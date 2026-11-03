@@ -178,6 +178,9 @@ public sealed class ClientSettings
         ("eden_sit",         "Sit / Stand",        new[] { "X" }),
         ("eden_weapon",      "Toggle WPN",         new[] { "Z" }),
         ("eden_attack",      "Attack",             new[] { "R" }),
+        // Annuler le cast en vol (NCID 13) — natif : Shift+S casse
+        // l'incantation. « Mod+Touche » supporté par InputBindings.
+        ("eden_cancel_cast", "Cancel cast",        new[] { "Shift+S" }),
         ("eden_achievements","Achievements",       new[] { "L" }),
         ("eden_social",      "Community",          new[] { "O" }),
         ("eden_party_01",   "Party Member 1",     new[] { "F1" }),

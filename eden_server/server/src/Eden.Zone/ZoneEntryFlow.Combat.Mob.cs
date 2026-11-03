@@ -166,6 +166,11 @@ public sealed partial class ZoneEntryFlow
             return;
         }
         if (st.PlayerHp <= 0) return;
+        // Natif CPlayerFactory::MeleeAttack @0x080f6930 : attaque
+        // pendant un cast en cours → ISpell::Break → 287 émis ici.
+        // En pratique le client EE gel toute émission NCID 5 pendant
+        // la barre — filet serveur pour un client modifié/désync.
+        await BreakCastAsync(session, st, token);
         // StateNoAttack natif (cnt +0xba > 0) — attaque interdite
         // pendant stun/lien ; 410 débloque l'action client.
         if ((GetStateLocks(st) & StatusLocks.NoAttack) != 0)

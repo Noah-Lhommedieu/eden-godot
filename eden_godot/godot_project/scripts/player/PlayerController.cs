@@ -2011,5 +2011,12 @@ public partial class PlayerController : CharacterBody3D
         Bind("move_left", K(Key.A), K(Key.Left));
         Bind("move_right", K(Key.D), K(Key.Right));
         Bind("move_run", K(Key.Shift));
+        // Annuler le cast (sondé par SkillCast) — défaut natif
+        // Shift+S ; les settings le couvrent via InputBindings.Apply
+        // (Bind ne remplit que les actions vides, pas d'écrasement).
+        Bind("eden_cancel_cast", new InputEventKey
+        {
+            PhysicalKeycode = Key.S, ShiftPressed = true,
+        });
     }
 }

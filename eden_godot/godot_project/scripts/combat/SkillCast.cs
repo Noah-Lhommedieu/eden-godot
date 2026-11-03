@@ -187,6 +187,14 @@ public partial class SkillCast : Node
             (PlayerVitals.IsDead ||
              _lock.Expired(Time.GetTicksMsec())))
             ForceReleaseCast(PlayerVitals.IsDead ? "mort" : "échéance");
+        // « Annuler le cast » (bind configurable, Shift+S par défaut —
+        // settings/InputBindings) : NCID 13 + libération locale.
+        // Pas de break pendant la saisie chat — Shift+S y = « S ».
+        if (InputMap.HasAction("eden_cancel_cast") &&
+            Input.IsActionJustPressed("eden_cancel_cast") &&
+            GetViewport().GuiGetFocusOwner() is not
+                (LineEdit or TextEdit))
+            Break();
         // --cast-break : interruption volontaire en vol (NCID 13 →
         // 287 serveur → barre annulée).
         if (_breakAt != 0 && Time.GetTicksMsec() >= _breakAt)
@@ -393,7 +401,10 @@ public partial class SkillCast : Node
         if (_registry != null && _registry.Entities.TryGetValue(h, out var t) &&
             GodotObject.IsInstanceValid(t) && !t.Dying && !t.IsQueuedForDeletion() &&
             _player?.AutoAttacker is { Engaged: false } aa)
-            aa.Engage(t);
+            // Natif (AutoReAttackb) : la reprise post-sort ne reprend
+            // QUE si la cible est déjà à portée — sinon engagement
+            // armé sans poursuite (jamais de course vers la cible).
+            aa.ResumeAfterCast(t);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -464,12 +475,19 @@ public partial class SkillCast : Node
         CastStateChanged?.Invoke();
     }
 
-    /// <summary>Annulation manuelle (touche Échap/déplacement…) —
-    /// NCID 13 SpellBreak.</summary>
+    /// <summary>Annulation manuelle (touche « annuler le cast » —
+    /// Shift+S par défaut) : NCID 13 SpellBreak au serveur + libération
+    /// LOCALE immédiate — le 287 confirme en idempotent
+    /// (<see cref="OnSpellBreak"/> no-ope sur un cast déjà clos) et un
+    /// 410/279 tardif n'a plus de self à réveiller. La poursuite avant
+    /// cast (sort pas encore émis) est annulée aussi.</summary>
     public void Break()
     {
+        _chaseSpell = 0;
+        _chaseTarget = 0;
         if (!IsCasting) return;
         Send(new ZoneSpellBreak());
+        ForceReleaseCast("break manuel");
     }
 
     /// <summary>Cap du perso en coords Eden (même conversion que

@@ -35,15 +35,24 @@ public static class InputBindings
     }
 
     /// <summary>true si <paramref name="name"/> est un nom d'événement
-    /// reconnu (Key enum Godot ou bouton souris Mouse*/Mouse4/Mouse5 —
-    /// la molette n'est PAS bindable, demande spec) — pur, utilisé par
-    /// les tests et la validation de la fenêtre.</summary>
+    /// reconnu (Key enum Godot, éventuellement préfixé de modificateurs
+    /// « Shift+ », « Ctrl+ », « Alt+ », « Meta+ » — ex. « Shift+S » —
+    /// ou bouton souris Mouse*/Mouse4/Mouse5 — la molette n'est PAS
+    /// bindable, demande spec) — pur, utilisé par les tests et la
+    /// validation de la fenêtre.</summary>
     public static bool IsValidEventName(string name)
     {
+        var parts = name.Split('+');
+        // Modificateurs : tous les segments sauf le dernier.
+        for (var i = 0; i < parts.Length - 1; i++)
+            if (!IsModifierName(parts[i])) return false;
+        name = parts[^1];
         if (name.StartsWith("Wheel", StringComparison.Ordinal))
             return false;
         if (name.StartsWith("Mouse", StringComparison.Ordinal))
-            return MouseButtonNumber(name) > 0;
+            // Pas de modificateur sur les boutons souris (ParseEvent
+            // le refuse aussi — les deux restent cohérents).
+            return parts.Length == 1 && MouseButtonNumber(name) > 0;
 #if GODOT
         return Enum.TryParse<Key>(name, true, out _);
 #else
@@ -53,6 +62,14 @@ public static class InputBindings
         return name.Length > 0;
 #endif
     }
+
+    /// <summary>« Shift », « Ctrl », « Alt », « Meta » —
+    /// préfixes autorisés des bindings composés (« Shift+S »).</summary>
+    private static bool IsModifierName(string n) =>
+        n.Equals("Shift", StringComparison.OrdinalIgnoreCase) ||
+        n.Equals("Ctrl", StringComparison.OrdinalIgnoreCase) ||
+        n.Equals("Alt", StringComparison.OrdinalIgnoreCase) ||
+        n.Equals("Meta", StringComparison.OrdinalIgnoreCase);
 
 #if GODOT
     /// <summary>Applique tous les bindings sauvegardés à l'InputMap :
@@ -71,33 +88,68 @@ public static class InputBindings
         }
     }
 
-    /// <summary>Nom sauvegardé → InputEvent (Key enum, ou bouton
-    /// souris : MouseLeft/MouseRight/MouseMiddle/MouseXButton1/2
-    /// (alias Mouse4/Mouse5). La molette n'est pas bindable).
+    /// <summary>Nom sauvegardé → InputEvent (Key enum, éventuellement
+    /// composé « Mod+Touche » ex. « Shift+S », ou bouton souris :
+    /// MouseLeft/MouseRight/MouseMiddle/MouseXButton1/2 (alias
+    /// Mouse4/Mouse5). La molette n'est pas bindable).
     /// null si le nom est inconnu.</summary>
     public static InputEvent? ParseEvent(string name)
     {
-        var mb = MouseButtonNumber(name);
+        var parts = name.Split('+');
+        var keyName = parts[^1];
+        var mb = MouseButtonNumber(keyName);
         if (mb > 0)
-            return new InputEventMouseButton
-            {
-                ButtonIndex = (MouseButton)mb,
-            };
-        if (Enum.TryParse<Key>(name, true, out var key))
-            return new InputEventKey { PhysicalKeycode = key };
+            return parts.Length == 1
+                ? new InputEventMouseButton
+                {
+                    ButtonIndex = (MouseButton)mb,
+                }
+                : null;   // pas de modificateur sur les boutons souris
+        if (Enum.TryParse<Key>(keyName, true, out var key))
+        {
+            var ev = new InputEventKey { PhysicalKeycode = key };
+            for (var i = 0; i < parts.Length - 1; i++)
+                switch (parts[i].ToLowerInvariant())
+                {
+                    case "shift": ev.ShiftPressed = true; break;
+                    case "ctrl": ev.CtrlPressed = true; break;
+                    case "alt": ev.AltPressed = true; break;
+                    case "meta": ev.MetaPressed = true; break;
+                    default: return null;
+                }
+            return ev;
+        }
         return null;
     }
 
     /// <summary>InputEvent → nom sauvegardé (réciproque de
-    /// <see cref="ParseEvent"/>) — null si non représentable.</summary>
+    /// <see cref="ParseEvent"/>) — modificateurs émis en tête
+    /// (« Shift+S ») ; null si non représentable.</summary>
     public static string? EventName(InputEvent e) => e switch
     {
-        InputEventKey k => k.PhysicalKeycode != Key.None
-            ? k.PhysicalKeycode.ToString()
-            : k.Keycode != Key.None ? k.Keycode.ToString() : null,
+        InputEventKey k => KeyName(k),
         InputEventMouseButton mb => MouseButtonName(mb.ButtonIndex),
         _ => null,
     };
+
+    private static string? KeyName(InputEventKey k)
+    {
+        var key = k.PhysicalKeycode != Key.None
+            ? k.PhysicalKeycode
+            : k.Keycode;
+        if (key == Key.None) return null;
+        // Touche modificateur seule (« Shift » pour move_run) : son
+        // propre flag est posé dans l'événement — ne pas produire
+        // « Shift+Shift ».
+        if (key is Key.Shift or Key.Ctrl or Key.Alt or Key.Meta)
+            return key.ToString();
+        var s = "";
+        if (k.ShiftPressed) s += "Shift+";
+        if (k.CtrlPressed) s += "Ctrl+";
+        if (k.AltPressed) s += "Alt+";
+        if (k.MetaPressed) s += "Meta+";
+        return s + key;
+    }
 
     /// <summary>Libellé compact d'un binding pour l'UI
     /// (« W, ↑ » — jointure des noms).</summary>

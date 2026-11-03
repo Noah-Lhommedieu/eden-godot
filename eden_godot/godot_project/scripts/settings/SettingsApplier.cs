@@ -650,9 +650,11 @@ public partial class SettingsApplier : Node
             case "eden_cam_zoom_out":
                 return CamZoom(1.5f);
             // eden_jump : le saut est sondé par PlayerController
-            // (Input.IsActionJustPressed en _PhysicsProcess) — ce
-            // dispatch d'actions fenêtre/HUD ne le consomme pas ;
-            // le binding InputMap est posé par InputBindings.Apply.
+            // (Input.IsActionJustPressed en _PhysicsProcess) —
+            // eden_cancel_cast : idem, sondé par SkillCast (_Process)
+            // pour casser le cast en vol (NCID 13). Ce dispatch
+            // d'actions fenêtre/HUD ne les consomme pas ; les bindings
+            // InputMap sont posés par InputBindings.Apply.
             default:
                 return false;
         }

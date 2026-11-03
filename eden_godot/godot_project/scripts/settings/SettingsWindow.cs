@@ -805,6 +805,12 @@ public partial class SettingsWindow : Panel
             CancelCapture();
             return true;
         }
+        // Modificateur seul pendant la capture : ignoré — le bind
+        // composé (« Shift+S ») arrive à la touche suivante, flag posé.
+        if (e is InputEventKey { Pressed: true, Echo: false } mod &&
+            mod.PhysicalKeycode is Key.Shift or Key.Ctrl or Key.Alt
+                or Key.Meta)
+            return true;
         var pressed = e switch
         {
             InputEventKey { Pressed: true, Echo: false } => true,

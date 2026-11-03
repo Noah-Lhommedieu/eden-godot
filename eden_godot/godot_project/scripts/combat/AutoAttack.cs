@@ -21,6 +21,12 @@ namespace EdenClient.Combat;
 /// nouveau clic droit / mort ou despawn de la cible → envoi
 /// <c>[0][2]</c> (stop).
 ///
+/// Cast (PostCastRules — docs/knowledge/combat-autoattack-cast.md) :
+/// pendant <c>SkillCast.IsCasting</c> la boucle est gelée (aucun 5 —
+/// une attaque casserait le cast côté natif) ; à la fin du cast la
+/// poursuite ne reprend QUE si la cible est déjà à portée, sinon
+/// <c>_holdAfterCast</c> garde l'engagement armé sans déplacement.
+///
 /// Session : <see cref="SessionCarry.Session"/> (flux écrans). En mode
 /// <c>--live</c> direct la session appartient à GameScene et n'est pas
 /// accessible — le combat est alors désactivé (log WARN une fois).
@@ -43,6 +49,14 @@ public partial class AutoAttack : Node
     private double _farTimer;   // cadence du NCID 5 envoyé hors portée
     private double _rechaseTimer;
     private bool _warnedNoSession;
+    // Règles natives cast → auto-attaque (PostCastRules) :
+    // pendant un cast, l'auto-attaque est gelée (attaque = cast cassé
+    // côté natif) ; à la fin du cast la poursuite ne reprend QUE si
+    // la cible est déjà à portée — sinon _holdAfterCast garde
+    // l'engagement armé sans jamais courir après la cible.
+    private bool _wasCasting;       // cast en vol vu au dernier tick
+    private bool _explicitInCast;   // Engage explicite PENDANT le cast
+    private bool _holdAfterCast;    // armée mais immobile (hors portée)
     private readonly CancellationTokenSource _cts = new();
 
     /// <summary>Cible courante (null = pas d'engagement).</summary>
@@ -72,10 +86,21 @@ public partial class AutoAttack : Node
     }
 
     /// <summary>Démarre l'engagement : sélection réseau (124) +
-    /// approche + swings.</summary>
+    /// approche + swings. Engagement EXPLICITE (clic droit, hotkey) —
+    /// lève le hold post-cast : le joueur a demandé la poursuite.</summary>
     public void Engage(RemoteEntity target)
     {
-        if (_target == target) return;
+        // Resynchronise le suivi de cast : un ordre explicite pendant
+        // un cast re-donne la poursuite à la fin du cast ; hors cast,
+        // aucune retenue post-cast ne doit s'appliquer.
+        _explicitInCast = SkillCast.Instance?.IsCasting == true;
+        _wasCasting = _explicitInCast;
+        if (_target == target)
+        {
+            // Même cible : un clic explicite re-donne la poursuite.
+            _holdAfterCast = false;
+            return;
+        }
         CancelSend();
         _target = target;
         _swingTimer = SwingInterval;   // premier swing immédiat dès la portée
@@ -88,6 +113,42 @@ public partial class AutoAttack : Node
         EngagedEvent?.Invoke(target.Handle);
     }
 
+    /// <summary>Reprise après un cast offensif (natif
+    /// <c>AutoReAttackb</c>) : l'auto-attaque ne reprend QUE si la
+    /// cible est DÉJÀ à portée — sinon l'engagement reste armé mais
+    /// le perso ne court PAS après elle (pas de SetMoveTarget, pas
+    /// de NCID 5 hors portée). Le swing repart dès qu'elle revient
+    /// à portée ; tout ordre explicite (<see cref="Engage"/>,
+    /// <see cref="Cancel"/>) re-donne la main.</summary>
+    public void ResumeAfterCast(RemoteEntity target)
+    {
+        var p = _player;
+        var to = p != null
+            ? target.GlobalPosition - p.GlobalPosition : Vector3.Zero;
+        var dist = p != null
+            ? new Vector2(to.X, to.Z).Length() : float.MaxValue;
+        if (PostCastRules.Decide(true, dist, AttackReach)
+                == PostCastAttack.Resume)
+        {
+            Engage(target);
+            return;
+        }
+        if (_target != target)
+        {
+            CancelSend();
+            _target = target;
+            _swingTimer = SwingInterval;
+            _farTimer = SwingInterval;
+            _rechaseTimer = 0;
+            Send(new ZoneTargetUpdate { Value = (int)target.Handle });
+            EngagedEvent?.Invoke(target.Handle);
+        }
+        _holdAfterCast = true;
+        GD.Print($"[combat] post-cast : 0x{target.Handle:x8} hors " +
+            $"portée ({dist:0.#} u > {AttackReach:0.#}) — armée, " +
+            "pas de poursuite");
+    }
+
     /// <summary>Arrêt explicite (clic, WASD, despawn…) — notifie le
     /// serveur [0][2].</summary>
     public void Cancel() => CancelSend();
@@ -96,6 +157,7 @@ public partial class AutoAttack : Node
     {
         if (_target == null) return;
         _target = null;
+        _holdAfterCast = false;
         // NCID 5 stop : [i32 0][u8 2] — natif : handle=0 OU type=2.
         Send(new ZoneMeleeAttack { TargetId = 0, AttackSlot = 2 });
         Disengaged?.Invoke();
@@ -128,12 +190,36 @@ public partial class AutoAttack : Node
         if (PlayerStateLocks.NoAttack) return;
         var to = t.GlobalPosition - p.GlobalPosition;
         var dist = new Vector2(to.X, to.Z).Length();
+        var casting = SkillCast.Instance?.IsCasting == true;
+        // Fin de cast (front descendant) : la poursuite ne reprend QUE
+        // si la cible est à portée — sinon engagement armé immobile
+        // (natif : l'auto-attaque post-sort ne court jamais vers la
+        // cible). _explicitInCast est verrouillé jusqu'ici : un Engage
+        // explicite reçu PENDANT le cast re-donne la poursuite.
+        if (_wasCasting && !casting)
+        {
+            if (!_holdAfterCast && !_explicitInCast &&
+                PostCastRules.Decide(true, dist, AttackReach)
+                    == PostCastAttack.Hold)
+                _holdAfterCast = true;
+            _explicitInCast = false;
+        }
+        _wasCasting = casting;
+        // Règle native : pendant un cast (temporisé ou vol d'un
+        // instantané) AUCUNE auto-attaque — ni swing ni approche —
+        // une attaque casserait le cast (natif MeleeAttack →
+        // ISpell::Break, zone @0x080f6930). Le déplacement reste libre
+        // (cast mobile) — seule la boucle d'attaque est gelée.
+        if (casting) return;
         _swingTimer = Math.Min(_swingTimer + delta, SwingInterval);
         _farTimer += delta;
         _rechaseTimer += delta;
 
         if (dist > AttackReach)
         {
+            // Retenue post-cast : armée mais jamais de poursuite ni de
+            // NCID 5 tant que la cible est hors de portée.
+            if (_holdAfterCast) return;
             // Poursuite : cible le point au sol du mob, re-ciblée
             // périodiquement (il peut bouger).
             if (_rechaseTimer >= RechaseInterval)
@@ -155,6 +241,9 @@ public partial class AutoAttack : Node
             return;
         }
 
+        // À portée : la retenue post-cast tombe — l'engagement redevient
+        // un engagement normal (poursuite si la cible repart).
+        _holdAfterCast = false;
         // À portée : arrêt net, face à la cible, swing périodique.
         p.ClearMoveTarget();
         p.FaceTowards(t.GlobalPosition, 1f);

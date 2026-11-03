@@ -22,9 +22,17 @@ public static class MountCombatRules
 
     /// <summary>Type de la commande enchant 2134 (rideKey) d'une ligne
     /// brute c_enchant : cellules après 2134 = rideKey, flag, sièges,
-    /// <b>type</b> — 2 = monture de combat (le ride survit à l'engage ;
-    /// enchant-tables.md §1.3, ex. <c>2134|253020||1|2</c>). 0 = monture
-    /// ordinaire ou pas de 2134.</summary>
+    /// <b>type</b> — le natif ne teste que <c>≠ 0</c> : <c>CEC_Ride::SetState</c>
+    /// (zone @0x0854f330) stocke var3 en char+0x824, relu à l'identique
+    /// dans <c>CEC_Chaos::SetState</c> (@0x0851cac0) et
+    /// <c>ISpell::CastTest</c> (@0x084f08c3) — 0 →
+    /// <c>RemoveEnchantByState(9)</c> (dismount à l'engage/transform),
+    /// ≠0 → le ride survit + KFM <c>r%06d</c> chargé ; client
+    /// <c>FUN_00778660</c> route les anims de combat sur l'octet ride ≠0.
+    /// Données : type 1 = montures à sorts (10 enchants, TOUS avec 2140
+    /// RideSpell), type 2 = combat ordinaire (81) — combat dans les deux
+    /// cas ; 0/absent = monture ordinaire ou pas de 2134
+    /// (enchant-tables.md §1.3, ex. <c>2134|253020||1|2</c>).</summary>
     public static int RideTypeOf(string[]? raw)
     {
         if (raw == null) return 0;
@@ -39,10 +47,13 @@ public static class MountCombatRules
     }
 
     /// <summary>Vrai si l'enchant porte une monture de combat
-    /// (2134 type 2) — badge « épée » natif sur l'icône d'item.</summary>
+    /// (2134 type ≠ 0, preuve native ci-dessus — même règle que le
+    /// serveur <c>RideType != 0</c>) — badge « épée » natif sur
+    /// l'icône d'item. Les montures à sorts (type 1 : dragons, canon,
+    /// toutes avec 2140) survivent à l'engage comme les type 2.</summary>
     public static bool IsCombatRide(int enchantId) =>
         enchantId > 0 && RideTypeOf(
-            Data.Tables.EnchantTable.Get(enchantId)?.Raw) == 2;
+            Data.Tables.EnchantTable.Get(enchantId)?.Raw) != 0;
 
     /// <summary>Vitesse par couleur (spec propriétaire, custom serveur) :
     /// blanc 35 %, vert 55 %, bleu 70 %, or 90 %. MÊME règle que

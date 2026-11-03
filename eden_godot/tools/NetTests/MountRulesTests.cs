@@ -97,6 +97,49 @@ public class MountRulesTests
             "2083|2|1 attendu (ATQ +2 %, DÉF +1 %)");
     }
 
+    /// <summary>Montures à sorts (2134 <b>type 1</b>) : le natif ne
+    /// teste que le type <c>≠ 0</c> (<c>CEC_Ride::SetState</c> zone
+    /// @0x0854f330 stocke var3 en char+0x824, relu par
+    /// <c>ISpell::CastTest</c> @0x084f08c3 — 0 =&gt; dismount à
+    /// l'engage ; client <c>FUN_00778660</c> route sur l'octet ≠0).
+    /// Le badge « épée » (<see cref="MountCombatRules.IsCombatRide"/>)
+    /// doit donc couvrir les montures à sorts, pas seulement le type 2
+    /// — corpus : type 1 = 10 enchants, TOUS avec un bloc 2140
+    /// (RideSpell). Cas réels : 50114 « canon », 51369/58997/59033.
+    /// </summary>
+    [Theory]
+    [InlineData(58997)] [InlineData(50114)]
+    [InlineData(51369)] [InlineData(59033)]
+    public void CombatBadge_Type1SpellMount_IsCombat(int eid)
+    {
+        var raw = Defs()[eid].Raw;
+        Assert.Equal(1, MountCombatRules.RideTypeOf(raw));
+        // Même prédicat que le badge inventaire : type ≠ 0 → combat.
+        Assert.True(MountCombatRules.RideTypeOf(raw) != 0,
+            $"enchant {eid} : type 1 = monture de combat (badge épée)");
+        Assert.Contains("2140", raw);   // RideSpell — marqueur type 1
+    }
+
+    /// <summary>Invariant corpus : <b>tout</b> enchant 2134 type 1
+    /// porte 2140 (RideSpell) — le type 1 n'existe que pour les
+    /// montures à sorts. Et l'inverse du badge : type 0/absent, ou
+    /// pas de 2134 du tout, n'est pas combat.</summary>
+    [Fact]
+    public void CombatBadge_Type1Invariants_AndNonCombat()
+    {
+        var type1 = Defs().Values
+            .Where(d => MountCombatRules.RideTypeOf(d.Raw) == 1).ToList();
+        Assert.True(type1.Count >= 4, $"type-1 réels : {type1.Count}");
+        Assert.All(type1, d => Assert.Contains("2140", d.Raw));
+        // Raws synthétiques : pas de 2134, ou 2134 sans type (var3 vide).
+        Assert.Equal(0, MountCombatRules.RideTypeOf(
+            new[] { "1", "x", "2051", "10" }));
+        Assert.Equal(0, MountCombatRules.RideTypeOf(
+            new[] { "1", "x", "2134", "999999", "", "", "", "" }));
+        // Court-circuit déterministe du badge (id invalide → non combat).
+        Assert.False(MountCombatRules.IsCombatRide(0));
+    }
+
     /// <summary>Aucun enchant de monture FR ne porte de bonus PM
     /// direct (2013/1014 absents) : la montée de PM vient de 2085
     /// (toutes stats +N % → Sag). Invariant à maintenir si la donnée

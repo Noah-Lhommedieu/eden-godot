@@ -23,7 +23,7 @@ Verrou `/tmp/godot.lock` : un seul client graphique à la fois.
 | Classe / Style | classe 0 = tenue de base `202` ; classe N = tenue du `c_class.ini` (style = index de garde-robe 0..8) |
 | Coiffure, Visage | index du blob d'apparence (0..63) |
 | Peau, Cheveux, Yeux 1/2 | sélecteurs 6 bits du blob : base de section selon le corps (peau 201/401/501/601, cheveux 101/701, yeux 301) + `C_CharColor.ini`. Les pastilles montrent la couleur résolue. |
-| Gain peau corps / visage | `CharVisual.SkinGain` (défaut 2) et `FaceSkinGain` (défaut 1) |
+| Gain peau corps / visage | `CharVisual.SkinGain` (défaut 2) et `FaceSkinGain` (défaut 1,35) |
 | 7 corps côte à côte | compare toutes les races avec les mêmes réglages |
 
 Souris : glisser = tourner, molette = zoom.

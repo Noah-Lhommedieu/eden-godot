@@ -102,7 +102,15 @@ internal sealed class NiParticleRuntime : IFxDriver
         }
         else if (tex?.Base?.File != null) a = "file-unresolved";
         else if (tex?.Base != null) a = "src-unresolved";
-        GD.Print($"[psdiag] {ps.Name} blend={NativeFx.BlendMode(al)} alpha={(al == null ? "none" : $"b{al.Blend} t{al.Test} src{al.SrcBlend} dst{al.DstBlend}")} clamp={tex?.Base?.ClampMode.ToString() ?? "-"} tex={tex?.Base?.File} {a} texprop={(tex == null ? "null" : tex.Base == null ? "nobase" : $"src={tex.Base.SourceBlock} ext={tex.Base.Source?.External} px={tex.Base.Source?.Pixels != null} pdb={tex.Base.Source?.PixelDataBlock} fmt={tex.Base.Source?.Pixels?.Format}")} props={string.Join(",", ps.Properties.Select(q => q.Type))}");
+        var em = ps.Of<NifPSysEmitter>().FirstOrDefault();
+        var nm = ps.Properties.OfType<EdenClient.World.NifMaterial>().FirstOrDefault();
+        var emit = em == null ? "no-emitter" :
+            $"shape={em.Shape} ir={em.InitialRadius:0.###}±{em.RadiusVariation:0.###} spd={em.Speed:0.##}±{em.SpeedVariation:0.##} " +
+            $"life={em.LifeSpan:0.##}±{em.LifeSpanVariation:0.##} col={em.InitialColor.X:0.##},{em.InitialColor.Y:0.##},{em.InitialColor.Z:0.##},{em.InitialColor.W:0.##} " +
+            $"meshes={em.MeshBlocks.Length} veltype={em.VelocityType} emitfrom={em.EmitFrom}";
+        var nmat = nm == null ? "nomat" :
+            $"dif={nm.Diffuse.X:0.##},{nm.Diffuse.Y:0.##},{nm.Diffuse.Z:0.##} emi={nm.Emissive.X:0.##},{nm.Emissive.Y:0.##},{nm.Emissive.Z:0.##} a={nm.Alpha:0.##}";
+        GD.Print($"[psdiag] {ps.Name} blend={NativeFx.BlendMode(al)} alpha={(al == null ? "none" : $"b{al.Blend} t{al.Test} src{al.SrcBlend} dst{al.DstBlend}")} ws={ps.WorldSpace} max={ps.Data?.MaxParticles} {emit} {nmat} clamp={tex?.Base?.ClampMode.ToString() ?? "-"} tex={tex?.Base?.File} {a} texprop={(tex == null ? "null" : tex.Base == null ? "nobase" : $"src={tex.Base.SourceBlock} ext={tex.Base.Source?.External} px={tex.Base.Source?.Pixels != null} pdb={tex.Base.Source?.PixelDataBlock} fmt={tex.Base.Source?.Pixels?.Format}")} props={string.Join(",", ps.Properties.Select(q => q.Type))} mods={string.Join(",", ps.Modifiers.Select(m => m.Type))}");
     }
 
     public void Reset() { _sim.Reset(); _frameSet = false; }

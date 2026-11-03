@@ -225,3 +225,32 @@ Le point 4 « Non prouvé » est **confirmé et corrigé** :
   gamedata/), `run.sh`/`capture.sh` ne posent ni `EDEN_PACKS` ni
   `EDEN_ALLOW_LOOSE` ; `_tintCache` processus-neuf identique. Rien à
   corriger côté banc pour ce point.
+
+## Correctif teinte peau/visage appliqué (2026-11-03, statut `verified`)
+
+Les points 1, 2 et 3 sont **corrigés** :
+
+- **Gain peau ×2** : `CharVisual.SkinGain = 2f` (`CharVisual.cs:856`) remplace
+  les deux `-1.15f` des lignes 395/403 (peau `S<L>*` et corps nu `#<L>000`).
+- **Gain visage ×1,35** : `CharVisual.FaceSkinGain = 1.35f` (`:857`), appliqué
+  au seul terme `kr·skin` de `FaceComposite` (`:887-889`, cache-key `:862`
+  inclus). 1,35 retenu car la réf. visage (234,188,130) sature dès ~1,52
+  (`kr·0,81·gain ≥ 1`) ; mesure banc (234,189,142) : G/R=0,807 vs ref 0,81.
+- **Course table couleurs** : `CharColorTable.ResolveTablePath`
+  (`scripts/data/tables/CharColorTable.cs:109-120`) enchaîne
+  `TextResolver.ResolveFile` → `StoreTable.ResolveDefault` (les deux casse)
+  → `AssetCatalog.ResolveRawAsset`/`DataPaths.ResolveFile` (Godot). Table vide
+  non verrouillée (`:144`). `ScreenManager._Ready` (`screens/ScreenManager.cs:65`)
+  pose `ResolveFile` dès le boot — avant `PreGameWarmup`/CharSelect/GameScene.
+- **Diagnostic** : branches visage tracées sous `EDEN_VISDBG=1`
+  (`[visdbg]` dans `ApplyFaceVariant`/`FaceComposite`) — worker-safe confirmé
+  (`FaceComposite ok` avec `mainThread=False`).
+- **Preuves** : `live_avant_fg1.png` → `live_apres_fg135.png` (en jeu),
+  `live_select_dbg.png` (sélecteur, visage composite OK — plus de masque
+  rouge brut), `skinview_b_sc1_liveparams.png`. `[look]` live affiche les
+  couleurs de la table (0.81,0.60,0.45) — pas le repli.
+- **Limite restante** : `KFACES12*` absent de fr-full (corps k, face 12) →
+  repli documenté, cf. EDENFR-GAPS. Blob `test123` NULL corrigé : comptes
+  `racetest`/`halftest` créés (`edenfr.account.accounts` 3/4), 7 corps
+  répartis : test123=g+b, racetest=m/f/k, halftest=l/c, tous avec
+  `appearance_data` non nul et `worldserver=1010`.

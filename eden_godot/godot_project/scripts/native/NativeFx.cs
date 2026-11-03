@@ -255,7 +255,11 @@ void fragment() {{
     if (uv_clamp.x > 0.5) p.x = clamp(p.x, 0.0, 1.0);
     if (uv_clamp.y > 0.5) p.y = clamp(p.y, 0.0, 1.0);
     vec4 t = use_tex ? texture(albedo_texture, p) : vec4(1.0);
-    ALBEDO = (t.rgb * albedo.rgb + emissive) * vcol.rgb;
+    // Émissif DANS le facteur de la texture (pipeline fixe Gamebryo :
+    // tex × (emissive + ambient·Ia)) — l'ajouter à plat (« + emissive »)
+    // rend tout matériau émissif≥1 uniformément blanc (halos r014 :
+    // emissive=1,1,1 écrasait la flamme bleue de R00251.dds).
+    ALBEDO = t.rgb * (albedo.rgb + emissive) * vcol.rgb;
     {alpha}
 }}";
             return s_shaders[key] = new Shader { Code = code };

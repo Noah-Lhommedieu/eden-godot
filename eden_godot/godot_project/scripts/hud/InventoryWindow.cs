@@ -1557,7 +1557,8 @@ public partial class InventoryWindow : Control
             _qty.Text = it is { Amount: > 1 }
                 ? it.Amount.ToString() : "";
             // Badge épée natif : items « monture de combat » (enchant
-            /// d'usage 2134 type 2, ref MountCombatRules.IsCombatRide).
+            /// d'usage 2134 type ≠ 0 — le natif ne compare jamais à 2,
+            /// ref MountCombatRules.IsCombatRide).
             var combat = def != null &&
                 Game.MountCombatRules.IsCombatRide(def.UseEnchantId);
             if (combat && RideBadge != null)

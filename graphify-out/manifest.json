@@ -8580,9 +8580,9 @@
     "semantic_hash": ""
   },
   "docs/INDEX.md": {
-    "mtime": 1793680205.386564,
-    "seen": 1793680266.7297993,
-    "ast_hash": "7a52c06e8033d8b6bae41837a9d87af1",
+    "mtime": 1793716688.1639686,
+    "seen": 1793717751.755424,
+    "ast_hash": "de8c1a05607322de1d572b2700a490a0",
     "semantic_hash": ""
   },
   "docs/architecture/ARCHITECTURE.md": {
@@ -8646,9 +8646,9 @@
     "semantic_hash": ""
   },
   "docs/workflows/EDENFR-GAPS.md": {
-    "mtime": 1793616670.065336,
-    "seen": 1793619179.9841478,
-    "ast_hash": "74b62bb419b72f7350f6aac5b4487377",
+    "mtime": 1793717674.4024262,
+    "seen": 1793717751.7554595,
+    "ast_hash": "e742f4f297579c9f65391cb5769a49a6",
     "semantic_hash": ""
   },
   "docs/workflows/task-contract.md": {

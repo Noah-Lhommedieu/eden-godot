@@ -115,3 +115,26 @@ l'inventer.
   `verified`, `hypothesis` ou `deprecated`, la version testée et la date.
 - Écrire la livraison selon `docs/workflows/task-contract.md` : commandes
   exactes, résultats, captures ou benchs, limites.
+
+## Audits de référence (`docs/knowledge/`)
+
+À lire avant de toucher classes, skins, enchants, protocole ou formules.
+Vérifié le 2026-11-03 : les 15 fichiers existent ; les constats de code citent
+`fichier:ligne` (statut *verified*), l'impact in-game reste *hypothesis*
+(audits statiques) : re-vérifier la ligne avant d'éditer.
+
+| Fichier | Contenu |
+|---|---|
+| `known-bugs.md` | **Index maître : 24 bugs** (KB-01…KB-24) par sévérité, fichier:ligne + fix + test |
+| `class-bug-fixplan.md` | Ordre d'attaque F1-F12 (préalable H1 « panneau vide » tranché) |
+| `class-skins-audit.md` / `class-skins-audit-v2.md` | Audit chaîne skins, puis re-audit post-édits de l'autre IA |
+| `class-skills-audit.md` | Audit compétences classe (+preuve H1 `--class-mock`) |
+| `rankbuff-server-audit.md` | `c_classrankbuff` vs `RefreshJPAward` natif |
+| `class-skills-server-audit.md` | Chaîne serveur sorts de classe |
+| `schema-drift-audit.md` | **Bug majeur** : garde-fou mort `EnchantParser.cs:84` (`row.Length == 60` jamais vrai, rows FR = 61 cellules) |
+| `equip-visuals-audit.md` | Chaîne K-codes visuels équipements |
+| `enchant-tables.md` | Schéma `c_enchant`/`t_enchant` décodé |
+| `protocol-map.md` / `protocol-partials.md` | Carte opcodes + 57 manques natifs émis côté zone |
+| `native-constants.md` / `-2` / `-3` | Formules codées en dur (stats, XP, heal, dégâts) |
+| `live-vs-test-visual-parity.md` | Écart rendu live (`run.sh --char`) vs bancs de test (2026-11-03) |
+| `backlog-2026-11-03.md` | Backlog demandé par le propriétaire (FX, montures, skins, sorts de zone…) |

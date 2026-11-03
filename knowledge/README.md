@@ -36,8 +36,18 @@ le quoi.
 | **Une synthèse déjà récoltée** (ne pas re-extraire le wiki) | `docs/reference/harvest/` (6 docs, importés du portage le 2026-11-03) | `classes-catalog.md`, `class-expertise.md`, `expertise-stats.md`, `racial-skills.md`, `refshots-classes.md`, `awakened-refs.md` — mécaniques croisées wiki+natif+INI avec statuts CONFIRMED/MISSING et sources citées. |
 | **Un catalogue de fichiers du corpus** (modèles NIF, items, maps) | `docs/reference/` (`MODELS-CATALOG`, `ITEMS`, `MAPS`, `INVENTAIRE-QUETES-MONTURES` + `.tsv`) | 7 991 NIF/KF classés, items, maps, quêtes/montures — généré sur `corpus/fr-full`. |
 | **L'inventaire complet de `corpus/fr-full`** (47 639 fichiers, par type) | `docs/reference/corpus/` + `artifacts/corpus-inventory/files.tsv` | Un doc par type (tables, maps, modèles, anims, textures, UI, audio, divers) + `INDEX.md` global ; TSV = 1 ligne/fichier avec métadonnées (dims DDS, version NIF, durée WAV) et rôle. Regénéré par `tools/corpus-inventory/`. |
+| **Voir une texture/asset du corpus** | `artifacts/corpus-png/<même chemin>.png` (miroir) + `artifacts/corpus-sheets/` (planches 5×5) + `sheets-index.tsv` | Toutes les images lisibles via `read` ; descriptions déjà rédigées dans `visual-notes-*.md` (tenues de classes tous corps, atlas CEGUI, skins monstres 1 362, icônes). Voir `docs/reference/corpus/VISUEL.md`. |
+| **Tenues de classes / équipements visuels** | `artifacts/corpus-inventory/class-outfits.tsv` + `equip-visuals.tsv` | classe×niveau×code→mesh+texture×7 corps (2 960) ; K-codes items→apparence (11k). `docs/knowledge/class-skins-audit.md` = bugs connus de la chaîne. |
+| **Class Ability Bonus attendu** | `artifacts/corpus-inventory/class-rankbuff-expected.tsv` + `docs/knowledge/native-constants.md` | 48 classes×22 paliers cumulés ; formule native `RefreshJPAward` vérifiée ; divergences affichage↔enchant connues. |
+| **Les skills attendus d'une classe** | `artifacts/corpus-inventory/class-skills-expected.tsv` | 2 701 lignes Reg/Class/Expertise/Certificat × 61 classes avec icônes + noms FR. |
+| **Une entité et ses assets** (item→enchant→visuel→son, PNJ→modèle, quête→dialogue) | `artifacts/corpus-inventory/{item-enchants,npc-visuals,mission-index,dialogue-index,map-spawns,model-index,audio-joins}.tsv` | Index maîtres : `model-index` 23 310 codes→nif/kfm/textures ; `mission-index` 2 392 quêtes ; `dialogue-index` 20 362 ; `audio-joins` 61 717. Entrée : `artifacts/corpus-inventory/README.md`. |
+| **Une constante de `S_Parameter.ini`** | `artifacts/corpus-inventory/parameter-index.tsv` | Les 678 slots indexés, consommateurs natif+C# par ligne. |
+| **Ce qui manque en FR** | `artifacts/corpus-inventory/fr-coverage.tsv` | 67 tables, 8 254 ids sans nom — complète G22-G27 de `EDENFR-GAPS`. |
+| **Le protocole** (opcode→handler serveur) | `docs/knowledge/protocol-map.md` | 264 C→S + 364 S→C zone, wire↔natif documenté. |
+| **Quel layout CEGUI est implémenté** | `docs/reference/corpus/layout-impl-map.md` | 415 layouts : 55 % couverts, carte du travail UI restant. |
+| **Le plan de fix du bug classes** | `docs/knowledge/class-bug-fixplan.md` | 12 fixes ordonnés (F1-F12) + audits : `class-skins-audit`, `class-skills-audit`, `rankbuff-server-audit`, `class-skills-server-audit`, `equip-visuals-audit`. |
 | **L'état technique du projet** (versions moteur, perf, pipelines, leçons) | `docs/knowledge/*.md` (≠ `knowledge/` !) | Notes vérifiées avec statut/date — projet, pas gameplay. Ne pas confondre les deux dossiers « knowledge ». |
-| **Ce que fr-full ne fournit pas** | `docs/workflows/EDENFR-GAPS.md` | Lacunes connues (G1–G21) : tables absentes, textures jamais livrées — à lire avant d'« inventer » une donnée. |
+| **Ce que fr-full ne fournit pas** | `docs/workflows/EDENFR-GAPS.md` | Lacunes connues (G1–G27) : tables absentes, textures jamais livrées — à lire avant d'« inventer » une donnée. |
 
 ## Contenu du dossier
 

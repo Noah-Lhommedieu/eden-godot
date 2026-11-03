@@ -26,12 +26,15 @@ alors que les fichiers corpus sont en minuscules (`dejavu.png`,
 - `schemes/dejavu.scheme` ne charge **qu'un seul imageset** : `DejaVu`. Tous
   les autres doivent être chargés par le code client (avant l'ouverture des
   layouts qui en référencent).
-- `looknfeel/dejavu.looknfeel` (skin des widgets `DejaVu/*`) n'utilise que des
-  régions `set:DejaVu` (84 refs : boutons, scrollbars, onglets, cases, cadres,
-  curseurs souris…). **Tout layout hérite donc de `dejavu.png`** même sans
-  aucune référence `set:` explicite : **151 layouts / 415 n'ont aucune**
-  référence `set:` (ex. `castingbarwnd`, `characterwnd`, `questwnd` — frames,
-  barres et boutons viennent du skin).
+- `looknfeel/dejavu.looknfeel` (skin des widgets `DejaVu/*`) utilise la
+  syntaxe `imageset="X" image="Y"` : **1027 refs `DejaVu` + 149 refs `main`
+  + 14 refs `CDAni`**. Le `main` du looknfeel couvre le cadre de chat
+  (`channel*`, `Transparent*`), le fond de buffs (`BuffBackground*`) et
+  divers boutons ; le `CDAni` du looknfeel = le cadre lumineux `Light*`
+  (widget `DejaVu/LightStatic`). **Tout layout hérite donc de `dejavu.png`
+  (et en partie de `main.png`)** même sans référence `set:` explicite :
+  **151 layouts / 415 n'ont aucune** référence `set:` (ex. `castingbarwnd`,
+  `characterwnd`, `questwnd` — frames, barres et boutons viennent du skin).
 - `main.imageset` déclare `NativeHorzRes="800" NativeVertRes="600"` (seul
   imageset avec résolution native).
 - `imagesets/<couleur>/` (10 dossiers : `blue`, `grapes`, `green`, `lemon`,
@@ -49,11 +52,11 @@ alors que les fichiers corpus sont en minuscules (`dejavu.png`,
 |---|---|---|---|---|
 | `dejavu` | `DejaVu.png` → `dejavu.png` (1024×512) | 437 | **216** (52 % des layouts — quasi tous) | Skin maître : cadres de fenêtres, boutons, cases losange, scrollbars, onglets, tooltips, slots fleur-de-lis (`Slot*`), cadres qualité objet (`QualityW/G/B/O/P/Y*`), barre de cast (`castingBar*`), curseurs souris (`Mouse*`), `ScreenMessageBG`, `HelpButton*`. Tout panneau visible (**vérifié** — scheme + looknfeel). |
 | `dejavuimage` | `DejaVuImage.png` → `dejavuimage.png` (512×512) | 133 | **109** | Iconographie partagée : slots équipement (`Head/Body/Hand/Shoes/Ring/Necklace/L/R/AL/ARWeapon/Hat/Back*`), résistances (`Anti*`), monnaies (`Gold/Silver/AlpacaCoin/Crystalcross`), achat/vente/réparation (`Buy*`, `Sell*`, `FixAll/Fixone*`, `Stall*`, `Helper*`, `Chest*`), états serveur (`ServerGreen/Red/Gray/Yellow`), item mall (`ItemMall*`, `itemmallBonus`), notifications (`Notification*` : badges « NEW TITLE / ACHIEVEMENT / NEW JOB / LEVEL UP / JOB SPELL / NEW AVATAR / LICENSE / STORY » visibles dans la texture), humeurs (`Mood*`), classes (`FClass1-7`, `HeroIcon1-10`). |
-| `main` | `main.png` → `main.png` (1024×512) | 115 | 40 | **HUD** : cadre portrait orné `faceFrame`, cadres cible `TargetNPC/King/Human/UnDead/Monster` + `MonsterStar` (★ rang élite), vitals `MiniinfoBG`/`MiniInfoHP/Mp/BP`/`InfoHpBG/InfoBpBG`, hotbar `FunctionFastBar`/`FunctionSlot`/`FunctionUp/Down`/`FunctionLock`, barre XP `FunctionExpBackgrand`, boutons menu `Function{Character,Item,Skill,Mission,Team,Commu,City,Pet,Sys,Bagr}*` + `FunctionMenuBG`, chat `channel*`/`Channel*`/`Transparent*`, buffs `BuffBackground*`, modes pet `Pet{Attack,Collect}Mode`, classes `AttackIcon`/`HealerIcon`/`DefenderIcon`, `MiniInfoLeaderIcon`/`PkIcon`, `Mission{Hide,Hover,Action}` (tracker), résistances `Anti*` (doublon de DejaVuImage). **vérifié.** |
+| `main` | `main.png` → `main.png` (1024×512) | 115 | 40 | **HUD** : cadre portrait orné `faceFrame`, `MonsterStar` (★ rang élite), vitals `MiniinfoBG`/`MiniInfoHP/Mp/BP`/`InfoHpBG/InfoBpBG`, hotbar `FunctionFastBar`/`FunctionSlot`/`FunctionUp/Down`/`FunctionLock`, barre XP `FunctionExpBackgrand`, boutons menu `Function{Character,Item,Skill,Mission,Team,Commu,City,Pet,Sys,Bagr}*` + `FunctionMenuBG`, chat `channel*`/`Channel*`/`Transparent*`, buffs `BuffBackground*`, modes pet `Pet{Attack,Collect}Mode`, classes `AttackIcon`/`HealerIcon`/`DefenderIcon`, `MiniInfoLeaderIcon`/`PkIcon`. **vérifié** (layouts + looknfeel). Non cités : `Target{NPC,King,Human,UnDead,Monster}` (cadres cible, code), `Mission{Hide,Hover,Action}` (tracker, code), `Anti*` (doublon utilisé via `dejavuimage`), `FunctionBall`, `AntiLightining` (coquille). |
 | `radar` | `Radar.png` → `radar.png` (512×512) | 102 | 11 | **Minimap** : cadre `RadarBody`/`RadarPic`, zoom `ZoomIn/Out*`, globe `Globle*`, masquage `OpenHiding/CloseHiding*`, et toute la rangée de boutons-fonctions autour de la minimap (Mail, Map, Help, Rank, Lty=loyalty, Ach=achievement, App=appellation, Col=collect, Com?, Pre=prestige, LS, SF, Territory, MagicCube + boutons `*NA{D,H,N,P}` = états Disable/Hover/Normal/Press pour Shop/Team/Carve/Combo/Option/Collect/MagicCube/SpecialCoin). **vérifié** (`radarui*`, `cnradarui`). Réutilisé hors minimap : `fateroad*` prend 39× `AppNormal` pour ses `RoadIcon*`, `inventorywnd_{cn,na}` et `miniinfownd*` prennent les boutons `OpenHiding/CloseHiding`. |
 | `cndejavu` | `CNDejaVu.png` → `cndejavu.png` (512×512) | 62 | 9 | Boutons HUD variante CN : `BagButton*`/`JobButton*`/`CharButton*`/`TeamButton*`/`FamilyButton*`/`FriendButton*`/`MissionButton*`/`SystemButton*`/`ItemmallButton*`/`Pet*`/`CloseButton*`/`PinkCloseButton*`/`SliverCloseButton*`, `auto1-6`, `Gold/SilverIcon`, `beginners_guide_*`. → barre menu (`functionmenu*`) et sac (`inventorywnd*`) (**vérifié**), `cnarrowmessage`. |
 | `cndejavu2` | `CNDejaVu2.png` → `cndejavu2.png` (512×512) | 21 | 6 | Flèches de navigation `Up/Left/Right/BottomArrow`, `MainBase/MainBase2`, marqueurs page `NumberLeft/Right*` + `AL*`. → `cnradarui`, `cnitemmall`, `functionmenucn*`, `newmagiccubewnd`, `cnarrowmessage` (**vérifié**). |
-| `cdani` | `CoolDownSets.png` → `cooldownsets.png` (512×512) | 172 | 8 | Arène/versus : `ArenaVS`, `ArenaFire1-6`, `ArenaLightOn/Off`, boutons `AT/BT/HT*`, `Mask*`, `SelectFrame`, `BattleDungeonWinner`, `Chess`, `Light*` ; frames cooldown `b1-9`, `c1-120`, `auto1-6`. → `arenaduel*`, `mosterarena`, `dpsrecord` (boutons AT/BT/HT), `fateroadwnd*` (`Chess`), `versusinstancerankwnd` (**vérifié**). Le sweep de cooldown des skills en jeu est probablement `b*`/`c*` (**probable**, cf. overlays numérotés de `SkillAnimationTornado(cleric).png`). |
+| `cdani` | `CoolDownSets.png` → `cooldownsets.png` (512×512) | 172 | 8 | Arène/versus : `ArenaVS`, `ArenaLightOn/Off` (`arenaduel*`), boutons `AT/BT/HT*` (`dpsrecord`), `Chess` (`fateroadwnd*`), `BattleDungeonWinner`, `Light*` (cadre lumineux du looknfeel `DejaVu/LightStatic`) (**vérifié**). 149 régions jamais citées : frames d'animation `c1-120`/`b1-9` (sweep de cooldown, **probable** — cf. overlays numérotés de `SkillAnimationTornado(cleric).png`), `ArenaFire1-6`, `Mask*`, `SelectFrame`, `auto1-6`. |
 | `magiccube` | `MagicCube.png` → `magiccube.png` (512×512) | 50 | 2 | Mini-jeu Magic Cube (alchimie/alpaga) : `Function01-06*` (grille de fonctions, 5 états), `Success`/`Fail`, `Animation`, `Probability`, `runner0-3`, `countbackground*`. → `magiccube00`, `newmagiccubewnd` (**vérifié**). |
 | `newhand` | `newhand.png` → `newhand.png` (512×256) | 44 | 1 | Guide débutant : main/pointeur + icônes de tutorat nommées comme les fonctions (`Bag`, `Skill`, `Mail`, `Team`, `Quest`, `Mission`, `Lty`, `LSN`, `SFN`, `SYS`, `Itemmall`, `Achieve`, `Collect`, `Prestige`, `Territory`, `MonsterKing`, `Crystalcross`, `HeroIcon01-09`…). → `guidewnd` ne cite que `newhand:Yes` (**vérifié**) ; le reste est posé par code (**probable** pour les bulles d'aide type « How to move »). |
 | `promotion` | `promotion.png` → `promotion.png` (512×512) | 11 | 1 | Graphique « VS »/lettres (`LImage1-11`). → `familybattlejudgewnd` (fenêtre `Root/CompetitionSchedule`) (**vérifié** — guerre de guildes). |
@@ -68,8 +71,8 @@ alors que les fichiers corpus sont en minuscules (`dejavu.png`,
 | `worldmap` | `mapworld01.png` → `mapworld01.png` (512×512) | 1 | 5 | Fond continent `Background` (la carte peinte « Central Continent »). → `transportwnd` (fenêtre **Portal** = `TransportationArray (TP changement carte)*.png`), `zonemapuiver2`, `zonemapuicn`, `battlecrusadewnd`, `territoryrankwnd` (**vérifié**). |
 | `worldmap11` | `mapworld011.png` → `mapworld011.png` | 1 | 1 | Variante fond continent. → `zonemapui` (**vérifié**). |
 | `worldmap12` | `mapworld012.png` → `mapworld012.png` | 1 | 0 | Variante fond continent — orphelin (voir §3). |
-| `worldmapcity` | `worldmap.png` → `worldmap.png` (128×128) | 4 | 5 | **Icônes cristal de destination** `CityNormal/Hover` (+2 tailles) posées sur la carte monde — ce sont les cristaux bleus des ref-shots Portal/carte (**vérifié** : `transportwnd` 84 refs, `zonemapui*` 69-87, `territoryrankwnd` 57, `battlecrusadewnd` 84). |
-| `worldmapcity2` | `worldmap2.png` → `worldmap2.png` (128×128) | 4 | 1 | Mêmes marqueurs ville, autre variante. → `battlecrusadewnd` (**vérifié**). |
+| `worldmapcity` | `worldmap.png` → `worldmap.png` (128×128) | 4 | 5 | **Icônes cristal de destination** `CityNormal/Hover` (+2 tailles) posées sur la carte monde — ce sont les cristaux bleus des ref-shots Portal/carte (**vérifié** : `transportwnd` 84 refs, `zonemapui*` 69-87, `territoryrankwnd` 57). |
+| `worldmapcity2` | `worldmap2.png` → `worldmap2.png` (128×128) | 4 | 1 | Mêmes marqueurs ville, autre variante. → `battlecrusadewnd` (84 refs, **vérifié**). |
 | `bigworldset` | `worldmap1.png` → `worldmap1.png` (1024×512) | 5 | 5 | Découpe de la carte monde en 5 sous-régions (`North`, `Center`, `EastSouth`, `WestNorth`, `WestSouth`). → `transportwnd`, `zonemapui*`, `battlecrusadewnd` (**vérifié**). |
 | `map` | `mapworld01.png` | 1 | 0 | Doublon de `worldmap` (région `map`) — orphelin. |
 | `map2` | `mapworld02.png` | 1 | 0 | Fond continent alternatif — orphelin. |
@@ -99,14 +102,14 @@ toujours de `dejavu.png` via `dejavu.looknfeel`.
 | `DoubleEXPbar.png` — double barre EXP/CP | `fucntionbarwnd.layout` (`Root/FunctionBarWnd` : `expBackGrand` + `SoulBackGrand`) | `main` : `FunctionExpBackgrand` ; remplissage = `DejaVu/ProgressBar` du skin (**vérifié**) |
 | Menu bas-droite (10 boutons, cf. `juste le jeu.png`) | `functionmenu.layout`, `functionmenu_na`, `functionmenucn`, `functionmenucnpet`, `functionmenu5ppet` (`Root/FunctionMenu`) | `main` : `FunctionMenuBG` + `Function{Character,Item,Skill,Mission,Team,Commu,City,Pet,Sys,Bagr}{Normal,Hover,Press}` ; `CNDejaVu` : variantes boutons (**vérifié**) |
 | `pet skillbar.png` | `petfunctionwnd.layout`, `petfunctionwnd5p.layout` (`Root/PetFunctionWnd`) | `main` : `FunctionFastBar`, `FunctionLock*`, `PetAttackMode`, `PetCollectMode` (**vérifié**) |
-| `ChatPanel.png`, `ChatPanel-Peer.png` | `channelwnd.layout`, `channelwndv2.layout` (`Root/ChannelWnd`) | `main` : `channel*` (41 refs : cadre, onglets, `ChannelName`, `ChannelHover`, `ChannelEnable/Disable`, `ChannelInputBackground`, `channelVertScrollBar*`), `Transparent*` ; `DejaVu` + `DejaVuImage` (**vérifié**) |
+| `ChatPanel.png`, `ChatPanel-Peer.png` | `channelwnd.layout`, `channelwndv2.layout` (`Root/ChannelWnd`) | `main` : `channel*`/`Channel*` (41 refs dans le layout + `channelVertScrollBar*` via looknfeel : cadre, onglets, `ChannelName`, `ChannelHover`, `ChannelEnable/Disable`, `ChannelInputBackground`), `Transparent*` ; `DejaVu` + `DejaVuImage` (**vérifié**) |
 | `shot_0078_000316.png` — Channel Settings | `channelconfig.layout`, `channelconfigv2.layout` | skin DejaVu seul (0 `set:`) — losanges = `Checkbox*`/`RedCheckbox*` de `dejavu.png` (**probable**) |
 | `targetframe (Elite mob).png` — cadre cible (+ Target's Target de `shot_0085`) | `targetinfownd.layout`, `targetinfownd1.layout` (`Root/TargetInfoWnd`) | `main` : `faceFrame`, `MonsterStar` (★ rang), `MiniinfoBG`, `MiniInfoHP/Mp/BP`, `InfoHpBG/InfoBpBG`, `AntiStroke` ; `DejaVu` (`HelpButton*`) ou `DejaVuImage` (`Chest*`) (**vérifié**) |
 | `party UI.png` — cadres de groupe | `partywnd.layout` (`Root/party`) + `teamwndframe.layout`, `teamwndframe1` (`Root/TeamWndFrame`) ; raid : `raidwndframe.layout` | `main` : `MiniinfoBG`, `MiniInfoHP/Mp`, `InfoHpBG`, `MiniInfoLeaderIcon` (couronne chef) (**vérifié**) |
 | Minimap haut-droite (`juste le jeu.png`) | `radarui.layout`, `radarui_ver2.layout`, `cnradarui.layout` (`Root/Radar`) | `Radar` : `RadarBody`, `RadarPic`, `Zoom*`, `Globle*`, boutons-fonctions NAD/NAH/NAN/NAP (**vérifié**). La carte elle-même = DDS `ui/map/S###m.dds`, hors imagesets. |
-| Buffs sous barre ULTIMATE (`shot_0045`) | `buffwnd.layout`, `buffwnd1.layout` (`Root/BuffWnd`) + `slotbuff` | `main` : `BuffBackground*` (9-patch) ; `DejaVuImage` : `BuffBtn` (**vérifié**) |
+| Buffs sous barre ULTIMATE (`shot_0045`) | `buffwnd.layout`, `buffwnd1.layout` (`Root/BuffWnd`) + `slotbuff` | `main` : `BuffBackground*` (9-patch, cité par le looknfeel — **vérifié**) ; `DejaVuImage` : `BuffBtn` (**vérifié**) |
 | `TimedCastSkill.png` — barre de cast | `castingbarwnd.layout` (`Root/castingbarWnd`, type `DejaVu/CastingBarImage`) | `dejavu.png` : `castingBar{L,R,T,B,LT,RT,LB,RB,C}` via le skin (**vérifié par le looknfeel**) |
-| `QuestTracker*.png` — tracker de quêtes | `questtracewnd.layout` (`Root/QuestTraceWnd`) + `slotquest` ; parties repliables | `DejaVu` : `CreateZoomIn*` ; `main` : `Mission{Hide,Hover,Action}` (dans `main`, cités par `fucntionbarwnd`/`functionmenu*`) (**partiellement vérifié / probable**) |
+| `QuestTracker*.png` — tracker de quêtes | `questtracewnd.layout` (`Root/QuestTraceWnd`) + `slotquest` ; parties repliables | `DejaVu` : `CreateZoomIn*` (**vérifié**) ; `main` : `Mission{Hide,Hover,Action}` — présents dans l'atlas mais jamais cités (code, **probable**) |
 | Toasts centraux (« acquired state », « Switched Class », « learned skill ») | `screenmessagewnd.layout`, `screenmessagewnd_na` (`Root/DWindow`), `nitificationtipwnd` (`Root/NotificationTipWnd`), `notifywnd`, `messagewnd` | `dejavu.png` : `ScreenMessageBG` ; `Injured` (variante NA) ; `main` : `FunctionLock*` (**vérifié**). Oiseaux du changement de classe : `flybirditem.layout` (`Root/FlyBirdItem`) — **probable**. |
 
 ### Panneau Classes (K) — `ClassePanel*.png`, `HoverToolTipClasse.png`, `case pour certificat.png`
@@ -154,7 +157,7 @@ Candidats par nommage (**probable**, non confirmé) :
 
 | Niveau | Layout | Atlas |
 |---|---|---|
-| « Region Map » plein écran (Aven, Search Listing, City Features) | `zonemapui.layout` (`WorldMap11` bg), `zonemapuiver2` (`WorldMap` bg), `zonemapuicn` (`WorldMap` bg) + `zonemapoption*` | `worldmapcity` (marqueurs cristal ville, 78-87 refs), `BigWorld`/`BigWorldSet` (continents), `DejaVu` (**vérifié**). Fond de région illustré = DDS `ui/map/S###s.dds` hors imagesets. |
+| « Region Map » plein écran (Aven, Search Listing, City Features) | `zonemapui.layout` (`WorldMap11` bg), `zonemapuiver2` (`WorldMap` bg), `zonemapuicn` (`WorldMap` bg) + `zonemapoption*` | `worldmapcity` (marqueurs cristal ville, 69-87 refs), `BigWorld`/`BigWorldSet` (continents), `DejaVu` (**vérifié**). Fond de région illustré = DDS `ui/map/S###s.dds` hors imagesets. |
 | « Portal » téléportation | `transportwnd.layout` (`Root/TransportWnd`) + `transporttip` | `WorldMap` (`mapworld01.png` = continent « Central Continent » du dropdown), `worldmapcity` (84 cristaux bleus de destination), `BigWorldSet`, `BigWorld`, `DejaVu` (**vérifié**) |
 | Carte guerre de territoire | `battlecrusadewnd` (`mapBtn1-38`, `BigWorldImage`), `territoryrankwnd` | `WorldMap`, `worldmapcity2` (84 refs), `worldmapcity`, `BigWorldSet` (**vérifié**) |
 
@@ -239,8 +242,21 @@ Tout le reste de l'UI visible est en DDS chargé directement par le code
 
 - **Régions posées en code** : les propriétés `Image` absentes du XML sont
   remplies à l'exécution (icônes de skills/items DDS, `BGImage` des onglets
-  classe, régions `newhand` autres que `Yes`, balayage de cooldown `CDAni`
-  `b*/c*`, contenu de `RadarPic`). La carte ci-dessus ne couvre que les
+  classe, contenu de `RadarPic`…). Régions définies mais citées nulle part
+  (ni `set:` ni `imageset=`, layouts + looknfeel + scheme confondus) :
+  `main` 17/115 (`Target*`, `Mission*`, `Anti*`, `FunctionBall`,
+  `AntiLightining`) ; `cdani` 149/172 (`c1-120`, `b1-9`, `ArenaFire*`,
+  `Mask*`, `SelectFrame`, `auto*`) ; `newhand` 43/44 ; `magiccube` 23/50
+  (états `active/hover2/press2/disable`, `Fail`, `runner1-3`,
+  `Function06*`) ; `dejavuimage` 35/133 (`Mood*`, `HeroIcon*`, `ServerGray/
+  Yellow/Green`, `Crystalcross`, `AlpacaCoin`, `LicenseCombo*`, moitié des
+  `Notification*`) ; `cndejavu` 21/62 (états `Light`, `auto2-6`,
+  `PinkCloseButton*`) ; `dejavu` 43/437 (`AngelSkill*`, `MouseArrow`,
+  `MouseTarget`, `invalidItem`, `multiitem*`, `QuestLogDone*`, doublons
+  mal orthographiés `RedioButtonhere`/`CloseNormal/Pressed/Hover`) ;
+  `radar` 6/102 (états `Helpcn*`/`CloseHiding*`) ; `cutscene` 3/13
+  (`KeyBar*`, `MainBar`) ; `worldmapcity[2]` les grandes variantes
+  `CityHover2`/`CityNormal2`. La carte ci-dessus ne couvre que les
   références textuelles.
 - **Assemblage runtime** : les onglets (`Root/Job`, `Root/Activities`,
   `Root/StallUI`…) ne citent pas leurs sous-fenêtres ; la correspondance

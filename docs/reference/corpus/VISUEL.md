@@ -39,6 +39,24 @@ de relancer.
 
 Pour une description sémantique d'un fichier précis, l'agent ouvre le PNG
 avec `read` (cellules de planche lisibles à 25/sheet, détail = PNG unitaire).
-Sous-ensembles à décrire à la main en priorité : tenues de classes
-(`class-outfits.tsv`), atlas CEGUI des layouts, textures visibles dans
-`ref-shots/`.
+
+**Descriptions déjà rédigées** (`artifacts/corpus-inventory/`) — à lire avant
+de re-décrire :
+
+| Fichier | Couverture |
+|---|---|
+| `visual-notes-outfits-{1,2,3,boy,other}.md` | tenues de classes, **les 7 corps** (2 960 entrées `class-outfits.tsv`) |
+| `visual-notes-class-icons.md` | icônes classes `J###` |
+| `visual-notes-skill-icons.md` | 4 742 icônes de sorts (join `c_spell.ini` champ 2) |
+| `visual-notes-item-icons.md` | **6 069/6 069** icônes d'items (jointes `items.tsv`) |
+| `visual-notes-item-textures.md` | skins d'armes `item/texture/` |
+| `visual-notes-monsters.md` | **1 362/1 362** skins monstres référencés |
+| `visual-notes-rides.md` | 450 textures montures |
+| `visual-notes-ui-atlas.md` | les 34 atlas CEGUI par région |
+| `visual-notes-ui-maps.md` | cartes région/minimap par map |
+| `visual-notes-char-misc.md` | visages, cheveux, accessoires, costumes |
+| `visual-notes-fx-misc.md` | familles effect/, loadingframe, deco |
+
+Jointures dérivées : `class-outfits.tsv`, `equip-visuals.tsv` (11 099 lignes
+K-codes), `class-rankbuff-expected.tsv`, `equip-visuals-notes.md`,
+`class-rankbuff-notes.md`.

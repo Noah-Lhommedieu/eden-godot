@@ -5,7 +5,7 @@
 | `architecture/MASTER-PLAN.md` | Plan par lots, statut réel, prochaine action |
 | `architecture/ARCHITECTURE.md` | Arborescence réelle et cible, frontières |
 | `decisions/ADR-*.md` | Décisions d'architecture (version moteur, EDENFR, Core, assets) |
-| `knowledge/` | Connaissances vérifiées, chaque note avec statut, version et date |
+| `knowledge/` | Connaissances vérifiées, chaque note avec statut, version et date. Entrée bugs : **`known-bugs.md`**. Gameplay : `class-*-audit`, `rankbuff-server-audit`, `native-constants{,-2,-3}`, `enchant-tables`, `protocol-{map,partials}`, `schema-drift-audit` |
 | `workflows/task-contract.md` | Contrat de tâche agent et format de livraison |
 | `workflows/EDENFR-GAPS.md` | Lacunes de données EDENFR (backlog données) |
 | `provenance/` | Classement de provenance des assets (2026-11-02) |

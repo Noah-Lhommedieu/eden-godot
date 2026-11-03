@@ -24,3 +24,5 @@ d'abord), le plan dans `docs/architecture/MASTER-PLAN.md`.
 - Ne jamais charger : `corpus/`, `re/`, `knowledge/` en entier,
   `docs/legacy/`, `eden_godot/docs/archive/`, `artifacts/`.
 - Commits/push : pas de git pour l'instant (décision du propriétaire).
+
+- Audits de référence : `docs/knowledge/known-bugs.md` (24 bugs, index maître) puis la liste complète dans `AGENTS.md` § « Audits de référence ». Commande utilisateur de test : `tools/run.sh -- --login=test123:test123 --channel --char`.

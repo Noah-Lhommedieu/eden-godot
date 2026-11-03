@@ -16,6 +16,8 @@ catégorie, taille, métadonnées, description).
 | [animations.md](animations.md) | Animations .kf/.kfm Gamebryo (1 572) | 1572 |
 | [textures.md](textures.md) | Textures .dds par domaine + formats + .ifl (34 972) | 34972 |
 | [ui-et-cegui.md](ui-et-cegui.md) | Interface CEGUI + textures UI (uidata/, ui/, UI/) | 16628 |
+| [ui-atlas-map.md](ui-atlas-map.md) | Carte imageset ↔ layouts ↔ panneaux ref-shots (quel fichier alimente quel panneau) | — |
+| [layout-impl-map.md](layout-impl-map.md) | Les 415 layouts ↔ implémentation Godot : 125 implémentés / 104 partiels / 186 absents — carte du travail UI restant | — |
 | [audio-video.md](audio-video.md) | Sons WAV, musiques OGG, cinématiques SWF/OGV | 2552 |
 | [systeme-et-divers.md](systeme-et-divers.md) | Racine launcher + formats orphelins | 36 |
 | [VISUEL.md](VISUEL.md) | Accès aux images : miroir PNG + contact sheets + index | — |

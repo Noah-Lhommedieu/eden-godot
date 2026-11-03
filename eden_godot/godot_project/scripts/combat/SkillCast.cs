@@ -71,6 +71,7 @@ public partial class SkillCast : Node
     private int _testStep;
     private EntityRegistry? _registry;
     private string? _castAnim;   // (hérité) — plus de rejeu : l'incantation tient la pose, le blast joue le clip
+    private CastCircle? _circle;  // cercle magique au sol pendant l'incantation temporisée
     private ulong _rawAnimDeadline;   // repli gestuelle brute si aucun blast n'arrive (sorts instantanés)
     private int _rawAnimSpell;
     private GroundTargeter? _targeter;   // visée au sol (sorts Ground)
@@ -257,10 +258,13 @@ public partial class SkillCast : Node
     public uint CurrentTarget =>
         Hud.HudExtensions.FindHud()?.Target?.TargetHandle ?? 0;
 
-    /// <summary>Lance un sort : sur la cible courante (9) ou sans
-    /// cible (17, direction = cap du perso). Refusé si un cast est
-    /// déjà en cours (le serveur répondrait 279 flag=0) ou si le perso
-    /// est mort.</summary>
+    /// <summary>Lance un sort : sur la cible courante (9), au sol
+    /// (16, formes zone/directionnelles sans cible) ou sans cible
+    /// (17, forme 3 auto-centrée). Une forme 0 (cible unique) sans
+    /// cible est REFUSÉE en local (textindex 2195) — le natif n'a pas
+    /// de message « dans le vide » pour elle. Refusé aussi si un cast
+    /// est déjà en cours (le serveur répondrait 279 flag=0) ou si le
+    /// perso est mort.</summary>
     public void Cast(int spellId)
     {
         if (spellId <= 0 || IsCasting || PlayerVitals.IsDead ||
@@ -341,6 +345,20 @@ public partial class SkillCast : Node
         if (_shotTimes.Count > 0 && _shotT0 == 0) _shotT0 = Time.GetTicksMsec();
         var plan = SpellZone.Plan(shape, target != 0, tx, ty, cx, cy, PlayerFacingEden(),
             SpellZone.Reach(SpellCatalog.RangeUnits(spellId)));
+        if (plan.Route == CastRoute.Refused)
+        {
+            // Forme 0 (sort ciblé) sans cible : le client natif n'a
+            // aucun message « dans le vide » pour elle — blocage local
+            // + prompt textindex 2195 « Veuillez sélectionner une
+            // cible pour utiliser cette compétence. » ; AUCUN paquet
+            // n'est émis (le serveur refuserait de toute façon 410).
+            var msg = TextResolver.TextIndex(2195)
+                ?? "Veuillez sélectionner une cible pour utiliser cette compétence.";
+            SysMsg(msg);
+            GD.Print($"[skill] cast #{spellId} refusé : cible requise " +
+                $"(textindex 2195, forme 0)");
+            return;
+        }
         switch (plan.Route)
         {
             case CastRoute.ToLife:
@@ -468,6 +486,7 @@ public partial class SkillCast : Node
         CastingSpell = 0;
         CastingTarget = 0;
         _castAnim = null;
+        StopCastVisuals();
         _lock.Released();
         _chaseSpell = 0;
         _chaseTarget = 0;
@@ -592,8 +611,28 @@ public partial class SkillCast : Node
                      $"castDs={m.CastTimeDs}");
             // castDs=0 = cast instantané : pas de barre à animer.
             if (m.CastTimeDs > 0)
+            {
                 CastBar.Instance?.BeginCast(m.CastTimeDs / 10f,
                     SpellCatalog.Name((ushort)m.SpellId));
+                // Incantation temporisée (natif) : gestuelle « chant »
+                // C_Spell col 2 (301-317 → magicNN) tenue en boucle
+                // jusqu'au blast + cercle magique doré tournant sous
+                // le lanceur — les deux s'arrêtent à la résolution
+                // (blast/break/fin). Le blast joue le clip shootNN.
+                var id = (ushort)m.SpellId;
+                var stem = CharModelSpec.BodyStem(
+                    SessionCarry.Character?.Appearance);
+                var chant = SpellCatalog.ChantKf(id) is { } ck && ck > 0
+                    ? MotionTable.Shared.Lookup(stem, ck) : null;
+                if (chant != null && _player?.Animator != null)
+                {
+                    _player.Animator.HoldAnim = chant;
+                    GD.Print($"[verify] cast : chant {chant} " +
+                             $"tenu (kf={ck})");
+                }
+                _circle = CastCircle.Begin(_player!,
+                    m.CastTimeDs / 10f + 1.5f);
+            }
             if (_castBreakMs > 0 && m.CastTimeDs > 0)
                 _breakAt = Time.GetTicksMsec() + (ulong)_castBreakMs;
             // Gestuelle : natif = clip du kfId RÉSOLU porté par le blast (288 ciblé/sans cible, 297 au sol,
@@ -607,11 +646,25 @@ public partial class SkillCast : Node
         CastStateChanged?.Invoke();
     }
 
+    /// <summary>Fin des visuels d'incantation : le cercle magique
+    /// disparaît en fondu et la gestuelle « chant » est relâchée
+    /// (la locomotion reprend, ou le one-shot du blast s'il joue).</summary>
+    private void StopCastVisuals()
+    {
+        _circle?.End();
+        _circle = null;
+        if (_player?.Animator != null)
+            _player.Animator.HoldAnim = "";
+    }
+
     /// <summary>Joue la gestuelle de blast du lanceur local : kfId résolu du serveur (repli col3).</summary>
     private void PlayCastAnim(int blastId, int spellId)
     {
         _rawAnimDeadline = 0;
         _rawAnimSpell = 0;
+        // Le blast libère la gestuelle « chant » : le one-shot shootNN
+        // prend la main, puis la locomotion reprend (sans HoldAnim).
+        StopCastVisuals();
         var stem = CharModelSpec.BodyStem(SessionCarry.Character?.Appearance);
         var raw = SpellCatalog.ActionKf(spellId);
         var kf = blastId > 0 ? blastId : raw;
@@ -633,6 +686,7 @@ public partial class SkillCast : Node
             CastingSpell = 0;
             CastingTarget = 0;
             _castAnim = null;
+            StopCastVisuals();
             _lock.Released();
             CastBar.Instance?.CompleteCast();
             CastStateChanged?.Invoke();
@@ -649,6 +703,7 @@ public partial class SkillCast : Node
             CastingSpell = 0;
             CastingTarget = 0;
             _castAnim = null;
+            StopCastVisuals();
             CastBar.Instance?.CancelCast();
             CastStateChanged?.Invoke();
         }
@@ -663,6 +718,7 @@ public partial class SkillCast : Node
             CastingSpell = 0;
             CastingTarget = 0;
             _castAnim = null;
+            StopCastVisuals();
             CastBar.Instance?.CompleteCast();
             CastStateChanged?.Invoke();
             GD.Print($"[verify] cast : 281 impact " +
@@ -682,6 +738,7 @@ public partial class SkillCast : Node
             CastingSpell = 0;
             CastingTarget = 0;
             _castAnim = null;
+            StopCastVisuals();
             CastBar.Instance?.CancelCast();
             CastStateChanged?.Invoke();
         }
@@ -768,9 +825,14 @@ public partial class SkillCast : Node
                     if (GameScene.MobTestActive) break;
                     // Zone sans mob (ville) : après ~16 s on bascule
                     // sur un cast sans cible (17 → 279) — le flux de
-                    // cast reste prouvé live.
+                    // cast reste prouvé live. On préfère un sort dont
+                    // la forme accepte le 17/16 (≠ cible unique 0, qui
+                    // est désormais refusée en local — textindex 2195).
                     if (_testTimer < 16.0) break;
-                    var spell0 = PlayerSkills.Spells.FirstOrDefault();
+                    var spell0 = PlayerSkills.Spells.FirstOrDefault(s =>
+                        !SpellZone.RequiresTarget(
+                            (CastShape)SpellCatalog.Shape(s.SpellMaster)))
+                        ?? PlayerSkills.Spells.FirstOrDefault();
                     GD.Print("[combat-test] aucun mob en vue " +
                         "(zone urbaine) — cast hors cible");
                     if (spell0 != null)
@@ -1028,6 +1090,7 @@ public static class SpellCatalog
 {
     private static Dictionary<int, string>? _icons;   // id → code icône
     private static Dictionary<int, int>? _actions;    // id → KF motion
+    private static Dictionary<int, int>? _chant;      // id → KF chant col2 (magicNN incantation)
     private static Dictionary<int, int>? _pay;        // id → col42 paiement
     private static Dictionary<int, ulong>? _masks;    // id → col24 class mask
     private static Dictionary<int, int>? _castDs;     // id → col27 cast ds
@@ -1206,6 +1269,17 @@ public static class SpellCatalog
                _icons.TryGetValue(spellId, out var code) ? code : "";
     }
 
+    /// <summary>Id motion KF de l'incantation du sort (col 2 de
+    /// C_Spell — 301-317 magicNN « chant » tenu en boucle pendant un
+    /// cast temporisé, avant la gestuelle de release col 3). 0 si
+    /// le sort n'a pas de chant (instantané de mêlée…).</summary>
+    public static int ChantKf(int spellId)
+    {
+        EnsureLoaded();
+        return _chant != null &&
+               _chant.TryGetValue(spellId, out var kf) ? kf : 0;
+    }
+
     /// <summary>Id motion KF de l'action du sort (col 3 de C_Spell —
     /// 301-317 magicNN chant, 4xx shootNN release, 10xx attackNN) —
     /// 0 si inconnu.</summary>
@@ -1245,6 +1319,7 @@ public static class SpellCatalog
             if (_icons != null) return;
             var icons = new Dictionary<int, string>();
             var actions = new Dictionary<int, int>();
+            var chant = new Dictionary<int, int>();
             var payT = new Dictionary<int, int>();
             var masks = new Dictionary<int, ulong>();
             var castDs = new Dictionary<int, int>();
@@ -1273,6 +1348,8 @@ public static class SpellCatalog
                     if (code.Length > 0) icons[id] = code;
                     var kf = IniTable.GetInt(row, 3);
                     if (kf > 0) actions[id] = kf;
+                    var ck = IniTable.GetInt(row, 2);
+                    if (ck > 0) chant[id] = ck;
                     var pay = IniTable.GetInt(row, 42);
                     if (pay > 0) payT[id] = pay;
                     var mask = IniTable.GetStr(row, 23);
@@ -1316,7 +1393,7 @@ public static class SpellCatalog
             {
                 GD.PrintErr($"[skill] c_spell.ini : {e.Message}");
             }
-            _actions = actions; _pay = payT; _masks = masks;
+            _actions = actions; _chant = chant; _pay = payT; _masks = masks;
             _castDs = castDs; _ttype = ttype; _family = family;
             _upBase = upBase; _mpBase = mpBase; _cdDs = cdDs;
             _result = result; _reqLv = reqLv; _dmgPow = dmgPow;

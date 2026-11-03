@@ -22,8 +22,10 @@ public enum CastShape
     Sector = 6,
 }
 
-/// <summary>Quel message le client natif émet (<c>CastToLife/Location/Nowhere</c>).</summary>
-public enum CastRoute { ToLife, ToLocation, ToNowhere }
+/// <summary>Quel message le client natif émet (<c>CastToLife/Location/Nowhere</c>) —
+/// ou <c>Refused</c> : le sort exige une cible et le client natif n'a AUCUN
+/// message « dans le vide » pour cette forme → le cast ne doit pas partir.</summary>
+public enum CastRoute { ToLife, ToLocation, ToNowhere, Refused }
 
 /// <summary>Décision de lancement : message + point visé (coords sol Eden x,y).</summary>
 public readonly record struct CastPlan(CastRoute Route, float X, float Y);
@@ -75,6 +77,22 @@ public static class SpellZone
     public static bool AcceptsLocation(CastShape s) =>
         s is CastShape.Ground or CastShape.Direction or CastShape.Cross or CastShape.Sector;
 
+    /// <summary>Vrai si le natif accepte un lancer sans cible (<c>CastToNowhere</c>).</summary>
+    public static bool AcceptsNowhere(CastShape s) => s == CastShape.Self;
+
+    /// <summary>Vrai si le blast est centré SUR le lanceur (Self/Nearby —
+    /// CSpellToNowhere @0x08153990, centre = position du lanceur) : le
+    /// visuel AoE (cyclone…) entoure le lanceur et non chaque victime.</summary>
+    public static bool SelfAnchored(CastShape s) =>
+        s is CastShape.Self or CastShape.Nearby;
+
+    /// <summary>Vrai si la forme EXIGE une entité ciblée — la forme 0
+    /// (<c>CSpellToLife</c>) est la seule sans canal de repli : ni
+    /// CastToLocation ni CastToNowhere ne l'acceptent (serveur natif
+    /// 0x5aa/0x5ac → 410). Un client natif n'émet rien sans cible pour
+    /// elle — c'est la règle « pas de cast sans cible ».</summary>
+    public static bool RequiresTarget(CastShape s) => s == CastShape.Single;
+
     /// <summary>Vecteur unitaire (x,y sol Eden) du cap Eden <paramref name="dir"/>.</summary>
     public static (float X, float Y) Axis(float dir)
     {
@@ -102,7 +120,10 @@ public static class SpellZone
     /// <summary>
     /// Routage natif d'un sort : forme + cible → message et point.
     /// <para><c>Self</c> : toujours NCID 17, même avec une cible sélectionnée.
-    /// <c>Single</c> : NCID 9 avec cible, sinon 17 (le serveur refusera, comme le natif sans cible).
+    /// <c>Single</c> : NCID 9 avec cible ; SANS cible → <see cref="CastRoute.Refused"/>
+    /// — le client natif n'a pas de message « dans le vide » pour la forme 0
+    /// (CastToNowhere la refuse, 0x5ac), il bloque en local avec le prompt
+    /// textindex 2195.
     /// <c>Ground</c> : NCID 16 centré sur la cible, ou devant le lanceur sans cible.
     /// <c>Direction/Cross/Sector</c> : NCID 9 avec cible (le serveur redirige vers la position de la
     /// cible, <c>CastToLife</c>), sinon NCID 16 vers un point devant le lanceur (l'axe est
@@ -125,9 +146,13 @@ public static class SpellZone
                 if (hasTarget) return new CastPlan(CastRoute.ToLife, targetX, targetY);
                 return Ahead(casterX, casterY, facingDir, 5f);
             default:
+                // Forme 0 (cible unique) : le natif n'a aucun message
+                // « dans le vide » — CastToNowhere refuse la forme 0
+                // (0x5ac) et CastToLocation aussi (0x5ab). Sans cible
+                // le cast est REFUSÉ en local (textindex 2195 côté UI).
                 return hasTarget
                     ? new CastPlan(CastRoute.ToLife, targetX, targetY)
-                    : new CastPlan(CastRoute.ToNowhere, casterX, casterY);
+                    : new CastPlan(CastRoute.Refused, casterX, casterY);
         }
     }
 

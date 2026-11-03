@@ -39,6 +39,17 @@ public sealed partial class ZoneEntryFlow
             return;
         }
         var castDef = _services.Spells.GetDefinition(spellId);
+        if (castDef is null)
+        {
+            // `CheckCanCast` natif @0x081526e0 : le sort n'est pas dans
+            // la table → vfunc TextOutputIndex 0x5a9 = textindex 1449
+            // « La Compétence (%s1) n'existe pas. » (arg = id décimal,
+            // fmt "%hu"), puis CastTo* retourne 0 → 410.
+            await RefuseCastRouteAsync(session, 9, spellId,
+                SpellCastRouting.TextUnknownSpell,
+                spellId.ToString(), token);
+            return;
+        }
 
         // StateNoUseSkill natif (NoUseMagic +0xbc / NoUseKungfu +0xbe
         // sur char+0x8c) — le cast est refusé sous silence/stun ; le
@@ -67,6 +78,28 @@ public sealed partial class ZoneEntryFlow
             return;
         }
 
+        // --- Gate de routage natif `CSpellFactory::CastToLife` ---
+        // @0x081545a0 : seules les formes 0/2/5/6 passent par le 9.
+        // Une forme 1 (au sol) ou 3 (auto-centrée) forgée en NCID 9 →
+        // vfunc TextOutputIndex 0x5aa = textindex 1450
+        // « Inutilisable sur les gens », puis 410.
+        if (!SpellCastRouting.AcceptsToLife(
+                SpellCastRouting.ShapeOf(castDef!)))
+        {
+            await RefuseCastRouteAsync(session, 9, spellId,
+                SpellCastRouting.TextCantCastToLife, "", token);
+            return;
+        }
+        // `CSpellToLife::CastTest` : la cible résolue est NULL
+        // (GetLifeEntity(0) échoue — un 9 sans handle) → 0x5af =
+        // textindex 1455 « La cible n'existe pas », puis 410.
+        if (handle == 0)
+        {
+            await RefuseCastRouteAsync(session, 9, spellId,
+                SpellCastRouting.TextTargetNotFound, "", token);
+            return;
+        }
+
         // `ISpell::CastTest` @0x084f04d0 : tout cast tenté sur une
         // monture NON-combat (ride-spells 2140 vides ET char+0x824==0)
         // déclenche RemoveEnchantByState(9) — dismount avant la
@@ -86,7 +119,37 @@ public sealed partial class ZoneEntryFlow
             var lifeTarget = ResolveLifeTarget(st, handle);
             if (lifeTarget is not null)
             {
-                var ldef = castDef;
+                var ldef = castDef!;   // gate 1449 : castDef non-null
+                // --- `CSpellToLife::CastTest` natif, cible joueur ---
+                // CanCastTarget(+0x1a) avec param_5=0 : échec = refus
+                // SILENCIEUX (410 seul, pas de 316). Spec -99 (ennemi
+                // requis) et -95/-94 avec Type==1 → refus sur joueur ;
+                // -96/-97 → équipe requise (le lanceur reste admis).
+                var pspec = SpellTargetSpecOf(ldef);
+                if (!SpellCastRouting.SpecAllowsPlayerTarget(
+                        pspec, ldef.Type) ||
+                    (lifeTarget != st &&
+                        SpellCastRouting.SpecNeedsTeam(pspec) &&
+                        !SameTeam(st, lifeTarget)))
+                {
+                    await session.SendAsync(
+                        new CNC_CZ_ClientCommandFailReturn
+                        { Field1 = 9, Field2 = (int)spellId }, token);
+                    return;
+                }
+                // Portée native CastTest : HowClose(cible, +0x44=0,
+                // r_c+r_t + portée(+0x40) + attrMod(0) + 2.5) →
+                // 0x333 = textindex 819 « trop éloignée », puis 410.
+                var pdx = lifeTarget.PosX - st.PosX;
+                var pdz = lifeTarget.PosZ - st.PosZ;
+                var pmax = SpellCastRouting.LifeCastOuterRange(ldef,
+                    GetSpellAttrModify(st, 0, spellId));
+                if (pdx * pdx + pdz * pdz > pmax * pmax)
+                {
+                    await RefuseCastRouteAsync(session, 9, spellId,
+                        SpellCastRouting.TextTooFar, "", token);
+                    return;
+                }
                 var lifeCastMs = ldef?.CastTimeMs ?? 0;
                 if (lifeCastMs > 0)
                 {
@@ -130,11 +193,15 @@ public sealed partial class ZoneEntryFlow
                     handle, lifeTarget, token, skipAck: false);
                 return;
             }
-            // Cible morte/despawnée : le natif répond 410
+            // Cible morte/despawnée : CastTest → 0x5af →
+            // TextOutputIndex 1455 « La cible n'existe pas » PUIS 410
             // ClientCommandFailReturn [i32 ncid][i32 0] — SANS réponse
             // le client garde son cast en attente et refuse TOUTE
             // action suivante (plus de cast/attaque/dialogue — le
             // lockout constaté live après 2 combats).
+            await session.SendAsync(new CNC_CZ_ClientTextOutputIndex
+            { Field1 = (short)SpellCastRouting.TextTargetNotFound,
+                Field2 = "" }, token);
             await session.SendAsync(new CNC_CZ_ClientCommandFailReturn
             { Field1 = 9, Field2 = 0 }, token);
             return;
@@ -420,6 +487,35 @@ public sealed partial class ZoneEntryFlow
             if (s.Migrated && s.CharId == handle && s.PlayerHp > 0)
                 return s;
         return null;
+    }
+
+    /// <summary>Refus natif complet d'un cast mal routé : 316
+    /// <c>CNC_CZ_ClientTextOutputIndex</c> <c>[s16 index][str arg]</c>
+    /// (vfunc TextOutputIndex @0x08429b20 — message t_textindex)
+    /// PUIS 410 <c>ClientCommandFailReturn</c> <c>[i32 ncid][i32 spell]</c>
+    /// (les Execute des commandes 9/16/17/59 émettent le 410 quand
+    /// <c>CastTo*</c> retourne 0). <paramref name="arg"/> = la chaîne
+    /// %s1 du texte — vide sauf 1449 (id du sort, fmt "%hu").</summary>
+    private static async Task RefuseCastRouteAsync(NetSession session,
+        int ncid, int spellId, int textIndex, string arg,
+        CancellationToken token)
+    {
+        await session.SendAsync(new CNC_CZ_ClientTextOutputIndex
+        { Field1 = (short)textIndex, Field2 = arg }, token);
+        await session.SendAsync(new CNC_CZ_ClientCommandFailReturn
+        { Field1 = ncid, Field2 = spellId }, token);
+    }
+
+    /// <summary>Vrai si <paramref name="b"/> est dans l'équipe de
+    /// <paramref name="a"/> (<c>IsMyTeam</c> natif — la spec +0x1a
+    /// -96/-97 des buffs de groupe). Le lanceur est sa propre équipe
+    /// (-96 inclut explicitement le lanceur).</summary>
+    private bool SameTeam(EntryState a, EntryState b)
+    {
+        if (a == b) return true;
+        var team = _services.Teams.GetTeamOf((int)a.CharId);
+        return team != null && team.Members.Exists(
+            m => m.CharacterId == (int)b.CharId);
     }
 
     /// <summary>Résolution d'un sort sur cible joueur (soin/buff

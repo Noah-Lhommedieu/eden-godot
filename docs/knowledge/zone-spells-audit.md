@@ -261,3 +261,109 @@ MISS, 10u derrière MISS, côté pur ~10u MISS hors disque-pointe,
   visuel d'impact du client Godot — déviation assumée.
 - Preuve headless seule : ordre/contenu des paquets et géométrie
   couverts par tests ; la validation visuelle live reste à refaire.
+
+## 8. Gates de routage cast : « pas de sort sans cible » (2026-11-03)
+
+Statut : **TESTED + VISUALLY_VALIDATED** (live `tools/run.sh --
+--login=test123:test123 --channel --char --combat-test --cast-nowhere
+--cast-spell=<id>` ; détail §8.4). Fichiers :
+`eden_server/server/src/Eden.Zone/Combat/SpellCastRouting.cs` (NEUF —
+règle pure partagée), `ZoneEntryFlow.Combat.Spells.cs`,
+`ZoneEntryFlow.Combat.Spells.Resolution.cs`, `ZoneEntryFlow.cs`,
+`godot_project/scripts/combat/SpellZone.cs`, `SkillCast.cs`,
+tests `NetTests/SpellZoneTests.cs` + `Eden.Tests/SpellCastRoutingTests.cs`
+(neuf, 62 cas).
+
+### 8.1 Table de routage native (vérifiée, zone @ adresses)
+
+`SSpellData+0x18` (forme) ← `LoadAllSpellData` @0x08380130
+(col21 Param1 × col31 ShapeSub). `CastTo*` exige la forme adéquate
+et émet sinon `TextOutputIndex` (316 `[s16 idx][str arg]`, arg = chaîne
+%s1 du fmt — vide sauf « %hu » pour 1449) PUIS 410
+`ClientCommandFailReturn [i32 ncid][i32 spell]` quand le CastTo*
+retourne 0 :
+
+| NCID | Fonction | Formes acceptées | Refus (textindex) |
+|---|---|---|---|
+| 9 | `CastToLife` @0x081545a0 | 0, 2, 5, 6 | 0x5aa → **1450** « Inutilisable sur les gens » ; cible NULL → 0x5af → **1455** |
+| 16 | `CastToLocation` @0x08154210 | 1, 2, 5, 6 | 0x5ab → **1451** « Inutilisable au sol » |
+| 17 | `CastToNowhere` @0x08153990 | 3 | 0x5ac → **1452** « Inutilisable sur vous-même » |
+| 59 | `CastToNearby` @0x081536d0 | 4 (jamais produit) | 0x5ac → **1452** |
+| — | `CheckCanCast` @0x081526e0 | sort hors table | 0x5a9 → **1449** « La Compétence (%s1) n'existe pas. » |
+
+Conséquence : la forme 0 (`CSpellToLife`, cible unique) n'a **aucun**
+canal de repli — le client natif n'a pas de message « cast dans le
+vide » pour elle : sans cible il bloque en local (prompt textindex
+**2195** « Veuillez sélectionner une cible pour utiliser cette
+compétence. »). `CastToNowhere` sur forme 0 et `CastToLocation` sur
+forme 0/3 sont des paquets forgés que le serveur doit refuser.
+
+### 8.2 Correctifs client (SpellZone / SkillCast)
+
+- `CastRoute.Refused` ajouté ; `Plan(CastShape.Single, hasTarget:false)`
+  retourne `Refused` (était : `ToNowhere` — envoyait un 17 voué au
+  refus 410 ; c'était la faille « cast sans cible »).
+- `SpellZone.RequiresTarget(s)` / `AcceptsNowhere(s)` — la forme 0 est
+  la SEULE qui exige une entité ; 1/2/5/6 passent par un point (16),
+  3 par soi-même (17), 4 par 59.
+- `SkillCast.SendCast` : `Refused` → `SysMsg(TextResolver.TextIndex
+  (2195))` + log, **aucun paquet émis**, `CastingSpell` non posé.
+- Repli combat-test en zone urbaine : préfère un sort de forme ≠ 0
+  pour garder la preuve du cast hors cible.
+
+### 8.3 Correctifs serveur (Eden.Zone)
+
+- `SpellCastRouting` (pur, Eden.Zone/Combat) : `ShapeOf(def)` (port du
+  switch), `Accepts{ToLife,ToLocation,ToNowhere,ToNearby}(shape)` +
+  `Accepts(ncid,shape)`, `RefusalTextIndex(ncid)`,
+  `SpecAllowsPlayerTarget`, `SpecNeedsTeam`, `LifeCastOuterRange`.
+- NCID 9 : sort inconnu → 316[1449 arg=id]+410 ; forme ∉{0,2,5,6} →
+  316[1450]+410 ; `handle==0` → 316[1455]+410 (GetLifeEntity(0)→NULL
+  natif — avant : `ResolveLifeTarget` retombait sur soi).
+- Cible joueur (`CastTest` @0x084f04d0) : spec -99 (ennemi requis) et
+  -95/-94 avec Type==1 → refus **silencieux** (410 seul —
+  `CanCastTarget(param_5=0)` natif) ; -96/-97 → équipe requise
+  (`SameTeam`, le lanceur reste admis) ; portée
+  `r_c+r_t+range(+0x40)+attrMod(0)+2.5` (DAT_08896c68=2.5, .rodata)
+  → 316[819 « trop éloignée »]+410.
+- NCID 16 : inconnu → 316[1449]+410 ; forme ∉{1,2,5,6} → 316[1451]+410.
+- NCID 17/59 : inconnu → 316[1449]+410 ; forme ≠3 (17) / ≠4 (59) →
+  316[1452]+410 — avant : un 17 forgé avec un sort forme-0 retombait
+  sur le chemin buff/résultat (résolu quand même !). Le `case 59` du
+  dispatch porte désormais son propre ncid (410 Field1=59).
+- Ordre : gates après les checks `CheckCanCast` (silence/down-time),
+  avant `CastTest` (dismount/MP/279-en-cours) — comme le natif qui
+  dispatche la forme dans la factory avant de créer l'ISpell.
+- `DerivedShape` (privé, doublon) supprimé → `SpellCastRouting.ShapeOf`.
+
+### 8.4 Preuves live (run.sh, compte test123)
+
+- `--cast-spell=50022` (Perforation, Param1=4/sub=0 → **forme 0**) :
+  `cast #50022 refusé : cible requise (textindex 2195, forme 0)` —
+  **aucun NCID émis** (fil wire vérifié). Idem 50026/50038 (forme 0)
+  en casts suivants.
+- `--cast-spell=50015` (Attaque Cyclone, Param1=0 → **forme 3**,
+  rayon col30=10→5u) : `cast #50015 → sans cible` → **NCID 17** →
+  `279 OK` → gestuelle + blast 59280/PBAoE.
+- `--cast-spell=50663` (Grille Sonique, Param1=4/sub=2 → **forme 6
+  secteur**) : `cast #50663 → sans cible` → **[wire] NCID 16** vers un
+  point devant le lanceur → `279 OK` → `281 impact` sur un mob dans
+  le secteur. (La forme 6 n'accepte pas le 17 : le « sans cible »
+  natif passe par un point, pas par CastToNowhere.)
+- NCID 9 ciblé (mob, en combat) : comportement inchangé.
+
+### 8.5 Limites / hypothèses
+
+- Rayons d'entités (`vfunc+0x18`) de la borne `HowClose` non résolus
+  dans le décompilé → `LifeCastOuterRange` ajoute **1,0 u** forfaitaire
+  + la constante native 2,5 (hypothesis, documentée).
+- `CanSee` (invisibilité, 0x5b0→1456) non modélisé — pas de furtivité
+  serveur ; spec -95/-94 : la condition « Type==1 » est dérivée du
+  param_4 de CastTest (`SSpellData+0xc`), pas re-désassemblée au-delà.
+- Le check d'équipe -97 sur soi est admis (IsMyTeam(self) natif non
+  désassemblé jusqu'au fond) ; PvP/duel non modélisés → spec -99 est
+  refusée sur TOUT joueur (le natif les traiterait ennemi).
+- Échec `NifParticleMapperTests.MountEmitter_ReskinCost_PerFrame`
+  (3169 µs > seuil) au run de suite — domaine montures/FX, hors lot.
+- `CastCircle.cs` (fichier SpellFx non commité d'un autre agent)
+  cassait le build — fix mécanique `Godot.Mesh.PrimitiveType` posé.

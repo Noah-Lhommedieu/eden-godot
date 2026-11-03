@@ -7,6 +7,7 @@ using Eden.Core.Networking;
 using Eden.Core.Networking.Session;
 using Eden.Core.Networking.Messages.Generated;
 using Eden.Core.Game.Services;
+using Eden.Zone.Combat;
 using Eden.Zone.Links;
 using Eden.Core.Logging;
 
@@ -632,13 +633,25 @@ public sealed partial class ZoneEntryFlow
                 return true;
 
             case 17: // SpellCastToNowhere [u16 spell][i32]
-            case 59: // SpellCastToNearby
                 if (!SpellAllowedForClass(st, payload))
                 {
                     await RefuseSpellCastAsync(session, 17, payload, token);
                     return true;
                 }
-                await HandleCastNowhereAsync(session, st, payload, token);
+                await HandleCastNowhereAsync(session, st, payload, token,
+                    SpellCastRouting.NcidToNowhere);
+                return true;
+
+            case 59: // SpellCastToNearby — même wire que 17 mais gate
+                     // forme 4 (CastToNearby @0x081536d0) ; le 410 de
+                     // refus porte le ncid 59, pas 17.
+                if (!SpellAllowedForClass(st, payload))
+                {
+                    await RefuseSpellCastAsync(session, 59, payload, token);
+                    return true;
+                }
+                await HandleCastNowhereAsync(session, st, payload, token,
+                    SpellCastRouting.NcidToNearby);
                 return true;
 
             case 241: // BattleRoyaleJoinRequest [i32 join][i32 leave]

@@ -37,30 +37,9 @@ public sealed partial class ZoneEntryFlow
     ///     survie : `280 attr0x21` + `299` ; mort : `305` + `300` + exit.
     /// L'act reste constant pendant toute la chaîne (0x1e dans la
     /// capture) ; la sortie prend un nouvel act (0x1f).</summary>
-    /// <summary>Shape dérivée `SSpellData+0x18` — switch natif de
-    /// `LoadAllSpellData` @0x08380130 sur `CSpellData+0x44`
-    /// (SpellDef.Param1 = S_Spell col21) combiné à `+0xcc`
-    /// (SpellDef.ShapeSub = col31) : 0→{3,5}, 1-3→3, 4→{0,2,5,6},
-    /// 5→{1,2,5,6}, 6→0. Valeurs = clés de générateurs
-    /// (enregistrement @0x0815xxxx) : 0=CSpellToLife (ciblé),
-    /// 1=CSpellToLocation (NCID16, AoE au sol), 2=direction,
-    /// 3=CSpellToNowhere (sans cible, NCID17), 4=CSpellToNearby
-    /// (jamais produit par la table), 5=croix, 6=secteur.
-    /// `CastToLife` @0x081545a0 : 2/5/6 → AoE à la position de la
-    /// cible.</summary>
-    private static int DerivedShape(SpellParser.SpellDef def) =>
-        def.Param1 switch
-        {
-            0 => def.ShapeSub == 3 ? 5 : 3,
-            >= 1 and <= 3 => 3,
-            4 => def.ShapeSub == 2 ? 6 : def.ShapeSub == 3 ? 5
-                : def.ShapeSub == 1 ? 2 : 0,
-            // cas 5 natif : sub==1→2, sub==2→6, sub==3→5,
-            // sinon 1 (ToLocation) ; +0x6e==0 → forcé 1.
-            5 => def.ShapeSub == 2 ? 6 : def.ShapeSub == 3 ? 5
-                : def.ShapeSub == 1 ? 2 : 1,
-            _ => 0,         // case 6 et hors table → mono-cible
-        };
+    // Shape dérivée SSpellData+0x18 → SpellCastRouting.ShapeOf
+    // (Combat/SpellCastRouting.cs) : la table de routage NCID↔forme
+    // et les refus natifs 1449/1450/1451/1452/1455 y sont centralisés.
 
     /// <summary>Spec de ciblage du sort — `SSpellData+0x1a` dérivé dans
     /// `CSpellDBO::LoadAllSpellData` @0x08380130 : switch sur
@@ -290,7 +269,7 @@ public sealed partial class ZoneEntryFlow
         // (L+trunc(mod/2)) balayée ; croix @0x084f40c0 : pointe du bras
         // 0, les bras 1-3 partiraient dans les vecteurs n/m×f32 — le
         // codec 288 généré n'en transporte pas, ils vont dans le 297).
-        var shape = def is null ? 0 : DerivedShape(def);
+        var shape = def is null ? 0 : SpellCastRouting.ShapeOf(def);
         var blastVictim = (int)mob.Handle;
         float blastX = mob.X, blastY = mob.Y, blastZ = mob.Z;
         (float X, float Y)[]? crossTips = null;
@@ -507,7 +486,7 @@ public sealed partial class ZoneEntryFlow
         // secteur s'ancrent sur le LANCEUR.
         if (def != null &&
             kind is SpellHitKind.Physical or SpellHitKind.Magic &&
-            DerivedShape(def) is 0 or 2 or 5 or 6)
+            SpellCastRouting.ShapeOf(def) is 0 or 2 or 5 or 6)
         {
             // Rayon natif du cercle = base tronquée + trunc(mod/2)
             // (HitTest @0x084f9300 — pas le mod entier).
@@ -577,7 +556,7 @@ public sealed partial class ZoneEntryFlow
         SpellParser.SpellDef def, SpellHitKind kind, float cx, float cz,
         float radius)
     {
-        var shape = DerivedShape(def);
+        var shape = SpellCastRouting.ShapeOf(def);
         var modHalf = SpellAreaGeometry.RadiusModHalf(
             GetSpellAttrModify(st, 1, spellId));
         var baseR = SpellAreaGeometry.AreaRadius(def);
@@ -856,10 +835,11 @@ public sealed partial class ZoneEntryFlow
         var def = _services.Spells.GetDefinition(spellId);
         if (def is null)
         {
-            // Sort hors S_Spell → refus natif ClientCommandFailReturn.
-            await session.SendPacketAsync(410, Concat(
-                BitConverter.GetBytes(16),
-                BitConverter.GetBytes((int)spellId)), token);
+            // Sort hors S_Spell → 316[1449] « n'existe pas » +
+            // 410 ClientCommandFailReturn (CheckCanCast natif 0x5a9).
+            await RefuseCastRouteAsync(session, 16, spellId,
+                SpellCastRouting.TextUnknownSpell,
+                spellId.ToString(), token);
             return;
         }
         // StateNoUseSkill (stun/silence) — refus 410 comme CastToLife.
@@ -876,6 +856,19 @@ public sealed partial class ZoneEntryFlow
         {
             await session.SendAsync(new CNC_CZ_ClientCommandFailReturn
             { Field1 = 16, Field2 = (int)spellId }, token);
+            return;
+        }
+        // --- Gate de routage natif `CSpellFactory::CastToLocation` ---
+        // @0x08154210 : seules les formes 1/2/5/6 passent par le 16
+        // (1 = cercle sur le point ; 2/5/6 = axe lanceur→point). Une
+        // forme 0 (cible) ou 3 (auto-centrée) forgée en NCID 16 →
+        // TextOutputIndex 0x5ab = textindex 1451 « Inutilisable au
+        // sol », puis 410.
+        if (!SpellCastRouting.AcceptsToLocation(
+                SpellCastRouting.ShapeOf(def)))
+        {
+            await RefuseCastRouteAsync(session, 16, spellId,
+                SpellCastRouting.TextCantCastToLocation, "", token);
             return;
         }
         // Cast déjà en cours → refus 279 flag=0 (GCD natif).
@@ -1072,7 +1065,7 @@ public sealed partial class ZoneEntryFlow
 
         // Forme/axe/pointe calculés AVANT l'émission : les paquets
         // portent la pointe de la forme, pas le point visé brut.
-        var shape = DerivedShape(def);
+        var shape = SpellCastRouting.ShapeOf(def);
         var modHalf = SpellAreaGeometry.RadiusModHalf(
             GetSpellAttrModify(st, 1, spellId));
         var baseR = SpellAreaGeometry.AreaRadius(def);
@@ -1269,22 +1262,24 @@ public sealed partial class ZoneEntryFlow
     /// 59558, Type=8/TargetType=1/ResultSpellId=0 dans S_Spell, mettait
     /// le client en stance combat sur un simple saut).</summary>
     private async Task HandleCastNowhereAsync(NetSession session,
-        EntryState st, byte[] payload, CancellationToken token)
+        EntryState st, byte[] payload, CancellationToken token,
+        int ncid = SpellCastRouting.NcidToNowhere)
     {
         // Wire natif (désasm Deserialize) : [s16 spell][f32 direction].
         if (payload.Length < 6 || st.CharId == 0) return;
         var spellId = BitConverter.ToUInt16(payload, 0);
         var dir = BitConverter.ToSingle(payload, 2);   // f32 : orientation
 
-        // Sort hors S_Spell → le natif `CSpellFactory::CastToNowhere`
-        // échoue et renvoie 410 ClientCommandFailReturn
-        // [i32 ncid][i32 spell] (désasm 0x87fd1ec / NCID @0x89bc932).
+        // Sort hors S_Spell → CheckCanCast 0x5a9 : 316[1449]
+        // « La Compétence (%s1) n'existe pas. » puis 410
+        // ClientCommandFailReturn [i32 ncid][i32 spell]
+        // (désasm 0x87fd1ec / NCID @0x89bc932).
         var def0 = _services.Spells.GetDefinition(spellId);
         if (def0 is null)
         {
-            await session.SendPacketAsync(410, Concat(
-                BitConverter.GetBytes(17), BitConverter.GetBytes((int)spellId)),
-                token);
+            await RefuseCastRouteAsync(session, ncid, spellId,
+                SpellCastRouting.TextUnknownSpell,
+                spellId.ToString(), token);
             return;
         }
 
@@ -1294,7 +1289,25 @@ public sealed partial class ZoneEntryFlow
                 != 0)
         {
             await session.SendAsync(new CNC_CZ_ClientCommandFailReturn
-            { Field1 = 17, Field2 = (int)spellId }, token);
+            { Field1 = ncid, Field2 = (int)spellId }, token);
+            return;
+        }
+
+        // --- Gate de routage natif ---
+        // `CSpellFactory::CastToNowhere` @0x08153990 : seule la forme 3
+        // (auto-centrée) passe par le 17 ; `CastToNearby` @0x081536d0 :
+        // forme 4 seulement pour le 59. Toute autre forme forgée →
+        // TextOutputIndex 0x5ac = textindex 1452 « Inutilisable sur
+        // vous-même », puis 410 [ncid][spell]. Sans ce gate un 17
+        // forgé avec un sort mono-cible (forme 0) retombait sur le
+        // chemin buff/résultat ci-dessous. Le gate précède CastTest
+        // (dismount/MP) — le natif choisit le générateur dans la
+        // factory AVANT de créer l'ISpell.
+        if (!SpellCastRouting.Accepts(ncid,
+                SpellCastRouting.ShapeOf(def0)))
+        {
+            await RefuseCastRouteAsync(session, ncid, spellId,
+                SpellCastRouting.TextCantCastToNowhere, "", token);
             return;
         }
 
@@ -1312,7 +1325,7 @@ public sealed partial class ZoneEntryFlow
         if (mpCost > 0 && st.PlayerMp < mpCost)
         {
             await session.SendAsync(new CNC_CZ_ClientCommandFailReturn
-            { Field1 = 17, Field2 = (int)spellId }, token);
+            { Field1 = ncid, Field2 = (int)spellId }, token);
             return;
         }
         // Down-time natif (CheckInDownTime → refus 410, puis
@@ -1321,7 +1334,7 @@ public sealed partial class ZoneEntryFlow
         if (_services.SpellCooldowns.IsCooling((int)st.CharId, spellId))
         {
             await session.SendAsync(new CNC_CZ_ClientCommandFailReturn
-            { Field1 = 17, Field2 = (int)spellId }, token);
+            { Field1 = ncid, Field2 = (int)spellId }, token);
             return;
         }
         // Cast déjà en cours (toute forme) : refus natif 279 flag=0 —
@@ -1531,7 +1544,7 @@ public sealed partial class ZoneEntryFlow
                 NativeCombatFormulas.SpellHitKindOf(rdef) is
                     SpellHitKind.Physical or SpellHitKind.Magic;
             var spec = def != null ? SpellTargetSpecOf(def) : -91;
-            if (def != null && DerivedShape(def) == 3 &&
+            if (def != null && SpellCastRouting.ShapeOf(def) == 3 &&
                 SpellSpecHostile(spec))
                 await ApplyNowherePbaoeAsync(session, st, def,
                     spellId);
@@ -1543,7 +1556,7 @@ public sealed partial class ZoneEntryFlow
             // équipe pour -96) et entités non-caractères — et applique
             // l'enchant de résultat par victime, SANS aucune entrée en
             // combat (HitRestoreSkill/EffectToLife, jamais Hit*Skill).
-            else if (def != null && DerivedShape(def) == 3)
+            else if (def != null && SpellCastRouting.ShapeOf(def) == 3)
                 await ApplyNowhereFriendlyCircleAsync(session, st, def,
                     spellId, spec);
             // Buff self : l'enchant résultat (SSpellData+0x7c, S_Spell
@@ -1555,7 +1568,7 @@ public sealed partial class ZoneEntryFlow
             // victimes, jamais le lanceur (bug live « debuffs que
             // j'applique visibles dans MON hud »).
             if (def is { ResultSpellId: > 0 } && def.Value != -1 &&
-                !(DerivedShape(def) == 3 && spec == -99) &&
+                !(SpellCastRouting.ShapeOf(def) == 3 && spec == -99) &&
                 _services.Enchants.GetUseCommands(def.ResultSpellId)
                     .Count > 0 &&
                 (def.ResultSpellChance <= 0 ||

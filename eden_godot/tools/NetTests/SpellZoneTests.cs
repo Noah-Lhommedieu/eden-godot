@@ -27,6 +27,17 @@ public class SpellZoneTests
         Assert.Equal(expected, SpellZone.ShapeOf(p1, sub));
 
     [Theory]
+    [InlineData(CastShape.Self, true)]     // 50015 PBAoE — cyclone au lanceur
+    [InlineData(CastShape.Nearby, true)]
+    [InlineData(CastShape.Single, false)]  // 50027 : impact sur la cible
+    [InlineData(CastShape.Sector, false)]  // 50663 : cône depuis le lanceur
+    [InlineData(CastShape.Ground, false)]
+    [InlineData(CastShape.Direction, false)]
+    [InlineData(CastShape.Cross, false)]
+    public void SelfAnchored_OnlySelfCentered(CastShape s, bool expected) =>
+        Assert.Equal(expected, SpellZone.SelfAnchored(s));
+
+    [Theory]
     [InlineData(20, 10f)]
     [InlineData(25, 12f)]   // 12.5 tronqué (short)
     [InlineData(5, 2f)]     // 2.5 → 2
@@ -107,11 +118,36 @@ public class SpellZoneTests
     }
 
     [Fact]
-    public void Plan_Single_TargetToLife_ElseNowhere()
+    public void Plan_Single_TargetToLife_ElseRefused()
     {
+        // Forme 0 = cible unique : NCID 9 avec cible ; SANS cible le
+        // natif n'a aucun message — CastToNowhere refuse la forme 0
+        // (0x5ac→1452) et CastToLocation aussi (0x5ab→1451). Le client
+        // bloque donc en local (prompt textindex 2195) au lieu
+        // d'émettre un 17 voué au refus 410.
         Assert.Equal(CastRoute.ToLife, SpellZone.Plan(CastShape.Single, true, 5, 5, 0, 0, 0f, 30f).Route);
-        Assert.Equal(CastRoute.ToNowhere, SpellZone.Plan(CastShape.Single, false, 0, 0, 0, 0, 0f, 30f).Route);
+        Assert.Equal(CastRoute.Refused, SpellZone.Plan(CastShape.Single, false, 0, 0, 0, 0, 0f, 30f).Route);
     }
+
+    [Fact]
+    public void RequiresTarget_OnlySingleShape()
+    {
+        // Seule la forme 0 exige une entité — 1/2/5/6 passent par un
+        // point (16), 3 par soi-même (17), 4 par le canal 59.
+        foreach (var s in Enum.GetValues<CastShape>())
+            Assert.Equal(s == CastShape.Single, SpellZone.RequiresTarget(s));
+    }
+
+    [Theory]
+    [InlineData(CastShape.Self, true)]
+    [InlineData(CastShape.Single, false)]
+    [InlineData(CastShape.Ground, false)]
+    [InlineData(CastShape.Direction, false)]
+    [InlineData(CastShape.Cross, false)]
+    [InlineData(CastShape.Sector, false)]
+    [InlineData(CastShape.Nearby, false)]
+    public void AcceptsNowhere_OnlyShapeThree(CastShape s, bool ok) =>
+        Assert.Equal(ok, SpellZone.AcceptsNowhere(s));
 
     [Theory]
     [InlineData(CastShape.Ground, true)]

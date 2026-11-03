@@ -111,3 +111,58 @@ Voir le rapport de session (captures `artifacts/` et journaux) ; commandes :
   PlayerBag/InventoryWindow/QuestTracker), pas du spawn du trésor au sol (mob 79 = dépôt direct en
   sac) ni de la mort elle-même (mob sans drop : p99 post-kill 9,4 ms ≤ baseline). Hors périmètre
   des fichiers `combat/` : correctif à router (fusionner les 3 `RefreshCells` par 274 + tracer).
+
+## 6. Session live 2026-11-03 (~21h) — ancrage du blast directionnel + floaters
+
+Correctifs client (`combat/SpellFx.cs`, `combat/DamageFloaters.cs`) — **verified live**
+(compte test123, map S002, `tools/run.sh -- --login=test123:test123 --channel --char --combat-test …`) :
+
+- **Ancre des effets de blast directionnels** : l'effet 297 des formes 2/5/6 (direction/
+  croix/secteur) était posé au point `dst` ; la géométrie native (§1 : sommet du cône,
+  centre de la croix, origine de l'onde **au lanceur**) veut l'ancre à `src`. Corrigé :
+  `OnGroundBlast` ancre à `src` pour les formes directionnelles (`dst` inchangé pour le
+  cercle au sol). Le 288 (lanceur self, formes directionnelles) posait l'effet **sur la
+  victime** : remplacé par `DirectionalBlast` ancré au lanceur, orienté vers `(X,Y)` du
+  paquet ; le 289 témoin suit le même chemin (src/dst du paquet).
+- **Gestuelle distante du 297** : le filtre « entité la plus proche de src » ignorait les
+  mobs et pouvait animer un voisin quand le lanceur est le joueur local (absent du
+  registre). Désormais : src ≈ joueur local → pas de gestuelle distante (déjà jouée par
+  `SkillCast.PlayCastAnim`) ; sinon entité joueur **ou mob** la plus proche (≤ 1,5 u).
+- **Floaters** : log `[verify] floater victime=…pos=…` ajouté — prouve un floater par
+  victime de chaque 281, posé à +2,2 u sur l'entité victime (déjà correct, désormais
+  tracé).
+
+Preuves live (journaux `--combat-test --clone-mob=20678`) :
+
+- Secteur 50663 ciblé (NCID 9 → 288) : `[verify] blast dir #50663 forme=Sector
+  src=(360,3,58,8) dst=(364,4,60,1) axe=(0,95,0,32)` — src = position du joueur ; 28
+  victimes `s55541` + 28 floaters à leurs positions.
+- Secteur 50663 sans cible (NCID 16 → 297) : `[spellfx] zone #50663 forme=Sector
+  src=(357,1,60) dst=(357,1,65) ancre=(357,1,60) axe=(0,1)` — ancre = lanceur.
+- Cercle 50622 au sol (297) : `ancre=(330,9,62,1)` = dst — chemin inchangé.
+- Cyclone 50015 (self, 17) : FX `s10541` joueur + 3 victimes + 3 floaters.
+- Tornade 50027 (ciblé, 9 → 288) : `s11741` sur la victime principale + 14 victimes
+  281 avec FX + floater chacune (ex. `victime=0xffff90e7 pos=(362,7,2,-61) «237» Crit`).
+
+Divergences serveur constatées (rapportées — serveur en lecture seule) :
+
+- `SendSpellBlastToLocationAsync` écrit `dst` = **point visé par le client** ; le natif
+  écrit la **pointe de la forme** (lanceur + axe·L pour secteur/croix/direction). Axe
+  identique, mais le `dst` natif porte la portée réelle.
+- `SendSpellBlastOK` (288) écrit `X,Y,Z` = position de la victime ; pour les formes
+  directionnelles le natif écrit la pointe (`CSpellToSector::NotifyBlastToSelf`…).
+- `SendSpellBlastToLifeAsync` (289) est émis aux **témoins** pour toutes les formes y
+  compris directionnelles ; le natif n'émet pas de 289 pour les sorts à position
+  (secteur/croix/direction passent par `NotifyBlastToLocation` → 297).
+- `ClientSpellFlyToLocation` (546, onde visuelle de la forme Direction) jamais émis.
+- Le secteur 50663 (cône attendu) touche des victimes **derrière et sur les côtés** du
+  lanceur à ~10 u — la résolution serveur du secteur ressemble ici à une zone plus
+  large que le cône natif (`SpellAreaGeometry` à re-vérifier sur ce cas).
+- Un même impact produit parfois deux 281 **identiques sur le fil** pour une même
+  victime (`NCID=281 …90e7 f690ffff 01c2eb0b bb000000 01000000` ×2, et `fe90ffff` ×2,
+  run 2026-11-03 ~21h) — double envoi serveur ; le client affiche les deux, fidèle
+  au fil.
+- Sort 59280 (AoE) : les 281 portent `caster=0x0bebc201` = **le joueur** — c'est un
+  proc/enchant AoE déclenché côté serveur pendant le combat (pas un cast explicite) ;
+  il arrive en 281 directs, sans paquet blast (288/289/297) — le visuel de zone
+  d'un proc n'est donc jamais diffusé (côté serveur).

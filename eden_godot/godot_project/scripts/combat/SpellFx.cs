@@ -191,7 +191,8 @@ public partial class SpellFx : Node
                 // posé sur la victime.
                 var id = (ushort)m.SpellId;
                 if (Directional(id))
-                    DirectionalBlast(id, PlayerEden(), (m.X, m.Y));
+                    DirectionalBlast(id, PlayerEden(), (m.X, m.Y),
+                        PlayerFacingEden());
                 else
                     Impact(id, (uint)m.VictimHandle, false);
             });
@@ -207,7 +208,7 @@ public partial class SpellFx : Node
                 var id = (ushort)m.SpellId;
                 if (Directional(id))
                     DirectionalBlast(id, (m.X, m.Y),
-                        (m.Field8, m.Field9));
+                        (m.Field8, m.Field9), 0f);
                 else
                     Impact(id, (uint)m.TargetHandle, false);
             });
@@ -290,19 +291,25 @@ public partial class SpellFx : Node
     private (float X, float Y) PlayerEden() => _player != null
         ? WorldConv.ToEdenGround(_player.GlobalPosition) : (0f, 0f);
 
+    /// <summary>Cap Eden du perso (même conversion que
+    /// <c>SkillCast.PlayerFacingEden</c>).</summary>
+    private float PlayerFacingEden() =>
+        EdenClient.Game.EdenDir.FromYaw(_player?.ModelYaw ?? 0f);
+
     /// <summary>Effet de blast directionnel ancré à la position du
     /// lanceur (srcX,srcY Eden), orienté vers la pointe (dstX,dstY) —
     /// formes 2/5/6 (secteur/croix/direction) : cône/croix/onde
     /// émanent du lanceur. Utilisé par le 288 (lanceur self — src =
     /// position du joueur, dst = champ position du paquet) et le 289
-    /// (témoin — src/dst du paquet).</summary>
+    /// (témoin — src/dst du paquet). <paramref name="fallbackDir"/> =
+    /// cap Eden de repli quand src ≈ dst (point confondu).</summary>
     private void DirectionalBlast(int spellId, (float X, float Y) src,
-        (float X, float Y) dst)
+        (float X, float Y) dst, float fallbackDir)
     {
         var hp = _player?.GroundHeight?.Invoke(src.X, -src.Y);
         var hr = _registry?.GroundHeight?.Invoke(src.X, -src.Y);
         var h = hp ?? hr ?? _player?.GlobalPosition.Y ?? 0f;
-        var (ax, ay) = SpellZone.AxisTo(src.X, src.Y, dst.X, dst.Y, 0f);
+        var (ax, ay) = SpellZone.AxisTo(src.X, src.Y, dst.X, dst.Y, fallbackDir);
         var anchor = new Node3D { Name = $"DirFx_{spellId}" };
         AddChild(anchor);
         anchor.GlobalPosition = new Vector3(src.X, h, -src.Y);

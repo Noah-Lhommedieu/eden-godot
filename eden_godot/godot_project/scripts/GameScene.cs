@@ -3797,6 +3797,7 @@ public partial class GameScene : Node3D
         System.Threading.Interlocked.Exchange(ref _heartbeatMs, System.Environment.TickCount64);
 
         // Drain des actions postées par les handlers réseau.
+        using var _ptd = EdenClient.Perf.PerfTrace.Scope("gs.drain"); // TEMP-DIAG
         while (_pending.TryDequeue(out var act))
         {
             try { act(); }

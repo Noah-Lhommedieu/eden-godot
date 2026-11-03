@@ -428,7 +428,7 @@ public partial class CharSelectScreen : Control
             float.TryParse(System.Environment.GetEnvironmentVariable(
                     "EDEN_CHARSEL_SAFE"),
                 System.Globalization.CultureInfo.InvariantCulture,
-                out var sr) ? sr : 0.78f;
+                out var sr) ? sr : 0.75f;
         var centerOff = (n - 1) * 0.5f * Spacing;
         var safeNdc = safeRight * 2f - 1f;
         var dist = Mathf.Clamp(

@@ -39,6 +39,13 @@ public partial class SettingsApplier : Node
     private bool _menuHooked;
     private Node? _scene;
     private int _applyIn;
+    /// <summary>Frames restantes avant une ré-application graphismes
+    /// demandée par <see cref="OnNodeAdded"/> : la map est construite
+    /// en tâche de fond et n'entre dans l'arbre que longtemps après
+    /// le changement de scène — le « 5 frames » de _Process rate
+    /// alors le WorldEnvironment, le soleil, la caméra joueur,
+    /// FogCeiling/Grass et les particules.</summary>
+    private int _gfxApplyIn;
     private int _qaTab = -1;
     /// <summary>Frames restantes pour poser le thème dès que le HUD et
     /// son atlas existent (le HUD se monte après le chargement des
@@ -83,6 +90,7 @@ public partial class SettingsApplier : Node
 
         if (OS.GetCmdlineUserArgs().Contains("--settings-reapply"))
             GetTree().CreateTimer(10.9).Timeout += () => { GD.Print("[settings] reapply QA"); ApplyAll(); };
+        GetTree().NodeAdded += OnNodeAdded;
         ApplyAll();
         GD.Print($"[settings] chargés — ui_scale={S.UiScale} " +
                  $"thème={S.Theme} preset={S.Preset}");
@@ -206,6 +214,24 @@ public partial class SettingsApplier : Node
             ApplyGraphics();
             ApplyInterface();
         }
+        if (_gfxApplyIn > 0 && --_gfxApplyIn == 0)
+            ApplyGraphics();
+    }
+
+    /// <summary>Un nœud dépendant des réglages graphiques entre dans
+    /// l'arbre → ré-application différée de 2 frames (coalescée par
+    /// le compte à rebours — un subtree de map ne provoque qu'une
+    /// passe). Couvre le montage asynchrone de la map
+    /// (<c>GameScene.LoadWorldAsync</c>), la migration de zone en jeu
+    /// et les caméras/particules tardives, sans couplage
+    /// GameScene → settings. Idempotent : ApplyGraphics réécrit les
+    /// mêmes valeurs.</summary>
+    private void OnNodeAdded(Node n)
+    {
+        if (n is WorldEnvironment or DirectionalLight3D or Camera3D
+                or GpuParticles3D ||
+            n.Name.ToString() is "FogCeiling" or "Grass")
+            _gfxApplyIn = Math.Max(_gfxApplyIn, 2);
     }
 
     // ==================================================================
@@ -264,9 +290,14 @@ public partial class SettingsApplier : Node
                      true, false).Cast<WorldEnvironment>())
         {
             if (we.HasMeta("pregame_env") ||
-                we.HasMeta("fog_ceiling_env") ||
                 we.Environment is not { } env) continue;
-            env.FogEnabled = S.Fog;
+            // fog_ceiling_env : FogCeiling a neutralisé le fog
+            // builtin (post-process FogMax) — on ne protège QUE
+            // FogEnabled ; SSAO/SSIL/grade restent applicables
+            // (l'ancien continue les excluait tous → preset jamais
+            // appliqué sur les maps foguées, live comme bancs).
+            if (!we.HasMeta("fog_ceiling_env"))
+                env.FogEnabled = S.Fog;
             // Glow/Glare/Photo/Death : ApplyColorGrade (ApplyRender).
             env.SsaoEnabled = S.Ssao;
             env.SsilEnabled = S.Ssil;
@@ -409,15 +440,16 @@ public partial class SettingsApplier : Node
         _themeWait--;
         var hud = FindHud();
         if (_themeWait % 300 == 0)
-            GD.Print($"[theme-boot] wait={_themeWait} " +
-                $"hud={(hud == null ? "null" : "ok")} " +
-                $"tex={(hud?.Tex == null ? "null" : "ok")} " +
-                $"scene={_scene?.Name}");
+            GD.Print($"[theme-boot] wait={_themeWait} hud={(hud == null ? "null" : "ok")} tex={(hud?.Tex == null ? "null" : "ok")} scene={_scene?.Name}");
+        // S'abonner à HudReady DÈS que le nœud HUD existe — c'est le
+        // seul signal fiable « atlas construit » (émis en fin de
+        // BuildAll) : si l'attente rate sa fenêtre ou est déjà
+        // épuisée, OnHudReady pose quand même thème+palette.
+        if (hud != null) HookHud(hud);
         if (hud == null || Ui.UiThemeBoot.MustWait(true, hud.Tex != null))
             return;
         _themeWait = 0;
         ApplyTheme(hud, S.Theme);
-        HookHud(hud);
     }
 
     private static void ApplyTheme(Hud.HudRoot hud, string theme)

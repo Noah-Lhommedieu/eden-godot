@@ -53,8 +53,10 @@ public partial class SettingsApplier
         foreach (var we in root.FindChildren("*", "WorldEnvironment",
                      true, false).Cast<WorldEnvironment>())
         {
+            // fog_ceiling_env NON exclu : ce grade ne touche pas le
+            // fog — l'exclure privait les maps foguées (quasi toutes)
+            // de glow/adjust même dans les bancs.
             if (we.HasMeta("pregame_env") ||
-                we.HasMeta("fog_ceiling_env") ||
                 we.Environment is not { } env) continue;
             if (!env.HasMeta("glow_i0"))
             {

@@ -99,7 +99,10 @@ public partial class FogCeiling : Node3D
             _mat.SetShaderParameter("fog_max",
                 Mathf.Clamp(p.FogMax, 0f, 1f));
             _configured = true;
-            Visible = true;
+            // Respecte le réglage « Fog » (SettingsApplier peut
+            // appliquer avant cette configuration différée —
+            // SettingsApplier.cs:Visible = S.Fog).
+            Visible = Settings.SettingsApplier.Instance?.S.Fog ?? true;
             GD.Print($"[fog] {code}: plafond FogMax={p.FogMax} " +
                      $"à {p.FogSightRange} u (post-process)");
             DisableBuiltinFog(n);

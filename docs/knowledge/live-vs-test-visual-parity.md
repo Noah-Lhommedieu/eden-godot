@@ -190,3 +190,38 @@ comparer à part (le temple GLB était « introuvable/illisible » dans mon run 
   ×2 est inféré (masques R max 0,48/0,84, ref-shot, doc FIX-B).
 - Le sélecteur de personnage (temple) n'a pas été capturé (GLB temple absent).
 - La course de warmup (point 3) est plausible mais non reproduite.
+
+## Correctif environnement appliqué (2026-11-03, statut `verified`)
+
+Le point 4 « Non prouvé » est **confirmé et corrigé** :
+
+- **Course prouvée** : `GameScene.LoadWorldAsync` charge la map en tâche de
+  fond (`GameScene.cs:423`, `Task.Run`) puis `AddChild(root)` des secondes
+  APRÈS le changement de scène → le « 5 frames » de
+  `SettingsApplier._Process` (`SettingsApplier.cs` ~L215) ratait le
+  `WorldEnvironment`, le `Sun`, la `Camera3D` joueur (`PlayerController.cs:195`),
+  `FogCeiling`, `Grass` et les particules de la map. Mesure live avant
+  (`--black-scan`, S002) : `env ssao=False ssil=False glow=False adj=False`,
+  `Sun Parallel2Splits/100` alors que `settings.cfg` exige ssao/ssil/bloom/
+  photo/glare + preset ultra (4 splits/220).
+- **Deuxième bug trouvé** : le méta `fog_ceiling_env` (posé par
+  `FogCeiling` à sa 1re frame) excluait l'env de TOUT (fog + SSAO/SSIL +
+  glow/adjust) → ces effets absents même au banc `vis_test` sur toute map
+  foguée. La garde ne protège désormais que `FogEnabled`.
+- **Fix** : `SceneTree.NodeAdded` dans `SettingsApplier._Ready` ré-arme une
+  ré-application différée (2 frames, coalescée) à chaque entrée d'un nœud
+  concerné (`SettingsApplier.cs` `OnNodeAdded`) ; `FogCeiling` respecte
+  `S.Fog` à sa configuration.
+- **Preuves** : run live identique après fix → `env ssao=True ssil=True
+  glow=True adj=True`, `Sun Parallel4Splits/220` ; `game.tscn --solo` S002
+  idem. Captures : `artifacts/shots/live_S002_env_avant.png`,
+  `live_S002_env_apres.png`, `/tmp/vistest_S002.png` (banc). Mesures PIL :
+  ciel (83,110,143)→(80,114,155), montagne (128,137,127)→(135,146,135) —
+  contraste/saturation du preset enfin visibles.
+- **Effet de bord accepté** : les `WorldEnvironment` des previews HUD
+  (portrait, ClassWindow, ItemPreview) reçoivent aussi le grade à leur
+  création — même sémantique qu'`ApplyAndSave`, à surveiller visuellement.
+- **Assets** : pas de divergence EPK/loose — aucun `.epk` monté (aucun dans
+  gamedata/), `run.sh`/`capture.sh` ne posent ni `EDEN_PACKS` ni
+  `EDEN_ALLOW_LOOSE` ; `_tintCache` processus-neuf identique. Rien à
+  corriger côté banc pour ce point.

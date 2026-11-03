@@ -872,6 +872,16 @@ public partial class PlayerController : CharacterBody3D
 
     private float _dbgYaw;
     private bool _dbgYawOn;
+    /// <summary>Cap du modèle hors décalage directionnel
+    /// (<see cref="DirectionalLocomotion.FaceOffset"/>) : c'est lui que
+    /// la caméra de debug doit suivre. Sans ça <c>_Process</c> reprenait
+    /// <c>ModelYaw</c> (offset ±90° cuit dedans) comme base de
+    /// <c>_yaw</c> — chaque frame recuisait le décalage : le modèle
+    /// tournait sans fin (A/D monté « inversés »/cap fou en
+    /// ride-debug). Resynchronisé sur <see cref="ModelYaw"/> hors mode
+    /// debug et, en déplacement, égal au cap visé (<c>_yaw</c> clavier,
+    /// atan2 clic-déplacement).</summary>
+    private float _faceBase;
 
     /// <summary>Caméra de debug (RideDebug) : yaw/pitch en degrés,
     /// distance et hauteur du pivot, hors bornes de zoom.</summary>
@@ -1135,6 +1145,11 @@ public partial class PlayerController : CharacterBody3D
             var d = Mathf.Wrap(targetYaw - cur, -Mathf.Pi, Mathf.Pi);
             _model.Rotation = new Vector3(0f,
                 cur + d * Mathf.Min(1f, dt * 12f), 0f);
+            // Cap hors FaceOffset : le clavier garde _yaw comme cap de
+            // base (natif : A/D monté ne changent pas le cap, le ±90°
+            // est la pose de déplacement) ; le clic-déplacement tourne
+            // le cap réel.
+            _faceBase = _keyMove ? _yaw : targetYaw;
         }
 
         // Approche NPC : à portée → TalkToNpc (NCID 10) une fois.
@@ -1790,9 +1805,13 @@ public partial class PlayerController : CharacterBody3D
     {
         if (_dbgYawOn)
         {
-            _yaw = ModelYaw + _dbgYaw;
+            // _faceBase (cap sans FaceOffset) — jamais ModelYaw brut :
+            // le ±90° monté serait recuit dans _yaw à chaque frame
+            // (toupie/« inversion » du ride-debug).
+            _yaw = _faceBase + _dbgYaw;
             ApplyCamAngles();
         }
+        else _faceBase = ModelYaw;
         // Barre de PV au-dessus de soi : créée à la demande, nourrie
         // par HudPrefs.SelfHp (HudRoot.SetVitals).
         if (_npBar == null) SetNameplate("");

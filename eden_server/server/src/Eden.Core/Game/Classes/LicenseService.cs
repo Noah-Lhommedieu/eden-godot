@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
 using Eden.Core.Data;
 using Eden.Core.Data.Parsers;
 using Eden.Core.Database.Repositories;
@@ -69,12 +68,14 @@ public sealed class LicenseService
         _itemDefs;
     private readonly EquipSetParser.EquipSetPool _pool;
     private readonly EnchantService _enchants;
-    private readonly IReadOnlyDictionary<int, string>
-        _enchantDescriptions;
 
     /// <summary>Construit le service — `itemEnchants` = dict
     /// itemId → enchantId (col23) pour résoudre les récompenses de
-    /// combo et l'enchant posé par licence.</summary>
+    /// combo et l'enchant posé par licence. `enchantDescriptions`
+    /// (T_Enchant) n'est plus lu : les bonus natifs viennent des
+    /// commandes, pas du texte — l'ancien parsing « EVA +N% »
+    /// comptait l'esquive en double avec AttrDodgeRateRate (2088).
+    /// Le paramètre reste pour compatibilité des appelants.</summary>
     public LicenseService(ILicenseRepository licenses,
         IReadOnlyDictionary<int, ItemParser.ItemDef> itemDefs,
         EquipSetParser.EquipSetPool pool,
@@ -85,8 +86,7 @@ public sealed class LicenseService
         _itemDefs = itemDefs;
         _pool = pool;
         _enchants = enchants;
-        _enchantDescriptions = enchantDescriptions
-            ?? new Dictionary<int, string>();
+        _ = enchantDescriptions;
     }
 
     /// <summary>État runtime du personnage (créé à la demande).</summary>
@@ -340,46 +340,26 @@ public sealed class LicenseService
 
     /// <summary>Contribution stats des enchants actifs — licences
     /// posées (`+0xafc`) + combos (`+0xb14`). Chaque enchant est lu
-    /// via <see cref="EnchantService.GetUseCommands"/> (blocs
-    /// cmd+6 args c9+7k) ; seules les commandes résolues portant sur
-    /// les stats du pipeline sont sommées :
-    ///   HPPlusRate/AttrMaxHPRate → pct Hp, AttrMaxHPPlus → pre Hp,
-    ///   AttrMaxHP → post Hp, MPPlusRate/AttrMaxMPRate → pct Mp,
-    ///   AttrMaxMPPlus → pre Mp, AttrMaxMP → post Mp.
-    /// Les autres commandes (procs OnAttack*, haine, soins,
-    /// invocations…) n'ont pas de canal dans StatIndex — fidélité
-    /// partielle assumée, les ids restent visibles dans
-    /// <see cref="ActiveEnchantIds"/> pour le futur pipeline de
-    /// procs combat.</summary>
+    /// via <see cref="EnchantService.GetPassiveCommands"/> : le natif
+    /// SORT du vecteur passif les blocs listés en col40
+    /// (`CEnchantQuery::Deserialize` @0x85ecf00 — `*slotPtr = 0` après
+    /// transfert dans le set de déclenchement), donc les enchants à
+    /// proc ne donnent leurs bonus que lorsque l'événement survient —
+    /// pas en stats permanentes. Seules les commandes portant sur les
+    /// canaux du pipeline sont sommées par
+    /// <see cref="ApplyEnchantCommands"/> ; les ids combat/proc
+    /// restent visibles dans <see cref="ActiveEnchantIds"/> pour le
+    /// dispatch de procs (`st.ProcEnchantIds`, voir
+    /// ZoneEntryFlow.License.cs).</summary>
     public StatContribution ProvideStats(int charId)
     {
         var st = StateOf(charId);
         var c = new StatContribution();
+        // Distinct() = FindEnchant natif : deux licences dont les
+        // items pointent le même enchant ne le cumulent pas deux fois.
         foreach (var id in ActiveEnchantIds(charId).Distinct())
-        {
-            ApplyEnchantCommands(c, _enchants.GetUseCommands(id));
-            // T_Enchant's native English tooltip stores explicit
-            // certificate EVA bonuses (e.g. "EVA +4%"). CCharFormula's
-            // PhysicalDodgeRate consumes the same percentage-point
-            // accumulator and serializes it as rate×100.
-            if (_enchantDescriptions.TryGetValue(id, out var description))
-                ApplyTooltipStats(c, description);
-        }
+            ApplyEnchantCommands(c, _enchants.GetPassiveCommands(id));
         return c;
-    }
-
-    /// <summary>Applies the explicit EVA percentage present in a
-    /// certificate's T_Enchant tooltip. The stat meaning is confirmed by
-    /// `CEC_AttrDodgeRate::Execute` (@0x8504d00) and
-    /// `CCharFormula::PhysicalDodgeRate` (@0x83fccd0).</summary>
-    private static void ApplyTooltipStats(StatContribution contribution,
-        string description)
-    {
-        var match = Regex.Match(description,
-            @"\bEVA\s*\+\s*(\d+)\s*%", RegexOptions.IgnoreCase);
-        if (match.Success && int.TryParse(match.Groups[1].Value,
-                out var percent))
-            contribution.AddDodgePercent(percent);
     }
 
     /// <summary>Ids d'enchant actifs (slots + combos) — miroir de
@@ -560,12 +540,26 @@ public sealed class LicenseService
                     c.AddSecondary(critDamage: V(0),
                         magicCritDamage: V(1));
                     break;
+                case 2052: // AttrWeaponAttackSpeedLevel <cat 0..5> —
+                    // chaque arg remplit les accums d'une catégorie
+                    // d'arme (CEC_AttrWeaponAttackSpeedLevel::Execute
+                    // @0x085149d0 : kinddata+0x414..+0x434, signe
+                    // NÉGATIF = attaque plus rapide — ex. certificat
+                    // corsaire « VIT ATQ +8 % » = 2052|-8). Le pipeline
+                    // n'a pas de canal par catégorie : rapproché au
+                    // % global attackSpeed en signe inversé.
+                    c.AddSecondary(attackSpeedPct:
+                        -(V(0) + V(1) + V(2) + V(3) + V(4) + V(5)));
+                    break;
                 case 2053: // dispatch natif par arg : arg0→« AttrCastTime
-                    // » (flat), args1-4→« AttrWeaponCastSpeedRate » /
-                    // « AttrWeaponAttackSpeedRate » (par type d'arme —
-                    // rapproché au seul canal disponible : atk spd).
-                    c.AddSecondary(castSpeed: V(0),
-                        attackSpeed: V(1) + V(2) + V(3) + V(4));
+                    // » (kinddata+0x138 — retranché du temps de cast dans
+                    // GetBuffCastTimeRate/CCharFormula::CastTime : NÉGATIF
+                    // = cast plus court — certificat « VIT INV +5 % » =
+                    // 2053|-5), args1-4→« AttrWeaponCastSpeedRate » /
+                    // « AttrWeaponAttackSpeedRate » (taux % par type
+                    // d'arme — rapproché au % global).
+                    c.AddSecondary(castSpeed: -V(0),
+                        attackSpeedPct: V(1) + V(2) + V(3) + V(4));
                     break;
                 case 2088: // AttrHitRateRate / AttrDodgeRateRate —
                     // strings natives des branches arg0/arg1 (désasm
@@ -595,11 +589,38 @@ public sealed class LicenseService
                     c.AddSecondary(mpCost: V(0)); break;
                 case 2122: // AttrHateRate — % d'aggro générée.
                     c.AddSecondary(hateRatePct: V(0)); break;
+                // ===== Effets combat/proc — sans canal stats : le
+                // natif les évalue dans le dispatch d'événements ou au
+                // calcul des dégâts, JAMAIS comme accumulateur passif.
+                // Cas explicites pour documenter la décision par id. =====
+                case 1031: case 2031: case 2032: // MultiStroke — coups
+                    // extra roulés à l'attaque (GetAttackCommands +
+                    // ProcSources), pas un stat de profil.
+                case 2033: case 2034: case 2036: // DamageAddPlus(Plus) —
+                    // modifie les dégâts par coup dans AffectDamage
+                    // (@0x085203c0) : combat pur (ex. certificats
+                    // « DÉG PHY reçus −N % » 52508/52678/56110/56111 —
+                    // réduction par hit, non couverte par le pipeline).
+                case 2055: // AttrWeaponCriticalLevel — blocs normalement
+                    // transférés en col40 (proc stun « Étude du Sonar »,
+                    // « Prisonnier de la Mort ») ; passif : niveau de
+                    // crit par arme — pas de canal kinddata équivalent.
+                case 2061: // AttrCastFailRate — procs « statut Trivial »
+                    // (56112/56113, evt4) — combat pur.
+                case 2145: // OnAttackBuffMagicCritical — hook runtime
+                    // « quand crit magique → poser enchant » (46308/09) :
+                    // enregistre un déclencheur, pas un accumulateur.
+                case 2151: // OnAttackBuffPerry — hook « quand parade →
+                    // poser enchant » (56114/56115 — récupération PV).
+                case 2152: // OnBuffEndBuff — chaîne runtime de buffs.
+                case 2035: case 2105: case 2112: case 2144: case 2146:
+                case 2148: case 2149: // OnAttackBuff*/OnBeAttack* —
+                    // hooks de déclenchement similaires, aucun accum.
+                    break;
                 // 2059/2069 cast-time déjà couverts, 2092
                 // ResistDamage, 2155 AttrType (tag de condition —
-                // pas un modificateur), 2152 OnBuffEndBuff (chaîne
-                // runtime), 1823 EnchantKills (dissipation proc),
-                // 29xx drop/XP, 3002/3012 régén/5s : pas de canal
+                // pas un modificateur), 1823 EnchantKills (dissipation
+                // proc), 29xx drop/XP, 3002/3012 régén/5s : pas de canal
                 // pipeline aujourd'hui — ignorés fidèlement.
             }
         }

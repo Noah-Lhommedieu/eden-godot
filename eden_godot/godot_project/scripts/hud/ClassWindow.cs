@@ -1387,14 +1387,14 @@ public partial class ClassWindow : Control
                     ContentMarginLeft = 1, ContentMarginRight = 1,
                 });
                 lv.ClipText = true;
-                lv.CustomMinimumSize = new Vector2(0, 0);
                 EeSkin.Shadowed(lv, 9, pend > 0
                     ? new Color(0.55f, 1f, 0.55f)
                     : pts + pend >= maxPts ? new Color(1f, 0.85f, 0.3f)
                     : Colors.White);
-                lv.SetAnchorsAndOffsetsPreset(LayoutPreset.BottomRight);
-                lv.GrowHorizontal = GrowDirection.Begin;
-                lv.GrowVertical = GrowDirection.Begin;
+                // Rect explicite : avec ClipText le min-width du Label
+                // vaut 0 → le preset BottomRight le réduisait à un
+                // trait de ~2 px au bord droit (compteur illisible).
+                HudRoot.Pin(lv, 1, 1, 1, 1, -33, -15, -1, -1);
                 cell.AddChild(lv);
                 var sid = (short)slot.SpellId;
                 if (isCurrent)

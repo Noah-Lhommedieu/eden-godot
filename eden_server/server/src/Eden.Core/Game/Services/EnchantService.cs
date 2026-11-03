@@ -428,6 +428,66 @@ public sealed class EnchantService
         return list;
     }
 
+    /// <summary>Slots déclenchés de l'enchant (col40, indices 1-based
+    /// dans les 4 blocs cmd+6 vars) — les blocs listés sont SORTIS du
+    /// vecteur passif vers le set de déclenchement par le natif
+    /// (`CEnchantQuery::Deserialize` @0x85ecf00 : `*slotPtr = 0` après
+    /// insertion dans le set — ils ne votent plus comme stats
+    /// passives). Null quand aucune commande n'est transférée.</summary>
+    private static HashSet<int>? TriggeredSlots(
+        EnchantParser.EnchantDef e)
+    {
+        if (string.IsNullOrWhiteSpace(e.TriggerSlotsRaw))
+            return null;
+        HashSet<int>? set = null;
+        foreach (var tok in e.TriggerSlotsRaw.Split(';',
+                     StringSplitOptions.RemoveEmptyEntries |
+                     StringSplitOptions.TrimEntries))
+            if (int.TryParse(tok, out var s) && s is >= 1 and <= 4)
+                (set ??= new HashSet<int>()).Add(s);
+        return set;
+    }
+
+    /// <summary>Commandes du vecteur PASSIF natif — identique à
+    /// <see cref="GetUseCommands"/> mais en excluant les blocs
+    /// transférés vers le set déclenché (col40). À utiliser pour
+    /// toute application de stats permanentes (certificats, talents) :
+    /// le natif applique ces blocs UNIQUEMENT quand l'événement
+    /// déclencheur survient — les compter en passif octroyait en
+    /// permanence des bonus conçus comme procs (ex. certificat
+    /// « Mort Ressuscitée » 41709 : `2047|1` + `1004|3|3` en slots
+    /// 1-2 déclenchés → heal/HP de proc, pas de stats).</summary>
+    public IReadOnlyList<UseCommand> GetPassiveCommands(int enchantId)
+    {
+        var e = Get(enchantId);
+        if (e == null) return Array.Empty<UseCommand>();
+        var triggered = TriggeredSlots(e);
+        if (triggered == null) return GetUseCommands(enchantId);
+        var raw = e.Raw;
+        var list = new List<UseCommand>(4);
+        for (var k = 0; k < 4; k++)
+        {
+            if (triggered.Contains(k + 1)) continue;
+            var at = 9 + k * 7;
+            if (at >= raw.Length ||
+                !int.TryParse(raw[at], out var cmd) || cmd <= 0)
+                continue;
+            var args = new double[6];
+            for (var i = 0; i < 6 && at + 1 + i < raw.Length; i++)
+                if (double.TryParse(raw[at + 1 + i],
+                        System.Globalization.NumberStyles.Float,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var dv))
+                    args[i] = dv;
+            if (cmd == 160 && args[0] > 0)
+                list.Add(new UseCommand((int)args[0],
+                    args.Skip(1).ToArray()));
+            else
+                list.Add(new UseCommand(cmd, args));
+        }
+        return list;
+    }
+
     private static bool Roll(int chance)
         => chance >= 100 || (chance > 0 && Random.Shared.Next(100) < chance);
 
@@ -449,13 +509,7 @@ public sealed class EnchantService
         if (e == null) return Array.Empty<UseCommand>();
         // Slots déclenchés col40 (indices 1-based) — exclus du scan
         // passif : ils votent déjà via GetProc.
-        HashSet<int>? triggered = null;
-        if (!string.IsNullOrWhiteSpace(e.TriggerSlotsRaw))
-            foreach (var tok in e.TriggerSlotsRaw.Split(';',
-                         StringSplitOptions.RemoveEmptyEntries |
-                         StringSplitOptions.TrimEntries))
-                if (int.TryParse(tok, out var s))
-                    (triggered ??= new HashSet<int>()).Add(s);
+        var triggered = TriggeredSlots(e);
         var list = new List<UseCommand>(2);
         var raw = e.Raw;
         for (var k = 0; k < 4; k++)

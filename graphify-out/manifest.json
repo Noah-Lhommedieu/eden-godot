@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/AutoAttack.cs": {
-    "mtime": 1793733294.2149622,
-    "seen": 1793733737.05386,
-    "ast_hash": "1cf612e87d2e042a44239a28102ba1ca",
+    "mtime": 1793733847.8812156,
+    "seen": 1793734464.162368,
+    "ast_hash": "4f398794cb1e4b0b6f09a83dd249ca45",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/CastBar.cs": {
@@ -540,9 +540,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClassWindow.cs": {
-    "mtime": 1793722683.76935,
-    "seen": 1793726602.6673865,
-    "ast_hash": "86ff159ffd9d5f619fb2dd709f4e2b64",
+    "mtime": 1793734122.202347,
+    "seen": 1793734464.1625333,
+    "ast_hash": "08f5d995981904d2215e7a0deb614b63",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClientUiStore.cs": {
@@ -552,9 +552,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/CooldownOverlay.cs": {
-    "mtime": 1793205445.2421675,
-    "seen": 1793580342.7691994,
-    "ast_hash": "9f2568e5d026a87eeae2906f33dafc72",
+    "mtime": 1793734178.9668963,
+    "seen": 1793734464.1625369,
+    "ast_hash": "94f2d95e4f1a32f39615de29605b730a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/CostumeWindow.cs": {
@@ -3126,9 +3126,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Classes/LicenseService.cs": {
-    "mtime": 1793722391.2609637,
-    "seen": 1793726602.6678524,
-    "ast_hash": "e8c1c4f9707f254d0db4cea11db511c0",
+    "mtime": 1793734138.6874406,
+    "seen": 1793734464.1633162,
+    "ast_hash": "585bfc416e2dbae7bd600d0ad2d6743d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Colosseum/ColosseumPackets.cs": {
@@ -3378,9 +3378,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/EnchantService.cs": {
-    "mtime": 1793721245.1540875,
-    "seen": 1793726602.6678913,
-    "ast_hash": "f8ffb2b9028a50d7528c15d4b0a1a1c4",
+    "mtime": 1793734104.5330935,
+    "seen": 1793734464.163386,
+    "ast_hash": "dbe31929297b2a4fd08b11261f214b7e",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/EquipTrainService.cs": {
@@ -4902,9 +4902,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.License.cs": {
-    "mtime": 1793722053.6151352,
-    "seen": 1793726602.668158,
-    "ast_hash": "138fc1b13adfb189ad8e1708b24a2358",
+    "mtime": 1793734160.1202812,
+    "seen": 1793734464.1638246,
+    "ast_hash": "16a2cd1ff054b866c2f650dabf8c40d6",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.LifeSkill.cs": {
@@ -6294,9 +6294,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/LicenseTests.cs": {
-    "mtime": 1793722053.6153696,
-    "seen": 1793726602.6683831,
-    "ast_hash": "ae4e44baffdb3b5f74dd67e79d0bf80c",
+    "mtime": 1793734254.037685,
+    "seen": 1793734464.1642325,
+    "ast_hash": "437e292452a2ac9027867f350f6b1c27",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/LifelongTests.cs": {
@@ -11637,6 +11637,12 @@
     "mtime": 1793733440.2782218,
     "seen": 1793733737.054222,
     "ast_hash": "6be2cf7f82f08eee3a239a9050f8a8b3",
+    "semantic_hash": ""
+  },
+  "eden_server/docs/temp-plans/2026-11-03-certificats-classe-stats.md": {
+    "mtime": 1793734095.5860555,
+    "seen": 1793734464.1656916,
+    "ast_hash": "228b7d1ed440ba947bae26c7043587f9",
     "semantic_hash": ""
   }
 }

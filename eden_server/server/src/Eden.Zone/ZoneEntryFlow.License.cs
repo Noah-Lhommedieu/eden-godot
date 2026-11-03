@@ -36,11 +36,37 @@ public sealed partial class ZoneEntryFlow
         // autres données d'entrée.
         if (st.Entry is not { Emitted: false })
             await _services.Licenses.LoadAsync((int)st.CharId, token);
+        MergeLicenseProcEnchants(st);
         var st2 = _services.Licenses.StateOf((int)st.CharId);
         var msg = new CNC_CZ_ClientPlayerLicense();
         foreach (var (itemId, loc) in st2.Owned)
             msg.Licenses.Add((itemId, loc));
         await session.SendAsync(msg, token);
+    }
+
+    /// <summary>Fusionne les enchants de licences actives porteurs
+    /// d'un proc (blocs transférés col40 ou commandes MultiStroke
+    /// passives) dans <c>st.ProcEnchantIds</c> — la liste est
+    /// reconstruite depuis l'équipement par <c>ResolveWeaponAsync</c>
+    /// (chemin combat — non éditable) ; ce merge la complète avec les
+    /// certificats posés, dont les procs natifs se déclenchent comme
+    /// ceux de l'équipement (EffectToLife +0xafc/+0xb14). Appelée
+    /// après chaque mutation de licences ; les ids licence sont
+    /// reperdus si l'équipement est résolu par un autre flux avant la
+    /// prochaine opération licence — limite documentée dans
+    /// docs/knowledge/certificate-stats.md.</summary>
+    private void MergeLicenseProcEnchants(EntryState st)
+    {
+        if (st.CharId == 0) return;
+        var ids = _services.Licenses.ActiveEnchantIds((int)st.CharId)
+            .Where(id => _services.Enchants.GetProc(id) != null
+                || _services.Enchants.GetAttackCommands(id).Count > 0);
+        foreach (var id in ids)
+        {
+            st.ProcEnchantIds ??= new List<int>();
+            if (!st.ProcEnchantIds.Contains(id))
+                st.ProcEnchantIds.Add(id);
+        }
     }
 
     /// <summary>NCID 182 PlayerLicense — pose/déplace/déséquipe des
@@ -87,6 +113,7 @@ public sealed partial class ZoneEntryFlow
             st.WeaponResolved = false;
             st.EntryDirty = true; // bundle d'entrée périmé (Phase 2)
             await ResolveWeaponAsync(st);
+            MergeLicenseProcEnchants(st);
             await SendStatBlocksAsync(session, st, st.ClassId,
                 st.ClassLevel, token);
             return;
@@ -131,6 +158,7 @@ public sealed partial class ZoneEntryFlow
             st.WeaponResolved = false;
             st.EntryDirty = true; // bundle d'entrée périmé (Phase 2)
             await ResolveWeaponAsync(st);
+            MergeLicenseProcEnchants(st);
             await SendStatBlocksAsync(session, st, st.ClassId,
                 st.ClassLevel, token);
         }
@@ -189,5 +217,6 @@ public sealed partial class ZoneEntryFlow
         // Rebuild slots/enchants (InvokeSpellStones natif : réévalue
         // +0xafc depuis le vecteur +0xaf0 après la bascule).
         await lic.LoadAsync(charId);
+        MergeLicenseProcEnchants(st);
     }
 }

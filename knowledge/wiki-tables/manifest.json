@@ -1,0 +1,322 @@
+[
+ {
+  "csv": "BM_ Demonic Valley.csv",
+  "md": "BM/Demonic_Valley.md",
+  "scope": "out"
+ },
+ {
+  "csv": "BM_ Dimension of Souls.csv",
+  "md": "BM/Dimension_of_Souls.md",
+  "scope": "out"
+ },
+ {
+  "csv": "BM_ Dragonside Ridge.csv",
+  "md": "BM/Dragonside_Ridge.md",
+  "scope": "out"
+ },
+ {
+  "csv": "BM_ VL_DD_BTS.csv",
+  "md": "BM/VL_DD_BTS.md",
+  "scope": "in"
+ },
+ {
+  "csv": "C_ Armour Lv23-88.csv",
+  "md": "C/Armour_Lv23-88.md",
+  "scope": "in"
+ },
+ {
+  "csv": "C_ Lv100 Awaken Weps..csv",
+  "md": "C/Lv100_Awaken_Weps.md",
+  "scope": "out"
+ },
+ {
+  "csv": "C_ Lv110 Awaken Sets.csv",
+  "md": "C/Lv110_Awaken_Sets.md",
+  "scope": "out"
+ },
+ {
+  "csv": "C_ Lv65-75 Weps.csv",
+  "md": "C/Lv65-75_Weps.md",
+  "scope": "in"
+ },
+ {
+  "csv": "C_ Lv70-80 Awaken Sets.csv",
+  "md": "C/Lv70-80_Awaken_Sets.md",
+  "scope": "in"
+ },
+ {
+  "csv": "C_ Lv95 Awaken Sets.csv",
+  "md": "C/Lv95_Awaken_Sets.md",
+  "scope": "out"
+ },
+ {
+  "csv": "C_ Partial Enchants Lv1-8.csv",
+  "md": "C/Partial_Enchants_Lv1-8.md",
+  "scope": "in"
+ },
+ {
+  "csv": "C_ Weapons Lv20-90.csv",
+  "md": "C/Weapons_Lv20-90.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ 4ToD.csv",
+  "md": "D/4ToD.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ AT_DF.csv",
+  "md": "D/AT_DF.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Abyss.csv",
+  "md": "D/Abyss.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Celestial Corridor II.csv",
+  "md": "D/Celestial_Corridor_II.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Celestial Corridor.csv",
+  "md": "D/Celestial_Corridor.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Daylight Forest.csv",
+  "md": "D/Daylight_Forest.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Deep Abyss.csv",
+  "md": "D/Deep_Abyss.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Dreadlore Lab.csv",
+  "md": "D/Dreadlore_Lab.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Dream of Destruction 90 & 95.csv",
+  "md": "D/Dream_of_Destruction_90_and_95.md",
+  "scope": "partial"
+ },
+ {
+  "csv": "D_ Elemental's Battlefield.csv",
+  "md": "D/Elemental_s_Battlefield.md",
+  "scope": "uncertain"
+ },
+ {
+  "csv": "D_ Guardian Colosseum.csv",
+  "md": "D/Guardian_Colosseum.md",
+  "scope": "partial"
+ },
+ {
+  "csv": "D_ Haven of Oblivion.csv",
+  "md": "D/Haven_of_Oblivion.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Lv110 Dragonridge Sanctuary.csv",
+  "md": "D/Lv110_Dragonridge_Sanctuary.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Lv98 GoP.csv",
+  "md": "D/Lv98_GoP.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ S-Trials Lv50,55,60.csv",
+  "md": "D/S-Trials_Lv50_55_60.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Sky Tower.csv",
+  "md": "D/Sky_Tower.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Temple Arena.csv",
+  "md": "D/Temple_Arena.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Trials Lv100.csv",
+  "md": "D/Trials_Lv100.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Trials Lv110.csv",
+  "md": "D/Trials_Lv110.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Trials Lv130.csv",
+  "md": "D/Trials_Lv130.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Trials Lv50,55,60,65.csv",
+  "md": "D/Trials_Lv50_55_60_65.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Trials Lv70,75,80,85.csv",
+  "md": "D/Trials_Lv70_75_80_85.md",
+  "scope": "in"
+ },
+ {
+  "csv": "D_ Trials Lv95.csv",
+  "md": "D/Trials_Lv95.md",
+  "scope": "out"
+ },
+ {
+  "csv": "D_ Viridian Gorge.csv",
+  "md": "D/Viridian_Gorge.md",
+  "scope": "out"
+ },
+ {
+  "csv": "G_Arcane Box Lv95_105_110.csv",
+  "md": "G/Arcane_Box_Lv95_105_110.md",
+  "scope": "out"
+ },
+ {
+  "csv": "Intro.csv",
+  "md": "misc/Intro.md",
+  "scope": "in"
+ },
+ {
+  "csv": "Lvling & Farming Guides.csv",
+  "md": "misc/Lvling_and_Farming_Guides.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Arcane Box.csv",
+  "md": "M/Arcane_Box.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Armour Boxes.csv",
+  "md": "M/Armour_Boxes.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Aven Fame Vendors.csv",
+  "md": "M/Aven_Fame_Vendors.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Class Certificates.csv",
+  "md": "M/Class_Certificates.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Class Expertise.csv",
+  "md": "M/Class_Expertise.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Dyes.csv",
+  "md": "M/Dyes.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Furniture Guide (WIP).csv",
+  "md": "M/Furniture_Guide_WIP.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Gathering Tools.csv",
+  "md": "M/Gathering_Tools.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Guardian Skills.csv",
+  "md": "M/Guardian_Skills.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Holy Skills.csv",
+  "md": "M/Holy_Skills.md",
+  "scope": "partial"
+ },
+ {
+  "csv": "M_ Honor Medals & CCM.csv",
+  "md": "M/Honor_Medals_and_CCM.md",
+  "scope": "partial"
+ },
+ {
+  "csv": "M_ Legendary Achievements.csv",
+  "md": "M/Legendary_Achievements.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Lv72 Class Skills.csv",
+  "md": "M/Lv72_Class_Skills.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Monster Stones.csv",
+  "md": "M/Monster_Stones.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Pet Prays.csv",
+  "md": "M/Pet_Prays.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Phoenix Maps.csv",
+  "md": "M/Phoenix_Maps.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Racial Passive.csv",
+  "md": "M/Racial_Passive.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Racial Skills.csv",
+  "md": "M/Racial_Skills.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_ Titles.csv",
+  "md": "M/Titles.md",
+  "scope": "in"
+ },
+ {
+  "csv": "M_Pet Skills.csv",
+  "md": "M/Pet_Skills.md",
+  "scope": "in"
+ },
+ {
+  "csv": "R_ Bear.csv",
+  "md": "R/Bear.md",
+  "scope": "in"
+ },
+ {
+  "csv": "R_ Human.csv",
+  "md": "R/Human.md",
+  "scope": "in"
+ },
+ {
+  "csv": "R_ Zumi_Halfkin_Frog.csv",
+  "md": "R/Zumi_Halfkin_Frog.md",
+  "scope": "in"
+ },
+ {
+  "csv": "T_ Trophies.csv",
+  "md": "T/Trophies.md",
+  "scope": "partial"
+ },
+ {
+  "csv": "Useful Info.csv",
+  "md": "misc/Useful_Info.md",
+  "scope": "in"
+ }
+]

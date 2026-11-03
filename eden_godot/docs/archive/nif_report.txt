@@ -1,0 +1,154 @@
+nif2gltf report — 2026-10-27 21:09:13
+files processed: 17822  converted: 17795  failed: 27  (560s)
+  ext_.kf : 4243
+  ext_.kfm : 2009
+  ext_.nif : 11543
+
+== measured bounding boxes (NIF units, Z-up) ==
+  char/animation/t205.nif                                      min=[-0.884, -0.318, -0.13] size=[1.767, 1.465, 2.916]
+  char/model/AX6111A.nif                                       min=[-2.98, -2.811, -1.233] size=[6.025, 6.893, 4.46]
+  char/model/AX6178A.nif                                       min=[-4.003, -1.818, -1.398] size=[7.769, 4.626, 6.745]
+  char/model/AX6179A.nif                                       min=[-4.003, -1.818, -1.398] size=[7.769, 4.626, 6.745]
+  char/model/Ax6177a.nif                                       min=[-3.113, -1.272, -2.426] size=[6.279, 3.358, 4.213]
+  char/model/B.nif                                             min=[-2.996, -0.417, -1.494] size=[4.023, 1.392, 3.696]
+  char/model/B1001.nif                                         min=[1.418, -0.403, -0.223] size=[0.606, 0.634, 0.446]
+  char/model/B1002.nif                                         min=[-0.527, -0.339, 1.401] size=[1.054, 0.903, 1.14]
+  char/model/B1003.nif                                         min=[-0.229, -0.33, -0.25] size=[0.458, 0.66, 0.5]
+  char/model/B1004.nif                                         min=[-0.226, -0.231, 1.345] size=[0.449, 0.567, 0.753]
+  char/model/B1005.nif                                         min=[-0.252, -0.675, -0.339] size=[0.504, 0.561, 0.529]
+  char/model/B1006.nif                                         min=[-0.563, -0.442, -0.532] size=[1.126, 0.951, 1.196]
+  char/model/B1007.nif                                         min=[-0.216, -0.27, -0.136] size=[0.432, 0.596, 0.554]
+  char/model/B1008.nif                                         min=[-0.271, -0.261, -0.212] size=[0.542, 0.613, 0.67]
+  char/model/B1009.nif                                         min=[-0.336, -0.279, -0.237] size=[0.672, 0.615, 0.765]
+  char/model/B1010.nif                                         min=[-0.583, -0.366, -0.257] size=[1.166, 0.943, 1.139]
+  char/model/B1011.nif                                         min=[-0.281, -0.289, -0.35] size=[0.563, 0.811, 0.791]
+  char/model/B1012.nif                                         min=[-0.18, -0.462, -0.327] size=[0.727, 0.761, 0.654]
+  char/model/B1013.nif                                         min=[-0.313, -0.367, -0.432] size=[0.917, 0.66, 0.865]
+  char/model/B1014.nif                                         min=[-0.613, -0.57, -0.371] size=[1.226, 1.157, 1.208]
+  char/model/B1101.nif                                         min=[-0.437, -0.238, 1.624] size=[0.874, 0.511, 0.679]
+  char/model/B1102.nif                                         min=[-0.411, -0.427, 1.731] size=[0.823, 1.023, 0.639]
+  char/model/B1103.nif                                         min=[-0.304, -0.247, 1.724] size=[0.608, 0.74, 0.661]
+  char/model/B1104.nif                                         min=[-0.402, -0.247, 1.731] size=[0.808, 0.742, 0.622]
+  char/model/B1105.nif                                         min=[-0.226, -0.477, 0.031] size=[0.452, 0.717, 0.503]
+  char/model/B1106.nif                                         min=[-0.513, -0.509, -0.211] size=[1.064, 1.15, 0.761]
+  char/model/B1107.nif                                         min=[1.608, -0.379, -0.367] size=[0.859, 0.723, 0.732]
+  char/model/B1108.nif                                         min=[-0.257, -0.249, 1.468] size=[0.514, 0.497, 0.615]
+  char/model/B1109.nif                                         min=[-0.488, -0.457, 1.536] size=[0.976, 0.902, 0.786]
+  char/model/B1111.nif                                         min=[-0.34, -0.291, 1.676] size=[0.68, 0.676, 0.775]
+
+== counters ==
+  meshes                   217095
+  verts                    50548407
+  tris                     56831469
+  nodes                    621070
+  skins                    19494
+  multi_parent_dups        4019
+  skinned_meshes           19476
+  uv_sets                  191823
+  vcolor_meshes            60172
+  alpha_materials          97326
+  missing_textures         3950
+  anims                    64879
+  anim_channels            15007570
+  kfm_anims                44002
+  billboards               54825
+  psys_nodes               20085
+  unskinned_verts          208
+  bspline_failed           143569
+
+== skipped block types (unparsed) ==
+  ?                                                  73
+  NiDeferredPointLight                               4
+== other skip counters ==
+  bspline_incomplete_Scale                           2703755
+  bspline_incomplete_Translation                     2001074
+  interp_skip_NiFloatInterpolator                    521903
+  interp_nodata                                      349671
+  cb_skip_AlphaController                            338919
+  cb_skip_PSysEmitterCtlr                            229356
+  bspline_failed                                     143569
+  bspline_incomplete_Rotation                        103927
+  cb_skip_VisController                              72461
+  prop_NiStencilProperty                             48841
+  cb_skip_PSysEmitterSpeedCtlr                       43143
+  prop_NiZBufferProperty                             38081
+  interp_skip_NiBSplineCompFloatInterpolator         25547
+  cb_skip_PSysEmitterLifeSpanC                       25095
+  cb_skip_MaterialColorControl                       13292
+  cb_skip_PSysEmitterInitialRa                       6797
+  tex_extra_maps                                     1697
+  cb_skip_PSysEmitterDeclinati                       1430
+  cb_skip_PSysEmitterPlanarAng                       1376
+  cb_skip_FlipController                             1069
+  interp_skip_NiPathInterpolator                     455
+  cb_skip_GeomMorpherControlle                       266
+  prop_NiDitherProperty                              165
+  cb_skip_FloatExtraDataContro                       104
+  prop_NiSpecularProperty                            100
+  cb_skip_PSysInitialRotSpeedC                       53
+  cb_skip_PSysGravityStrengthC                       52
+  cb_skip_PSysInitialRotSpeedV                       30
+  prop_NiShadeProperty                               6
+  prop_NiAlphaProperty                               1
+  prop_NiTexturingProperty                           1
+
+== top warnings ==
+     104  missing texture UB05353.dds
+      69  missing texture UD07501.dds
+      63  missing texture UC01551.dds
+      56  missing texture EFS201051.dds
+      51  missing texture UB28153.dds
+      36  missing texture UD07101.dds
+      32  missing texture UD12551.dds
+      31  missing texture M48354.dds
+      30  missing texture EFS40002.dds
+      28  missing texture UD07103.dds
+      26  missing texture UD07304.dds
+      24  missing texture UB07052.dds
+      24  missing texture UD06751.dds
+      24  missing texture UE16551.dds
+      23  missing texture EFS50701.dds
+      21  missing texture UD12352.dds
+      21  missing texture UD13352.dds
+      20  missing texture UC11451.dds
+      20  missing texture UD07303.dds
+      19  missing texture UD06451.dds
+      18  missing texture UB01354.dds
+      18  missing texture UB05855.dds
+      18  missing texture UD06351.dds
+      18  missing texture UD07601.dds
+      17  missing texture UD07602.dds
+      17  missing texture UE73054.dds
+      16  missing texture UB05856.dds
+      16  missing texture UD0703.dds
+      16  missing texture UD08552.dds
+      16  missing texture UE16103.dds
+
+== failures ==
+  char/model/g130205.nif : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  char/model/l130205.nif : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  map/map.nif : fail:not a NIF: 'MZ\x90\x00\x03\x00\x00\x00\x04\x00\x00\x00ÿÿ\x00\x00¸\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
+  map/map2.nif : fail:not a NIF: 'MZ\x90\x00\x03\x00\x00\x00\x04\x00\x00\x00ÿÿ\x00\x00¸\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x
+  monster/animation/m962_bip01_attack01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_attack02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_battle01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_condition01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_death01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_death02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_death03.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_hurt01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_hurt02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_hurt03.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_hurt04.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_hurt05.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_magic01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_move01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_move02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_shoot01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_shoot02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_shoot03.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_stand01.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_stand02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  monster/animation/m962_bip01_trigger02.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  ride/animation/R603_Bip01_move04.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)
+  ride/animation/R852_Bip01_move04.kf : fail:unsupported header layout (ver 0x14030202, packed variant?)

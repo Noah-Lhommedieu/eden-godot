@@ -1,0 +1,126 @@
+# Celestial Corridor
+
+> Source : `src_csv/D_ Celestial Corridor.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+> ⚠️ **Hors périmètre (lvl>90)** : Donjon Vendetta niv. ~117. Données conservées pour référence.
+
+**CELESTIAL CORRIDOR**
+
+**TROPHY + CAPE COMBO & NECKLACE + RING COMBO:**
+
+| SET: | BASE EFFECT & PROC. | 2-PIECE COMBO: | 3-PIECE COMBO: | 6-PIECE COMBO: |
+|---|---|---|---|---|
+| Aries' Fragmented Stone | DMG Taken -2%. When attacked you have a 5% chance to decrease DMG Taken -3757 pts for 7 seconds. | Max HP +3300 pts, STR & LCK +165 pts, P-CRIT DMG & M-CRIT DMG -5%. | DMG Taken -7%, DEF +3300 pts, Physical & Elemental Resistance +5 pts, Malice +100%. | Aries Shield <br>Recovers 1% HP every sec, Reducing the DMG Dealt from enemies within 15 meters by -8%. |
+| Aries' Strategic Plan | DMG Taken-2%. When attacked you have a 10% chance to remove 3 neative status'. | Max HP +3300 pts, STR & LCK +165 pts, P-CRIT DMG & M-CRIT DMG -5%. | DMG Taken -7%, DEF +3300 pts, Physical & Elemental Resistance +5 pts, Malice +100%. |  |
+| Aries' Leader's Cape | DMG Taken-2%. Your attacks will grant Aries' Shield Status for 5 seconds. | Max HP +3300 pts, STR & LCK +165 pts, P-CRIT DMG & M-CRIT DMG -5%. | DMG Taken -7%, DEF +3300 pts, Physical & Elemental Resistance +5 pts, Malice +100%. |  |
+| Aries' Leadership Ring | Your attacks and casts have a 5% chance to recover HP & MP +1266pts for 10 seconds.<br>DMG Dealt -3%, and Healing Done -3%. | Max HP +3300 pts, STR & LCK +AGI pts, P-CRIT DMG & M-CRIT DMG -5%. | Rapier, Sword, Mace, Club, Greatsword, Axe, Pike and Hammer's P-ATK & M-ATK +10%, Malice +100%. |  |
+| Aries' Cracked Ring | Your attacks and casts have a 5% chance to Increase Physical & Elemental Resistance +15 pts for 10 seconds. <br>DMG Dealt -5%, and Healing Done -5%. | Max HP +3300 pts, STR & LCK +AGI pts, P-CRIT DMG & M-CRIT DMG -5%. | Rapier, Sword, Mace, Club, Greatsword, Axe, Pike and Hammer's P-ATK & M-ATK +10%, Malice +100%. |  |
+| Aries' Pendant | Your attacks have a 10% chance to decrease DMG Taken -1423 pts; lasts 10 seconds.<br>DMG Dealt -5%, and Healing Done -5%. | Max HP +3300 pts, STR & LCK +AGI pts, P-CRIT DMG & M-CRIT DMG -5%. | Rapier, Sword, Mace, Club, Greatsword, Axe, Pike and Hammer's P-ATK & M-ATK +10%, Malice +100%. |  |
+| Leo's Calling | DMG Dealt+1%. Your attacks have a 5% chance to decrease targets Elemental Resistance -10 pts, lasts  seconds. Additionally the caster is granted P-ATK +11489 pts; lasts 10 seconds. | Max MP +3300 pts, STR, INT & LCK +165 pts, Move SPD +5%. | DMG Dealt +3%, P-ATK & M-ATK +10%, P-ATK & M-ATK +3300 pts, P-CRIT RATE & M-CRIT RATE +330 pts, EVA +330 pts. | Leo's Roar <br>When there is at least two enemies within 10 meters of the caster, the caster is granted DMG Dealt +20%. |
+| Leo's Medal of Participation | DMG Dealt+1%. Your attacks have a 5% chance to decrease targets Physical Resistance -7 pts; lasts 7 seconds. Additonally the caster is granted M-ATK +14361 pts; lasts 10 seconds. | Max MP +3300 pts, STR, INT & LCK +165 pts, Move SPD +5%. | DMG Dealt +3%, P-ATK & M-ATK +10%, P-ATK & M-ATK +3300 pts, P-CRIT RATE & M-CRIT RATE +330 pts, EVA +330 pts. |  |
+| Leo's Cub Blanket | DMG Dealt+2%. Your attacks will grant Leo's Roar status for 5 seconds. | Max MP +3300 pts, STR, INT & LCK +165 pts, Move SPD +5%. | DMG Dealt +3%, P-ATK & M-ATK +10%, P-ATK & M-ATK +3300 pts, P-CRIT RATE & M-CRIT RATE +330 pts, EVA +330 pts. |  |
+| Leo's Lion Ring | Your attacks have a 5% chance to increase P-ATK +6892 pts and M-ATK +9089 pts for 10 seconds. | Max HP +3300 pts, STR, AGI & INT +165 pts, Move SPD +5%. | DMG Dealt +3%, Dagger, Rapier, Sword, Greatsword, Pike, Hammer and Gun's P-ATK & M-ATK +10%. P-CRIT DMG & M-CRIT DMG +10%. |  |
+| Leo's Precious Band | Your attacks have a 5% chance to increase P-CRIT & M-CRIT RATE +481 pts; lasts 10 seconds. | Max HP +3300 pts, STR, AGI & INT +165 pts, Move SPD +5%. | DMG Dealt +3%, Dagger, Rapier, Sword, Greatsword, Pike, Hammer and Gun's P-ATK & M-ATK +10%. P-CRIT DMG & M-CRIT DMG +10%. |  |
+| Leo's Proof of Victory | Move SPD+10%. Your attacks have a 4% chance to deal Triple Hit DMG. | Max HP +3300 pts, STR, AGI & INT +165 pts, Move SPD +5%. | DMG Dealt +3%, Dagger, Rapier, Sword, Greatsword, Pike, Hammer and Gun's P-ATK & M-ATK +10%. P-CRIT DMG & M-CRIT DMG +10%. |  |
+| Sagittarius' Golden Pendant | Phys DMG Dealt+1%. Your attacks have a 5% chance to decrease targets Physical Resistance -7 pts; lasts 10 seconds. Additionally the caster is granted P-ATK +11489 & P-CRIT RATE +312 pts; lasts 10 seconds. | Max MP +3300 pts, STR & LCK +165 pts, Elemental Resistance +2 pts. | Physical DMG Dealt +3%, P-ATK +10T, P-ATK +3300 pts, P-CRIT RATE +330 pts, ACC +330 pts. | Sagittarius' Spirit <br>Your attacks have a 10% chance to deal Triple Hit DMG. |
+| Sagittarius' Tranquil Elixir | Phys DMG Dealt+1%. P-CRIT DMG+10%. Your attacks and casts have a 5% chance to recover HP +10454 pts and remove 2 negative status'. | Max MP +3300 pts, STR & LCK +165 pts, Elemental Resistance +2 pts. | Physical DMG Dealt +3%, P-ATK +10T, P-ATK +3300 pts, P-CRIT RATE +330 pts, ACC +330 pts. |  |
+| Sagittarius' Glorious Cape | Phys DMG Dealt+2%. Your attacks will grant Sagittarius' Spirit Status for 5 seconds. | Max MP +3300 pts, STR & LCK +165 pts, Elemental Resistance +2 pts. | Physical DMG Dealt +3%, P-ATK +10T, P-ATK +3300 pts, P-CRIT RATE +330 pts, ACC +330 pts. |  |
+| Sagittarius' Power Ring | Your attacks have a 5% chance to increase P-ATK +8960 and MP Cost +249 pts for 10 seconds. | Max MP +3300 pts, STR & AGI +165 pts, Elemental Resistance +2 pts. | Physical DMG Dealt +3%, Dagger, Rapier, Sword, Cestus, Club, Katana, Greatsword, Axe, Pike. Hammer, Bow, Gun and Sickleshot's P-ATK & M-ATK +10%, P-CRIT DMG +10%. |  |
+| Sagittarius' Goldstone Ring | Your attacks have a 5% chance to decrease targets DEF -5773 pts and ACC -321 pts; lasts 10 seconds. | Max MP +3300 pts, STR & AGI +165 pts, Elemental Resistance +2 pts. | Physical DMG Dealt +3%, Dagger, Rapier, Sword, Cestus, Club, Katana, Greatsword, Axe, Pike. Hammer, Bow, Gun and Sickleshot's P-ATK & M-ATK +10%, P-CRIT DMG +10%. |  |
+| Sagittarius' Power Necklace | STR+160 Your attacks have a 8% chance to deal Double Hit DMG. | Max MP +3300 pts, STR & AGI +165 pts, Elemental Resistance +2 pts. | Physical DMG Dealt +3%, Dagger, Rapier, Sword, Cestus, Club, Katana, Greatsword, Axe, Pike. Hammer, Bow, Gun and Sickleshot's P-ATK & M-ATK +10%, P-CRIT DMG +10%. |  |
+| Libra's Broken Crystal | Healing +1%. Your attacks and casts have a 5% chance to increase WIS+514 pts and M-SPD+10%; lasts 10 seconds. | Max MP +3300 pts, WIS & LCK +165 pts, MOVE SPD +5%. | Healing Done +3%, WIS +15%, M-CRIT RATE +330 pts, CAST SPD +330 pts. | Libra's Balance <br>Party members within 15 meters are granted P-ATK & M-ATK +10%. |
+| Libra's Perspective of Life | Healing +1%. Skill Healing +3%. Your attacks and casts have a 10% chance to increase CAST SPD+312 pts; lasts 10 seconds. | Max MP +3300 pts, WIS & LCK +165 pts, MOVE SPD +5%. | Healing Done +3%, WIS +15%, M-CRIT RATE +330 pts, CAST SPD +330 pts. |  |
+| Libra's Wisdom Cape | G-Heal+1%. Your attacks and casts will grant Libra's Balance status for 3 seconds. | Max MP +3300 pts, WIS & LCK +165 pts, MOVE SPD +5%. | Healing Done +3%, WIS +15%, M-CRIT RATE +330 pts, CAST SPD +330 pts. |  |
+| Libra's Understanding Stone | Your attacks and casts have a 5% chance to alternative between recovering HP & MP +1582 pts; lasts 10 seconds. | Max MP +3300 pts, WIS & AGI +165 pts, MOVE SPD +5%. | Healing Done +3#, G-Healing +15%, G-Heal +330 pts, M-CRIT DMG +10%. |  |
+| Libra's Wisdom Ring | Your attacks and casts have a 5% chance to increase G-Heal+589 pts; lasts 10 seconds. | Max MP +3300 pts, WIS & AGI +165 pts, MOVE SPD +5%. | Healing Done +3#, G-Healing +15%, G-Heal +330 pts, M-CRIT DMG +10%. |  |
+| Libra's Blue Shard Necklace | Your attacks and casts have a 5% chance to increase WIS+370 pts and M-CRIT RATE+312 pts; lasts 10 seconds. | Max MP +3300 pts, WIS & AGI +165 pts, MOVE SPD +5%. | Healing Done +3#, G-Healing +15%, G-Heal +330 pts, M-CRIT DMG +10%. |  |
+| Aquarius' Precious Azurite | DMG Taken -1%. Healing +1%. Skill Healing+3%. Your attacks and casts have a 5% chance to increase WIS+411 pts, LCK+206 pts, and M-SPD+10%; lasts 10 seconds. | Max HP +3300 pts, LCK & WIS +165 pts, Elemental Resistance +3 pts. | Healing Done +2%, DMG Taken -2%, WIS +10%, M-CRIT RATE +330 pts, CAST SPD +330 pts. | Water Veil <br>Party members within 15 meters are granted DMG Taken -5%. |
+| Aquarius' Fresh Spring Water | Healing +1%. Your attacks and casts have a 5% chance to activate "Water Spring" status for 5 seconds. Party Members within 15 meters recover 5% HP every second. | Max HP +3300 pts, LCK & WIS +165 pts, Elemental Resistance +3 pts. | Healing Done +2%, DMG Taken -2%, WIS +10%, M-CRIT RATE +330 pts, CAST SPD +330 pts. |  |
+| Aquarius' Water Cape | DMG Taken-1%. Healing +1%. Your attacks and casts will grant Water Veil status for 3 seconds. | Max HP +3300 pts, LCK & WIS +165 pts, Elemental Resistance +3 pts. | Healing Done +2%, DMG Taken -2%, WIS +10%, M-CRIT RATE +330 pts, CAST SPD +330 pts. |  |
+| Aquarius' Apatite Ring | DMG Taken-1%. Your attacks and casts have a 5% chance to increase WIS+278 pts and Physical Resistance+10 pts; lasts 10 seconds. | Max HP +3300 pts, AGI & WIS +165 pts, Physical Resistance +3 pts. | Healing Done +2%, DMG Taken -2%, G-Healing +10%, G-Heal +330 pts, M-CRIT DMG +10%. |  |
+| Aquaris' Carrier's Ring | G-Heal+1%. Your attacks and casts have a 5% chance to increase CAST SPD+361 pts and Elemental Resistance+10 pts; lasts 10 seconds. | Max HP +3300 pts, AGI & WIS +165 pts, Physical Resistance +3 pts. | Healing Done +2%, DMG Taken -2%, G-Healing +10%, G-Heal +330 pts, M-CRIT DMG +10%. |  |
+| Aquaris' Pure Water Amulet | DMG Taken-1%. Your attacks and casts have a 5% chance to reduce DMG Taken-5% and increase G-Heal+348 pts; lasts 10 seconds. | Max HP +3300 pts, AGI & WIS +165 pts, Physical Resistance +3 pts. | Healing Done +2%, DMG Taken -2%, G-Healing +10%, G-Heal +330 pts, M-CRIT DMG +10%. |  |
+| Gemini's Dark Seal | Magic DMG Dealt+1%. Your attacks have a 5% chance to decrease targets Elemental Resistance -10 pts; lasts 10 seconds. | Max MP +3300 pts, LCK & INT +165 pts, Physical Resistance +2 pts. | Magic DMG Dealt +3%, M-ATK +10%, M-ATK +3300 pts, M-CRIT RATE +330 pts, ACC +330 pts. | Twin Gemini <br>Your attacks have a 3% chance to deal Double DMG. |
+| Gemini's Old Grimoire | Magic DMG Dealt+1%. M-SPD+10%. <br>Your attacks have a 8% chance to deal Double Hit DMG and a 4% chance to deal Triple Hit DMG. | Max MP +3300 pts, LCK & INT +165 pts, Physical Resistance +2 pts. | Magic DMG Dealt +3%, M-ATK +10%, M-ATK +3300 pts, M-CRIT RATE +330 pts, ACC +330 pts. |  |
+| Gemini's Identical Cloak | Magic DMG Dealt+2%. Your attacks will grant Twin Gemini for 5 seconds. | Max MP +3300 pts, LCK & INT +165 pts, Physical Resistance +2 pts. | Magic DMG Dealt +3%, M-ATK +10%, M-ATK +3300 pts, M-CRIT RATE +330 pts, ACC +330 pts. |  |
+| Gemini's Dishonourable Ring | Magic DMG Dealt+1%. Your attacks have a 5% chance to increase M-ATK+11816 pts and MP Cost +497 pts for 10 seconds. | Max MP +3300 pts, AGI & INT +165 pts, Physical Resistance +2 pts. | Magic DMG Dealt +3%, Dagger, Rapier, Sword, Mace, Greatsword, Pike, Hammer, Gun, Guitar, Grimoire and Staff's P-ATK & M-ATK +10%, M-CRIT DMG +10%. |  |
+| Gemini's Corrupted Ring | Magic DMG Dealt+1%. Your attacks have a 5% chance to decrease target's P-ATK -30%, P-CRIT -30%; lasts 10 seconds. Additonally the caster is granted M-ATK+15% and M-CRIT RATE+15% for 10 seconds. | Max MP +3300 pts, AGI & INT +165 pts, Physical Resistance +2 pts. | Magic DMG Dealt +3%, Dagger, Rapier, Sword, Mace, Greatsword, Pike, Hammer, Gun, Guitar, Grimoire and Staff's P-ATK & M-ATK +10%, M-CRIT DMG +10%. |  |
+| Gemini's Amulet of Darkness | Your attacks have a 5% chance to increase M-ATK +9089 pts and M-SPD+7%; lasts 10 seconds. | Max MP +3300 pts, AGI & INT +165 pts, Physical Resistance +2 pts. | Magic DMG Dealt +3%, Dagger, Rapier, Sword, Mace, Greatsword, Pike, Hammer, Gun, Guitar, Grimoire and Staff's P-ATK & M-ATK +10%, M-CRIT DMG +10%. |  |
+
+**BLUEPRINTS & MATERIALS:**
+
+| FORMULA: | MATERIALS: | COST: |
+|---|---|---|
+| Blueprint: Aries' Fragmented Stone. | Aries' Fiery Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Aries' Stragetic Plan. | Aries' Fiery Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Aries' Leader's Cape. | Aries' Fiery Token x2, Cape Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Aries' Leadership Ring. | Aries' Fiery Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Aries' Cracked Ring. | Aries' Fiery Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Aries' Pendant. | Aries' Fiery Token x2,  Necklace Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Leo's Calling. | Leo's Orange Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Leo's Medal of Participation. | Leo's Orange Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Leo's Cub Blanket. | Leo's Orange Token x2, Cape Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Leo's Lion Ring | Leo's Orange Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Leo's Precious Band | Leo's Orange Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Leo's Proof of Victory | Leo's Orange Token x2,  Necklace Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Sagittarius' Golden Pendant | Sagittarius' Golden Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Sagittarius' Tranquil Elixir | Sagittarius' Golden Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Sagittarius' Glorious Cape | Sagittarius' Golden Token x2, Cape Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Sagittarius' Power Ring | Sagittarius' Golden Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Sagittarius' Goldstone Ring | Sagittarius' Golden Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Sagittarius' Power Necklace | Sagittarius' Golden Token x2,  Necklace Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Libra's Broken Crystal | Libra's Balance Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Libra's Perspective of Life | Libra's Balance Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Libra's Wisdom Cape | Libra's Balance Token x2, Cape Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Libra's Understanding Stone | Libra's Balance Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Libra's Wisdom Ring | Libra's Balance Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Libra's Blue Shard Necklace | Libra's Balance Token x2,  Necklace Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Aquarius' Precious Azurite | Aquarius' Water Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Aquarius' Fresh Spring Water | Aquarius' Water Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Aquarius' Water Cape | Aquarius' Water Token x2, Cape Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Aquarius' Apatite Ring | Aquarius' Water Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Aquaris' Carrier's Ring | Aquarius' Water Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Aquaris' Pure Water Amulet | Aquarius' Water Token x2,  Necklace Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Gemini's Dark Seal | Gemini's Magic Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Gemini's Old Grimoire | Gemini's Magic Token x4, Trophy Template x1, Zodiac Token x3. | Zodiac Sparkles x720, Constellation Stone x36. |
+| Blueprint: Gemini's Identical Cloak | Gemini's Magic Token x2, Cape Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+| Blueprint: Gemini's Dishonourable Ring | Gemini's Magic Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Gemini's Corrupted Ring | Gemini's Magic Token x1, Ring Template x1, Zodiac Token x1. | Zodiac Sparkles x360, Constellation Stone x12. |
+| Blueprint: Gemini's Amulet of Darkness | Gemini's Magic Token x2,  Necklace Template x1, Zodiac Token x2. | Zodiac Sparkles x480, Constellation Stone x24. |
+
+**MISC ITEM EXCHANGE, QUESTS & INFORMATION:**
+
+| MATERIAL & MISC EXCHANGE: | COST: | DUNGEON REWARDS: | QUESTS: | QUEST REWARDS: |
+|---|---|---|---|---|
+| Enhanced Zodiac Token | Aries' Fiery Token x1, Zodiac Sparkles x60. | Leo's Pack Bag. | Quest: Lv117 Celestial Corridor (Daily). | Zodiac Token x1. |
+| Enhanced Zodiac Token | Gemini's Magic Token x1, Zodiac Sparkles x60. | Aries' Molten Bag. | Quest: Lv117 The Twin Nightmare. | Gemini's Magic Token x1, Zodiac Token x1, 113g 547s. |
+| Enhanced Zodiac Token | Leo's Orange Token x1, Zodiac Sparkles x60. | Libra's Balance Bag. | Quest: Lv117 Burning Aries. | Aries' Fiery Token x1, Zodiac Token x1, 113g 547s. |
+| Enhanced Zodiac Token | Libra's Balance Token x1, Zodiac Sparkles x60. | Sagittarius' Bow Bag. | Quest: Lv117 Just Keep Swimming. | Aquaris' Water Token x1, Zodiac Token x1, 113g 547s. |
+| Enhanced Zodiac Token | Sagittarius' Golden Token x1, Zodiac Sparkles x60. | Aquarius' Water Bag. | Quest: Lv117 Sniper Ready. | Sagittarius' Golden Token x1, Zodiac Token x1, 113g 547s. |
+| Enhanced Zodiac Token | Aquarius' Water Token x1, Zodiac Sparkles x60. | Gemini's Twin Bag. | Quest: Lv117 The Loyal Boy. | Leo's Orange Token x1, Zodiac Token x1, 113g 547s. |
+| Ring Template | Enhanced Zodiac Token x6. | NOTE: Rewards at the end of the dungeon may contain Zodiac Sparkles x10, x20, x30, x40, and x50. May also contain Formula Bags and boss specific tokens. | Quest: Lv117 Balanced. | Libra's Balance Token x1, Zodiac Token x1, 113g 547s. |
+| Necklace Template | Enhanced Zodiac Token x8. |  | N/A |  |
+| Trophy Template | Enhanced Zodiac Token x12. |  |  |  |
+| Cape Template | Enhanced Zodiac Token x8. |  |  |  |
+| Holy Celestial Guardian | Zodiac Sparkles x720, Enhanced Zodiac Token x3, Zodiac Token x3. |  |  |  |
+| Icy Celestial Guardian | Zodiac Sparkles x720, Enhanced Zodiac Token x3, Zodiac Token x3. |  |  |  |
+| Dark Celestial Guardian | Zodiac Sparkles x720, Enhanced Zodiac Token x3, Zodiac Token x3. |  |  |  |
+
+**GEM FORMULA EXCHANGE:**
+
+| GEM NAME: | EFFECT: | COST: |
+|---|---|---|
+| Formula: 1H Gem: Sagittarius | Pierce Resistance +3. Your attacks have a 1% chance to increase P-ATK+4352 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 2H Gem: Sagittarius | Pierce Resistance +3. Your attacks have a 1% chance to increase Basic Attack Triple Hit Rate +5%; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 1H Gem: Leo | Slash Resistance +3. Your attacks have a 1% chance to decrease the targeted Physical & Elemental Resistance -7 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 2H Gem: Leo | Slash Resistance +3. Your attacks have a 1% chance to increase P-ATK & M-ATK +6528 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 1H Gem: Aries | Fire Resistance +3. Your attacks have a 1% chance to decrease DMG Dealt -10% & DMG Taken -10%; lasts 10 sec. | Zodiac Sparkles x400. |
+| Formula: Off-Hand Gem: Aries | Fire Resistance +3. When attacked you have a 1% chance to decrease DMG Dealt -20% & remove 2 negative status' effects every 5 secs. | Zodiac Sparkles x400. |
+| Formula: 1H Gem: Libra | Nature Resistance +3. Your attacks & casts have a 1% chance to increase G-Healing +614 pts & Physical Resistanc e+10 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 2H Gem: Libra | Nature Resistance +3. Your attacks & casts have a 1% chance to increase G-Healing +614 pts & Physical Resistanc e+10 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: Off-Hand Gem: Libra | Nature Resistance +3. Your attacks & casts have a 1% chance to instantly remove 6 negative status' from surrounding party members within 20 meters. | Zodiac Sparkles x400. |
+| Formula: 1H Gem: Aquarius | Ice Resistance +3. Your attacks & casts have a 1% chance to increase WIS +614 pts & Elemental Resistance +10 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 2H Gem: Aquarius | Ice Resistance +3. Your attacks & casts have a 1% chance to increase WIS +614 pts & Elemental Resistance +10 pts; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: Off-Hand Gem: Aquarius | Ice Resistance +3. Your attacks & casts have a 1% chance to increase P-Healing +614 pts & decrease DMG Taken -5% of all surrounding party members within 15 meters; lasts 10 secs. | Zodiac Sparkles x400. |
+| Formula: 1H Gem: Gemini | Dark Resistance +3. Your attacks have a 1% chance to deal Double DMG. | Zodiac Sparkles x400. |
+| Formula: 2H Gem: Gemini | Dark Resistance +3. Your attacks have a 1% chance to increase M-DMG Dealt +5%; lasts 10 sec. | Zodiac Sparkles x400. |
+

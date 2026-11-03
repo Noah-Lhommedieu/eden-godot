@@ -1,0 +1,15 @@
+{
+ "ncid": 55,
+ "cases": [
+  {
+   "dir": "D",
+   "body": "0000000100",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "D",
+   "body": "0000000500",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

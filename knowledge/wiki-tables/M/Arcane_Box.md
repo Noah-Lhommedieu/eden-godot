@@ -1,0 +1,52 @@
+# Arcane Box
+
+> Source : `src_csv/M_ Arcane Box.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+| 1.0 | Defibrillation Hammer | P-ATK +20, Lightning Resistance +50 | Reduces P-CRIT Rate & M-CRIT Rate by a huge amount. Each attack inflicts 20 more DMG. | Red Diamond Hammer x1 | Tumult Energy x1 | Super Battery x1 |
+|---|---|---|---|---|---|---|
+|  |  |  |  | Lightning Res. Potion Lv1 x3 | Thunder Gem Lv1 x5 |  |
+| 30.0 | Hanga's Weeding Gloves | AGI +25, LCK +25 | Invalid against Boss monsters. | Gathering Gloves x1 | Serene Blue Herb x10 | Book: Flowers for Mother x1 |
+|  |  |  |  | Basic Luck Gem x10 | Tough Branch x10 |  |
+| 40.0 | Rora's Leg Armor | DEF +250, AGI +40 | Increases Move SPD +10%. | Water Spirit Boots x1 | Ranger Glyph x5 | Book: Ranger's Guide x1 |
+|  |  |  |  | Snow Cotton x10 | Embroidery Threads x10 |  |
+| 45.0 | Gane Stone's Iron Mace | STR +24, AGI +24, INT +24, WIS +24, LCK +24 | This weapon doesn't get damaged and cannot be fortified. This weapon can't receive bonus gold and equipment. | Tribal Club x1 | Volcanic Steel x10 | Hard Iron x10 |
+|  |  |  |  | Snow Iron x10 | Amaranth Iron x10 |  |
+| 50.0 | Alice's Lollipop Club | All Resistance +5 | Recovers +125 HP every second. This weapon cannot be recovered once broken. | Alice's Nightmare Touch x1 | Dana's Nightmare Heart x1 | Beguiling Ash x5 |
+|  |  |  |  | Analgesic Jam x30 | Rose Ship x100 |  |
+| 55.0 | Invisible Katana | LCK +47, EVA +50, CRIT Rate +50 | Its range is very long, but the weapon is invisible. | Garson's Spirit Eye x1 | Reanimated Blood x1 | N/A |
+|  |  |  |  | Garson's Horn x1 | Aether Fruit x1 |  |
+| 60.0 | Salvio's Giant Axe | STR +185, AGI -20, Parry +125 | This weapon's attack speed is very slow. | Salvio's Attack Axe x1 | Salvio's Punishment x1 | Lv56-60 2-H Weapons x6 |
+|  |  |  |  | Salvio's Ambition Ring x1 | Raw Heavy Copper x10 |  |
+| 60.0 | Encyclopedia Edenica | INT +100, WIS +50, CRIT DMG +50 | Each attack has a 30% chance to stun targets for 3 secs. | Book: Rise of the Eagles x1 | Book: Flight Safety Guide x1 | Book: Darksong Mixology x1 |
+|  |  |  |  | Book: Golden City x1 | Book: Bonmalo Guide x1 |  |
+| 60.0 | Provoked Katana | STR +31, AGI +93, LCK +62, ACC +65, CRIT Rate +42 | Every block will recover HP by +1%. For every attack, the target will recover, at most, 1000 HP. | Galt's Katana x1 | Halu Root x10 | Amending Blood x1 |
+|  |  |  |  | Sabaster's Robe x1 | Revival Grass x10 |  |
+| 70.0 | Fantasy Popsicle Stick | STR +119, AGI +77, WIS +39, P-Healing +64, Parry +165 | When attacking, there's a chance to increase the original damage by +100%. When attacking, damage decreases by -40%. | Silver Pioneer x1 | Yuhidor's Devil Rod x1 | Blood Vine Ink x1 |
+|  |  |  |  | Champion Collosus x1 | Crimson Sequoia x30 |  |
+| 71.0 | Grimoire - Rose Knight's Odd Tales | N/A | Able to trigger a quest. After completing the missions in the grimoire, you can read through it freely. | Abandoned Diary Pages x1 | Lv69 Unidentified Treasure Map x1 | Book: The Tales of Elis |
+|  |  |  |  | Eternal Energy Threads x10 | Mirage Rune x10 |  |
+| 20.0 | Alpaca Transformation Crystal | N/A | Can transform the player into an Alpaca. Effect is lost if attacked. | Departure Crystal x1 | Ancient Alpaca Food Recipe x1 | Alpaca King Jade x10 |
+|  |  |  |  | Copper Alpaca Token x10 | Alpaca King Metal x10 |  |
+| 50.0 | Frightclaw's Azure Cape | AGI +7, INT +11, WIS +4 | When under CRIT-ATK, decreases HP limit -10% and increases MP limit +10%. Increases INT +50. Lasts for 10 secs and can stack up to 5 times. | Frightclaw's Contract x1 | Rose Milk x2 | Silver Dragon Necklace x1 |
+|  |  |  |  | Flower Beast Rootstalk x1 | Book: Dragon Magic x1 |  |
+| 65.0 | Watermelon Slicesword | STR +99, AGI +69, INT -9, WIS +39, P-Healing +99, Parry +99, Ice Resistance +9 | Causes an additional 99 points of Ice DMG. When attacking, there's a 9% chance of the damage caused to be recovered by the caster. There's a 9% chance to failure when using this skill. | Rysel's Sadafang x1 | Tienro's Necklace x1 | Fantasy Fruit x10 |
+|  |  |  |  | Black Hole Energy x1 | Basic 2H Weapon Enchant - Frozen Soil Lv1 |  |
+| 70.0 | Gane Stone's Iron Mace | STR +42, WIS +56, LCK +28, ACC +41, C-Rate +28, C-DMG +7, A-SPD +84, P-Healing +72 | This weapon doesn't get damaged and cannot be fortified. This weapon can't receive bonus gold and equipment. | Gane Stone's Iron Mace x1 | Obsidian Steel x10 | Amber Crystal Sand x20 |
+|  |  |  |  | Fire Platinum x10 | Ice Storm Platinum x10 |  |
+| 5.0 | Gravitational Stone | N/A | Instantly rises caster up 90 feet in the air. | Glimmering Crystal Ball x1 | Star Pulverizer x1 | Floating Magnet x1 |
+|  |  |  |  | Basic Intelligence Gem x1 | Electromagnetic Transducer x1 |  |
+| 10.0 | Decadent Crabby Patty | N/A | User recovers +125 HP every sec for 30 secs. | Crab Meat x3 | N/A | N/A |
+|  |  |  |  | N/A | N/A |  |
+| 40.0 | Rose Milk | N/A | User recovers between +1896-1916 HP & MP. | Milk x1 | Roseship x1 | N/A |
+|  |  |  |  | N/A | N/A |  |
+| 50.0 | Wine Braised Pork Chop | N/A | User recovers between +3158-3178 HP & MP. | Fresh Pork x1 | Desert Wine x1 | N/A |
+|  |  |  |  | N/A | N/A |  |
+| 60.0 | Organic Juice | N/A | User recovers between +4448-4468 HP & MP. | Fresh Fruit x1 | Water Packet x1 | N/A |
+|  |  |  |  | N/A | N/A |  |
+| 70.0 | Eyebloom Bread | N/A | User recovers between +5554-5574 HP & MP. | Perfume Petal x1 | Heady Perfume Flower Seed x1 | N/A |
+|  |  |  |  | Dry Pollen x1 | N/A |  |
+| 1.0 | Roasted Peeper Egg | N/A | Eating it can increase the HP limit and Magic limit by +1%. It also yields a chance to remove one negative status. | Tinder Bag x10 | Worm Skin x20 | Book: Rainbow Peeper |
+|  |  |  |  | Kraken Ichor x10 | Space Essence x10 |  |
+| 40.0 | Zagdon's Energy Drink | N/A | Greatly decreases the MP Cost of using skills. | Pure Dew x1 | Lost Energy x10 | Water Packet x1 |
+|  |  |  |  | Static Fruit x10 | Magic Glitter x1 |  |
+

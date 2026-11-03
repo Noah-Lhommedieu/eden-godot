@@ -1,0 +1,45 @@
+{
+ "scenario": "mixed",
+ "requestedSessions": 300,
+ "actualSessions": 300,
+ "entered": 300,
+ "errors": 4,
+ "durationSeconds": 77.1907181,
+ "totals": {
+  "sent": 112390,
+  "received": 13198243,
+  "moves": 35552,
+  "attacks": 17617,
+  "spells": 17825,
+  "lootAttempts": 0,
+  "mobsSeen": 19025,
+  "treasuresSeen": 0
+ },
+ "entryMs": {
+  "min": 8.4582,
+  "avg": 158.29652166666665,
+  "max": 737.2225
+ },
+ "failures": [
+  {
+   "CharacterId": 800000244,
+   "CharacterName": "botchar0244",
+   "Error": "Unable to write data to the transport connection: Broken pipe."
+  },
+  {
+   "CharacterId": 800000257,
+   "CharacterName": "botchar0257",
+   "Error": "Unable to write data to the transport connection: Broken pipe."
+  },
+  {
+   "CharacterId": 800000274,
+   "CharacterName": "botchar0274",
+   "Error": "Unable to write data to the transport connection: Broken pipe."
+  },
+  {
+   "CharacterId": 800000289,
+   "CharacterName": "botchar0289",
+   "Error": "Unable to write data to the transport connection: Broken pipe."
+  }
+ ]
+}

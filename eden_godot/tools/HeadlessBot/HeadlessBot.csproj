@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>EdenClient.HeadlessBot</RootNamespace>
+    <!-- Même fermeture de sources que tools/NetTests : le noyau
+         net/session/protocol + tables pures compile sans GodotSharp
+         (les parties Godot sont sous #if GODOT). -->
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\godot_project\scripts\net\**\*.cs" />
+    <Compile Include="..\..\godot_project\scripts\protocol\**\*.cs" />
+    <Compile Include="..\..\godot_project\scripts\session\**\*.cs" />
+    <Compile Include="..\..\godot_project\scripts\data\**\*.cs"
+             Exclude="..\..\godot_project\scripts\data\tables\PartnerTable.cs" />
+    <Compile Include="..\..\godot_project\scripts\game\**\*.cs"
+             Exclude="..\..\godot_project\scripts\game\CharVisual.cs;..\..\godot_project\scripts\game\AnimRetarget.cs;..\..\godot_project\scripts\game\EntityAnimator.cs;..\..\godot_project\scripts\game\EdenGltfMipmaps.cs;..\..\godot_project\scripts\game\CharBodyCache.cs" />
+    <Compile Include="..\..\godot_project\scripts\input\PickCore.cs" />
+    <Compile Include="..\..\godot_project\scripts\combat\CombatMessages.cs" />
+    <Compile Include="..\..\godot_project\scripts\combat\MotionTable.cs" />
+    <Compile Include="..\..\godot_project\scripts\combat\CombatFx.cs" />
+    <Compile Include="..\..\godot_project\scripts\ClientConfig.cs" />
+    <Compile Include="..\..\godot_project\scripts\settings\ClientSettings.cs" />
+    <Compile Include="..\..\godot_project\scripts\settings\InputBindings.cs" />
+    <Compile Include="..\..\godot_project\scripts\world\FsmFile.cs" />
+    <Compile Include="..\..\godot_project\scripts\world\TerrainSampler.cs" />
+    <Compile Include="..\..\godot_project\scripts\world\GrassLayout.cs" />
+    <Compile Include="..\..\godot_project\scripts\world\IflFile.cs" />
+    <Compile Include="..\..\godot_project\scripts\player\InterpBuffer.cs" />
+    <Compile Include="..\..\godot_project\scripts\ui\**\*.cs"
+             Exclude="..\..\godot_project\scripts\ui\CeguiToGodot.cs" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+  </ItemGroup>
+</Project>

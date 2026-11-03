@@ -1,0 +1,22 @@
+# Gros/régénérable : jamais versionné
+/corpus/
+/re/
+/artifacts/
+/engine/
+/knowledge/raw/
+/tools/graph/.venv/
+/tools/graph/re-src/
+/tools/graph/reagraph.json
+/tools/graph/portage/
+graphify-out/cache/
+graphify-out/graph.json
+knowledge/graphify-out/graph.json
+/eden_server/server_us/
+**/bin/
+**/obj/
+**/.godot/
+**/.mono/
+*.out
+*.log
+*.pem
+.env

@@ -1,0 +1,61 @@
+[
+  {
+    "Name": "or  AddGold      PG direct",
+    "N": 60000,
+    "OpsPerSec": 17526.216591087777,
+    "P50": 15.7639,
+    "P95": 22.4172,
+    "P99": 26.3741,
+    "Max": 188.4287
+  },
+  {
+    "Name": "or  AddGold      Redis",
+    "N": 60000,
+    "OpsPerSec": 89114.96365000634,
+    "P50": 3.1251,
+    "P95": 4.7248,
+    "P99": 8.8668,
+    "Max": 26.9064
+  },
+  {
+    "Name": "pos UpdateCoords PG direct",
+    "N": 60000,
+    "OpsPerSec": 23616.70559158962,
+    "P50": 12.3737,
+    "P95": 15.9305,
+    "P99": 18.2886,
+    "Max": 28.1642
+  },
+  {
+    "Name": "pos UpdateCoords Redis (F\u0026F)",
+    "N": 60000,
+    "OpsPerSec": 599586.2854630305,
+    "P50": 0.0046,
+    "P95": 0.0462,
+    "P99": 0.5723,
+    "Max": 14.1759
+  },
+  {
+    "Name": "ticket login Issue\u002BConsume PG",
+    "N": 60000,
+    "OpsPerSec": 11129.62441691202,
+    "P50": 25.1305,
+    "P95": 40.1405,
+    "P99": 49.5418,
+    "Max": 61.0487
+  },
+  {
+    "Name": "ticket login Issue\u002BConsume Redis",
+    "N": 60000,
+    "OpsPerSec": 177810.23143779722,
+    "P50": 1.3909,
+    "P95": 3.4496,
+    "P99": 7.0947,
+    "Max": 13.5699
+  },
+  {
+    "name": "flush all dirty",
+    "chars": 300,
+    "ms": 551.8742
+  }
+]

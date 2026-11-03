@@ -1,0 +1,28 @@
+# Compétences des shamans éveillés
+
+> Source : `raw/guides-fr/2017/07/17/competences-des-shamans-eveilles.html` — publié le 2017/07/17 (site WordPress edenfr.wordpress.com)
+
+Voici une présentation des compétences des deux shamans éveillés : le Druid et le Totem Master, pour les joueurs non-anglophones. Pour rappel, ces classes ne sont actuellement disponibles _que_ sur le serveur Vendetta. Pour les attaques, la valeur des boosts d’atta- que est donnée au niveau 80 (si disponible) pour se faire une idée mais ces sorts peuvent être améliorés.
+Druid
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_shamaniccourse.jpg?w=800) | **Shamanic Curse**. Augmenter l’ATQ MAG. Inflige des dégâts de nature et réduit la VIT ATQ et INV de la cible de 10 % pendant 7 secondes, cumulable 3 fois.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_stomp.jpg?w=800) | **Stomp and Circumstance**. Augmente l’ATQ MAG. Charge une cible et inflige des dégâts de nature aux ennemis dans un rayon de 15 pieds autour d’elle.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_ancestorswrath.jpg?w=800) | **Ancestor’s Wrath**. Augmente l’ATQ MAG. Inflige des dégâts de nature aux ennemis dans un rayon de 25 mètres et des dégâts additionnels par seconde à hauteur de 15 % de l’ATQ MAG du lanceur pendant 12 secondes.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_martyrwrath.jpg?w=800) | **Martyr’s Wrath**. Augmente l’ATQ MAG. Inflige des dégâts de nature et réduit la VIT DEP de la cible de 10 % pendant 5 secondes, cumulable 5 fois. Au 5ème stack, cible assommée.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_sprinoflife.jpg?w=800) | **Spring of Life**. Restaure les PV de la cible alliée et 50 % de chance de lui rendre 10 % de ses PV Max à chaque coup subi pendant 5 secondes.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_soulawaken.jpg?w=800) | **Soul Awaken Lv1**. Ressuscite la cible alliée avec PV et PM à 100 %, sans pénalité d’expérience.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_spikedarmor.jpg?w=800) | **Spiked Armor Lv1**. DEF +10 % et renvoie 40% des dégâts physiques reçus pendant 20 secondes. Sans effet sur les boss.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_natureblessing.jpg?w=800) | **Nature’s Blessing**. Augmente l’ATQ MAG. Inflige des dégâts de nature aux ennemis dans un rayon de 15 mètres et les assomme pendant 5 secondes. Lanceur immobilisé mais dégâts reçus -100 % pendant 5 secondes.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_metamorphose.jpg?w=800) | **Metamorphose**. Augmente l’ATQ MAG et inflige des dégâts de nature à la cible. Sort modifié par Nature’s Power. _Bear_ : augmente l’ATQ MAG. Inflige des dégâts de nature et provoque la cible ; dégâts additionnels pdt 6 sec. _Monkey_ : augmente l’ATQ PHY. Inflige des dégâts de nature à la cible et augmente ses dégâts subis de 50 % quand touché par un critique. _Unicorn_ : restaure des PV aux membres du groupe dans un rayon de 20 mètres et réduit les dégâts subis de 10 % pdt 5 sec.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_naturepower.jpg?w=800) | **Nature’s Power Lv1**. Permet 3 transformations. _Raging Bear_ : PV Max +100 %, dégâts reçus -40 %, restaure 3 % des PV Max par sec. _Shrewd Monkey_ : Taux CRIT MAG, DEG CRIT MAG et PM +30 %. _Fanciful Unicorn_ : guérison géné et perso +50 %.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/druid_restore.jpg?w=800) | **Restore Human Power Lv1**. Annule toutes les transformations de Nature’s Power.
+Totem Master
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_murkywaters.jpg?w=800) | **Murky Waters Lv80**. ATQ MAG +8.884. Inflige des dégâts de nature à la cible et réduit sa résistance nature de 10 points pendant 5 secondes, cumulable 3 fois.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_destinedstrike.jpg?w=800) | **Destined Strike Lv80**. ATQ MAG +9.567 et inflige des dégâts de nature aux ennemis dans un rayon de 20 pieds. Dégâts subis par les cibles +10 % pendant 5 secondes.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_letitrain.jpg?w=800) | **Let It Rain**. Restaure les PV des alliés dans un rayon de 30 mètres et des PV additionnels par seconde pendant 8 secondes.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_blessing.jpg?w=800) | **Blessing Totem**. Invoque un totem pendant 30 secondes : DEF et ESQ +30 %, toutes résistances +30 pendant 3 secondes pour les alliés dans un rayon de 15 pieds.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_time.jpg?w=800) | **Time Totem Lv1**. Invoque un totem pendant 30 secondes : inflige des dégâts par seconde aux ennemis à raison de 2% de leurs PV dans un rayon de 20 pieds et réduit leur VIT DEP de 10 %, la VIT ATQ et INV de 5 % pdt 5 sec, cumulable 5 fois.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/toteml_rebellion.jpg?w=800) | **Rebellion Totem Lv1**. Invoque un totem pendant 30 secondes : réduit les résistances élémentaires de 10 points pendant 5 secondes aux ennemis dans un rayon de 20 pieds, cumulable 5 fois.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_grace.jpg?w=800) | **Grace Totem**. Invoque un totem pendant 30 secondes : restaure 5 % des PV et réduit les dégâts reçus de 30 % pendant 3 secondes pour les alliées dans un rayon de 15 pieds.
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/07/totem_tranquility.jpg?w=800) | **Tranquility Totem**. Invoque un totem pendant 10 secondes : ennemis dans un rayon de 15 pieds placés sous « Silence » pendant 3 secondes. Sans effet sur les boss.

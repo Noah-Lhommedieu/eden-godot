@@ -1,0 +1,173 @@
+# Protocole Eden — inventaire des messages (repérage statique)
+
+> Généré par \`tools/extract_symbols.py\`. **581 messages CNE_\* uniques** repérés
+> (repérage des NOMS, sans provider). Étape suivante (ÉTAPE B du PLAN-REVERSE) :
+> associer chaque message à son **opcode** (\`GetNCID()\`) et à ses **champs**
+> (\`Serialize\`) via Ghidra (\`rea function <bin> <CNE_...> --provider ghidra\`).
+
+| Catégorie (préfixe) | Nombre |
+|---|---:|
+| CNE_CZ_ | 263 |
+| CNE_DBA_ | 39 |
+| CNE_CW_ | 35 |
+| CNE_ZW_ | 32 |
+| CNE_G_ | 28 |
+| CNE_MW_ | 20 |
+| CNE_ZM_ | 17 |
+| CNE_T_ | 9 |
+| CNE_GJ_ | 5 |
+| CNE_CL_ | 4 |
+| CNE_CNE_ZMis_ZoneServerReportID_ | 2 |
+| CNE_CG_ | 2 |
+| CNE_CNE_ZMis_ZoneServerWeddingsInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateRoomItem_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateRoom_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateRecommendActivities_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateNPCSymbols_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateMissionState_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateLifelongPoint_ | 1 |
+| CNE_CNE_ZMis_ZoneServerUpdateLifelongGold_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTransportGMCharacterToCharacter_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTransitionCommands_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTextOutputIndex_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTextOutput_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTextExCmdRemoteZone_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTextExCmdRemoteWorld_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTextExCmd_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTerritoryQuery_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTerritoryJoin_ | 1 |
+| CNE_CNE_ZMis_ZoneServerTerritoryInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerSwitchPlayerRoom_ | 1 |
+| CNE_CNE_ZMis_ZoneServerStartVersusInstance_ | 1 |
+| CNE_CNE_ZMis_ZoneServerStartColosseum_ | 1 |
+| CNE_CNE_ZMis_ZoneServerStartBattleRoyale_ | 1 |
+| CNE_CNE_ZMis_ZoneServerStartBattlefield_ | 1 |
+| CNE_CNE_ZMis_ZoneServerStartBattleCrusade_ | 1 |
+| CNE_CNE_ZMis_ZoneServerSearchRoomResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerSearchInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerReturnTeamInviteeID_ | 1 |
+| CNE_CNE_ZMis_ZoneServerResetNodeTimes_ | 1 |
+| CNE_CNE_ZMis_ZoneServerResetDailyMonsterKill_ | 1 |
+| CNE_CNE_ZMis_ZoneServerResetDailyMission_ | 1 |
+| CNE_CNE_ZMis_ZoneServerReplyDialogue_ | 1 |
+| CNE_CNE_ZMis_ZoneServerRemoteClient_ | 1 |
+| CNE_CNE_ZMis_ZoneServerRankInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerQueryPlayerCard_ | 1 |
+| CNE_CNE_ZMis_ZoneServerPVPTopData_ | 1 |
+| CNE_CNE_ZMis_ZoneServerPutItem_ | 1 |
+| CNE_CNE_ZMis_ZoneServerNPCTalkCheck_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMessageWriteResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMessageRead_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMessageList_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMessageDeleteResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailSendResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailReturnResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailReceive_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailRead_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailList_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailGetItemOK_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailGetGoldOK_ | 1 |
+| CNE_CNE_ZMis_ZoneServerMailDeleteResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerLoverUpdate_ | 1 |
+| CNE_CNE_ZMis_ZoneServerListDialogue_ | 1 |
+| CNE_CNE_ZMis_ZoneServerGreedyIslandJoin_ | 1 |
+| CNE_CNE_ZMis_ZoneServerGreedyIslandInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerGMToolGetMission_ | 1 |
+| CNE_CNE_ZMis_ZoneServerGMToolGetInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFindTargetLocation_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFastDressEquipEnd_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFamilyTownMemberQuery_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFamilyStorageUpdate_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFamilyStorageLog_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFamilyContainerUpdate_ | 1 |
+| CNE_CNE_ZMis_ZoneServerFamilyBattleInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerEnterColosseum_ | 1 |
+| CNE_CNE_ZMis_ZoneServerEnterBattlefieldAnswer_ | 1 |
+| CNE_CNE_ZMis_ZoneServerEnterBattlefield_ | 1 |
+| CNE_CNE_ZMis_ZoneServerEnterBattleCrusadeAnswer_ | 1 |
+| CNE_CNE_ZMis_ZoneServerDropItem_ | 1 |
+| CNE_CNE_ZMis_ZoneServerDisconnected#_ | 1 |
+| CNE_CNE_ZMis_ZoneServerDeallocateItemID_ | 1 |
+| CNE_CNE_ZMis_ZoneServerCrossZoneResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerConnected_ | 1 |
+| CNE_CNE_ZMis_ZoneServerColosseumQuery_ | 1 |
+| CNE_CNE_ZMis_ZoneServerColosseumModeUpdate_ | 1 |
+| CNE_CNE_ZMis_ZoneServerColosseumLeaveJoinResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerColosseumJoinResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerCharNotQuit_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBuyBackList_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBuybackInitAllocate_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBuyBackGetItem_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBattlefieldSetup_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBattlefieldList_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBattlefieldJoinResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBattlefieldEraseMember_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBattlefieldChangeCharNum_ | 1 |
+| CNE_CNE_ZMis_ZoneServerBattleCrusadeInfo_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAuctionSellResult_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAuctionSellList_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAuctionCancelOK_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAuctionBuyOK_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAuctionBuyList_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAchievementUpdate_ | 1 |
+| CNE_CNE_ZMis_ZoneServerAchievementRewardMail_ | 1 |
+| CNE_CNE_ZMis_MissionServerVersusInstanceJoinRequest_ | 1 |
+| CNE_CNE_ZMis_MissionServerUpdatePlayerCard_ | 1 |
+| CNE_CNE_ZMis_MissionServerUpdatePKList_ | 1 |
+| CNE_CNE_ZMis_MissionServerTextExCmdRemoteZone_ | 1 |
+| CNE_CNE_ZMis_MissionServerTextExCmdRemoteWorld_ | 1 |
+| CNE_CNE_ZMis_MissionServerTextExCmd_ | 1 |
+| CNE_CNE_ZMis_MissionServerSetRecommendActivityTracing_ | 1 |
+| CNE_CNE_ZMis_MissionServerSendTargetLocation_ | 1 |
+| CNE_CNE_ZMis_MissionServerSendSystemMail_ | 1 |
+| CNE_CNE_ZMis_MissionServerRemovePMS_ | 1 |
+| CNE_CNE_ZMis_MissionServerRemoteClient_ | 1 |
+| CNE_CNE_ZMis_MissionServerRefreshRecommendActivities_ | 1 |
+| CNE_CNE_ZMis_MissionServerPlayerCCDataSave_ | 1 |
+| CNE_CNE_ZMis_MissionServerOnDialogueSelected_ | 1 |
+| CNE_CNE_ZMis_MissionServerNodeCreate_ | 1 |
+| CNE_CNE_ZMis_MissionServerMobDieReport_ | 1 |
+| CNE_CNE_ZMis_MissionServerMigrationDone_ | 1 |
+| CNE_CNE_ZMis_MissionServerMessageWrite_ | 1 |
+| CNE_CNE_ZMis_MissionServerMailSend_ | 1 |
+| CNE_CNE_ZMis_MissionServerListDialogue_ | 1 |
+| CNE_CNE_ZMis_MissionServerItemMallMailSend_ | 1 |
+| CNE_CNE_ZMis_MissionServerItemMallMailCheck_ | 1 |
+| CNE_CNE_ZMis_MissionServerIDReport_ | 1 |
+| CNE_CNE_ZMis_MissionServerGreedyIslandRankQuery_ | 1 |
+| CNE_CNE_ZMis_MissionServerGiveUpMission_ | 1 |
+| CNE_CNE_ZMis_MissionServerGetTeamInviteeID_ | 1 |
+| CNE_CNE_ZMis_MissionServerFindCharacter_ | 1 |
+| CNE_CNE_ZMis_MissionServerEnterBattlefieldAnswer_ | 1 |
+| CNE_CNE_ZMis_MissionServerCrossZoneRequest_ | 1 |
+| CNE_CNE_ZMis_MissionServerCrossZone_ | 1 |
+| CNE_CNE_ZMis_MissionServerColosseumLeaveJoin_ | 1 |
+| CNE_CNE_ZMis_MissionServerColosseumJoinRequest_ | 1 |
+| CNE_CNE_ZMis_MissionServerColosseumJoinAnswer_ | 1 |
+| CNE_CNE_ZMis_MissionServerColosseumClose_ | 1 |
+| CNE_CNE_ZMis_MissionServerCloseMissionBrief_ | 1 |
+| CNE_CNE_ZMis_MissionServerCheckFamilyInvite_ | 1 |
+| CNE_CNE_ZMis_MissionServerChannelMsg_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattleRoyaleJoinRequest_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattleRoyaleClose_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattlefieldUpdateStatus_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattlefieldList_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattlefieldJoin_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattlefieldEraseMember_ | 1 |
+| CNE_CNE_ZMis_MissionServerBattlefieldClose_ | 1 |
+| CNE_CNE_ZMis_MissionServerArrangeItem_ | 1 |
+| CNE_CNE_ZMis_MissionServerAddFamilyMessage_ | 1 |
+| CNE_CGIZ_ | 1 |
+
+---
+
+## Messages par serveur
+
+| Serveur | Nb CNE_ |
+|---|---:|
+| GatewayServer | 19 |
+| LoginServer | 9 |
+| MissionServer | 63 |
+| TicketServer | 3 |
+| WorldServer | 92 |
+| ZoneServer | 409 |

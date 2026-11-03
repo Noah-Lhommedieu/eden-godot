@@ -1,0 +1,67 @@
+# Guardian Skills
+
+> Source : `src_csv/M_ Guardian Skills.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+**NOTE: Holy skills and Guardian skills DO NOT CO-EXIST. <br>You must choose between one or the other!**
+
+| CLASS: |  | SKILL NAME: | SKILL EFFECT: |
+|---|---|---|---|
+| WARRIOR | BERSERKER | Piercing Empowerment | Grants all party memebrs within 50 meters Physical & Elemental Resistance Penetration +5 pts & MP Cost -7% for 10 seconds. |
+|  | SHIELDER | Titan's Fury | Tenacity Strike Range +15 Meters. Your attacks decrease enemies Targeted Slash & Strike Resistance -2 pts for 5 seconds, stacks 5 times. If the caster has 5 stacks of Tenacity Strike, the caster is immune to the HP & MP cost of Titan's Fury. |
+| KNIGHT | EXECUTIONER | Deep Slash | Grants P-ATK +xxx and deals Triple HIt Physical DMG to the target, reducing their Targeted Physical Resistance -10 pts for 10 seconds. |
+|  | GLACIER KNIGHT | Frosty Rally | Heals all party members within 35 meters of the caster +xxx HP and increases their DMG Dealt +12% for 8 seconds. |
+| TEMPLAR | PALADIN | Shield of Glory | Grants the target "Shield of GLory" status for 10 seconds. Heals all party members within 15 meters HP +xx pts every second and grants them DMG Taken -xx pts. |
+|  |  | Battle Spirit Awaken | Grants the caster "Battle Spirit" status for 10 seconds. ATK SPD +xx pts, MOVE SPD +20%, Holy Resistance Penetration +10 pts. |
+|  | BLOODKNIGHT | Sunlight Strike | Grants M-ATK +xxx and deals Triple Hit Holy DMG to all enemies within 20 meters of the caster knocking them down for 3 seconds. |
+| DRAGON KNIGHT | DRAGON SOUL | Dragon Swipe | Grants P-ATK +xxx pts and deals Triple Hit Physical DMG to the target reducing their Targeted Slash Resistance -3 pts for 12 seconds, stacks 5 times. |
+|  | DRAGON EMPEROR | Dragon's Fire | Grants M-ATK +xxx and deals Triple Hit Fire DMG to all enemies wthin a 25 meter straight line, reducing their Targeted Fire Resistance -7 pts for 10 seconds. |
+|  |  | Flame Dragon's Energy | Grants P-ATK +xxx and deals Triple Hit Physical DMG to all enemies wthin 25 meters of the caster reducing their Targeted Slash Resistance -7 pts for 10 seconds. |
+| THIEF | ASSASSIN | Assasinate | Grants P-ATK +xxx and deals Physical DMG to the target. Additionally if the target's HP is below 30% this skill will deal Double DMG reducing their MOVE SPD -15% for 4 seconds. |
+|  | KAGE | Ninjutsu Formation | Grants the caster "Ninjutsu Formation" Status for 10 seconds. ATK SPD +xx pts. MOVE SPD +20%. Physical Resistance Penetration +10 pts. |
+|  |  | Bonus Kage | Flaming Barrage: Grants M-ATK +xxx and deals Triple Hit Fire DMG to the target granting M-ATK +2% for 10 seconds, stacks 5 times. |
+|  |  |  | Lightning Strike: Grants M-ATK +xxx and deals Lightning DMG to all enemies within 25 meters of the caster, reducing their Targeted Lightning Resistance -2 pts for 10 seconds, stacks 5 times. Additionally grants the caster DMG Dealt +1% for 10 seconds, stacks 5 times. |
+|  |  |  | Energy Release: Grants M-ATK +xxx and deals Double Hit Nature DMG to all enemies within 20 meters of the caser stunning them for 3 seconds. |
+|  |  |  | Frosted Shurikens: Grants M-ATK +xxx and deals Double Hit Ice DMG to the target, reducing their Targeted Ice Resistance -7 pts for 10 seconds. |
+| MARTIAL ARTIST | ASURA | Fist of Fury | Grants P-ATK +xxx and deals Double Hit Physical DMG to the target reducing their DEF -30% for 10 seconds. |
+|  | RAKSHASA | Spinning Dragon | Grants P-ATK +xxx and deals Double Hit Physical DMG to all enemies wtihin 25 meters of the caster reducing their DEF -30% for 10 seconds. |
+| BLADE DANCER | ELEGANT DANCER | Finnese | Grants P-ATK +xxx and deals Double Hit Physical DMG to all enemies within 20 meters of the caster reducing their Targeted Physical Resistance -2 pts for 10 seconds, stacks 5 times. Additionally grants Battlefield Poet's in the party within 40 meters Elemental Resistance Penetration +5 pts for 15 seconds. |
+|  | BLADE ACROBAT | Dance Routine | Grants P-ATK +xxx and deals Physical DMG to all enemies within 20 meters of the caster reducing their Physical & Elemental Resistance -2 pts for 10 seconds, stacks 5 times. Dance Routine Range +5 meters. |
+| SAMURAI | BLADE MASTER | Master's Mark | Inflict's the target with "Master's Mark" status for 20 seconds. Additionallly grats the caster "Master" status for 20 seconds. When attacking enemies with "Master's Mark" status, you will deal 10% more DMG |
+|  | MASTER FENCER | Whirling Blades | Grants P-ATK and deals Double Hit Physical DMG to all enemies within 30 meters of the caster, dealing additional Slash DMG equal to 15% of teh caster's P-ATK every second for 7 seconds |
+| HUNTER | TRAINER | Aero Arrows | Grants P-ATK +xxx and deals Quadruple Hit Physical DMG to all enemies within 20 meters of the target, dealing additional Pierce DMG equal to 25% of the caster's P-ATK every second for 5 seconds. |
+|  | DEVIL HUNTER | Penetration Arrow | Grants P-ATK and deals Double Hit Physical DMG to the target reducing their Physical & Elemental Resistance -1 pt and DEF -3% for 12 seconds, stacks 5 times. |
+| ENGINEER | ANNIHILATOR | Armor Breaker | Grants P-ATK +xxx and deals Physical DMG to the target inflicting "Armor Breaker" status for 10 seconds, stacks 5 times. Targeted Pierce & Elemental Resistance -1 pts. Cloth ARmor Defense -2%. Light Armor Defense -4%. Heavy Armor Defense -8%. |
+|  | MECHA ARES | Gasoline | Inflincts "Gasoline" status on all enemies within 10 meters of the target for 10 seconds. Deals Fire DMG equal to 5% of the cater's M-ATK every second. Additionally skill "Robot Grenade" will deal an additional 10% DMG to the target's inflicted with "Gasoline" |
+| RANGER | CELESTIAL ARROW | Straight Arrow | Grants P-ATK +xxx and deals Physical DMG to all enemies within a 36 meter straight line increasing their DMG Taken +15% and stunning them for 3 seconds. |
+|  | LETHAL ARROW | Blinding Arrow | Grant's P-ATK +xxx and deals Physical DMG to the target reducing their ACC -xx pts for 10 seconds. Additionally grants the caster EVA +xx pts for 10 seconds. |
+| INQUISITOR | REAVER | Chain Lash | Grants P-ATK and deals Double Hit DMG to all enemies within 20 meters of the caster reducing their Targeted Pierce Resistance -10 pts for 10 seconds. |
+|  | RIFLETEER | Piercing Shot | Grants P-ATK +xxx and deals Physical DMG to all enemies within a 36 meter straight line reducing their Targeted Pierce Resistance -4 pts for 12 seconds, stacks 5 times. |
+| AGENT | SPECIAL AGENT | Shot Storm | M-ATK +xxx and deals Fire DMG to all enemies within 20 meters of the caster reducing Targeted Elemental Resistance -5 pts for 12 seconds, stacks 4 times. |
+|  | GUNSLINGER | Gunslinger Lv4 | Instantly grants the caster "Gunslinger Lv4" status. |
+| CLERIC | ADJUDICATOR | Healing Light | Heals all party members within 50 emters of the caster's HP +xxx and removes 2 negative status'. |
+|  | EQUILIBRIAN | Fierce Light Strike | Grants M-ATK +xxx and deals Holy DMG to all enemies within 25 meters of the target granting the caster DMG Deal +1.5% for 15 seconds, stacks 20 times. |
+|  |  | Fierce Dark Strike | Grants M-ATK +xxx and deals Dark DMG to all enemies within 25 meters of the target granting the caster DMG Deal +1.5% for 15 seconds, stacks 20 times. |
+| BARD | BATTLEFIELD POET | Holy Impacto | M-ATK +xxx and deals Holy DMG to all enemies within a 36 meter straight line. Additionally if the target is in "Finnese" status Holy Impacto will deal Triple Hit DMG. |
+|  | LIFE WORSHIPPER | Purification Melody | Heals all party members within 50 meters of the caster's HP +xxx, removing 4 negative status' and grants "Routine" status for 10 seconds. Dance Routine Range +5 meters. |
+| SHAMAN | DRUID | Bonus Druid: Bear With Me | Grants the caster "Bear with me" status for 15 seconds. Enemies within 15 meters Physical & Elemental Resistance -10 pts. Grants all party members within 25 meters DMG Dealt +5% and Malice -20%. |
+|  |  | Bonus Druid: Battle Chimp | Max HP +10%. M-ATK +10%. MOVE SPD +10%. Your attacks will trigger "Monkey Business" on the target dealing 20% extra DMG. |
+|  |  | Bonus Druid: Unicorn Energy | Grants the caster "Unicorn Energy" status for 15 seconds. DMG Taken -xxx pts. Heals all party members within 25 meters MP +xx pts every second. |
+|  | TOTEM MASTER | Golden Barrier | Grants your totem "Golden Barrier" Status for 10 seconds. DMG Taken -100%. Heals all party members within 20 meters of the totem for HP +xxx pts every second and grants DMG Taken -15%. |
+| SAGE | HOLY SAGE | Holy Energy | Grants M-ATK +xxx pts and deals Triple Hit DMG to all enemies within 20 meters of the caster, knocking them back 5 meters and stunning them for 0.5 seconds. Has no effect on boss monsters. |
+|  | ANGEL OF JUSTICE | Holy Hammer | Grants M-ATK +xxx and deals Triple Hit DMG to all enemies within 20 meters of the caster knocking them down for 3 seconds. |
+| MAGICIAN | ARCH-ELEMENTALIST | Bonus AE: Flaming Mark | Inflicts the target with "Flaming Mark" status for 20 seconds. Additionally grants the caster "Flame Wizard" for 20 seconds. When attacking enemies with "Flaming Mark" status, you will deal 10% more DMG. |
+|  |  | Bonus AE: Frost Dragon | Grants M-ATK and deals Double Hit Ice DMG to all enemies within 15 meters of the target, reducing their Targeted Ice Resistance -5 pts and deals Ice DMG equal to 25% of the caster's M-ATK every second for 5 seconds. |
+|  |  | Bonus AE: Lightning Strike | Grants M-ATK +xxx and deals Lightning DMG to all enemies within 10 meters of the target, reducing their Targeted Lightning Resistance -3 pts for 10 seconds, stacks 5 times. |
+|  |  | Bonus AE: Nature's Vines | Grants M-ATK +xxx and deals Nature DMG to all enemies within 20 meter fan-shaped area, reducing their Targeted Nature Resistance -5 pts for 12 seconds, stacks 2 times. |
+|  | GRAVITY MANIPULATOR | Tornado Wings | Grants M-ATK +xxx and deals Triple Hit Dark DMG to all enemies within 15 meters of the target. |
+| ILLUSIONIST | DEMON SUMMONER | Demon Eye | Consumes 25% of your Summon's HP and grants the caster "Demon Eye" status for 10 seconds. ACC +xxx pts. Your attacks will trigger "Demon Eye" on the target, dealing 50% extra DMG. |
+|  | TIME MANIPULATOR | The Dark Mark | Inflicts the target with "Dark Mark" status for 20 seconds. Additionally grants the caster "Chrono Wizard" status for 10 seconds. When attacking enemies with "Dark Mark" status you will deal 10% more DMG. |
+| WARLOCK | DEMON TAMER | Demon Meteor | Grants M-ATK +xxx and deals Triple Hit Fire DMG to all enemies within 15 meters of the target, knocking them down for 3 seconds. |
+|  | CONJURER | Energy Strikes | Grants M-ATK +xxx pts and deals Triple Hit Lightning DMG to all enemies within a 15 meter target area, reducing their Targeted Elemental Resistance -3 pts for 10 seconds, stacks 5 times. |
+| LUMINARY | DARKNESS BLADE | Shadow Blades | Grants M-ATK +xxx pts and deals Triple Hit Dark DMG to all enemies within 20 meters of the target, dealing Dark DMG equal to 25% of the caster's M-ATK every second for 7 seconds. |
+|  |  |  | Grants M-ATK +xxx pts and deals Triple Hit Holy DMG to all enemies within 20 meters of the target, dealing Holy DMG equal to 25% of the caster's M-ATK every second for 7 seconds. |
+|  | HOLY BLADE | Swords of Impairment | Grants P-ATK +xxx and deals Double Hit Physical DMG to all enemies within 10 meters of the target, reducing their MOVE SPD -30% for 10 seconds. |
+| WYVERN LORD | SHADOW WYVERN | Shadow Curse | Grants M-ATK +xxx and deals Dark DMG to all enemies witin 15 meters of the target, reducing their Targeted Dark Resistance -5 pts for 12 seconds, stacks 3 times. |
+|  | WYVERN SOVEREIGN | Flaming Dragon | Grants M-ATK +xxx and deals Fire DMG to all enemies within 15 meters of the target knocking them down for 3 seconds. |
+|  |  | Frosty Breath | Grants M-ATK +xxx and deals Ice DMG to all enemies within 20 meters straight line, dealing Ice DMG equal to 20% of the caster's M-ATK every second for 7 seconds. |
+

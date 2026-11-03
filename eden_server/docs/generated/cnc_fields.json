@@ -1,0 +1,7861 @@
+{
+ "LoginServer": {
+  "CNC_CL_ClientGetWorldServers": [
+   "short",
+   "short",
+   "std::string",
+   "std::string",
+   "short",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CL_ClientHello": [
+   "float"
+  ],
+  "CNC_CL_ClientLoginFail": [
+   "short"
+  ],
+  "CNC_CL_ClientReceiveTicketToWorldServer": [
+   "byte"
+  ],
+  "CNC_CL_ClientSCardInfo": [
+   "short",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_CL_ServerHello": [
+   "std::string"
+  ],
+  "CNC_CL_ServerLoginAccount": [
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_CL_ServerLoginWorld": [
+   "short",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_CL_ServerSCardVerify": [],
+  "CNC_G_ClientAccountLogin": [],
+  "CNC_G_ClientAccountLogout": [],
+  "CNC_G_ClientBillingLogin": [],
+  "CNC_G_ClientCrossWorldAccountLogout": [],
+  "CNC_G_ClientExchangePinItemResult": [
+   "uint",
+   "uint",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_G_ClientGetPointInfo": [],
+  "CNC_G_ClientKickUser": [],
+  "CNC_G_ClientReqBuyItem": [],
+  "CNC_G_ClientServerTypeReport": [],
+  "CNC_G_ClientSetWorldStates": [],
+  "CNC_G_ClientTextCommand": [
+   "std::string"
+  ],
+  "CNC_G_ServerAccountLogin": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "uint"
+  ],
+  "CNC_G_ServerAccountLogout": [
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_G_ServerBillingLogin": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "uint"
+  ],
+  "CNC_G_ServerCharacterLogin": [],
+  "CNC_G_ServerCharacterLogout": [],
+  "CNC_G_ServerCheckCommunicateLock": [],
+  "CNC_G_ServerClientTypeReport": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_G_ServerCrossWorldAccountLogoutAck": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "ushort",
+   "uint"
+  ],
+  "CNC_G_ServerExchangePinItem": [
+   "std::string",
+   "std::string",
+   "uint",
+   "uint",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_G_ServerExchangePinUpdateState": [
+   "std::string",
+   "std::string",
+   "ushort"
+  ],
+  "CNC_G_ServerGetPointInfo": [
+   "std::string",
+   "uint"
+  ],
+  "CNC_G_ServerReqBuyItem": [
+   "std::string",
+   "uint"
+  ],
+  "CNC_G_ServerSCardVerify": [
+   "std::string",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_G_ServerTextCommand": [
+   "std::string"
+  ],
+  "CNC_T_ClientGetTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNC_T_ClientUseTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNC_T_ServerGetTicket": [
+   "uint",
+   "uint",
+   "uint",
+   "uint",
+   "ushort"
+  ],
+  "CNC_T_ServerUseTicket": [
+   "uint",
+   "byte"
+  ]
+ },
+ "GatewayServer": {
+  "CNC_GJ_ServerAuthenticate": [
+   "byte",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort"
+  ],
+  "CNC_GJ_ServerCharacterLogin": [
+   "byte",
+   "unsigned long",
+   "byte",
+   "byte",
+   "ushort"
+  ],
+  "CNC_GJ_ServerHeartbeat": [
+   "ushort"
+  ],
+  "CNC_GJ_ServerPointBalanceCheck": [
+   "unsigned long",
+   "ushort"
+  ],
+  "CNC_GJ_ServerUsePoint": [
+   "unsigned long",
+   "byte",
+   "byte",
+   "unsigned long",
+   "unsigned long",
+   "unsigned long",
+   "unsigned long",
+   "byte",
+   "ushort"
+  ],
+  "CNC_G_ClientAccountLogin": [
+   "short",
+   "unsigned long",
+   "long"
+  ],
+  "CNC_G_ClientAccountLogout": [
+   "short"
+  ],
+  "CNC_G_ClientBillingLogin": [
+   "short",
+   "long"
+  ],
+  "CNC_G_ClientCrossWorldAccountLogout": [
+   "unsigned long"
+  ],
+  "CNC_G_ClientExchangePinItemResult": [
+   "unsigned long",
+   "unsigned long",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_G_ClientGetPointInfo": [
+   "long",
+   "long",
+   "unsigned long"
+  ],
+  "CNC_G_ClientKickUser": [
+   "unsigned long"
+  ],
+  "CNC_G_ClientReqBuyItem": [
+   "unsigned long",
+   "long",
+   "unsigned long",
+   "short",
+   "long"
+  ],
+  "CNC_G_ClientServerTypeReport": [],
+  "CNC_G_ClientSetWorldStates": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_G_ClientTextCommand": [
+   "std::string"
+  ],
+  "CNC_G_ServerAccountLogin": [],
+  "CNC_G_ServerAccountLogout": [],
+  "CNC_G_ServerBillingLogin": [],
+  "CNC_G_ServerCharacterLogin": [],
+  "CNC_G_ServerCharacterLogout": [],
+  "CNC_G_ServerClientTypeReport": [],
+  "CNC_G_ServerCrossWorldAccountLogoutAck": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "ushort",
+   "unsigned long"
+  ],
+  "CNC_G_ServerExchangePinItem": [
+   "std::string",
+   "std::string",
+   "unsigned long",
+   "unsigned long",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_G_ServerExchangePinUpdateState": [
+   "std::string",
+   "std::string",
+   "ushort"
+  ],
+  "CNC_G_ServerGetPointInfo": [],
+  "CNC_G_ServerReqBuyItem": [],
+  "CNC_G_ServerTextCommand": [
+   "std::string"
+  ]
+ },
+ "TicketServer": {
+  "CNC_T_ClientCheckPin": [
+   "unsigned long",
+   "std::string",
+   "long",
+   "ushort"
+  ],
+  "CNC_T_ClientGetTicket": [
+   "unsigned long",
+   "byte"
+  ],
+  "CNC_T_ClientUseTicket": [
+   "unsigned long",
+   "byte"
+  ],
+  "CNC_T_ServerCheckPin": [
+   "std::string",
+   "unsigned long",
+   "std::string",
+   "long"
+  ],
+  "CNC_T_ServerGetTicket": [
+   "unsigned long",
+   "unsigned long",
+   "unsigned long",
+   "unsigned long",
+   "ushort"
+  ],
+  "CNC_T_ServerUseTicket": [
+   "unsigned long",
+   "byte"
+  ]
+ },
+ "WorldServer": {
+  "CNC_CW_ClientApexBufferTransfer": [
+   "byte",
+   "ushort",
+   "byte"
+  ],
+  "CNC_CW_ClientCancelCreateCharacterResp": [],
+  "CNC_CW_ClientCaptcha": [
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "std::string"
+  ],
+  "CNC_CW_ClientChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "uint"
+  ],
+  "CNC_CW_ClientCharPassword": [
+   "short"
+  ],
+  "CNC_CW_ClientCheckHasCharPassword": [
+   "int"
+  ],
+  "CNC_CW_ClientCrossZone": [
+   "ushort",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_CW_ClientException": [
+   "short"
+  ],
+  "CNC_CW_ClientFamilyAchievementUpdate": [
+   "byte",
+   "ushort",
+   "short",
+   "uint",
+   "int",
+   "uint",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "short",
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNC_CW_ClientFamilyEmblem": [
+   "int",
+   "int",
+   "ushort",
+   "byte"
+  ],
+  "CNC_CW_ClientFamilyInvitation": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_CW_ClientFamilyLogUpdate": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_CW_ClientFamilyOpException": [
+   "byte"
+  ],
+  "CNC_CW_ClientFamilyQuit": [],
+  "CNC_CW_ClientFamilySchedule": [
+   "byte",
+   "ushort",
+   "short",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "int",
+   "byte",
+   "short",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_CW_ClientForceKick": [
+   "byte",
+   "int"
+  ],
+  "CNC_CW_ClientFriendInvitation": [
+   "int",
+   "std::string"
+  ],
+  "CNC_CW_ClientGetCharacters": [
+   "byte",
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "byte",
+   "ushort",
+   "short",
+   "byte",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long"
+  ],
+  "CNC_CW_ClientGetWorldServers": [
+   "short",
+   "short",
+   "std::string",
+   "std::string",
+   "short",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte"
+  ],
+  "CNC_CW_ClientHello": [
+   "float"
+  ],
+  "CNC_CW_ClientItemMallAnythingReceivable": [
+   "byte"
+  ],
+  "CNC_CW_ClientItemMallLimit": [
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CW_ClientItemMallList": [
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "uint",
+   "uint",
+   "ushort",
+   "long",
+   "int",
+   "std::string",
+   "std::string",
+   "ushort",
+   "int"
+  ],
+  "CNC_CW_ClientItemMallPointInfo": [
+   "int",
+   "int"
+  ],
+  "CNC_CW_ClientItemMallReceieveAttempt": [
+   "short",
+   "uint"
+  ],
+  "CNC_CW_ClientItemMallReceivableQuery": [
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_CW_ClientItemMallReqBuyItem": [
+   "short",
+   "int",
+   "int"
+  ],
+  "CNC_CW_ClientLookingForMemberResult": [
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CW_ClientMutuallyHelpUpdate": [
+   "short",
+   "uint",
+   "std::string",
+   "short",
+   "byte",
+   "byte",
+   "short",
+   "short",
+   "byte"
+  ],
+  "CNC_CW_ClientNotifyChangeWorld": [
+   "ushort"
+  ],
+  "CNC_CW_ClientQueryExploitRank": [
+   "byte",
+   "short",
+   "std::string",
+   "short",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_CW_ClientQueryFamilyInfo": [
+   "byte",
+   "ushort",
+   "ushort",
+   "std::string",
+   "ushort",
+   "ushort",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "int",
+   "std::string",
+   "byte",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "std::string",
+   "int",
+   "short",
+   "short",
+   "int",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "int",
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_CW_ClientQueryFamilyRecruitList": [
+   "short",
+   "int",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CW_ClientReceiveTicketToWorld": [
+   "byte"
+  ],
+  "CNC_CW_ClientReceiveTicketToZoneServer": [
+   "byte"
+  ],
+  "CNC_CW_ClientRepeatedLogin": [
+   "byte"
+  ],
+  "CNC_CW_ClientResetTime": [
+   "int",
+   "int"
+  ],
+  "CNC_CW_ClientSelectCharEnableBtn": [],
+  "CNC_CW_ClientTell": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "uint",
+   "byte"
+  ],
+  "CNC_CW_ClientTextOutput": [
+   "byte",
+   "std::string"
+  ],
+  "CNC_CW_ClientTextOutputIndex": [
+   "short",
+   "std::string"
+  ],
+  "CNC_CW_ClientTicketInvalid": [
+   "short"
+  ],
+  "CNC_CW_ClientUpdateBlackList": [
+   "byte",
+   "short",
+   "int",
+   "std::string"
+  ],
+  "CNC_CW_ClientUpdateFamilyMember": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "int",
+   "int",
+   "std::string",
+   "std::string",
+   "int",
+   "uint"
+  ],
+  "CNC_CW_ClientUpdateFortuneBagContentList": [
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_CW_ClientUpdateFriendMember": [
+   "ushort",
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "byte",
+   "ushort",
+   "byte",
+   "byte"
+  ],
+  "CNC_CW_ClientUpdatePrestigeData": [
+   "short",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CW_ClientUpdateSpecialCoin": [
+   "ushort",
+   "short",
+   "int"
+  ],
+  "CNC_CW_ClientVerifyCharacterName": [
+   "short",
+   "byte"
+  ],
+  "CNC_CW_ServerItemMallReceivableList": [],
+  "CNC_DBA_AgentDBACommand": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_DBA_ClientAllFamilyInstnce": [],
+  "CNC_DBA_ClientAllLover": [],
+  "CNC_DBA_ClientAllPlayerRoom": [],
+  "CNC_DBA_ClientAllTerritory": [],
+  "CNC_DBA_ClientCollection": [],
+  "CNC_DBA_ClientContainer": [],
+  "CNC_DBA_ClientElfData": [],
+  "CNC_DBA_ClientEnchant": [],
+  "CNC_DBA_ClientFamilyContainerData": [],
+  "CNC_DBA_ClientFamilyStorage": [],
+  "CNC_DBA_ClientFinishPlayerData": [],
+  "CNC_DBA_ClientFortuneBagCounter": [],
+  "CNC_DBA_ClientGladiatorTeamInfo": [],
+  "CNC_DBA_ClientMissionState": [],
+  "CNC_DBA_ClientNewPlayerGuideData": [],
+  "CNC_DBA_ClientNodeID": [],
+  "CNC_DBA_ClientPlayerData": [],
+  "CNC_DBA_ClientRecommendActivityState": [],
+  "CNC_DBA_ClientShortcut": [],
+  "CNC_DBA_ClientSpell": [],
+  "CNC_G_ClientSetWorldStates": [],
+  "CNC_G_ServerAccountLogin": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "int"
+  ],
+  "CNC_G_ServerAccountLogout": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "ushort"
+  ],
+  "CNC_G_ServerBillingLogin": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "uint",
+   "ushort"
+  ],
+  "CNC_G_ServerCharacterLogin": [
+   "std::string",
+   "ushort",
+   "std::string",
+   "std::string",
+   "uint",
+   "std::string",
+   "std::string",
+   "int"
+  ],
+  "CNC_G_ServerCharacterLogout": [
+   "std::string",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_G_ServerCheckCommunicateLock": [
+   "std::string",
+   "uint",
+   "uint",
+   "int"
+  ],
+  "CNC_G_ServerClientTypeReport": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_G_ServerCrossWorldAccountLogoutAck": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "ushort",
+   "uint"
+  ],
+  "CNC_G_ServerExchangePinItem": [
+   "std::string",
+   "std::string",
+   "uint",
+   "uint",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_G_ServerExchangePinUpdateState": [
+   "std::string",
+   "std::string",
+   "ushort"
+  ],
+  "CNC_G_ServerGetPointInfo": [
+   "std::string",
+   "uint"
+  ],
+  "CNC_G_ServerHealthCheck": [
+   "std::string",
+   "uint",
+   "ushort",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_G_ServerReqBuyItem": [
+   "uint",
+   "std::string",
+   "ushort",
+   "std::string",
+   "std::string",
+   "int",
+   "std::string",
+   "uint",
+   "short",
+   "short"
+  ],
+  "CNC_G_ServerTextCommand": [
+   "std::string"
+  ],
+  "CNC_MW_MissionServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_MissionServerTextExCmdRemoteWorld": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_MissionServerTextExCmdRemoteZone": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNC_T_ServerCheckPin": [
+   "std::string",
+   "uint",
+   "std::string",
+   "int"
+  ],
+  "CNC_T_ServerGetTicket": [
+   "uint",
+   "uint",
+   "uint",
+   "uint",
+   "ushort"
+  ],
+  "CNC_T_ServerUseTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNC_ZM_ZoneServerUpdatePKList": [],
+  "CNC_ZMis_MissionServerAddFamilyMessage": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZMis_MissionServerCheckFamilyInvite": [
+   "short",
+   "int",
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZMis_MissionServerIDReport": [
+   "ushort"
+  ],
+  "CNC_ZMis_MissionServerItemMallMailCheck": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerItemMallMailSend": [
+   "uint",
+   "int",
+   "ushort",
+   "ushort",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerRefreshRecommendActivities": [],
+  "CNC_ZMis_MissionServerUpdatePKList": [],
+  "CNC_ZMis_MissionServerUpdatePlayerCard": [],
+  "CNC_ZMis_ZoneServerUpdateRecommendActivities": [],
+  "CNC_ZW_ZoneServerChangeFamily": [
+   "int",
+   "short",
+   "int",
+   "byte",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZW_ZoneServerChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "int"
+  ],
+  "CNC_ZW_ZoneServerCharacterArrivedDest": [
+   "uint"
+  ],
+  "CNC_ZW_ZoneServerDestShutdown": [
+   "int"
+  ],
+  "CNC_ZW_ZoneServerGetCloneItemID": [],
+  "CNC_ZW_ZoneServerItemMallReceieveAttempt": [
+   "uint",
+   "uint",
+   "ushort",
+   "ushort",
+   "long"
+  ],
+  "CNC_ZW_ZoneServerNewFamily": [
+   "int",
+   "std::string",
+   "short",
+   "int",
+   "std::string"
+  ],
+  "CNC_ZW_ZoneServerRemoveFamily": [
+   "int"
+  ],
+  "CNC_ZW_ZoneServerReportID": [],
+  "CNC_ZW_ZoneServerTextCommand": [
+   "std::string"
+  ],
+  "CNC_ZW_ZoneServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_ZW_ZoneServerUpdateFortuneBag": [
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "float",
+   "ushort",
+   "short",
+   "byte",
+   "float",
+   "float",
+   "short",
+   "short"
+  ],
+  "CNC_ZW_ZoneServerUpdateLottery": [
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "float",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZW_ZoneServerUpdateStarWay": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "std::string"
+  ],
+  "CNE_CW_ServerAddFriend": [
+   "std::string",
+   "short"
+  ],
+  "CNE_CW_ServerApexBufferTransfer": [],
+  "CNE_CW_ServerCancelCreateCharacterReq": [],
+  "CNE_CW_ServerCaptchaReturn": [
+   "std::string"
+  ],
+  "CNE_CW_ServerChangeWorld": [
+   "int"
+  ],
+  "CNE_CW_ServerChangeWorldAck": [],
+  "CNE_CW_ServerCharPassword": [],
+  "CNE_CW_ServerCheckHasCharPassword": [],
+  "CNE_CW_ServerCreateCharacterData": [],
+  "CNE_CW_ServerCreateCharacterName": [
+   "std::string",
+   "std::string",
+   "uint"
+  ],
+  "CNE_CW_ServerCreateCharacterNameCheck": [],
+  "CNE_CW_ServerFamilyOp": [],
+  "CNE_CW_ServerFriendInvitation": [],
+  "CNE_CW_ServerHello": [],
+  "CNE_CW_ServerIllPluginInfo": [],
+  "CNE_CW_ServerItemMallAnythingReceivable": [],
+  "CNE_CW_ServerItemMallListQuery": [],
+  "CNE_CW_ServerItemMallPointInfo": [],
+  "CNE_CW_ServerItemMallReceieveAttempt": [],
+  "CNE_CW_ServerItemMallReceivableQuery": [],
+  "CNE_CW_ServerItemMallReqBuyItem": [],
+  "CNE_CW_ServerKeepAlive": [],
+  "CNE_CW_ServerLoginCharacter": [],
+  "CNE_CW_ServerLookingForGroup": [],
+  "CNE_CW_ServerLookingForMember": [],
+  "CNE_CW_ServerMutuallyHelpSearch": [],
+  "CNE_CW_ServerPlayerState": [],
+  "CNE_CW_ServerQueryExploitRank": [],
+  "CNE_CW_ServerQueryFamilyEmblem": [],
+  "CNE_CW_ServerQueryFamilyInfo": [],
+  "CNE_CW_ServerQueryFriendInfo": [],
+  "CNE_CW_ServerReceiveTicket": [],
+  "CNE_CW_ServerRemoveCharacter": [],
+  "CNE_CW_ServerRemoveFriend": [
+   "int"
+  ],
+  "CNE_CW_ServerUpdateWorldServers": [],
+  "CNE_DBA_ClientAddFamilyMember": [],
+  "CNE_DBA_ClientAllFamily": [],
+  "CNE_DBA_ClientChangeFamily": [],
+  "CNE_DBA_ClientChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "int"
+  ],
+  "CNE_DBA_ClientDelPlayerOK": [],
+  "CNE_DBA_ClientFamilyAllMember": [],
+  "CNE_DBA_ClientFamilyAllMessage": [],
+  "CNE_DBA_ClientNewFamily": [],
+  "CNE_DBA_ClientRemoveFamily": [],
+  "CNE_G_ClientAccountLogin": [],
+  "CNE_G_ClientAccountLogout": [],
+  "CNE_G_ClientBillingLogin": [],
+  "CNE_G_ClientCrossWorldAccountLogout": [
+   "uint"
+  ],
+  "CNE_G_ClientExchangePinItemResult": [
+   "uint",
+   "uint",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNE_G_ClientGetPointInfo": [],
+  "CNE_G_ClientKickUser": [],
+  "CNE_G_ClientReqBuyItem": [],
+  "CNE_G_ClientServerTypeReport": [],
+  "CNE_G_ClientTextCommand": [
+   "std::string"
+  ],
+  "CNE_MW_WorldServerCheckFamilyInvite": [],
+  "CNE_MW_WorldServerCrossWorldEndClearAccount": [
+   "uint"
+  ],
+  "CNE_MW_WorldServerCrossZone": [
+   "int",
+   "short",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNE_MW_WorldServerFBMsgUpdate": [
+   "std::string",
+   "std::string",
+   "uint",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_MW_WorldServerFriendNotify": [],
+  "CNE_MW_WorldServerItemMallMailCheckOK": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_MW_WorldServerItemMallMailSendResult": [
+   "uint",
+   "int",
+   "uint",
+   "uint",
+   "short"
+  ],
+  "CNE_MW_WorldServerTell": [],
+  "CNE_MW_WorldServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNE_MW_WorldServerTextExCmdRemoteWorld": [
+   "std::string",
+   "short"
+  ],
+  "CNE_MW_WorldServerTextExCmdRemoteZone": [
+   "std::string",
+   "short"
+  ],
+  "CNE_MW_WorldServerUpdateBlackList": [
+   "int",
+   "byte",
+   "ushort",
+   "int",
+   "std::string"
+  ],
+  "CNE_MW_WorldServerUpdateFriendMember": [],
+  "CNE_MW_WorldServerUpdatePrestigeData": [],
+  "CNE_MW_WorldServerUpdateSpecialCoin": [],
+  "CNE_MW_WorldTextCommand": [
+   "std::string"
+  ],
+  "CNE_T_ClientCheckPin": [
+   "uint",
+   "std::string",
+   "int",
+   "ushort"
+  ],
+  "CNE_T_ClientGetTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNE_T_ClientUseTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNE_ZMis_ZoneServerReportID": [],
+  "CNE_ZW_WorldServerAllUsers": [
+   "int"
+  ],
+  "CNE_ZW_WorldServerChannelMsg": [],
+  "CNE_ZW_WorldServerCharacterArrived": [
+   "uint"
+  ],
+  "CNE_ZW_WorldServerFBMsgUpdate": [
+   "std::string",
+   "std::string",
+   "uint",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_ZW_WorldServerFamilyCreation": [],
+  "CNE_ZW_WorldServerGetCloneItemID": [],
+  "CNE_ZW_WorldServerIDReport": [
+   "ushort"
+  ],
+  "CNE_ZW_WorldServerItemMallReceieveAttempt": [],
+  "CNE_ZW_WorldServerLogout": [
+   "int",
+   "short"
+  ],
+  "CNE_ZW_WorldServerNotifyEntry": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNE_ZW_WorldServerResetTime": [
+   "int"
+  ],
+  "CNE_ZW_WorldServerReturnToCharacterList": [
+   "uint"
+  ],
+  "CNE_ZW_WorldServerTeamLeavedNotify": [
+   "int"
+  ],
+  "CNE_ZW_WorldServerTell": [
+   "int",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_ZW_WorldServerTextCommand": [
+   "std::string"
+  ],
+  "CNE_ZW_WorldServerTextExCmd": [
+   "std::string",
+   "short"
+  ]
+ },
+ "MissionServer": {
+  "CNC_DBA_ClientAddFamilyMember": [
+   "int",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "uint",
+   "int"
+  ],
+  "CNC_DBA_ClientAllFamily": [
+   "short",
+   "int",
+   "std::string",
+   "int",
+   "std::string",
+   "int",
+   "byte",
+   "int",
+   "int",
+   "short",
+   "short",
+   "std::string",
+   "int",
+   "short",
+   "short",
+   "short",
+   "int",
+   "short",
+   "long",
+   "uint",
+   "byte",
+   "short",
+   "std::string",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "short",
+   "int",
+   "short",
+   "int",
+   "int",
+   "std::string",
+   "std::string",
+   "uint",
+   "ushort",
+   "byte",
+   "short",
+   "int"
+  ],
+  "CNC_DBA_ClientAllFamilyInstnce": [
+   "ushort",
+   "int"
+  ],
+  "CNC_DBA_ClientAllLover": [
+   "byte",
+   "ushort",
+   "int",
+   "int",
+   "short",
+   "std::string",
+   "std::string",
+   "int",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short"
+  ],
+  "CNC_DBA_ClientAllPlayerRoom": [
+   "byte",
+   "ushort",
+   "int",
+   "std::string",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "uint",
+   "int",
+   "int",
+   "int",
+   "int",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "int",
+   "ushort",
+   "uint",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_DBA_ClientAllTerritory": [
+   "ushort",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_DBA_ClientChangeFamily": [
+   "int",
+   "short",
+   "int",
+   "std::string",
+   "std::string",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_DBA_ClientChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "int",
+   "uint"
+  ],
+  "CNC_DBA_ClientCollection": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNC_DBA_ClientContainer": [
+   "int",
+   "short",
+   "std::string",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_DBA_ClientDelPlayerOK": [
+   "int",
+   "int",
+   "byte"
+  ],
+  "CNC_DBA_ClientElfData": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNC_DBA_ClientEnchant": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNC_DBA_ClientFamilyAllMember": [
+   "int",
+   "ushort",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "uint",
+   "int",
+   "int",
+   "std::string",
+   "std::string",
+   "uint",
+   "int"
+  ],
+  "CNC_DBA_ClientFamilyAllMessage": [
+   "int",
+   "ushort",
+   "short",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_DBA_ClientFamilyContainerData": [
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "uint",
+   "short",
+   "uint",
+   "float",
+   "float",
+   "float",
+   "short",
+   "short",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_DBA_ClientFamilyStorage": [
+   "int",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_DBA_ClientFastDress": [
+   "int",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_DBA_ClientFinishPlayerData": [
+   "int",
+   "short"
+  ],
+  "CNC_DBA_ClientFortuneBagCounter": [
+   "int",
+   "short",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_DBA_ClientGladiatorTeamInfo": [
+   "int",
+   "int",
+   "int",
+   "uint",
+   "byte",
+   "byte"
+  ],
+  "CNC_DBA_ClientLotteryCount": [
+   "int",
+   "int",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_DBA_ClientMissionState": [
+   "int",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "short",
+   "ushort",
+   "int",
+   "ushort"
+  ],
+  "CNC_DBA_ClientNewFamily": [
+   "int",
+   "int",
+   "std::string",
+   "std::string",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_DBA_ClientNewPlayerGuideData": [
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "byte"
+  ],
+  "CNC_DBA_ClientNodeID": [
+   "int",
+   "short"
+  ],
+  "CNC_DBA_ClientPlayerData": [
+   "byte",
+   "int"
+  ],
+  "CNC_DBA_ClientRecommendActivityState": [
+   "int",
+   "int",
+   "ushort",
+   "ushort",
+   "uint",
+   "byte",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_DBA_ClientRemoveFamily": [
+   "int",
+   "short"
+  ],
+  "CNC_DBA_ClientShortcut": [
+   "int",
+   "short",
+   "byte",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_DBA_ClientSpell": [
+   "int",
+   "ushort"
+  ],
+  "CNC_MW_WorldServerCheckFamilyInvite": [
+   "short",
+   "int",
+   "int",
+   "std::string"
+  ],
+  "CNC_MW_WorldServerCrossWorldEndClearAccount": [
+   "uint"
+  ],
+  "CNC_MW_WorldServerCrossZone": [
+   "int",
+   "short",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_MW_WorldServerFBMsgUpdate": [
+   "std::string",
+   "std::string",
+   "uint",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_MW_WorldServerFriendNotify": [
+   "int",
+   "std::string",
+   "ushort",
+   "short",
+   "int",
+   "short",
+   "ushort",
+   "int"
+  ],
+  "CNC_MW_WorldServerItemMallMailCheckOK": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_MW_WorldServerItemMallMailSendResult": [
+   "uint",
+   "int",
+   "uint",
+   "uint",
+   "short"
+  ],
+  "CNC_MW_WorldServerTell": [
+   "int",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "uint",
+   "byte"
+  ],
+  "CNC_MW_WorldServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerTextExCmdRemoteWorld": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerTextExCmdRemoteZone": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerUpdateBlackList": [
+   "int",
+   "byte",
+   "ushort",
+   "int",
+   "std::string"
+  ],
+  "CNC_MW_WorldServerUpdateFriendMember": [
+   "int",
+   "ushort",
+   "ushort",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "byte",
+   "ushort",
+   "byte"
+  ],
+  "CNC_MW_WorldServerUpdatePrestigeData": [
+   "int",
+   "ushort",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_MW_WorldServerUpdateSpecialCoin": [
+   "int",
+   "short",
+   "ushort",
+   "short",
+   "int"
+  ],
+  "CNC_MW_WorldTextCommand": [
+   "std::string"
+  ],
+  "CNC_ZM_ZoneServerCharRegenerate": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZM_ZoneServerMessageToCharacter": [
+   "ushort",
+   "uint",
+   "short",
+   "byte",
+   "std::string"
+  ],
+  "CNC_ZM_ZoneServerRebornMonster": [
+   "ushort",
+   "int",
+   "float",
+   "float",
+   "short",
+   "float",
+   "float",
+   "float",
+   "short",
+   "int"
+  ],
+  "CNC_ZM_ZoneServerReportMonster": [
+   "ushort"
+  ],
+  "CNC_ZM_ZoneServerSetRebornMonsterResult": [
+   "ushort",
+   "ushort",
+   "uint",
+   "int",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int",
+   "byte"
+  ],
+  "CNC_ZM_ZoneServerUpdatePKList": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerAchievementRewardMail": [
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerAchievementUpdate": [
+   "byte",
+   "int",
+   "ushort",
+   "int",
+   "uint",
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerAuctionBuyList": [
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerAuctionBuyOK": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerAuctionCancelOK": [
+   "int",
+   "short",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerAuctionSellList": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerAuctionSellResult": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerBattleCrusadeInfo": [
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "byte",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerBattlefieldChangeCharNum": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerBattlefieldEraseMember": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerBattlefieldJoinResult": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerBattlefieldList": [
+   "int",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerBattlefieldSetup": [
+   "byte",
+   "byte",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerBuyBackGetItem": [
+   "int",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "std::string",
+   "short",
+   "short",
+   "uint",
+   "uint",
+   "uint",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerBuyBackList": [
+   "byte",
+   "int",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "byte",
+   "ushort",
+   "std::string",
+   "ushort",
+   "long",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort"
+  ],
+  "CNC_ZMis_ZoneServerBuybackInitAllocate": [
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerCharNotQuit": [
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerColosseumJoinResult": [
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerColosseumLeaveJoinResult": [
+   "int",
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerColosseumModeUpdate": [
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerColosseumQuery": [
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "uint",
+   "ushort",
+   "byte",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerCrossZoneResult": [
+   "int",
+   "short",
+   "int",
+   "float",
+   "float",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerDeallocateItemID": [
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerDropItem": [
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerEnterBattleCrusadeAnswer": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerEnterBattlefield": [
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerEnterBattlefieldAnswer": [
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerEnterColosseum": [
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerFamilyBattleInfo": [
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerFamilyContainerUpdate": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "float",
+   "float",
+   "float",
+   "short",
+   "uint",
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerFamilyStorageLog": [
+   "int",
+   "ushort",
+   "short",
+   "std::string"
+  ],
+  "CNC_ZMis_ZoneServerFamilyStorageUpdate": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "byte"
+  ],
+  "CNC_ZMis_ZoneServerFamilyTownMemberQuery": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_ZMis_ZoneServerFastDressEquipEnd": [
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerFindTargetLocation": [
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerGMToolGetInfo": [
+   "uint",
+   "std::string",
+   "int",
+   "int",
+   "short",
+   "std::string",
+   "std::string",
+   "std::string",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerGMToolGetMission": [
+   "int",
+   "std::string",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort"
+  ],
+  "CNC_ZMis_ZoneServerGreedyIslandInfo": [
+   "byte",
+   "uint",
+   "int",
+   "byte",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerGreedyIslandJoin": [
+   "short",
+   "int",
+   "short",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerListDialogue": [
+   "int",
+   "short",
+   "byte",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "ushort",
+   "int",
+   "ushort",
+   "ushort",
+   "std::string",
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerLoverUpdate": [
+   "int",
+   "int",
+   "short",
+   "int",
+   "std::string"
+  ],
+  "CNC_ZMis_ZoneServerMailDeleteResult": [
+   "int",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerMailGetGoldOK": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerMailGetItemOK": [
+   "int",
+   "short",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerMailList": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort"
+  ],
+  "CNC_ZMis_ZoneServerMailRead": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "std::string",
+   "uint",
+   "uint",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "byte",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerMailReceive": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerMailReturnResult": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerMailSendResult": [
+   "int",
+   "short",
+   "short",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "int",
+   "int",
+   "byte",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerMessageDeleteResult": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerMessageList": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerMessageRead": [
+   "int",
+   "short",
+   "int",
+   "std::string",
+   "byte"
+  ],
+  "CNC_ZMis_ZoneServerMessageWriteResult": [
+   "int",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerNPCTalkCheck": [
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerPVPTopData": [
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerPutItem": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "ushort",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "uint",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerQueryPlayerCard": [
+   "int",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string"
+  ],
+  "CNC_ZMis_ZoneServerRankInfo": [
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_ZMis_ZoneServerRemoteClient": [
+   "uint",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerReplyDialogue": [
+   "int",
+   "short",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerReportID": [],
+  "CNC_ZMis_ZoneServerResetDailyMission": [
+   "uint",
+   "byte"
+  ],
+  "CNC_ZMis_ZoneServerResetDailyMonsterKill": [],
+  "CNC_ZMis_ZoneServerResetNodeTimes": [
+   "uint",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerReturnTeamInviteeID": [
+   "uint",
+   "uint",
+   "std::string",
+   "byte",
+   "byte",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerSearchInfo": [
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerSearchRoomResult": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerStartBattleCrusade": [
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerStartBattleRoyale": [
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerStartBattlefield": [
+   "short",
+   "ushort",
+   "int",
+   "std::string",
+   "ushort",
+   "int",
+   "std::string"
+  ],
+  "CNC_ZMis_ZoneServerStartColosseum": [
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerStartVersusInstance": [
+   "int",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerSwitchPlayerRoom": [
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerTerritoryInfo": [
+   "byte",
+   "int",
+   "int",
+   "std::string",
+   "int",
+   "short",
+   "int",
+   "byte",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerTerritoryJoin": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerTerritoryQuery": [
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "byte"
+  ],
+  "CNC_ZMis_ZoneServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerTextExCmdRemoteWorld": [
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerTextExCmdRemoteZone": [
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerTextOutput": [
+   "int",
+   "short",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerTextOutputIndex": [
+   "int",
+   "short",
+   "short",
+   "std::string",
+   "byte",
+   "byte"
+  ],
+  "CNC_ZMis_ZoneServerTransitionCommands": [
+   "short",
+   "int",
+   "ushort",
+   "std::string",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerTransportGMCharacterToCharacter": [
+   "int",
+   "short",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_ZMis_ZoneServerUpdateLifelongGold": [
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerUpdateLifelongPoint": [
+   "int",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerUpdateMissionState": [
+   "uint",
+   "ushort",
+   "byte",
+   "uint",
+   "ushort",
+   "uint",
+   "byte",
+   "ushort",
+   "uint",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerUpdateNPCSymbols": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerUpdateRecommendActivities": [
+   "int",
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZMis_ZoneServerUpdateRoom": [
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "uint",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_ZoneServerUpdateRoomItem": [
+   "int",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_ZoneServerWeddingsInfo": [
+   "int",
+   "byte",
+   "int",
+   "std::string",
+   "std::string",
+   "byte",
+   "int",
+   "int"
+  ],
+  "CNE_DBA_AgentDBACommand": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_MW_MissionServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNE_MW_MissionServerTextExCmdRemoteWorld": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNE_MW_MissionServerTextExCmdRemoteZone": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNE_ZM_MonsterServerListRebornMonster": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNE_ZM_MonsterServerModifyRebornMonster": [
+   "ushort",
+   "ushort",
+   "int",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int"
+  ],
+  "CNE_ZM_MonsterServerMonsterDieReport": [
+   "ushort",
+   "ushort",
+   "int",
+   "byte",
+   "int",
+   "short"
+  ],
+  "CNE_ZM_MonsterServerMonsterReport": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNE_ZM_MonsterServerRegenerationReport": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNE_ZM_MonsterServerRemoveNode": [
+   "ushort",
+   "int"
+  ],
+  "CNE_ZM_MonsterServerRemoveRebornMonster": [
+   "ushort",
+   "ushort",
+   "int",
+   "uint"
+  ],
+  "CNE_ZM_MonsterServerSetRebornMonster": [
+   "ushort",
+   "ushort",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int"
+  ],
+  "CNE_ZM_MonsterServerStartCharRegenerate": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNE_ZM_MonsterServerStopCharRegenerate": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNE_ZM_MonsterServerUnRegRebornMonster": [
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNE_ZMis_MissionServerAddFamilyMessage": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_ZMis_MissionServerArrangeItem": [],
+  "CNE_ZMis_MissionServerBattleRoyaleClose": [],
+  "CNE_ZMis_MissionServerBattleRoyaleJoinRequest": [],
+  "CNE_ZMis_MissionServerBattlefieldClose": [
+   "short"
+  ],
+  "CNE_ZMis_MissionServerBattlefieldEraseMember": [
+   "int"
+  ],
+  "CNE_ZMis_MissionServerBattlefieldJoin": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerBattlefieldList": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNE_ZMis_MissionServerBattlefieldUpdateStatus": [
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerChannelMsg": [],
+  "CNE_ZMis_MissionServerCheckFamilyInvite": [],
+  "CNE_ZMis_MissionServerCloseMissionBrief": [
+   "int"
+  ],
+  "CNE_ZMis_MissionServerColosseumClose": [],
+  "CNE_ZMis_MissionServerColosseumJoinAnswer": [],
+  "CNE_ZMis_MissionServerColosseumJoinRequest": [],
+  "CNE_ZMis_MissionServerColosseumLeaveJoin": [],
+  "CNE_ZMis_MissionServerCrossZone": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "float",
+   "float",
+   "float",
+   "float",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerCrossZoneRequest": [
+   "int",
+   "int",
+   "int",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNE_ZMis_MissionServerEnterBattlefieldAnswer": [
+   "int"
+  ],
+  "CNE_ZMis_MissionServerFindCharacter": [],
+  "CNE_ZMis_MissionServerGetTeamInviteeID": [],
+  "CNE_ZMis_MissionServerGiveUpMission": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerGreedyIslandRankQuery": [],
+  "CNE_ZMis_MissionServerIDReport": [
+   "short"
+  ],
+  "CNE_ZMis_MissionServerItemMallMailCheck": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerItemMallMailSend": [
+   "uint",
+   "int",
+   "ushort",
+   "ushort",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerListDialogue": [],
+  "CNE_ZMis_MissionServerMailSend": [
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "int"
+  ],
+  "CNE_ZMis_MissionServerMessageWrite": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNE_ZMis_MissionServerMigrationDone": [
+   "int",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerMobDieReport": [
+   "ushort",
+   "ushort",
+   "short",
+   "float",
+   "float",
+   "ushort",
+   "int"
+  ],
+  "CNE_ZMis_MissionServerNodeCreate": [],
+  "CNE_ZMis_MissionServerOnDialogueSelected": [],
+  "CNE_ZMis_MissionServerPlayerCCDataSave": [],
+  "CNE_ZMis_MissionServerRefreshRecommendActivities": [],
+  "CNE_ZMis_MissionServerRemoteClient": [],
+  "CNE_ZMis_MissionServerRemovePMS": [
+   "int"
+  ],
+  "CNE_ZMis_MissionServerSendSystemMail": [
+   "std::string",
+   "int",
+   "std::string",
+   "std::string",
+   "int",
+   "int",
+   "byte",
+   "int"
+  ],
+  "CNE_ZMis_MissionServerSendTargetLocation": [],
+  "CNE_ZMis_MissionServerSetRecommendActivityTracing": [
+   "int",
+   "ushort",
+   "ushort"
+  ],
+  "CNE_ZMis_MissionServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerTextExCmdRemoteWorld": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerTextExCmdRemoteZone": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerUpdatePKList": [
+   "int",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNE_ZMis_MissionServerUpdatePlayerCard": [],
+  "CNE_ZMis_MissionServerVersusInstanceJoinRequest": []
+ },
+ "ZoneServer": {
+  "CNC_CGIZ_ClientTextOutput": [
+   "std::string"
+  ],
+  "CNC_CG_ClientChannel": [
+   "byte",
+   "std::string",
+   "int",
+   "std::string",
+   "short",
+   "std::string"
+  ],
+  "CNC_CG_ClientCharLocate": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort"
+  ],
+  "CNC_CG_ClientCharacter": [
+   "int",
+   "std::string",
+   "byte",
+   "std::string",
+   "short",
+   "float",
+   "float",
+   "short"
+  ],
+  "CNC_CG_ClientCharacterList": [
+   "uint",
+   "int",
+   "std::string"
+  ],
+  "CNC_CG_ClientDataTest": [
+   "short",
+   "uint",
+   "uint",
+   "uint",
+   "short",
+   "uint",
+   "uint",
+   "uint",
+   "short",
+   "uint",
+   "uint",
+   "uint",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "uint",
+   "short",
+   "short",
+   "uint",
+   "short",
+   "short",
+   "uint",
+   "short",
+   "float",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort"
+  ],
+  "CNC_CG_ClientGetContainerItem": [
+   "short",
+   "byte",
+   "uint",
+   "std::string",
+   "int",
+   "std::string",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "long",
+   "short"
+  ],
+  "CNC_CG_ClientGetMissionState": [
+   "int",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort"
+  ],
+  "CNC_CG_ClientGetMoney": [
+   "int",
+   "int"
+  ],
+  "CNC_CG_ClientTextOutput": [
+   "byte",
+   "int",
+   "std::string"
+  ],
+  "CNC_CZ_ClientAchievementUpdate": [
+   "byte",
+   "ushort",
+   "int",
+   "uint",
+   "uint",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientAddAppellation": [
+   "int"
+  ],
+  "CNC_CZ_ClientAltarState": [
+   "short",
+   "short",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_CZ_ClientArrangeItemOK": [
+   "uint",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientAskIdentifyGold": [
+   "ushort",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientAskRepairEquipGold": [
+   "int"
+  ],
+  "CNC_CZ_ClientAskRepairOneItemGold": [
+   "byte",
+   "byte",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientAttrLevelRefresh": [
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientAttrRefresh": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "float",
+   "float",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientAuctionBuyList": [
+   "short",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientAuctionBuyOK": [],
+  "CNC_CZ_ClientAuctionCancelOK": [],
+  "CNC_CZ_ClientAuctionHouse": [
+   "int"
+  ],
+  "CNC_CZ_ClientAuctionSellList": [
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientAuctionSellResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientBackItem": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientBagDueDate": [
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientBaseAttrRefresh": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "float",
+   "float",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientBattleMemberPosition": [
+   "int",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientBattleRoyaleInfo": [
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientBattlefieldJoinResult": [
+   "short",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientBattlefieldList": [
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "uint"
+  ],
+  "CNC_CZ_ClientBattlefieldMemberInfo": [
+   "short",
+   "ushort",
+   "int",
+   "std::string",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientBattlefieldResult": [
+   "byte",
+   "int",
+   "ushort",
+   "std::string",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "byte",
+   "std::string",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientBattlefieldUpdateScore": [
+   "byte",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientBuyBackList": [
+   "byte",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientBuyUp": [],
+  "CNC_CZ_ClientCanCloseConnection": [],
+  "CNC_CZ_ClientCanJoinTeam": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientCanLogout": [],
+  "CNC_CZ_ClientChanceLuckyBagResult": [
+   "ushort",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientChangeAppellation": [
+   "int",
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientChangeClassShortcut": [
+   "byte",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientChangeElf": [
+   "int",
+   "int",
+   "std::string"
+  ],
+  "CNC_CZ_ClientChangeEquip": [
+   "int",
+   "ushort",
+   "ushort",
+   "short",
+   "byte",
+   "byte",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "long"
+  ],
+  "CNC_CZ_ClientChangeFamily": [
+   "int",
+   "int",
+   "byte",
+   "std::string",
+   "int",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientChangeSpell": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "uint"
+  ],
+  "CNC_CZ_ClientCheckTeamTransport": [
+   "byte"
+  ],
+  "CNC_CZ_ClientCoRideInvite": [
+   "uint",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_CZ_ClientColosseumJoinResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientColosseumLeaveJoinResult": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientColosseumModeQueryResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientColosseumQuery": [
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "uint",
+   "ushort",
+   "byte",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientColosseumTeamInfo": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "byte",
+   "short",
+   "byte",
+   "short",
+   "std::string",
+   "int",
+   "ushort",
+   "byte",
+   "byte",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientCommandFailReturn": [
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientDestShutdown": [],
+  "CNC_CZ_ClientDestinyDiceFailed": [
+   "short"
+  ],
+  "CNC_CZ_ClientDiamondLotteryNotify": [
+   "int"
+  ],
+  "CNC_CZ_ClientDie": [
+   "uint",
+   "uint",
+   "byte"
+  ],
+  "CNC_CZ_ClientDisbandGladiatorTeam": [
+   "int"
+  ],
+  "CNC_CZ_ClientDisplayChar": [
+   "uint",
+   "std::string",
+   "float",
+   "float",
+   "float",
+   "float",
+   "byte",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "long",
+   "long",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "uint",
+   "uint",
+   "uint",
+   "ushort",
+   "byte",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientDisplayCharSimple": [
+   "uint",
+   "std::string",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "byte",
+   "byte",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientDisplayDialogView": [
+   "int",
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientDisplayMonster": [
+   "uint",
+   "byte",
+   "short",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientDropItem": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientDuelBegin": [
+   "int",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientDuelRequest": [
+   "int",
+   "std::string"
+  ],
+  "CNC_CZ_ClientDuelRequestResult": [
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_CZ_ClientDuelResult": [
+   "int",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_CZ_ClientEffectReport": [
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientElfAction": [
+   "short",
+   "short",
+   "short",
+   "int",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientElfAdd": [
+   "short",
+   "int",
+   "int",
+   "short",
+   "int",
+   "short",
+   "std::string",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientElfCastEnchant": [
+   "int",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientElfDecompose": [
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientElfEvent": [
+   "short",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientElfGoToWork": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientElfReturnEffect": [
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientElfReturnOK": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientElfStoneUse": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientElfUpdateAttr": [
+   "short",
+   "short",
+   "int",
+   "std::string"
+  ],
+  "CNC_CZ_ClientElfUpdateSkill": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientElfUpdateSoulAbility": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort"
+  ],
+  "CNC_CZ_ClientElfWorkResult": [
+   "short",
+   "short",
+   "short",
+   "int",
+   "byte",
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientElfWorkResultEnd": [
+   "short"
+  ],
+  "CNC_CZ_ClientEnchantAdd": [
+   "int",
+   "short",
+   "int",
+   "byte",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientEnchantPause": [
+   "int",
+   "short",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientEnchantRemove": [
+   "int",
+   "short",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientEnchantReset": [
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientEnchantStart": [
+   "int",
+   "short",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientEnchantUpdate": [
+   "int",
+   "byte",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientEnterBattlefield": [
+   "short"
+  ],
+  "CNC_CZ_ClientEnterColosseum": [
+   "byte"
+  ],
+  "CNC_CZ_ClientEnterElfReturn": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterExchageItemService": [],
+  "CNC_CZ_ClientEnterFamilyBuilding": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterFamilyCreation": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterFamilyInstanceCreation": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterFamilyStorage": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterFamilyTownList": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterGladiatorTeamCreation": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterIdentifyShop": [],
+  "CNC_CZ_ClientEnterInlayShop": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterMessageBoard": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterMissionList": [
+   "short",
+   "int",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterNodeElfContainer": [
+   "byte",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientEnterNodeElfInfo": [
+   "ushort",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterNodeEquipAndSpell": [
+   "byte",
+   "byte",
+   "uint",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterNodeFastDress": [
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientEnterNodeInventory": [
+   "byte",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientEnterNodeNodeData": [
+   "short",
+   "byte",
+   "float",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientEnterNodePlayerCard": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "byte"
+  ],
+  "CNC_CZ_ClientEnterNodePlayerData": [
+   "uint",
+   "std::string",
+   "std::string",
+   "float",
+   "byte",
+   "byte",
+   "ushort",
+   "long",
+   "long",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "long",
+   "int",
+   "ushort",
+   "uint",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "std::string",
+   "std::string",
+   "int",
+   "int",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "int",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "int",
+   "uint",
+   "short",
+   "short",
+   "byte",
+   "byte",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterNodePlayerRoom": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "uint",
+   "int",
+   "int",
+   "int",
+   "byte",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientEnterNodeShortcut": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientEnterRepairShop": [],
+  "CNC_CZ_ClientEnterShop": [
+   "int",
+   "short",
+   "byte",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterSpellShop": [
+   "int",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientEnterStarWayData": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "std::string"
+  ],
+  "CNC_CZ_ClientEnterStorage": [
+   "int"
+  ],
+  "CNC_CZ_ClientEnterStrengthen": [
+   "int",
+   "short",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientEnterTransport": [
+   "ushort",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientEnterWorks": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort"
+  ],
+  "CNC_CZ_ClientEquipTrainItemChanged": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientEvaluateInfo": [
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "std::string",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientFamilyBattleInfo": [
+   "short",
+   "short",
+   "std::string",
+   "int",
+   "int",
+   "short",
+   "int",
+   "short",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientFamilyBattleKilledRank": [
+   "short",
+   "std::string",
+   "std::string",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientFamilyContainerData": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "uint",
+   "uint"
+  ],
+  "CNC_CZ_ClientFamilyContainerDeleteItem": [
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientFamilyContainerPutItem": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "short",
+   "int",
+   "short",
+   "uint",
+   "uint"
+  ],
+  "CNC_CZ_ClientFamilyInstanceData": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "uint"
+  ],
+  "CNC_CZ_ClientFamilyStorageData": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientFamilyStorageDeleteItem": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientFamilyStorageLog": [
+   "ushort",
+   "short",
+   "std::string"
+  ],
+  "CNC_CZ_ClientFamilyStoragePutItem": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientFamilyTownMemberQuery": [
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_CZ_ClientFamilyTownQuery": [
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "ushort",
+   "std::string",
+   "ushort",
+   "std::string",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort"
+  ],
+  "CNC_CZ_ClientFlagModify": [
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientGetSelectLifeTarget": [
+   "int",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientGetSpell": [
+   "short",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientGetStorageData": [
+   "short",
+   "byte",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientGladiatorTeamInfo": [
+   "int",
+   "int",
+   "uint",
+   "byte"
+  ],
+  "CNC_CZ_ClientGoto": [
+   "int",
+   "float",
+   "float",
+   "byte"
+  ],
+  "CNC_CZ_ClientGreedyIslandInfo": [
+   "short",
+   "int",
+   "int",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientHateReport": [
+   "uint",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientHello": [
+   "float"
+  ],
+  "CNC_CZ_ClientIdentifyItem": [
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientInGameLotteryNotify": [
+   "int"
+  ],
+  "CNC_CZ_ClientInlayItemResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientItemRent": [
+   "short",
+   "short",
+   "short",
+   "uint"
+  ],
+  "CNC_CZ_ClientItemUse": [
+   "int",
+   "int",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientLeaveNode": [
+   "int"
+  ],
+  "CNC_CZ_ClientLevelUp": [
+   "uint",
+   "byte",
+   "short",
+   "long",
+   "int"
+  ],
+  "CNC_CZ_ClientLifeEradicate": [
+   "int"
+  ],
+  "CNC_CZ_ClientLifeFloat": [
+   "int",
+   "float",
+   "float",
+   "float",
+   "short"
+  ],
+  "CNC_CZ_ClientLifeSkillUpdate": [
+   "byte",
+   "ushort",
+   "uint"
+  ],
+  "CNC_CZ_ClientLoadCubeItems": [
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientLogoutResp": [
+   "byte"
+  ],
+  "CNC_CZ_ClientLookElfPetEquip": [
+   "int",
+   "std::string",
+   "short",
+   "int",
+   "int",
+   "int",
+   "float",
+   "float",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "long",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientLookEquip": [
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "float",
+   "float",
+   "short",
+   "short",
+   "float",
+   "float",
+   "short",
+   "short",
+   "int",
+   "int",
+   "short",
+   "short",
+   "int",
+   "short",
+   "short",
+   "short",
+   "float",
+   "short",
+   "float",
+   "float",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientLotteryEnd": [
+   "short",
+   "short",
+   "short",
+   "byte",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientLotteryResult": [
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "int",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "byte",
+   "ushort",
+   "ushort",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientLotteryUpdatePlus": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientLoverBreak": [
+   "int"
+  ],
+  "CNC_CZ_ClientLoverInfo": [
+   "int",
+   "int",
+   "short",
+   "std::string",
+   "std::string",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientLoverInvite": [
+   "int",
+   "std::string",
+   "short"
+  ],
+  "CNC_CZ_ClientLoverPosition": [
+   "int",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientLoverUpdate": [
+   "short",
+   "int",
+   "std::string"
+  ],
+  "CNC_CZ_ClientMagicBoxResult": [
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientMailDeleteResult": [
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientMailGetGoldOK": [
+   "int"
+  ],
+  "CNC_CZ_ClientMailGetItemOK": [
+   "int"
+  ],
+  "CNC_CZ_ClientMailList": [
+   "ushort",
+   "int",
+   "std::string",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientMailOpenBox": [
+   "int"
+  ],
+  "CNC_CZ_ClientMailRead": [
+   "int",
+   "int",
+   "std::string",
+   "uint",
+   "uint",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "byte",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientMailReceive": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientMailReturnResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientMailSendResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientMarryOperation": [
+   "short"
+  ],
+  "CNC_CZ_ClientMeleeAttack": [
+   "uint",
+   "uint",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientMessageDeleteResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientMessageList": [
+   "ushort",
+   "int",
+   "std::string",
+   "std::string",
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientMessageRead": [
+   "int",
+   "std::string",
+   "byte"
+  ],
+  "CNC_CZ_ClientMessageWriteResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientMigrationDone": [
+   "ushort"
+  ],
+  "CNC_CZ_ClientMissionStates": [
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientMobChangeAI": [
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientMobTransform": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientModelModify": [
+   "int",
+   "byte",
+   "int",
+   "ushort",
+   "uint",
+   "ushort",
+   "uint"
+  ],
+  "CNC_CZ_ClientModifyAttr": [
+   "int",
+   "short",
+   "int",
+   "long"
+  ],
+  "CNC_CZ_ClientModifyItemDurability": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientModifyItemInfo": [
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "long",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "byte",
+   "byte",
+   "ushort",
+   "short",
+   "ushort"
+  ],
+  "CNC_CZ_ClientModifyItemStrengthen": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientMoveChar": [
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientMovePrediction": [
+   "int",
+   "ushort",
+   "ushort",
+   "byte",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientNewPlayerGuide": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientNodeExit": [
+   "byte",
+   "byte"
+  ],
+  "CNC_CZ_ClientNonSafeQuit": [
+   "int"
+  ],
+  "CNC_CZ_ClientOpenAreaDialog": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientOpenBattleCrusadeDialog": [
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientOpenChurchDialog": [],
+  "CNC_CZ_ClientOpenExploitRank": [],
+  "CNC_CZ_ClientOpenHotel": [
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientOpenInstanceDialog": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientOpenMagicBoxDialog": [],
+  "CNC_CZ_ClientOpenMissionShop": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientOpenPaySystem": [
+   "int",
+   "ushort"
+  ],
+  "CNC_CZ_ClientPVPRankLookEquip": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "byte",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "int",
+   "ushort",
+   "byte",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientPVPTime": [
+   "byte"
+  ],
+  "CNC_CZ_ClientPayEvent": [
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientPayEventOK": [],
+  "CNC_CZ_ClientPetLotteryEnd": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientPetLotteryResult": [
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "int",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "byte",
+   "ushort",
+   "ushort",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientPetShortCut": [
+   "byte",
+   "short"
+  ],
+  "CNC_CZ_ClientPetUpgradeCancel": [],
+  "CNC_CZ_ClientPetUpgradeCasting": [
+   "short"
+  ],
+  "CNC_CZ_ClientPlayEffect": [
+   "float",
+   "float",
+   "float",
+   "int",
+   "int",
+   "float",
+   "std::string",
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientPlayElfPetAction": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientPlayMonsterAction": [
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientPlaySound": [
+   "std::string",
+   "float",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientPlayerAction": [
+   "uint",
+   "byte",
+   "float",
+   "byte",
+   "byte",
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientPlayerClassCustomData": [
+   "byte",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "byte",
+   "uint",
+   "ushort",
+   "uint"
+  ],
+  "CNC_CZ_ClientPlayerClassList": [
+   "byte",
+   "byte",
+   "ushort",
+   "byte"
+  ],
+  "CNC_CZ_ClientPlayerClosets": [
+   "byte",
+   "ushort",
+   "byte",
+   "ushort"
+  ],
+  "CNC_CZ_ClientPlayerDestinyRoad": [],
+  "CNC_CZ_ClientPlayerDestinyRoadEvent": [
+   "short"
+  ],
+  "CNC_CZ_ClientPlayerEmotion": [
+   "uint",
+   "byte"
+  ],
+  "CNC_CZ_ClientPlayerEvent": [
+   "short",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_CZ_ClientPlayerLicense": [
+   "ushort"
+  ],
+  "CNC_CZ_ClientPlayerLifeSkill": [
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort",
+   "uint"
+  ],
+  "CNC_CZ_ClientPlayerWorkResult": [
+   "int",
+   "short",
+   "short",
+   "std::string",
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientPlayerWorkResultEnd": [
+   "short"
+  ],
+  "CNC_CZ_ClientPlayerWorkUpdate": [
+   "ushort",
+   "short",
+   "short",
+   "int",
+   "int",
+   "std::string"
+  ],
+  "CNC_CZ_ClientPutItemIntoContainer": [
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientPutItemIntoInventory": [
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientPutItemIntoStorage": [
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientQueryNpc": [
+   "int"
+  ],
+  "CNC_CZ_ClientQueryPlayerCard": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientR25UpdateFamily": [
+   "short",
+   "std::string"
+  ],
+  "CNC_CZ_ClientRankInfo": [
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNC_CZ_ClientReceiveShortcutOfPage": [
+   "short",
+   "ushort",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientRecommendActivities": [
+   "short",
+   "int",
+   "ushort",
+   "ushort",
+   "uint",
+   "byte",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientRecruitInstanceResult": [
+   "byte",
+   "byte"
+  ],
+  "CNC_CZ_ClientResetCoord": [
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientResetDailyMission": [],
+  "CNC_CZ_ClientResetSpell": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientRestore": [
+   "uint"
+  ],
+  "CNC_CZ_ClientResurrect": [
+   "uint"
+  ],
+  "CNC_CZ_ClientRevive": [
+   "uint",
+   "byte"
+  ],
+  "CNC_CZ_ClientReviveInfo": [
+   "int"
+  ],
+  "CNC_CZ_ClientRideSpell": [
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientRollTreasure": [
+   "uint",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "int",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientRoomData": [
+   "int",
+   "std::string",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "byte",
+   "short",
+   "byte",
+   "ushort",
+   "byte",
+   "ushort",
+   "short",
+   "short",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientSafeQuitCancel": [],
+  "CNC_CZ_ClientSafeQuitResp": [
+   "short"
+  ],
+  "CNC_CZ_ClientSay": [
+   "uint",
+   "std::string",
+   "uint"
+  ],
+  "CNC_CZ_ClientScreenMessage": [
+   "short",
+   "std::string"
+  ],
+  "CNC_CZ_ClientSearchInfo": [
+   "short",
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientSearchRoomResult": [
+   "short",
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientSearchTeamInfo": [
+   "short"
+  ],
+  "CNC_CZ_ClientSearchTeamInfoV2": [
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientSeeChar": [
+   "uint",
+   "float",
+   "float",
+   "float",
+   "float",
+   "byte",
+   "byte",
+   "ushort",
+   "ushort",
+   "long",
+   "long",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "byte",
+   "byte",
+   "byte",
+   "short",
+   "std::string",
+   "short",
+   "float",
+   "float",
+   "float",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientSeeMob": [
+   "uint",
+   "short",
+   "byte",
+   "float",
+   "float",
+   "float",
+   "float",
+   "byte",
+   "std::string",
+   "long",
+   "long",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "short",
+   "float",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientSeeTreasure": [
+   "uint",
+   "float",
+   "float",
+   "float",
+   "float",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "byte",
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientSelectFamilyEmblem": [],
+  "CNC_CZ_ClientSellOut": [],
+  "CNC_CZ_ClientSetRoomResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientSetSpellStone": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientSloganUpdate": [
+   "int",
+   "std::string",
+   "byte"
+  ],
+  "CNC_CZ_ClientSlotFlicker": [
+   "int"
+  ],
+  "CNC_CZ_ClientSpellBlastOK": [
+   "uint",
+   "int",
+   "short",
+   "int",
+   "float",
+   "float",
+   "float",
+   "int",
+   "ushort",
+   "float",
+   "ushort",
+   "float",
+   "byte"
+  ],
+  "CNC_CZ_ClientSpellBlastToLife": [
+   "uint",
+   "short",
+   "int",
+   "float",
+   "float",
+   "float",
+   "int",
+   "float",
+   "float",
+   "float",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientSpellBlastToLocation": [
+   "uint",
+   "short",
+   "int",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int",
+   "ushort",
+   "float",
+   "ushort",
+   "float"
+  ],
+  "CNC_CZ_ClientSpellBreak": [
+   "int",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientSpellCast": [
+   "short",
+   "int",
+   "int",
+   "byte",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientSpellCastOK": [
+   "short",
+   "int",
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientSpellFlyToLocation": [
+   "uint",
+   "short",
+   "int",
+   "int",
+   "ushort",
+   "float",
+   "ushort",
+   "float",
+   "ushort",
+   "float",
+   "ushort",
+   "float"
+  ],
+  "CNC_CZ_ClientSpellHitToLife": [
+   "short",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientSpellLoopCastStop": [
+   "short"
+  ],
+  "CNC_CZ_ClientStorageExpandResult": [
+   "short"
+  ],
+  "CNC_CZ_ClientStrengthenCasting": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientStrengthenItemCancel": [
+   "short"
+  ],
+  "CNC_CZ_ClientStrengthenItemResult": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientSummonPet": [
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientSwitchItemLocationOK": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientTeamAllMembersInfo": [
+   "short",
+   "short",
+   "short",
+   "uint",
+   "std::string",
+   "long",
+   "long",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "std::string",
+   "short"
+  ],
+  "CNC_CZ_ClientTeamCheckNotify": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTeamInfo": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTeamInviteNotice": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTeamInviteResult": [
+   "std::string",
+   "std::string",
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientTeamLeaved": [
+   "short",
+   "byte"
+  ],
+  "CNC_CZ_ClientTeamMemberEnchant": [
+   "short",
+   "int",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientTeamMemberPosition": [
+   "int",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientTeamNewMemberInfo": [
+   "short",
+   "short",
+   "int",
+   "std::string",
+   "long",
+   "long",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "short",
+   "std::string"
+  ],
+  "CNC_CZ_ClientTeamRadarAttention": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTeamRecruitMsg": [
+   "std::string",
+   "std::string",
+   "byte",
+   "byte",
+   "std::string",
+   "std::string",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTeamRecruitMsgV2": [
+   "byte",
+   "short",
+   "short",
+   "std::string",
+   "uint"
+  ],
+  "CNC_CZ_ClientTerritoryEnd": [],
+  "CNC_CZ_ClientTerritoryFamilyScore": [
+   "short",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientTerritoryInfo": [
+   "short",
+   "int",
+   "int",
+   "short",
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientTerritoryKilledInfo": [
+   "int",
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTerritoryPlayerInfo": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTerritoryQuery": [
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "int",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "byte"
+  ],
+  "CNC_CZ_ClientTextOutput": [
+   "byte",
+   "std::string"
+  ],
+  "CNC_CZ_ClientTextOutputIndex": [
+   "short",
+   "std::string"
+  ],
+  "CNC_CZ_ClientTextOutputItem": [
+   "byte",
+   "std::string",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "uint",
+   "byte",
+   "byte",
+   "byte",
+   "ushort",
+   "short",
+   "std::string",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "long",
+   "short",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientTicketInvalid": [],
+  "CNC_CZ_ClientTradeAddItem": [
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "long"
+  ],
+  "CNC_CZ_ClientTradeAddItemFail": [
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientTradeCancel": [
+   "uint",
+   "short"
+  ],
+  "CNC_CZ_ClientTradeComplete": [],
+  "CNC_CZ_ClientTradeConfirm": [],
+  "CNC_CZ_ClientTradeModifyGold": [
+   "uint",
+   "uint"
+  ],
+  "CNC_CZ_ClientTradeModifyGoldFail": [
+   "uint",
+   "uint"
+  ],
+  "CNC_CZ_ClientTradeReady": [],
+  "CNC_CZ_ClientTradeRemoveItem": [
+   "ushort"
+  ],
+  "CNC_CZ_ClientTradeRequest": [
+   "uint",
+   "std::string"
+  ],
+  "CNC_CZ_ClientTradeReset": [],
+  "CNC_CZ_ClientTradeStart": [
+   "uint",
+   "std::string"
+  ],
+  "CNC_CZ_ClientTradeUnConfirm": [
+   "uint"
+  ],
+  "CNC_CZ_ClientTreasureDisappear": [
+   "uint"
+  ],
+  "CNC_CZ_ClientTreasurePickupOK": [
+   "uint",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientTurnChar": [
+   "int",
+   "float"
+  ],
+  "CNC_CZ_ClientUIControlNotify": [
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateAdvancedAbility": [
+   "byte",
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateAlpacaCoin": [
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateAppellation": [
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateAttr": [
+   "int",
+   "short",
+   "int",
+   "long"
+  ],
+  "CNC_CZ_ClientUpdateAttrNewExp": [
+   "int",
+   "long"
+  ],
+  "CNC_CZ_ClientUpdateAttrNewHp": [
+   "int",
+   "short",
+   "long"
+  ],
+  "CNC_CZ_ClientUpdateBFData": [
+   "ushort",
+   "byte",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateBattleCrusadeInfo": [],
+  "CNC_CZ_ClientUpdateCollection": [
+   "short",
+   "int",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateCoolDown": [
+   "byte",
+   "int",
+   "byte",
+   "short",
+   "ushort",
+   "byte",
+   "short",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateDailyAwards": [
+   "short",
+   "int",
+   "long",
+   "long",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateDestinyRoad": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateElfMixElf": [
+   "short",
+   "int",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateElfSpell": [
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateEquipment": [
+   "int",
+   "uint",
+   "ushort",
+   "byte",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "long"
+  ],
+  "CNC_CZ_ClientUpdateEvaluateInfo": [
+   "uint",
+   "uint",
+   "uint",
+   "std::string"
+  ],
+  "CNC_CZ_ClientUpdateFastDressData": [
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateFloorInfo": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateFortuneBagCounter": [
+   "ushort",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateHealthOnlineTime": [
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateInteraction": [
+   "short",
+   "int",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateLifelongGold": [
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateLifelongPoint": [
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateLottery": [
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "uint",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateMissionState": [
+   "byte",
+   "uint",
+   "ushort",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateMixElf": [
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateNPCSymbols": [
+   "short",
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateNodeTimes": [
+   "short",
+   "ushort"
+  ],
+  "CNC_CZ_ClientUpdateRecommendActivities": [
+   "ushort",
+   "uint",
+   "byte"
+  ],
+  "CNC_CZ_ClientUpdateRoom": [
+   "short",
+   "int",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateRoomItem": [
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUpdateSpellAttr": [
+   "short",
+   "short",
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateSystemVar": [
+   "byte",
+   "uint",
+   "uint"
+  ],
+  "CNC_CZ_ClientUpdateWarCoin": [
+   "int"
+  ],
+  "CNC_CZ_ClientUpdateZoneMonster": [
+   "int",
+   "short",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_CZ_ClientUseItemTime": [
+   "uint",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientUseItemTimeBreak": [],
+  "CNC_CZ_ClientUseSkillPointOK": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_CZ_ClientVendorClose": [
+   "int",
+   "byte"
+  ],
+  "CNC_CZ_ClientVendorCloseView": [
+   "int"
+  ],
+  "CNC_CZ_ClientVendorContainer": [
+   "byte"
+  ],
+  "CNC_CZ_ClientVendorStatus": [
+   "byte",
+   "byte"
+  ],
+  "CNC_CZ_ClientVendorUpdateView": [
+   "int",
+   "std::string",
+   "byte",
+   "byte",
+   "uint",
+   "int",
+   "short",
+   "short",
+   "int",
+   "int",
+   "ushort",
+   "short",
+   "byte",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "uint",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_CZ_ClientVersusInstanceInfo": [
+   "int",
+   "int",
+   "int",
+   "int",
+   "ushort",
+   "int",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int"
+  ],
+  "CNC_CZ_ClientWeddingsInfo": [
+   "byte",
+   "int",
+   "std::string",
+   "std::string",
+   "byte",
+   "int"
+  ],
+  "CNC_DBA_AgentDBACommand": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_DBA_ClientDelPlayerOK": [],
+  "CNC_DBA_ClientFamilyAllMessage": [],
+  "CNC_MW_MissionServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_MissionServerTextExCmdRemoteWorld": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_MissionServerTextExCmdRemoteZone": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerCheckFamilyInvite": [
+   "byte",
+   "int",
+   "int",
+   "std::string"
+  ],
+  "CNC_MW_WorldServerCrossWorldEndClearAccount": [
+   "uint"
+  ],
+  "CNC_MW_WorldServerCrossZone": [],
+  "CNC_MW_WorldServerFBMsgUpdate": [],
+  "CNC_MW_WorldServerFriendNotify": [],
+  "CNC_MW_WorldServerItemMallMailCheckOK": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_MW_WorldServerItemMallMailSendResult": [
+   "uint",
+   "int",
+   "uint",
+   "uint",
+   "short"
+  ],
+  "CNC_MW_WorldServerTell": [],
+  "CNC_MW_WorldServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerTextExCmdRemoteWorld": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerTextExCmdRemoteZone": [
+   "std::string",
+   "short"
+  ],
+  "CNC_MW_WorldServerUpdateBlackList": [],
+  "CNC_MW_WorldServerUpdateFriendMember": [],
+  "CNC_MW_WorldServerUpdatePrestigeData": [],
+  "CNC_MW_WorldServerUpdateSpecialCoin": [],
+  "CNC_T_ServerGetTicket": [
+   "uint",
+   "uint",
+   "uint",
+   "uint",
+   "ushort"
+  ],
+  "CNC_T_ServerUseTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNC_ZM_MonsterServerListRebornMonster": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZM_MonsterServerModifyRebornMonster": [
+   "ushort",
+   "ushort",
+   "int",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int"
+  ],
+  "CNC_ZM_MonsterServerMonsterDieReport": [
+   "ushort",
+   "ushort",
+   "int",
+   "byte",
+   "int",
+   "short"
+  ],
+  "CNC_ZM_MonsterServerMonsterReport": [
+   "ushort",
+   "ushort",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZM_MonsterServerRegenerationReport": [
+   "ushort",
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZM_MonsterServerRemoveNode": [
+   "ushort",
+   "int"
+  ],
+  "CNC_ZM_MonsterServerRemoveRebornMonster": [
+   "ushort",
+   "ushort",
+   "int",
+   "uint"
+  ],
+  "CNC_ZM_MonsterServerSetRebornMonster": [
+   "ushort",
+   "ushort",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int"
+  ],
+  "CNC_ZM_MonsterServerStartCharRegenerate": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZM_MonsterServerStopCharRegenerate": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZM_MonsterServerUnRegRebornMonster": [
+   "ushort",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerAddFamilyMessage": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZMis_MissionServerArrangeItem": [
+   "int",
+   "short",
+   "uint",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerBattleRoyaleClose": [
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerBattleRoyaleJoinRequest": [
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerBattlefieldClose": [
+   "short"
+  ],
+  "CNC_ZMis_MissionServerBattlefieldEraseMember": [
+   "int"
+  ],
+  "CNC_ZMis_MissionServerBattlefieldJoin": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerBattlefieldList": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNC_ZMis_MissionServerBattlefieldUpdateStatus": [
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerChannelMsg": [
+   "byte",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "uint"
+  ],
+  "CNC_ZMis_MissionServerCheckFamilyInvite": [
+   "byte",
+   "int",
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZMis_MissionServerCloseMissionBrief": [
+   "int"
+  ],
+  "CNC_ZMis_MissionServerColosseumClose": [
+   "int",
+   "short",
+   "byte",
+   "byte",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerColosseumJoinAnswer": [
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerColosseumJoinRequest": [
+   "int"
+  ],
+  "CNC_ZMis_MissionServerColosseumLeaveJoin": [
+   "int"
+  ],
+  "CNC_ZMis_MissionServerCrossZone": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "float",
+   "float",
+   "float",
+   "float",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerCrossZoneRequest": [
+   "int",
+   "int",
+   "int",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_ZMis_MissionServerEnterBattlefieldAnswer": [
+   "int"
+  ],
+  "CNC_ZMis_MissionServerFindCharacter": [
+   "uint",
+   "std::string"
+  ],
+  "CNC_ZMis_MissionServerGetTeamInviteeID": [
+   "uint",
+   "uint",
+   "std::string",
+   "byte",
+   "byte",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerGiveUpMission": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerGreedyIslandRankQuery": [],
+  "CNC_ZMis_MissionServerIDReport": [
+   "ushort"
+  ],
+  "CNC_ZMis_MissionServerItemMallMailCheck": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerItemMallMailSend": [
+   "uint",
+   "int",
+   "ushort",
+   "ushort",
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerListDialogue": [
+   "int",
+   "short",
+   "byte",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerMailSend": [
+   "int",
+   "std::string",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "int",
+   "int",
+   "byte",
+   "byte",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerMessageWrite": [
+   "int",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZMis_MissionServerMigrationDone": [
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerMobDieReport": [
+   "ushort",
+   "short",
+   "short",
+   "float",
+   "float",
+   "ushort",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerNodeCreate": [
+   "ushort",
+   "short",
+   "uint",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerOnDialogueSelected": [
+   "ushort",
+   "int",
+   "ushort",
+   "short",
+   "int",
+   "short",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerPlayerCCDataSave": [
+   "int",
+   "byte",
+   "byte",
+   "byte",
+   "ushort",
+   "uint"
+  ],
+  "CNC_ZMis_MissionServerRefreshRecommendActivities": [
+   "int",
+   "int",
+   "ushort",
+   "ushort",
+   "uint",
+   "byte"
+  ],
+  "CNC_ZMis_MissionServerRemoteClient": [
+   "uint",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerRemovePMS": [
+   "int"
+  ],
+  "CNC_ZMis_MissionServerSendSystemMail": [
+   "std::string",
+   "int",
+   "std::string",
+   "std::string",
+   "int",
+   "int",
+   "byte",
+   "int"
+  ],
+  "CNC_ZMis_MissionServerSendTargetLocation": [
+   "int",
+   "short",
+   "float",
+   "float"
+  ],
+  "CNC_ZMis_MissionServerSetRecommendActivityTracing": [
+   "int",
+   "ushort",
+   "ushort"
+  ],
+  "CNC_ZMis_MissionServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerTextExCmdRemoteWorld": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerTextExCmdRemoteZone": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerUpdatePKList": [
+   "int",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNC_ZMis_MissionServerUpdatePlayerCard": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "byte"
+  ],
+  "CNC_ZMis_MissionServerVersusInstanceJoinRequest": [
+   "int",
+   "int"
+  ],
+  "CNC_ZW_WorldServerAllUsers": [
+   "int"
+  ],
+  "CNC_ZW_WorldServerChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "int",
+   "uint"
+  ],
+  "CNC_ZW_WorldServerCharacterArrived": [
+   "uint"
+  ],
+  "CNC_ZW_WorldServerFBMsgUpdate": [
+   "std::string",
+   "std::string",
+   "uint",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZW_WorldServerFamilyCreation": [
+   "int",
+   "std::string"
+  ],
+  "CNC_ZW_WorldServerGetCloneItemID": [
+   "ushort",
+   "int"
+  ],
+  "CNC_ZW_WorldServerIDReport": [
+   "ushort"
+  ],
+  "CNC_ZW_WorldServerItemMallReceieveAttempt": [
+   "short",
+   "uint",
+   "uint",
+   "uint",
+   "uint"
+  ],
+  "CNC_ZW_WorldServerLogout": [
+   "int",
+   "short"
+  ],
+  "CNC_ZW_WorldServerNotifyEntry": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNC_ZW_WorldServerResetTime": [
+   "int"
+  ],
+  "CNC_ZW_WorldServerReturnToCharacterList": [
+   "uint"
+  ],
+  "CNC_ZW_WorldServerTeamLeavedNotify": [
+   "uint"
+  ],
+  "CNC_ZW_WorldServerTell": [
+   "int",
+   "std::string",
+   "std::string",
+   "std::string"
+  ],
+  "CNC_ZW_WorldServerTextCommand": [
+   "std::string"
+  ],
+  "CNC_ZW_WorldServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNE_CGIZ_ServerTextCommand": [
+   "std::string"
+  ],
+  "CNE_CG_ServerLogin": [
+   "std::string",
+   "std::string"
+  ],
+  "CNE_CG_ServerTextCommand": [
+   "std::string"
+  ],
+  "CNE_CZ_ZoneServerApplyFastDressData": [],
+  "CNE_CZ_ZoneServerArrangeItem": [],
+  "CNE_CZ_ZoneServerAskIdentifyGold": [
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerAskRepairEquipGold": [],
+  "CNE_CZ_ZoneServerAskRepairOneItemGold": [
+   "byte",
+   "byte",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerAskVendor": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerAskVendorContainer": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerAuctionBuy": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerAuctionBuyQuery": [
+   "short",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "std::string",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerAuctionCancel": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerAuctionSell": [
+   "short",
+   "short",
+   "int",
+   "int"
+  ],
+  "CNE_CZ_ZoneServerAuctionSellQuery": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerBFListQuery": [],
+  "CNE_CZ_ZoneServerBagDueDate": [],
+  "CNE_CZ_ZoneServerBattleCrusadeJoin": [],
+  "CNE_CZ_ZoneServerBattleRoyaleJoinRequest": [],
+  "CNE_CZ_ZoneServerBattlefieldJoin": [],
+  "CNE_CZ_ZoneServerBattlefieldLeave": [],
+  "CNE_CZ_ZoneServerBuyBackOpen": [],
+  "CNE_CZ_ZoneServerBuyItems": [],
+  "CNE_CZ_ZoneServerBuySpell": [
+   "short"
+  ],
+  "CNE_CZ_ZoneServerChanceLuckyBagGetReward": [],
+  "CNE_CZ_ZoneServerChanceLuckyBagReTry": [],
+  "CNE_CZ_ZoneServerChangeClass": [],
+  "CNE_CZ_ZoneServerChangePositionV2": [],
+  "CNE_CZ_ZoneServerChangeRoomTexture": [],
+  "CNE_CZ_ZoneServerChannelMsg": [],
+  "CNE_CZ_ZoneServerCheckNodeExit": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerCheckUpdateLottery": [],
+  "CNE_CZ_ZoneServerChurchReserve": [],
+  "CNE_CZ_ZoneServerCloseMissionBrief": [],
+  "CNE_CZ_ZoneServerClosetSet": [],
+  "CNE_CZ_ZoneServerCoRideInvite": [],
+  "CNE_CZ_ZoneServerColosseumJoinAnswer": [],
+  "CNE_CZ_ZoneServerColosseumJoinRequest": [],
+  "CNE_CZ_ZoneServerColosseumLeaveJoin": [],
+  "CNE_CZ_ZoneServerColosseumModeQuery": [],
+  "CNE_CZ_ZoneServerColosseumTeamQuery": [],
+  "CNE_CZ_ZoneServerDailyAwardOP": [],
+  "CNE_CZ_ZoneServerDestinyDice": [],
+  "CNE_CZ_ZoneServerDivideItem": [],
+  "CNE_CZ_ZoneServerDropItem": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerDuelRequest": [],
+  "CNE_CZ_ZoneServerDuelRequestAnswer": [],
+  "CNE_CZ_ZoneServerEcho": [],
+  "CNE_CZ_ZoneServerElfCallElf": [],
+  "CNE_CZ_ZoneServerElfChangeName": [],
+  "CNE_CZ_ZoneServerElfCheckData": [],
+  "CNE_CZ_ZoneServerElfMix": [],
+  "CNE_CZ_ZoneServerElfReturn": [],
+  "CNE_CZ_ZoneServerElfRevive": [],
+  "CNE_CZ_ZoneServerElfStoneUpdate": [],
+  "CNE_CZ_ZoneServerElfStoneUse": [],
+  "CNE_CZ_ZoneServerElfTalk": [],
+  "CNE_CZ_ZoneServerElfWork": [],
+  "CNE_CZ_ZoneServerElfWorkResultOK": [],
+  "CNE_CZ_ZoneServerEnchantCancel": [],
+  "CNE_CZ_ZoneServerEnchantPause": [],
+  "CNE_CZ_ZoneServerEnchantStart": [],
+  "CNE_CZ_ZoneServerEnchantUpdate": [],
+  "CNE_CZ_ZoneServerEnterBattlefieldAnswer": [],
+  "CNE_CZ_ZoneServerEnterNodeElfContainer": [],
+  "CNE_CZ_ZoneServerEnterNodeElfInfo": [],
+  "CNE_CZ_ZoneServerEnterNodeEquipAndSpell": [],
+  "CNE_CZ_ZoneServerEnterNodeFastDress": [],
+  "CNE_CZ_ZoneServerEnterNodeInventory": [],
+  "CNE_CZ_ZoneServerEnterNodePlayerCard": [],
+  "CNE_CZ_ZoneServerEnterNodePlayerData": [],
+  "CNE_CZ_ZoneServerEnterNodePlayerRoom": [],
+  "CNE_CZ_ZoneServerEnterNodeShortcut": [],
+  "CNE_CZ_ZoneServerEnterNodeStarWay": [],
+  "CNE_CZ_ZoneServerEnterRoom": [],
+  "CNE_CZ_ZoneServerEquipTrainSetItem": [],
+  "CNE_CZ_ZoneServerEvaluateLotteryOpen": [],
+  "CNE_CZ_ZoneServerExchangeItemPin": [],
+  "CNE_CZ_ZoneServerExecuteMagicBox": [],
+  "CNE_CZ_ZoneServerExtendRoom": [],
+  "CNE_CZ_ZoneServerFamilyBattleAskInfo": [],
+  "CNE_CZ_ZoneServerFamilyBuildingRepair": [],
+  "CNE_CZ_ZoneServerFamilyContainerGetItem": [],
+  "CNE_CZ_ZoneServerFamilyContainerPutItem": [],
+  "CNE_CZ_ZoneServerFamilyCreate": [],
+  "CNE_CZ_ZoneServerFamilyDonateMoney": [],
+  "CNE_CZ_ZoneServerFamilyInstanceCreate": [],
+  "CNE_CZ_ZoneServerFamilyInstanceGetData": [],
+  "CNE_CZ_ZoneServerFamilyStatue": [],
+  "CNE_CZ_ZoneServerFamilyStorageGetItem": [],
+  "CNE_CZ_ZoneServerFamilyStoragePutItem": [],
+  "CNE_CZ_ZoneServerFamilyStorageQueryLog": [],
+  "CNE_CZ_ZoneServerFamilyTalkToNpc": [],
+  "CNE_CZ_ZoneServerFamilyTownEnter": [],
+  "CNE_CZ_ZoneServerFamilyTownMemberQuery": [],
+  "CNE_CZ_ZoneServerFamilyTownQuery": [],
+  "CNE_CZ_ZoneServerFixEquipByFamily": [],
+  "CNE_CZ_ZoneServerGetCollection": [
+   "short"
+  ],
+  "CNE_CZ_ZoneServerGetSelectLifeTarget": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerGetShortcutOfPage": [],
+  "CNE_CZ_ZoneServerGetStorageData": [],
+  "CNE_CZ_ZoneServerGiveUpMission": [
+   "short"
+  ],
+  "CNE_CZ_ZoneServerGladiatorTeamCreate": [],
+  "CNE_CZ_ZoneServerGladiatorTeamQuery": [],
+  "CNE_CZ_ZoneServerGoLottery": [],
+  "CNE_CZ_ZoneServerGreedyIslandJoin": [],
+  "CNE_CZ_ZoneServerGreedyIslandRankQuery": [],
+  "CNE_CZ_ZoneServerHello": [],
+  "CNE_CZ_ZoneServerIdentifyItem": [
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerInlayItem": [
+   "ushort",
+   "short",
+   "ushort",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerItemMallReceivableEnter": [],
+  "CNE_CZ_ZoneServerItemMallUseItem": [],
+  "CNE_CZ_ZoneServerItemUse": [],
+  "CNE_CZ_ZoneServerLeaveShop": [],
+  "CNE_CZ_ZoneServerLifeSkill": [],
+  "CNE_CZ_ZoneServerLogoutReq": [],
+  "CNE_CZ_ZoneServerLookEquip": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerLoverBreak": [],
+  "CNE_CZ_ZoneServerLoverInvite": [
+   "uint",
+   "std::string",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerLoverMessage": [],
+  "CNE_CZ_ZoneServerMailDelete": [
+   "int",
+   "ushort",
+   "int"
+  ],
+  "CNE_CZ_ZoneServerMailGetGold": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerMailGetItem": [
+   "int",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerMailOpenBox": [],
+  "CNE_CZ_ZoneServerMailQuery": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerMailRead": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerMailReturn": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerMailSend": [
+   "std::string",
+   "std::string",
+   "std::string",
+   "short",
+   "short",
+   "int",
+   "int",
+   "byte"
+  ],
+  "CNE_CZ_ZoneServerMarryOperation": [],
+  "CNE_CZ_ZoneServerMeleeAttack": [],
+  "CNE_CZ_ZoneServerMessageDelete": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerMessageExit": [],
+  "CNE_CZ_ZoneServerMessageListQuery": [
+   "short"
+  ],
+  "CNE_CZ_ZoneServerMessageRead": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerMessageWrite": [
+   "std::string",
+   "std::string"
+  ],
+  "CNE_CZ_ZoneServerMigrationDone": [],
+  "CNE_CZ_ZoneServerMissionGoto": [
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerMissionListOp": [
+   "short",
+   "int",
+   "ushort"
+  ],
+  "CNE_CZ_ZoneServerMoveSelf": [],
+  "CNE_CZ_ZoneServerNewPlayerGuide": [],
+  "CNE_CZ_ZoneServerNodeGroupReset": [],
+  "CNE_CZ_ZoneServerPVPFlagModify": [],
+  "CNE_CZ_ZoneServerPVPRankLookEquip": [],
+  "CNE_CZ_ZoneServerPayEventResponse": [],
+  "CNE_CZ_ZoneServerPayEventSelect": [],
+  "CNE_CZ_ZoneServerPayRent": [],
+  "CNE_CZ_ZoneServerPetModeChange": [],
+  "CNE_CZ_ZoneServerPlayerAction": [
+   "byte",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNE_CZ_ZoneServerPlayerCCDataSave": [],
+  "CNE_CZ_ZoneServerPlayerCardUpdate": [],
+  "CNE_CZ_ZoneServerPlayerEmotion": [
+   "byte"
+  ],
+  "CNE_CZ_ZoneServerPlayerLicense": [],
+  "CNE_CZ_ZoneServerPlayerWork": [],
+  "CNE_CZ_ZoneServerPlayerWorkCheckData": [],
+  "CNE_CZ_ZoneServerPlayerWorkResultOK": [],
+  "CNE_CZ_ZoneServerQueryAppellation": [
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerQueryBattlefieldData": [],
+  "CNE_CZ_ZoneServerQueryClassList": [],
+  "CNE_CZ_ZoneServerQueryClosets": [],
+  "CNE_CZ_ZoneServerQueryCollection": [],
+  "CNE_CZ_ZoneServerQueryDestinyRoad": [],
+  "CNE_CZ_ZoneServerQueryFortuneBagCounter": [],
+  "CNE_CZ_ZoneServerQueryLicense": [],
+  "CNE_CZ_ZoneServerQueryLicenseSet": [],
+  "CNE_CZ_ZoneServerQueryLifeSkill": [],
+  "CNE_CZ_ZoneServerQueryLoverInfo": [],
+  "CNE_CZ_ZoneServerQueryMissionStates": [],
+  "CNE_CZ_ZoneServerQueryPlayerCard": [
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerQueryRecommendActivities": [],
+  "CNE_CZ_ZoneServerRankInfoQuery": [],
+  "CNE_CZ_ZoneServerReceiveTicket": [
+   "byte"
+  ],
+  "CNE_CZ_ZoneServerRecordFastDressInfo": [],
+  "CNE_CZ_ZoneServerRecruitInstance": [],
+  "CNE_CZ_ZoneServerRemoveFastDressInfo": [],
+  "CNE_CZ_ZoneServerRentRoom": [],
+  "CNE_CZ_ZoneServerRepairEquipment": [],
+  "CNE_CZ_ZoneServerRepairOneItem": [
+   "byte",
+   "byte",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerReplyDialog": [],
+  "CNE_CZ_ZoneServerReportProcessInfos": [
+   "ushort",
+   "std::string"
+  ],
+  "CNE_CZ_ZoneServerResurrect": [],
+  "CNE_CZ_ZoneServerRevive": [],
+  "CNE_CZ_ZoneServerRollTreasure": [
+   "uint",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerRoomGetData": [],
+  "CNE_CZ_ZoneServerSafeQuitCancel": [],
+  "CNE_CZ_ZoneServerSafeQuitCountDownOver": [],
+  "CNE_CZ_ZoneServerSafeQuitReq": [],
+  "CNE_CZ_ZoneServerSaveCollection": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerSaveFastDressData": [],
+  "CNE_CZ_ZoneServerSearchCondition": [],
+  "CNE_CZ_ZoneServerSearchOpt": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerSearchRoom": [],
+  "CNE_CZ_ZoneServerSearchTeam": [],
+  "CNE_CZ_ZoneServerSearchTeamV2": [],
+  "CNE_CZ_ZoneServerSellItems": [
+   "short",
+   "ushort",
+   "ushort",
+   "ushort"
+  ],
+  "CNE_CZ_ZoneServerSendPetCmd": [],
+  "CNE_CZ_ZoneServerSetAAPoint": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerSetAARate": [
+   "short"
+  ],
+  "CNE_CZ_ZoneServerSetFamilyEmblem": [],
+  "CNE_CZ_ZoneServerSetMissionTrace": [],
+  "CNE_CZ_ZoneServerSetRecommendActivityTracing": [],
+  "CNE_CZ_ZoneServerSetRoomPrivilege": [],
+  "CNE_CZ_ZoneServerSetSpellStone": [
+   "short",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNE_CZ_ZoneServerSloganUpdate": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerSpellBreak": [],
+  "CNE_CZ_ZoneServerSpellCastToLife": [
+   "short",
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerSpellCastToLocation": [],
+  "CNE_CZ_ZoneServerSpellCastToNearby": [],
+  "CNE_CZ_ZoneServerSpellCastToNowhere": [],
+  "CNE_CZ_ZoneServerStartParty": [],
+  "CNE_CZ_ZoneServerStateCancel": [
+   "short"
+  ],
+  "CNE_CZ_ZoneServerStorageDeposit": [],
+  "CNE_CZ_ZoneServerStorageExpand": [],
+  "CNE_CZ_ZoneServerStorageWithdraw": [],
+  "CNE_CZ_ZoneServerStrengthenClose": [],
+  "CNE_CZ_ZoneServerStrengthenItem": [
+   "short",
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerSwitchItemLocation": [
+   "short",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerSwitchSetRoomMode": [],
+  "CNE_CZ_ZoneServerTalkToNPC": [],
+  "CNE_CZ_ZoneServerTargetUpdate": [],
+  "CNE_CZ_ZoneServerTeamChangeLeader": [
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerTeamInvite": [],
+  "CNE_CZ_ZoneServerTeamInviteAnswer": [],
+  "CNE_CZ_ZoneServerTeamInviteCancel": [],
+  "CNE_CZ_ZoneServerTeamLeave": [
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerTeamOperation": [
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerTeamRadarAttention": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerTeamRecruitMsg": [],
+  "CNE_CZ_ZoneServerTeamRecruitTransport": [],
+  "CNE_CZ_ZoneServerTeamRecruitV2": [],
+  "CNE_CZ_ZoneServerTerritoryJoin": [],
+  "CNE_CZ_ZoneServerTerritoryQuery": [],
+  "CNE_CZ_ZoneServerTextCommand": [
+   "std::string"
+  ],
+  "CNE_CZ_ZoneServerTradeAddItem": [],
+  "CNE_CZ_ZoneServerTradeCancel": [],
+  "CNE_CZ_ZoneServerTradeConfirm": [],
+  "CNE_CZ_ZoneServerTradeModifyGold": [],
+  "CNE_CZ_ZoneServerTradeReady": [],
+  "CNE_CZ_ZoneServerTradeRemoveItem": [],
+  "CNE_CZ_ZoneServerTradeRequest": [],
+  "CNE_CZ_ZoneServerTradeRequestAccept": [],
+  "CNE_CZ_ZoneServerTradeReset": [],
+  "CNE_CZ_ZoneServerTradeUnConfirm": [],
+  "CNE_CZ_ZoneServerTransport": [],
+  "CNE_CZ_ZoneServerTreasurePickup": [],
+  "CNE_CZ_ZoneServerTurnSelf": [
+   "float"
+  ],
+  "CNE_CZ_ZoneServerUpdateAppellation": [],
+  "CNE_CZ_ZoneServerUpdateBotData": [],
+  "CNE_CZ_ZoneServerUpdateDecoration": [],
+  "CNE_CZ_ZoneServerUpdateEquipment": [
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerUpdateFamily": [
+   "uint"
+  ],
+  "CNE_CZ_ZoneServerUpdateFastDressPage": [],
+  "CNE_CZ_ZoneServerUpdateLotteryBonus": [],
+  "CNE_CZ_ZoneServerUpdateShortcut": [],
+  "CNE_CZ_ZoneServerUseSkillPoint": [],
+  "CNE_CZ_ZoneServerVendorBuy": [],
+  "CNE_CZ_ZoneServerVendorClose": [
+   "byte"
+  ],
+  "CNE_CZ_ZoneServerVendorCloseVending": [
+   "byte"
+  ],
+  "CNE_CZ_ZoneServerVendorCloseView": [
+   "int"
+  ],
+  "CNE_CZ_ZoneServerVendorSellItem": [
+   "int",
+   "std::string",
+   "byte",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNE_CZ_ZoneServerVendorUseItem": [
+   "byte",
+   "short"
+  ],
+  "CNE_CZ_ZoneServerVerifyCubeCosts": [],
+  "CNE_CZ_ZoneServerVersusInstanceJoinRequest": [],
+  "CNE_CZ_ZoneServerVictoryDeclaration": [],
+  "CNE_CZ_ZoneServerWeddingInfoQuery": [],
+  "CNE_CZ_ZoneServerWhoIs": [],
+  "CNE_DBA_ClientAddFamilyMember": [],
+  "CNE_DBA_ClientAllFamily": [],
+  "CNE_DBA_ClientAllFamilyInstnce": [
+   "ushort",
+   "int"
+  ],
+  "CNE_DBA_ClientAllLover": [],
+  "CNE_DBA_ClientAllPlayerRoom": [],
+  "CNE_DBA_ClientAllTerritory": [],
+  "CNE_DBA_ClientChangeFamily": [],
+  "CNE_DBA_ClientChannelMsg": [
+   "byte",
+   "std::string",
+   "std::string",
+   "int"
+  ],
+  "CNE_DBA_ClientCollection": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNE_DBA_ClientContainer": [],
+  "CNE_DBA_ClientElfData": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNE_DBA_ClientEnchant": [
+   "int",
+   "short",
+   "ushort"
+  ],
+  "CNE_DBA_ClientFamilyAllMember": [],
+  "CNE_DBA_ClientFamilyContainerData": [],
+  "CNE_DBA_ClientFamilyStorage": [
+   "int",
+   "short",
+   "ushort",
+   "ushort"
+  ],
+  "CNE_DBA_ClientFastDress": [],
+  "CNE_DBA_ClientFinishPlayerData": [
+   "int",
+   "short"
+  ],
+  "CNE_DBA_ClientFortuneBagCounter": [],
+  "CNE_DBA_ClientGladiatorTeamInfo": [],
+  "CNE_DBA_ClientLotteryCount": [],
+  "CNE_DBA_ClientMissionState": [],
+  "CNE_DBA_ClientNewFamily": [],
+  "CNE_DBA_ClientNewPlayerGuideData": [],
+  "CNE_DBA_ClientNodeID": [
+   "int",
+   "short"
+  ],
+  "CNE_DBA_ClientPlayerData": [],
+  "CNE_DBA_ClientRecommendActivityState": [],
+  "CNE_DBA_ClientRemoveFamily": [],
+  "CNE_DBA_ClientShortcut": [],
+  "CNE_DBA_ClientSpell": [],
+  "CNE_MW_WorldTextCommand": [
+   "std::string"
+  ],
+  "CNE_T_ClientGetTicket": [],
+  "CNE_T_ClientUseTicket": [
+   "uint",
+   "byte"
+  ],
+  "CNE_ZM_ZoneServerCharRegenerate": [
+   "ushort",
+   "ushort",
+   "uint"
+  ],
+  "CNE_ZM_ZoneServerMessageToCharacter": [],
+  "CNE_ZM_ZoneServerRebornMonster": [
+   "ushort",
+   "int",
+   "float",
+   "float",
+   "short",
+   "float",
+   "float",
+   "float",
+   "short",
+   "int"
+  ],
+  "CNE_ZM_ZoneServerReportMonster": [
+   "ushort"
+  ],
+  "CNE_ZM_ZoneServerSetRebornMonsterResult": [
+   "ushort",
+   "ushort",
+   "uint",
+   "int",
+   "short",
+   "short",
+   "short",
+   "float",
+   "float",
+   "float",
+   "float",
+   "int",
+   "byte"
+  ],
+  "CNE_ZM_ZoneServerUpdatePKList": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerAchievementRewardMail": [],
+  "CNE_ZMis_ZoneServerAchievementUpdate": [],
+  "CNE_ZMis_ZoneServerAuctionBuyList": [],
+  "CNE_ZMis_ZoneServerAuctionBuyOK": [
+   "int",
+   "short",
+   "int",
+   "int",
+   "int",
+   "short",
+   "int"
+  ],
+  "CNE_ZMis_ZoneServerAuctionCancelOK": [
+   "int",
+   "short",
+   "int"
+  ],
+  "CNE_ZMis_ZoneServerAuctionSellList": [],
+  "CNE_ZMis_ZoneServerAuctionSellResult": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "int",
+   "int",
+   "int"
+  ],
+  "CNE_ZMis_ZoneServerBattleCrusadeInfo": [],
+  "CNE_ZMis_ZoneServerBattlefieldChangeCharNum": [
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerBattlefieldEraseMember": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerBattlefieldJoinResult": [
+   "int",
+   "std::string",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerBattlefieldList": [
+   "int",
+   "short",
+   "ushort",
+   "ushort",
+   "short",
+   "ushort",
+   "short",
+   "short",
+   "short",
+   "uint",
+   "uint"
+  ],
+  "CNE_ZMis_ZoneServerBattlefieldSetup": [],
+  "CNE_ZMis_ZoneServerBuyBackGetItem": [],
+  "CNE_ZMis_ZoneServerBuyBackList": [],
+  "CNE_ZMis_ZoneServerBuybackInitAllocate": [],
+  "CNE_ZMis_ZoneServerCharNotQuit": [
+   "int"
+  ],
+  "CNE_ZMis_ZoneServerColosseumJoinResult": [],
+  "CNE_ZMis_ZoneServerColosseumLeaveJoinResult": [],
+  "CNE_ZMis_ZoneServerColosseumModeUpdate": [],
+  "CNE_ZMis_ZoneServerColosseumQuery": [],
+  "CNE_ZMis_ZoneServerCrossZoneResult": [
+   "int",
+   "short",
+   "int",
+   "float",
+   "float",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerDeallocateItemID": [],
+  "CNE_ZMis_ZoneServerDropItem": [
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerEnterBattleCrusadeAnswer": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerEnterBattlefield": [
+   "int",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerEnterBattlefieldAnswer": [
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerEnterColosseum": [],
+  "CNE_ZMis_ZoneServerFamilyBattleInfo": [],
+  "CNE_ZMis_ZoneServerFamilyContainerUpdate": [],
+  "CNE_ZMis_ZoneServerFamilyStorageLog": [
+   "int",
+   "ushort",
+   "short",
+   "std::string"
+  ],
+  "CNE_ZMis_ZoneServerFamilyStorageUpdate": [],
+  "CNE_ZMis_ZoneServerFamilyTownMemberQuery": [],
+  "CNE_ZMis_ZoneServerFastDressEquipEnd": [],
+  "CNE_ZMis_ZoneServerFindTargetLocation": [],
+  "CNE_ZMis_ZoneServerGMToolGetInfo": [
+   "uint",
+   "std::string",
+   "int",
+   "int",
+   "short",
+   "std::string",
+   "std::string",
+   "std::string",
+   "ushort",
+   "ushort",
+   "ushort",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerGMToolGetMission": [],
+  "CNE_ZMis_ZoneServerGreedyIslandInfo": [],
+  "CNE_ZMis_ZoneServerGreedyIslandJoin": [],
+  "CNE_ZMis_ZoneServerListDialogue": [],
+  "CNE_ZMis_ZoneServerLoverUpdate": [
+   "int",
+   "int",
+   "short",
+   "int",
+   "std::string"
+  ],
+  "CNE_ZMis_ZoneServerMailDeleteResult": [
+   "int",
+   "short",
+   "short",
+   "int"
+  ],
+  "CNE_ZMis_ZoneServerMailGetGoldOK": [],
+  "CNE_ZMis_ZoneServerMailGetItemOK": [
+   "int",
+   "short",
+   "int"
+  ],
+  "CNE_ZMis_ZoneServerMailList": [],
+  "CNE_ZMis_ZoneServerMailRead": [],
+  "CNE_ZMis_ZoneServerMailReceive": [
+   "int",
+   "short",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerMailReturnResult": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerMailSendResult": [],
+  "CNE_ZMis_ZoneServerMessageDeleteResult": [
+   "int",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerMessageList": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "ushort",
+   "std::string",
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerMessageRead": [
+   "int",
+   "short",
+   "int",
+   "std::string",
+   "byte"
+  ],
+  "CNE_ZMis_ZoneServerMessageWriteResult": [
+   "int",
+   "short",
+   "int",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerNPCTalkCheck": [
+   "uint"
+  ],
+  "CNE_ZMis_ZoneServerPVPTopData": [],
+  "CNE_ZMis_ZoneServerPutItem": [],
+  "CNE_ZMis_ZoneServerQueryPlayerCard": [],
+  "CNE_ZMis_ZoneServerRankInfo": [
+   "ushort",
+   "std::string",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "ushort",
+   "int",
+   "short",
+   "short",
+   "ushort",
+   "std::string",
+   "ushort",
+   "ushort",
+   "std::string"
+  ],
+  "CNE_ZMis_ZoneServerRemoteClient": [
+   "uint",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerReplyDialogue": [],
+  "CNE_ZMis_ZoneServerReportID": [],
+  "CNE_ZMis_ZoneServerResetDailyMission": [],
+  "CNE_ZMis_ZoneServerResetDailyMonsterKill": [],
+  "CNE_ZMis_ZoneServerResetNodeTimes": [],
+  "CNE_ZMis_ZoneServerReturnTeamInviteeID": [],
+  "CNE_ZMis_ZoneServerSearchInfo": [],
+  "CNE_ZMis_ZoneServerSearchRoomResult": [],
+  "CNE_ZMis_ZoneServerStartBattleCrusade": [],
+  "CNE_ZMis_ZoneServerStartBattleRoyale": [],
+  "CNE_ZMis_ZoneServerStartBattlefield": [
+   "short",
+   "ushort",
+   "int",
+   "std::string",
+   "ushort",
+   "int",
+   "std::string"
+  ],
+  "CNE_ZMis_ZoneServerStartColosseum": [],
+  "CNE_ZMis_ZoneServerStartVersusInstance": [],
+  "CNE_ZMis_ZoneServerSwitchPlayerRoom": [],
+  "CNE_ZMis_ZoneServerTerritoryInfo": [],
+  "CNE_ZMis_ZoneServerTerritoryJoin": [],
+  "CNE_ZMis_ZoneServerTerritoryQuery": [],
+  "CNE_ZMis_ZoneServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerTextExCmdRemoteWorld": [
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerTextExCmdRemoteZone": [
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerTextOutput": [
+   "int",
+   "short",
+   "std::string",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerTextOutputIndex": [],
+  "CNE_ZMis_ZoneServerTransitionCommands": [],
+  "CNE_ZMis_ZoneServerTransportGMCharacterToCharacter": [],
+  "CNE_ZMis_ZoneServerUpdateLifelongGold": [],
+  "CNE_ZMis_ZoneServerUpdateLifelongPoint": [],
+  "CNE_ZMis_ZoneServerUpdateMissionState": [],
+  "CNE_ZMis_ZoneServerUpdateNPCSymbols": [
+   "int",
+   "short",
+   "ushort",
+   "int",
+   "short"
+  ],
+  "CNE_ZMis_ZoneServerUpdateRecommendActivities": [],
+  "CNE_ZMis_ZoneServerUpdateRoom": [],
+  "CNE_ZMis_ZoneServerUpdateRoomItem": [],
+  "CNE_ZMis_ZoneServerWeddingsInfo": [],
+  "CNE_ZW_ZoneServerChangeFamily": [],
+  "CNE_ZW_ZoneServerChannelMsg": [],
+  "CNE_ZW_ZoneServerCharacterArrivedDest": [
+   "uint"
+  ],
+  "CNE_ZW_ZoneServerDestShutdown": [
+   "int"
+  ],
+  "CNE_ZW_ZoneServerGetCloneItemID": [],
+  "CNE_ZW_ZoneServerItemMallReceieveAttempt": [],
+  "CNE_ZW_ZoneServerNewFamily": [],
+  "CNE_ZW_ZoneServerRemoveFamily": [],
+  "CNE_ZW_ZoneServerReportID": [],
+  "CNE_ZW_ZoneServerTextCommand": [
+   "std::string"
+  ],
+  "CNE_ZW_ZoneServerTextExCmd": [
+   "std::string",
+   "short"
+  ],
+  "CNE_ZW_ZoneServerUpdateFortuneBag": [],
+  "CNE_ZW_ZoneServerUpdateLottery": [],
+  "CNE_ZW_ZoneServerUpdateStarWay": []
+ }
+}

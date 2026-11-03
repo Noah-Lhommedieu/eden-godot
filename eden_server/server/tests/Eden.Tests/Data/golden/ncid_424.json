@@ -1,0 +1,10 @@
+{
+ "ncid": 424,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "00",
+   "src": "zsniff_cs_entry_success.bin"
+  }
+ ]
+}

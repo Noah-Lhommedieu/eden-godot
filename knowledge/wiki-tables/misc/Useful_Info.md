@@ -1,0 +1,151 @@
+# Useful Info
+
+> Source : `src_csv/Useful Info.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+| 1 |  |  | Guild Channel, Membership List, Announcement Message, Guild Funds |
+|---|---|---|---|
+| 2 | 2000.0 |  | Billboard, Open to the public |
+| 3 | 7000.0 |  | Guild Town and Guild Logo unlocked, 1st Warehouse unlocked |
+| 4 | 24000.0 | 3400.0 | 2 statues unlocked, Ability to claim territories unlocked |
+| 5 | 60000.0 | 16000.0 | 2nd Warehouse unlocked |
+| 6 | 120000.0 | 55000.0 | 2 additional statues unlocked |
+| 7 | 140000.0 | 55000.0 | Member Capacity +200 |
+| 8 | 160000.0 | 55000.0 | Member Capacity +225 |
+| 9 | 180000.0 | 55000.0 | Member Capacity +250 |
+| 10 | 200000.0 | 55000.0 | Member Capacity +300 |
+| 11 | 220000.0 | 55000.0 | Member Capacity +325 |
+| 12 | 240000.0 | 55000.0 | Member Capacity +350 |
+
+**VENDETTA GUILD STATUES:**
+
+**BaSH's Blessing**
+
+**Vivi's Blessing**
+
+**Jordan's Blessing**
+
+**↑<br>You can aquire these by collecting 750x "Stormy Mountain Stones" from "Lv95. Dragon Slaying Expedition - Stormy Ridge" and trading them with "Lost Spirit Arvad" in Aven (x:473, y:390).**
+
+**USEFUL BUFFS:**
+
+| PATH OF DESTINY BUFFS: | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+|---|---|---|---|---|
+| Blessing of Fortitude | Max HP & Max MP +5% | N | 4 hour | N/A |
+| Blessing of Strength | P-ATK, M-ATK & G-Healing +5% | N | 4 hour | N/A |
+| Blessing of Mindfulness | P-CRIT Rate & M-CRIT Rate +5% | N | 4 hour | N/A |
+| Blessing of Power | P-CRIT DMG & M-CRIT DMG +5% | N | 4 hour | N/A |
+| Blessing of Swiftness | ATK SPD & Cast SPD +5% | N | 4 hour | N/A |
+| Blessing of Awareness | ACC & EVA +5% | N | 4 hour | N/A |
+| Blessing of Speed | Move SPD +5% | N | 4 hour | N/A |
+| Blessing of Protection | Physical & Elemental Resistance +5 | N | 4 hour | N/A |
+| RECOMMENDED EVENTS | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Strong Defence | All Physical Resistances +5% | N | 2 hours | N/A |
+| Fearless Resistance | All Elemental Resistances +5% | N | 2 hours | N/A |
+| Vigourous Steps | Move SPD +5% | N | 2 hours | N/A |
+| Versatile Potential | All Attributes +10% | N | 2 hours | N/A |
+| Courageous Vigor | Max HP & MP +5% | N | 2 hours | N/A |
+| STONES | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Wind Meteor (can only be used with 1 other meteor) | Move SPD +5% | N | 1 hour | 30 mins |
+| Ice Meteor (can only be used with 1 other meteor) | Cast SPD+ 5% | N | 1 hour | 30 mins |
+| Fire Meteor (can only be used with 1 other meteor) | P-ATK & M-ATK +5% | N | 1 hour | 30 mins |
+| Earth Meteor (can only be used with 1 other meteor) | Max HP +5% | N | 1 hour | 30 mins |
+| STR Star Stone (can't be used with other star stones) | STR +7% | Y | 1 hour | N/A |
+| INT Star Stones (can't be used with other star stones) | INT +7% | Y | 1 hour | N/A |
+| AGI Star Stones (can't be used with other star stones) | AGI +7% | Y | 1 hour | N/A |
+| WIS Star Stones (can't be used with other star stones) | WIS +7% | Y | 1 hour | N/A |
+| LCK Star Stones (can't be used with other star stones) | LCK +7% | Y | 1 hour | N/A |
+| STR & LCK Luna Rock (can't be used with other luna rocks.) | STR & LCK +3% | Y | 1 hour | N/A |
+| WIS & LCK Luna Rock (can't be used with other luna rocks.) | WIS & LCK +3% | Y | 1 hour | N/A |
+| INT & AGI Luna Rock (can't be used with other luna rocks.) | INT & AGI +3% | Y | 1 hour | N/A |
+| MONSTER STONES | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Fire Stone Lv4 (only 1 stone can be equipped at a time) | Fire Res -9 Each attack has a 5% chance to reduce targets DEF -7% for 10 sec. | N | Permanent | N/A |
+| Ice Stone Lv4 (only 1 stone can be equipped at a time) | Ice Res +9 Each attack has a 5% chance to reduce targets ATK SPD & CAST SPD -10% for 10 sec. | N | Permanent | N/A |
+| Thunder Stone Lv4 (only 1 stone can be equipped at a time) | Lightning Res +9 Each attack has a 5% chance to increase your Move SPD +10% for 10 sec. | N | Permanent | N/A |
+| Nature Stone Lv4 (only 1 stone can be equipped at a time) | Nature Res +9 Each attack has a 5% chance to reduce targets Move SPD -10% for 10 sec. | N | Permanent | N/A |
+| Holy Stone Lv4 (only 1 stone can be equipped at a time) | Holy Res +9 Each attack has a 5% chance to increase your G-Heal & P-Heal -7% for 10 sec. | N | Permanent | N/A |
+| Dark Stone Lv4 (only 1 stone can be equipped at a time) | Dark Res +9 Each attack has a 5% chance to reduce targets M-ATK & P-ATK -7% for 10 sec. | N | Permanent | N/A |
+| Pierce Stone Lv4 (only 1 stone can be equipped at a time) | Pierce Res +9 Each attack has a 5% chance to reduce targets ACC -7% for 10 sec. | N | Permanent | N/A |
+| Slash Stone Lv4 (only 1 stone can be equipped at a time) | Slash Res +9 Each attack has a 5% chance to reduce targets M-CRIT & P-CRIT RATE -7% for 10 sec. | N | Permanent | N/A |
+| StrikeStone Lv4 (only 1 stone can be equipped at a time) | Strike Res +9 Each attack has a 5% chance to reduce targets Shield BLOCK -7% for 10 sec. | N | Permanent | N/A |
+| COUPLE BUFFS | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Love Makes Us Strong (can't be used with "Motiv. by Love") | Move SPD +10% | N | 30 Min. | N/A |
+| Love on the Battlefield (can't be used with "Unstop. Love") | STR & INT +10% | N | 30 Min. | N/A |
+| Lucky in Love (can't be used with "Spiritual Sustenance") | WIS & LCK +10% | N | 30 Min. | N/A |
+| Forever in Love (can't be used with Source of Love") | Max HP +5% | N | 30 Min. | N/A |
+| SPOUSE BUFFS | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Motivated by Love (can't be used with "Love makes us Stro.") | Move SPD +15% | N | 30 Min. | N/A |
+| Unstoppable Love (can't be used with "Love on the Battle.") | STR & INT +15% | N | 30 Min. | N/A |
+| Spiritual Sustenance (can't be used with "Lucky in Love") | WIS & LCK +15% | N | 30 Min. | N/A |
+| Source of Love (can't be used with "Forever in Love") | Max HP +15% | N | 30 Min. | N/A |
+| Extravagant Wedding Ring | All Stats +2% | N | 2 hours | N/A |
+| CONSUMABLES | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Enhanced Life Support Potion Lv7 | Max HP +1500 | N | 30 Min. | 10 Sec |
+| Enhanced Energy Support Potion Lv7 | Max MP +1500 | N | 30 Min. | 10 Sec |
+| Enhanced Energy Explosion Potion Lv7 | Max P-ATK +2300 | N | 30 Min. | 10 Sec |
+| Enhanced Mana Explosion Potion Lv7 | Max M-ATK +3500 | N | 30 Min. | 10 Sec |
+| Enhanced Complete Support Potion Lv7 | P-CRIT & M-CRIT Rate + 135 | N | 30 Min. | 10 Sec |
+| Enhanced Quick Recovery Potion Lv 7 | G-Healing & P-Healing +200 | N | 30 Min. | 10 Sec |
+| Enhanced Strength Potion Lv7 | STR +72 | N | 30 Min. | 10 Sec |
+| Enhanced Agility Potion Lv7 | AGI +72 | N | 30 Min. | 10 Sec |
+| Enhanced Intelligence Potion Lv7 | INT +72 | N | 30 Min. | 10 Sec |
+| Enhanced WIsdom Potion Lv7 | WIS +72 | N | 30 Min. | 10 Sec |
+| Enhanced Luck Potion Lv7 | LCK +72 | N | 30 Min. | 10 Sec |
+| Tank Potion Lv2 | DEF +5%, Block +5%, Malice +5% | N | 10 Min. | 10 Sec |
+| Healer Potion Lv2 | Cast SPD +5%, G-Healing +5%, M-CRIT Rate +5% | N | 10 Min. | 10 Sec |
+| War Potion Lv2 | P-ATK +5%, Crit Rate +5%, P-Crit DMG+5% | N | 10 Min. | 10 Sec |
+| Magician Lv2 | M-ATK +5%, M-Crit Rate +5%, M-Crit DMG+5% | N | 10 Min. | 10 Sec |
+| All Purpose Potion | All stats +16 | Y | 10 Min. | 10 Sec |
+| Anuran Energy Drink | WIS +52, Recovers +204 MP per sec | Y | N/A | 10 Sec |
+| Ultimate HP Potion Lv2 | All Stats +25, Recovers +612 HP per sec | Y | 10 Min. | 10 Sec |
+| Ultimate MP Potion Lv2 | All Stats +25, Recovers 612 MP per sec | Y | 10 Min. | 10 Sec |
+| Iron Skin Potion Lv2 | DMG Taken -5% | N | 10 Min. | 10 Sec |
+| Swiftness Potion Lv2 | Move SPD +5% | N | 10 Min. | 10 Sec |
+| Nature's Call Lv2 | STR, INT, WIS +5% | N | 10 Min. | 10 Sec |
+| Four Seasons Hibernation Potion | Falls asleep and recovers 10% HP and MP per sec | Y | 10 Min. | 10 Sec. |
+| Hidden Detection Potion | Reveal all hidden objects within 30 feet | N | N/A | N/A |
+| Frozen in Time Capsule | Get "Invincible" status, but cannot perform any actions | N | N/A | 10 Sec. |
+| Smoke Bomb | 50% chance to get "Invisible" status, exiting battle | Y | N/A | N/A |
+| Engineer Potion | All DMG causes combo hits, consuming 15% HP every 3 sec | Y | N/A | 5 Min. |
+| Mulled WIne | Max HP & MP +10% | N | 30 Min. | N/A |
+| Fire Resistance Potion Lv7 | Fire Resistance +20 | N | 3 Min. | 5 Min. |
+| Ice Resistance Potion Lv7 | Ice Resistance +20 | N | 3 Min. | 5 Min. |
+| Lightning Resistance Potion Lv7 | Lightning Resistance +20 | N | 3 Min. | 5 Min. |
+| Nature Resistance Potion Lv7 | Nature Resistance +20 | N | 3 Min. | 5 Min. |
+| Holy Resistance Potion Lv7 | Holy Resistance +20 | N | 3 Min. | 5 Min. |
+| Dark Resistance Potion Lv7 | Dark Resistance +20 | N | 3 Min. | 5 Min. |
+| Slash Resistance Potion Lv7 | Slash Resistance +20 | N | 3 Min. | 5 Min. |
+| Strike Resistance Potion Lv7 | Strike Resistance +20 | N | 3 Min. | 5 Min. |
+| Pierce Resistance Potion Lv7 | Pierce Resistance +20 | N | 3 Min. | 5 Min. |
+| Poisonous Powder | Body Size -60% | N | 5 Hours. | N/A |
+| Locus Life Leaf | Instantly revive on your death spot | N | N/A | 2 Min. |
+| OTHER ITEMS | EFFECTS: | EXPIRE ON D. | DURATION: | COOLDOWN: |
+| Alpaca Transformation Crystal | Transforms you into an Alpaca for 15 minutes (effect lost if attacked) | N/A | 15 Min. | 10 Sec. |
+| Shield of Valor | When attacked there's a 10% chance to remove 1 negative effect | N/A | N/A | N/A |
+| Amethyst Twin Blade | Shield Defence +5%, When block is activated, there is a 12% chance of increasing DEF +2643 and All Resistance +10 | N/A | 10 Sec. | N/A |
+| Duskblaze Guitar | When attacking or using skills, there's a 15% chance to recover 10% hp per sec for 5 sec to friendly targets within 10 feet | N/A | 5 Sec. | N/A |
+| Sacred Meolody | When attacking or using skills, there's a 10% chance to recover 10% hp per sec for 5 sec to friendly targets within 15 meters | N/A | 5 Sec. | N/A |
+| Basic Elysian Devil Soul | All DMG Received -2% | Y | 20 Min. | N/A |
+| Intermediate Elysian Devil Soul | All DMG Received -4% | Y | 20 Min. | N/A |
+| Advanced Elysian Devil Soul | All DMG Received -8% | Y | 20 Min. | N/A |
+| Guardian Boots | Move SPD+ 50% and All Resistances +5 | N/A | 10 Sec. | 1 Min, 30 Sec. |
+| Warrior Boots | Move SPD+ 50% and P-ATK +5% | N/A | 10 Sec. | 1 Min, 30 Sec. |
+| Wizard Boots | Move SPD+ 50% and M-ATK +5% | N/A | 10 Sec. | 1 Min, 30 Sec. |
+| Priest Boots | Move SPD+ 50% and WIS +5% | N/A | 10 Sec. | 1 Min, 30 Sec. |
+
+**AVEN FAME:**
+
+| FAME | ITEM | FAME REQ. | FAME | ITEM |  | FAME | ITEM | FAME REQ. |
+|---|---|---|---|---|---|---|---|---|
+| Nature Seekers | Pure Dew | 100 | Sage Stone | Cooling Potion | 1000.0 | Pyrowinds | White Flame | 1000 |
+|  | Dawn Dew | 1000 |  | Stabilizing Potion | 2000.0 |  | Red Lotus Flame | 2000 |
+|  | First Light Dew | 2000 |  | Acceleration Potion | 4000.0 |  | Black Hell Flame | 4000 |
+|  | Sun Dew | 4000 |  | Blended Potion | 6000.0 |  | Purgatory Purple Flame | 6000 |
+| Arthur Hammer | Ore Separator | 1000 | Crystal Camel Chamber of Commerce | Art Carver | 1000.0 | Amber Eye | Metamorphosis Mold | 1000 |
+|  | Metal Analyzer | 2000 |  | Magic Carver | 2000.0 |  | Soul Mold | 2000 |
+|  | Elemental Analyzer | 4000 |  | Amethyst Carver | 4000.0 |  | Star Pulverizer | 4000 |
+|  | Meteor Analyzer | 6000 |  | White Silver Carver | 6000.0 |  | Nano Cutter | 6000 |
+| Arcanum Association | Rose Stars | 1000 | Silver Needle | Devil-Sealing Hammer | 1000.0 | Ancestral Spirit Followers | Shaman's Prayer | 1000 |
+|  | Mystery Stars | 2000 |  | Deep Sea Stone | 2000.0 |  | Elder's Blessing | 2000 |
+|  | Fantasy Stars | 4000 |  | Perpetual Stove | 4000.0 |  | Prophet's Praise | 4000 |
+|  | Sunset Star | 6000 |  | Flame Catalysis Rock | 6000.0 |  | Sage Blessing | 6000 |
+

@@ -1,0 +1,1039 @@
+# ui_text_en.tsv — généré par tools/gen_ui_text.py ; ne pas éditer à la main
+# clé canonique (espaces Unicode → 1 espace, trim)	traduction anglaise
+*請勿洩露個人資訊	*Do not share personal information
+00：00：00	00:00:00
+0天	0 days
+0點聲望	0 Fame
+12月	Dec
+13天	13 days
+1職業積分加成清單	1Class Point Bonus List
+31日	31st
+3v3隊伍資訊	3v3 Team Info
+5分鐘	5 min
+999999點聲望	999999 Fame
+999╱999	999/999
+999／999	999/999
+99分99秒	99m 99s
+L09.煉金小屋	L09. Alchemy Hut
+L10 煉金小屋	L10 Alchemy Hut
+LV01～30副本討伐	LV01~30 Dungeon Hunt
+LV01～30副本討伐完成率：0.00％	LV01~30 Dungeon Hunt Completion: 0.00%
+NPC：	NPC: 
+String任務追蹤	Quest Tracker
+String推薦任務追蹤	Recommended Quest Tracker
+Test99分99秒	99m 99s
+Test使用道具	Use Item
+Test所需時間	Time Required
+Test所需費用	Required Cost
+Test有機會獲得：	Chance to receive:
+Test特殊虛寶	Special Item
+Test送出委託	Send Request
+Test關閉	Close
+XXX的個人商店	XXX's Personal Shop
+X副本傳送	Dungeon Teleport
+X廣播招募	Broadcast Recruitment
+X戰鬥狀態	Combat Status
+X提示資訊	Hint
+X搜尋	Search
+X殺人數	Kills
+X特殊寶物	Special Treasure
+X當日累積	Daily Total
+X當月累積	Monthly Total
+X確定	Confirm
+X積分	Points
+X舉辦宴會	Host Banquet
+X裝備成長	Gear Growth
+X設定招募	Recruit Settings
+X輔助寵物	Support Pet
+X輸出攻擊	Attack Output
+X進階寵物	Advanced Pet
+X開始進階	Start Advance
+X關閉	Close
+X點擊確定後，進入貪婪島開戰	Click OK to enter the Greed Island battle
+string一般場景分配	Normal Loot Rule
+string一般場景分配：	Normal Loot Rule:
+string互助清單	Assist List
+string他人加入時進行確認	Confirm when others join
+string副本擲骰	Dungeon Dice Roll
+string副本擲骰 ：	Dungeon Dice Roll:
+string創建隊伍	Create Party
+string加入隊伍	Join Party
+string尋找城鎮	Find Town
+string左鍵點選副本 ( 2 / 4 )	Left-click a dungeon   ( 2 / 4 )
+string戰士	Warrior
+string戰士專研高深的戰術技巧，並穿著厚重的鎧甲，優秀的近戰、防禦技巧讓戰士適合衝鋒、防守角色。活耀於各種場合。	Warriors master advanced tactics and wear heavy armor; their melee and defensive skills suit vanguard roles in any situation.
+string找玩家	Find Player
+string找隊伍	Find Party
+string服裝預覽	Outfit Preview
+string申請加入	Apply to Join
+string登錄到組隊清單	Register to Party List
+string白色品質以上的裝備	Gear of white quality or better
+string綠色品質以上的裝備	Gear of green quality or better
+string自由制	Free-for-all
+string英雄特質	Hero Traits
+string藍色品質以上的裝備	Gear of blue quality or better
+string邀請組隊	Invite to Party
+string開啟追蹤	Enable Tracking
+string開始尋找	Start Search
+string開始搜尋	Start Search
+string關閉	Close
+string隊伍目的	Party Goal
+string隊伍設定	Party Settings
+string隨機制	Random
+string離開隊伍	Leave Party
+string魔法師	Mage
+x0：00：0	0:00:0
+x100小時59分	100h 59m
+x21:00 開始	Starts at 21:00
+x24小時27分	24h 27m
+x3v3炎鷹競技場	3v3 Firehawk Arena
+x99／99	99/99
+xL01.阿卡貝拉友愛之鎮	L01. Arcabella Friendship Town
+xLV.30魔法的小喜馬拉雅犬	LV.30 Magic Himalayan Pup
+xȺѯĨʫ	Sample Text
+xɥ	Sample
+xϠďۡɺ	Sample Text
+xӝɷڙع	Sample Text
+xڙعƃʭ	Sample Text
+x一二三四五六七八九十	12345678910
+x一般共用技	Reg. Skills
+x一般頻道	General Chnl
+x世界頻道	World Chnl
+x主裝備	Equipment
+x主要原料	Main Material
+x主要裝備	Target Equipment
+x乘以二	Multiplied by 2
+x互助清單	Peer List
+x互助頻道	Peer Chnl
+x人物契約收藏冊	Character Contract Collection
+x介面快取	Fastload UI
+x他人加入不須詢問	Free to join
+x休息0	Rest 0
+x住戶名單	Residential Listings
+x使用	Use
+x使用這個命運圖捲?	Use this Destiny Scroll?
+x個人排名	Personal Rank
+x個人擊殺	Personal Kills
+x個人殺人	Personal Kills
+x傳奇網路	X-Legend
+x傷害承擔	Damage Taken
+x僅顯示「已獲得稱號」	Show only obtained titles
+x僅顯示尚未攻略副本	Show uncleared dungeons only
+x僅顯示適合等級	Qualified LV Only
+x先天特性	Characteristics
+x全啟/全關	All On/All Off
+x公式內容	Formula Contents
+x公式總覽	Formula
+x公會01	Guild 01
+x公會名稱	Guild Name
+x公會排名	Guild Rank
+x公會歷史	Guild History
+x公會淘汰賽場地	Guild Elimination Arena
+x冠軍公會	Champion:
+x刀槍砲劍	Sample Weapons
+x分子複製	Molecular Copy
+x分析	Analyze
+x剩餘 70 知識點數	70 Knowledge Points left
+x剩餘 80060 金 124 銀可用	80060g 124s left
+x剩餘 96865 點JP可用	96865 JP left
+x剩餘次數 : 9	Tries left: 9
+x副本選擇：	Select:
+x功能選單	Function Selection
+x加一或減一	Plus 1 or Minus 1
+x加三	Plus 3
+x加入隊伍	Join
+x加成清單	CE List
+x動作鈕	Action Button
+x區域頻道	Region Chnl
+x南方舊曠口【一般模式】LV7 (1/2)	South Old Mine [Normal] LV7 (1/2)
+x原料放置區	Main Material
+x反向排列	Reverse Order
+x取消	Cancel
+x取消招募	Cancel
+x受到傷害	DMG Taken
+x召喚作戰 / 取消作戰	Summon / Dismiss
+x可以接受工作等級99以下的委託	Can accept requests up to job lv99
+x右瞳色	Right Eye Color
+x命中	ACC
+x命運之路	The Path of Destiny
+x命運條	Destiny Bar
+x商城封印	Mall Seal
+x啟動	Start
+x啟源	Origin
+x在地圖上使用滑鼠滾輪可以縮放地圖大小，按住左鍵可以移動地圖。	Use the mouse wheel to zoom the map; hold left click to move it.
+x坦克	Tank
+x城鎮事件	Town Event
+x城鎮命令	Town Commands
+x城鎮成就積分	Town Achievement Points
+x城鎮搜尋	Towns
+x城鎮清單	Town List
+x城鎮營運	Town Ops
+x城鎮頻道	Town Channel
+x城鎮類型：	Town Type:
+x場景選單	Scene Selection List
+x外框	Frame
+x天空蔚藍風	Heavenly Blue Style
+x奇特度需求	Rarity Req.
+x奇特積分	Rarity Score
+x威望：	Prestige:
+x存取/套用	Load/Apply
+x定位需求	Orientation
+x宴會剩餘時間	Time Remaining
+x宴會效果清單	Banquet Effects
+x密語	Whisper
+x密語頻道	Whisper Chnl
+x寵物	Pet
+x寵物清單	Pet List
+x寵物裝備	Pet Gear
+x寵物資訊	Pet: Info and Skills
+x寵物餐盒	Pet Lunch Box
+x寶箱?¥٣＿999000	Chest_ 999000
+x寶箱錢幣：9999000	Chest Coins: 9999000
+x封印	Unbind
+x尊貴鐵灰風	Noble Irongray Style
+x尋求組隊	Search Party
+x對戰人數	# of Participants
+x小屋倉庫	House Storage
+x尚未獲得知識，將於此職業等級達到 2 級時獲得第一個知識點數	Knowledge point not obtained. To get the first knowledge point, this Class must reach Level 2.
+x尚未獲得證照，將於此職業等級達到 10 級時獲得第一個證照	License not obtained. To get the first license, this Class must reach Level 10.
+x居住地	Residence
+x左瞳色	Left Eye Color
+x已投入 99 知識點數	99 Knowledge Points spent
+x已開啟	Opened
+x已�9��點數	9 Points Spent
+x布衣	Cloth Armor
+x布諾拉克方塊x	Bunorac Cube
+x幻惑迷紫風	Visionary Violet Style
+x建物收藏冊	Building Collection
+x怪物討伐積分	Monster Hunt Points
+x恢復	Recovery
+x您於此排行榜上的名次為	Your rank on this leaderboard:
+x情侶頻道	Couple's Chnl
+x成品	Finished Item
+x成品預覽區	Finished Item Preview
+x成就：2點	Achievement: 2 pts
+x成立遠征隊	Form Expedition
+x戰場剩餘時間	Battle ends in:
+x戰場排名	Battlefield Ranking
+x戰場頻道	Battlefield Chnl
+x戰鬥2	Combat 2
+x戰鬥技能	Battle
+x所屬公會：一二三四五六七八	Guild: 12345678
+x承租	Rent Room
+x招募訊息	Recruit Message
+x招募設定	Recruit Setting
+x招募資訊	Recruitment Info
+x招待券	Invitation
+x拜訪	Visit
+x排行榜	Rankings
+x排行表列表	Ranking List
+x探險值	Adventure Exploration
+x推薦任務	Recommended Quest
+x搜尋	Search
+x搜尋住戶	Search for resident
+x搜尋條件	Filter
+x擊殺數	Kill Count:
+x支付租金	Pay Rent
+x收藏	Archive
+x收藏積分	Collection
+x改名	Rename
+x攻擊/魔力	ATK/M-ATK
+x攻擊屬性	Offense Stats
+x攻速	ATK SPD 
+x放棄寵物	Abandon Pet
+x數量：10/20	Count: 10/20
+x新布蘭德方塊	New Brandt Cube
+x新布蘭德方塊詳細資料	New Brandt Cube Details
+x方塊功能名稱	Cube Function Name
+x施展祈禱 / 取消祈禱	Pray / Cancel Prayer
+x星鑽煉化	Star Diamond Refining
+x時空裂縫	Time-Space Rift
+x時空裂縫世界地圖	Time-Space Rift World Map
+x時間倒數	Countdown
+x時間表	Schedule
+x更換服裝	Set Outfit
+x更新時間 14：00	Updated at 14:00
+x最高通關層數	Highest Floor Cleared
+x會員	Member
+x會員搜尋	Search
+x會員：	Member:
+x會長：一二三四五六七巴	Guild Master: 12345678
+x未開放	Private
+x本日挑戰次數	Daily Attempts
+x本週人氣	Popularity
+x本週記錄層數	This Week's Floor
+x查看	View
+x核心數量	Number of Cores:
+x核心溫度	Core Temperature:
+x條件1	Condition 1
+x條件2	Condition 2
+x條件3	Condition 3
+x榮譽之星	Honor Stars
+x機率%	Chance %
+x權限設定	Edit
+x次	time(s)
+x殺人數：	Kills:
+x每日登入領獎說明	Information
+x水晶十字勳章	Crystal Cross Medal
+x水晶煉化	Crystal Refining
+x治療者	Healer
+x法色	Highlight Color
+x洗鍊	Reshuffle
+x洗鍊成果	Reshuffle Results
+x活力值：100/100	Energy: 100/100
+x派大星	Patrick
+x海綿寶寶	SpongeBob
+x消耗材料	Material
+x消耗裝備	Materials
+x清新翠綠風	Verdant Green Style
+x清空	Clear
+x清空方塊	Clear
+x清除	Clear
+x減四	Minus 4
+x火焰	Fire
+x灰岩山時空戰場	Limestone Mtn. Battlefield
+x無收益	Zero earning
+x無組隊	Non-partied
+x煉金	Alchemy
+x營業稅制	Set Taxes
+x營業稅率：	Sales Tax:
+x爆擊/魔爆	Crit/M.Crit
+x物品名稱	Item Name
+x特殊虛寶	Charm
+x狀態訊息	Status Info
+x獲勝獎勵：	Victory Reward:
+x獲得物品	Item Acquired
+x獲得經驗	EXP Acquired
+x獲得聲望	Fame Acquired
+x獲得金錢	Coin Acquired
+x玩家姓名	Player Name
+x申請加入	Apply to Join
+x異界塔挑戰紀錄	Sky Tower Record
+x當前等級：%s1級	Current level: %s1
+x當周表現	This Week's Performance
+x當月英雄公會榜 第99名	This Month's Hero Guild Rank  99th
+x當月開拓公會榜 第99名	This Month's Pioneer Guild Rank  99th
+x登錄組隊需求	Show in search
+x百大冒險者	Top 100 Adventurers
+x皮甲	Leather Armor
+x目前排名	Current Rank
+x目前沒有承租房屋	No house currently rented
+x目前狀態：	Current Status:
+x目前隊伍人數：1	Current party size: 1
+x瞳色	Eyes
+x確定	Confirm
+x確認	Confirm
+x礦場	Mine
+x祈禱1	Prayer 1
+x祈禱技能	Pray
+x祭壇	Altar
+x租金費用	Rent Cost
+x程式記憶體	Process Memory
+x積分：	Points:
+x第10天	Day 10
+x第11天	Day 11
+x第12天	Day 12
+x第13天	Day 13
+x第14天	Day 14
+x第15天	Day 15
+x第16天	Day 16
+x第17天	Day 17
+x第18天	Day 18
+x第19天	Day 19
+x第1天	Day 1
+x第20天	Day 20
+x第21天	Day 21
+x第22天	Day 22
+x第23天	Day 23
+x第24天	Day 24
+x第25天	Day 25
+x第26天	Day 26
+x第27天	Day 27
+x第28天	Day 28
+x第2天	Day 2
+x第3天	Day 3
+x第4天	Day 4
+x第5天	Day 5
+x第6天	Day 6
+x第7天	Day 7
+x第999名	Rank 999
+x第9天	Day 9
+x等於五	Equals 5
+x等級上限	Max Level
+x等級下限	Min Level
+x粉漾紅彩風	Rippling Ruby Style
+x精品	Result
+x精工	精工
+x精工需求	Required Materials
+x系統記憶體	System Memory
+x系統頻道	System Channel
+x紅橙黃	Red Orange Yellow
+x紅軍	Red Team
+x紅軍公會	Red Guild
+x紅軍殺人	Red Team Kills
+x紅軍水晶數	Red Team Crystals
+x累積在線時間：	Cumulative online time:
+x累積離線時間：	Cumulative offline time:
+x綁定封印	Bind Seal
+x總成就	Total Achievement
+x繳交	Pay
+x繳交內容	Payment Details
+x繳交列表	Payment List
+x繳交物品	Turn In Item
+x繼續	Continue
+x聖境傳說	Eden Eternal
+x聖境傳說要八個字	Eden Eternal Eight Words
+x聲望：	Fame:
+x職務名稱	Rank Name
+x職務權限	Rank Privileges
+x職務設定	Edit
+x職業加成	Class Stat Bonus
+x職業知識	Class Talent Tree
+x職業能力加成	Class Ability Bonus
+x背景載入	Background Loading
+x膚色	Skin
+x臉孔	Face
+x自宅狀況	Home Status
+x舉辦時間	Banquet Time
+x舉辦費用	Banquet Fee
+x舒適度需求	Comfort Req.
+x舒適積分	Comfort Score
+x若在有失敗加成下做其他操作時，會遺失該加成效果	Performing other actions while a fail bonus is active will lose it
+x華麗度需求	Luxury Req.
+x華麗積分	Luxury Score
+x藍軍	Blue Team
+x藍軍公會	Blue Guild
+x藍軍殺人數	Blue Team Kills
+x藍軍水晶數	Blue Team Crystals
+x虛寶	Clover
+x裂縫狀態	Rift Status
+x裂縫資訊	Rift Information
+x裂縫開啟條件	Rift Opening Conditions
+x製作	Craft
+x製作費用	Fee:
+x設定權限	Set Authority
+x試衣間	Preview
+x詳細資料類型	Detail Type
+x請左鍵點選至多4個欲參加的副本	Left-click up to 4 dungeons
+x請放置舉辦宴會的功能物品	Place the banquet item
+x請輸入密保卡號：	Enter security card number:
+x請選擇副本中的定位	Choose your role in the dungeon
+x請選擇副本中要扮演的腳色定位	Choose your dungeon role
+x謠言頻道	Buzz Chnl
+x證照組合（目前可裝備的證照數：２）	Certificate Combo (equippable certs: 2)
+x證照組合（目前可裝備的證照數：７）	Certificate Combo (equippable certs: 7)
+x貨幣資訊	Currency Info
+x貪婪島剩餘時間	Greed Island Time Left
+x賽程表	Schedule
+x軟式分子	Soften Molecular
+x輸出者	DPS
+x轉化	Infusion
+x轉化預覽	Infusion Preview
+x農場	Farm
+x造成傷害	DMG Dealt
+x進入	Enter
+x進入佇列	Enter Queue 
+x進入房間	Enter Room
+x進入裂縫	Enter Rift
+x進行	Execute
+x進階	Advanced
+x過濾已經進行的爭奪戰	Omit wars in progress
+x選擇場景	Scene:
+x選擇定位	Orientation Selection
+x選擇要找的隊友	Choose teammates to find
+x選擇輔助寵物	Select Pet Assistant
+x邀請隊員	Recruit Players
+x配方	Recipe
+x重置	Reset
+x重骰一次	Re-roll Dice
+x金錢	Money
+x鎧甲	Plate Armor
+x鑄造	Forge
+x開啟	Open
+x開啟網頁	Open Web Page
+x開始招募	Recruit!
+x關閉	Close
+x防沉迷系統時間	Addiction Prevention Program hours
+x阿卡貝拉友愛之鎮	Arcabella Friendship Town
+x陣營排行	Team Ranking
+x隊伍目的	Objective
+x隊伍記錄層數	Party Record Floor
+x隊伍資訊	Party Info
+x隊伍需求	Details
+x隊伍頻道	Party Chnl
+x隊員清單	Members
+x隊長名稱：一二三四五六七八	Leader: 12345678
+x隊長資訊	Exped. Leader Info
+x離開戰場	Leave
+x需求材料	Required Materials
+x需求等級	Req. Lv
+x需求裝備:	Required Equipment:
+x領先公會	Leading Guild
+x領取	Collect
+x領地戰	Territory War
+x領地爭奪戰時程表	Territory War Schedule
+x顯卡溫度	Graphics Card Temperature:
+x顯示記憶體	Video Memory
+x餵食	Feed
+x髮型	Hair
+x魔方力量	Cube Power
+x魔方能量	Cube Energy
+x魔池	Mana Pool
+x點數操作列	Points Bar
+x�業��	Sample Text
+※每周例行維護時將清空煉金累積值	※Alchemy progress resets at weekly maintenance
+※若強化失敗裝備將會消失	*Failure will destroy item
+※若強化失敗裝備將會消失若強化失敗裝備將會消	※Item will be destroyed if fortification fails
+オークション価格	Auction Price
+キアラクタ-	Character
+一	1
+一二三四	1234
+一二三四五	12345
+一二三四五六	123456
+一二三四五六七	1234567
+一二三四五六七八	12345678
+一二三四五六七八九十	12345678910
+一二三四五六七八九十一二三四	123456789101234
+一二三四五六七八九十一二三四五六	12345678910123456
+一二三四五六七八九十一二三四五六七八九十	1234567891012345678910
+一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十	12345678910123456789101234567891012345678910
+一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十 一二三四五六七八九十一二三四五六七八九十 一二三四五六七八九十一二三四五六七八九十	Sample Text Sample Text Sample Text
+一二三四五六七八九十一二三四五六七八九時一二三四五六七八九十	1234567891012345678910h12345678910
+一二三四五六七八九十對你說	12345678910 says to you
+一二三四五六七八九哈	123456789 ha
+一二三四五六七八對你施展復活技能	12345678 casts Revive on you
+一份倉庫租約可租用一個月	Select Slot
+一大堆小擲斧	Pile of Throwing Axes
+一般商人	General Merchant
+一般場景分配	Loot / EXP Distribution
+一般暫代	General
+一階加成 3% 攻擊 999999	Tier 1 Bonus 3% Attack 999999
+上限	Upper Limit
+下限	Lower Limit
+不開放個人名片	Profile Locked
+世界地圖	World Map
+世界暫代	World
+丟棄	Discard
+中國一定強對不隊	Sample Team
+主手武器耐久度低於	If weapon Dura <
+二倍	2x
+互助暫代	Assist
+交往天數	Length
+交往日期	Anniv.
+人口：300/300，300位線上	Population: 300/300, 300 online
+人物	Character
+人物契約收藏冊	Character Contract Collection
+人物顯示	Char Draw
+人際關係	Friends
+他人加入不須詢問	Free to join
+任務	Quest
+任務一	Quest 1
+任務三	Quest 3
+任務二	Quest 2
+任務五	Quest 5
+任務四	Quest 4
+任務回報	Quest NPC
+任務承接	New Quest
+伊二三四五伊二三四五伊二三四五伊二三四五伊二三四五	12345 12345 12345 12345 12345
+伽瑪校正	Gamma Adjustment
+使用傳送水晶	Use Teleport Crystal
+使用武器	Use item
+使用道具	Use Item
+依照職業系別排序	Sort by class
+修理	Repr
+修理裝備	Repair Equipment
+個人	Individual
+個人房間	Private Room
+倒數計時...	Countdown...
+傳送到	Teleport to
+傳送口	Portal
+傳送石	Teleport Stone
+傳送點	Portal 
+僅顯示同分流	My Channel
+僅顯示同場景	My Location
+僅顯示未完成任務	Only Display Uncompleted Quest
+儲 值	Top Up
+儲存	Save
+先天特性	Characteristics
+入場次數	Tries
+內容	Content
+全部	All
+全部收藏	Archive All
+全部靜音	Mute
+全部領取	Collect All
+公會	Guild
+公會任務-副	Guild Task - Sub
+公會任務-副本	Guild Benefits
+公會任務-野	Guild Task - Field
+公會任務-野外	Guild Quests
+公會升級	Upgrade
+公會排名	Guild Rank
+公會清單	Guild List
+公會留言板	Guild Message Board
+共用技能爹斯	Shared Skill
+其他	Other
+冒險日誌	Adventure Log
+分享任務	Share Quest
+刪除	Delete
+刺殺系	Assassination
+前景張數	Max FPS
+剩餘抽獎次數： 次	Draws left:
+剩餘時間：59秒	Time left: 59s
+剩餘空間 100篇	Space left: 100
+剩餘空間 99 篇	Space left: 99
+副手	Off-Hand
+副本擲骰	Roll dice for Loot if:
+創鎮資格：	Town Charter Eligibility:
+加入好友	Add
+加入封鎖	Block
+加入隊伍	Join
+加成清單	CE List
+勝利宣言 :	Victory Declaration :
+區域地圖	Region Map
+區域暫代	Zone
+參賽者資訊	Contestant Info
+反鋸齒	Anti-aliasing
+取消	Cancel
+受到暫代	Received
+只顯示商城寶物	Item Mall Treasure Only
+只顯示已收藏的寶物	Show collected treasures only
+只顯示遊戲內寶物	Show in-game treasures only
+可以接受工作等級99以下的委託	Can accept requests up to job lv99
+可獲得證照	Class Certificates
+品質	Quality
+品質：	Quality:
+哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈	Sample Text
+商 品	Items
+商品瀏覽	Browse Items
+啟動	Start
+善惡	Alignment
+喜惡設定	Edit L/H
+嚇人炸彈試作品	Scary Bomb Prototype
+四倍	4x
+回到城鎮	Return to Town
+回復	Recover
+國國國	Sample Text
+國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國	Sample Text
+圖例設置	Icon Setting
+圖標顯示	Map Display
+團隊總成績	Team Total Score
+團隊評價副本 01	Team Rating Dungeon 01
+團隊陣亡數上限：	Team Death Limit:
+在線搜尋	Search
+地區	Region
+地面雜物	Groundcover 
+坐騎商人	Mount Merchant
+城市功能	City Features
+城鎮	Town
+城鎮傳送陣	Town Portal
+城鎮公告：	Town Notice:
+城鎮列表	Town List
+城鎮收回條件：	City Recall Requirement 
+城鎮暫代	Town
+基本屬性	Core Stats
+場景材質	Textures
+場景視距	Field
+外框	Frame
+夜晚	Night
+大陸地圖	Mainland
+天上天下唯我獨尊	Sample Title
+失落的糯米聚合體	Lost Sticky Blob
+女	Female
+好友	Friend
+好友名單	Friends List
+好評：	Rating:
+婚禮教堂排程	Wedding Chapel Schedule
+完成	Finished
+完結	Finish
+寄件人	From
+寄送人	Sender
+密碼	Password
+密語暫代	Whisper
+寵物	Pet
+寶盒結果	Box Result
+寶箱＿ x999000	Chest_ x999000
+寶翀	Chest
+封鎖名單	Block List
+專業	Class
+對著收藏品按右鍵即可取出收藏品	Right-click to withdraw
+就近復活	Revive Here
+巨蟹	CANC
+已熟練	Mastered
+布衣	Cloth Armor
+布衣防具	Cloth Armor Set
+幻化	Transform
+幻化結果	Result
+序號	Serial No.
+座標：	Coord: 
+建物收藏冊	Building Collection
+建鎮申請書	Town Charter Application
+強制?ܩ?	Force
+強化捲軸	Fortify Scroll
+強忀	Fortify
+彈出對話框	Pop-up Dialog
+復活	Revive 
+復活點	Revival Point
+心情	Mood
+性別	Sex
+怪物：	Monster: 
+您還有2次機會	You have 2 chances left
+情侶技能一	Couple Skill 1
+情侶暫代	Couple
+情侶資訊	Couple Info
+愛情硬幣	Love Coin
+成功機率 100.00％	Success Rate 100.00%
+成功機率：	Success Rate:
+成員名單	User
+成就報告	Progress
+我同意留言規章	I agree to the message rules
+我想對他說	I want to tell them
+我要留言	Leave a Message
+戰場暫代	Battlefield
+戰士	Warrior
+戰鬥報告	Battle Report
+戰鬥擊殺積分：	Kill Points:
+戰鬥表現	Battle Results
+所屬公會	Guild
+所需時間	Time
+所需費用	Cost
+找尋城鎮	Find Town
+承接任務 25/25 件	Quests 25/25
+抗性	Resistance
+抽重消失機率90%	90% chance of losing on redraw
+拍賣中的物品	Merchandise
+拍賣價格	Auction Price
+拍賣場	Auction
+招募新人	Open Guild
+招攬人員	Recruit
+挑戰副本	Arena Dungeon
+挑戰進行時間	Trial Time
+捐獻金錢	Donate
+捲軸	Scroll
+排行榜	Rankings
+排行資訊	Ranking Info
+推薦任務	Recommended Quest
+推薦任務列表	Recommended Quest Listing
+提出分手	Breakup
+換裝	Change Outfit
+揪愛歐北造	Sample Text
+搜尋	Search
+搜尋條件	Filter
+搜尋結果	Search Results
+搜尋結果（共有15隊）	Search Results (15 parties)
+搜尋項目	Search Items
+搜尋：	Search:
+擊殺怪物數量	Monsters Killed
+擊殺怪物：	Monsters Killed:
+擊殺王怪數量	Bosses Killed
+擊殺王怪：	Bosses Killed:
+擊殺精英數量	Elites Killed
+擊殺精英：	Elites Killed:
+擺攤上架	Add
+收尋列表	Search List
+收藏清單	Archive List
+收藏綠：0.0％	Collected: 0.0%
+收藏設定	Archive Save
+攻擊速度	Attack Speed
+放入裝備	Item
+放棄任務	Abandon Quest
+放置繼承能力的裝備	Place gear with inheritable ability
+放置轉出能力的裝備	Place Transfer-Out Gear
+新手引導	Beginner Guide
+早晨	Morning
+星座	Zodiac Sign
+是否同意組隊申請：	Do you wish to apply to join this party?
+是否領取？	Claim?
+普通	Low
+暫代傷害	Damage
+暫代物品	Item
+暫代經驗	EXP
+暫代聲望	Fame
+暫代訊息	Temporary Message
+暫代金錢	Money
+暫代頻道	Channel
+替換	Rplc
+最佳化	Optimize
+最佳團隊積分	Best Team Score
+最佳通關時間	Best Clear Time
+最佳通關評價	Best Clear Rating
+會員	Member
+會員清單	Members
+會長三四五六七八九十	Guild Master 345678910
+會長：一二三四五六七八九十	Guild Master: 12345678910
+有機會獲得下列道具：	May obtain 1 item:
+有機會獲得：	May acquire: 
+未接任務清單(主線)	Available Quests (Main)
+本月表現	This Month's Performance
+本週積分	Weekly Score
+榮譽之心	Heart of Honor
+標題	Title
+標題：	Title:
+模型邊框	Outline
+橘色	Orange
+檔案下載中， 如想要更順暢遊戲 請重新起動後 完整更新 遊戲，再進行遊戲。或待遊戲下載完後即可進行遊戲。	Downloading files. For smoother play, restart after the update finishes, or wait for the download to complete.
+此染劑有機會染成以下顏色	This dye may produce the following colors
+武器商人	Weapon Merchant
+死零法師哈哈	Necromancer Sample
+死靈法師	Warlock
+死靈法師職業加成 1 階	Necromancer Class Bonus Stage 1
+毀損：100 / 999	Damage: 100 / 999
+每日聖物效果：未領取	Daily Artifact's Blessings: Not Taken
+每日領地獎勵：未領取	Daily Territory Reward: Not Taken
+每週紅利	Bonus
+泛光效果	Glow FX
+活動	Event
+活動列表	Events
+活動日期：2011/99/99~2011/99/99	Event dates: 2011/99/99~2011/99/99
+活動背景	Event Background
+活動說明	Event Description
+測試	Test
+測試徽章	Test Insignia
+滑鼠速度	Mouse
+滑鼠速度bar	Mouse speed bar
+灰岩山 LV1~8	Limestone Mtn. LV1~8
+無隊伍	No Party
+營業稅率：	Sales Tax:
+物品上架	Add Item to Shelf
+物品下架	Remove Item
+物品清單	Item List
+物資需求	Required Supplies
+特效人數	Max FX
+特殊	Special
+特殊挑戰項目	Special Trials
+特殊虛寶	Charm
+狀態暫代	Status
+獲得暫代	Obtained
+獲得物品後將自動榜定	Item will be bound automatically once obtained
+玩家姓名	Player Name
+生命	HP
+生日	Height
+生涯成就 : 99999999	Lifetime Achievements : 99999999
+生涯成就報告	Lifetime Achievement Report
+留言板	Message Board
+留言者	Poster
+留言規章	Message Rules
+畫面效果	Special FX
+疲勞 2	Fatigue 2
+發表日期	Post Date
+發表留言	Post Msg
+白天	Day
+白色	White
+白色品質裝備	White quality gear
+白裝	White gear
+白裝三四五六妻	White gear sample
+皮甲	Leather Armor
+皮甲防具	Light Armor Set
+目前排名	Current Rank
+目前擁有	Current:
+目前玩家積分	Current Player Points
+目前職業	Current Class
+直接復活	Revive
+直接附活	Attach
+眩光	Glare
+確定	Confirm
+確定領取	Confirm Claim
+確認	Confirm
+確�	OK
+社交	Social
+禮卷商城	Gift Voucher Mall
+禮卷：999999	Vouchers: 999999
+積分加成	Point Bonus
+積分結算	Calculate Points
+積分賽	Score Match
+穫得2000成就	Earned 2000 achievement points
+穫得2000成就擊敗英國炸魚一二三四五六七八九十	Earned 2000 achievement: defeated British Fish 12345678910
+第8天	Day 8
+第一格	Slot 1
+第一部位	Part 1
+第三位	3rd
+第三格	Slot 3
+第二位	2nd
+第二格	Slot 2
+第四位	4th
+第四格	Slot 4
+等級	Lv
+等級上限	Max Level
+等級下限	Min Level
+等級篩選	Level Choice
+等級限制	Level Restriction
+等級：	Level:
+管翀	Manage
+篩選條件	Filter
+簡介	Introduction
+系統	System
+系統暫代	System
+紅利商城	Bonus Mall
+紅隊	Red Team
+紅隊資訊	Red Team Information
+紫色	Purple
+細緻	High
+組隊申請	Party Sign Up
+結束遊戲	Exit Game
+綠色	Green
+綠色品質裝備	Green quality gear
+綠裝	Green gear
+綠裝三四五六妻	Green gear sample
+維修費	Repair Cost
+編輯公告	Edit Msg
+編輯名片	Edit Profile
+編輯徽章	Edit Insignia
+編輯情話	Edit Msg
+編輯簡介	Edit Intro
+聖物祭祀區	Sac. Obj.
+聲望：999999/999999	Fame: 999999/999999
+職業	Class
+職業介面	Class Interface
+職業加成	Class Stat Bonus
+職業專屬技能	Class Skills
+職業專屬技能「」	Class-Exclusive Skill 「」
+職業專屬技能【】	Class-Exclusive Skill 【】
+職業技能爹死	Class Skills
+職業特色	Class Characteristics
+職業積分好加成不加嗎	Class Point Bonus
+職業等級 75 級	Class Level 75
+職業總積分99999分	Total Class Points 99999
+職業總積分99999分職業總積分99999分	Total Class Points 99999Total Class Points 99999
+職等	Class
+背光效果	Backlight Effect
+背包	Backpack
+背包管理	Backpack Manager
+背景	Background
+背景張數	Background
+能量	Energy
+自動尋路	Auto-Route
+自動組隊	Auto Party
+自由制	Free Mode
+良好	Mid
+落敗感言 :	Defeat Comment :
+藍色	Blue
+藍色品質裝備	Blue quality gear
+藍隊	Blue Team
+藍隊資訊	Blue Team Information
+藥劑	Potion
+虛寶	Clover
+虛寶復活	Revival Item
+血型	Specialty
+裝備	Gear
+裝備成長	Gear Upgrade
+視窗模式	Windowed Mode
+角色名稱	Name
+角色材質	Models
+解散公會	Disband
+解析度	Window
+訊息暫代	Message
+設 定 感 言	Set Message
+設定	Settings
+設定宣言	Set Quote
+設定條件	Recruit
+設置徽章	Set Insignia
+評價副本挑戰紀錄	Rated Dungeon Challenge Record
+調整主畫面UI大小	Adjust main UI size
+調整字體大小	Font Size
+調整透明度	Opacity
+調整頻道字體大小	Chat Font Size
+請輸入與圖片相同文字	Enter above characters.
+請選擇欲改變的英雄特質	Please select a new Heroic Trait.
+請選擇獎勵	Select Reward
+請選擇移除哪一位共乘者	Select which rider to remove
+謠言暫代	Rumor
+貨幣	Coins
+販售	Sell
+貪婪	Greed
+買 回	Buy Back
+資金：	Funding: 
+購買	Buy
+超級爽的遭遇 exp+5%，持續30分鐘。	Super Encounter                 EXP +5% for 30 min.
+跳過引導	Skip Guide
+轉化額外獎勵	Convert Bonus Reward
+轉換職業	Transform!
+轉移能力：	Transfer Ability:
+轉移虛寶：	Transfer Item:
+近戰防禦系	Defense
+退件	Return
+退出公會	Leave Guild
+這事第一位共乘者	This is the first rider
+通訊錄	Contacts
+通關時間總計	Total Clear Time
+造成暫代	Caused
+進入副本	Enter Dungeon
+進入異界塔	Enter
+進入領地	Enter Territory
+進行中	In Progress
+進行轉移	Transfer
+遊戲說明	Game Guide
+過濾不組隊玩家	Omit 
+過濾封鎖隊員	No blocked chars.
+過濾無名片玩家	Omit anon.
+道具	Item
+選擇場景：	Select Scene:
+選擇建鎮地區：	Select Town Location:
+遺忘	Forget
+郵資	Fee
+重抽	Redraw
+重生點	Respawn Point
+重置x	Reset
+金色	Gold
+鎧甲	Plate Armor
+鎧甲防具	Heavy Armor Set
+鎮民稅率：100％	Resident Tax: 100%
+鎮長：一二三四五六七八九十	Mayor: 12345678910
+鑑定成功！物品重新進行了能力組合。	Assessment was a success! The item has a new skill set!
+開啟招募	Open Recruitment
+開始搜尋	Search
+開始擺攤	Begin Sale
+開怪獨享制	Monster-Taunt
+開放追蹤	Enable Tracking
+關 閉	Close
+關閉	Close
+防具商人	Armor Merchant
+阿卡貝拉友愛之鎮	Arcabella Friendship Town
+阿卡貝拉友愛之鎮(搜尋到 5 位)	Arcabella Friendship Town (5 found)
+陰影品質	Shadows 
+隊伍	Party
+隊伍名稱	Party Name
+隊伍招募設定	Team Recruitment Settings
+隊伍搜尋	Find Party
+隊伍明細（3/5）	Party Details (3/5)
+隊伍暫代	Party
+隊伍清單	Team List
+隊伍目的	Objective
+隊伍積分	Party Points
+隊伍賽制	Party Mode
+隊伍需求	Details
+隊員	Members
+隊員招募	Member Recruitment
+隊員招募設定	Recruitment settings
+隊員清單	Members
+隊長	Party Leader
+隨機制	Random Mode
+離開	Exit
+離開戰場	Leave
+離開戰鬥	Leave Combat
+需求	Need
+需要	Required
+音效音量	SFX
+音樂音量	Music
+預設值	Default
+領取	Collect
+領取虛寶	Acquire Items
+領地戰擊殺數	Territory War Kill Count
+領悟	Learn
+額外抽獎次數： 次	Extra draws:
+顏色校正參數	Color Calibration
+願意參加	Willing to Join
+顯示個人任務	Display Personal Quest
+顯示團體任務	Display Party Quest
+顯示所有隊員x	Show All Members
+顯示適合等級	Qualified LV Only
+顯示離線鎮民	Show Offline Residents
+餓死抬頭	Sample Title
+騎乘	Mount
+鬥士賽	Fighter Match
+黃昏	Dusk
+點卷商城	Point Voucher Mall
+點數：999999	Points: 999999
+－	-
+：	:
+Ｘ	X
+��	Sample Text
+�� 99 ��點數	99 Points

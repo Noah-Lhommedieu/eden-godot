@@ -1,0 +1,8 @@
+== 300 joueurs × 200 ops (latence client, ms)
+or  AddGold      PG direct         n= 60000     17 526 op/s  p50=15,76  p95=22,42  p99=26,37  max=188,4 ms
+or  AddGold      Redis             n= 60000     89 115 op/s  p50=3,13  p95=4,72  p99=8,87  max=26,9 ms
+pos UpdateCoords PG direct         n= 60000     23 617 op/s  p50=12,37  p95=15,93  p99=18,29  max=28,2 ms
+pos UpdateCoords Redis (F&F)       n= 60000    599 586 op/s  p50=0,00  p95=0,05  p99=0,57  max=14,2 ms
+ticket login Issue+Consume PG      n= 60000     11 130 op/s  p50=25,13  p95=40,14  p99=49,54  max=61,0 ms
+ticket login Issue+Consume Redis   n= 60000    177 810 op/s  p50=1,39  p95=3,45  p99=7,09  max=13,6 ms
+flush Redis→PG de 300 persos sales : 552 ms (1,84 ms/perso)

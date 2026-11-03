@@ -1,0 +1,112 @@
+# AT_DF
+
+> Source : `src_csv/D_ AT_DF.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+| ANGELIC WEAPONS | 1-H Weapons | Oath Dagger | P-ATK & M-ATK+1%. Your attacks have a 5% chance to increase P-ATK & M-ATK +3290 pts; lasts 10 sec. | Empty Parchment x75, Sunset Shroom Cap x1, Poison Core x60. | 300.0 |
+|---|---|---|---|---|---|
+|  |  | Swift Rapier | P-ATK & M-ATK+1%. Your attacks have a 5% chance to increase P-ATK & M-ATK +3290 pts; lasts 10 sec. | Empty Parchment x75, Sunset Shroom Cap x1, Poison Core x60. | 300.0 |
+|  |  | Guard Sword | P-ATK & M-ATK+1%. Your attacks have a 5% chance to increase P-ATK & M-ATK +3619 pts; lasts 10 sec. | Empty Parchment x75, Eternal Spirit's Candle x1, Poison Core x60. | 300.0 |
+|  |  | Aurora Mace | G-Heal+1%. Your attacks & casts have a 5% chance to increase WIS +377 pts & AGI +233 pts; lasts 10 sec. | Empty Parchment x75, Eternal Spirit's Candle x1, Poison Core x60. | 300.0 |
+|  |  | Claw Cestus | P-ATK+1%. Your attacks have a 5% chance to increase P-ATK & M-ATK +3619 pts; lasts 10 sec. | Empty Parchment x75, Sacred Blood Stone x1, Poison Core x60. | 300.0 |
+|  |  | Spiked Club | P-ATK+1%. Your attacks have a 5% chance to increase P-ATK & M-ATK +3619 pts; lasts 10 sec. | Empty Parchment x75, Sacred Blood Stone x1, Poison Core x60. | 300.0 |
+|  |  | Daybreak Shield | Elemental Resistance+1%. When block triggers, you have a 10% chance to decrease P-CRIT DMG & M-CRIT DMG Taken -5%; lasts 7 sec. | Empty Parchment x75, Sunset Shroom Cap x1, Poison Core x60. | 300.0 |
+|  | 2-H Weapons | Spirit Katana | P-ATK+2%. Your attacks have a 3% chance to deal Double Hit DMG. | Empty Parchment x100, Sacred Blood Stone x2, Poison Core x90. | 350.0 |
+|  |  | Execution Greatsword | P-ATK & M-ATK +2%. Your attacks have a 5% chance to increase P-ATK & M-ATK +5429 pts; lasts 10 sec. | Empty Parchment x100, Sacred Blood Stone x2, Poison Core x90. | 350.0 |
+|  |  | Royal Axe | P-ATK+2%. Your attacks have a 5% chance to increase P-ATK +5429 pts; lasts 10 sec. | Empty Parchment x100, Sacred Blood Stone x2, Poison Core x90. | 350.0 |
+|  |  | Sun Spear | P-ATK & M-ATK +2%. Your attacks have a 5% chance to increase P-CRIT RATE & M-CRIT RATE +333 pts; lasts 10 sec. | Empty Parchment x100, Eternal Spirit's Candle x2, Poison Core x90. | 350.0 |
+|  |  | Great Hammer | P-ATK+2%. Your attacks have a 5% chance to increase P-ATK +5429 pts; lasts 10 sec. | Empty Parchment x100, Sacred Blood Stone x2, Poison Core x90. | 350.0 |
+|  |  | Crystal Bow | P-ATK+2%. Your attacks have a 5% chance to increase P-CRIT RATE +333 pts & ACC +537 pts; lasts 10 sec. | Empty Parchment x100, Sunset Shroom Cap x2, Poison Core x90. | 350.0 |
+|  |  | Space Cannon | P-ATK & M-ATK +2%. Your attacks have a 5% chance to increase P-ATK & M-ATK +4936 pts; lasts 10 sec. | Empty Parchment x100, Sunset Shroom Cap x2, Poison Core x90. | 350.0 |
+|  |  | Rock Guitar | M-ATK+2%, G-Heal+2%. Your attacks have a 5% chance to increase M-ATK+ 4936 pts; lasts 10 sec. | Empty Parchment x100, Eternal Spirit's Candle x2, Poison Core x90. | 350.0 |
+|  |  | Magic Grimoire | M-ATK+2%. Your attacks have a 5% chance to increase M-ATK +5429 pts; lasts 10 sec. | Empty Parchment x100, Eternal Spirit's Candle x2, Poison Core x90. | 350.0 |
+|  |  | Radiant Staff | M-ATK+2%. Your attacks have a 5% chance to increase M-ATK +5429 pts; lasts 10 sec. | Empty Parchment x100, Eternal Spirit's Candle x2, Poison Core x90. | 350.0 |
+|  |  | Soul Sickleshot | P-ATK+2%. Your attacks have a 5% chance to increase P-ATK+ 4936 pts; lasts 10 sec. | Empty Parchment x100, Sunset Shroom Cap x2, Poison Core x90. | 350.0 |
+|  |  | Dragon Pistols | P-ATK & M-ATK + 2%. Your attacks have a 5% chance to increase P-ATK & M-ATK +4936 pts; lasts 10 seconds. | Empty Parchment x100, Sunset Shroom Cap x2, Poison Core x90. | 350.0 |
+| NAME: |  |  | MATERIALS: |  |  |
+
+**MATERIAL FORMULAS**
+
+| Angelic Blessing Stone | Angelic Parchment x50, Angelic Essence x5. | 20.0 |
+|---|---|---|
+| Awaken Angelic Blessing Stone | Angelic Blessing Stone x1, Blessed EXP Jar x2. | 40.0 |
+| Demonic Curse Stone | Demonic Parchment x50, Demonic Essence x5. | 20.0 |
+| Demonic Awaken Stone | Demonic Blessing Stone x1,  Cursed EXP Jar x2. | 40.0 |
+| Blueprint: Angelic Essence | Demonic Essence x1, Angelic Parchment x15, Blessed EXP Jar x2. | 10.0 |
+| Blueprint: Demonic Essence | Angelic Essence x1, Demonic Parchment x15, Blessed EXP Jar x2. | 10.0 |
+
+**DUNGEON REWARDS**
+
+| DUNGEON | BOSS | MONSTER DROPS: | PLAYER DROPS: | MAIL REWARDS: |
+|---|---|---|---|---|
+| Angel Temple | Lila | Trophy: Lila's Flower Amulet | Blessed EXP Shell | Angelic Gift Bag:  <br>This bag contains one of the following items:<br>-Angelic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Angelic Essence |  |  |
+|  |  | Blueprint: Oath Dagger |  |  |
+|  |  | Blueprint: Claw Cestus |  |  |
+|  |  | Blueprint: Spirit Katana |  |  |
+|  | Celeste | Celeste's Eternal Notebook | Blessed EXP Shell | Angelic Gift Bag:  <br>This bag contains one of the following items:<br>-Angelic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Angelic Essence |  |  |
+|  |  | Blueprint: Guard Sword |  |  |
+|  |  | Blueprint: Crystal Bow |  |  |
+|  |  | Blueprint: Rock Guitar |  |  |
+|  | Rachel | Rachel's Holy Sword | Blessed EXP Jar | Angelic Reward Bag: <br>This bag contains the following items: <br>-Battle Token x10<br>This bag contains one of the following items:<br>-Angelic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Angelic Essence |  |  |
+|  |  | Blueprint: Aurora Mace |  |  |
+|  |  | Blueprint: Execution Greatsword |  |  |
+|  |  | Blueprint: Magic Grimoire |  |  |
+|  | Sally | Sally's Flower Charm | Blessed EXP Jar | Angelic Reward Bag: <br>This bag contains the following items: <br>-Battle Token x10<br>This bag contains one of the following items:<br>-Angelic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Angelic Essence |  |  |
+|  |  | Blueprint: Aurora Mace |  |  |
+|  |  | Blueprint: Execution Greatsword |  |  |
+|  |  | Blueprint: Magic Grimoire |  |  |
+|  | Sammy | Sammy's Holy Feather | Blessed EXP Jar | Angelic Reward Bag: <br>This bag contains the following items: <br>-Battle Token x10<br>This bag contains one of the following items:<br>-Angelic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Angelic Essence |  |  |
+|  |  | Blueprint: Aurora Mace |  |  |
+|  |  | Blueprint: Execution Greatsword |  |  |
+|  |  | Blueprint: Magic Grimoire |  |  |
+|  |  | Blueprint: Royal Nunchaku |  |  |
+| Demonic Fortress | Xinos | Xinos' Eternal Flame | Cursed EXP Shell | Demonic Gift Bag:  <br>This bag contains one of the following items:<br>-Demonic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Demonic Essence |  |  |
+|  |  | Blueprint: Spiked Club |  |  |
+|  |  | Blueprint: Sun Spear |  |  |
+|  |  | Blueprint: Great Hammer |  |  |
+|  | Nimir | Nimir's Dark Glyphs | Cursed EXP Shell | Demonic Gift Bag:  <br>This bag contains one of the following items:<br>-Demonic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Demonic Essence |  |  |
+|  |  | Blueprint: Swift Rapier |  |  |
+|  |  | Blueprint: Space Cannon |  |  |
+|  |  | Blueprint: Radiant Staff |  |  |
+|  | Alice | Alice's Frozen Flower | Cursed EXP Jar | Demonic Reward Bag: <br>This bag contains the following items: <br>-Battle Token x10<br>This bag contains one of the following items:<br>-Demonic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Demonic Essence |  |  |
+|  |  | Blueprint: Royal Axe |  |  |
+|  |  | Blueprint: Daybreak Shield |  |  |
+|  |  | Blueprint: Soul Sickle |  |  |
+|  |  | Blueprint: Dragon Pistols |  |  |
+|  | Rhexnos | Rhexnos' Unbreakable Shield | Cursed EXP Jar | Demonic Reward Bag: <br>This bag contains the following items: <br>-Battle Token x10<br>This bag contains one of the following items:<br>-Demonic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Demonic Essence |  |  |
+|  |  | Blueprint: Royal Axe |  |  |
+|  |  | Blueprint: Daybreak Shield |  |  |
+|  |  | Blueprint: Soul Sickle |  |  |
+|  |  | Blueprint: Dragon Pistols |  |  |
+|  | Syntha | Synthia's Evil Crown | Cursed EXP Jar | Demonic Reward Bag: <br>This bag contains the following items: <br>-Battle Token x10<br>This bag contains one of the following items:<br>-Demonic Parchment x2-4.<br>-Empty Parchment x2-4. |
+|  |  | Demonic Essence |  |  |
+|  |  | Blueprint: Royal Axe |  |  |
+|  |  | Blueprint: Daybreak Shield |  |  |
+|  |  | Blueprint: Soul Sickle |  |  |
+|  |  | Blueprint: Dragon Pistols |  |  |
+
+**TROPHIES**
+
+**ANGELIC TEMPLE & DEMONIC FORTRESS TROPHY COMBOS**
+
+| TROPHY: | BASE EFFECT: | WEAPON EFFECT: | 2-PIECE COMBO: |
+|---|---|---|---|
+| Lila's Flower Amulet | HP+3228. MP+3228. P-ATK+3%. | Your attacks have a 5% chance to increase P-ATK +14568 pts; lasts 10 sec. | Physical DMG Dealt +3%, STR +400 pats, Physical Resistance +5 pts, Elemental Resistance +7 pts. |
+| Synthia's Evil Crown | HP+3228. MP+3228. P-ATK+3%. | Your attacks have a 5% chance to decrease targets Physical Resistance -10 pts; lasts 10 sec. |  |
+| Rachel's Holy Sword | HP+3228. MP+3228. DMG Taken-3%. | Your attacks have a 5% chance to decrease targets P-ATK -11654 pts & M-ATK -14222 pats; lasts 10 sec. | DMG Taken -3%, STR & WIS +350 pts, Physical Resistance +5 pts, Elemental Resistance +7 pts. |
+| Rhexnos' Unbreakable Shield | HP+3228. MP+3228. DMG Taken-3%. | When attacked you have a 5% chance to decrease DMG Taken -4396 pts; lasts 7 sec. |  |
+| Celeste's Eternal Notebook | HP+3228. MP+3228. M-ATK & WIS+3%. | Light of Truth Heal+5%, Melody of Lightness Heal+5%, Let it Rain Heal+5%, Ice Blessing Heal +5%, Light Blessing Aura Heal+5%. | G-Heal+3%, WIS +400 pts, Physical Resistance +5 pts, Elemental Resistance +7 pts. |
+| Alice's Frozen Flower | HP+3228. MP+3228. M-ATK & WIS+3%. | Your attacks and casts have a 5% chance to increase WIS +949 pts & CAST SPD +508 pts; lasts 10 sec. |  |
+| Sammy's Holy Feather | HP+3228. MP+3228. M-ATK+3%. | Your attacks deal +863 pts of Holy DMG. Your attacks have a 5% chance to deal Triple Hit DMG. | Magical DMG Dealt +3%, INT +400 pats, Physical Resistance +5 pts, Elemental Resistance +7 pts. |
+| Nimir's Dark Glyphs | HP+3228. MP+3228. M-ATK+3%. | Your attacks have a 5% chance to increase M-ATK+ 17777 pts; lasts 10 sec. |  |
+| Xinos' Eternal Flame | HP+3228. MP+3228. M-ATK & P-ATK+3% | Your attacks have a 5% chance to increase P-ATK +13111 pts & M-ATK +15999 pts; lasts 10 sec. | Skill DMG Dealt +3%, STR & INT +350 pts, Physical Resistance +5 pts, Elemental Resistance +7 pts. |
+| Sally's Flower Charm | HP+3228. MP+3228. M-ATK & P-ATK+3% | Your attacks and casts have a 5% chance to increase AGI & LCK +350 pts; lasts 10 sec. |  |
+

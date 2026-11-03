@@ -1,0 +1,20 @@
+{
+ "ncid": 11,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "1900636865636b5f696e7465726661636520323030303030303034",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "0000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "1900636865636b5f696e7465726661636520323030303030303032",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

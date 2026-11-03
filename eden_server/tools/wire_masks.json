@@ -1,0 +1,12 @@
+{
+  "_comment": "Plages de bytes du body (hors u16 NCID) ignorées par wire_diff.py — champs volatils : handles de session (charId/mobHandle attribués à la session), timestamps, positions, ids générés.",
+  "0":   [[0, 24]],
+  "1":   [[0, 24]],
+  "5":   [[0, 4]],
+  "301": [[0, 4]],
+  "302": [[0, 4]],
+  "313": [[4, 15]],
+  "326": [[0, 4]],
+  "444": [[0, 4], [5, 4]],
+  "271": [[0, 4], [6, 4]]
+}

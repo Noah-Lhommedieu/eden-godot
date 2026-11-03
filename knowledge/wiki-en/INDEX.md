@@ -1,0 +1,1180 @@
+# Index — Wiki Eden Eternal (EN)
+
+Base de connaissance extraite du dump Fandom (`knowledge/raw/wiki-en/`). **12840 pages indexées** dans `pages-index.tsv` (colonnes : fichier, titre, catégorie, sous-type, niveau, localisation, rareté, infobox, résumé, flags). Ce dump est la **référence principale pour les objets/équipements/crafts** (ère X-Legend/Aeria).
+
+Navigation : ce fichier = catégories + échantillons ; l'exhaustif par catégorie = `categories/<cat>.md` ; la recherche par nom/niveau/rareté = `pages-index.tsv`.
+
+## Contenu par catégorie
+
+- **classes** (26) : 5 branches (Défense, Mêlée, Distance, Magie, Soin) + conditions de déblocage par classe ; **classes-competences** (22) : pages `X_Skills` par classe (couverture partielle : Luminary/Samurai/Sage/Inquisitor manquants) ; **certificats-classes** (88) + **glyphes** (120, par classe/slot).
+- **Équipement** (référence la plus complète du corpus) : **armes** 2 092 (18 types, bouclier inclus), **armures** 2 464 (~209 sets de 5 pièces, lv1-90), **accessoires** 1 083 (~570 trophées de boss, anneaux/colliers), **costumes** 112 (cash-shop), **sacs** 6. Raretés white/green/blue/orange/gold ; familles notables : `Accursed` lv80/85, `Holy -` lv90, `Temple Knights` lv50-80, signatures `<Boss>'s X` bleues, sets craftés 23-88, sets éveillés lv70/80.
+- **plans-artisanat** (2 828) : blueprints Foundry (armes/armures), Magic Pool (anneaux/colliers/enchants), Alchemy Lab (gemmes/potions), Town Blueprints de guilde ; work levels 1-12 = produits lv20-90.
+- **objets** (2 925) : matériaux de récolte par work level (minerais, plantes, autels), consommables/potions/charmes, gemmes lv1-6, quêtes d'alerte de guilde, meubles (~164), monnaies, teintures, cartes au trésor ; **objets-quete** (222) : items utilisables, Fortune Bags, coffres de boss, armour boxes ; **decorations-guilde** (105) : PNJ de ville de guilde par bâtiment ; **familiers** (46).
+- **Monde** : **zones** (15 pages détaillées, surtout lv1-68 — le reste des régions existe mais en stub/vide), **donjons** (30), **monstres** (159), **bosses** (147), **pnjs** (19), **quetes** (42, dont ~22 coquilles vides), **hauts-faits** (1 seul — les vrais succès sont dans les pages de zones).
+- **guides-debutant** (8) : contrôles/interface/combat ; **guides-mecaniques** (201) : réputation & 9 factions d'Aven (tables fame/prix — données économiques les plus structurées), crafts raciaux (Alchemy/Engineering/Engraving/Embroidery/Jewel Fusion), Arcane Box, équipement & qualités, teintures, warps, guilde/ville/logement, familiers/montures, banque/archive, break point, patch notes X-Legend 2023 ; **meta-wiki** (72) : désambiguïsations, galleries d'icônes par type — + 10 vraies pages d'objets et `Ring_crafting` mals rangés.
+
+## Images
+
+Toutes les images sont **distantes** (URLs Fandom/Wikia) — aucune copie locale. Patterns :
+- `https://static.wikia.nocookie.net/edeneternal/images/<h>/<h>/<Fichier>.png/revision/latest?cb=...`
+- variantes `scale-to-width-down/<n>` ; certaines via `data-src` (lazy-load, `src` = placeholder base64).
+
+## Périmètre (serveur = contenu ≤ lvl 90)
+
+⚠️ **Le flag `awaken-lvl95+` est trompeur** : les **60 pages flaggées** sont les 12 sets d'armure éveillés **lv70/80** (`Awaken <Nom>`, obtenus par quêtes « Sprite Scroll ») — du contenu du jeu de base **dans le périmètre**, pas du 95+. Le vrai contenu >90 n'existe quasiment pas dans ce dump (ère X-Legend, cap 90) — il vit dans `wiki-tables/` et `guides-fr/` (voir la section lvl95+ du `../README.md`). Seules 2 exceptions numériques : `Guard Scroll Lv100` et `Power Scroll Lv100`, qui couvrent l'équipement ≤100 et restent utilisables.
+
+**Lacunes connues** : pas de table d'expertise de classe complète (→ wiki-tables), pages `Archimage`/`Druid` (classes éveillées jamais implémentées) et `Mimic` (retirée en 2023), ~22 quêtes vides, ~14 fiches de monstres-stub, zones post-46 clairsemées, aucune page achievement dédiée, `raw/` non versionné (sell price/stack absents du TSV quand la page manque).
+
+## Catégories
+
+
+### classes (26)
+
+- **Adjudicator** `Adjudicator.html` — Adjudicator is an awakened advancement of the Cleric class. A Cleric may become an Adjudic
+- **Bard** `Bard.html` — Bard is a class in the Healing and Support class branch.
+- **Berserker** `Berserker.html` — Berserker is an awakened advancement of the Warrior class. A Warrior may become a Berserke
+- **Blade Dancer** `Blade_Dancer.html` — Blade Dancer is the third class available in the Melee DPS class branch, and focuses on us
+- **Cleric** `Cleric.html` — Cleric is a healing class in Eden Eternal. It is available at character creation.
+- **Dragon Knight** `Dragon_Knight.html` — Dragon Knight is a tank class in Eden Eternal.
+- **Dragon Soul** `Dragon_Soul.html` — Dragon Soul is Awakened class of Dragon Knight
+- **Engineer** `Engineer.html` — Engineer is a class in the Ranged DPS branch.
+- **Executioner** `Executioner.html` — Executioner is an awakened advancement of the Knight class. A Warrior may become an Execut
+- **Glacier Knight** `Glacier_Knight.html` — Glacier Knight is an awakened advancement of the Knight class. A Warrior may become an Exe
+- **Hunter** `Hunter.html` — Hunter is a Ranged DPS class in Eden Eternal. It is available at character creation.
+- **Illusionist** `Illusionist.html` — Illusionist is a class in the Magic DPS class branch.
+- **Inquisitor** `Inquisitor.html` — Inquisitor is a class in the Ranged DPS class branch.
+- **Knight** `Knight.html` — Knight is the second of four basic tank classes in Eden Eternal.
+- **Luminary** `Luminary.html` — Luminary is a Magic DPS class in Eden Eternal.
+- **Magician** `Magician.html` — Magician is a Magic DPS class in Eden Eternal. It is available at character creation.
+- **Martial Artist** `Martial_Artist.html` — Martial Artist is a Melee DPS class in Eden Eternal.
+- **Ranger** `Ranger.html` — Ranger is the third unlockable class in the Ranged DPS class branch.
+- **Sage** `Sage.html` — Sage is one of four classes in the Healing and Support class branch.
+- **Samurai** `Samurai.html` — Samurai is the fourth class in the Melee DPS class branch.
+- **Shaman** `Shaman.html` — Shaman is a class in the Healing and Support class branch.
+- **Shielder** `Shielder.html` — Shielder is an awakened advancement of the Warrior class. A Warrior may become a Shielder 
+- **Templar** `Templar.html` — Templar is the third of four preawakened tank classes in Eden Eternal.
+- **Thief** `Thief.html` — Thief is a Melee DPS class in Eden Eternal. It is available at character creation.
+- **Warlock** `Warlock.html` — Warlock is a Magic DPS class in Eden Eternal.
+- **Warrior** `Warrior.html` — Warrior is a tank class in Eden Eternal. It is available at character creation.
+
+### classes-competences (22)
+
+- **Bard Class Skills** `Bard_Class_Skills.html` — Bard's skills, although much like Cleric's skills, differs in that Bard skills focus on mo
+- **Blade Dancer Class Skills** `Blade_Dancer_Class_Skills.html` — A Bladedancer performing their powerful AOE 3 hit skill, Dancing Blade
+- **Class Expertise** `Class_Expertise.html` — Each Class has it's own Expertise tree. Expertise abilities are passive boosts (not skills
+- **Cleric Class Expertise** `Cleric_Class_Expertise.html` — Cleric Talents redirects here. If you are looking for Cleric Skills, go here
+- **Cleric Class Skills** `Cleric_Class_Skills.html` — Cleric: Masters of party support. The Cleric is knowledgeable on the art of healing, remov
+- **Dragon Knight Class Skills** `Dragon_Knight_Class_Skills.html` — Dragon Knights are a melee ranged class that uses spears. Possessing different dragon soul
+- **Engineer Class Expertise** `Engineer_Class_Expertise.html` — Engineer Talents redirects here. If you are looking for Engineer Skills, go here
+- **Engineer Class Skills** `Engineer_Class_Skills.html` — Engrineer in Mecha Mode Human Men
+- **Hunter Class Expertise** `Hunter_Class_Expertise.html` — Hunter Talents redirects here. If your are looking for Hunter's Skills, go here.
+- **Hunter Class Skills** `Hunter_Class_Skills.html` — Summoning the mighty Tiger! Tiger at the ready.
+- **Illusionist Class Skills** `Illusionist_Class_Skills.html` — Illusionist: The illusionist is similar to a bard, but much more offensive focused. These 
+- **Knight Class Skills** `Knight_Class_Skills.html` — Knight fighting a monster with Deep Impact
+- **Magician Class Skills** `Magician_Class_Skills.html` — Magician: The magician is the second of the two starting classes and they are masters of e
+- **Martial Artist Class Skills** `Martial_Artist_Class_Skills.html` — Martial Artist's Suppress skill
+- **Ranger Class Skills** `Ranger_Class_Skills.html` — An Obscured Ranger prior to release.
+- **Shaman Class Skills** `Shaman_Class_Skills.html` — A Shaman casting Rage of Storms
+- **Templar Class Skills** `Templar_Class_Skills.html` — Here are some early versions of Templar's class skills
+- **Thief Class Expertise** `Thief_Class_Expertise.html` — Thief Talents redirects here. If you are looking for Thief Skills, go here
+- **Thief Class Skills** `Thief_Class_Skills.html` — Icon Name Lv Weapon Cast Time CD Description Ambush 1 1-Handed Weapon Instant 4 sec. Incre
+- **Warlock Class Skills** `Warlock_Class_Skills.html` — Icon Name Lv Weapon Cast Time CD Description Dark Parasite 5 None Instant 0 sec. Spawns a 
+- **Warrior Class Expertise** `Warrior_Class_Expertise.html` — Warrior's Expertise focuses on Melee stat atributes, like STR. Max HP, ACC, P-Crit rate, a
+- **Warrior Class Skills** `Warrior_Class_Skills.html` — One of two starting classes. Relies on heavily fortified and upgraded heavy armor to absor
+
+### certificats-classes (88)
+
+- **Ancient Spirit Spell I** `Ancient_Spirit_Spell_I.html` — "The power of the ancient spirit is imbued in my amulet, which grants me strength and prot
+- **Ancient Spirit Spell II** `Ancient_Spirit_Spell_II.html` — "The power of the ancient spirit grants me strength through my amulet and protects me from
+- **Avatar Master I** `Avatar_Master_I.html` — "Hi everyone! Time to start the show! If you'll kindly cover your eyes, you'll find that I
+- **Avatar Master II** `Avatar_Master_II.html` — "Hi everyone! Time to start the show! Please cover your eyes. See, I'm gone!"
+- **Critical Attack I** `Critical_Attack_I.html` — "Sacred power, please make my attacks sharp, precise, and strong!"
+- **Critical Attack II** `Critical_Attack_II.html` — "Sacred power, please strengthen my attack to shock your brain!"
+- **Dancing Master I** `Dancing_Master_I.html` — "I am the ultimate dance master. You could at least pretend you were subdued by my powerfu
+- **Dancing Master II** `Dancing_Master_II.html` — "I am the ultimate dancing master. Could you just pretend you were hurt by my powerful att
+- **Defend Master I** `Defend_Master_I.html` — "The greatest attack will fail if you cannot also defend yourself."
+- **Defend Master II** `Defend_Master_II.html` — "The greatest attack will fail if you cannot also defend yourself."
+- **Defense Energy I** `Defense_Energy_I.html` — "I train my body, soul, and heart to defend against any attack."
+- **Defense Energy II** `Defense_Energy_II.html` — "I train my heart, body and skill to the highest level to defend against any attack."
+- **Demon Eyes I** `Demon_Eyes_I.html` — "I need more power. Demon! Please, lend me you eyes to help me see my foes more clearly."
+- **Demon Eyes II** `Demon_Eyes_II.html` — "I need more power. Demon! Please, lend me you eyes to help me see the my foes more clearl
+- **Devoted Belief I** `Devoted_Belief_I.html` — "The sacred bell's sweet peal rolls across the land. All is peaceful. My beliefs gives me 
+- **Devoted Belief II** `Devoted_Belief_II.html` — "I listen to the tolling of the sacred bell. All is peaceful, my beliefs gives me the stre
+- **Dual Arrow Shot I** `Dual_Arrow_Shot_I.html` — "I've got my bow. No criminal will dare step out of line!"
+- **Dual Arrow Shot II** `Dual_Arrow_Shot_II.html` — "I've got my bow. No criminal will dare step out of line!"
+- **Dynamic Body I** `Dynamic_Body_I.html` — "Real dancing requires limber joints and a rhythmic switch in one's hips. I don't mean to 
+- **Dynamic Body II** `Dynamic_Body_II.html` — "Real dancing starts with twisting ankles and inconsistent body movement. I don't mean to 
+- **Elegance I** `Elegance_I.html` — "A true knight must move with elegance. Even on a dangerous battlefield, we can avoid enem
+- **Elegance II** `Elegance_II.html` — "A true knight must move with elegance. Even on a dangerous battlefield, we can avoid enem
+- **Find Weakness I** `Find_Weakness_I.html` — "Focus on finding the hidden weaknesses in your enemies and exploiting them."
+- **Find Weakness II** `Find_Weakness_II.html` — "Focus on finding the weaknesses of enemies and how to exploit them."
+- **Focused Thought I** `Focused_Thought_I.html` — "I focus my mind and listen to the voice of nature."
+- **Focused Thought II** `Focused_Thought_II.html` — "I focus my mind and listen to the voice of nature."
+- **Heavy Shield Defense I** `Heavy_Shield_Defense_I.html` — "With this heavy shield, I will turn into a frontline fortress to defend against any attac
+- **Heavy Shield Defense II** `Heavy_Shield_Defense_II.html` — "With this heavy shield, I will turn into a frontline fortress to defend against any attac
+- **Hidden Aura I** `Hidden_Aura_I.html` — "I slink about like a puff of smoke, forever covering my tracks, so that the enemies can n
+- **Hidden Aura II** `Hidden_Aura_II.html` — "By suppressing my scent and hiding myself, the enemies would not know where I am."
+- **Holy Heart I** `Holy_Heart_I.html` — "Holy light washes over my mind and body, lending courage to my heart."
+- **Holy Heart II** `Holy_Heart_II.html` — "Holy light washed my mind and body, lending courage to my heart."
+- **Holy Inspiration I** `Holy_Inspiration_I.html` — "The power of the holy light expands my mind and guides me when I am lost."
+- **Holy Inspiration II** `Holy_Inspiration_II.html` — "The power of the holy light expands my mind and guides me when I am lost."
+- **Holy Kindness I** `Holy_Kindness_I.html` — "The holy power dwells within me. It gives me a clear mind, untainted by any evil I may en
+- **Holy Kindness II** `Holy_Kindness_II.html` — "The holy power dwells within me. It gives me a clear mind, untainted by any evil I may en
+- **Iron Armor I** `Iron_Armor_I.html` — "After putting on the Iron Armor, your defenses will improve greatly, and you won't have t
+- **Iron Armor II** `Iron_Armor_II.html` — "After putting on the Iron Armor I don't just focus on attack. It will help you a lot. Try
+- **Lens Optics I** `Lens_Optics_I.html` — "Put on the lens, and you will finally see the real world."
+- **Lens Optics II** `Lens_Optics_II.html` — "Put on the lens and you will finally see the real world."
+- **Lv 15 Treasure Map 1st Piece** `Lv_15_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Rainbowfall Forest. Find the other two piece
+- **Lv 20 Treasure Map 1st Piece** `Lv_20_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Goss Mountains. Find the other two pieces an
+- **Lv 25 Treasure Map 1st Piece** `Lv_25_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Beluga Bay. Find the other two pieces and fu
+- **Lv 30 Treasure Map 1st Piece** `Lv_30_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Wetlands. Find the other two pieces and fuse
+- **Lv 34 Treasure Map 1st Piece** `Lv_34_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Valley of Kings. Find the other two pieces a
+- **Lv 38 Treasure Map 1st Piece** `Lv_38_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Avila Volcano. Find the other two pieces and
+- **Lv 42 Treasure Map 1st Piece** `Lv_42_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Golden Plains. Find the other two pieces and
+- **Lv 46 Treasure Map 1st Piece** `Lv_46_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Arid Wilds. Find the other two pieces and fu
+- **Lv 49 Treasure Map 1st Piece** `Lv_49_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Delphi Forest. Find the other two pieces and
+- **Lv 52 Treasure Map 1st Piece** `Lv_52_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Blackflame Peak. Find the other two pieces a
+- **Lv 55 Treasure Map 1st Piece** `Lv_55_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Decay Swamp. Find the other two pieces and f
+- **Lv 58 Treasure Map 1st Piece** `Lv_58_Treasure_Map_1st_Piece.html` — The first piece of a treasure map acquired in Highlands. Find the other two pieces and fus
+- **Muscle Flexibility I** `Muscle_Flexibility_I.html` — "After many battles, I became stronger and tougher. Your attack is nothing to me."
+- **Muscle Flexibility II** `Muscle_Flexibility_II.html` — "After many battles, I became stronger and tougher. Your attack is nothing to me."
+- **Nimbleness I** `Nimbleness_I.html` — "Nimbleness is very important to thieves. Otherwise, how could we jump across barriers to 
+- **Nimbleness II** `Nimbleness_II.html` — "Nimbleness is very important to thieves. Otherwise, how could we jump across barriers to 
+- **Pop Star I** `Pop_Star_I.html` — "Dancing is my greatest skill; it runs through my veins and pumps through my heart. You co
+- **Pop Star II** `Pop_Star_II.html` — "Slash slash! Slash slash! My boyfriend's a fighter!"
+- **Powerful Muscle I** `Powerful_Muscle_I.html` — "Focusing on muscle development makes me stronger."
+- **Powerful Muscle II** `Powerful_Muscle_II.html` — "Focusing on muscle development makes me stronger."
+- … 28 autres, voir `categories/certificats-classes.md` et `pages-index.tsv`
+
+### glyphes (120)
+
+- **Aerolite Glyph** `Aerolite_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv5
+- **Ancient Call Glyph** `Ancient_Call_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv5
+- **Arrow of Fear Glyph** `Arrow_of_Fear_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV6
+- **Asura Slash Glyph** `Asura_Slash_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV6
+- **Asylum Glyph** `Asylum_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Aura: Invisibility Glyph** `Aura__Invisibility_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Aura: Protective Shield Glyph** `Aura__Protective_Shield_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Aura: Singularity Glyph** `Aura__Singularity_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Bard Glyph** `Bard_Glyph.html` — "A mysterious glyph made by professionals." "An Ursun crafstman carved patterns into this 
+- **Black Explosive Glyph** `Black_Explosive_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Black Puma Glyph** `Black_Puma_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV5
+- **Blend Glyph** `Blend_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Blinding Glory Glyph** `Blinding_Glory_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Blood Converter Glyph** `Blood_Converter_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv6
+- **Brain Drain Glyph** `Brain_Drain_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Burning Metal Glyph** `Burning_Metal_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Callback Glyph** `Callback_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV5
+- **Chaos Incarnate Glyph** `Chaos_Incarnate_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Cleric Glyph** `Cleric_Glyph.html` — "A mysterious glyph made by professionals." "This glyph looks normal, but it has a magical
+- **Collapsing Blow Glyph** `Collapsing_Blow_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv5
+- **Cruel Slashes Glyph** `Cruel_Slashes_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Dancer Glyph** `Dancer_Glyph.html` — "A mysterious glyph made by professionals." "The words carved on the glyph are like a melo
+- **Dancing Blade Glyph** `Dancing_Blade_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV5
+- **Dark Shadow Sacrifice Glyph** `Dark_Shadow_Sacrifice_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Deadly Containment Glyph** `Deadly_Containment_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Death Threats Glyph** `Death_Threats_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv6
+- **Defenders Strength Glyph** `Defenders_Strength_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv5
+- **Demonic Symphony Glyph** `Demonic_Symphony_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Divine Light Glyph** `Divine_Light_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Dodging Leap Glyph** `Dodging_Leap_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV6
+- **Dragon Knight Glyph** `Dragon_Knight_Glyph.html` — "Professionals crafted this mysterious glyph." "A fiery dragon is engraved on one side of 
+- **Drake's Power Glyph** `Drake's_Power_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Drake Tail Slash Glyph** `Drake_Tail_Slash_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Drake Tail Strike Glyph** `Drake_Tail_Strike_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Dual Flame Glyph** `Dual_Flame_Glyph.html` — When embedding, hold down the left mouse button and select a career glyph slot. Can only b
+- **Elegant Glyph** `Elegant_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Energy Control Glyph** `Energy_Control_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv5
+- **Engineer Glyph** `Engineer_Glyph.html` — "A mysterious glyph made by professionals." "Ursun crafstmen carved this mysterious glyph 
+- **Exhiliration Glyph** `Exhiliration_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Extreme Magic Glyph** `Extreme_Magic_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Fearless Glyph** `Fearless_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Final Verdict Glyph** `Final_Verdict_Glyph.html` — When embedding, hold down the left mouse button and select a career glyph slot. Can only b
+- **Firebird Dance Glyph** `Firebird_Dance_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV5
+- **Flash Bomb Glyph** `Flash_Bomb_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Flashy Charm Glyph** `Flashy_Charm_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a LV5
+- **Fusion Reaction Glyph** `Fusion_Reaction_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Grace of Wisdom Glyph** `Grace_of_Wisdom_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Group Provoke Glyph** `Group_Provoke_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Hammer of Discipline Glyph** `Hammer_of_Discipline_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Hammer of Healing Glyph** `Hammer_of_Healing_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Healing Light Glyph** `Healing_Light_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv6
+- **Heartless Glyph** `Heartless_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Heavy Artillery Glyph** `Heavy_Artillery_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Hell Fire Glyph** `Hell_Fire_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- **Hellfire Dragon Devour Glyph** `Hellfire_Dragon_Devour_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Hidden Drake Mode Glyph** `Hidden_Drake_Mode_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Hidden Force Glyph** `Hidden_Force_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Holy Concerto Glyph** `Holy_Concerto_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv4
+- **Holy Prayer Glyph** `Holy_Prayer_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv7
+- **Holy Smite Glyph** `Holy_Smite_Glyph.html` — To inlay the item, left-click and select the class glyph socket. Can only be used in a Lv3
+- … 60 autres, voir `categories/glyphes.md` et `pages-index.tsv`
+
+### quetes (42)
+
+- **A Botanist's Life** (niv. 42) `A_Botanist's_Life.html` — (You read the letter from the Nature Seekers.)
+- **Andrew Village Crisis** `Andrew_Village_Crisis.html` — Andrew Village Crisis
+- **Angor Quarry I** (niv. 08) `Angor_Quarry_I.html` — "I don't know what to do now. Those Mushroids keep multiplying," moaned Kev.
+- **Angor Quarry II** (niv. 08) `Angor_Quarry_II.html` — "I don't know how to express my appreciation. You saved us, saved the mining industry of L
+- **Avenge the Wounded** (niv. 11) `Avenge_the_Wounded.html` — "I'll teach those Boars a lesson."
+- **Awakening I** (niv. 01) `Awakening_I.html` — You left the house feeling odd. You didn't know why you were there or even who you were.
+- **Awakening II** (niv. 01) `Awakening_II.html` — "You only remember your name is [ Name ] right? You're welcome to live here in Andrew Vill
+- **Awakening III** (niv. 02) `Awakening_III.html` — " I was curious about the Blue Crystal too, so I researched ancient books for answers."
+- **Awakening IV** (niv. 02) `Awakening_IV.html` — "I collect all kinds of information abuot Limestone Mtn., but the Blue Crystals is still a
+- **Baram's Chasm III** (niv. 39) `Baram's_Chasm_III.html` — L39. Baram's Chasm III
+- **Being Slim Is Not a Dream** (niv. 41) `Being_Slim_Is_Not_a_Dream.html` — L41. Being Slim Is Not a Dream
+- **Crystal Clue I** (niv. 02) `Crystal_Clue_I.html` — The monster lurks near the Blue Crystal. I fear that it lies in wait for you. Your memory 
+- **Crystal Clue II** (niv. 03) `Crystal_Clue_II.html` — "[ Name ], I'm going to identify this crystal for you for free. It'll be an easy feat."
+- **Crystal Clue III** (niv. 03) `Crystal_Clue_III.html` — "I'd like to do more detailed research. It's not often I get to analyze such a fascinating
+- **Cut It Out!** (niv. 40) `Cut_It_Out!.html` — (You opened a letter from the Ancestral Spirit Followers.)
+- **Cutting Costs** (niv. 42) `Cutting_Costs.html` — (You opened an ornate letter from Silver Needle.)
+- **Drifting Through Fog I** (niv. 67) `Drifting_Through_Fog_I.html` — L67. Drifting Through Fog I
+- **Drifting Through Fog II** (niv. 67) `Drifting_Through_Fog_II.html` — L67. Drifting Through Fog II
+- **Drifting Through Fog V** (niv. 67) `Drifting_Through_Fog_V.html` — L67. Drifting Through Fog V
+- **Fashion Forward** `Fashion_Forward.html` — High-Quality Jacket (Repeatable)
+- **Guide to Limestone Mountain** (niv. 02) `Guide_to_Limestone_Mountain.html` — Provided by [ Saltyloves ] with full consent, and credits to Saltyloves.
+- **Ipomoea Alba Battle IV** (niv. 66) `Ipomoea_Alba_Battle_IV.html` — L66. Ipomoea Alba Battle IV
+- **Ipomoea Alba Battle V** (niv. 66) `Ipomoea_Alba_Battle_V.html` — L66. Ipomoea Alba Battle V
+- **Oracle Magi I** (niv. 04) `Oracle_Magi_I.html` — [ Name ], since you were born from the Blue Crystal , I suspect you have an extraordinary 
+- **Oracle Magi II** (niv. 05) `Oracle_Magi_II.html` — "I hope you're not disappointed by the result. This shard is just an ordinary crystal, alb
+- **Oracle Magi III** (niv. 06) `Oracle_Magi_III.html` — Athena Marie looked at the shard. "I don't have time to examine your crystal." She paused,
+- **Oracle Magi IV** (niv. 06) `Oracle_Magi_IV.html` — "I was able to discern very fine magical writing on it, words that have power."
+- **Oracle Magi V** (niv. 06) `Oracle_Magi_V.html` — "I must help you grow strong and give you direction, but I cannot yet see where your missi
+- **Pet Combat Skill** (niv. 25) `Pet_Combat_Skill.html` — L25. Pet Combat Skill
+- **Preparations for Manual** (niv. 40) `Preparations_for_Manual.html` — L40. Preparations for Manual
+- **The Dark Marsh I** (niv. 18) `The_Dark_Marsh_I.html` — "A wondrous srystal called the Rainbow Pillar has been in my family for generations. Latel
+- **The Dark Marsh II** (niv. 18) `The_Dark_Marsh_II.html` — "Everyone wants to help Del defeat the Dark Marsh gang. Del Alyssas a heavy burden of guil
+- **The Dark Marsh III** (niv. 18) `The_Dark_Marsh_III.html` — "I've adored Del since I was a child. I can't understand why Juan would betray him so."
+- **The Dark Marsh IV** (niv. 19) `The_Dark_Marsh_IV.html` — "Juan's cruelly torments the member of the Dark Marsh gang."
+- **The Dark Marsh V** (niv. 19) `The_Dark_Marsh_V.html` — "Juan wants the Rainbow Gem. With its energy, he will gain incredible power."
+- **The Eagle Gang I** (niv. 11) `The_Eagle_Gang_I.html` — "Are you _____? I've heard so much about you."
+- **The Enemy of Trade Unions** (niv. 40) `The_Enemy_of_Trade_Unions.html` — L40. The Enemy of Trade Unions
+- **The Mayor's Dream III** (niv. 43) `The_Mayor's_Dream_III.html` — L43. The Mayor's Dream III
+- **Turn-About** `Turn-About.html` — This Quest page is incomplete. If you would like to contribute, please make sure that any 
+- **Ulta Hall II** (niv. 37) `Ulta_Hall_II.html` — L37. Ulta Hall II
+- **Weaving Ox Hair For Love** `Weaving_Ox_Hair_For_Love.html` — Weaving Ox Hair For Love
+- **What a Girl Wants** (niv. 06) `What_a_Girl_Wants.html` — "Oracle Athena Marie needs more materials for making the potion. She needs fresh Magic Muc
+
+### zones (15)
+
+- **Andrew Village** `Andrew_Village.html` — Andrew Village is the main town in Limestone Mountain . It also contains the notable Andre
+- **Andrew Village Mine** `Andrew_Village_Mine.html` — Portal: Limestone Mountain
+- **Aven** `Aven.html` — Aven is the capital city of the Central Continent . Players can access it from any Warp po
+- **Avila Volcano** `Avila_Volcano.html` — Avila Volcano (Chinese: 阿維拉火山 , ā wéi lā huǒshān ) is the level 38–41 area on the central 
+- **Beluga Bay** `Beluga_Bay.html` — Beluga Bay (Chinese: 冷風海灣 , lěngfēng hǎiwān , "cold wind bay") is the level 25–29 area on 
+- **Central Continent** `Central_Continent.html` — The central continent is the largest continent visible on the world map, and contains the 
+- **Eyebloom Plain** `Eyebloom_Plain.html` — Eyebloom Plain is located on the Central Continent . It suitable for levels sixty six to s
+- **Golden Plains** `Golden_Plains.html` — Golden Plains (Chinese: 大草原 , dà cǎoyuán , "prairie") is the level 42–45 area on the centr
+- **Goss Mountains** `Goss_Mountains.html` — Goss Mountains (Chinese: 戈德山域 , gē dé shān yù ) is the level 20–24 area on the central con
+- **Limestone Mountain** `Limestone_Mountain.html` — Limestone Mountain is located on the Central Continent , and is the starting map for human
+- **Rainbowfall Forest** `Rainbowfall_Forest.html` — Rainbowfall Forest is located on the Central Continent . It is suitable for levels fifteen
+- **Simulacrum** `Simulacrum.html` — This dungeon generates much confusion between players. Much confusion is caused by the fac
+- **Tranquil Hill** `Tranquil_Hill.html` — Tranquil Hill is a map located on the Central Continent . It is the second questing area i
+- **Valley of Kings** `Valley_of_Kings.html` — Valley of Kings (Chinese: 帝王谷 , dìwáng gǔ ) is the level 34–37 area on the central contine
+- **Wetlands** `Wetlands.html` — Wetlands (Chinese: 古老溼地 , gǔlǎo shī dì , "ancient wetlands") is the level 30–33 area on th
+
+### donjons (30)
+
+- **Angor Quarry** `Angor_Quarry.html` — However, the creatures living near the mine have become aggressive. The miners fought back
+- **Baira's Chamber** `Baira's_Chamber.html` — His remains were guarded for centuries, until the Bane Prince corrupted the land.He transf
+- **Baltaroi Core** `Baltaroi_Core.html` — Statues of valiant Tuskar warriors are displayed throughout the city, alongside engraved r
+- **Baram's Chasm** `Baram's_Chasm.html` — A river of lava flows through the cleft, between giant, gleaming crystals. The law of the 
+- **Basel Border** `Basel_Border.html` — Bodies littered the ground beneath clouds of ash. Though Valencia's troops still guard the
+- **Branda Root** `Branda_Root.html` — The Branda Root itself has become an essential part of the local ecology, absorbing magica
+- **Century** `Century.html` — Today, the fortress is used for creating zombies. The soulless soldiers issuing from its g
+- **Colossal Cauldron** `Colossal_Cauldron.html` — Additionally, the cauldron stores alchemy equipment and research data. Unfortunately, the 
+- **Crimson** `Crimson.html` — The scent of rancid blood and festering death consumes the fort, the thick odor entangled 
+- **Crooked Vein** `Crooked_Vein.html` — Rainbow Ore, a rare mineral found only here, is extremely hard and shines like a prism. It
+- **Crypticone** `Crypticone.html` — A surprisingly religious race, Bullmen believe red is a holy color, and prayerfully hurl i
+- **Delphi Temple** `Delphi_Temple.html` — Scientists exploring the sanctuary's secrets have inadvertently damaged it. It's falling a
+- **Eroda** `Eroda.html` — Cenanars believe it to be the tomb of a dragon that caused a devastating disaster here eon
+- **Federal Armory** `Federal_Armory.html` — A small fort is the only way in or out of the underground facility. All water and electric
+- **Fort Verdure** `Fort_Verdure.html` — One day, a member of the Eagle Gang came upon the abandoned fort. The gang remodeled the b
+- **Malice Palace** `Malice_Palace.html` — A powerful mage once lived here. It's said that his voracious studying consumed him, ultim
+- **Mara Cult Altar** `Mara_Cult_Altar.html` — Blackflame Peak villagers hate the cultists but are too afraid to stand up to them. The Ma
+- **Mayor's Dream** `Mayor's_Dream.html` — This malicious aura is waiting for the right time to engulf everything, trapping Reginald'
+- **Morticora** `Morticora.html` — Evil spirits often beset travelers in the woods. These wraiths flourish in the dank climat
+- **Rotten** `Rotten.html` — Pustule-like eggs line the hive's entrance, held fast by gluey mucus. The pupa feed raveno
+- **Shale Cavern** `Shale_Cavern.html` — Inside the legendary civilization, scientists discovered machines running automatically an
+- **Slain** `Slain.html` — The Bane Prince opened the interdimensional door and is controlling the insects with his p
+- **Soulmor Falls** `Soulmor_Falls.html` — Unusual flowers and plants grow on top of the mountain, all useful as medical herbs and al
+- **Tasos Channel** `Tasos_Channel.html` — In red, the healer's path. In blue, possible places to engage the Frog.
+- **Trial: Ulta Hall** `Trial__Ulta_Hall.html` — Unwilling to give up so easily, the Gang redoubled their efforts to retrieve the sword. Ru
+- **Trial: Vileshark HQ** `Trial__Vileshark_HQ.html` — During a fierce battle with the Eternal Guardians years ago, the base was ruined. The Pira
+- **Ulta Hall** `Ulta_Hall.html` — Unwilling to give up so easily, the Gang redoubled their efforts to retrieve the sword. Ru
+- **Veninfang** `Veninfang.html` — However, even the noblest of intentions can decay over time. These days, the Wolfeye Gang 
+- **Vileshark HQ** `Vileshark_HQ.html` — During a fierce battle with the Eternal Guardians years ago, the base was ruined. The Pira
+- **Vortek** `Vortek.html` — People believe the vortex of the whirlpool is connected to Galt's Palace, but that the whi
+
+### monstres (159)
+
+- **Abyss Flying Monster** (niv. 47) `Abyss_Flying_Monster.html` — This monster is not directly named in any quests.
+- **Abyss Hermit** (niv. 41) `Abyss_Hermit.html` — This monster is not directly named in any quests.
+- **Abyss Hunter** (niv. 47) `Abyss_Hunter.html` — This monster is not directly named in any quests.
+- **Abyss Spirit** (niv. 47) `Abyss_Spirit.html` — This monster is not directly named in any quests.
+- **Acidic Worm** (niv. 35) `Acidic_Worm.html` — This monster is not directly named in any quests.
+- **Activated Safeguard** (niv. 37) `Activated_Safeguard.html` — This monster is not directly named in any quests.
+- **Activated Safeguard (Trial)** (niv. 50) `Activated_Safeguard_(Trial).html` — This monster is not directly named in any quests.
+- **Amur Protector** (niv. 48) `Amur_Protector.html` — This monster is not directly named in any quests.
+- **Amur Sacred Worm** (niv. 48) `Amur_Sacred_Worm.html` — This monster is not directly named in any quests.
+- **Ancient Guardian** (niv. 21) `Ancient_Guardian.html` — This monster is not directly named in any quests.
+- **Ancient King Worm** (niv. 48) `Ancient_King_Worm.html` — This monster is not directly named in any quests.
+- **Angry Angelly** (niv. 49) `Angry_Angelly.html` — This monster is not directly named in any quests.
+- **Angry Palace Guard** (niv. 57) `Angry_Palace_Guard.html` — This monster is not directly named in any quests.
+- **Awake Bronze Statue (Trial)** (niv. 50) `Awake_Bronze_Statue_(Trial).html` — This monster is not directly named in any quests.
+- **Awakened Flower Beast** (niv. 56) `Awakened_Flower_Beast.html` — This monster is not directly named in any quests.
+- **Awoken Bronze Statue** (niv. 37) `Awoken_Bronze_Statue.html` — This monster is not directly named in any quests.
+- **Basim Mushroid** (niv. 60) `Basim_Mushroid.html` — This monster is not directly named in any quests.
+- **Bay Angelly** `Bay_Angelly.html` — Bay Angelly is a jelly fish with a moss-green halo atop its head. It has a pink head and b
+- **Beast Eating Bug** (niv. 35) `Beast_Eating_Bug.html` — This monster is not directly named in any quests.
+- **Black Hand Assassin** (niv. 62) `Black_Hand_Assassin.html` — This monster is not directly named in any quests.
+- **Black Hand Boxing Master** (niv. 62) `Black_Hand_Boxing_Master.html` — This monster is not directly named in any quests.
+- **Black Hand Guard** (niv. 62) `Black_Hand_Guard.html` — This monster is not directly named in any quests.
+- **Black Hand Steel Guard** (niv. 62) `Black_Hand_Steel_Guard.html` — This monster is not directly named in any quests.
+- **Blood Sucking Bat** (niv. 54) `Blood_Sucking_Bat.html` — is a monster located in Mara Cult Altar . Contents 1 Skills 2 Drops 3 Quest appearances 3.
+- **Blood Sucking Bug** (niv. 55) `Blood_Sucking_Bug.html` — This monster is not directly named in any quests.
+- **Bloodtooth Attacker** (niv. 50) `Bloodtooth_Attacker.html` — This monster is not directly named in any quests.
+- **Bloodtooth Executioner** (niv. 50) `Bloodtooth_Executioner.html` — This monster is not directly named in any quests.
+- **Bloodtooth Fighter** (niv. 50) `Bloodtooth_Fighter.html` — This monster is not directly named in any quests.
+- **Bloodtooth Fleshrender** (niv. 50) `Bloodtooth_Fleshrender.html` — This monster is not directly named in any quests.
+- **Bloodtooth Leader** (niv. 50) `Bloodtooth_Leader.html` — This monster is not directly named in any quests.
+- **Bloody Beast** (niv. 56) `Bloody_Beast.html` — This monster is not directly named in any quests.
+- **Bryophyte Beast** (niv. 56) `Bryophyte_Beast.html` — is a monster located in Soulmor Falls . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 
+- **Carmela Robber Leader** (niv. 37) `Carmela_Robber_Leader.html` — This monster is not directly named in any quests.
+- **Carmela Robber Leader (Trial)** (niv. 50) `Carmela_Robber_Leader_(Trial).html` — This monster is not directly named in any quests.
+- **Carmela Tomb Raider** (niv. 37) `Carmela_Tomb_Raider.html` — This monster is not directly named in any quests.
+- **Carmela Tomb Raider (Trial)** (niv. 50) `Carmela_Tomb_Raider_(Trial).html` — This monster is not directly named in any quests.
+- **Carmela Totem Master** (niv. 37) `Carmela_Totem_Master.html` — This monster is not directly named in any quests.
+- **Carmela Totem Master (Trial)** (niv. 50) `Carmela_Totem_Master_(Trial).html` — This monster is not directly named in any quests.
+- **Cave Dragon** (niv. 23) `Cave_Dragon.html` — This monster is not directly named in any quests.
+- **Cave Dread Flower** (niv. 31) `Cave_Dread_Flower.html` — This monster is not directly named in any quests.
+- **Cave Flame Crab** (niv. 49) `Cave_Flame_Crab.html` — This monster is not directly named in any quests.
+- **Charming Spirit** (niv. 43) `Charming_Spirit.html` — This monster is not directly named in any quests.
+- **Confused Walker** (niv. 33) `Confused_Walker.html` — This monster is not directly named in any quests.
+- **Controlled Spirit** (niv. 50) `Controlled_Spirit.html` — This monster is not directly named in any quests.
+- **Corrupted Soultree** (niv. 31) `Corrupted_Soultree.html` — This monster is not directly named in any quests.
+- **Crystal Road Guard** (niv. 47) `Crystal_Road_Guard.html` — This monster is not directly named in any quests.
+- **Dark Abyss Killer** (niv. 41) `Dark_Abyss_Killer.html` — This monster is not directly named in any quests.
+- **Dark Abyss Rep.** (niv. 41) `Dark_Abyss_Rep.html` — This monster is not directly named in any quests.
+- **Dark Abyss Spirit** (niv. 41) `Dark_Abyss_Spirit.html` — This monster is not directly named in any quests.
+- **Dark Marsh Killer** (niv. 18) `Dark_Marsh_Killer.html` — is a monster located in Tasos Channel . Skills Icon Name Skill Type Cast Time CD Descripti
+- **Darksong Black Axe** (niv. 57) `Darksong_Black_Axe.html` — is a monster located in Vortek . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party m
+- **Darksong Witch** (niv. 57) `Darksong_Witch.html` — is a monster located in Vortek . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party m
+- **Desert Rats Tomb Raider** (niv. 48) `Desert_Rats_Tomb_Raider.html` — This monster is not directly named in any quests.
+- **Desert Rats Witch** (niv. 48) `Desert_Rats_Witch.html` — This monster is not directly named in any quests.
+- **Dimensional Worm** (niv. 47) `Dimensional_Worm.html` — This monster is not directly named in any quests.
+- **Dirt Devil** (niv. 55) `Dirt_Devil.html` — This monster is not directly named in any quests.
+- **Double Wing Demon** (niv. 55) `Double_Wing_Demon.html` — This monster is not directly named in any quests.
+- **Eagle Gang Fighter** (niv. 13) `Eagle_Gang_Fighter.html` — This monster is not directly named in any quests.
+- **Eagle Gang Hunter** (niv. 13) `Eagle_Gang_Hunter.html` — This monster is not directly named in any quests.
+- **Eagle Gang Leader** (niv. 13) `Eagle_Gang_Leader.html` — This monster is not directly named in any quests.
+- … 99 autres, voir `categories/monstres.md` et `pages-index.tsv`
+
+### bosses (147)
+
+- **Acilino** (niv. 31) `Acilino.html` — is a boss located in Branda Root . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party
+- **Alice** (niv. 43) `Alice.html` — is a boss located in Mayor's Dream . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Ancient Defender** `Ancient_Defender.html`
+- **Anderli** (niv. 47) `Anderli.html` — is a boss located in Slain . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party mode 
+- **Angela** (niv. 19) `Angela.html` — is a boss located in Tasos Channel . She appears in a dual-boss fight alongside Juan at th
+- **Appacka** `Appacka.html` — Note: Appacka does also appear as Woolly Yak in Eden Eternal.
+- **AxeBeak Fat Bird** `AxeBeak_Fat_Bird.html` — Cooldown 2sec.
+- **Axe Moss** (niv. 29) `Axe_Moss.html` — Axe Moss is a boss located in Vileshark HQ . In order for him to spawn, one must defeat al
+- **Axe Moss (Trial)** (niv. 50) `Axe_Moss_(Trial).html` — Axe Moss is a boss located in Trial: Vileshark HQ .
+- **Axebeak Eagle** `Axebeak_Eagle.html`
+- **Bass** (niv. 49) `Bass.html` — is a boss located in Crypticone . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party 
+- **Bassett** (niv. 60) `Bassett.html` — This monster is not directly named in any quests.
+- **Bayard** (niv. 47) `Bayard.html` — is a boss located in Slain . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party mode 
+- **Beelzebub** `Beelzebub.html`
+- **Bug Queen Abby** (niv. 35) `Bug_Queen_Abby.html` — is a boss located in Rotten . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party mode
+- **Buster** `Buster.html` — Location
+- **Captain Kasin (Trial)** (niv. 50) `Captain_Kasin_(Trial).html` — Captain Kasin is a boss located in Trial: Ulta Hall . Skills Icon Name Skill Type Cast Tim
+- **Cashil** `Cashil.html` — Heavy Armor Body Durability: 120/120
+- **Cave Mushroid** `Cave_Mushroid.html` — Awakening IV - Defeat 4 Cave Mushroid
+- **Charles** (niv. 29) `Charles.html` — Charles is a boss located in Vileshark HQ . In order for him to appear, one must kill all 
+- **Charles (Trial)** (niv. 50) `Charles_(Trial).html` — Charles is a boss located in Trial: Vileshark HQ .
+- **Chino** (niv. 45) `Chino.html` — is a boss located in Veninfang . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party m
+- **Cruel Kasi** (niv. 58) `Cruel_Kasi.html` — Cruel Kasi, along with three Mobile Mine DX mobs, will spawn after you defeat Koos . The m
+- **Dana** (niv. 43) `Dana.html` — is a boss located in Mayor's Dream . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Dark Dragon Jiro** (niv. 24) `Dark_Dragon_Jiro.html` — is a boss located in Eroda . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party mode 
+- **Dark Marsh Butcher** `Dark_Marsh_Butcher.html`
+- **Dark Marsh Gangster** `Dark_Marsh_Gangster.html`
+- **Dark Marsh Soldier** `Dark_Marsh_Soldier.html`
+- **Dark Marsh Wizard** `Dark_Marsh_Wizard.html`
+- **Donatello** (niv. 53) `Donatello.html` — This monster is not directly named in any quests.
+- **Doubledoor** (niv. 33) `Doubledoor.html` — is a boss located in Malice Palace . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Eagle Gang Assassin** `Eagle_Gang_Assassin.html`
+- **Eagle Gang Butcher** `Eagle_Gang_Butcher.html`
+- **Eagle Gang Gangster** `Eagle_Gang_Gangster.html`
+- **Eagle Gang Killer** `Eagle_Gang_Killer.html`
+- **Eagle Gang Robber** `Eagle_Gang_Robber.html`
+- **Eagle Gang Swordsman** `Eagle_Gang_Swordsman.html`
+- **Ebaster** (niv. 41) `Ebaster.html` — is a boss located in Baltaroi Core . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Experiment 627** (niv. 51) `Experiment_627.html` — is a boss located in Delphi Temple . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Forest Elder** `Forest_Elder.html`
+- **Forest Giant** `Forest_Giant.html`
+- **Forest Imp** `Forest_Imp.html`
+- **Fragrant Lily** `Fragrant_Lily.html`
+- **Frederick** (niv. 60) `Frederick.html` — is the first boss of Basel Border . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Part
+- **Galapagos** `Galapagos.html` — Location
+- **Galt** (niv. 57) `Galt.html` — is the second and final boss of Vortek . Contents 1 Skills 2 Drops 3 Quest appearances 3.1
+- **Garrot** (niv. 51) `Garrot.html` — is a boss located in Crimson . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party mod
+- **Garson** (niv. 33) `Garson.html` — is a boss located in Malice Palace . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Giant Rock Turtle** `Giant_Rock_Turtle.html`
+- **Granite Hands** `Granite_Hands.html` — Heavy Armor Body Durability: 120/120
+- **Greedy Gremlin** `Greedy_Gremlin.html`
+- **Guillaume** (niv. 27) `Guillaume.html` — is a boss located exclusively in the party version Morticora . His solo mode equivalent is
+- **Guillermo's Totem** (niv. 27) `Guillermo's_Totem.html` — is a boss located in the solo version Morticora . The party mode equivalent is Guillaume .
+- **Gun-RX79** (niv. 21) `Gun-RX79.html` — is a boss located in Shale Cavern . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Part
+- **Hakar** `Hakar.html` — Location
+- **Hans** (niv. 45) `Hans.html` — is a boss located in Veninfang . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Party m
+- **Haslett** (niv. 41) `Haslett.html` — is a boss located in Baltaroi Core . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Par
+- **Herak** (niv. 8) `Herak.html` — is the first boss in Angor Quarry . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Part
+- **Iron Feet Ellison** (niv. 60) `Iron_Feet_Ellison.html` — is a boss located in Basel Border . Contents 1 Skills 2 Drops 3 Quest appearances 3.1 Part
+- **Iron Hide Boar** `Iron_Hide_Boar.html`
+- … 87 autres, voir `categories/bosses.md` et `pages-index.tsv`
+
+### pnjs (19)
+
+- **Alec** `Alec.html` — Systematically, Zumi Merchant Alec will recite tips to players through the chatbox (in ran
+- **Andrew** `Andrew.html` — This NPC used to known as Village Head Schoss
+- **Athena Marie** `Athena_Marie.html` — "If you cannot change your fate, you must accept it.
+- **Carrack** `Carrack.html` — Systematically, General Merchant Carrack will recite tips to players through the chatbox (
+- **Dash** `Dash.html` — Use your power to overcome the forces of evil. Collect the following items, and you'll hel
+- **Deln** `Deln.html` — Deln is an Ursun warrior, and the bodyguard of Athena Marie .
+- **Garrison Sniper Nelle** `Garrison_Sniper_Nelle.html`
+- **Hettie** `Hettie.html` — Maybe you're interested in revealing the mysteries of your future. Would you like to know 
+- **Horn** `Horn.html` — Talking to Horn does not show text: instead,
+- **Kev** `Kev.html` — Systematically, Kev will recite tips to players through the chatbox (in random order).
+- **Lady Rainbow** `Lady_Rainbow.html` — "I have pigments of various colors. You can dye your clothes any color you like. Come have
+- **Laz** `Laz.html` — Periodically, Laz will recite tips to players through the chatbox (in random order)
+- **Madam Cynthia** `Madam_Cynthia.html` — Periodically,Cynthia will recite tips to players through the chatbox (in random order)
+- **Miner Airy** `Miner_Airy.html` — "So strange that the place has changed like this. There was nothing special here when I pa
+- **Morgan** `Morgan.html` — Morgan is a student of the Arcanum Association . She can be found in Aven , near the cente
+- **Naut** `Naut.html` — "Since the highwaymen infested the area, another merchants seems to leave torn every day. 
+- **Rel** `Rel.html` — is a Traveling Merchant in Tranquil Hill. He can be found at Camina Ranch. Shop Items Cost
+- **Stella** `Stella.html` — Talking to Stella does not show text: instead,
+- **Torch** `Torch.html` — Systematically, the Hunter Torch will recite tips (or rather, complaints) to players throu
+
+### armes (2092)
+
+- **28-Caliber Sniper Barrel** (niv. 62) `28-Caliber_Sniper_Barrel.html` — Obtain Monster/Item Drop Rune Dryad <Blood Battler> Spenja Black Hand Guard Black Hand Tra
+- **Abandoned Code of Law** (niv. 75) `Abandoned_Code_of_Law.html` — Obtain Monster/Item Drop <Army Beast> Frost Wing Terradrake Wicked Flying Mount Boy's Illu
+- **Abby's Crystal Toxic Staff** (niv. 35) `Abby's_Crystal_Toxic_Staff.html` — "This staff is made from a crystal derived from Bug Queen Abby's fang through an advanced 
+- **Abyss Beast Shell** (niv. 45) `Abyss_Beast_Shell.html` — Obtain Purchasable from the following NPCs for 299 200 Silver Needle Elma
+- **Abyss Biochemical Cannon** (niv. 71) `Abyss_Biochemical_Cannon.html` — "Scholars tried to cast magic upon weapons and created this kick-butt cannon. Not only can
+- **Abysser Sword** (niv. 65) `Abysser_Sword.html` — Obtain Monster/Item Drop Spike Ceratop Hamanzi Mad Warrior <Lord of War> Ochoeve Black Han
+- **Accursed Alchemical Flash Blade** (niv. 85) `Accursed_Alchemical_Flash_Blade.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Amber Cradle Katana** (niv. 80) `Accursed_Amber_Cradle_Katana.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Amethyst Twin Blade** (niv. 80) `Accursed_Amethyst_Twin_Blade.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Anchor Greatsword** (niv. 80) `Accursed_Anchor_Greatsword.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Ancient Frost Sword** (niv. 85) `Accursed_Ancient_Frost_Sword.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Angel of Death Solo** (niv. 80) `Accursed_Angel_of_Death_Solo.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Aqua Dragon's Fury** (niv. 85) `Accursed_Aqua_Dragon's_Fury.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Arcane Propulsion** (niv. 85) `Accursed_Arcane_Propulsion.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Avenger's Flame** (niv. 85) `Accursed_Avenger's_Flame.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Azure Soul Guitar** (niv. 80) `Accursed_Azure_Soul_Guitar.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Azure Truth** (niv. 85) `Accursed_Azure_Truth.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Baleful Defender** (niv. 85) `Accursed_Baleful_Defender.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Batwing Bow** (niv. 80) `Accursed_Batwing_Bow.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Book of Vast Mysteries** (niv. 80) `Accursed_Book_of_Vast_Mysteries.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Borealis Mace** (niv. 80) `Accursed_Borealis_Mace.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Breath of Judgment** (niv. 85) `Accursed_Breath_of_Judgment.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Bright Barrier Shield** (niv. 85) `Accursed_Bright_Barrier_Shield.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Celestial Phoenix** (niv. 85) `Accursed_Celestial_Phoenix.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Chilalo's Heart** (niv. 85) `Accursed_Chilalo's_Heart.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Crimes and Punishments 4 to 52** (niv. 80) `Accursed_Crimes_and_Punishments_4_to_52.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Crushblade Scythe** (niv. 80) `Accursed_Crushblade_Scythe.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Demon's Bloodheart Axe** (niv. 80) `Accursed_Demon's_Bloodheart_Axe.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Divine Way Staff** (niv. 80) `Accursed_Divine_Way_Staff.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Dragonfire** (niv. 85) `Accursed_Dragonfire.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Dragonfrost Thorn** (niv. 85) `Accursed_Dragonfrost_Thorn.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Dream Journal - Book of Inner Light** (niv. 80) `Accursed_Dream_Journal_-_Book_of_Inner_Light.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Electric Plasma Assault** (niv. 80) `Accursed_Electric_Plasma_Assault.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Electromagnetic Orbital Cannon - Trump Card** (niv. 80) `Accursed_Electromagnetic_Orbital_Cannon_-_Trump_Card.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Eternal Guardian's Bond** (niv. 85) `Accursed_Eternal_Guardian's_Bond.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Eternity Staff** (niv. 85) `Accursed_Eternity_Staff.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Fall of Dusk** (niv. 85) `Accursed_Fall_of_Dusk.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Fallen Star's Essence** (niv. 85) `Accursed_Fallen_Star's_Essence.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Fearless Bravery** (niv. 80) `Accursed_Fearless_Bravery.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Frost Hell's Essence** (niv. 85) `Accursed_Frost_Hell's_Essence.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Fusion Pike** (niv. 80) `Accursed_Fusion_Pike.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Gallant Steelshatter Hammer** (niv. 80) `Accursed_Gallant_Steelshatter_Hammer.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Gilded Flashblade** (niv. 80) `Accursed_Gilded_Flashblade.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Goldgale Hammer** (niv. 80) `Accursed_Goldgale_Hammer.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Goshawk Battle Staff** (niv. 80) `Accursed_Goshawk_Battle_Staff.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Grim Witch Sword** (niv. 80) `Accursed_Grim_Witch_Sword.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Heartbreaker Spiral Blade** (niv. 80) `Accursed_Heartbreaker_Spiral_Blade.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Heavenly Retribution** (niv. 85) `Accursed_Heavenly_Retribution.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Iced Thunderbolt Fang** (niv. 80) `Accursed_Iced_Thunderbolt_Fang.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Infinite Loop Blade** (niv. 80) `Accursed_Infinite_Loop_Blade.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Iron Warlord** (niv. 85) `Accursed_Iron_Warlord.html` — Obtain Purchasable from the following NPCs for 45 Graylin Guard Alan
+- **Accursed Knight's Soul Blade** (niv. 80) `Accursed_Knight's_Soul_Blade.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Leo Howl Shield** (niv. 80) `Accursed_Leo_Howl_Shield.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Magnetic Pulse Katana** (niv. 85) `Accursed_Magnetic_Pulse_Katana.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Magnus Greatsword** (niv. 80) `Accursed_Magnus_Greatsword.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Millennium Axe** (niv. 85) `Accursed_Millennium_Axe.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Monster's Feverish Dance** (niv. 80) `Accursed_Monster's_Feverish_Dance.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- **Accursed Moonblade** (niv. 80) `Accursed_Moonblade.html` — Obtain Purchasable from the following NPCs for 40 Valencia Security Officer Chabel
+- **Accursed Nave of Vision** (niv. 85) `Accursed_Nave_of_Vision.html` — Obtain Purchasable from the following NPCs for 90 Graylin Guard Alan
+- **Accursed Obsidian Steel Greatsword** (niv. 80) `Accursed_Obsidian_Steel_Greatsword.html` — Obtain Purchasable from the following NPCs for 80 Valencia Security Officer Chabel
+- … 2032 autres, voir `categories/armes.md` et `pages-index.tsv`
+
+### armures (2464)
+
+- **9-Level Hellfire Cape** (niv. 70) `9-Level_Hellfire_Cape.html` — Obtain Crafting Blueprints Formula: 9-Level Hellfire Cape
+- **Abby's Abyss Shell** (niv. 33) `Abby's_Abyss_Shell.html` — "This tunic was made from Abby's shell. Mysterious light sources seem to move through it. 
+- **Abby's Horror Stare** (niv. 33) `Abby's_Horror_Stare.html` — "The glassy eye set into the top of the helmet is Abby's. You can see the fear she felt be
+- **Abby's Mother Hug** (niv. 33) `Abby's_Mother_Hug.html` — "Abby always covers rampaging baby worms with this robe. It has a special essence that mak
+- **Abyss Boots** (niv. 56) `Abyss_Boots.html` — "It's said that the Imps of the Abyss would wear these boots and pull pranks on people wit
+- **Adaptive Steel Gloves** (niv. 82) `Adaptive_Steel_Gloves.html` — "Made from the most malleable metal around, these gloves are so flexible that they don't i
+- **Agile Fox Cloak** (niv. 50) `Agile_Fox_Cloak.html` — Obtain Crafting Blueprints Blueprint: Agile Fox Cloak
+- **Alice's Dream Walker** (niv. 43) `Alice's_Dream_Walker.html` — "Dreams are hard to understand. People always get trapped in their own dreams, but these s
+- **Alice's Dream Weaver Belt** (niv. 43) `Alice's_Dream_Weaver_Belt.html` — "Every dream weaver has her own belt. The belt is not just a part of her wardrobe, though;
+- **Alice's Fancy Helmet** (niv. 43) `Alice's_Fancy_Helmet.html` — "This helmet is inlaid with many magic crystals. The magic totem on it makes it look myste
+- **Almighty Belt** (niv. 75) `Almighty_Belt.html` — Obtain Crafting Blueprints Blueprint: Almighty Belt
+- **Almighty Boots** (niv. 75) `Almighty_Boots.html` — Obtain Crafting Blueprints Blueprint: Almighty Boots
+- **Almighty Bracers** (niv. 75) `Almighty_Bracers.html` — Obtain Crafting Blueprints Blueprint: Almighty Bracers
+- **Almighty Brigandine** (niv. 75) `Almighty_Brigandine.html` — Obtain Crafting Blueprints Blueprint: Almighty Brigandine
+- **Almighty Cape** (niv. 63) `Almighty_Cape.html` — Obtain Crafting Blueprints Blueprint: Almighty Cape
+- **Almighty Hat** (niv. 75) `Almighty_Hat.html` — Obtain Crafting Blueprints Blueprint: Almighty Hat
+- **Amethyst Armor** (niv. 70) `Amethyst_Armor.html` — "This entire suit of armor is studded with Crystal Pangolin's amethyst. Fabulous!"
+- **Anathema Belt** (niv. 88) `Anathema_Belt.html` — Obtain Crafting Blueprints Blueprint: Anathema Belt
+- **Anathema Brigandine** (niv. 88) `Anathema_Brigandine.html` — Obtain Crafting Blueprints Blueprint: Anathema Brigandine
+- **Anathema Gloves** (niv. 88) `Anathema_Gloves.html` — Obtain Crafting Blueprints Blueprint: Anathema Gloves
+- **Anathema Leather Boots** (niv. 88) `Anathema_Leather_Boots.html` — Obtain Crafting Blueprints Blueprint: Anathema Leather Boots
+- **Anathema Leather Hat** (niv. 88) `Anathema_Leather_Hat.html` — Obtain Crafting Blueprints Blueprint: Anathema Leather Hat
+- **Ancient Armor** (niv. 53) `Ancient_Armor.html` — Obtain Monster/Item Drop Bloodtooth Scout Mining Chopper Abyss Turtle Deadlycap Mushroid S
+- **Ancient Belt** (niv. 53) `Ancient_Belt.html` — Obtain Monster/Item Drop Hopping Cactus Crystal Mantis Petrified Turtle <Dread Hand> Sincl
+- **Ancient Boots (Level 1)** (niv. 1) `Ancient_Boots_(Level_1).html` — This item is part of the beginner's gear set. You'll have it equipped upon character creat
+- **Ancient Boots (Level 53)** (niv. 53) `Ancient_Boots_(Level_53).html` — Obtain Monster/Item Drop Bloody Eye Owl Lava Soul Bestial Bellwort Redbreast Eagle Gates M
+- **Ancient Gauntlets** (niv. 53) `Ancient_Gauntlets.html` — Obtain Monster/Item Drop Swampwalk Mushroid Crazy Sharp Cactus Ryke Death Elder <Timid Mag
+- **Ancient Gloves** (niv. 1) `Ancient_Gloves.html` — This item is part of the beginner's gear set. You'll have it equipped upon character creat
+- **Ancient Helmet** (niv. 53) `Ancient_Helmet.html` — Obtain Monster/Item Drop Bloodtooth Ax Man Mining Gangster Mad Flower Soul Prickly Pear Li
+- **Ancient Light Armor** (niv. 1) `Ancient_Light_Armor.html` — This item is part of the beginner's gear set. You'll have it equipped upon character creat
+- **Ancient Mystery Belt** (niv. 22) `Ancient_Mystery_Belt.html` — "This belt has writing in some ancient language. It seems to have some unusual power."
+- **Ancient Priest Cape** (niv. 47) `Ancient_Priest_Cape.html` — "This cape was worn by an ancient priest. It looks old but elegant. They say if you listen
+- **Ancient Ritual Headpiece** (niv. 74) `Ancient_Ritual_Headpiece.html` — "This experimental headpiece was made in the image of a ritualistic headpiece featured in 
+- **Ancient Saint Belt** (niv. 63) `Ancient_Saint_Belt.html` — Obtain Monster/Item Drop Steel Armor Box Frozen Earth Armor Box
+- **Ancient Saint Boots** (niv. 63) `Ancient_Saint_Boots.html` — Obtain Purchasable from the following NPCs for 496 360 Spirit Follower Balder
+- **Ancient Saint Brigandine** (niv. 63) `Ancient_Saint_Brigandine.html` — Obtain Monster/Item Drop Crystal Armor Box Permafrost Armor Box
+- **Ancient Saint Gloves** (niv. 63) `Ancient_Saint_Gloves.html` — Obtain Purchasable from the following NPCs for 551 520 Spirit Follower Balder
+- **Ancient Saint Hat** (niv. 63) `Ancient_Saint_Hat.html` — Obtain Monster/Item Drop Sealed Armor Box Emerald Thorn Armor Box
+- **Ancient Shield Armor** (niv. 53) `Ancient_Shield_Armor.html` — Obtain Crafting Blueprints Blueprint: Ancient Shield Armor
+- **Ancient Shield Belt** (niv. 53) `Ancient_Shield_Belt.html` — Obtain Crafting Blueprints Blueprint: Ancient Shield Belt
+- **Ancient Shield Gauntlets** (niv. 53) `Ancient_Shield_Gauntlets.html` — Obtain Crafting Blueprints Blueprint: Ancient Shield Gauntlets
+- **Ancient Shield Greaves** (niv. 53) `Ancient_Shield_Greaves.html` — Obtain Crafting Blueprints Blueprint: Ancient Shield Greaves
+- **Ancient Shield Helmet** (niv. 53) `Ancient_Shield_Helmet.html` — Obtain Crafting Blueprints Blueprint: Ancient Shield Helmet
+- **Ancient Spirit Belt** (niv. 65) `Ancient_Spirit_Belt.html` — Obtain Crafting Blueprints Blueprint: Ancient Spirit Belt
+- **Ancient Spirit Boots** (niv. 65) `Ancient_Spirit_Boots.html` — Obtain Crafting Blueprints Blueprint: Ancient Spirit Boots
+- **Ancient Spirit Brigandine** (niv. 65) `Ancient_Spirit_Brigandine.html` — Obtain Crafting Blueprints Blueprint: Ancient Spirit Brigandine
+- **Ancient Spirit Crown** (niv. 48) `Ancient_Spirit_Crown.html` — "This crown was blessed by an ancient spirit. It is sturdy and still smells of the cream u
+- **Ancient Spirit Gloves** (niv. 65) `Ancient_Spirit_Gloves.html` — Obtain Crafting Blueprints Blueprint: Ancient Spirit Gloves
+- **Ancient Spirit Hat** (niv. 65) `Ancient_Spirit_Hat.html` — Obtain Crafting Blueprints Blueprint: Ancient Spirit Hat
+- **Ancient Warrior Helmet** (niv. 78) `Ancient_Warrior_Helmet.html` — "Only the fiercest warriors among the Durango Kingdom's court are allowed to wear this hel
+- **Ancient Weaving Gloves** (niv. 77) `Ancient_Weaving_Gloves.html` — "This special pair of gloves was originally part of the Valley of Kings' shaman warriors' 
+- **Angel's Delight Belt** (niv. 85) `Angel's_Delight_Belt.html` — Obtain Crafting Blueprints Blueprint: Angel's Delight Belt
+- **Angel's Delight Brigandine** (niv. 85) `Angel's_Delight_Brigandine.html` — Obtain Crafting Blueprints Blueprint: Angel's Delight Brigandine
+- **Angel's Delight Gloves** (niv. 85) `Angel's_Delight_Gloves.html` — Obtain Crafting Blueprints Blueprint: Angel's Delight Gloves
+- **Angel's Delight Leather Boots** (niv. 85) `Angel's_Delight_Leather_Boots.html` — Obtain Crafting Blueprints Blueprint: Angel's Delight Leather Boots
+- **Angel's Delight Leather Hat** (niv. 85) `Angel's_Delight_Leather_Hat.html` — Obtain Crafting Blueprints Blueprint: Angel's Delight Leather Hat
+- **Angel Crime Belt** (niv. 70) `Angel_Crime_Belt.html` — Obtain Monster/Item Drop Abyss Armor Chest Guard Crafting Blueprints Formula: Angel Crime 
+- **Angel Crime Boots** (niv. 70) `Angel_Crime_Boots.html` — Obtain Monster/Item Drop Abyss Armor Chest Guard Crafting Blueprints Formula: Angel Crime 
+- **Angel Crime Crown** (niv. 70) `Angel_Crime_Crown.html` — Obtain Monster/Item Drop Abyss Armor Chest Guard Crafting Blueprints Formula: Angel Crime 
+- **Angel Crime Gloves** (niv. 70) `Angel_Crime_Gloves.html` — Obtain Monster/Item Drop Abyss Armor Chest Guard Crafting Blueprints Formula: Angel Crime 
+- … 2404 autres, voir `categories/armures.md` et `pages-index.tsv`
+
+### accessoires (1083)
+
+- **5 Beast Team Badge** (niv. 57) `5_Beast_Team_Badge.html` — "Warriors from five different races crossed racial barriers to form a team to bring peace 
+- **5 Beast Team Totem: Anura** (niv. 19) `5_Beast_Team_Totem__Anura.html` — "This totem is a memorial to Bonka, the Anura Ranger. As a talented leader, he had a warm 
+- **5 Beast Team Totem: Zumi** (niv. 33) `5_Beast_Team_Totem__Zumi.html` — "The totem is a memorial to Yula, the Zumi Illusionist. He always knew just how to lead en
+- **5 Beast Totem: Torturra** (niv. 57) `5_Beast_Totem__Torturra.html` — "This totem is a memorial to Maschatta, the Torturra Shaman. He was always kind and helped
+- **5 Beast Totem: Tuskar** (niv. 41) `5_Beast_Totem__Tuskar.html` — "The totem is a memorial to Barlilu, the Tuskar Thief. Although he wasn't strong, he could
+- **5 Beast Totem: Ursun** (niv. 51) `5_Beast_Totem__Ursun.html` — "This totem is a memorial to Ron, the Ursun Martial Artist. He always stood in front of hi
+- **Abby's Egg Sac** (niv. 35) `Abby's_Egg_Sac.html` — "It's the only part of Abby that isn't poisonous, though it still smells like foul halitos
+- **Absolute Territory Ring** (niv. 70) `Absolute_Territory_Ring.html` — Obtain Monster/Item Drop <Eagle Gang Leader> Ketak (Trial S) <Abyssal Sin> Haslett (Trial 
+- **Abyss Alchemist- Dark Devour** (niv. 71) `Abyss_Alchemist-_Dark_Devour.html` — Obtain Purchasable from the following NPCs for 384 960 Eternal Watcher Fame Chest
+- **Abyss Necklace** (niv. 55) `Abyss_Necklace.html` — Obtain Crafting Blueprints Blueprint: Abyss Necklace
+- **Acilino's Fang** (niv. 65) `Acilino's_Fang.html` — "Acilino's teeth are arranged in such a way as to easily crush its enemies skulls, but den
+- **Acilino's Recovery Stone** (niv. 30) `Acilino's_Recovery_Stone.html` — "The demonic gem on the ring has a potent recovery power. Acilino was able to survive a ma
+- **Acilino's Trophy Claw** (niv. 31) `Acilino's_Trophy_Claw.html` — "This well polished claw is proof that its owner once fought a demon. Warlocks can absorb 
+- **Adventure Ring** (niv. 20) `Adventure_Ring.html` — Obtain Crafting Blueprints Blueprint: Adventure Ring
+- **Akartis' Fur** (niv. 80) `Akartis'_Fur.html` — "Although stripped from the dragon's corpse long ago, the green fur on this hide still rip
+- **Alchemist- Imperial Regret** (niv. 75) `Alchemist-_Imperial_Regret.html` — Obtain Purchasable from the following NPCs for 408 Steeler Fame Chest
+- **Alchemist- Unlimited** (niv. 75) `Alchemist-_Unlimited.html` — Obtain Crafting Blueprints Blueprint: Alchemist- Unlimited
+- **Alice's Broken Chain** (niv. 43) `Alice's_Broken_Chain.html` — "Alice's hobby is bewitching people with beautiful dreams and strangling them to death whi
+- **Alice's Dream Key** (niv. 65) `Alice's_Dream_Key.html` — "Alice uses this key to access other people's dreams. She doesn't just snoop on dreams tho
+- **Alice's Instruction** (niv. 65) `Alice's_Instruction.html` — "Alice wrote this book, properly titled 'The Moron's Guide to Being a Maid.' She's somethi
+- **Alloy Fighter Ring** (niv. 50) `Alloy_Fighter_Ring.html` — "It has a chic design and was made using advanced technology."
+- **Alloy Ring - Gamma** (niv. 73) `Alloy_Ring_-_Gamma.html` — "This ring was forged from chromium alloy. It can store a large amount of magic and expel 
+- **Ancestor Ring** (niv. 50) `Ancestor_Ring.html` — "Followers of nature use this ring in their worship of nature. Put it on for good luck."
+- **Ancient Battlefield Necklace** (niv. 55) `Ancient_Battlefield_Necklace.html` — Obtain Crafting Blueprints Blueprint: Ancient Battlefield Necklace
+- **Ancient Signet Ring** (niv. 50) `Ancient_Signet_Ring.html` — Obtain Monster/Item Drop <Pirate Leader> One-Eye Roger (Trial) Crafting Blueprints Bluepri
+- **Ancient Totem Rune** (niv. 58) `Ancient_Totem_Rune.html` — "This mysterious ancient totem rune was imbued with a special power due to generations of 
+- **Ancient Tree Vine Ring** (niv. 48) `Ancient_Tree_Vine_Ring.html` — "This tree vine ring from an ancient tree spirit is said to be bursting with a distinctly 
+- **Ancient Tyrant's Policy** (niv. 75) `Ancient_Tyrant's_Policy.html` — "Based on this policy, when Toroto the Third was young, he wanted to go into politics. Unf
+- **Ancient Water Ring** (niv. 65) `Ancient_Water_Ring.html` — Obtain Monster/Item Drop <Wild Beast> Bayard (Trial) Crafting Blueprints Blueprint: Ancien
+- **Anderli's Conscious** (niv. 45) `Anderli's_Conscious.html` — "Anderli can't accept the fact that it is dead. This ring holds all his laments."
+- **Anderli's Eyes** (niv. 47) `Anderli's_Eyes.html` — "This is a squishy eyeball in a little jar. It's said that since Anderli was cursed, its r
+- **Anderli's Feather** (niv. 65) `Anderli's_Feather.html` — "The feathers that fall from Anderli can offset gravity. Carry one and you'll lose 40 poun
+- **Angel Voice Necklace** (niv. 55) `Angel_Voice_Necklace.html` — Obtain Monster/Item Drop <King of Baltaroi> Gustav Baltaroi (Trial) Crafting Blueprints Bl
+- **Angela's Demon Stone- S** (niv. 70) `Angela's_Demon_Stone-_S.html` — "Angela always takes this stone with her. Carved in the shape of an arrowhead, it's adorne
+- **Angela's Demon Stone** (niv. 55) `Angela's_Demon_Stone.html` — "Angela always takes this stone with her. Carved in the shape of an arrowhead, it's adorne
+- **Angela's Fortune Domino** (niv. 19) `Angela's_Fortune_Domino.html` — "A fortune domino made of smooth, bleached bone. Only Angela can truly understand it."
+- **Annihilation Beast's Raging Blood** (niv. 73) `Annihilation_Beast's_Raging_Blood.html` — "Bubbles just keep coming forth from Specimen 4's boiling blood. It would be kinda neat if
+- **Antor's Invisible Blood Claw** (niv. 66) `Antor's_Invisible_Blood_Claw.html` — "After Antor transformed into a demon, these claws grew from his hands. They're covered in
+- **Aquan's Evil Eye** (niv. 69) `Aquan's_Evil_Eye.html` — "By looking into this ring's gemstone, it's possible to see the fate of each and every vic
+- **Aquan's Shell Fragment** (niv. 69) `Aquan's_Shell_Fragment.html` — "Aquan's shell holds many secrets. Unfortunately, it will take you several years of dedica
+- **Aquan's Spider Silk** (niv. 80) `Aquan's_Spider_Silk.html` — "The spider silk spun by Aquan. If you become trapped in the silk, escape is very difficul
+- **Aquarius Ring** (niv. 45) `Aquarius_Ring.html` — Obtain Monster/Item Drop <Nasty Wolf> B.B. Cursed Treasure Chest Rubyoath Guardian <Slow P
+- **Arcane Flame Necklace** (niv. 81) `Arcane_Flame_Necklace.html` — Obtain Purchasable from the following NPCs for 471 360 Holy Tree Guardian Fame Chest
+- **Arrons's Healing Artifact** (niv. 77) `Arrons's_Healing_Artifact.html` — "The source of Arrons's self-healing is this ancient, crumbling artifact that must be powe
+- **Arrons's Unstable Crystal** (niv. 75) `Arrons's_Unstable_Crystal.html` — "This looks like your average mineral crystal, but the patterns that cross its gleaming su
+- **Assassin Certificate** (niv. 58) `Assassin_Certificate.html` — "The certificate of a qualified killer. The 'X' on the ring means extermination."
+- **Assassin Ring** (niv. 48) `Assassin_Ring.html` — "While the ring itself is made of smooth metal, the sharp, thin needles that shoot from it
+- **Assassination Ring** (niv. 83) `Assassination_Ring.html` — Obtain Purchasable from the following NPCs for 482 880 Blazing Angels Fame Chest
+- **Assault Ring** (niv. 45) `Assault_Ring.html` — Obtain Crafting Blueprints Blueprint: Assault Ring
+- **Association's Gift Box** (niv. 11) `Association's_Gift_Box.html` — "The hoof from an Irritable Bison that had manic depression. People who carry it will be q
+- **Aura Absorption Necklace** (niv. 45) `Aura_Absorption_Necklace.html` — Obtain Purchasable from the following NPCs for 149 600 Boulder Fame Chest
+- **Aurora's Silver Badge** (niv. 80) `Aurora's_Silver_Badge.html` — "A silver badge with a rose totem. It represents the highest honor bestowed by the Rose Te
+- **Aurora Ring** (niv. 65) `Aurora_Ring.html` — Obtain Purchasable from the following NPCs for 379 200 Shiver Peak Fame Chest
+- **Axe Moss's Eternal Flame Candle- S** (niv. 70) `Axe_Moss's_Eternal_Flame_Candle-_S.html` — "This candle can't be blown out. A scientist made the magical equipment inside of it, deli
+- **Axe Moss's Eternal Flame Candle** (niv. 50) `Axe_Moss's_Eternal_Flame_Candle.html` — "This candle can't be blown out. A scientist made the magical equipment inside of it, deli
+- **Axe Moss's Pure Gold Bullet** (niv. 29) `Axe_Moss's_Pure_Gold_Bullet.html` — "A gold bullet from Axe Moss. He likes to demonstrate his nobility with things made of gol
+- **Aziz Thought Necklace** (niv. 59) `Aziz_Thought_Necklace.html` — Obtain Purchasable from the following NPCs for 344 640 Aziz Fame Chest
+- **Balefire Necklace** (niv. 87) `Balefire_Necklace.html` — Obtain Purchasable from the following NPCs for 505 920 [[<Toroto Crusader> Fame Chest]]
+- **Balifaith Necklace** (niv. 60) `Balifaith_Necklace.html` — Obtain Monster/Item Drop <Chieftain> Bloodtooth Tor (Trial) Crafting Blueprints Blueprint:
+- **Balre's Beating Heart** (niv. 80) `Balre's_Beating_Heart.html` — "A small high-pressure pump, made by hand. This is Balre's second heard, which holds his p
+- … 1023 autres, voir `categories/accessoires.md` et `pages-index.tsv`
+
+### costumes (112)
+
+- **7-11 Vigor Peaked Cap** `7-11_Vigor_Peaked_Cap.html` — "This magical 7-11 Vigor Peaked Cap makes the wearer energetic and vibrant!"
+- **Adventure Garb** `Adventure_Garb.html` — "Trendy fashions for the young or young-at-heart. Designed to hold up to the most vigorous
+- **Adventure Garb (Alpha)** `Adventure_Garb_(Alpha).html` — "Trendy fashions that increase the wearer's attributes. Designed to hold up to the most vi
+- **Adventure Threads** `Adventure_Threads.html` — "Trendy fashions to help you look sweet, sexy, and maybe a little dangerous." Note: This f
+- **Adventure Threads (Alpha)** `Adventure_Threads_(Alpha).html` — "Trendy fashions to help you look sweet, sexy, and maybe a little dangerous. Also increase
+- **Alluring Gown** `Alluring_Gown.html` — "The sleekest type of evening wear, the proper gown can make you feel as elegant as a quee
+- **Blood Rosette** `Blood_Rosette.html` — "A silk bow adds charm to any outfit." Note: This fashion cannot be dyed.
+- **Blood Rosette (Alpha)** `Blood_Rosette_(Alpha).html` — "An advanced silk bow adds charm to any outfit. It also increases the wearer's attributes.
+- **Bonechiller Horns** `Bonechiller_Horns.html` — "Sport the fashion popularized by the famous bard, Belladonna, at the Aven Solstice festiv
+- **Bonechiller Horns (Alpha)** `Bonechiller_Horns_(Alpha).html` — "Sport the fashion popularized by the famous bard, Belladonna, at the Aven Solstice festiv
+- **Charming Tailcoat** `Charming_Tailcoat.html` — "Fit for feasts, balls, or masquerades, a Tailcoat showcases a man's charm and maturity." 
+- **Charming Tailcoat (Alpha)** `Charming_Tailcoat_(Alpha).html` — "Fit for feasts, balls, or masquerades, a Tailcoat showcases a man's charm and maturity. I
+- **Chivalrous Tailcoat (Alpha)** `Chivalrous_Tailcoat_(Alpha).html` — "Fit for feasts, balls, or masquerades, a Tailcoat showcases a man's charm and maturity. I
+- **Classic Prep Girl** `Classic_Prep_Girl.html` — "This chic sweater set has been designed to keep female adventurers both warm and fashiona
+- **Classic Prep Girl (Alpha)** `Classic_Prep_Girl_(Alpha).html` — "This chic sweater set has been designed to keep female adventurers both warm and fashiona
+- **Classic Prep Guy** `Classic_Prep_Guy.html` — "This trendy leather coat and denim set has been designed to keep male adventurers both wa
+- **Classy Cavalier Dress (Alpha)** `Classy_Cavalier_Dress_(Alpha).html` — "This shapely gown is designed to be elegant and non-constrictive. (Handy when you need to
+- **Classy Cavalier Succat (Alpha)** `Classy_Cavalier_Succat_(Alpha).html` — "This men's robe is designed to be convenient for the elegant swashbuckler (or anyone who 
+- **Corrupt Minidemon's Wings (Prime)** `Corrupt_Minidemon's_Wings_(Prime).html` — "Look as enticing as a sip of icy nightshade on a hot summer's day and be just as dangerou
+- **Crafty Prep Girl (Alpha)** `Crafty_Prep_Girl_(Alpha).html` — "This chic sweater set has been designed to keep female adventurers both warm and fashiona
+- **Cute Rosette (Alpha)** `Cute_Rosette_(Alpha).html` — "An advanced silk bow adds charm to any outfit. It also increases the wearer's attributes.
+- **Dangerous Prep Girl (Alpha)** `Dangerous_Prep_Girl_(Alpha).html` — "This chic sweater set has been designed to keep female adventurers both warm and fashiona
+- **Dangerous Prep Guy (Alpha)** `Dangerous_Prep_Guy_(Alpha).html` — "This trendy leather coat and denim set has been designed to keep male adventurers both wa
+- **Deadly Gown (Alpha)** `Deadly_Gown_(Alpha).html` — "The sleekest type of evening wear, the proper gown can make you feel as elegant as a quee
+- **Delicate Green Santa Hat** `Delicate_Green_Santa_Hat.html` — "A jolly green hat for the holiday, though maybe not quite as jolly as a red one would be.
+- **Delicate Red Santa Hat** `Delicate_Red_Santa_Hat.html` — "A jolly red hat for the holiday that can increase the wearer's attributes." Note: This ca
+- **Divine Seraph's Wings (Alpha)** `Divine_Seraph's_Wings_(Alpha).html` — "They'll give you a peaceful, angelic air, lending you the confidence to face down even th
+- **Dreamy Bunny Ears (Alpha)** `Dreamy_Bunny_Ears_(Alpha).html` — "Headwear in the shape of plush rabbit ears, soft and tall. You may find that they make yo
+- **Dreamy Seraph's Wings** `Dreamy_Seraph's_Wings.html` — "They'll give you a peaceful, angelic air, lending you the confidence to face down even th
+- **Dreamy Seraph's Wings (Alpha)** `Dreamy_Seraph's_Wings_(Alpha).html` — "They'll give you a peaceful, angelic air, lending you the confidence to face down even th
+- **Dyeable Daemon Horns** `Dyeable_Daemon_Horns.html` — "Sport the fashion popularized by the famous bard, Belladonna, at the Aven Solstice festiv
+- **Eden Spectacles** `Eden_Spectacles.html` — "Smart is sexy! These useful and fashionable glasses make the wearer look more intellectua
+- **Eden Spectacles (Alpha)** `Eden_Spectacles_(Alpha).html` — "Smart is sexy! These useful and fashionable glasses make the wearer look more intellectua
+- **Elegant Gown** `Elegant_Gown.html` — "The sleekest type of evening wear, the proper gown can make you feel as elegant as a quee
+- **Elegant Gown (Alpha)** `Elegant_Gown_(Alpha).html` — "The sleekest type of evening wear, the proper gown can make you feel as elegant as a quee
+- **Elegant Tailcoat** `Elegant_Tailcoat.html` — "Fit for feasts, balls, or masquerades, a Tailcoat showcases a man's charm and maturity." 
+- **Elegant Tailcoat (Alpha)** `Elegant_Tailcoat_(Alpha).html` — "Fit for feasts, balls, or masquerades, a Tailcoat showcases a man's charm and maturity. I
+- **Enchanting Serpah's Wings (Alpha)** `Enchanting_Serpah's_Wings_(Alpha).html` — "They'll give you a peaceful, angelic air, lending you the confidence to face down even th
+- **Enigmatic Wizar'ds Top Hat (Alpha)** `Enigmatic_Wizar'ds_Top_Hat_(Alpha).html` — "Top hats lend everyone an elegant and mysterious air, whether worn by gentlemen or ladies
+- **Fancy Garb (Alpha)** `Fancy_Garb_(Alpha).html` — "Trendy fashions that increase the wearer's attributes. Designed to hold up to the most vi
+- **Fancy Threads (Alpha)** `Fancy_Threads_(Alpha).html` — "Trendy fashions to help you look sweet, sexy, and maybe a little dangerous. Also increase
+- **Final Dynasty Cheongsam (Alpha)** `Final_Dynasty_Cheongsam_(Alpha).html` — "The silky, stylish cheongsam is a body-hugging wonder. You'll never look more alluring. A
+- **Final Dynasty Jacket (Alpha)** `Final_Dynasty_Jacket_(Alpha).html` — "Indulge yourself with this silky, smooth over-jacket. Also increases the wearer's attribu
+- **First Dynasty Cheongsam** `First_Dynasty_Cheongsam.html` — "The silky, stylish cheongsam is a body-hugging wonder. You'll never look more alluring." 
+- **First Dynasty Cheongsam (Alpha)** `First_Dynasty_Cheongsam_(Alpha).html` — "The silky, stylish cheongsam is a body-hugging wonder. You'll never look more alluring. A
+- **First Dynasty Jacket** `First_Dynasty_Jacket.html` — "Indulge yourself with this silky, smooth over-jacket." Note: This fashion cannot be dyed.
+- **First Dynasty Jacket (Alpha)** `First_Dynasty_Jacket_(Alpha).html` — "Indulge yourself with this silky, smooth over-jacket. Also increases the wearer's attribu
+- **Furious Wizard's Top Hat** `Furious_Wizard's_Top_Hat.html` — "Top hats lend everyone an elegant and mysterious air, whether worn by gentlemen or ladies
+- **Furious Wizard's Top Hat (Alpha)** `Furious_Wizard's_Top_Hat_(Alpha).html` — "Top hats lend everyone an elegant and mysterious air, whether worn by gentlemen or ladies
+- **Green Santa Hat** `Green_Santa_Hat.html` — "A jolly green hat for the holiday, though maybe not quite as jolly as a red one would be.
+- **Guilty Butler** `Guilty_Butler.html` — "An elegant suit tailored to show off the dashing side of every man." Note: This fashion c
+- **Guilty Butler (Alpha)** `Guilty_Butler_(Alpha).html` — "An elegant suit tailored to show off the dashing side of every man. So you can cut an eve
+- **Guilty Maid** `Guilty_Maid.html` — "You'll instantly charm everyone you meet with this sweet and lovely ensemble." Note: This
+- **Guilty Maid (Alpha)** `Guilty_Maid_(Alpha).html` — "You'll instantly charm everyone you meet with this sweet and lovely ensemble. For even mo
+- **Halo** `Halo.html` — "Its gentle glow will warm your head as well as your heart. It also increases the wearer's
+- **Handmade Burned Rice Cake Headdress** `Handmade_Burned_Rice_Cake_Headdress.html` — "A rice cake is burnt. Although it looks a little scary, it can still increase your attrib
+- **Handmade Original Rice Cake Headdress** `Handmade_Original_Rice_Cake_Headdress.html` — "A hot and delicious handmade rice cake will keep you warm in the winter." Note: This can'
+- **Handmade Read Bean Rice Cake Headdress** `Handmade_Read_Bean_Rice_Cake_Headdress.html` — "A hot and delicious handmade red-bean flavor rice cake will keep you warm in the winter."
+- **Holy Seraph's Wings (Alpha)** `Holy_Seraph's_Wings_(Alpha).html` — "They'll give you a peaceful, angelic air, lending you the confidence to face down even th
+- **Honeycreeper Horns (Alpha)** `Honeycreeper_Horns_(Alpha).html` — "Sport the fashion popularized by the famous bard, Belladonna, at the Aven Solstice festiv
+- … 52 autres, voir `categories/costumes.md` et `pages-index.tsv`
+
+### familiers (46)
+
+- **(Pet) Accuracy Necklace (Blue)** (niv. 25) `(Pet)_Accuracy_Necklace_(Blue).html` — This pet necklace can increase your pet's ACC.
+- **(Pet) Accuracy Necklace (Green)** (niv. 25) `(Pet)_Accuracy_Necklace_(Green).html` — This pet necklace can increase your pet's ACC.
+- **Abracapaca** `Abracapaca.html` — "Playful and spunky, this miniature Alpaca is always ready to scamper around your feet, ni
+- **Battle Dog** `Battle_Dog.html` — Pet Skill: Basic Smash Additional Ability: None Attack Attribute: None It can help pick up
+- **Brave Beagle** `Brave_Beagle.html` — ATK Attr: Phys - Pierce Bonus: Move SPD +5% "This brave dog picks up items and fights alon
+- **Brave Chihuahua** `Brave_Chihuahua.html` — ATK Attr: Phys - Slash Bonus: LCK +10% "This brave dog picks up items and fights alongside
+- **Brave Flame Kirin** `Brave_Flame_Kirin.html` — ATK Attr: Phys - Pierce Bonus: CRIT-DMG to target +10%. "This brave chimera picks up items
+- **Brave Labrador** `Brave_Labrador.html` — ATK Attr: Phys - Slash Bonus: Increases by 5% Malice caused by attacks. "A brave dog that 
+- **Brave Lil' Pom** `Brave_Lil'_Pom.html` — ATK Attr: Phys - Strike Bonus: ATK SPD +8% "A brave dog that picks up items and fights alo
+- **Brave Persian Cat** `Brave_Persian_Cat.html` — ATK Attr: Phys - Slash Bonus: Increases by 5% Malice caused by attacks. "This brave cat pi
+- **Brave Shiba Inu** `Brave_Shiba_Inu.html` — ATK Attr: Phys - Strike Bonus: Max HP +5% "This brave dog picks up items and fights alongs
+- **Brave Shorthair Cat** `Brave_Shorthair_Cat.html` — ATK Attr: Phys - Strike Bonus: ATK SPD +8% "This brave cat picks up items and fights along
+- **Chihuahua** `Chihuahua.html` — "A tiny dog with a big heart, it picks up items and keeps adventurers company." Note: This
+- **Clever Beagle** `Clever_Beagle.html` — ATK Attr: Magic - Lightning Bonus: Max MP +5% "This smart dog picks up items and fights al
+- **Clever Chihuahua** `Clever_Chihuahua.html` — ATK Attr: Phys - Slash Bonus: MP Cost decreases by 2%. "This smart dog picks up items and 
+- **Clever Flame Kirin** `Clever_Flame_Kirin.html` — ATK Attr: Magic - Nature Bonus: M-CRIT Rate +5%. "This smart chimera picks up items and fi
+- **Clever Labrador** `Clever_Labrador.html` — ATK Attr: Magic - Dark Bonus: All Elemental Resistances +3% "A smart dog that picks up ite
+- **Clever Lil' Pom** `Clever_Lil'_Pom.html` — ATK Attr: Magic - Holy Bonus: When being attacked, P-DMG received decreases 5%. "A smart d
+- **Clever Persian Cat** `Clever_Persian_Cat.html` — ATK Attr: Magic - Dark Bonus: All Elemental Resistances +3% "This smart cat picks up items
+- **Clever Shiba Inu** `Clever_Shiba_Inu.html` — ATK Attr: Magic - Ice Bonus: Decreases 5% Malice caused by attacks. "This smart dog picks 
+- **Clever Shorthair Cat** `Clever_Shorthair_Cat.html` — ATK Attr: Magic - Holy Bonus: When being attacked, P-DMG received decreases 3%. "This smar
+- **Flame Kirin** `Flame_Kirin.html` — "This fierce chimera picks up items and keeps adventurers company." Note: This pet cannot 
+- **Lil' Pom** `Lil'_Pom.html` — "Cute dog that can pick up items and keep adventurers company." Note: This pet can not be 
+- **Little Labrador** `Little_Labrador.html` — "A cute dog that loyally picks up items and keeps adventurers company." Note: This pet can
+- **Magic Beagle** `Magic_Beagle.html` — ATK Attr: Magic - Lightning Bonus: Max MP +5% Skills: Rage of Lighting, Resistance Collaps
+- **Magic Chihuahua** `Magic_Chihuahua.html` — ATK Attr: Magic - Fire Bonus: MP Cost decreases by 2%. Skills: Deadly Icicle, Resistance C
+- **Magic Dog** `Magic_Dog.html` — Pet skill: Basic Vocal Bomb Additional Ability: None Attack Attribute: None It can help pi
+- **Magic Flame Kirin** `Magic_Flame_Kirin.html` — ATK Attr: Magic - Nature Bonus: M-CRIT Rate +5%. Skills: Nightmare Attack, Winter Chill "T
+- **Magic Labrador** `Magic_Labrador.html` — ATK Attr: Magic - Dark Bonus: All Elemental Resistances +3% Skills:Vocal Bomb, Earth Shock
+- **Magic Lil' Pom** `Magic_Lil'_Pom.html` — ATK Attr: Magic - Holy Bonus: When being attacked, P-DMG received decreases 3%. Skills: Ea
+- **Magic Persian Cat** `Magic_Persian_Cat.html` — ATK Attr: Magic - Dark Bonus: All Elemental Resistances +3% Pet skills: Vocal Bomb, Earth 
+- **Magic Shiba Inu** `Magic_Shiba_Inu.html` — ATK Attr: Magic - Ice Bonus: Decreases 5% Malice caused by attacks. Skills: Sanction's Lig
+- **Magic Shorthair Cat** `Magic_Shorthair_Cat.html` — ATK Attr: Magic - Holy Bonus: When being attacked, P-DMG received decreases 3%. Skills: Ea
+- **Mystical Puppy** `Mystical_Puppy.html` — "Cute and hard-working, this puppy can help its owner pick up items. It's a rare gift from
+- **Naughty Puppy** `Naughty_Puppy.html` — "Cute, but with a mischevious gleam in its eye, this pup always helps its owner pick up it
+- **Persian Cat** `Persian_Cat.html` — "This regal feline picks up items and keeps adventurers company." Note: This pet cannot pa
+- **Robust Beagle** `Robust_Beagle.html` — ATK Attr: Phys - Pierce Bonus: Running Speed +5% Skills: Energy Wound, Sonic Cut "This bra
+- **Robust Chihuahua** `Robust_Chihuahua.html` — ATK Attr: Phys - Slash Bonus: LCK +10% Skills: Ambush, Sonic Cut "This brave dog has its o
+- **Robust Flame Kirin** `Robust_Flame_Kirin.html` — ATK Attr: Phys - Pierce Bonus: CRIT-DMG to target +10%. Skills: Swift Attack, Ambush "This
+- **Robust Labrador** `Robust_Labrador.html` — ATK Attr: Phys - Slash Bonus: Increases by 5% Malice caused by attacks. Skills: Slam, Soni
+- **Robust Lil' Pom** `Robust_Lil'_Pom.html` — ATK Attr: Phys - Strike Bonus: ATK SPD +8% Skills: Collapsing Blow, Ambush "A brave dog th
+- **Robust Persian Cat** `Robust_Persian_Cat.html` — ATK Attr: Phy - Slash Bonus: Increases by 5% Malice caused by attacks. Skills: Smash, Soni
+- **Robust Shiba Inu** `Robust_Shiba_Inu.html` — ATK Attr: Phys - Strike Bonus: Max HP +5% Skills: Energy Wound, Magic Blockade "This brave
+- **Robust Shorthair Cat** `Robust_Shorthair_Cat.html` — ATK Attr: Phys - Strike Bonus: ATK SPD +8% Skills: Collapsing Blow, Ambush "This brave cat
+- **Shiba Inu** `Shiba_Inu.html` — "This compact dog can pick up items and keep adventurers company." Note: This pet can not 
+- **Shorthair Cat** `Shorthair_Cat.html` — "This curious pet can pick up items and keep adventurers company." Note: This pet cannot p
+
+### decorations-guilde (105)
+
+- **Agricultural Merchant** `Agricultural_Merchant.html` — Merchant who sells Cultivation Secrets. Products: Lv20-40 Cultivation Secret (Rarity: *) L
+- **Alchemist** `Alchemist.html` — An experienced alchemist who will do a good job. Functionality: Accept gem inlay quests Ac
+- **Alchemist Trainee** `Alchemist_Trainee.html` — A young Apprentice Alchemist who needs more practice. Functionality: Accept gem inlay ques
+- **Ancient Giant Warrior** `Ancient_Giant_Warrior.html` — This divine weapon destroyed many old towns. Possible Blessing: Strength +7%, Intelligence
+- **Ark of the Covenant** `Ark_of_the_Covenant.html` — A priceless treasure blessed by the angels. Possible Blessing: WIS +5%; DEF +5%; EVA +5% f
+- **Artillery Gun Draftsman** `Artillery_Gun_Draftsman.html` — Merchant who sells Pistol Blueprints Products: Lv45-50 Pistol Blueprints Can only be manag
+- **Axe Draftsman** `Axe_Draftsman.html` — A merchant who sells Axe Blueprints. Products: Lv55 Axe Blueprints Can only be managed in 
+- **Bank Commissioner** `Bank_Commissioner.html` — This bank teller lets you access your personal banks.
+- **Bladed Weapon Designer** `Bladed_Weapon_Designer.html` — Merchant who sells Sharp Force blueprints Products: Lv20-40 Dagger Blueprints Lv20-40 Axe 
+- **Blooming Melody** `Blooming_Melody.html` — Holy flower named Rikerine. Possible Blessing: Max HP +7%, Heal +7%, Block Rate +7% for 3 
+- **Blunt Weapon Designer** `Blunt_Weapon_Designer.html` — Merchant who sells Blunt Force blueprints Products: Lv20-40 Mace Blueprints Lv20-40 Shield
+- **Botanist** `Botanist.html` — Merchant who sells Cultivation Secrets. Products: Lv20-40 Cultivation Secret (Rarity: ***)
+- **Bow Draftsman** `Bow_Draftsman.html` — Merchant who sells Bow Blueprints Products: Lv45-50 Bow Blueprints Can only be managed in 
+- **Celestial Mystery** `Celestial_Mystery.html` — An astrology Instrument used to study the stars. Possible Blessing: AGI +5%, ATK SPD +5%, 
+- **Cestus Draftsman** `Cestus_Draftsman.html` — Merchant who sells Cestus Blueprints Products: Lv45-50 Cestus Blueprints Can only be manag
+- **Cloth Armor Designer** `Cloth_Armor_Designer.html` — Merchant who sells Cloth Armor Blueprints Products: Lv23-43 Cloth Armor Blueprints Can onl
+- **Cloth Armor Draftsman** `Cloth_Armor_Draftsman.html` — Merchant who sells Cloth Armor Blueprints Products: Lv48 Cloth Armor Blueprints Can only b
+- **Club Draftsman** `Club_Draftsman.html` — A merchant who sells Club Blueprints. Products: Lv55 Club Blueprints Can only be managed i
+- **Crafts Merchant** `Crafts_Merchant.html` — Merchant who sells Accessary Formulas. Products: Lv20-40 Necklace and Ring Formulas Can on
+- **Craftsman** `Craftsman.html` — A professional enchantment craftsman who has sharp insights at making delicate accessories
+- **Cthulhu Throne** `Cthulhu_Throne.html` — This is the throne of a long-dead evil god. Possible Blessing: Resistance to Lightning, Fi
+- **Dagger Draftsman** `Dagger_Draftsman.html` — Merchant who sells Dagger Blueprints Products: Lv45-50 Dagger Blueprints Can only be manag
+- **Dark Throne** `Dark_Throne.html` — The throne for the destroyed Dark Lord Possible Blessing: Resistance to Lightning, Fire, a
+- **Enchantment Merchant** `Enchantment_Merchant.html` — Merchant who sells Enchantment Formulas. Products: Lv20-40 Enchant Formula Can only be man
+- **Enchantment Obelisk** `Enchantment_Obelisk.html` — This pillar is engraved with mysterious magical symbols. Possible Blessing: Loot Drop Rate
+- **Eternal Crystal** `Eternal_Crystal.html` — An Eternal Guardian was born from this giant, blue crystal. Possible Blessing: Exp +5% for
+- **Expert Botanist** `Expert_Botanist.html` — Merchant who sells Cultivation Secrets. Products: Lv41-50 Cultivation Secret (Rarity: ***)
+- **Eyerne's Holy Grail** `Eyerne's_Holy_Grail.html` — A cup used by Luxin I, founder of the Meterol Church. Possible Blessing: Resistance to Hol
+- **Famous Forger** `Famous_Forger.html` — A legendary craftsman who has made hundreds of weapons and armors. Functionality: Accept w
+- **Farmer** `Farmer.html` — Experienced farmer who helps at the town farm. Functionality: Accept cultivation quests Cu
+- **Gold Ark of the Covenant** `Gold_Ark_of_the_Covenant.html` — This is an old golden coffin kept by Meterol Church Pope Zephyrinus. Possible Blessing: WI
+- **Gravitation Orrery** `Gravitation_Orrery.html` — This strange clockwork device can detect invisible powers. Possible Blessing: AGI +7%, ATK
+- **Greatsword Draftsman** `Greatsword_Draftsman.html` — Merchant who sells Greatsword Blueprints Products: Lv45-50 Greatsword Blueprints Can only 
+- **Grimoire Draftsman** `Grimoire_Draftsman.html` — Merchant who sells Grimoire Blueprints Products: Lv45-50 Grimoire Blueprints Can only be m
+- **Guitar Draftsman** `Guitar_Draftsman.html` — A merchant who sells Guitar Blueprints. Products: Lv55 Guitar Blueprints Can only be manag
+- **Hammer Draftsman** `Hammer_Draftsman.html` — Merchant who sells Hammer Blueprints Products: Lv45-50 Hammer Blueprints Can only be manag
+- **Heavy Armor Designer** `Heavy_Armor_Designer.html` — Merchant who sells Heavy Armor Blueprints Products: Lv23-43 Heavy Armor Blueprints Can onl
+- **Heavy Armor Draftsman** `Heavy_Armor_Draftsman.html` — A merchant who sells Heavy Armor Blueprints. Products: Lv53 Heavy Armor Blueprints Can onl
+- **Holy Crystal Light Tree** `Holy_Crystal_Light_Tree.html` — Dazzling Quartz-shine Wood. Possible Blessing: Max MP +7%, Casting Speed +7%, Heal +7% for
+- **Holy Glass Tree** `Holy_Glass_Tree.html` — Fine divine wood Possible Blessing: Max MP +5%, Cast Speed +5%, Heal +5% for 3 hours. Guil
+- **Holy Light Crystal** `Holy_Light_Crystal.html` — A large crystal that glows with holy light. Possible Blessing: EXP +7% for 3 hours. Guild 
+- **Inlay Merchant** `Inlay_Merchant.html` — Merchant who sells Gem Inlay Blueprints Products: Lv20-35 Gem Inlay Formula Can only be ma
+- **Katana Draftsman** `Katana_Draftsman.html` — A merchant who sells Katana Blueprints. Products: Lv55 Katana Blueprints Can only be manag
+- **Legendary Crafts Merchant** `Legendary_Crafts_Merchant.html` — A merchant who sells Accessory Formulas. Products: Lv60 Necklace and Ring Formula Can only
+- **Legendary Enchantment Merchant** `Legendary_Enchantment_Merchant.html` — A merchant who sells Enchant Formulas. Products: Lv60 Enchant Formula Can only be managed 
+- **Legendary Pharmaceutical Merchant** `Legendary_Pharmaceutical_Merchant.html` — A Merchant who sells Potion Formulas. Products: Lv60 Potion Formula Can only be managed in
+- **Light Armor Designer** `Light_Armor_Designer.html` — Merchant who sells Light Armor Blueprints Products: Lv23-43 Light Armor Blueprints Can onl
+- **Light Armor Draftsman** `Light_Armor_Draftsman.html` — A merchant who sells Light Armor Blueprints. Products: Lv53 Light Armor Blueprints Can onl
+- **Mace Draftsman** `Mace_Draftsman.html` — A merchant who sells Mace Blueprints. Products: Lv55 Mace Blueprints Can only be managed i
+- **Master Alchemist** `Master_Alchemist.html` — A master alchemist who can always get the job done. Functionality: Accept gem inlay quests
+- **Master Botanist** `Master_Botanist.html` — Merchant who sells Cultivation Secrets. Products: Lv51-60 Cultivation Secret (Rarity: ***)
+- **Master Craftsman** `Master_Craftsman.html` — A master enchantment craftsman who is skilled at making any accessory with the Magic Pool.
+- **Master Farmer** `Master_Farmer.html` — Detail-oriented old farmer who can plant anything. Functionality: Accept cultivation quest
+- **Master Miners** `Master_Miners.html` — Knowledgeable master miner who can find any ore. Functionality: Accept mining quests Failu
+- **Mineral Expert** `Mineral_Expert.html` — Merchant who sells Ore Location Maps. Products: Lv41-50 Ore Location Map (Rarity: ***) Lv4
+- **Mineral Master** `Mineral_Master.html` — Merchant who sells Ore Location Maps. Products: Lv51-60 Ore Location Map (Rarity: ***) Lv5
+- **Mineral Merchant** `Mineral_Merchant.html` — Merchant who sells Ore Location Maps. Products: Lv20-40 Ore Location Map (Rarity: *) Lv20-
+- **Mineral Scholars** `Mineral_Scholars.html` — Merchant who sells Ore Location Maps. Products: Lv20-40 Ore Location Map (Rarity: ***) Can
+- **Miners** `Miners.html` — Professional miner who can find mining spots. Functionality: Accept mining quests Mining P
+- **Molding Master** `Molding_Master.html` — A passionate young foundry master that might sometimes be careless. Functionality: Accept 
+- … 45 autres, voir `categories/decorations-guilde.md` et `pages-index.tsv`
+
+### sacs (6)
+
+- **10-Slot Pack** `10-Slot_Pack.html` — A thick and rugged blueleather pack with fine white stitching. It's construction is truly 
+- **15-Slot Pack** `15-Slot_Pack.html` — This tiny pack is the size of your fist, yet you can reach your entire arm inside and stil
+- **5-Slot Pack** `5-Slot_Pack.html` — A very sturdy hard-leather pack with dark red stitching. It's craftmanship is remarkable, 
+- **Fox Pack** `Fox_Pack.html`
+- **Mystical 7-Slot Expansion** `Mystical_7-Slot_Expansion.html` — A flimsy blueleather pack with light pink stitching. It's construction is pretty unremarka
+- **Traveler's Luggage** `Traveler's_Luggage.html`
+
+### plans-artisanat (2828)
+
+- **15-Slot Backpack Expansion Blueprint** `15-Slot_Backpack_Expansion_Blueprint.html` — Archaic symbols in amethyst ink cover this singed blueprint. A diagram seems to depict one
+- **Alchemy Formula** (niv. 30) `Alchemy_Formula.html` — Obtain Crafting Blueprints Blueprint: Alchemy Formula
+- **Alpaca DNA Modification Formula** (niv. 60) `Alpaca_DNA_Modification_Formula.html` — Required Materials: Alpaca Mount x 1 Finished Product DNA Modified Alpaca Mount "Alpacas w
+- **Ancient Alpaca Food Blueprint** `Ancient_Alpaca_Food_Blueprint.html` — "The ancient shepherds developed this recipe for a food that can increase alpacas' appetit
+- **Ancient Alpaca Food Recipe** `Ancient_Alpaca_Food_Recipe.html` — "The ancient shepherds developed this recipe for a food that can increase alpacas' appetit
+- **Ancient Civilization Formula** (niv. 60) `Ancient_Civilization_Formula.html` — Work Level 51 Emotion Crystal x1 Tiny Drake Fang x1 Hot Blooded Tiger Eye x1
+- **Ancient Formula** `Ancient_Formula.html` — "When you hold this crystal you can feel the power inside it..."
+- **Antidote Formula** `Antidote_Formula.html` — Quest Item Antidote. It bubbles aggressively. Bonmalmo Mayor Aguero needs it.
+- **Artillery Blueprint Draft Collector** `Artillery_Blueprint_Draft_Collector.html` — A merchant who sells Pistol Blueprints. Products: Lv60 Pistol Blueprints Can only be manag
+- **Artisan Blueprint: Alchemical Flash Blade** (niv. 85) `Artisan_Blueprint__Alchemical_Flash_Blade.html` — Work Level 11 Blade of Crimson Rain x1 Powdered Skin x1 Petrified Heart x60
+- **Artisan Blueprint: Ancient Frost Sword** (niv. 85) `Artisan_Blueprint__Ancient_Frost_Sword.html` — Work Level 11 Enduring Crystal Sword x1 Powdered Skin x1 Petrified Heart x30
+- **Artisan Blueprint: Ancient Grace** (niv. 55) `Artisan_Blueprint__Ancient_Grace.html` — Work Level 5 Serene Grace x1 God Fire Seed x1 Autarch Kernel x20
+- **Artisan Blueprint: Antediluvian God Shield** (niv. 65) `Artisan_Blueprint__Antediluvian_God_Shield.html` — Work Level 7 Ancient Demon Shield x1 Halu Root x1 Fear Core x30
+- **Artisan Blueprint: Aqua Blue Zone** (niv. 75) `Artisan_Blueprint__Aqua_Blue_Zone.html` — Work Level 9 Diamond Ring x1 Urumqi Root x1 Odium Magic Core x30
+- **Artisan Blueprint: Aqua Dragon's Fury** (niv. 85) `Artisan_Blueprint__Aqua_Dragon's_Fury.html` — Work Level 11 Shark Fin x1 Powdered Skin x1 Petrified Heart x30
+- **Artisan Blueprint: Arcane Propulsion** (niv. 85) `Artisan_Blueprint__Arcane_Propulsion.html` — Work Level 11 Hallowed History x1 Crystal Root x1 Core of Regret x30
+- **Artisan Blueprint: Arrival of Heaven** (niv. 75) `Artisan_Blueprint__Arrival_of_Heaven.html` — Work Level 9 Arrival of Orochi x1 Moon Scar Crystal x1 Odium Magic Core x30
+- **Artisan Blueprint: Athena Hurricane Wing** (niv. 65) `Artisan_Blueprint__Athena_Hurricane_Wing.html` — Work Level 7 Icarus Hurricane Wing x1 Devour Element x1 Fear Core x60
+- **Artisan Blueprint: Avenger's Flame** (niv. 85) `Artisan_Blueprint__Avenger's_Flame.html` — Work Level 11 Invader's Fire x1 Leaf Crystal x1 Core of Regret x30
+- **Artisan Blueprint: Azure Truth** (niv. 85) `Artisan_Blueprint__Azure_Truth.html` — Work Level 11 Frost Lord's Power x1 Crystal Root x1 Petrified Heart x60
+- **Artisan Blueprint: Baleful Defender** (niv. 85) `Artisan_Blueprint__Baleful_Defender.html` — Work Level 11 Witch's Venom x1 Crystal Root x1 Core of Regret x30
+- **Artisan Blueprint: Baroque Photon Gun** (niv. 65) `Artisan_Blueprint__Baroque_Photon_Gun.html` — Work Level 7 Nano Photon Gun x1 Halu Root x1 Sacred Scar Heart x60
+- **Artisan Blueprint: Battle Destiny** (niv. 65) `Artisan_Blueprint__Battle_Destiny.html` — Work Level 7 Revival Destiny x1 Devour Element x1 Fear Core x60
+- **Artisan Blueprint: Black Scorch True Katana** (niv. 60) `Artisan_Blueprint__Black_Scorch_True_Katana.html` — Work Level 6 Purple Flame Katana x1 Luminous Soul Sand x1 Heretical Heart x60
+- **Artisan Blueprint: Blazing Jet** (niv. 50) `Artisan_Blueprint__Blazing_Jet.html` — Work Level 4 Flamethrower x1 Luna Seed x1 Chaotic Heart x20
+- **Artisan Blueprint: Blessing's Ragnarok** (niv. 75) `Artisan_Blueprint__Blessing's_Ragnarok.html` — Work Level 9 Blessing's Scarlet Wing x1 Urumqi Root x1 Odium Magic Core x30
+- **Artisan Blueprint: Blood Devourer** (niv. 65) `Artisan_Blueprint__Blood_Devourer.html` — Work Level 7 Blood Devourer x1 Wheel Dance Rock x1 Fear Core x30
+- **Artisan Blueprint: Blood Fin Turning Blade** (niv. 75) `Artisan_Blueprint__Blood_Fin_Turning_Blade.html` — Work Level 9 Dragon's Fin Reverse Blade x1 Moon Scar Crystal x1 Odium Magic Core x30
+- **Artisan Blueprint: Blood Frost True Katana** (niv. 50) `Artisan_Blueprint__Blood_Frost_True_Katana.html` — Work Level 4 Icy Blast Katana x1 Netherworld Emerald x1 Chaotic Heart x20
+- **Artisan Blueprint: Blood Shout Axe** (niv. 65) `Artisan_Blueprint__Blood_Shout_Axe.html` — Work Level 7 Blood Howl Axe x1 Wheel Dance Rock x1 Fear Core x60
+- **Artisan Blueprint: Blood Wind Storm** (niv. 65) `Artisan_Blueprint__Blood_Wind_Storm.html` — Work Level 7 Fury Flame Storm x1 Wheel Dance Rock x1 Sacred Scar Heart x30
+- **Artisan Blueprint: Bloodghost Battle Cry** (niv. 75) `Artisan_Blueprint__Bloodghost_Battle_Cry.html` — Work Level 9 Onyx Ghost Snarl x1 Moon Scar Crystal x1 Sacred Totem Heart x30
+- **Artisan Blueprint: Bloody Fairy Tales** (niv. 55) `Artisan_Blueprint__Bloody_Fairy_Tales.html` — Work Level 5 Evil Fairy Tale x1 God Fire Seed x1 Immortal Heart x40
+- **Artisan Blueprint: Bloody Torture Guide** (niv. 50) `Artisan_Blueprint__Bloody_Torture_Guide.html` — Work Level 4 Torture Basics x1 Demon Element x1 Doomsday Kernel x20
+- **Artisan Blueprint :Blossom Shield** (niv. 75) `Artisan_Blueprint__Blossom_Shield.html` — Work Level 9 Flower Shield x1 Moon Scar Crystal x1 Sacred Totem Heart x30
+- **Artisan Blueprint: Breakpoint Quantum Outbreak** (niv. 75) `Artisan_Blueprint__Breakpoint_Quantum_Outbreak.html` — Work Level 9 Power Surge Spear x1 Evolution Element x1 Odium Magic Core x60
+- **Artisan Blueprint: Bright Barrier Shield** (niv. 85) `Artisan_Blueprint__Bright_Barrier_Shield.html` — Work Level 11 Sapphire Shield x1 Leaf Crystal x1 Petrified Heart x30
+- **Artisan Blueprint: Broken Army** (niv. 70) `Artisan_Blueprint__Broken_Army.html` — Work Level 8 Final Darkness x1 Devil Soul Jade x1 Devil Core x30
+- **Artisan Blueprint: Burning Flow** (niv. 60) `Artisan_Blueprint__Burning_Flow.html` — Work Level 6 Icy Tide x1 Divine Tree Root x1 Evil Extinction Pit x30
+- **Artisan Blueprint: Catastrophe Avenger** (niv. 60) `Artisan_Blueprint__Catastrophe_Avenger.html` — Work Level 6 Horror Avenger x1 Divine Tree Root x1 Evil Extinction Pit x30
+- **Artisan Blueprint: Celestial Phoenix** (niv. 85) `Artisan_Blueprint__Celestial_Phoenix.html` — Work Level 11 Phoenix Wing x1 Crystal Root x1 Petrified Heart x60
+- **Artisan Blueprint: Chaos Discipline Wall** (niv. 60) `Artisan_Blueprint__Chaos_Discipline_Wall.html` — Work Level 6 Wall of Redemption x1 Luminous Soul Sand x1 Heretical Heart x30
+- **Artisan Blueprint: Chaotic Dawn** (niv. 50) `Artisan_Blueprint__Chaotic_Dawn.html` — Work Level 4 Dark Dawn x1 Luna Seed x1 Doomsday Kernel x10
+- **Artisan Blueprint: Chest Cutter-Nael** (niv. 60) `Artisan_Blueprint__Chest_Cutter-Nael.html` — Work Level 6 Blood Drainer - Nael x1 World Particle x1 Heretical Heart x30
+- **Artisan Blueprint: Chilalo's Heart** (niv. 85) `Artisan_Blueprint__Chilalo's_Heart.html` — Work Level 11 Chilalo's Wings x1 Powdered Skin x1 Core of Regret x60
+- **Artisan Blueprint: Classic Wave** (niv. 75) `Artisan_Blueprint__Classic_Wave.html` — Work Level 9 Classic Rhyme x1 Evolution Element x1 Odium Magic Core x60
+- **Artisan Blueprint: Cold Front Lament** (niv. 55) `Artisan_Blueprint__Cold_Front_Lament.html` — Work Level 5 Silent Sigh x1 God Fire Seed x1 Autarch Kernel x20
+- **Artisan Blueprint: Cold Front Sniper** (niv. 55) `Artisan_Blueprint__Cold_Front_Sniper.html` — Work Level 5 Ice Sword Sniper x1 God Fire Seed x1 Immortal Heart x40
+- **Artisan Blueprint: Crimson Dragon's Flame** (niv. 75) `Artisan_Blueprint__Crimson_Dragon's_Flame.html` — Work Level 9 Dawn Dragon's Fang x1 Moon Scar Crystal x1 Sacred Totem Heart x60
+- **Artisan Blueprint: Cruel Magic Barrier** (niv. 50) `Artisan_Blueprint__Cruel_Magic_Barrier.html` — Work Level 4 Cunning Eye Barrier x1 Luna Seed x1 Doomsday Kernel x10
+- **Artisan Blueprint: Cyclone Summit Staff** (niv. 70) `Artisan_Blueprint__Cyclone_Summit_Staff.html` — Work Level 8 Storm Pulse Staff x1 Kaia seed x1 Devil Blood Heart x30
+- **Artisan Blueprint: Damaged Resplendence** (niv. 55) `Artisan_Blueprint__Damaged_Resplendence.html` — Work Level 5 Falling Resplendence x1 Fate Stone x1 Immortal Heart x20
+- **Artisan Blueprint: Dance Slaughter** (niv. 65) `Artisan_Blueprint__Dance_Slaughter.html` — Work Level 7 Dance Blood Fang x1 Wheel Dance Rock x1 Fear Core x30
+- **Artisan Blueprint: Dark Master's Bio** (niv. 60) `Artisan_Blueprint__Dark_Master's_Bio.html` — Work Level 6 Dark Master's Notes x1 World Particle x1 Evil Extinction Pit x60
+- **Artisan Blueprint: Dark Night Lament** (niv. 60) `Artisan_Blueprint__Dark_Night_Lament.html` — Work Level 6 Bloody Lament x1 Luminous Soul Sand x1 Evil Extinction Pit x30
+- **Artisan Blueprint: Dark Spirit** (niv. 55) `Artisan_Blueprint__Dark_Spirit.html` — Work Level 5 Lost Soul x1 Fate Stone x1 Autarch Kernel x40
+- **Artisan Blueprint: Darkness Devour Mace** (niv. 65) `Artisan_Blueprint__Darkness_Devour_Mace.html` — Work Level 7 Infernal Soul Staff x1 Halu Root x1 Fear Core x30
+- **Artisan Blueprint: Death Sender** (niv. 50) `Artisan_Blueprint__Death_Sender.html` — Work Level 4 Mourner x1 Netherworld Emerald x1 Chaotic Heart x10
+- **Artisan Blueprint: Death Skull Cutter** (niv. 55) `Artisan_Blueprint__Death_Skull_Cutter.html` — Work Level 5 Devil Skull Cutter x1 Strife Element x1 Immortal Heart x40
+- **Artisan Blueprint: Death Stealer** (niv. 60) `Artisan_Blueprint__Death_Stealer.html` — Work Level 6 Death Avenger x1 World Particle x1 Heretical Heart x60
+- … 2768 autres, voir `categories/plans-artisanat.md` et `pages-index.tsv`
+
+### objets-quete (222)
+
+- **2-Layer Egg Box** `2-Layer_Egg_Box.html` — Quest Item How to use: Right-click to use this item. The bugs inside are screaming; all yo
+- **5-Player Instance Treasure Chest** `5-Player_Instance_Treasure_Chest.html` — How to Use: Right-click to open It seems to contain some treasures.
+- **Adventurer Armor Box** `Adventurer_Armor_Box.html` — "It's covered with marks and scratches, but also some protective talismans." How to Use: O
+- **Airy's Iron Shovel** `Airy's_Iron_Shovel.html` — Quest Item How to use: Right-click to use this item. The shovel that Miner Airy lent you. 
+- **Amber Armor Box** `Amber_Armor_Box.html` — "This box is translucent; you can just make out what's inside." How to Use: Open the box t
+- **Amulet Totem Bag** `Amulet_Totem_Bag.html` — Quest Item How to use: Right-click to use this item. A bag covered with odd patterns. It c
+- **Ancient Magic Armor Box** `Ancient_Magic_Armor_Box.html` — "This is an ancient magician's treasure. There is a powerful energy inside that's ready to
+- **Arid Wilds Guardian Treasure Chest** `Arid_Wilds_Guardian_Treasure_Chest.html` — "This is the reward for your protection of the Arid Wilds." Right click to use the item.
+- **Aven's New Year Firework** `Aven's_New_Year_Firework.html` — Prize for the New Year's quest. Set off fireworks around the fountain in Aven (300,355) du
+- **Avila Volcano Guardian Treasure Chest** `Avila_Volcano_Guardian_Treasure_Chest.html` — "This is the reward for your protection of the Avila Volcano." Right click to use the item
+- **Axe Moss's Treasure Chest** `Axe_Moss's_Treasure_Chest.html` — How to Use: Right-click to open It seems to contain some treasures.
+- **Backpack for Detector** `Backpack_for_Detector.html` — Quest Item How to use: Right-click to use this item. Backpack with a detector to prevent i
+- **Bag** `Bag.html` — Quest Item How to use: Right-click to use this item. A light bag containing some pills.
+- **Bag for Bottles** `Bag_for_Bottles.html` — Quest Item How to use: Right-click to use this item. A bag with a strange bottle inside.
+- **Beagle Treasure Box** `Beagle_Treasure_Box.html` — Has a chance to contain: -Robust Beagle (physical; combat skills) -Magic Beagle (magical, 
+- **Beast Blood Fruit** `Beast_Blood_Fruit.html` — Item A special fruit that was nourished by Beast Blood. It tastes severely metallic. Bould
+- **Beast Bone Armor Box** `Beast_Bone_Armor_Box.html` — "It's made from animal bones and dark red materials." How to Use: Open the box to check wh
+- **Beluga Bay Guardian Treasure Chest** `Beluga_Bay_Guardian_Treasure_Chest.html` — "This is the reward for your protection of the Beluga Bay." Right click to use the item.
+- **Black Chain Armor Box** `Black_Chain_Armor_Box.html` — "The box is surrounded by black chains and locks. It looks really strong." How to Use: Ope
+- **Black Iron Armor Box** `Black_Iron_Armor_Box.html` — "The box is made from Black Iron. It's hard to destroy from the outside." How to Use: Open
+- **Blackflame Peak Guardian Treasure Chest** `Blackflame_Peak_Guardian_Treasure_Chest.html` — "This is the reward for your protection of the Blackflame Peak." Right click to use the it
+- **Blessed Crystal Lv10** (niv. 10) `Blessed_Crystal_Lv10.html` — A holy crystal with mysterious power. When you reach Lv10, you can activate the crystal an
+- **Blessed Crystal Lv15** (niv. 15) `Blessed_Crystal_Lv15.html` — A holy crystal with mysterious power. When you reach Lv15, you can activate the crystal an
+- **Blessed Crystal Lv20** (niv. 20) `Blessed_Crystal_Lv20.html` — A holy crystal with mysterious power. When you reach Lv20, you can activate the crystal an
+- **Blessed Crystal Lv25** (niv. 25) `Blessed_Crystal_Lv25.html` — A holy crystal with mysterious power. When you reach Lv25, you can activate the crystal an
+- **Blessed Crystal Lv30** (niv. 30) `Blessed_Crystal_Lv30.html` — A holy crystal with mysterious power. When you reach Lv30, you can activate the crystal an
+- **Blessed Crystal Lv35** (niv. 35) `Blessed_Crystal_Lv35.html` — A holy crystal with mysterious power. When you reach Lv35, you can activate the crystal an
+- **Blessed Crystal Lv40** (niv. 40) `Blessed_Crystal_Lv40.html` — A holy crystal with mysterious power. When you reach Lv40, you can activate the crystal an
+- **Blessed Crystal Lv45** (niv. 45) `Blessed_Crystal_Lv45.html` — A holy crystal with mysterious power. When you reach Lv45, you can activate the crystal an
+- **Blessed Crystal Lv5** (niv. 5) `Blessed_Crystal_Lv5.html` — A holy crystal with mysterious power. When you reach Lv5, you can activate the crystal and
+- **Blessed Crystal Lv50** (niv. 50) `Blessed_Crystal_Lv50.html` — A holy crystal with mysterious power. When you reach Lv50, you can activate the crystal an
+- **Blue Crystal** `Blue_Crystal.html` — Quest Item This Blue Crystal was born with you. It sheds a soft light when you touch it.
+- **Blue Crystal Shard** `Blue_Crystal_Shard.html` — "A Blue Crystal Shard. Show it to Airy the miner; maybe he knows something."
+- **Blueprint** `Blueprint.html` — Quest Item Right-click to use it. Use it to collect a Radio Report at the Ruined Research 
+- **Bonus Treasure Chest** `Bonus_Treasure_Chest.html` — Chest has a chance to contain: -Legendary Ivory Tusk Boar (Rank II, Movement speed +50%) -
+- **Butler Fortune Bag** `Butler_Fortune_Bag.html` — This Fortune Bag has a chance to contain: -Mysterious Butler -Jealous Butler (Alpha) -Stoi
+- **Cactus Fruit** `Cactus_Fruit.html` — Item Nikola can extract cactus oil from the rinds of this fruit. It makes a loud hissing s
+- **Cavalier Dress Fortune Bag** `Cavalier_Dress_Fortune_Bag.html` — This Fortune Bag has a chance to contain: -Mysterious Cavalier Dress -Classy Cavalier Dres
+- **Cavalier Succat Fortune Bag** `Cavalier_Succat_Fortune_Bag.html` — This Fortune Bag has a chance to contain: -Mysterious Cavalier Succat -Classy Cavalier Suc
+- **Champion of the Month Reward** `Champion_of_the_Month_Reward.html` — Prize given to the top player in the monthly Eden Eternal rankings. Contains precious trea
+- **Charles's Treasure Chest** `Charles's_Treasure_Chest.html` — How to Use: Right-click to open It seems to contain some treasures.
+- **Clean Tube** `Clean_Tube.html` — Quest Item How to use: Right-click to use this item. A clean tube that can be filled with 
+- **Clear Crystal Pillar** `Clear_Crystal_Pillar.html` — Quest Item A transparent crystal from a Wetland Crystal Eye. Wayward Camp Antique Collecto
+- **Cloth Bag** `Cloth_Bag.html` — Quest Item How to use: Right-click to use this item. A cloth bag containing fresh Blue-Lea
+- **Cloth Legacy Armor Set** `Cloth_Legacy_Armor_Set.html` — Legacy Armor: Can grow to Lv30 Blue Armor at most. This package contains the full set. Not
+- **Clothing Color Giftbox** `Clothing_Color_Giftbox.html` — Has a chance to contain: -Star Light Clothing Color No.1 (pink and white) -Star Light Clot
+- **Craftsman Mysterious Box 1** `Craftsman_Mysterious_Box_1.html` — Craftsman NPC Mysterious Box "A excellent craftsman who was sealed in this box by evil mag
+- **Cross Armor Box** `Cross_Armor_Box.html` — "It sounds like there are gears working inside." How to Use: Open the box to check what's 
+- **Cursed Armor Box** `Cursed_Armor_Box.html` — "It has numerous nail scratches." How to Use: Open the box to check what's inside.
+- **Daemon's Delite Fortune Bag** `Daemon's_Delite_Fortune_Bag.html` — Fortune Bag has a chance to contain: Dyeable Daemon Horns -Bonechiller Horns (Alpha) -Roya
+- **Decay Swamp Guardian Treasure Chest** `Decay_Swamp_Guardian_Treasure_Chest.html` — "This is the reward for your protection of the Decay Swamp." Right click to use the item.
+- **Delphi Forest Guardian Treasure Chest** `Delphi_Forest_Guardian_Treasure_Chest.html` — "This is the reward for your protection of the Delphi Forest." Right click to use the item
+- **Desert Thief Armor Box** `Desert_Thief_Armor_Box.html` — "The label on the box has the mark of a desert thief." How to Use: Open the box to check w
+- **Detector** `Detector.html` — Quest Item Use it near Baltaroi Core in Avila Volcano (216,402) to check how badly the Bal
+- **Detector Bag** `Detector_Bag.html` — Quest Item How to use: Right-click to use this item. A heavy bag with a detector in it.
+- **Dim Rainbow Pillar** `Dim_Rainbow_Pillar.html` — Quest Item How to use: Right-click to use this item. You must wash it in the waterfall tha
+- **Dirty Armor Box** `Dirty_Armor_Box.html` — "This box is filled with monsters' dirty things. Nobody in their right mind would want to 
+- **Dirty Seed** `Dirty_Seed.html` — Quest Item How to use: Right-click to use this item. A dirty seed whose shape can't be ide
+- **Doom Armor Box** `Doom_Armor_Box.html` — "Someone scrawled a bunch of strange, creepy marks all over this box." How to Use: Open th
+- **Dream Gem Gift Box** `Dream_Gem_Gift_Box.html` — This box has a very strong aura. It seems to have a precious gem inside.
+- … 162 autres, voir `categories/objets-quete.md` et `pages-index.tsv`
+
+### objets (2925)
+
+- **1000 Needle Sapling** `1000_Needle_Sapling.html` — 302 Battlefield Item Collect 3 to learn fierce tiger skills from an animal trainer.
+- **1 H Weapon Master** `1_H_Weapon_Master.html` — Increase Weapon ATK & Magic ATK by +5%
+- **2 H Weapon Master** `2_H_Weapon_Master.html` — Increase Weapon ATK & Magic ATK by +5%
+- **5-Ring Flower Bunch** `5-Ring_Flower_Bunch.html` — Quest Item Flower Bunch that was made with Five-Ring Flowers. The Garden Elder Angi needs 
+- **AGI Curse Gem Lv1** (niv. 35) `AGI_Curse_Gem_Lv1.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Curse Gem Lv2** (niv. 45) `AGI_Curse_Gem_Lv2.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Curse Gem Lv3** (niv. 55) `AGI_Curse_Gem_Lv3.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Fast Cast Gem Lv1** (niv. 35) `AGI_Fast_Cast_Gem_Lv1.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Fast Cast Gem Lv2** (niv. 45) `AGI_Fast_Cast_Gem_Lv2.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Fast Cast Gem Lv3** (niv. 55) `AGI_Fast_Cast_Gem_Lv3.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Fast Cast Gem Lv4** (niv. 65) `AGI_Fast_Cast_Gem_Lv4.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Fast Cast Gem Lv5** (niv. 75) `AGI_Fast_Cast_Gem_Lv5.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Fast Cast Gem Lv6** (niv. 85) `AGI_Fast_Cast_Gem_Lv6.html` — To inlay the item, right-click on it, then select a piece of equipment with sockets. Can o
+- **AGI Match Gem Lv1** (niv. 35) `AGI_Match_Gem_Lv1.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Match Gem Lv2** (niv. 45) `AGI_Match_Gem_Lv2.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Match Gem Lv3** (niv. 55) `AGI_Match_Gem_Lv3.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Match Gem Lv4** (niv. 65) `AGI_Match_Gem_Lv4.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Match Gem Lv5** (niv. 75) `AGI_Match_Gem_Lv5.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Match Gem Lv6** (niv. 85) `AGI_Match_Gem_Lv6.html` — To inlay the item, right-click on it, then select a piece of equipment with sockets. Can o
+- **AGI Plus Gem Lv1** (niv. 35) `AGI_Plus_Gem_Lv1.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Plus Gem Lv2** (niv. 45) `AGI_Plus_Gem_Lv2.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Plus Gem Lv3** (niv. 55) `AGI_Plus_Gem_Lv3.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Plus Gem Lv4** (niv. 65) `AGI_Plus_Gem_Lv4.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Plus Gem Lv5** (niv. 75) `AGI_Plus_Gem_Lv5.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Plus Gem Lv6** (niv. 85) `AGI_Plus_Gem_Lv6.html` — To inlay the item, right-click on it, then select a piece of equipment with sockets. Can o
+- **AGI Ultimate Speed Gem Lv1** (niv. 35) `AGI_Ultimate_Speed_Gem_Lv1.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Ultimate Speed Gem Lv2** (niv. 45) `AGI_Ultimate_Speed_Gem_Lv2.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Ultimate Speed Gem Lv3** (niv. 55) `AGI_Ultimate_Speed_Gem_Lv3.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Ultimate Speed Gem Lv4** (niv. 65) `AGI_Ultimate_Speed_Gem_Lv4.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Ultimate Speed Gem Lv5** (niv. 75) `AGI_Ultimate_Speed_Gem_Lv5.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **AGI Ultimate Speed Gem Lv6** (niv. 85) `AGI_Ultimate_Speed_Gem_Lv6.html` — To inlay the item, right-click on it, then select a piece of equipment with sockets. Can o
+- **Abstruse Crystal Ore** (niv. 80) `Abstruse_Crystal_Ore.html` — "This ore is hidden deep in mines. Because of its dark color, miners tend to overlook it o
+- **Abstruse Sakura Vine** (niv. 75) `Abstruse_Sakura_Vine.html` — "This strong black vine grows on ancient sakura trees. As the tree blossoms, the vine grow
+- **Abyss Magic Spell** (niv. 75) `Abyss_Magic_Spell.html` — "Those struck with this spell will suffer from incredible pain. They are also forced to wa
+- **Academia 2- Shelf Bookcase** `Academia_2-_Shelf_Bookcase.html` — "Store all of your favorite books and decorative items in this fanciful bookcase." Note: P
+- **Acceleration Potion** (niv. 60) `Acceleration_Potion.html` — "Using an inert material requires a catalyst. Adding a bucket of this potion can make even
+- **Action Plan** `Action_Plan.html` — Quest Item The Action Plan from the Golden Claw Assassin. Cenana Garrison Captain Shears n
+- **Adventure Progress Report** `Adventure_Progress_Report.html` — Quest Item The report Oeto asked you to give to Antique Collector Bes.
+- **Adventurer Crystal Gem** `Adventurer_Crystal_Gem.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets.
+- **Aerolite** `Aerolite.html`
+- **Aether Fruit** (niv. 60) `Aether_Fruit.html` — "While Aether plants are common, they only produce fruit if watered by the purest glacier 
+- **Aged Container** `Aged_Container.html` — Quest Item Aged Container from an old wooden box. Archaeologist Polos needs it.
+- **Aged Flower Soul Gem** `Aged_Flower_Soul_Gem.html` — Quest Item "An Aged Flower Soul Gem from the Frantic Giant. It appears diamond hard but ha
+- **Agility Gem Lv1** (niv. 35) `Agility_Gem_Lv1.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **Agility Gem Lv2** (niv. 45) `Agility_Gem_Lv2.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **Agility Gem Lv3** (niv. 55) `Agility_Gem_Lv3.html` — To inlay the item, right-click on it, and select a piece of equipment with sockets. Can on
+- **Agility Gem Lv4** (niv. 65) `Agility_Gem_Lv4.html` — To inlay this item, right-click on it and select a piece of equipment with sockets. Can on
+- **Agility Increase** `Agility_Increase.html` — AGI +2% Attention! When triggering a license combination with two of the same licenses, on
+- **Agility Potion Lv1** (niv. 20) `Agility_Potion_Lv1.html` — Obtain Monster/Item Drop Association's Gift Box Crafting Blueprints Formula: Agility Potio
+- **Agility Potion Lv2** (niv. 40) `Agility_Potion_Lv2.html` — Obtain Monster/Item Drop Research's Delicate Gift Crafting Blueprints Formula: Agility Pot
+- **Agility Potion Lv3** (niv. 50) `Agility_Potion_Lv3.html` — Obtain Monster/Item Drop Research's Gift of Praise Crafting Blueprints Formula: Agility Po
+- **Agility Potion Lv4** (niv. 60) `Agility_Potion_Lv4.html` — Obtain Crafting Blueprints Formula: Agility Potion Lv4 Quest Reward L60. Uncooperative Alc
+- **Agility Potion Lv5** (niv. 70) `Agility_Potion_Lv5.html` — Obtain Crafting Blueprints Formula: Agility Potion Lv5
+- **Airline Map** `Airline_Map.html` — Quest Item Obtained from Gates Corsairs or Gates Navigators. Sakin hopes you can deliver i
+- **Airship Clutch** `Airship_Clutch.html` — Quest Item You made this from Power Wheel Axis's and a Clutch Blueprint. Label really need
+- **Alazarin Fur** (niv. 30) `Alazarin_Fur.html` — "Probably dyed red with blood. The only question is--whose? Or what's?" Dropped by summone
+- **Alchemy Tool** `Alchemy_Tool.html` — "These are the Alchemist Gurotath's favored tools. They are in excellent condition and hav
+- **Alchemy Toolkit** `Alchemy_Toolkit.html` — "It contains Raw Copper, Dry Branches, and Lost Energy.Where can i find it?"
+- **Algae Mud** `Algae_Mud.html` — Quest Item Algae Mud from a Kelp Muddy. It has a fresh, clean smell. The Pyrowinds asked y
+- **All-Purpose Potion** (niv. 65) `All-Purpose_Potion.html` — This magic drink gives you limitless powers and tastes like liquefied cotton candy. Watch 
+- … 2865 autres, voir `categories/objets.md` et `pages-index.tsv`
+
+### races (7)
+
+- **Anura** `Anura.html` — As a race, the Anuran were shy and somewhat isolated prior to their voyage to the central 
+- **Drakai** `Drakai.html` — A powerful and mysterious Drakai Magician
+- **Halfkin** `Halfkin.html` — Halfkin is a playable race in Eden Eternal . They were previously referred to as Eternal C
+- **Human** `Human.html` — Humans are a playable race in Eden Eternal . Their unique racial craft is Jewel Fusion .
+- **Tuskar** `Tuskar.html` — A fierce and vicious Tuskar about to do something rash
+- **Ursun** `Ursun.html` — Ursun is a playable race in Eden Eternal whose unique racial craft is Engraving .
+- **Zumi** `Zumi.html` — The petite Zumi are a creative race, lovers of invention and commerce. They originated fro
+
+### hauts-faits (1)
+
+- **Tranquil Hill/Achievements** `Tranquil_Hill/Achievements.html` — A list of achievements in Tranquil Hill .
+
+### guides-debutant (8)
+
+- **Beginner's Guide/Battle** `Beginner's_Guide/Battle.html` — You can summon monsters at a Summoning Altar and choose to defeat them there. Summon scrol
+- **Beginner's Guide/Character Creation** `Beginner's_Guide/Character_Creation.html` — Once you have logged in, you can begin creating your characters! Character creation in Ede
+- **Beginner's Guide/Controls** `Beginner's_Guide/Controls.html` — There are two ways to control your Character in Eden Eternal. You can use the Mouse or the
+- **Beginner's Guide/Interface** `Beginner's_Guide/Interface.html` — The above character portrait shows the current status of your character. The top pink bar 
+- **Beginner's Guide/Item Mall** `Beginner's_Guide/Item_Mall.html` — The Item Mall is a shop in Eden Eternal where players can purchase additional Items for Ae
+- **Beginner's Guide/Items and Storage** `Beginner's_Guide/Items_and_Storage.html` — placeholder
+- **Beginner's Guide/Quests** `Beginner's_Guide/Quests.html` — Questing is a common term in MMORPGs to describe doing tasks to gain experience and level 
+- **Beginner's Guide/Social** `Beginner's_Guide/Social.html` — Hey there! If you're here, you're probably wondering what makes up the social aspect of th
+
+### guides-mecaniques (201)
+
+- **Accessory** `Accessory.html` — An accessory is a type of equipment . Accessories are divided into three categories: neckl
+- **Aeria Games** `Aeria_Games.html` — Aeria Games is a subsidiary of the Germany based media company ProSiebenSat1. Aeria licens
+- **Aeria Point** `Aeria_Point.html` — The Aeria Point ( AP ) is the unit of microtransaction currency used by Aeria Games . It i
+- **Alchemy** `Alchemy.html` — Alchemy is the Racial Crafting skill for players of the Anuran race, used to create variou
+- **Alchemy lab** `Alchemy_lab.html` — An alchemy lab is a facility found in Aven and in some guild towns that allows the craftin
+- **Alpaca's Friends** `Alpaca's_Friends.html` — This Quest page is incomplete. If you would like to contribute, please make sure that any 
+- **Alpaca Coin** `Alpaca_Coin.html` — Alpaca Tokens are a special currency in Eden Eternal. After being consumed, they can be ex
+- **Alpaca Shop** `Alpaca_Shop.html` — The Alpaca Shop is an in-world shop run and accessed by talking to <Happy Alpaca> Joankena
+- **Amber Eye** `Amber_Eye.html` — Amber Eye is one of the nine general fame factions. Amber Eye's NPCs are located on the mi
+- **An Analgesic Jam** `An_Analgesic_Jam.html` — The berries can be found in the forst north of Opera in the Rainbowfall forest. They look 
+- **Ancestral Spirit Followers** `Ancestral_Spirit_Followers.html` — Ancestral Spirit Followers is one of the nine general fame factions. Ancestral Spirit Foll
+- **Andrew Mining** `Andrew_Mining.html` — Andrew Mining is the regional fame faction for Limestone Mountain .
+- **Angelly** `Angelly.html` — A Angelly is a recurring monster type found throughout Eden Eternal. Angelly's as a whole 
+- **Arcane Box** `Arcane_Box.html` — Arcane Box is a feature that allows certain items to be transformed into other items. It h
+- **Arcanum Association** `Arcanum_Association.html` — Arcanum Association is one of the nine general fame factions. Arcanum Association's NPCs a
+- **Archimage** `Archimage.html` — Archimage is an awakened class branching off from Shaman . This class has not yet been rel
+- **Archive** `Archive.html` — The archive is a special storage feature, different from the warehouse and inventory. The 
+- **Arid Wilds** `Arid_Wilds.html`
+- **Arthur Hammer** `Arthur_Hammer.html` — Arthur Hammer is one of the nine general fame factions. Arthur Hammer's NPCs are located b
+- **Awakening** `Awakening.html` — Awakening is an Illusionist class expertise that improves the effect and duration of Mind 
+- **Awakening Quest** `Awakening_Quest.html` — There are actually 2 tiers of awakening, being Lv 65 and Lv 75 for weapons, and Lv 70 and 
+- **Bad Magical Contract** `Bad_Magical_Contract.html` — M-ATK +10%
+- **Bank** `Bank.html` — The Bank , also sometimes referred to as Warehouse , is a type of storage in Eden Eternal 
+- **Beginner's Guide** `Beginner's_Guide.html` — Welcome to the Eden Eternal Beginner's Guide ! If you are new to the game and want to know
+- **Biotechnology** `Biotechnology.html` — 45641156
+- **Blackflame Peak** `Blackflame_Peak.html`
+- **Bloody Payback** `Bloody_Payback.html` — Bloody Payback 70% chance of reflecting 30% received damage back to attacker
+- **Book** `Book.html` — Books do not have any mechanical purpose in the game other than to provide information. Ea
+- **Boss Locations** `Boss_Locations.html` — A list of the bosses found in the Achievements section and their locations.
+- **Bosses** `Bosses.html` — Sabaster, an outdoor boss.
+- **Break Point System** `Break_Point_System.html` — A graphic indicating that a boss's BP bar has been fully depleted
+- **Certificate** `Certificate.html` — A certificate or license is a stat boost earned by gaining class levels, and equipped in t
+- **Character experience** `Character_experience.html` — Character experience , also known as EXP or XP, measures a character's progress to higher 
+- **Character stat** `Character_stat.html` — Character stats are attributes that influence different aspects of the game, such as defen
+- **Class** `Class.html` — Classes in Eden Eternal , like in many MMORPGs, are what define your skills, what weapons 
+- **Class Branches** `Class_Branches.html`
+- **Class Template** `Class_Template.html` — Playable Class and Class Branches Defense Melee DPS Ranged DPS Healing and Support Magic D
+- **Class experience** `Class_experience.html` — Class experience , also known as CP or JP, measures a character's progress to higher class
+- **Common Monster** `Common_Monster.html` — The portrait of a normal monster
+- **Core of Regret** `Core_of_Regret.html` — Dropped by level 85 Boss Monsters.
+- **Costume** `Costume.html` — Players can buy fashion items (also known as costumes) from the Item Mall to change their 
+- **Crafting** `Crafting.html` — Crafting allows level 20+ players to create various equipment and consumable items.
+- **Crone Eagle** `Crone_Eagle.html` — Crone Eagle has only one thing in mind when it comes to outsiders!
+- **Crystal Camel Auctions** `Crystal_Camel_Auctions.html` — Crystal Camel Auctions , also known as CC Auctions or simply the auction house (AH), is a 
+- **Crystal Camel Chamber of Commerce** `Crystal_Camel_Chamber_of_Commerce.html` — Crystal Camel Chamber of Commerce is one of the nine general fame factions. Crystal Camel'
+- **Crystal Cross Medal** `Crystal_Cross_Medal.html` — A Crystal Cross Medal is a special currency won from territory wars, arena matches, and bo
+- **Cyclone Basin** `Cyclone_Basin.html` — In this city you can find enemies between levels 55 and 57.
+- **Death** `Death.html` — POV: Your character is dead.
+- **Death Omen** `Death_Omen.html` — cost 274mp instant cd 8s Inflicts +185 damage per second on all enemies in a 50-foot targe
+- **Death Valley** `Death_Valley.html`
+- **Decay Swamp** `Decay_Swamp.html`
+- **Delphi Forest** `Delphi_Forest.html`
+- **Destructive Blow** `Destructive_Blow.html` — cost 274mp instant cd 4s Increase PATK +915 points. Damages an enemy and doubles the next 
+- **Devastation Realm** `Devastation_Realm.html` — A map filled with devastation, saved for the Crystal Staircase that leads to Devastation D
+- **Devil Horn Fat Bird** `Devil_Horn_Fat_Bird.html` — HP: Unknown
+- **Dimension of Souls** `Dimension_of_Souls.html`
+- **Druid** `Druid.html` — Druid is an awakened class branching off from Shaman . This class has not yet been release
+- **Durango Kingdom** `Durango_Kingdom.html` — The long lost Durango Kingdom, kept together by bridges and magical portals. The Bane Prin
+- **Dye** `Dye.html` — A dye is a consumable item that allows a player to alter the color of a portion of a class
+- **Eden Eternal Wiki** `Eden_Eternal_Wiki.html` — <!-- Saved in parser cache with key 1.43.9_prod_wikia:pcache:idhash:2207133-0!sseVary=Regu
+- … 141 autres, voir `categories/guides-mecaniques.md` et `pages-index.tsv`
+
+### meta-wiki (72)
+
+- **(Pet) Accuracy Necklace** `(Pet)_Accuracy_Necklace.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **5 Beast Team Totem** `5_Beast_Team_Totem.html` — 5 Beast Team Totems are Totems that are related to the 5 Beast Team, which is a group of t
+- **Ancient Boots** `Ancient_Boots.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Ancient Hunter's Bow** `Ancient_Hunter's_Bow.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Ancient Totem Bow** `Ancient_Totem_Bow.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Angelly (disambiguation)** `Angelly_(disambiguation).html` — Angelly may refer to...
+- **Awakening V** `Awakening_V.html` — The children born from the Crystal searched for clues that would solve the mystery of thei
+- **Axe Images** `Axe_Images.html` — A repository of all axe dagger icons.
+- **Blood Carved Sequoia** (niv. 70) `Blood_Carved_Sequoia.html` — This tree can be found on farms and is very difficult to chop down. Can be found on farms.
+- **Blueprint: Desert Eagle** `Blueprint__Desert_Eagle.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Blueprint: Devil's Dictionary** `Blueprint__Devil's_Dictionary.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Blueprint: Silent Avenger** `Blueprint__Silent_Avenger.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Blueprint: Star Frost Belt** `Blueprint__Star_Frost_Belt.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Blueprint: Star Frost Boots** `Blueprint__Star_Frost_Boots.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Blueprint: Star Frost Brigandine** `Blueprint__Star_Frost_Brigandine.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Blueprint: Star Frost Gloves** `Blueprint__Star_Frost_Gloves.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Bow Images** `Bow_Images.html` — A repository of all known bow icons.
+- **Broken Magic Pot** `Broken_Magic_Pot.html` — Broken Magic Pot reders to a series of items attained in Limestone Mountain from quests, t
+- **Cestus Images** `Cestus_Images.html` — cestus1a cestus1b cestus1c cestus1d cestus1e Cestus1f.png cestus1f Design 2 cestus2a cestu
+- **Cloak Images** `Cloak_Images.html` — I've uploaded some images of the cloaks in the game. Before you upload yours, try to see i
+- **Cloth Armor Images** `Cloth_Armor_Images.html` — A collection of cloth armor images. Please refer to these first, before uploading your own
+- **Club Images** `Club_Images.html` — A repository of all known club icons.
+- **Dagger Images** `Dagger_Images.html` — A repository of all known dagger icons.
+- **Defender Ring** `Defender_Ring.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Defense** `Defense.html` — Defense may refer to...
+- **Desert Boots** `Desert_Boots.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Desert Eagle** `Desert_Eagle.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Devil's Dictionary** `Devil's_Dictionary.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Devour Element** (niv. 65) `Devour_Element.html` — "This insatiable element can devour any power in the world--including the owner's." Droppe
+- **Disaster Rune** (niv. 45) `Disaster_Rune.html` — "There is holy magic and dark magic; runes that bring peace and runes that bring disaster.
+- **Earth Shock** `Earth_Shock.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Eden Eternal** `Eden_Eternal.html` — Eden Eternal , known as Finding Neverland Online (Chinese: 聖境傳說 ) in Chinese-speaking mark
+- **Eden Eternal Wiki/Help wanted** `Eden_Eternal_Wiki/Help_wanted.html` — Want to help out Eden Eternal Wiki? Here are a few ways to contribute: Connect with other 
+- **Eden Eternal Wiki/News** `Eden_Eternal_Wiki/News.html` — More news
+- **Eden Eternal Wiki/Poll** `Eden_Eternal_Wiki/Poll.html` — This Poll has yet to be re-implemented back into the main page. If you would like to sugge
+- **Emerald Fruit** (niv. 70) `Emerald_Fruit.html` — "They look like they belong in a ring, but they really belong in a pie. These glistening g
+- **Flame Crystal** `Flame_Crystal.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Galaxy Seal Staff** `Galaxy_Seal_Staff.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Ghost Skull** `Ghost_Skull.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Greatsword Images** `Greatsword_Images.html` — greatsword1a greatsword1b greatsword1c Greatsword1d.png greatsword1d Greatsword1e.png grea
+- **Grimoire Images** `Grimoire_Images.html` — grimoire1a grimoire1b grimoire1c Grimoire1d.png grimoire1d Grimoire1e.png grimoire1e Grimo
+- **Guardian Ring** `Guardian_Ring.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Guitar Images** `Guitar_Images.html` — guitar1a guitar1b guitar1c Guitar1d.png guitar1d Guitar1e.png guitar1e Guitar1f.png guitar
+- **Gun Images** `Gun_Images.html` — gun1a gun1b gun1c Gun1d.png gun1d Gun1e.png gun1e Gun1f.png gun1f Design 2 gun2a gun2b gun
+- **Healing** `Healing.html` — Healing may refer to the following...
+- **Heavy Armor Images** `Heavy_Armor_Images.html` — A collection of heavy armor images. Please refer to these first, before uploading your own
+- **Help** `Help.html` — We have two many sources of help on this wiki.
+- **Hurricane Ring** `Hurricane_Ring.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Ironbleak Armor** `Ironbleak_Armor.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Ironbleak Boots** `Ironbleak_Boots.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Ironbleak Bracers** `Ironbleak_Bracers.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Katana Images** `Katana_Images.html` — katana1a Katana1b.png katana1b Katana1c.png katana1c Katana1d.png katana1d Katana1e.png ka
+- **Light Armor Images** `Light_Armor_Images.html` — A collection of light armor images. Please refer to these first, before uploading your own
+- **Mace Images** `Mace_Images.html` — mace1a mace1b mace1c Mace1d.png mace1d Mace1e.png mace1e Mace1f.png mace1f Design 2 mace2a
+- **Mist Boots** `Mist_Boots.html` — This is a disambiguation page used to distinguish between articles with similar names. If 
+- **Mountain Pine Tree** (niv. 45) `Mountain_Pine_Tree.html` — "Mountain Pines are difficult to transport, so they always fetch a hefty sum." Can be foun
+- **Mushroid (disambiguation)** `Mushroid_(disambiguation).html` — Mushroid may refer to the following:
+- **Necklace Images** `Necklace_Images.html` — I've uploaded some images of the necklaces in the game. Before you upload yours, try to se
+- **Rapier Images** `Rapier_Images.html` — rapier1a Rapier1b.png rapier1b Rapier1c.png rapier1c Rapier1d.png rapier1d Rapier1e.png ra
+- **Ring Images** `Ring_Images.html` — I've uploaded some images of the rings in the game. Before you upload yours, try to see if
+- … 12 autres, voir `categories/meta-wiki.md` et `pages-index.tsv`

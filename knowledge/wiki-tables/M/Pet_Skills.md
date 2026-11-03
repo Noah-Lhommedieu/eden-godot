@@ -1,0 +1,140 @@
+# Pet Skills
+
+> Source : `src_csv/M_Pet Skills.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+**PET SKILLS**
+
+| NAME: | DMG TYPE | EFFECT: | Gen. Debuff | Phys. Debuffs | Slows | Buffs/Heals | Magic Debuffs | Damage Only | Crowd Control |
+|---|---|---|---|---|---|---|---|---|---|
+|  |  |  | Note: DMG TYPE: "Pet" relates to the pets attack attribute type seen in the pet window. |  |  |  |  |  |  |
+| Slam | Phys | Grants P-ATK +8251 pts and deals Physical DMG to the target. If the target is in "Resonating Blow" status there is a 10% chance to knock them down for 4 seconds. |  |  |  |  |  |  |  |
+| Resonating Blow | Phys | Deals 613 pts of Physical DMG to the target every second for 8 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Swift Attack | Phys | Grants P-ATK +4715 pts and deals Triple Hit Physical DMG to the target. |  |  |  |  |  |  |  |
+| Magic Blockade | Phys | Grants P-ATK +11788 pts and deals Physical DMG to the target and Silences them for 4 seconds.<br>Has no effect on boss monsters. |  |  |  |  |  |  |  |
+| Dancing Blade | Phys | Grants P-ATK +7662 pts and deals Triple Hit Physical DMG to all enemies within 10 meters of the caster. |  |  |  |  |  |  |  |
+| Eagle Pursuit | Phys | Grants P-ATK +7662 pts and deals Physical DMG to the target. If the target's HP is below 20% Eagle Pursuit will deal Double Hit DMG.<br> |  |  |  |  |  |  |  |
+| Resonating Strike | Phys | Deals 1090 pts of Physical DMG to the target every second for 8 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Rapid Strikes | Phys | Grants P-ATK +7072 pts and deals Quadruple Hit Physical DMG to the target. |  |  |  |  |  |  |  |
+| Violent Pursuit | Phys | Grants P-ATK +11493 pts and deals Physical DMG to the target. If the target's HP is below 20% Eagle Pursuit will hit the target twice. |  |  |  |  |  |  |  |
+| Poison Blade | Phys | Deals 940 pts of Physical DMG to the target every second for 10 seconds, stacks 10 times. |  |  |  |  |  |  |  |
+| Swinging Shot | Phys | Grants P-ATK +11788 pts and deals Physical DMG to the target and decreases their Physical DMG Dealt -10% for 7.5 seconds. |  |  |  |  |  |  |  |
+| Sickle Strike | Phys | Grants P-ATK +11788 pts and deals Physical DMG to all enemies within 10 meters of the target dealing DMG equal to 1% of the targets Max HP.<br>Has no effect on boss monsters. |  |  |  |  |  |  |  |
+| Frenzied Attack | Phys | Grants P-ATK +18271 pts and deals Physical DMG to the target. This skill will hit the target three times. |  |  |  |  |  |  |  |
+| Thousand Arrow Rain | Phys | Grants P-ATK + pts and deals Triple Physical DMG to all enemies within 25 meters of the caster. |  |  |  |  |  |  |  |
+| Collapsing Blow | Phys | Grants P-ATK +11788 pts and deals Physical DMG to the target and decreases the targets Block & Parry -390 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Spirit Scar | Phys | Grants P-ATK +17682 pts and deals Physical DMG to the target and prevents them from being healed for 4 seconds. |  |  |  |  |  |  |  |
+| Ambush | Phys | Increases the targets P-DMG Taken +50% on the next attack. |  |  |  |  |  |  |  |
+| Purgatory | Phys | Grants P-ATK +7367 pts and deals Physical DMG to all enemies within a 10 meter straight line and decreases their DEF -7286 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Protrusion | Phys | Grants P-ATK +10314 pts and deals Physical DMG to the target. If the target is in "Purgatory" status, their Physical Resistance is decreased -5 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Flash Bomb | Phys | Grants P-ATK +4715 pts and deals Physical DMG to the target and decreases the targets ACC -522 for 8 seconds. |  |  |  |  |  |  |  |
+| Oil Bomb | Phys | Grants P-ATK +589 pts and deals Physical DMG to all enemies within 10 meters of the target dealing 740 pts of Physical DMG every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Brain Drain | Phys | Grants P-ATK +7072 pts and deals Physical DMG to the target and decreases the targets M-DMG Dealt -5% for 8 seconds, stacks 2 times. |  |  |  |  |  |  |  |
+| Piercing Spiral | Phys | Grants P-ATK +7662 pts and deals Physical DMG to the target and decreases the targets Pierce Resistance -5 pts. |  |  |  |  |  |  |  |
+| Shadow Ambush | Phys | Increases the targets P-DMG Taken +100% on the next attack. |  |  |  |  |  |  |  |
+| Crushing Blow | Phys | Grants P-ATK +17682 pts and deals Double Hit Physical DMG to the target and decreases the targets Block & Parry 780 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Asura's Purgatory | Phys | Grants P-ATK +9430 pts and deals Double Hit Physical DMG to all enemies within a 10 meter straight line and decreases their DEF -10928 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Protrusive Stab | Phys | Grants P-ATK +15619 pts and deals Physical DMG to the target and decreases their Physical Resistance is decreased -8 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Flash Bang | Phys | Grants P-ATK +7072 pts and deals Physical DMG to the target and decreases the targets ACC -1044 for 8 seconds. |  |  |  |  |  |  |  |
+| Dirty Oil Bomb | Phys | Grants P-ATK +884 pts and deals Physical DMG to all enemies within 10 meters of the target dealing 1480 pts of Physical DMG every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Power Drain | Phys | Grants P-ATK +10609 pts and deals Physical DMG to the target and decreases the targets DMG Dealt -5% for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Piercing Strike | Phys | Grants P-ATK +11493 pts and deals Physical DMG to the target and decreases the targets Pierce Resistance -8 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Heavy Strike | Phys | Grants P-ATK +10314 pts and deals Physical DMG to the target and decreases their Strike Resistance -10 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Piercing Arrow | Phys | Grants P-ATK +7662 pts and deals Double Hit Physical DMG to the target and decreases their Pierce Resistance -7 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Bone Gnash | Phys | Grants P-ATK +11659 pts and deals Physical DMG to the target and decreases their DEF -11795 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Deep Slash | Phys | Grants P-ATK +17976 pts and deals Physical DMG to the target and decreases their Slash Resistance -5 pts for 10 seconds, stacks 4 times. |  |  |  |  |  |  |  |
+| Crushed Bone | Phys | Grants P-ATK +15286 pts and deals Physical DMG to the target and decreases their Strike Resistance -5 pts for 10 seconds, stacks 4 times. |  |  |  |  |  |  |  |
+| Pierced Armor | Phys | Grants P-ATK +15546 pts and deals Physical DMG to the target and decreases their Pierce Resistance -5 pts for 10 seconds, stakcs 4 times. |  |  |  |  |  |  |  |
+| Weakened Armor | Phys | Increases the targets Physical DMG Taken +5% for 7 seconds.<br> |  |  |  |  |  |  |  |
+| Cracked Armor | Phys | Grants P-ATK +16582 pts and deals Physical DMG to the target and decreases their DEF -15% for 10 seconds.<br> |  |  |  |  |  |  |  |
+| Horrific Slash | Phys | Grants P-ATK +26523 pts and deals Physical DMG to all enemies within 25 meters of the caster and decreases their Slash Resistance -12 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Forceful Strike | Phys | Grants P-ATK +23319 pts and deals Physical DMG to all enemies within 25 meters of the caster decreasing their DEF -7720 pts and Move SPD -15% for 10 seconds. |  |  |  |  |  |  |  |
+| Blood Slash | Phys | Grants P-ATK +29175 pts and deals Physical DMG to all enemies within 25 meters of the caster and decreases their Slash Resistance -15 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Final Strike | Phys | Grants P-ATK +29175 pts and deals Physical DMG to all enemies within 25 meters of the caster decreasing their DEF -10685 pts and Move SPD -20% for 10 seconds |  |  |  |  |  |  |  |
+| Sacred Light | Holy | Grants M-ATK +38820 pts and deals Holy DMG to the target and decreases the targets Move SPD -10% for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Winter's Touch | Ice | Decreases the targets Move SPD -15% and deals 2631 pts of Ice DMG to the target every second for 8 seconds, stacks 2 times. |  |  |  |  |  |  |  |
+| Magic Chains | Phys | Grants P-ATK +15546 pts and deals Physical DMG to the target and decreases their Move SPD -25% and Silences them for 4 seconds. |  |  |  |  |  |  |  |
+| Holy Light | Holy | Grants M-ATK +58230 pts and deals Holy DMG to the target and decreases their Holy Resistance -5 pts and Move SPD -10% for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Dark Gravitation | Dark | Grants M-ATK +52407 pts and deals Dark DMG to the target and decreases their Move SPD -15% for 10 seconds, stacks 2 times. |  |  |  |  |  |  |  |
+| Winter's Chill | Ice | Decreases the targets Move SPD -10% and deals 877 pts of Ice DMG to the target every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Frosty Winds | Ice | Grants M-ATK +59876 pts and deals Double Hit Ice DMG to all enemies within 15 meters of the target and decreases their Move SPD -20% for 10 seconds. |  |  |  |  |  |  |  |
+| Snipers Heart | Pet | Grants surrounding allies within 15 meters P-ATK +2652 pts & ACC +130 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Protective Light | Pet | Heals all party members within 15 meters +2898 HP & Removes 1 negative status. |  |  |  |  |  |  |  |
+| Guardian Light | Pet | Heals all party members within 20 meters +4347 HP and removes 1 negative Status. |  |  |  |  |  |  |  |
+| Rainbow Rays | Pet | Grants surrounding allies within 15 meters M-ATK +3235 pts and EVA +121 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Burning Spirit | Pet | Grants surrounding allies within 15 meters ATK SPD +121 pts and Cast SPD +121 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Frozen Barrier | Pet | Grants surrounding allies within 15 meters Elemental Resistance +2 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Nature Energy | Pet | Grants surrounding allies within 15 meters recovering HP equal to 1% of their Max HP every second for 5 seconds. |  |  |  |  |  |  |  |
+| Magical Energy | Pet | Grants surrounding allies within 15 meters recovering MP equal to 1% of their Max MP every second for 5 seconds. |  |  |  |  |  |  |  |
+| Wind Song | Pet | Grants surrounding allies within 15 meters Move SPD +25% for 10 seconds. |  |  |  |  |  |  |  |
+| Fiery Spirit | Pet | Grants surrounding allies within 15 meters Physical DMG Dealt +336 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Stargazer | Pet | Grants surrounding allies within 15 meters Magical DMG Dealt +336 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Light Shield | Pet | Grants surrounding allies within 15 meters DMG Taken -336 pts for 10 seconds, stacks 5 times. |  |  |  |  |  |  |  |
+| Angel Prayer | Pet | Heals all surrounding allies within 20 meters +8233 HP and recovers their HP +2763 pts and MP +611 pts every second for 7 seconds.<br> |  |  |  |  |  |  |  |
+| Guardian Angel | Pet | Grants surrounding allies within 20 meters DMG Taken -7% for 10 seconds. |  |  |  |  |  |  |  |
+| Light's Sanction | Holy | Grants M-ATK +15528 pts and deals Holy DMG to the target and decreases their Nature and Holy Resistance -5 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Vocal Bomb | Fire | Grants M-ATK +12940 pts and deals Fire DMG to the target. If the target is in "Earth Shock" status there is a 10% chance to knock them down for 4 seconds. |  |  |  |  |  |  |  |
+| Rage of Storms | Lightning | Decreases the targets ATK SPD -242 pts, Cast SPD -242 pts and deals -658 pts of Lightning DMG to the target every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Resistance Collapse | Pet | Decreases Fire, Ice and Lightning Resistance -5 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Deadly Icicle | Ice | Grants M-ATK +11646 pts and deals Triple Hit Ice DMG to the target. |  |  |  |  |  |  |  |
+| Nightmare Attack | Dark | Grants M-ATK +12940 pts and deals Dark DMG to the target. If the target is in "Dark Parasite" status, Nightmare Attack deals Double Hit DMG. |  |  |  |  |  |  |  |
+| Earth Shock | Nature | Grants M-ATK +15528 pts and deals Nature DMG to the target and has a 50% chance to decrease the targets ACC -322 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Frozenado | Ice | Grants M-ATK +54995 pts and deals Ice DMG to all enemies within 10 meters of the target. |  |  |  |  |  |  |  |
+| Drake's Power | Fire | Grants M-ATK +25751 pts and deals Double Hit Fire DMG to the target. |  |  |  |  |  |  |  |
+| Dark Parasite | Dark | Deals 877 pts of Dark DMG to the target every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Earth Strike | Nature | Grants M-ATK +26487 pts and deals Nature DMG to the target and decreases the targets ACC -696 pts for 8 seconds.<br> |  |  |  |  |  |  |  |
+| Light's Purity | Holy | Grants M-ATK +23293 pts and deals Holy DMG to the target and decreases their Nature and Holy Resistance -8 pts for 8 seconds. |  |  |  |  |  |  |  |
+| Thunder Storms | Lightning | Grants M-ATK +7357 pts and deals Lightning DMG to the target and decreases the targets ATK SPD -522 pts, Cast SPD -522 pts and deals 1480 pts of Lightning DMG to the target every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Resistance Tap | Pet | Decreases Fire, Ice and Lightning Resistance -8 pts for 8 seconds.<br> |  |  |  |  |  |  |  |
+| Violent Icicle | Ice | Grants M-ATK +17459 pts and deals Quadruple Hit Ice DMG to the target. |  |  |  |  |  |  |  |
+| Shadow Strike | Dark | M-ATK +19410 pts and deals Double Hit Dark DMG to the target. |  |  |  |  |  |  |  |
+| Empowered Drake's Power | Fire | Grants M-ATK +38994 pts and deals Fire DMG to the target. This skill will hit the target twice. |  |  |  |  |  |  |  |
+| Evil Parasite | Dark | Deals 1754 pts of Dark DMG to the target every second for 8 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Blazefire | Fire | Grants M-ATK +58230 pts and deals Fire DMG to the target and has a 50% chance to deal 10524 pts of Fire DMG every second for 10 seconds. |  |  |  |  |  |  |  |
+| Snowball | Ice | Grants M-ATK +45290 pts and deals Ice DMG to the target and decreases their Ice Resistance -10 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Purifying Light | Holy | Grants M-ATK +44145 pts and deals Holy DMG to the target and has a 50% chance to remove 2 positive status' from the target. |  |  |  |  |  |  |  |
+| Lightning Shock | Lightning | Grants M-ATK +54995 pts and deals Lightning DMG to the target and decreases their Lightning Resistance -7 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Toxic Magic | Nature | Grants M-ATK +54348 pts and deals Nature DMG to the target and deals 8770 pts of Nature DMG every second for 10 seconds. |  |  |  |  |  |  |  |
+| Falling Star | Holy | Grants M-ATK +51760 pts and deals Holy DMG to all enemies within 10 meters of the target. |  |  |  |  |  |  |  |
+| Shattering Flame | Fire | Grants M-ATK +58230 pts and deals Fire DMG to the target and has a 50% chance to decrease Fire Resistance -10 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Cursed Mana | Dark | Grants M-ATK +55181 pts and deals Dark DMG to the target and decreases their Dark Resistance -10 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Wind Storm | Nature | Grants M-ATK +61803 pts and deals Nature DMG to all enemies within 10 meters of the target. |  |  |  |  |  |  |  |
+| Calling Thunder | Lightning | Grants M-ATK +56289 pts and deals Lightning DMG to all enemies within 10 meters of the target. |  |  |  |  |  |  |  |
+| Poison Ivy | Nature | Grants M-ATK +64700 pts and deals Nature DMG to the target and decreases their Nature resistance -5 pts for 10 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Darkness Rising | Dark | Deals Dark DMG to all enemies within a 25 meter cross shaped area reducing their Dark Resistance -15 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Flame Brand | Fire | Grants M-ATK +65347 pts and deals Fire DMG to the target and decreases their Fire Resistance -5 pts for 10 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Frosty Touch | Ice | Grants M-ATK +64053 pts and deals Ice DMG to the target and decreases their Ice Resistance -5 pts for 10 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Cursed Mark | Dark | Grants M-ATK +62759 pts and deals Dark DMG to the target and decreases their Dark Resistance -5 pts for 10 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Mark of Thunder | Lightning | Grants M-ATK +65994 pts and deals Lightning DMG to the target and decreases their Lightning Resistance -5 pts for 10 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Sanctum Response | Holy | Grants M-ATK +63406 pts and deals Holy DMG to the target and decreases their Holy Resistance -5 pts for 10 seconds, stacks 3 times. |  |  |  |  |  |  |  |
+| Shattering Earth | Nature | Deals Nature DMG to all enemies within a 25 meter cross shaped area reducing their Nature Resistance -15 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Ice Strike | Ice | Deals Ice DMG to all enemies within a 25 meter cross shaped area reducing their Ice Resistance -15 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Flame Spitter | Fire | Grants M-ATK +71170 pts and deals Double Hit Fire DMG to all enemies within 15 meters of the target and decreases their P-ATK & M-ATK -5% for 10 seconds. |  |  |  |  |  |  |  |
+| Floral Winds | Nature | Grants M-ATK +69229 pts and deals Double Hit Nature DMG to all enemies within 15 meters of the target and deals 11840 pts of Nature DMG every second for 10 seconds. |  |  |  |  |  |  |  |
+| Laughing Curse | Dark | Grants M-ATK +62759 pts and deals Double Hit Dark DMG to the target and deals 13155 pts of Dark DMG every second for 10 seconds. |  |  |  |  |  |  |  |
+| Fearful Strike | Dark | Grants M-ATK +71817 pts and deals Double Hit Dark DMG to all enemies within 15 meters of the target and decreases theri ACC -1022 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Sanctimonious Light | Holy | Grants M-ATK +70523 pts and deals Double Hit Holy DMG to all Enemies within 15 meters of the target and decreases their EVA -1022 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Gaslighting | Fire | Grants M-ATK +113305 pts and deals Fire DMG to all enemies within 25 meters of the caster and decreases their Fire Resistance -10 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Collapsing Light | Holy | Grants M-ATK +113305 pts and deals Holy DMG to all enemies within 25 meters of the caster and decreases their Holy Resistance -15 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Enhanced Curse Mark | Dark | Decreases the targets Dark Resistance -20 pts for 10 seconds. |  |  |  |  |  |  |  |
+| Natural Disaster | Nature | Grants M-ATK +??? pts and deals Nature DMG to all enemies within 25 meters of the caster. This skill will hit enemies twice. |  |  |  |  |  |  |  |
+| Lightning Assualt | Lightning | Grants M-ATK +??? pts and deals Double Hit Lightning DMG to all enemies within a 30 meter star shaped area. |  |  |  |  |  |  |  |
+| Frozen Breath | Ice | Grants M-ATK +103005 pts and deals Ice DMG to all enemies within a 30 meter fan-shaped area. This skill will hit enemies three times. |  |  |  |  |  |  |  |
+| Lightning Strike | Lightning | Grants M-ATK +77989 pts and deals Double Hit Lightning DMG to all enemies within 15 meters of the target and decreases their DMG Dealt -7% for 10 seconds. |  |  |  |  |  |  |  |
+| Frozen Tomb | Ice | Grants M-ATK +113305 pts and deals Ice DMG to all enemies within a 30 meter fan-shaped area. This skill will hit enemies three times. |  |  |  |  |  |  |  |
+| Heavy Impact | Phys | Grants P-ATK +10364 pts and deals Physical DMG to the target and has a 50% chance to stun the target for 5 seconds.11788 |  |  |  |  |  |  |  |
+| Heavy Slam | Phys | Grants P-ATK +12377 pts and deals Physical DMG to the target and has a 15% chance to knock them down for 4 seconds. |  |  |  |  |  |  |  |
+| Spirit Scar | Phys | Grants P-ATK +17682 pts and deals Physical DMG to the target and prevents them from being healed for 4 seconds. |  |  |  |  |  |  |  |
+| Spirit Burning Scar | Phys | Grants P-ATK +26523 pts and deals Physical DMG to the target. Removing 1 positive status' and prevents them from being healed for 4 seconds. |  |  |  |  |  |  |  |
+| Drake Tail Slash | Fire | Grants M-ATK +19410 pts and deals Fire DMG to the target knocking them back 5 meters. |  |  |  |  |  |  |  |
+| Natural Punishment | Nature | Grants M-ATK +14234 pts and deals Nature DMG to the target and Immobilizes them for 4 seconds. |  |  |  |  |  |  |  |
+| Fire Bomb | Fire | Grants M-ATK +20704 pts and deals Fire DMG to the target and has a 10% chance to stun the target for 4 seconds. |  |  |  |  |  |  |  |
+| Lightning Bolt | Lightning | Grants M-ATK +19410 pts and deals Lightning DMG to the target. If the target is in "Winter's Chill" status there is a 10% chance to knock them down for 4 seconds. |  |  |  |  |  |  |  |
+| Vocal Shout | Fire | Grants M-ATK +19410 pts and deals Fire DMG to all enemies within 10 meters of the target and has a 10% chance to stun them for 4 seconds. |  |  |  |  |  |  |  |
+| Flame Drake Slash | Fire | Grants M-ATK +29115 pts and deals Fire DMG to all enemies within a 15 meter target area knocking them back 10 meters. |  |  |  |  |  |  |  |
+| Earthly Punishment | Nature | Grants M-ATK +21351 pts and deals Double Hit Nature DMG to the target and Immobilizes them for 4 seconds. |  |  |  |  |  |  |  |
+| <br>Flame Bomb | Fire | Grants M-ATK +31065 pts and deals Fire DMG to the target and has a 20% chance to stun the target for 4 seconds. |  |  |  |  |  |  |  |
+| Thunder Bolt | Lightning | Grants M-ATK +29115 pts and deals Lightning DMG to the target and has a 10% chance to stun them for 4 seconds. |  |  |  |  |  |  |  |
+| Shadow Slash | Dark | Grants M-ATK +??? pts and deals Dark DMG to the target and Silences them for 5 seconds. |  |  |  |  |  |  |  |
+| Righteous Smite | Holy | Grants M-ATK +66641 pts and deals Holy DMG to all enemies within 10 meters of the target knocking them down for 3 seconds. |  |  |  |  |  |  |  |
+| Take Root | Nature | Grants M-ATK +42055 pts and deals Triple Hit Nature DMG to the target and Immobilizes them for 6 seconds. |  |  |  |  |  |  |  |
+

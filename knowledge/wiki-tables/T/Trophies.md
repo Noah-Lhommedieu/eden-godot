@@ -1,0 +1,1097 @@
+# Trophies
+
+> Source : `src_csv/T_ Trophies.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+> ⚠️ **Partiellement hors périmètre** : Liste de référence niv. 1-123 : les trophées de zones niv. >90 sont hors périmètre.
+
+| Justin Allspores Dry Mushroom Heart | Limestone Mountain | 8.0 | N/A | Warrior; "Sense of Survival" duration +10 sec. | N/A |
+|---|---|---|---|---|---|
+|  |  |  |  | Magician; "Resistance Collapse" duration +10 sec. |  |
+| Papineau's Gem Tooth | Tranquil Hill | 14.0 | N/A | Hunter; "Flash Bomb" duration +6 sec. | N/A |
+|  |  |  |  | Warrior; "Metal Buster" duration +11 sec . |  |
+| Mandragora's Tentacle Sample | Rainbowfall Forest | 19.0 | N/A | Cleric; "Light Sanction" duration +8 sec. | N/A |
+|  |  |  |  | Hunter; "Dazing Pierce" duration +8 sec. |  |
+| Tindilos' Broken Shell | Goss Mountains | 23.0 | N/A | Thief; "Gallop" duration +10 sec. | N/A |
+|  |  |  |  | Bard; "Spirited Melody" duration +8 sec. |  |
+| Sabasters Belly Shell | Beluga Bay | 27.0 | N/A | Magician; "Elemental Guardian" duration +10 sec. | N/A |
+|  |  |  |  | Cleric; "Holy Smite" duration +2 sec. |  |
+| Kisons Dry Stigma | Wetlands | 33.0 | N/A | Knight; "Elegant" duration +10 sec. | N/A |
+|  |  |  |  | Engineer; "Brain Drain" duration +8 sec. |  |
+| Ryloth's Colorful Shell | Valley of the Kings | 37.0 | N/A | Thief; "Hidden Force" duration +6 sec. | N/A |
+|  |  |  |  | Engineer; "Slime Explosives" duration +2 sec. |  |
+| Silin's Shining Teeth | Avila Volcano | 41.0 | N/A | Martial Artist; "Vajra Roars" duration +10 sec. | N/A |
+|  |  |  |  | Hunter; "Wild Stimulation" duration +10 sec. |  |
+| Gilles' Jumping Heart | Golden Plains | 45.0 | N/A | Bard; "Song of Illusions" duration: +8 sec. | N/A |
+|  |  |  |  | Illusionist; "Mind Surge" duration: +10 sec. |  |
+| Kekabu's Crystal Eye | Arid Wilds | 48.0 | N/A | Knight; "Focus" duration +10 sec. | N/A |
+|  |  |  |  | Illusionist; "Hypnotic Eye" duration +4 sec. |  |
+| Kikino's Shout Air Sac | Delphi Forest | 51.0 | N/A | Blade Dancer; "Magic Samba" duration: +10 sec. | N/A |
+|  |  |  |  | Shaman; "Rage of Storms" duration: +8 sec. |  |
+| Oberon's Tooth | Blackflame Peak | 54.0 | N/A | Blade Dancer; "Song of Patience" duration: +10 sec. | N/A |
+|  |  |  |  | Shaman; "Natural Punishment" duration: +2 sec. |  |
+| World Shell's Mandible | Decay Swamp | 57.0 | N/A | Martial Artist; "Spirit Scar" duration: +4 sec. | N/A |
+|  |  |  |  | Warrior; "Titan's Wall" duration: +8 sec. |  |
+| Gore Render's Hard Stomach | Highlands | 60.0 | N/A | Templar; "Decisive Shield" duration +10 sec. | N/A |
+|  |  |  |  | Ranger; "Serenity" duration +8 sec. |  |
+|  |  |  |  | Warlock; "Death Threats" duration +2 sec. |  |
+| Bazuda's Cursed Melodies | Witchcraft Forest | 63.0 | N/A | Samurai; "Fallen Swallow" duration +2 sec. | N/A |
+| Oisadar's Steel Willpower | Shiver Peak | 65.0 | N/A | Samurai; "Shrine Belief" duration +2 sec. | N/A |
+| Luisaka's Terrible Moan | Death Valley | 66.0 | N/A | Cleric; "Purifying Wind" duration +8 sec. | N/A |
+|  |  |  |  | Ranger; "Arrow of Fear" duration +2 sec. |  |
+| Zorna's Toxic Fin | Tempest Cliff | 70.0 | N/A | Samurai; "Purgatory" duration +2 sec. | N/A |
+|  |  |  |  | Sage; "Aura Hammer" duration +5 sec. |  |
+| Transformed Soultree's Withered Branches | Searing Valley | 71.0 | N/A | Dragon Knight; "Hellfire Dragon Devour" duration: +6 sec. | N/A |
+|  |  |  |  | Bard; "Music of Life" effective range increases +10 feet. |  |
+| Blade's Broken Soul | Vingot Lab | 72.0 | STR+55 | Each attack has a 5% chance to increase P-CRIT Rate +327; lasts 10 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Isolda's Frozen Heart | Vingot Lab | 72.0 | AGI+55 | Each attack has a 5% chance to increase M-ATK +6834; lasts 8 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Ultimate Beasts Broken Core | Vingot Lab | 72.0 | HP+513 | When under attack, there is a 5% chance to lower received DMG by -2278 pts; lasts 5 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Marquis Saad's Dragon Taming Rules | Vingot Lab | 72.0 | G-Healing+103 | Each attack has a 5% chance to recover HP and MP +339; lasts 8 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Mauls Atrophied Body | Devastation Dimension | 75.0 | WIS+57 | Increases the effect of the skill, "Cure". Max HP increases +1086; lasts 30 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Corken's Whisper | Devastation Dimension | 75.0 | INT+57 | Each attack has a 5% chance to recover M-CRIT Rate +339; lasts 8 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Kequa's Hell Key | Devastation Dimension | 75.0 | HP+543 | Each attack has a 5% chance to increase DEF +1810 and EVA +165; lasts 10 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Kimba's Sinister Ruby | Devastation Dimension | 75.0 | LCK+57 | Each attack has a 5% chance to increase P-ATK +2895; lasts 10 sec. | 2-Piece Effect: HP+1629, All Phys. Resistances +7, all Elem. Resistances+15. |
+| Dragon Misfortune's Bottled Breath | Devastation Realm | 75.0 | N/A | Warrior; "Thrill of Battle" duration +6 sec. | N/A |
+|  |  |  |  | Warlock; "Wild Shout" duration +10 sec. |  |
+| Arron's Unstable Crystal | Eloise Plains | 75.0 | N/A | Sage; "Earth Smash" range +5 feet. | N/A |
+|  |  |  |  | Templar; "Lightning Wave" duration +2 sec. |  |
+| Erros's Watchful Eye | Durango Kingdom | 77.0 | N/A | Luminary; "Blinding Glory" range +6 feet. | N/A |
+|  |  |  |  | Knight; "Magic Blockade" duration +2 sec. |  |
+| Frisaya's Tongue | Ethereal Dome | 81.0 | N/A | Executioner; "Raining Blades" range +5 feet. | N/A |
+|  |  |  |  | Asura; "Power Burst" duration +3 sec. |  |
+| Gaillet's Plate Metal | Meeryasha | 83.0 | N/A | Devil Hunter; "Viper Sting" duration +2 sec. | N/A |
+|  |  |  |  | Equilibrian; "Silence Sickle" range +5 feet. |  |
+| Oupella's Gorgeous Plume | Mayland Jungle | 87.0 | N/A | Conjurer; "Haunting Thunder" range +8 feet. | N/A |
+|  |  |  |  | Master Fencer; "Obscurity" duration +3 sec. |  |
+| Casto's Sacred Fang | Shaxia Basin | 90.0 | N/A | Reaver; "Shattering Wave" duration +3 sec. | N/A |
+|  |  |  |  | Rifleteer; "Court of Judgement" duration +4 sec. |  |
+| Staff of the Pharaoh | Dimension of Souls | 95.0 | INT +90 | Your attacks have a 5% chance to increase M-ATK +10000, AGI & LCK +150 for 10 sec. | N/A |
+| Dimension Lord's Tooth | Dimension of Souls | 95.0 | STR +90 | Your attacks have a 5% chance to increase P-ATK +10000, AGI & LCK +150 for 10 sec. | N/A |
+| Swamp King's Essence | Dimension of Souls | 95.0 | Block +3%, EVA +150 | When under attack there is a 5% chance to reduce DMG Taken by -2650 pts for 7 sec. | N/A |
+| Dimension Pond Water | Dimension of Souls | 95.0 | WIS +100 | Your casts have a 5% chance to increase WIS +600, Move SPD +5% and DEF +3750. | N/A |
+| Kiriyata's Ominous Heart | Viroona Vale | 97.0 | N/A | Blade Acrobat skill "Magic Rhythm" duration +5 sec.. | N/A |
+|  |  |  |  | Arch-Elementalist skill "Magic Burst" duration +5 sec. |  |
+| Venom's Twister Web | Whispering Woods | 97.0 | N/A | Blade Acrobat skill "Sword Dance" range +5 meters. | N/A |
+|  |  |  |  | Annihilator skill "High-Precision Cannon" DMG +5%. |  |
+| Mithos' Feather | Singing Valley | 100.0 | N/A | Assassin skill "Sudden Stab" duration +3 sec. | N/A |
+|  |  |  |  | Berserker skill "Rebuke" duration +10 sec. |  |
+| Pachy's Lost Horn | Roaming Hills | 103.0 | N/A | Adjudicator skill "Insight" cooldown -10%. | N/A |
+|  |  |  |  | Holy Sage skill "Virtuous King's Blessing" cooldown -20%. |  |
+| Azula's Crystal Heart | Crystal Utopia | 105.0 | N/A | Time Manipulator skill "Slo-Mo" range +5 meters. | N/A |
+|  |  |  |  | Demon Summoner skill "Ruthless Ruler" cooldown -10%. |  |
+| Hak'Zurk's Mighty Axe | Dragonside Ridge | 110.0 | STR +222 | Normal attacks have a 5% chance to deal triple hit DMG.<br>Each attack has a 5% chance to grant P-ATK +11011 & STR +30%; lasts 10 sec. | N/A |
+| Gal'Lunaburakku's Lunar Heart | Dragonside Ridge | 110.0 | WIS +222 | Each attack has a 5% chance to grant WIS +715, DEF +3990; lasts 10 sec.<br>Each cast has a 1% chance to remove 3 negative status effects from surrounding allies within 20 meters. | N/A |
+| Ko'Harumi's Ribcage | Dragonside Ridge | 110.0 | Move SPD +10% | When attacked you have a 5% chance to decrease received DMG by -3625 points, lasts 10 sec. | N/A |
+| Ka'Nenellos' Molten Core | Dragonside Ridge | 110.0 | INT +222 | Magical DMG Dealt +5%.<br>Each attack has a 5% chance to grant M-ATK +14021 & INT+30%; lasts 10 sec. | N/A |
+| Serpagons Frozen Tear | Frostmorn Mountains | 112.0 | N/A | Shielder skill "Endless Fury" Range +5 meters. | N/A |
+|  |  |  |  | Dragon Soul skill "Dragon Charge" range +5 meters. |  |
+|  |  |  |  | Adjudicator skill "Adjudicator's Escape" cooldown -20%. |  |
+| Treglar's Poisoned Soul | Grumond Grassland | 113.0 | N/A | Elegant Dancer skill "Dance of Blessing" range +5 meters. | N/A |
+|  |  |  |  | Rifleteer skill "Illusionary Phantom" cooldown -10%. |  |
+|  |  |  |  | Asura skill "Power Trance" Duration +5 seconds. |  |
+| Feabelles Toxic Faedust | Fallmyst Weald | 115.0 | N/A | Gravity Manipulator skill "Tornado Wings" range +5 meters. | N/A |
+|  |  |  |  | Totem Master skill "Let it Rain" range +5 meters. |  |
+|  |  |  |  | Devil Hunter skill "Steady Shot Volley" DMG +10%. |  |
+| Frosmorn: Serpagons Frozen Tear | Frostmorn Mountains | 112.0 | HP+1164<br>Ice Res+8 | Shielder skill "Endless Fury" Range +5 meters. | N/A |
+|  |  |  |  | Dragon Soul skill "Dragon Charge" range +5 meters. |  |
+|  |  |  |  | Adjudicator skill "Adjudicator's Escape" cooldown -20%. |  |
+| Grumond: Treglar's Poisoned Soul | Grumond Grassland | 113.0 | HP+1280<br>Nature Res+8 | Elegant Dancer skill "Dance of Blessing" range +5 meters. | N/A |
+|  |  |  |  | Rifleteer skill "Illusionary Phantom" cooldown -10%. |  |
+|  |  |  |  | Asura skill "Power Trance" Duration +5 seconds. |  |
+| Fallmyst: Feabelles Toxic Faedust | Fallmyst Weald | 115.0 | HP+1408<br>Dark Res+8 | Gravity Manipulator skill "Tornado Wings" range +5 meters. | N/A |
+|  |  |  |  | Totem Master skill "Let it Rain" range +5 meters. |  |
+|  |  |  |  | Devil Hunter skill "Steady Shot Volley" DMG +10%. |  |
+| Enhanced Swamp King's Essence | Dimension of Souls | 115.0 | HP+3808<br>All Phys Res+7<br>All Elem Res+10 | Shield Block Rate+5%, EVA+200. When attacked there is a 5% chance to reduce DMG Taken -3806 pts; lasts 7 sec | N/A |
+| Enhanced Dimension Lord's Tooth | Dimension of Souls | 115.0 | HP+2558<br>All Phys Res+7<br>All Elem Res+10 | STR+120 pts. Physical DMG Dealt+5%. Your atacks have a 5% chance to increase P-ATK+11562, AGI & LCK+3000 pts; lasts 10 sec. | N/A |
+| Enhanced Staff of the Pharaoh | Dimension of Souls | 115.0 | HP+2558<br>All Phys Res+7<br>All Elem Res+10 | INT+120 pts. Magical DMG Dealt+5%. Your atacks have a 5% chance to increase M-ATK+14722, AGI & LCK+3000 pts; lasts 10 sec. | N/A |
+| Enhanced Dimension Pond Water | Dimension of Souls | 115.0 | HP+2558<br>All Phys Res+7<br>All Elem Res+10 | WIS+135 pts. Adjudicator "Light of Truth" Healing +3%. Life Worshipper "Melody of Lightness" Healing +3%. Totem Master "Let It Rain" Healing +3%. Glacier Knight "Ice Blessing" +3%. Paladin "Light - Blessing Aura" Healing +3%. Attacks & Casts have a 5% chance to increase WIS+751, DEF+4190, M-SPD +10%; lasts 10 sec. | N/A |
+| Orochi's Demonic Necklace | Enchanted March | 118.0 | HP+2673<br>MP+2673 | Glacier Knight skill "Purifying Ice" cooldown -30%. | N/A |
+|  |  |  |  | Life Worshipper skill "Thunderous Voice"  duration +5 sec. |  |
+|  |  |  |  | Druid skill "Spring of Life" duration +5 sec. |  |
+| Goum's Stone Collection | Water Falls | 121.0 | HP+2726<br>MP+2726 | Blood Knight skill "Bloodborn" duration +5 sec | N/A |
+|  |  |  |  | Paladin skill "Light - Blessing Aura" healing +10%. |  |
+|  |  |  |  | Paladin skill "Defense - Blessing Aura" healing +10%. |  |
+|  |  |  |  | Mecha Ares skill "Mechanical Fist" range +5 meters. |  |
+| Xenor's Dark Parchment | Death Mountains | 123.0 | HP+2781<br>MP+2781 | Dragon Emperor skill "Dark Dragon Ambus" DMG+10%. | N/A |
+|  |  |  |  | Demon Tamer skill "Hellish Foray" duration +5 sec. |  |
+|  |  |  |  | Darkness Blade "Enchantment Circle" cooldown -30%. |  |
+| Banolet's Necklace | Demonic Valley | 125.0 | HP/MP+2807<br>All Phys. Res+5<br>All Elem. Res+8 | Phys. DMG Dealt+3%. P-CRIT RATE+5%. Your attacks have a 5% chance to increase P-ATK+12140 pts; lasts 10 sec. | N/A |
+| Selena's Pearl | Demonic Valley | 125.0 | HP/MP+2807<br>All Phys. Res+5<br>All Elem. Res+8 | Adjudicator "Light of Truth" Healing +3%. Life Worshipper "Melody of Lightness" Healing +3%. Totem Master "Let It Rain" Healing +3%. Glacier Knight "Ice Blessing" +3%. Paladin "Light - Blessing Aura" Healing +3%. Your attacks and casts have a 5% chance to increase WIS+826 pts; lasts 10 sec. | N/A |
+| Triton's Tentacle | Demonic Valley | 125.0 | HP/MP+2807<br>All Phys. Res+5<br>All Elem. Res+8 | DMG Taken-2%. When attacked you have a 5% chance to reduce DMG taken -3996 pts; lasts 10 sec. | N/A |
+| Azolt's Flame Stone | Demonic Valley | 125.0 | HP/MP+2807<br>All Phys. Res+5<br>All Elem. Res+8 | Magic DMG Dealt+3%. M-CRIT RATE+5%. Your attacks have a 5% chance to increase P-ATK+15458 pts; lasts 10 sec. | N/A |
+| Graad's Leaf Stone | Bleak Bog | 125.0 | N/A | Rakshasa skill <Shrouded Haste> cooldown -20%. | N/A |
+|  |  |  |  | Lethal Arrow skill <Corrosive Arrow> DMG +10%. |  |
+|  |  |  |  | Celestial Arrow skill <Heavenly Disarm> duration +2 seconds. |  |
+| Brarkon's Flame Axe | Scorched Marsh | 127.0 | N/A | Berserker skill <Frenetic Strike> DMG +10%. | N/A |
+|  |  |  |  | Blade Master skill <Oneiric Sword> DMG +10%. |  |
+|  |  |  |  | Angel of Justic skill <Demon's Hammer> DMG +10%. |  |
+| Cursed Manuscript | Wicked Chasm | 129.0 | N/A | Time Manipulator skill <Slo-Mo> area effect +5 meters. | N/A |
+|  |  |  |  | Demon Summoner skill <Demon Ruler> cooldown -10%. |  |
+|  |  |  |  | Holy Blade skill <The Magic Circle> DMG +10%. |  |
+
+**MAP DUNGEONS:**
+
+| NAME: | LOCATION: |  | STATS: | EFFECT: | MULTI-PIECE EFFECT: |
+|---|---|---|---|---|---|
+| Mori Mori's Spore Pod | Angor Quarry 0/2, 0/10 | 8.0 | Max MP+26 | Has a 2% chance to transform you into a mushroid when attacked; lasts 6 sec. Doesn't affect bosses | N/A |
+| Herak's Heart | Angor Quarry 0/2, 0/10 | 8.0 | Max HP+26 | Attacking has a 5% chance to increase DEF +232, lasts 10 sec | N/A |
+| Ketaks Pocket Watch | Fort Verdure 0/2, 0/10 | 14.0 | MP Cost -6 | Attacking has a 2% chance to summon an ogre to assist you in battle | N/A |
+| Quade's Fang | Fort Verdure 0/2, 0/10 | 14.0 | STR+12 | Attacking has a 5% chance to increase CRIT Rate +72, lasts 10 sec | N/A |
+| Juan's Leader Medal | Tasos Channel 0/2, 0/10 | 19.0 | AGI+15 | Attacking or casting skills has a 15% chance to randomly cancel a negative status | N/A |
+| Angela's Fortune Domino | Tasos Channel 0/2, 0/10 | 19.0 | INT+15 | Attacking or casting skills has a 5% chance to increase C-SPD+53, lasts 10 sec | N/A |
+| Gun-RX79's Fuse | Shale Cavern 0/2, 0/10 | 21.0 | N/A | Has a 5% chance of increasing P-Heal+85 when attacked, lasts20 sec | N/A |
+| Robo VT080's Driver Chip | Shale Cavern 0/2, 0/10 | 21.0 | AGI+17 | Attacking or casting skills has a 15% chance to randomly cancel a negative status | N/A |
+| Salvio's Lucky Coin | Eroda 0/2, 0/10 | 21.0 | LCK+18 | Attacking has a 5% chance to increase A-SPD+108, lasts 10 sec | N/A |
+| Jiro's Dragon Scale | Eroda 0/2, 0/10 | 24.0 | Max HP+26 | Attacking has a 5% chance to increase DEF+776 | N/A |
+| Ulicil's Compass | Morticora 0/2, 0/10 | 24.0 | STR+20 | Has a 2% chance to transforom you into a Minotaur when attacked (ATK+1080), lasts 12 sec | N/A |
+| Guillame's Demon Tail | Morticora 0/2, 0/10 | 27.0 | MP Cost-14 | Double Hit Chance +1%, but damage decreases with each hit | N/A |
+| Axe Moss Pure Golden Bullet | Vileshark HQ 0/2, 0/10 | 29.0 | STR+22 | Attacking has a 3% chance of disarming target's Weapon, ATK and M-ATK becoming 0, lasts 12 sec. Doesn't affect bosses | N/A |
+| Charles Magic Crystal | Vileshark HQ 0/2, 0/10 | 29.0 | INT+11 | Attacking has a 2% chance to cause Skill Failure rate +100%, lasts 6 sec. Doesn't affect bosses. Enters Mundane Immunity | N/A |
+|  |  |  | WIS+11 |  |  |
+| Kedar's Old Nautical  Chart | Vileshark HQ 0/2, 0/10 | 29.0 | MP Cost-15 | Attacking or casting skills has a 5% chance to recover HP and MP+49 every second, lasts 8 sec. | N/A |
+| Acilino's Trophy Claw | Branda Root 0/2, 0/10 | 31.0 | AGI+23 | N/A | N/A |
+|  |  |  | HP+123 |  |  |
+| Eye of Null Heart | Branda Root 0/2, 0/10 | 31.0 | Max MP+123 | Attacking has a 1% chance to stun target, lasts 3 sec. Doesn't affect bosses | N/A |
+| Doubledoor's Secret Magic Bottle | Malice Palace 0/2, 0/10 | 33.0 | INT+24 | N/A | N/A |
+|  |  |  | HP+135 |  |  |
+| Garson's Eye | Malice Palace 0/2, 0/10 | 33.0 | LCK+24 | N/A | N/A |
+|  |  |  | MP+135 |  |  |
+| Abby's Egg Sac | Rotten 0/2, 0/10 | 35.0 | Nature Resist+10 | Attacking has a 2% chance to summon Abbys pink worm to assist you in battle. | N/A |
+| Jinny's Feelers | Rotten 0/2, 0/10 | 35.0 | WIS+26 | N/A | N/A |
+|  |  |  | MP+146 |  |  |
+| Kennys Pickaxe | Ulta Hall 0/2, 0/10 | 37.0 | AGI+27 | Attacking has a 10% chance to randomly cancel one positive status on the target. Doesn't affect bosses | N/A |
+| Tiamat's Cracked Dragon Scale | Ulta Hall 0/2, 0/10 | 37.0 | Max HP+159 | Attacking or casting skills has a 5% chance to increase all Elemental Resistance +10, lasts 12 sec | N/A |
+| Gamera's Voodoo Essence | Ulta Hall 0/2, 0/10 | 37.0 | Fire Res.+10 | Attacking or casting skills has a 5% chance to recover MP+140 | N/A |
+| Millers Nucleus Piece | Baram's Chasm 0/2, 0/10 | 39.0 | STR+28 | N/A | N/A |
+|  |  |  | Max HP+1466 |  |  |
+| Quillers Finger Bone | Baram's Chasm 0/2, 0/10 | 39.0 | Max HP+172 | Attacking has a 5% chance to increase DEF+1526, lasts 10 sec | N/A |
+| Ebasters Nucleus | Baltaroi Core 0/2, 0/10 | 41.0 | Fire Resist+10 | Attacking or casting skills has a 15% chance to randomly cancel a negative status | N/A |
+| Hasletts Hard Eye | Baltaroi Core 0/2, 0/10 | 41.0 | MP Cost-25 | Has a 2% chance to transform you into an imp when attacked, lasts 6 sec. Doesn't affect bosses | N/A |
+| Dana's Magic Crystal | Mayor's Dream 0/2, 0/10 | 43.0 | INT+31 | Attacking or casting skills has a 5% chance to increast Cast SPD+183, lasts 10 sec. | N/A |
+| Alice's Broken Chain | Mayor's Dream 0/2, 0/10 | 43.0 | LCK+31 | Attacking or  has a 5% chance to increast ATK SPD+183, lasts 10 sec. | N/A |
+| Hans Development Notes | Veninfang 0/2, 0/10 | 45.0 | WIS+32 | Attacking has a 2% chance to prevent the target from casting any skills; Lasts 6 sec. Doesn't affect bosses. | N/A |
+| Ram Blood's Gilded Teeth | Veninfang 0/2, 0/10 | 45.0 | STR+32 | Attacking has a 5% chance to increase ATK +2264; Lasts 8 sec. | N/A |
+| Karen's Long Whip | Veninfang 0/2, 0/10 | 45.0 | INT+32 | Attacking has a 5% chance to increase M-ATK + 4245; Lasts 8 sec. | N/A |
+| Key To Chino's Fortress | Veninfang 0/2, 0/10 | 45.0 | Lightning Res+16 | When attacking, has a 2% chance to cause the enemy to be unable to receive any growth effect. lasts 8 sec. Doesn't affect Bosses. | N/A |
+|  |  |  | Nature Res+16 |  |  |
+| Anderli's Eyes | Slain 0/2, 0/10 | 47.0 | AGI+33 | Double hit chance +1%, but damage will decrease with the number of times preformed. | N/A |
+| Bayard's White Horn | Slain 0/2, 0/10 | 47.0 | Lightning Res+10 | Attacking has a 1% chance to stun target; lasts 3 seconds. Doesn't affect Bosses. | N/A |
+| Karis Amon's Mark | Dianack 0/2, 0/10 | 48.0 | MP+234 | Attacking has a 2% chance to summon a Mummified Ghoul to assist you in battle. | N/A |
+| Olsin's Spirit Piece | Dianack 0/2, 0/10 | 48.0 | WIS+34 | Attacking or casting skills has a 15% chance to randomly cancel a negative status. | N/A |
+| Tuala's Giant Chela Piece | Crypticone 0/2, 0/10 | 49.0 | Ice Res +10 | Attacking has a 5% chance to increase M-CRIT Rate+216; lasts 10 sec. | N/A |
+| Bass' Nose Ring | Crypticone 0/2, 0/10 | 49.0 | HP+256 | Attacking has a 5% chance to increase DEF+2278; lasts 10 sec. | N/A |
+| Luther's Rock Heart | Delphi Temple 0/2, 0/10 | 51.0 | INT+37 | Has a 2% chance to transform you into a Soultree when attacked (M-ATK +5435); lasts 12 sec. | N/A |
+| Percy Gray's Glowing Crystal | Delphi Temple 0/2, 0/10 | 51.0 | N/A | When HP is less than 50% and taget is attacked, received damage decreases -88; lasts 6 sec. | N/A |
+| Pross' Diary | Delphi Temple 0/2, 0/10 | 51.0 | MP Cost-36 | Attacking or casting skills has a 5% chance to increase Cast SPD +222; lasts 10 sec. | N/A |
+| Biological Experiment Log | Delphi Temple 0/2, 0/10 | 51.0 | STR+37 | Attacking has a 5% chance to increase ATK SPD +222; lasts 10 sec. | N/A |
+| Tuka Tufa's Quill Pen | Crimson 0/2, 0/10 | 51.0 | INT+35 | Attacking has a 5% chance to decrease skill MP consumption -165; lasts 10 sec. | N/A |
+| Scion's Medal | Crimson 0/2, 0/10 | 51.0 | All Phys. Res+3 | Attacking has a 5% chance to decrease received damage -500: lasts 3 sec. | N/A |
+| Bloodtooth Leader's Secret Order | Crimson 0/2, 0/10 | 51.0 | All Core Stats+9 | Attacking has a 5% chance to decrease targets resistances -10; lasts 12 sec. | N/A |
+| Stella's Charged Nucleus | Crooked Vein 0/2, 0/10 | 53.0 | Dark Res+10 | Attacking has a 5% chance of increasing M-CRIT Rate+231; lasts 10 sec. | N/A |
+| Stirling's Broken Stella Claw | Crooked Vein 0/2, 0/10 | 53.0 | All Stat+9 | Attacking has 1% chance to summon a Torturra Journeyman to fight for the player. | N/A |
+| Leonardo's Hilt | Crooked Vein 0/2, 0/10 | 53.0 | AGI+38 | N/A | N/A |
+|  |  |  | HP+288 |  |  |
+| Rafael's Back Shell Scale | Crooked Vein 0/2, 0/10 | 53.0 | DEF+639 | Attacking or casting skills has a 5% chance to increase all Elemental resistances +10; lasts 10 sec. | N/A |
+| Donatello's Head Skull | Crooked Vein 0/2, 0/10 | 53.0 | MP+288 | Attacking has a 5% chance to increase DEF+2556; lasts 10 seconds | N/A |
+| Michelangelo's Broken Tail | Crooked Vein 0/2, 0/10 | 53.0 | WIS+38 | Attacking or casting skills has a 5% chance to increase Cast SPD+231; lasts 10 sec. | N/A |
+| Wushu's Small Voodoo Bottle | Mara Cult Altar 0/2, 0/10 | 54.0 | INT+39 | N/A | N/A |
+|  |  |  | MP+296 |  |  |
+| Jiku's Necklace | Mara Cult Altar 0/2, 0/10 | 54.0 | LCK+39 | N/A | N/A |
+|  |  |  | HP+296 |  |  |
+| Kemrock's Chest Cutter | Century 0/2, 0/10 | 55.0 | Dark Res+10 | Attacking has a 5% chance to decrease targets P-Healing -346; lasts 6 sec. | N/A |
+| Loki's Silver Statue | Century 0/2, 0/10 | 55.0 | AGI+19 | Attacks deal +55 P-DMG. | N/A |
+| Neondo's Devil Statue | Century 0/2, 0/10 | 55.0 | Lighting Res+10 | Attacking or casting skills has a 5% chance to recover HP+1725. | N/A |
+| Kukala's Knight Emblem | Soulmor Falls 0/2, 0/10 | 56.0 | AGI+40 | Increases Double Hit chance+1%, but damage decreases with each hit. | N/A |
+| Sonia's Pray Feather | Soulmor Falls 0/2, 0/10 | 56.0 | MP Cost-42 | Attacking or casting skills has a 1% chance to randomly cancel a negative status. | N/A |
+| Galt's Crystalized Energy | Vortek 0/2, 0/10 | 57.0 | STR+41 | N/A | N/A |
+|  |  |  | HP+320 |  |  |
+| Radburn's Soldier Tag | Vortek 0/2, 0/10 | 57.0 | WIS+41 | N/A | N/A |
+|  |  |  | MP+320 |  |  |
+| Kasi's Black Blood Bugle | Federal Armory 0/2, 0/10 | 58.0 | All Stat+10 | Attacking has a 1% chance to Stun target; lasts 3 sec. Doesn't affect Bosses. | N/A |
+| Sami's Chignon | Federal Armory 0/2, 0/10 | 58.0 | Holy Res+10 | Attacking or casting skills has a 5% chance to increase Cast SPD+249; lasts 10 sec. | N/A |
+| Robin's Prisoner Tag | Manor 0/2, 0/10 | 59.0 | Ice Res+10 | Attacks deal ice damage +59 points and have a 2% chance to immobilize target; lasts 3 sec. | N/A |
+| Bob Johnson's Heavy Iron Footcuff | Manor 0/2, 0/10 | 59.0 | AGI+41 | Attacking has a 5% chance to increase CRIT Rate+246; lasts 10 sec. | N/A |
+| Banks Johnson's Duplicate Key | Manor 0/2, 0/10 | 59.0 | Block+62 | Attacking has a 5% chance to increase ATK+2560; lasts 10 sec. | N/A |
+| Jala's Suffering Log | Manor 0/2, 0/10 | 59.0 | LCK+41 | Attacking or casting skills has a 8% chance to randomly cancel two negative statuses. | N/A |
+| Fredericks Victory Badgeg | Basel Border 0/2, 0/10 | 60.0 | INT+42 | Attacking has a 5% chance of increasing M-CRIT Rate +249; lasts 12 sec | N/A |
+| MacDougals Portable Bugle | Basel Border 0/2, 0/10 | 60.0 | WIS+42 | N/A | N/A |
+|  |  |  | G/P-Heal+164 |  |  |
+| Iron Feet Ellison's Battle Theory | Basel Border 0/2, 0/10 | 60.0 | HP+328 | Attacking has a 5% chance to increase A-SPD+249; lasts 12 sec | N/A |
+| Bassett's Crystal | Basel Border 0/2, 0/10 | 60.0 | All Stat+8 | Attacking has a 5% chance to increase CRIT Rate and M-CRIT Rate+125; lasts 12 sec | N/A |
+| Spenja's Battle Dictionary | Colossaul Cauldron 0/2, 0/10 | 62.0 | STR+22 | Attacks have a 3% chance of triple hit | 2-Piece Effect: HP+1140, CRIT Rate+182. |
+|  |  |  | AG+22 |  |  |
+| Mosus Stimulacuit | Colossaul Cauldron 0/2, 0/10 | 62.0 | Parry+5% | Attacking or casting skills has a 5% chance to recoverr HP+815 | 2-Piece Effect: HP+1140, CRIT Rate +182. |
+| Yuhidor's Energy Core | Colossaul Cauldron 0/2, 0/10 | 62.0 | DEF+826 | Attacks have a 20% chance to reflect 10% damage | 2-Piece Effect: HP+1140, DEF+1269. |
+| Zagdon's Everlight | Sturmfrau 0/2, 0/10 | 63.0 | M-ATK +304 | Attacking or casting skills has a 5% chance to recover MP+501 | 2-Piece Effect: HP+1140, Cast SPD+182. |
+| Gimu's Evil Eye | Sturmfrau 0/2, 0/10 | 63.0 | AGI+44 | Attacking has a 5% chance of lowering targets EVA-273; lasts 10sec | 2-Piece Effect: HP+1140, DEF+1269. |
+| Rysel's Hurricane Eye | Sturmfrau 0/2, 0/10 | 63.0 | MP Cost-51 | Attacking or casting skill has a 5% chance to increase all Elemental Resistance+10; lasts 10 sec | 2-Piece Effect: HP+1140, EVA and ACC+91. |
+| Torbado's Rainbow Scale | Windsnap Lair 0/2, 0/10 | 64.0 | Malice+5% | Attacking has a 5% chance to increase ATK+2029; lasts 10 sec | 2-Piece Effect: HP+1140, EVA and ACC+91. |
+| Dostriv's Clarion | Windsnap Lair 0/2, 0/10 | 64.0 | Malice -5% | Attacking has a 5% chance to increase AGI and LCK+138; lasts 10 sec | 2-Piece Effect: HP+1140, CRIT Rate +182. |
+| Gazinas Cold Flaminig Shell | Windsnap Lair 0/2, 0/10 | 64.0 | M-SPD+5% | Attacking and casting skills has a 5% chance to increase INT and LCK+138; lasts 10 sec | 2-Piece Effect: HP+1140, CRIT and M-CRIT DMG to enemies +10%. |
+| Liyamus Head | Skleros's Ice Abyss 0/2, 0/10 | 65.0 | STR+23 | Attacking has a 2% chance to summon a No-Head Knight to assist in battle | 2-Piece Effect: HP+1140, CRIT and M-CRIT DMG to enemies +10%. |
+|  |  |  | INT+23 |  |  |
+| Tienros Mystic Brick | Skleros's Ice Abyss 0/2, 0/10 | 65.0 | Received DMG-35 | Attacks have a 5% chance to deccrease targets A-SPD and C-SPD -30%; lasts 10sec | 2-Piece Effect: HP+1140, Cast SPD+182. |
+| Torreyace's Crystal Heart | Skleros's Ice Abyss 0/2, 0/10 | 65.0 | Ice DMG+65 | Attacking has a 5% chance to increase STR and LCK +141; lasts 10 sec | 2-Piece Effect: HP+1140, CRIT Rate+182. |
+| Bayin's Plot | Gristle Prison 0/2, 0/10 | 65.0 | ATK+333 | Attacking has a 2% chance to prevent the target from casting skills; lasts 6 secs | N/A |
+| Zoets Motion Stone | Gristle Prison 0/2, 0/10 | 65.0 | All Phys. Res+3 | Attacking has a 5% chance to gain Lightning DMG+220; lasts 10 sec | N/A |
+| Oth's Shattered Horn | Gristle Prison 0/2, 0/10 | 65.0 | MP Cost-56 | Attacking has a 5% chance to increase EVA+288; lasts 10 sec | N/A |
+| Moa's Degenerate Soul | Guillotine 0/2, 0/10 | 65.0 | STR+49 | Attacking has a 5% chancec to increase CRIT+294; lasts 10 sec | N/A |
+| Antor's Invisible Blood Claw | Guillotine 0/2, 0/10 | 66.0 | AGI+49 | Attacking has a 2% chance to cause Skill Failure rate +100%; lasts 6 sec, grants Mundane Immune Status. | N/A |
+| Gaddis' Graceful Soul | Guillotine 0/2, 0/10 | 66.0 | INT+49 | Attacking has a 5% chance to increase M-ATK+6812; lasts 8 sec | N/A |
+| Baires' Vile Mask | Rage Cape 0/2, 0/10 | 69.0 | MP+454 | Attacking and casating skills has a 5% chance to increase C-SPD+303; lasts 10 sec | N/A |
+| Drake's Fury Badge | Rage Cape 0/2, 0/10 | 69.0 | WIS+51 | Attacking has a 5% chance to decrease Received DMG-160; lasts 10 sec | N/A |
+| Aquan's Shell Fragment | Rage Cape 0/2, 0/10 | 69.0 | DEF+908 | Attacking has a 10% chance to randomly remove one positive buff from the target. Doesn't affect bosses | N/A |
+| Newgage's Mutant Fang | Century Abyss 02/, 0/10 | 70.0 | LCK+52 | Attacking has a 3% chance to recover HP+834 | N/A |
+| Fanning's Chaotic Crystal | Century Abyss 02/, 0/10 | 70.0 | Dark Res+10 | Attacking has a 5% chance to increase M-CRIT+309; lasts 10 sec | N/A |
+| Unhallowed Trophy | Century Abyss 02/, 0/10 | 70.0 | HP+464 | Attacking has a 4% chance to trigger a Double Hit effect | N/A |
+| Frost Watcher's Sea Pearl | Uncharted Cave 0/2, 0/10 | 73.0 | ACC+110 | Each attack has a 5% chance to increase the caster's ATK+2787; lasts 10 sec. | 2-Piece Effect: HP+1629. When attacked and has HP lower than 50%, the targets within a range of 10 feet will be knocked down; lasts 2 sec. |
+| Annihilation Beast's Raging Blood | Uncharted Cave 0/2, 0/10 | 73.0 | G-Healing+104 | Each attack has a 5% chance to increase the caster's M-CRIT Rate+330; lasts 10 sec. | 2-Piece Effect: HP+1629. Teammates in a 15-foot range have HP lower than 50%, the character will recover +1195 HP within 10 feet; lasts 5 sec |
+| Ulysse's Torture Tools | Uncharted Cave 0/2, 0/10 | 73.0 | HP+523 | Each attack has a 5% chance to inflict -836 DMG to friendly targets within 15 feet. | 2-Piece Effect: HP+1629. Each attack grants a Move SPD increase of 5%. Stackable up to 5 times; lasts 10 sec. |
+| Kumars Terms of Reference | Rose Temple 0/2, 0/10 | 74.0 | AGI+56 | Each attack has a 5% chance to increase the caster's Move SPD+20%; lasts 10 sec. | 2-Piece Effect: HP+1629. When the character's HP is lower than 50%, targets within a range of 15 feet will be knocked down. Invalid against boss monsters. |
+| Liarro's Guardian | Rose Temple 0/2, 0/10 | 74.0 | STR+56 | Each attack has a 5% chance to reduce received damage by -2367; lasts 5 sec. | 2-Piece Effect: HP+1629. When the character is attacked and has an HP lower than 50%, the targets within a range of 10 feet will be knocked down; lasts 2 sec. |
+| Mayor's Rose Garden | Rose Temple 0/2, 0/10 | 74.0 | INT+56 | Each attack has a 5% chance to increase the caster's Cast SPD+336; lasts 10 sec. | 2-Piece Effect: HP+1629. When the character's HP is lower than 50%, targets within a range of 15 feet will be knocked down. Invalid against boss monsters. |
+| Knight Morris's Seal | Rose Temple 0/2, 0/10 | 74.0 | STR+56 | Has a 5% chance of triggering combo effect when attacking. | N/A |
+| Remona's Demonic Pistil | Vilespire Temple 0/2, 0/10 | 75.0 | STR+29 | Each attack has a 5% chance to increase the caster's ATK SPD+339; lasts 10 sec. | 2-Piece Effect: HP+1629. When the character's HP is lower than 50% and he or she is received CRIT DMG, the next attack has a 100% chance to inflict CRIT ATK. |
+| Caldaris Tentacles | Vilespire Temple 0/2, 0/10 | 75.0 | LCK+57 | Each attack has a 5% chance to reduce HP-612; lasts 10 sec. | 2-Piece Effect: HP+1629. When the character's HP is lower than 50% and he or she is received CRIT DMG, the next attack has a 100% chance to inflict CRIT ATK. |
+| Kinmokuseis Eye of Eternalilty | Vilespire Temple 0/2, 0/10 | 75.0 | WIS+57 | Each attack has a 5% chance to recover HP+1629 within 15 feet. | 2-Piece Effect: HP+1629. Teammates in a 15-foot range have HP lower than 50%, the character will recover +1195 HP within 10 feet; lasts 5 sec. |
+| Ancient Tyrant's Policy | Vilespire Temple 0/2, 0/10 | 75.0 | All Stats+11 | Each attack has a 5% chance to recover HP and MP+359; lasts 8 sec. | 2-Piece Effect: HP+1629. Each attack grants a Move SPD increase of 5%. Stackable up to 5 times; lasts 10 sec. |
+| Solaris's Heart | Dark Tide Cave 0/2, 0/10 | 74.0 | All Stat+12 | When attacking, you have a 5% chance to increase DEF+3756; lasts 10 sec | 2-Piece Effect: HP+1785. When HP dips below 40%, you will receive an additonal effect. Within the allotted time, your HP increases +1260 every second; lasts 5 sec. |
+| Sorkins Gilded Ring | Dark Tide Cave 0/2, 0/10 | 74.0 | AGI+58 | Each attack has a 5% chance to increase CRIT Rate+348; lasts 10 sec. | 2-Piece Effect: HP+1785. When HP dips below 50%, you will receive an additonal effect.The damage inflicted to your targets will increase+20%, lasts 5 sec. |
+| Lochero's Reverse Scale | Dark Tide Cave 0/2, 0/10 | 74.0 | STR+58 | When under attack, you have a 5% chance to increase P-ATK+3005; lasts 10 sec. | 2-Piece Effect: HP+1785. When your HP dips below 50%, you will receive an additonal effect. The damage inflicted to your targets will increase+10%; lasts 5 sec. |
+| Luala's Split Decision | Meteor Crater 0/2, 0/10 | 76.0 | STR+29 | When attacking, you have a 5% chance to increase CRIT Rate+348; lasts 10 sec. | 2-Piece Effect: HP+1785. When HP dips below 50%, you will receive an additonal effect. The damage inflicted to your targets will increase+10%; lasts 5 sec. |
+|  |  |  | AGI+29 |  |  |
+| Taipan's Crushed Crystal | Meteor Crater 0/2, 0/10 | 76.0 | MP+563 | Each attack has a 5% chance to increase M-ATK+7512; lasts 10 sec. | 2-Piece Effect: HP+1785. When HP dips below 50%, you will receive an additonal effect. The damage inflicted to your targets will increase+20%, lasts 5 sec. |
+| Stonmo's Source of Life | Meteor Crater 0/2, 0/10 | 76.0 | HP+563 | Each attack has a 5% chance to recover HP and MP+372; lasts 8 sec. | 2-Piece Effect: HP+1785. When HP dips below 40%, you will receive an additonal effect. Your HP increases+1260, every second. lasts 5 sec. |
+| Yagi's Energy Generator | Kahlo Tower 0/2, 0/10 | 77.0 | WIS+59 | Each attack has a 5% chance to increase Cast SPD+351; lasts 10 sec. | 2-Piece Effect: HP+1785. Teammates within 10 feet dip below 50% HP, you will receive an additonal effect. The damage you receive will decrease by -10%, lasts 5 sec. |
+| Seven's Energy Shield | Kahlo Tower 0/2, 0/10 | 77.0 | Block+5% | Each attack has a 5% chance to increase all Elem. res+10; lasts 10 sec. | 2-Piece Effect: HP+1785. Teammates within 10 feet dip below 50% HP, you will receive an additonal effect.The damage you receive will decrease by -10%, lasts 5 sec. |
+| Michelano's Fireworks | Kahlo Tower 0/2, 0/10 | 77.0 | INT+59 | Each attack has a 5% chance to increase M-CRIT Rate+351; lasts 10 sec. | N/A |
+| Eckle's Gilded Eyeball | Iyernafalo 02, 0/10 | 78.0 | INT+30 | Each attack has a 5% chance to increase Cast SPD+351; lasts 10 sec. | 2-Piece Effect: HP+1785, For every attack, there's a 12% chance of decreasing the target's Move SPD-10% and ATK SPD-10%; lasts 10 sec. |
+|  |  |  | WIS+30 |  |  |
+| Rheafer's Petrified Crystal | Iyernafalo 02, 0/10 | 78.0 | LCK+59 | N/A | 2-Piece Effect: HP+1785, For every attack, there's a 12% chance of decreasing the target's Move SPD-10% and ATK SPD-10%; lasts 10 sec. |
+|  |  |  | Malice -5% |  |  |
+| Dascha Adwin's Mystifying Grimoire | Iyernafalo 02, 0/10 | 78.0 | Dark Res+10 | Each attack has a 5% chance to increase M-CRIT Rate+351; lasts 10 sec. | N/A |
+| Kerus' Goodwill | Camodor Chastelands 0/2, 0/10 | 79.0 | WIS+59 | N/A | 2-Piece Effect: HP+1947, WIS+126. |
+|  |  |  | G-Healing+116 |  |  |
+| Katus' Mementos | Camodor Chastelands 0/2, 0/10 | 79.0 | N/A | Your attacks have a 5% chance of granting WIS and INT+177 and received DMG -156; lasts 10 sec. | 2-Piece Effect: HP+1947, WIS+126. |
+| Sinash's Soul Fragments | Camodor Chastelands 0/2, 0/10 | 79.0 | MP+468 | Your attacks have a 5% chance of granting INT and AGI+177; lasts 10 sec. | 2-Piece Effect: HP+1947, MP+1730. |
+| Lino's Frost Heart | Rheutear Temple 0/2, 0/10 | 79.0 | M-DMG+10% | Your attacks have a 5% chance of granting M-ATK+1558 and Malice -30%; lasts 10 sec. | 2-Piece Effect: HP+1947, MP+1730. |
+| Lendar's Shadow | Rheutear Temple 0/2, 0/10 | 79.0 | C-SPD+118 | Your attacks have a 5% chance of granting ACC+354; lasts 10 sec. | 2-Piece Effect: HP+1947, M-CRIT Rate+252. |
+| Wanda's Embodiment | Rheutear Temple 0/2, 0/10 | 79.0 | DEF+1169 | P-DMG -10% when receiving CRIT hit. | 2-Piece Effect: HP+1947, MP+2126. |
+| Geroy's Footsteps | Quantum Physics Institute 0/2,0/10 | 80.0 | AGI+60 | Your CRIT attacks have a 5% chance of granting ATK SPD+240 and skill MP Cost -129; lasts 10 sec. | 2-Piece Effect: HP+1947, EVA+252. |
+| Tamotan's Shattered Blades | Quantum Physics Institute 0/2,0/10 | 80.0 | ATK+476 | Your attacks have a 5% chance of granting STR+180 and AGI+180; lasts 10 sec. | 2-Piece Effect: HP+1947, ATK+1730. |
+| Nostris' Nocturnal Lens | Quantum Physics Institute 0/2,0/10 | 80.0 | A-SPD+120 | Your attacks have a 5% chance of granting ACC+360; lasts 10 sec. | 2-Piece Effect: HP+1947, EVA+252. |
+| Krontius' Clear Crystal | Quantum Physics Institute 0/2,0/10 | 80.0 | C-DMG+10% | Your attacks have a 5% chance of granting ATK+1586 and Malice-30%; lasts 10 sec. | 2-Piece Effect: HP+1947, ATK+1730. |
+| Natalia's Bound Hair | Graylin 0/2, 0/10 | 81.0 | MP Cost-41 | Your attacks have a 5% chance of granting Cast SPD+363; lasts 10 sec. | 2-Piece Effect: HP+1947, M-CRIT Rate+252. |
+| LAB-TR-000's Essence | Graylin 0/2, 0/10 | 81.0 | All Elem. Res+2 | Your attacks have a 5% chance of granting WIS+182 and all elemental resistances+10; lasts 10 sec. | N/A |
+| Forsinol's Fury | Graylin 0/2, 0/10 | 81.0 | Parry+5% | Your attacks have a 5% chance of granting Max HP+908 and reduces the target's ATK-2422; lasts 10 sec. | 2-Piece Effect: HP+1947, MP+2126. |
+| Eunice's Bugle | Batelo Valley 0/2 | 85.0 | Doublt Hit+4% | Your attacks have a 5% chance of granting CRIT Rate+378; lasts 10 sec. | 2-Piece Effect: HP+1977, ATK+1759. |
+| Benosaph's Firescale | Batelo Valley 0/2 | 85.0 | ATK+519 | Your CRIT attacks have a chance of granting M-ATK+1730 and ACC+189; lasts 10 sec. | 2-Piece Effect: HP+1977, ATK+1759. |
+| Nelwolfe's Claw | Allolands 0/2 | 88.0 | MP+682 | Your attacks have a 5% chance of granting INT+189 and AGI+189; lasts 10 sec. | 2-Piece Effect: HP+2046, MP+1818. |
+| Farhoss' Black Crystal | Allolands 0/2 | 88.0 | N/A | When CRIT-ATK is activated, there is a 5% chance of increasing caster's M-ATK+1730 and ACC+189; lasts 10 sec. | 2-Piece Effect: HP+2046, MP+1818. |
+| Spencer's Luscious Looks | Allolands 0/2 | 88.0 | N/A | Your attacks and skills have a 5% chance of granting WIS+195 and DEF+3029; lasts 10 sec. | 2-Piece Effect: HP+2046, EVA+260. |
+| Marstallo's Eyeball | Allolands 0/2 | 88.0 | N/A | Your attacks and skills have a 5% chance of granting WIS+163, AGI+163, and INT+163; lasts 10 sec. | 2-Piece Effect: HP+2046, EVA+260. |
+| Muurik's Protector Gem | Viroona City Ruins 0/2, 0/10 | 95.0 | STR+61 | Each attack has a 5% chance of increasing CRIT Rate+250 and Restoring HP+1152 every sec; lasts 10 sec. | 2-Piece Effect: P-ATK+2751, HP+4152, All Elemental Resistances+5. |
+|  |  |  | A-SPD+189 |  |  |
+| Avriell's Trapped Ghost | Viroona City Ruins 0/2, 0/10 | 95.0 | LCK+61 | Each attack has a 5% chance of increasing LCK+180 and ACC+301; lasts 10 sec. | 2-Piece Effect: M-ATK+2751, HP+4152, All Elemental Resistances+5. |
+|  |  |  | M-ATK+589 |  |  |
+| Curtal's Shattered Mask | Viroona City Ruins 0/2, 0/10 | 95.0 | Block+10% | Each attack has a 5% chance of increasing all Elemental Resistances+10 and AGI+180; lasts 10 sec. | 2-Piece Effect: DEF+2751; HP+4152, All Elemental Resistances +5. |
+|  |  |  | P-Healing+189 |  |  |
+| Kymui and Kytish's Free Soul | Viroona City Ruins 0/2, 0/10 | 96.0 | AGI+61 | Each attack has a 5% chance of increasing M-CRIT Rate+250 and Restoring MP+1152 every sec; lasts 10 sec. | 2-Piece Effect: G-Healing+300, HP+4152, All Elemental Resistances +5. |
+|  |  |  | LCK+61 |  |  |
+| Valdez's Captain Hat | Viroona City Ruins 0/2, 0/10 | 95.0 | Parry+61 | Each attack has a 3% chance to deal triple hit DMG. | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Flamijin's Burning Horns | Decayed Hallows 0/2, 0/10 | 97.0 | INT+71 | Each attack has a 5% chance of increasing M-ATK+3117 and AGI+194; lasts 10 sec. | 2-Piece Effect: M-ATK+2751, HP+4152, All Elemental Resistances+5. |
+|  |  |  | M-CRIT+199 |  |  |
+| Lixion's Evil Cape | Decayed Hallows 0/2, 0/10 | 97.0 | STR+71 | Each attack has a 5% chance of increasing ATK+3117 and ACC+327; lasts 10 sec. | 2-Piece Effect: P-ATK+2751, HP+4152, All Elemental Resistances+5. |
+|  |  |  | CRIT Rate+199 |  |  |
+| Sheeviq's Cursed Wings | Decayed Hallows 0/2, 0/10 | 97.0 | WIS+71 | Each attack and cast has a 5% chance of increasing WIS+194 and Cast SPD+189; lasts 10 sec. | 2-Piece Effect: G-Healing+300, HP+4152, All Elemental Resistances +5. |
+|  |  |  | G-Healing+199 |  |  |
+| Buuran's Protective Pauldron | Decayed Hallows 0/2, 0/10 | 97.0 | STR+71 | Each attack has a 5% chance of increasing Physical Resistances+5 and Block+5%; lasts 10 sec. | 2-Piece Effect: DEF+2751; HP+4152, All Elemental Resistances +5. |
+|  |  |  | DEF+589 |  |  |
+| Holy Templar's Healing Spirit | Gates of Pandemonium | 98.0 | WIS+100 | Each cast has a 5% chance of increasing WIS+525 and DEF+10%; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: Elemental Resistances+5, WIS+10%, HP+3000, Move SPD+5%. |
+|  |  |  | All Elem. Res+3 |  |  |
+| Holy Templar's Divine Protection Spirit | Gates of Pandemonium | 98.0 | WIS+100 | Each cast has a 5% chance of increasing G-Healing+25% and Move SPD+15%; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: Elemental Resistances+5, WIS+10%, HP+3000, Move SPD+5%. |
+|  |  |  | All Elem. Res+3 |  |  |
+| Zigbar's Iron Blade | Gates of Pandemonium | 98.0 | STR+100 | Each attack has a 5% chance of increasing DEF+20% and restoring HP+2500 each sec; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: Physical Resistances +5, HP+6000, DMG Taken-5%, Malice+100%. |
+| Zigbar's Indestructible Shield | Gates of Pandemonium | 98.0 | WIS+100 | Each attack has a 5% chance to recover 5500 HP and remove two negative status effects. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: Physical Resistances +5, HP+6000, DMG Taken-5%, Malice+100%. |
+| Corrupted Elemental Orb | Gates of Pandemonium | 98.0 | AGI+100 | Each attack has a 5% chance of increasing M-ATK+155574 and Cast SPD+10%; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: DEF+5% MP+3500, M-ATK+10%, AGI+250. |
+| Purified Elemental Orb | Gates of Pandemonium | 98.0 | INT+100 | Each skill has a 5% chance to deal double hit DMG. | 3-Piece Effect: DEF+5% MP+3500, M-ATK+10%, AGI+250. |
+| Cerberu's Left Jawline | Gates of Pandemonium | 98.0 | STR+100 | Each attack has a 5% chance of reducing target's Physical Resistances -5 and ACC-600; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: DEF+5%, Move SPD+5%, P-ATK+10%, AGI+250. |
+| Cerberu's Right Jawline | Gates of Pandemonium | 98.0 | LCK+100 | Each attack has a 5% chance of increasing P-ATK+12500 and CRIT Rate+400; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: DEF+5%, Move SPD+5%, P-ATK+10%, AGI+250. |
+| Asmodeus's Cursed Spine | Gates of Pandemonium | 98.0 | STR/INT+75 | Each attack has a 5% chance of increasing P-ATK and M-ATK+9520; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: P-ATK+8%, M-ATK+12%, HP+3000, Move SPD-5%. |
+| Asmodeus's Cursed Skull | Gates of Pandemonium | 98.0 | LCK+100 | Each attack has a 5% chance of increasing ACC+400 and EVA+600; lasts 5 sec. Note: This effect will not reactivate while it's already active. | 3-Piece Effect: P-ATK+8%, M-ATK+12%, HP+3000, Move SPD-5%. |
+| Blazing Rage | Ruin of Ages | 97.0 | MAX HP+849<br>WIS+139 | When attacked you have a 5% chance to decrease received DMG -5%; lasts 10 sec. | 2-Piece Effect: HP+2450, P-HEAL+250, All Resistances+5. |
+| Hell's Guard Stone | Ruin of Ages | 97.0 | MAX MP+849<br>WIS+139 | Each cast has a 5% chance to grant G-HEAL+390; lasts 10 sec. | 2-Piece Effect: HP+2054. G-HEAL+300, All Resistances+5. |
+| Shadow's Clipped Wing | Ruin of Ages | 97.0 | AGI+159 | Each attack has a 5% chance to grant Magic DMG dealt+5%; lasts 10 sec. | 2-Piece Effect: HP+2054, INT+450, All Elemental Resistances+5. |
+| Bunny's Fury | Dragon's Keep | 100.0 | M-ATK+909<br>M-RATE+202 | Each attack has a 3% chance to deal triple hit DMG. | N/A |
+| Insidius' Evil Seed | Dragon's Keep | 100.0 | STR+159 | Each attack has a 5% chance to deal P-DMG +5%; lasts 10 sec. | 2-Piece Effect: HP+2054, STR+450, All Physical Resistances+5. |
+| Viserion's Wing | Dragon's Keep | 100.0 | LCK+139 | When attacked you have a 3% chance to remove 2 negative status effects from the caster. | 2-Piece Effect: HP+2450, P-HEAL+250, All Resistances+5. |
+| Cerberus' Chain | Palace of Dreams | 103.0 | LCK+139 | Each attack has a 5% chance to grant P-ATK+10%, P-CRIT RATE+390; lasts 10 sec. | 2-Piece Effect: HP+2054, STR+450, All Physical Resistances+5. |
+| Alucard's Sword | Palace of Dreams | 103.0 | LCK+139 | Each cast has a 5% chance to grant WIS+550, M-CRIT RATE+390; lasts 10 sec. | 2-Piece Effect: HP+2054. G-HEAL+300, All Resistances+5. |
+| Hades' Secret | Palace of Dreams | 103.0 | LCK+139 | Each attack has a 5% chance to grant M-ATK+10%, M-CRIT RATE+390; lasts 10 sec. | 2-Piece Effect: HP+2054, INT+450, All Elemental Resistances+5. |
+| Nasci's Howling Soul | Dragonridge Sanctuary | 110.0 | Nature Res+2<br>HP+2650 pts<br>DMG Dealt-10% | When attacked you have a 5% chane to decrease DMG taken -4205 pts and DMG Dealt -10%, lasts 7 sec. | 2-Piece Effect: HP+5% M-SPD+5%<br>3-Piece Effect: HP+5420 pts, DEF+3773 pts, DMG Taken -5%, Malice Increased. |
+| Nasci's Spear of Justice | Dragonridge Sanctuary | 110.0 | Nature Res+2<br>HP+2650 pts<br>DMG Dealt-10% | Each attack has a 5% to cancel 5 negative status'. Effect cannot be reactived for 20 sec. | 2-Piece Effect: HP+5% M-SPD+5%<br>3-Piece Effect: HP+5420 pts, DEF+3773 pts, DMG Taken -5%, Malice Increased. |
+| Frost Queen's Crystalized Staff | Dragonridge Sanctuary | 110.0 | Ice Res+2, <br>All Res+3 | Each attack and cast has a 10% chance to grant surrounding allies within 15 meters "Crystalized Protection" Status for 5 sec. Crystalized protection: DMG Taken -3% and HP Reovery +2% every second. | 2-Piece Effect: WIS+5% M-SPD+5%<br>3-Piece Effect: MP+2892 pts, M-Crit Rate +251 pts, WIS+7% |
+| Frost Queen's Frozen Heart | Dragonridge Sanctuary | 110.0 | Ice Res+2<br>HP+1001 | Each attack and cast has a 5% chance to increase WIS+667 pts and Cast SPD+222 pts, lasts 5 sec. | 2-Piece Effect: WIS+5% M-SPD+5%<br>3-Piece Effect: MP+2892 pts, M-Crit Rate +251 pts, WIS+7% |
+| Thunor's Thunder Gun | Dragonridge Sanctuary | 110.0 | Lightning Res+2<br>INT+151pts | Each attack has a 5% chance to increase M-ATK+13573 pts, M-Crit Rate+232 pts, lasts 5 sec. | 2-Piece Effect: M-ATK+2%, INT+5%. <br>3-Piece Effect: MP+3373 pts, M-ATK+15%, Cast SPD+301 pts, Phsical Res+5 pts. |
+| Thunor's Shadow Gun | Dragonridge Sanctuary | 110.0 | Lightning Res+2<br>Cast SPD+291<br>M-SPD +10% | Each attack has a 8% chance to deal double hit DMG. | 2-Piece Effect: M-ATK+2%, INT+5%. <br>3-Piece Effect: MP+3373 pts, M-ATK+15%, Cast SPD+301 pts, Phsical Res+5 pts. |
+| Bushi's Spirit Sword | Dragonridge Sanctuary | 110.0 | Dark Res+2<br>LCK+131 | Each attack has a 5% chance to decrease target's Physical Res-5 pts and M-SPD -10%, lasts 10 sec. Each attack has a 5% chance to increase P-ATK +14732 and ATK SPD+232, lasts 5 sec. | 2-Piece Effect: STR+5%, M-SPD+5%. <br>3-Piece Effect: DEF+2710 pts, P-ATK+10%, P-Crit Rate+301 pts, EVA+253. |
+| Bushi's Undying Soul | Dragonridge Sanctuary | 110.0 | Dark Res+2<br>STR+151<br>P-Crit DMG+15% | Each attack has a 5% chance to decrease targets block and parry -348 pts, lasts 10 sec. | 2-Piece Effect: STR+5%, M-SPD+5%. <br>3-Piece Effect: DEF+2710 pts, P-ATK+10%, P-Crit Rate+301 pts, EVA+253. |
+| Draconem's Dragonkin Soul | Dragonridge Sanctuary | 110.0 | Holy/Fire Res+2<br>INT+151 | Each attack has a 5% chance to decrease targets Elemental Res-5 pts, lasts 5 sec. Each attack has a 5% chance to increase M-ATK+15333 pts, last 5 sec. | 2-Piece Effect: STR+5% INT+10%, Physical Res+2 pts. <br>3-Piece Effect: MP_2892 pts, INT+289, P-ATK +17%, AGI+254. |
+| Draconem's Bonetooth Blade | Dragonridge Sanctuary | 110.0 | Holy/Fire Res+2<br>STR+151 | Each attack has a 5% chance to decrease target's Physical Res -5 pts, lasts 5 sec. Each attack has a 5% chance to increase P-ATK +13582 pts, lasts 5 sec. | 2-Piece Effect: STR+5% INT+10%, Physical Res+2 pts. <br>3-Piece Effect: MP_2892 pts, INT+289, P-ATK +17%, AGI+254. |
+| Kepgoyle's Cursed Belt | Diamcrys Keep | 107.0 | HP+2328<br>All Res+3 | Each attack has a 5% chance to increase P-ATK+10% and DEF+10%, lats 10 sec. | N/A |
+| Fraize's Blight Ring | Diamcrys Keep | 107.0 | HP+1164<br>Cast-SPD+235 | Each attack and cast has a 5% chance to increase M-DMG+30%, lasts 10 sec. | N/A |
+| Diamcrys' Frosty Favour | Diamcrys Keep | 107.0 | HP+1164<br>M-DMG+10% | Each attack has a 5% chance to increase M-ATK+8952 pts, lasts 10 sec. | N/A |
+| Shiva's Icy Wing | Icecrown Altar | 106.0 | HP+1164<br>P-Crit Rate+235 | Each attack has a 5% chance to increase STR, AGI, LCK+389 pts, lasts 10 sec. | N/A |
+| Fraize's Top Hat | Icecrown Altar | 106.0 | HP+1164<br>M-Crit Rate+235<br> | Each attack has a 5% chance to increase INT, AGI, LCK+389 pts, lasts 10 sec. | N/A |
+| Kobra Cing Poisoned Scales | Falls Climb | 109.0 | HP+1280<br>P-DMG+10% | Each attack has a 5% chance to increas P-ATK+9847 pts, lasts 10 sec. | N/A |
+| Slauw's Wicked Eye | Falls Climb | 109.0 | HP+1920<br>M-Crit Rate+259 | Each attack and cast has a 5% chance to increase G-Healing +501 pts, lasts 10 sec. | N/A |
+| Floickle's Blighted Flower | Falls Climb | 109.0 | HP+2560<br>DMG Taken-10%<br>DMG Dealt -10% | When attacked there is a 5% chance to decrease DMG Taken -2138 pts, lasts 10 sec | N/A |
+| Smarok's Broken Core | Quarantined Mine | 110.0 | HP+2560<br>All Res+5 | Each attack and cast increases DEF+1% for 7 sec, stacks 30 times. | N/A |
+| Goroc's Torn Bandages | Quarantined Mine | 110.0 | HP+2560<br>All Res+3 | Each attack and cast has a 5% chance to increase STR & WIS+428 pts, lasts 10 sec. | N/A |
+| Zarloe's Blight Soul | Quarantined Mine | 110.0 | P-ATK+10%<br>HP+1280 | Each attack will decrease targets Physical Resistance & DEF -1%, lasts 7 sec, stacks 10 times. | N/A |
+| Drilbot'ts Hacked Circuitboard | Quarantined Mine | 110.0 | HP+2560<br>DEF+5%<br>M-ATK+5% | Each attack has a 5% chance to increase Magic DMG Dealt+5% and DMG Taken -3%, lasts 10 sec. | N/A |
+| Saplins Wilting Vines | Fallmyst Damtop | 112.0 | HP+2112<br>WIS+10% | Each attack and cast has a 5% chance to recover MP+618 every second, lasts 10 sec. | N/A |
+| Bladbeaks Sharp Beak | Fallmyst Damtop | 112.0 | HP+1408<br>P-Crit Rate+285 | Each attack has a 5% chnace to increase P-ATK+10832 pts, lasts 10 sec. | N/A |
+| Feriks Dismembered Leg | Fallmyst Damtop | 112.0 | HP+1408<br>M/P-Crit Rate+285 | Each attack has a 5% chance to increase P-ATK & M-ATK +8666 pts, lasts 10 sec. | N/A |
+| Wisvyras  Impure Jewel | Fallmyst Damtop | 112.0 | HP+1408<br>M-Crit Rate+285 | Your attacks have a 5% chance to decrease targets Elemental  Resistance -5 pts, lasts 10 sec. | N/A |
+| Machors Broken Horn | Forbidden Temple | 113.0 | HP+1408<br>ATK SPD+285 | Your attacks will decrease targets Move SPD -1% for 7 seconds, stacks 15 times. | N/A |
+| Yanishas Evil Amulet | Forbidden Temple | 113.0 | HP+2112 <br>Cast SPD+285 | Each attack and cast will increase WIS+1% for 7 seconds, stacks 15 times. | N/A |
+| Crysalis' Mask | Forbidden Temple | 113.0 | HP+1408<br>M-SPD+5% | Each attack and skill has a 3% chance to deal Triple Hit DMG. | N/A |
+| Mucklies Messy Puddle | Sacred Grove | 115.0 | HP+2324<br>M-SPD+5% | Each attack and cast has a 5% chnace to increase WIS+428 & DEF+4213 pts, lasts 10 sec. | N/A |
+| Draglings Dismembered Tailbone | Sacred Grove | 115.0 | HP+1549<br>M-SPD+10% | Your attacks have a 10% chance to decrease targets Fire Resistance -10 pts, lasts 7 sec. | N/A |
+| Skrims Sinister Hood | Sacred Grove | 115.0 | HP+1549 | M-ATK+10%, M-Crit Rate +10% | N/A |
+| Gloriosas Gift | Sacred Grove | 115.0 | HP+3098<br>All Res+5 | Each attack has a 5% chance to recover HP & MP + 568 pts every second, lasts 10 sec. | N/A |
+| Illustios Offering | Sacred Grove | 115.0 | HP+2324<br>All Res+5 | Adjudicator "Light of Truth" Healin +5%. Life Worshipper "Melody of Lightness" Healing +5%. Totem Master "Let It Rain" Healing +5%. Glacier Knight "Ice Blessing" +5%. Paladin "Light - Blessing Aura" Healing +5%. | N/A |
+| Frostmorn: Kepgoyle's Cursed Belt | Frostmorn MTNs Fame Chest | 107.0 | HP+2328<br>All Res+3<br>Nature Res+8 | Each attack has a 5% chance to increase P-ATK+10% and DEF+10%, lats 10 sec. HP+1164 pts. | N/A |
+| Frostmorn:  Fraize's Blight Ring | Frostmorn MTNs Fame Chest | 107.0 | HP+1164<br>Cast-SPD+235<br>Nature Res+8 | Each attack and cast has a 5% chance to increase M-DMG+30%, lasts 10 sec. HP+1164 pts. | N/A |
+| Frostmorn:  Diamcrys' Frosty Favour | Frostmorn MTNs Fame Chest | 107.0 | HP+1164<br>M-DMG+10%<br>Nature Res+8 | Each attack has a 5% chance to increase M-ATK+8952 pts, lasts 10 sec. HP+1164 pts. | N/A |
+| Frostmorn:  Shiva's Icy Wing | Frostmorn MTNs Fame Chest | 106.0 | HP+1164<br>P-Crit Rate+235<br>Nature Res+8 | Each attack has a 5% chance to increase STR, AGI, LCK+389 pts, lasts 10 sec. HP+1164 pts. | N/A |
+| Frostmorn:  Fraize's Top Hat | Frostmorn MTNs Fame Chest | 106.0 | HP+1164<br>M-Crit Rate+235<br>Nature Res+8 | Each attack has a 5% chance to increase INT, AGI, LCK+389 pts, lasts 10 sec. HP+1164 pts. | N/A |
+| Grumond: Kobra Cing Poisoned Scales | Grumond Fame Chest | 109.0 | HP+1280<br>P-DMG+10%<br>Nature Res+8 | Each attack has a 5% chance to increas P-ATK+9847 pts, lasts 10 sec. HP+1280 pts. | N/A |
+| Grumond: Slauw's Wicked Eye | Grumond Fame Chest | 109.0 | HP+1920<br>M-Crit Rate+259<br>Nature Res+8 | Each attack and cast has a 5% chance to increase G-Healing +501 pts, lasts 10 sec. HP+1920 pts. | N/A |
+| Grumond: Floickle's Blighted Flower | Grumond Fame Chest | 109.0 | HP+2560<br>Nature Res+8<br>DMG Taken-10%<br>DMG Dealt -10% | When attacked there is a 5% chance to decrease DMG Taken -2138 pts, lasts 10 sec. HP+2560 pts. | N/A |
+| Grumond: Smarok's Broken Core | Grumond Fame Chest | 110.0 | HP+2560<br>All Res+5<br>Nature Res+8 | Each attack and cast increases DEF+1% for 7 sec, stacks 30 times. HP+2560 pts. | N/A |
+| Grumond: Goroc's Torn Bandages | Grumond Fame Chest | 110.0 | HP+2560<br>All Res+3<br>Nature Res+8 | Each attack and cast has a 5% chance to increase STR & WIS+428 pts, lasts 10 sec. HP+2560 pts. | N/A |
+| Grumond: Zarloe's Blight Soul | Grumond Fame Chest | 110.0 | P-ATK+10%<br>HP+1280<br>Nature Res+8 | Each attack will decrease targets Physical Resistance & DEF -1%, lasts 7 sec, stacks 10 times. HP+1280 pts. | N/A |
+| Grumond: Drilbot'ts Hacked Circuitboard | Grumond Fame Chest | 110.0 | HP+2560, DEF+5%<br>M-ATK+5%, Nature Res+8 | Each attack has a 5% chance to increase Magic DMG Dealt+5% and DMG Taken -3%, lasts 10 sec. HP+2560 pts. | N/A |
+| Fallmyst: Saplins Wilting Vines | Fallmyst Fame Chest | 112.0 | HP+2112<br>WIS+10%<br>Dark Res+8 | Each attack and cast has a 5% chance to recover MP+618 every second, lasts 10 sec. HP+2112 pts. | N/A |
+| Fallmyst: Bladbeaks Sharp Beak | Fallmyst Fame Chest | 112.0 | HP+1408<br>P-Crit Rate+285<br>Dark Res+8 | Each attack has a 5% chnace to increase P-ATK+10832 pts, lasts 10 sec. HP+1408 pts. | N/A |
+| Fallmyst:  Feriks Dismembered Leg | Fallmyst Fame Chest | 112.0 | HP+1408<br>M/P-Crit Rate+285<br>Dark Res+8 | Each attack has a 5% chance to increase P-ATK & M-ATK +8666 pts, lasts 10 sec. HP+1408 pts. | N/A |
+| Fallmyst: Wisvyras Impure Jewel | Fallmyst Fame Chest | 112.0 | HP+1408<br>M-Crit Rate+285<br>Dark Res+8 | Your attacks have a 5% chance to decrease targets Elemental  Resistance -5 pts, lasts 10 sec. HP+1408 pts. | N/A |
+| Fallmyst: Machors Broken Horn | Fallmyst Fame Chest | 113.0 | HP+1408<br>ATK SPD+285<br>Dark Res+8 | Your attacks will decrease targets Move SPD -1% for 7 seconds, stacks 15 times. HP+1408 pts. | N/A |
+| Fallmyst: Yanishas Evil Amulet | Fallmyst Fame Chest | 113.0 | HP+2112 <br>Cast SPD+285<br>Dark Res+8 | Each attack and cast will increase WIS+1% for 7 seconds, stacks 15 times. HP+2112 pts. | N/A |
+| Fallmyst: Crysalis' Mask | Fallmyst Fame Chest | 113.0 | HP+1408<br>M-SPD+5%<br>Dark Res+8 | Each attack and skill has a 3% chance to deal Triple Hit DMG. HP+2324 pts. HP+1408 pts. | N/A |
+| Fallmyst: Mucklies Messy Puddle | Fallmyst Fame Chest | 115.0 | HP+2324<br>M-SPD+5%<br>Dark Res+8 | Each attack and cast has a 5% chnace to increase WIS+428 & DEF+4213 pts, lasts 10 sec. HP+2324 pts. | N/A |
+| Draglings Dismembered Tailbone | Fallmyst Fame Chest | 115.0 | HP+1549<br>M-SPD+10%<br>Dark Res+8 | Your attacks have a 10% chance to decrease targets Fire Resistance -10 pts, lasts 7 sec. HP+1549 pts. | N/A |
+| Fallmyst: Skrims Sinister Hood | Fallmyst Fame Chest | 115.0 | HP+1549<br>Dark Res+8 | M-ATK+10%, M-Crit Rate +10%, HP+1549 | N/A |
+| Fallmyst: Gloriosas Gift | Fallmyst Fame Chest | 115.0 | HP+3098,All Res+5<br>HP+3098,Dark Res+8 | Each attack has a 5% chance to recover HP & MP + 568 pts every second, lasts 10 sec. | N/A |
+| Fallmyst: Illustios Offering | Fallmyst Fame Chest | 115.0 | HP+2324<br>All Res+5 | Adjudicator "Light of Truth" Healin +5%. Life Worshipper "Melody of Lightness" Healing +5%. Totem Master "Let It Rain" Healing +5%. Glacier Knight "Ice Blessing" +5%. Paladin "Light - Blessing Aura" Healing +5%. | N/A |
+| Aries' Fragmented Stone | Celestial Corridor | 120.0 | DMG Taken-3%. | When attacked you have a 5% chance to decrase DMG Taken -5046 pts; lasts 5 seconds | 2-Piece Effect: Max HP+10%, M-SPD+7%, M-CRIT DMG Taken-5%.<br>3-Piece Effect: Max HP+6504 pts, All Resistances+5 pts, P-DMG Taken -5%, Increases Malice. |
+| Aries' Strategic Plan | Celestial Corridor | 120.0 | DMG Taken-3%. | When attacked you have a 10% chance to remove 3 neative status'. | 2-Piece Effect: Max HP+10%, M-SPD+7%, M-CRIT DMG Taken-5%.<br>3-Piece Effect: Max HP+6504 pts, All Resistances+5 pts, P-DMG Taken -5%, Increases Malice. |
+| Leo's Calling | Celestial Corridor | 120.0 | DMG Dealt+1%. | Your attacks and casts have a 5% chance to recover HP & MP +832pts, DMG Dealt -10%, and G-Heal -15%; lasts 10 seconds. | 2-Piece Effect: P-ATK & M-ATK+3%, P-CRIT & M-CRIT DMG+5%.<br>3-Piece Effect: Max MP +6244 pts, P-DMG & M-DMG Dealt+3%, P-ATK & M-ATK +3622 pts, AGI+313 pts. |
+| Leo's Medal of Participation | Celestial Corridor | 120.0 | DMG Dealt+1% | Your attacks have a 5% chance to decrease targets Physical Resistance -10 pts; lasts 7 seconds. Additonally the caster is granted M-ATK +17633 pts; lasts 10 seconds. | 2-Piece Effect: P-ATK & M-ATK+3%, P-CRIT & M-CRIT DMG+5%.<br>3-Piece Effect: Max MP +6244 pts, P-DMG & M-DMG Dealt+3%, P-ATK & M-ATK +3622 pts, AGI+313 pts. |
+| Sagittarius' Golden Pendant | Celestial Corridor | 120.0 | Phys DMG Dealt+3%. | Your attacks have a 5% chance to decrease targets Physical Resistance -10 pts; lasts 10 seconds. Additionally the caster is granted P-ATK +11411 & P-CRIT RATE +461 pts; lasts 10 seconds. | 2-Piece Effect: P-ATK+5%, P-CRIT RATE+5%, P-DMG +5%.<br>3-Piece Effect: Max HP+6244 pts, P-DMG Dealt+5%, P-ATK+3622 pts, P-CRIT RATE+361 pts. |
+| Sagittarius' Tranquil Elixir | Celestial Corridor | 120.0 | Phys DMG Dealt+3%. <br>P-CRIT DMG+10% | Your attacks and casts have a 5% chance to recover HP +6129 pts and remove 2 negative status'. | 2-Piece Effect: P-ATK+5%, P-CRIT RATE+5%, P-DMG +5%.<br>3-Piece Effect: Max HP+6244 pts, P-DMG Dealt+5%, P-ATK+3622 pts, P-CRIT RATE+361 pts. |
+| Libra's Broken Crystal | Celestial Corridor | 120.0 | DMG  Taken-3%. | Your attacks and casts have a 5% chance to increase WIS+767 pts and M-SPD+10%; lasts 10 seconds. | 2-Piece Effect: G-Healing+5%, CAST SPP+5%, M-SPD+5%.<br>3-Piece Effect: Max HP+6244 pts, WIS+7%, WIS+313 pts, AGI+313 pts, CAST SPD+371 pts. |
+| Libra's Perspective of Life | Celestial Corridor | 120.0 | G-Heal+3%. <br>Class Skill Heal+5%. | Your attacks and casts have a 10% chance to increase CAST SPD+363 pts; lasts 10 seconds. | 2-Piece Effect: G-Healing+5%, CAST SPP+5%, M-SPD+5%.<br>3-Piece Effect: Max HP+6244 pts, WIS+7%, WIS+313 pts, AGI+313 pts, CAST SPD+371 pts. |
+| Aquarius' Precious Azurite | Celestial Corridor | 120.0 | G-Heal+3%. <br>Class Skill Heal+3%. | Your attacks and casts have a 5% chance to increase WIS+462 pts, LCK+233 pts, and M-SPD+10%; lasts 10 seconds. | 2-Piece Effect: G-Healing+5%, CAST SPD+5%, M-SPD+5%.<br>3-Piece Effect: Max MP+6244 pts, WIS+7%, G-Heal+297 pts, DMG Taken-5%. |
+| Aquarius' Fresh Spring Water | Celestial Corridor | 120.0 | DMG Taken-3%. | Your attacks and casts have a 5% chance to activate "Water Spring" status for 5 seconds. Party Members within 15 meters recover 5% HP every second. | 2-Piece Effect: G-Healing+5%, CAST SPD+5%, M-SPD+5%.<br>3-Piece Effect: Max MP+6244 pts, WIS+7%, G-Heal+297 pts, DMG Taken-5%. |
+| Gemini's Dark Seal | Celestial Corridor | 120.0 | Magic DMG Dealt+3%. | Your attacks have a 5% chance to decrease targets Elemental Resistance -10 pts; lasts 10 seconds. | 2-Piece Effect: M-ATK+5%, M-CRIT RATE+5%, M-CRIT DMG+5%.<br>3-Piece Effect: Max HP +6244 pts, M-ATK+10%, M-ATK +3622 pts, ACC+371 pts. |
+| Gemini's Old Grimoire | Celestial Corridor | 120.0 | Magic DMG Dealt+3%. <br>M-SPD+10%. | Your attacks have a 8% chance to deal Double Hit DMG and a 4% chance to deal Triple Hit DMG. | 2-Piece Effect: M-ATK+5%, M-CRIT RATE+5%, M-CRIT DMG+5%.<br>3-Piece Effect: Max HP +6244 pts, M-ATK+10%, M-ATK +3622 pts, ACC+371 pts. |
+| Coorne's Mushroom Essence | Tree Root Cavern | 116.0 | HP+2673<br>MP+2673 | Adjudicator "Light of Truth" Healing +3%. Life Worshipper "Melody of Lightness" Healing +3%. Totem Master "Let It Rain" Healing +3%. Glacier Knight "Ice Blessing" +3%. Paladin "Light - Blessing Aura" Healing +3%. Your attacks and casts have a 5% chance to increase G-Healing +313 pts; lasts 10 sec. | N/A |
+| Enros' Lost Stone | Tree Root Cavern | 116.0 | HP+2673<br>MP+2673 | MOVE SPD+5%.  Your attacks and casts have a 5% chance to increase ACC +313; lasts 10 sec. | N/A |
+| Eva's Flower | Tree Root Cavern | 116.0 | HP+2673<br>MP+2673 | DEF+!0%. Your attacks and casts have a 5% chance to recover HP & MP +742 pts every second; lasts 10 sec. | N/A |
+| Rirbus' Battle Axe | Desolate Forest | 117.0 | HP+2673<br>MP+2673 | P-CRIT RATE+282 pts. Your attacks have a 6^ chance to increase P-ATK+11374 pts; lasts 10 sec. | N/A |
+| Vilan's Poison Egg | Desolate Forest | 117.0 | HP+2673<br>MP+2673 | MOVE SPD+5%. Your attacks have a 5% chance to deal +3335 pts of DMG every second; lasts 10 sec. | N/A |
+| Vubris' Sharp Tooth | Desolate Forest | 117.0 | HP+2673<br>MP+2673 | ATK SPD+282 pts. Your attacks have a 5% chance to reduce the targets Phys. Resistance -7; lats 10 sec. | N/A |
+| Ixnas' Bland Core | Grandiose Valley | 118.0 | HP+2726<br>MP+2726 | MOVE SPD+20%. | N/A |
+| Zudos' Thick Stomach | Grandiose Valley | 118.0 | HP+2726<br>MP+2726 | Phys. Res +3 pts. Elem. Res+5 pts. Your attacks and casts have a 10% chance to recover HP+6376 and remove 1 negative status'. | N/A |
+| Thomzolt's Bone Necklace | Grandiose Valley | 118.0 | HP+2726<br>MP+2726 | Your attacks have a  5% chance to deal Triple Hit DMG. | N/A |
+| Anir's Dark Bandage | Grandiose Valley | 118.0 | HP+2726<br>MP+2726 | M-CRIT RATE+282 pts. Your attacks have a 5% chance to increase M-ATK+13080 pts; lasts 10 sec. | N/A |
+| Ryesis' Cold Stone | Ice Crystal Palace | 120.0 | HP+2726<br>MP+2726 | Ice Res+10 pts. Your attacks have a 5% chance to reduce the targets MOVE SPD -25%; lasts 10 sec. | N/A |
+| Oddis' Feather | Ice Crystal Palace | 120.0 | HP+2726<br>MP+2726 | ATK SPD+282 pts. Your attacks have a 5% chance to reduce the targets ACC -335 pts; lasts 10 sec. | N/A |
+| Eara's Diary | Ice Crystal Palace | 120.0 | HP+2726<br>MP+2726 | M-ATK+5%. Your attacks have a 5% chance to reduce the targets DMG Dealt -7%; lasts 10 sec. | N/A |
+| Rutis' Hot Stone | Burning Mountain | 122.0 | HP+2781<br>MP+2781 | Fire Res+10 pts. Your attacks have a 5% chance to reduce the targets P-CRIT RATE & M-CRIT RATE -335 pts; lasts 10 sec. | N/A |
+| Zosyn's Fiery Core | Burning Mountain | 122.0 | HP+2781<br>MP+2781 | PVE Magic DMG Dealt+7%. Your attacks have a 5% chance to reduce the targets Elem. Resistance -10 pts; lasts 10 sec. | N/A |
+| Gorgen's Fire Sword | Burning Mountain | 122.0 | HP+2781<br>MP+2781 | Slash Res+10 pts. Fire Res+10 pts. Your attacks have a 5% chanc eto increase P-ATK & M-ATK+10399 pts; lasts 10 sec. | N/A |
+| Morosh's Oozing Slime | Duskmire Crypt | 125.0 | EVA +360 pts. | When attacked you will decrease the targets MOVE SPD -3% for 7 seconds, stacks 20 times. | N/A |
+| Ravenshade's Spine Fragment | Duskmire Crypt | 125.0 | P-ATK +3600 pts. | Your attacks have a 5% chance to increase P-ATK +9622 & ATK SPD +347 pts for 10 seconds. | N/A |
+| Posen's Spirit Dust | Duskmire Crypt | 125.0 | MOVE SPD +10%. | Your attacks have a 5% chance to decrease the targets ACC -630 pts for 10 seconds. | N/A |
+| Amye's Flaming Goo | Ruined Bloom Sanctuary | 127.0 | M-ATK +3600 pts. | Your attacks have a 5% chance to deal 3536 pts of DMG every second for 10 seconds. | N/A |
+| Ankan's Sharp Claw | Ruined Bloom Sanctuary | 127.0 | ATK SPD +360 pts | Your attacks have a 5% chance to deal 3536 pts of DMG every second for 10 seconds. | N/A |
+| Adaline's Blood Sample | Ruined Bloom Sanctuary | 127.0 | Basic attacks recover 5% of DMG dealt as HP. | Your attacks have a 5% chance to increase ATK SPD +623 pts for 10 seconds. | N/A |
+| Augsburg's Boney Pincer | Crystalized Necropolis | 129.0 | DEF +3600 pts. | When attacked you have a 5% chance ot increase Physical & Elemental Reistance +10 pts for 10 seconds. | N/A |
+| Lokham's Icy Crystal Fragment | Crystalized Necropolis | 129.0 | ATK/CAST SPD +180 pts. | Your attacks have a 5% chance to decrease t he targets ATK & CAST SPD -440 pts for 10 seconds. | N/A |
+| Menis' Dark Bandage | Crystalized Necropolis | 129.0 | M-ATK +3600 pts. | Your attacks have a 5% chance to increase M-ATK +16708 pts & M-CRIT RATE +358 pts for 10 seconds. | N/A |
+| Kerdos' Broken Medallion | Stormcliff Keep | 129.0 | N/A | EXP +25%, CLASS EXP + 25%, AWAKEN CLASS EXP + 25%, LOOT RATE +25%. | N/A |
+| Aetos' Mana Stone | Stormcliff Keep | 129.0 | Fire, Ice, Lightning & Nature Res +5. | Your attacks have a 5% chance to decrease the targets Fire, Ice, Lightning & Nature Resistance -5 pts for 10 seconds. | N/A |
+| Lunara's Feathers | Stormcliff Keep | 129.0 | N/A | Your attacks Deal 810 pts of Dark DMG. Your attacks have a 5% chance to deal Triple Hit DMG. | N/A |
+
+**TRIALS:**
+
+| NAME: | LOCATION: |  | STATS: | EFFECT: | MULTI-PIECE EFFECT: |
+|---|---|---|---|---|---|
+| Mori Mori's Mucous | Trial: Angor Quarry | 50.0 | MP+249 | Has a 2% chance to transform you into a Mushroid when attacked; lasts 6 seconds. Doesn't affect bosses. | N/A |
+|  |  |  | All Elem. Res+3 |  |  |
+| Herak's Crystal | Trial: Angor Quarry | 50.0 | HP+249 | When attacked, received damage decreases-50. Attacking has a 5% chance to increase DEF+2212; lasts 10 sec. | N/A |
+| Ketak's Hawk Conch | Trial: Fort Verdure | 50.0 | LCK+35 | Attacking has a 2% chance to summon an Ogre to assist you in combat. | N/A |
+|  |  |  | MP Cost-33 |  |  |
+| Quade's Nine Disciplines | Trial: Fort Verdure | 50.0 | STR+35 | Attacking has a 5% chance to increase CRIT Rate-213; lasts 10 sec. | N/A |
+|  |  |  | A-SPD+71 |  |  |
+| Axe Moss's Eternal Flame Candle | Trial: Vileshark HQ | 50.0 | STR+35 | Attacking has a 3% chance to Disarm targets; close combat weapons become ATK 0; lasts 8 seconds; can't be canceled. Doesn't affect Bosses. | N/A |
+|  |  |  | HP+249 |  |  |
+| Charles Angellies Secret Scroll | Trial: Vileshark HQ | 50.0 | INT+18 | Attacks deal lighting DMG+50. Attacking has a 2% chance to cause the target's cast skill failure rate to increase +100%; lasts 6 sec. Doesn't affect Bosses. Enters Mundane Immunity. | N/A |
+|  |  |  | WIS+18 |  |  |
+| Kedar's Tidal Scroll | Trial: Vileshark HQ | 50.0 | MP Cost-33 | Attacking or casting skills hahs a 5% chance to recover HP and MP+109 every second; lasts 8 sec. | N/A |
+|  |  |  | CAST SPD+71 |  |  |
+| Roger's Great Nautical Map | Trial: Vileshark HQ | 50.0 | All Elem. Res+3 | Attacks deal+50 extra damage. Attacking or casting skills has a 3% chance to increase all stats by +14; lasts 10 sec. Can stack 3 times. | N/A |
+| Demon Sight | Trial: Vileshark HQ | 45.0 | MP/HP+212 | Attacking has a 5% chance to increase M-ATK +2860; lasts 10 sec. | N/A |
+|  |  |  | C-SPD+64 |  |  |
+| Kenny's Black Flame Stone | Trial: Ulta Hall | 50.0 | AGI+35 | Attacking has a 10% chance to randomly cancel a psotive status of the enemy. Doesn't affect Bosses. | N/A |
+|  |  |  | -Malice by 5% |  |  |
+| Tiamat's Eternal Dragon Soul | Trial: Ulta Hall | 50.0 | HP+249 | Attacking or casting skills has a 5% chance to increase all Elemental. Resistances by +10; lasts 12 sec. | N/A |
+|  |  |  | DEF+553 |  |  |
+| Gamera's Voodoo Turtle Shell | Trial: Ulta Hall | 50.0 | Fire Res +10 | Attacking or casting skills has a 5% chance to recover MP+218. | N/A |
+|  |  |  | M-CRIT Rate+72 |  |  |
+| Kasin's Temple Discipline | Trial: Ulta Hall | 50.0 | Holy Res +10 | Increases a single healing spell+296. | N/A |
+|  |  |  | CAST SPD+71 |  |  |
+| Versatile Medal | Trial: Ulta Hall | 48.0 | HP/MP+234 | Attacking has a 5% chance to increase ATK +1871; lasts 10 sec. | N/A |
+|  |  |  | DEF+520 |  |  |
+| Team Tuskar-Zumi-Ursun | Trial: Century | 51.0 | N/A | N/A | N/A |
+| Time Crossing Pocketwatch | Trial: Baltaroi Core | 54.0 | MP+280 | Increases G-Healing and P-Healing+56 and decreases Malice caused by attacks -5%. | N/A |
+|  |  |  | HP+280 |  |  |
+| Ebaster's Heart | Trial: Baltaroi Core | 55.0 | Fire Res+10 | When attacking or casting skills, have a 15% cahnce to remove one negative status. | N/A |
+|  |  |  | WIS+38 |  |  |
+| Haslett's Tentacle | Trial: Baltaroi Core | 55.0 | MP Cost-38 | Has a 2% chance to transform you into an Imp when attacked; lasts 6 sec. Untriggered by Bosses. | N/A |
+|  |  |  | All Stat+9 |  |  |
+| Baltaroi's Great Seal | Trial: Baltaroi Core | 55.0 | AGI and LCK+19 | When attacking or casting skills, have a 5% chance of increasing ATK SPD and Cast SPD+231 for 10 sec. | N/A |
+|  |  |  | All Phys. Res+4 |  |  |
+| Hans's Calibration Tool | Trial: Veninfang | 55.0 | WIS+38 | When attacking, have a 2% chance of stopping targets from using any skills for 6 sec. Doesn't affect Bosses. | N/A |
+|  |  |  | Strike Res+10 |  |  |
+| Ram Blood's Blood Sharp Claw | Trial: Veninfang | 55.0 | STR+38 | AWhen attacking, have a 5% chance of increasing ATK+3066; lasts 8 sec. | N/A |
+|  |  |  | Slash Res+10 |  |  |
+| Wolfhowl's Beast Taming Tome | Trial: Veninfang | 55.0 | INT+38 | When attacking have a 5% chance of triggering the effect for 10 sec every attack causes extra 118 Fire DMG. When attacking have a 5% chance of increasing M-ATK+5751; lasts 10 sec. | N/A |
+| Chino's Leader Mark | Trial: Veninfang | 55.0 | Lighting and Nature Res+8 | When attacking, have a 2% chance of stopping targets from getting any postive buffs for 4 sec. Doesn't affect Bosses. | N/A |
+|  |  |  | HP and MP+288 |  |  |
+| Frightclaw's Dragon Contract | Trial: Veninfang | 55.0 | STR and INT+19 | When attacking, have a 2% chance of stopping targets from using any skills for 6 sec. Doesn't affect Bosses. | N/A |
+|  |  |  | All Phys. Res+4 |  |  |
+| Juan's Demon Stone | Trial: Tasos Channel | 55.0 | AGI+38 | When attacking or casting skills, has a 15% chance of removing one negative status. | N/A |
+|  |  |  | M-CRIT Rate+77 |  |  |
+| Angela's Demon Stone | Trial: Tasos Channel | 55.0 | INT+38 | When attacking or casting skills, has a 5% chance of increasing Cast SPD+231; lasts 10 sec. | N/A |
+| Gun-RX79's Microchip | Trial: Shale Cavern | 55.0 | WIS+38 | When attacking has a 5% chance of increasing P-Healing by +346; lasts 20 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Robo VT080's Kinetic Energy Nucleus | Trial: Shale Cavern | 55.0 | AGI+38 | When attacking or casting skills, has a 5% chance of recovering 1725 HP. when attacking or casting skills, has a 5% chance of removing one negative status. | N/A |
+| Team Anura-Torturra | Trial: Manor | 57.0 | N/A | N/A | N/A |
+| Skleros Time Candle | Trial: Manor | 60.0 | DEF+365 | Attacking or casting skills has a 5% chance to increase all Elemental Resistance +10; lasts 10 sec | N/A |
+|  |  |  | P-Heal+65 |  |  |
+| Tuka Tufa's Ice Breathh | Trial: Crimson | 60.0 | WIS+42 | Attacking or casting skills has a 5% chance to increase G-Heal+197; lasts 10 sec | N/A |
+|  |  |  | MP Cost-44 |  |  |
+| Scion's Bloodlust Fire | Trial: Crimson | 60.0 | LCK+42 | Attacking has a 5% chance to increase CRIT Rate+294; lasts 10 sec | N/A |
+|  |  |  | P-ATK+250 |  |  |
+| Garrott's Suzerainty | Trial: Crimson | 60.0 | STR+42 | Attacking has a 5% chance to increase A-SPD+249; lasts 10 sec | N/A |
+|  |  |  | Ice Res+10 |  |  |
+| Holy King's Index | Trial: Crimson | 60.0 | HP and MP+328 | Attacking or casting skills has a 5% chance to recover HP+145 every sec; lasts 10 sec | N/A |
+|  |  |  | All Elem. Res+5 |  |  |
+| Bloodtooth Tor's Bugle | Trial: Crimson | 60.0 | Nature Res+5 | Attacking has a 5% chance to increase C-SPD+249; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+83 |  |  |
+| Robin's Control Room Key | Trial: Manor | 60.0 | STR+42 | Attacking has a 5% chance to increase P-Heal+197; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Bob Johnson's Creation | Trial: Manor | 60.0 | G-Healing+65 | Attacking has a 5% chance to increase WIS+249; lasts 10 sec | N/A |
+|  |  |  | MP Cost-22 |  |  |
+| Banks Johnson's Escape Plan | Trial: Manor | 60.0 | INT+42 | Attacking has a 5% chance to inicrease M-CRIT+249; lasts 10 sec | N/A |
+|  |  |  | -Malice 4% |  |  |
+| JJala's Execution Decree | Trial: Manor | 60.0 | M-SPD+5% | Attacking has a 15% chance to remove one debuff from the caster | N/A |
+|  |  |  | Dark Res+5 |  |  |
+| Holy King's Barrier | Trial: Manor? | 60.0 | HP and MP+328 | Attacking or casting skills has a 20% chance to remove one negativve status | N/A |
+|  |  |  | Block+3% |  |  |
+| Garrott's Demon Heart | Trial: Century | 60.0 | Parry+5% | Attacking has a 5% chance to decrease Received DMG-600; lasts 3 sec | N/A |
+|  |  |  | Malice+5% |  |  |
+| Loki's Jade Totem | Trial: Century | 60.0 | AGI+42 | Attacking has a 5% chance to incrrease M-CRIT+249; lasts 10 sec | N/A |
+|  |  |  | M-ATK +258 |  |  |
+| Neondo's Imperial Contract | Trial: Century | 60.0 | M-SPD+5% | Attacking has a 5% chance to decrease target's DEF-10% and all Elem Res-5; lasts 10 sec | N/A |
+|  |  |  | Slash Res+10 |  |  |
+| Valmars Dark Pearl | Trial: Century | 60.0 | ACC+83 | Attacking has a 5% chance to increase DEF+1460 and EVA+249; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Sacred King Departure | Trial: Century |  | HP and MP+328 | Attacking or casting skills has a 5% chance to increase All Stats+40; lasts 10 sec | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Salvio's Silver Bag | Trial: Eroda | 60.0 | INT+42 | Attacking has a 5% chance to increase C-SPD+249; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+83 |  |  |
+| Jiro's Eternal Heart | Trial: Eroda | 60.0 | P-ATK+250 | Attacking has a 5% chance to increase A-SPD+249; lasts 10 sec | N/A |
+|  |  |  | Double Hit+1% |  |  |
+| Ulicil's Love Charm | Trial: Morticora | 60.0 | INT+42 | Attacking has a 5% chance to increase M-ATK+6130; lasts 10 sec | N/A |
+|  |  |  | MP+328 |  |  |
+| Guillaume's Soul Essence | Trial: Morticora | 60.0 | LCK+42 | Attacking has a 5% chance to increase ATK+3054; lasts 10 sec | N/A |
+|  |  |  |  | Attacking has a 5% chance to cause Ice DMG+120; lasts 10 sec |  |
+| Dana's Fashion Bracelet | Trial: Mayor's Dream | 65.0 | AGI+45 | Attacking or casting skills has a 5% chance to increase C-SPD+270; lasts 10 sec | N/A |
+|  |  |  | MP Cost -50 |  |  |
+| Alice's Instruction | Trial: Mayor's Dream | 65.0 | LCK+45 | Attacking has a 5% chance to increase A-SPD+270; lasts 10 sec | N/A |
+|  |  |  | EVA+90 |  |  |
+| Alice's Dream Key | Trial: Mayor's Dream | 65.0 | M-SPD+5% | Attacking has a 2% chance to summon a dream maker to assist in battle | N/A |
+|  |  |  | Dark Res+10 |  |  |
+| Bayard's Toxic Spine | Trial: Slain | 65.0 | HP+371 | Attacking has a 1% chance to stun the attacker when attacked; lasts 3 sec. Doesn't affect bosses. | N/A |
+|  |  |  | Lighting Res+10 |  |  |
+| Anderli's Feather | Trial: Slain | 65.0 | 2H: Parry +5% | Attacking has a 5% chance to decrease Received DMG-650; lasts 3 sec | N/A |
+|  |  |  | Malice+5% |  |  |
+| Kassadin's Hard Shell | Trial: Slain | 65.0 | INT+45 | Attacking has a 5% chancce to increase M-ATK+6439; lasts 8 sec | N/A |
+|  |  |  | MP+371 |  |  |
+| Garson's Eye Drop | Trial: Malice Palace | 65.0 | LCK+45 | Attacking has a 5% chance to increase CRIT+270; lasts 10 sec | N/A |
+|  |  |  | P-ATK+297 |  |  |
+| Doubledoor's Research Diary | Trial: Malice Palace | 65.0 | HP+371 | Attacking has a 15% chance to randomly remove a debuff | N/A |
+|  |  |  | Holy Res+10 |  |  |
+| Sagharra's Tasty Bone | Trial: Malice Palace | 65.0 | AGI+45 | Attacking has a 5% chance to increase M-CRIT+270; lasts 10 sec | N/A |
+|  |  |  | M-ATK+297 |  |  |
+| Null Heart's Tentacle | Trial: Branda Root | 65.0 | STR+45 | Attacking has a 5% chance to increase P-Heal+227; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Acilino's Fang | Trial: Branda Root | 65.0 | WIS+45 | Attacking or casting skills has a 5% chance to increase G-Heal+227; lasts 10 sec | N/A |
+|  |  |  | HP+371 |  |  |
+| Zagdon's Dark Mark | Trial: Sturmfrau | 70.0 | M-ATK+371 | Attacking has a 5% chance to reduce M-SPD-10%; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+103 |  |  |
+| Gimu's Storm Shield | Trial: Sturmfrau | 70.0 | AGI+52 | Attacking has a 5% chance to reduce ACC-309; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Rysel's Spike Shell | Trial: Sturmfrau | 70.0 | Parry+5% | Each attack has a 5% chance to increase all Elem. Resistances  +10; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-31 |  |  |
+| Myteis' Screaming Blade | Trial: Sturmfrau | 70.0 | CRIT Rate+103 | Each attack has a 3% chance to trigger a triple hit. | N/A |
+|  |  |  | Nature DMG+92 |  |  |
+| Liyamu's Revenge Soul | Trial: Skleros's Ice Abyss | 70.0 | STR+26 | Each attack has a 5% chance to increase CRIT Rate+309 and deals additional Dark DMG+244; lasts 10 sec. | N/A |
+|  |  |  | AGI+26 |  |  |
+| Tienro's Magic Heart | Trial: Skleros's Ice Abyss | 70.0 | WIS+52 | Each attack has a 5% chance to recover MP+612. | N/A |
+|  |  |  | Malice -5% |  |  |
+| Torreyace's Soul Hour Glass | Trial: Skleros's Ice Abyss | 70.0 | AGI+52 | <br>Each attack has a 5% chance to increase LCK+154; lasts 10 sec. | N/A |
+|  |  |  | CRIT Rate+103 |  |  |
+| Torreyace's Old Language | Trial: Skleros's Ice Abyss | 70.0 | INT and LCK+26 | Each attack has a 5% chance to increase Cast SPD+309; lasts 10 sec. | N/A |
+|  |  |  | Dark Res+10 |  |  |
+| Kasi's Steel Material | Trial: Federal Armory | 70.0 | DEF+927 | Each attack has a 1% chance to stun targets; lasts 3 sec. | N/A |
+|  |  |  | HP+513 |  |  |
+| Sami's Cosmetics Box | Trial: Federal Armory | 70.0 | M-ATK+371 | Each attack has a 5% chance to increase M-CRIT Rate+309; lasts 10 sec. | N/A |
+| Mustachio's Military Key | Trial: Federal Armory | 70.0 | AGI and LCK+26 | Each attack has a 5% chance to increase All Phys. Resistances +5; lasts 10 sec. | N/A |
+|  |  |  | CRIT Rate+103 |  |  |
+| Frederick's War Diary | Trial: Basel Border | 70.0 | AGI+52 | Each attack has a 5% chance to increase M-ATK+6181; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-31 |  |  |
+| MacDougal's Survival Note | Trial: Basel Border | 70.0 | WIS+52 | Each attack has a 3% chance to increase all attributes+5; lasts 10 sec. Stackable up to 3 times. | N/A |
+|  |  |  | G/P-Heal+46 |  |  |
+| Ellison's Honor Medal | Trial: Basel Border | 70.0 | HP+513 | Each attack has a 5% chance to increase ATK SPD+309; lasts 12 sec. | N/A |
+|  |  |  | Double Hit+4% |  |  |
+| Bassetts Natural Roar | Trial: Basel Border | 70.0 | STR and LCK+26 | Each attack or cast has a 15% chance to randomly cancel 1 debuff. | N/A |
+|  |  |  | EVA+103 |  |  |
+| Sylnestor's Secret Roar | Trial: Basel Border | 70.0 | All Stat+10 | When under attack there's a 20% chance of reflecting 10% DMG. | N/A |
+|  |  |  | Received DMG-81 |  |  |
+| Mori Mori's Mucous S | Trial: Angor Quarry S | 70.0 | MP+417 | Has a 2% chance to transform you into a Mushroid when attacked; lasts 6 seconds. Doesn't affect bosses. | N/A |
+|  |  |  | All Elem. Res+3 |  |  |
+| Herak's Crystal S | Trial: Angor Quarry S | 70.0 | HP+417 | Attacking has a 5% chance to increase DEF+3702; lasts 10 sec. | N/A |
+|  |  |  | Received DMG-73 |  |  |
+| Ketak's Hawk Conch S | Trial: Fort Verdure S | 70.0 | LCK+48 | Attacking has a 2% chance to summon an Ogre to assist you in combat. | N/A |
+|  |  |  | MP-56 |  |  |
+| Quade's Nine Disciples S | Trial: Fort Verdure S | 70.0 | STR+48 | Attacking has a 5% chance to increase CRIT Rate+288; lasts 10 sec. | N/A |
+|  |  |  | A-SPD+96 |  |  |
+| Axe Moss Eternal Flame Candle S | Trial: Vileshark HQ S | 70.0 | STR+48 | Attacking has a 3% chance to Disarm target; close combat weapons become ATK 0. lasts 8 sec; can't be canceled. Doesn't affect bosses. | N/A |
+|  |  |  | HP+417 |  |  |
+| Charles Angellies Secret Scroll S | Trial: Vileshark HQ S | 70.0 | INT and WIS+24 | Attacking has a 2% chance to cause target's Cast skill failure rate to increase+100%. Doesn't affect bosses. | N/A |
+|  |  |  | Lighting DMG+83 |  |  |
+| Kedar's Tidal Scroll S | Trial: Vileshark HQ S | 70.0 | MP Cost-56 | Attacking or casting skills has a 5% chance to recover HP and MP+183 every second; lasts 8 sec. | N/A |
+|  |  |  | C-SPD+96 |  |  |
+| Roger's Great Nautical Map S | Trial: Vileshark HQ S | 70.0 | All Elem. Res+3 | Attacking or casting has a 3% chance to increase all stats by +19; lasts 10 sec. Can stack 3 times. | N/A |
+|  |  |  | DMG Dealt+83 |  |  |
+| Kenny's Black Flame Stone S | Trial: Ulta Hall S | 70.0 | AGI+48 | Attacking has a 10% chance to randomly cancel an ememy's positive status. Doesn't affect bosses. | N/A |
+|  |  |  | Malice -5% |  |  |
+| Tiamat's Eternal Dragon Soul S | Trial: Ulta Hall S | 70.0 | HP+417 | Attacking or casting skills has a 5% chance to increase all Elemental Resistances +10; lasts 12 sec. | N/A |
+|  |  |  | DEF+926 |  |  |
+| Gamera's Voodoo Turtle Shell S | Trial: Ulta Hall S | 70.0 | Fire Res+10 | Attacking or casting skills has a 5% chance to recover MP+366. | N/A |
+|  |  |  | M-CRIT Rate+96 |  |  |
+| Kasin's Temple Disciple S | Trial: Ulta Hall S | 70.0 | Holy Res+10 | Attacking has a 5% chance of increasing a single healing spell +250; lasts 10 sec. | N/A |
+|  |  |  | C-SPD+96 |  |  |
+| Ebaster's Heart S | Trial: Baltaroi Core S | 70.0 | Fire Res+10 | When attacking or casting skills, caster has a 15% chance to remove one negative status. | N/A |
+|  |  |  | WIS+48 |  |  |
+| Haslett's Tentacle S | Trial: Baltaroi Core S | 70.0 | MP Cost-56 | Has a 2% chance to transform you into an Imp when attacked; lasts 6 sec. Doesn't affect bosses. | N/A |
+|  |  |  | Atl Stat+10 |  |  |
+| Baltaroi's Great Seal S | Trial: Baltaroi Core S | 70.0 | AGI and LCK+24 | When attacking or casting skills, caster has a 5% chance to increase ATK SPD and Cast SPD +288; lasts 10 sec. | N/A |
+|  |  |  | All Phys. Res+4 |  |  |
+| Hans Calibration Tool S | Trial: Veninfang S | 70.0 | WIS+48 | When attacking there's a 2% chance of stopping targets from using any skills; lasts 6 sec. Doesn't affect bosses. | N/A |
+|  |  |  | Strike Res+10 |  |  |
+| Ram Blood's Sharp Claw S | Trial: Veninfang S | 70.0 | STR+48 | When attacking, attacker has a 5% chance of increasing ATK+4444; lasts 8 sec. | N/A |
+|  |  |  | Slash Res+10 |  |  |
+| Wolfhowl's Beast Taming Tome S | Trial: Veninfang S | 70.0 | INT+48 | When attacking, attacker has a 5% chance of triggering the effect. For 10 seconds every attack causes extra 158 Fire DMG. When attackin, attacker has a 5% chance to increase M-ATK+8331; lasts 10 sec. | N/A |
+| Chino's Leader Mark S | Trial: Veninfang S | 70.0 | Light./Nat. Res+8 | When attacking, attacker has a 2% chance of stopping targets from receiving any positive buffs; lasts 4 sec. Doesn't affect bosses. | N/A |
+|  |  |  | HP and MP+417 |  |  |
+| Frightclaw's Dragon Contract S | Trial: Veninfang S | 70.0 | STR and INT+24 | When attacking, attacker has a 2% chance of stopping targets from using any skills; lasts 6 sec. Doesn't affect bosses. | N/A |
+|  |  |  | All Phys. Res+4 |  |  |
+| Juan's Demon Stone S | Trial: Tasos Channel S | 70.0 | AGI+48 | When attacking or casting skills, there is a 15% chance of removing one negative status. | N/A |
+|  |  |  | M-CRIT Rate+96 |  |  |
+| Angela's Demon Stone S | Trial: Tasos Channel S | 70.0 | INT+48 | When attacking or casting skills there is a 5% chance of increasing Cast SPD+288; lasts 10 sec. | N/A |
+|  |  |  | Malice -5% |  |  |
+| Gun RX79's Microchip S | Trial: Shale Cavern S | 70.0 | WIS+48 | When attacking, attacker has a 5% chance of increasing P-Healing+500; lasts 20 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Robo VT080's Kinetic Energy Nucleus S | Trial: Shale Cavern S | 70.0 | AGI+48 | When attacking or casting skills, there is a 5% chance of recovering 2499 HP. When attacking or casting skills there is a 5% chance of removing one negative status. | N/A |
+| Tuka Tufa's Ice Breath S | Trial: Crimson S | 70.0 | WIS+48 | When attacking or casting any skill there is a 5% chance of increasing G-Healing +250; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-56 |  |  |
+| Scion's Bloodlust Fire S | Trial: Crimson S | 70.0 | LCK+48 | When attacking, there is a 5% chance of increasing CRIT Rate+288; lasts 10 sec | N/A |
+|  |  |  | P-ATK+333 |  |  |
+| Garrotts Suzerainty S | Trial: Crimson S | 70.0 | STR+48 | When attacking, there is a 5% chance of increasing ATK SPD+288; lasts 10 sec | N/A |
+|  |  |  | Ice Res+10 |  |  |
+| Bloodtooth Tor's Bugle S | Trial: Crimson S | 70.0 | Nature Res+5 | Attacking has a 5% chance of increasing Cast SPD+288; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+96 |  |  |
+| Robin's Control Room Key S | Trial: Manor S | 70.0 | STR+48 | When attacking, there is a 5% chance of increasing P-Healing+250; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Bob Johnson's Creation S | Trial: Manor S | 70.0 | G-Healing+83 | Attacking has a 5% chance of increasing WIS+288; lasts 10 sec | N/A |
+|  |  |  | MP Cost-56 |  |  |
+| Bank Johnson's Escape Plan S | Trial: Manor S | 70.0 | INT+48 | When attacking, there is a 5% chance of increasing M-CRIT Rate+288; lasts 10 sec | N/A |
+|  |  |  | -Malice 4% |  |  |
+| Jala's Execution Decree S | Trial: Manor S | 70.0 | M-SPD+5% | Attacking has a 5% chance of increasing AGI+288; lasts 10 sec | N/A |
+|  |  |  | Dark Res+5 |  |  |
+| Skleros Time Candle S | Trial: Manor S | 70.0 | DEF+463 | Attacking or casting has a 5% chance of increasing all Elem. Resistances +10; lasts 12 sec | N/A |
+|  |  |  | P-Healing+83 |  |  |
+| Garrott's Demon Heart S | Trial: Century S | 70.0 | Parry +5% | When attacking, there is a 5% chance to decrease received damage -730; lasts 3 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Loki's Jade Totem S | Trial: Century S | 70.0 | AGI+48 | When attacking, there is a 5% chance of increasing M-CRIT Rate+288; lasts 10 sec<br> | N/A |
+|  |  |  | M-ATK+333 |  |  |
+| Neondo's Imperial Contract S | Trial: Century S | 70.0 | M-SPD+5% | When attacking, there is a 5% chance to decrease enemy's ATK by -1667; lasts 10 sec. | N/A |
+|  |  |  | Slash Res+10 |  |  |
+| Valmar's Dark Pearl S | Trial: Century S | 70.0 | ACC+96 | When attacking, there is a 5% chance to increase DEF+1851 and EVA+288; lasts 10 sec. | N/A |
+|  |  |  | Block+5% |  |  |
+| Salvio's Silver Bag S | Trial: Eroda S | 70.0 | INT+48 | When attacking, there is a 5% chance of increasing Cast SPD+288; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+96 |  |  |
+| Jiro's Eternal Heart S | Trial: Eroda S | 70.0 | P-ATK+333 | When attacking, there is a 5% chance of increasing ATK SPD+288; lasts 10 sec | N/A |
+|  |  |  | Doublt Hit+1% |  |  |
+| Ulicul's Love Charm S | Trial: Morticora S | 70.0 | INT+48 | When attacking, there is a 5% chance of increasing M-ATK+7220; lasts 10 sec | N/A |
+|  |  |  | MP+417 |  |  |
+| Guillaume's Soul Essence S | Trial: Morticora S | 70.0 | LCK+48 | When attacking, there is a 5% chance of increasing ATK+4444; lasts 10 sec. When attacking, there is a 5% chance of causing Ice DMG+158; lasts 10 sec | N/A |
+| Torbado's Buoyant Scale | Trial: Windsnap Lair | 75.0 | AGI and LCK+29 | Each attack has a 5% chance to increase ATK SPD and Cast SPD+170; lasts 10 sec. | N/A |
+|  |  |  | All Elem. Res+5 |  |  |
+| Dostriv's Rigid Fur | Trial: Windsnap Lair | 75.0 | HP+543 | Each attack has a 5% chance to increase DEF+3620; lasts 10 sec. | N/A |
+|  |  |  | 2H: Parry 5% |  |  |
+| Gazina's Strong Scale | Trial: Windsnap Lair | 75.0 | HP+543 | Each attack has a 5% chance to increase INT+226 and LCK+113; lasts 10 sec. | N/A |
+| Bowen's Spiritual Fishing Hook | Trial: Windsnap Lair | 75.0 | WIS+57 | Each attack has a 5% chance to increase G-Healing+326; lasts 10 sec. | N/A |
+| Bayin's Crown Deprival Diary | Trial: Gristle Prison | 75.0 | INT and WIS+29 | Each attack has a 5% chance to increase M-CRIT Rate+339; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-36 |  |  |
+| Zoet's All Purpose Wrench | Trial: Gristle Prison | 75.0 | WIS+57 | Each attack has a 5% chance to increase Cast SPD+339; lasts 10 sec. | N/A |
+|  |  |  | HP+543 |  |  |
+| Cursed Oth's Rock Eye | Trial: Gristle Prison | 75.0 | Dark Res+10 | Each attack has a 5% chance to decrease DEF-10% and all elemental resistances -5; lasts 10 sec. | N/A |
+|  |  |  | Dark DMG Dealt+107 |  |  |
+| Dascha Adwims Vintage Watch | Trial: Gristle Prison | 75.0 | AGI+57 | After killing the target this enchant increases CRIT Rate+339; lasts 10 sec. | N/A |
+|  |  |  | Double Hit+1% |  |  |
+| Spenjas Survival Guide | Trial: Colossaul Cauldron | 75.0 | STR+57 | Each attack has a 5% chance to increase all phys. resistances +10; lasts 10 sec. | N/A |
+|  |  |  | Block+5% |  |  |
+| Yuhidor's Cushion | Trial: Colossaul Cauldron | 75.0 | AGI+57 | Each attack has a 5% chance to reduce HP-612; lasts 10 sec. | N/A |
+|  |  |  | CRIT Rate+113 |  |  |
+| Mosus Super Chip | Trial: Colossaul Cauldron | 75.0 | AGI+57 | Each attack has a 5% chance to reduce ACC-170 and increase EVA+170; lasts 10 sec. | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Musajas Mutation Gene | Trial: Colossaul Cauldron | 75.0 | INT+57 | After killing the target this enchant increases M-CRIT Rate+339; lasts 10 sec. | N/A |
+|  |  |  | Malice -5% |  |  |
+| Newgage's Immortal Blade | Trial: Century Abyss | 75.0 | STR+57 | Each attack has a 5% chance to inflict -869 DMG to friendly targets within 15 feet range. | N/A |
+|  |  |  | Dark Res+10 |  |  |
+| Fannings Destruction Crystal | Trial: Century Abyss | 75.0 | INT+57 | Each attack has a 5% chance to increase the subsequent attack's Dark Damage by +286; lasts 10 sec. | N/A |
+|  |  |  | MP+543 |  |  |
+| Farfa's Chaotic Totem | Trial: Century Abyss | 75.0 | N/A | Each attack has a 5% chance to recover HP+717; lasts 10 sec | N/A |
+| Etherworld Drake Cub Horn | Trial: Century Abyss | 75.0 | STR+57 | After killing the target, P-ATK Rate increases +1303; lasts 10 sec. | N/A |
+|  |  |  | All Phys. Res+5 |  |  |
+| Justin Allspore's Mushroom Heart | Lv70 S Trials | 75.0 | STR+58 | N/A | 3-Piece Effect: Shield's DEF +12% and Block+5%. |
+|  |  |  | All Elem. Res+5 |  |  |
+| Magic Papineaus Gem Tooth | Lv70 S Trials | 75.0 | AGI+39 | Each attack has a 8% chance to remove 2 negative buffs. | 3-Piece Effect: Axe and Pike's M-ATK and P-ATK +12%, Parry Rate+5% |
+|  |  |  | LCK+19 |  |  |
+| Living Mandragora's Flower Bud | Lv70 S Trials | 75.0 | STR+58 | N/A | 3-Piece Effect: Dagger and 1H Sword's M-ATK and P-ATK +12%, CRIT DMG+10% |
+|  |  |  | Double Hit+1% |  |  |
+| Bloody Tindilos' Claw | Lv70 S Trials | 75.0 | LCK+58 | Each attack has a5% chance to recover HP+676; lasts 10 sec | 3-Piece Effect: Katana and Cestus's M-ATK and P-ATK +12%, CRIT Rate+116 |
+| Sabaster's Brutal Pinicer | Lv70 S Trials | 75.0 | STR+58 | Each attack has a 5% chance to increase P-ATK+1502 and ACC+232; lasts 10 sec. | 3-Piece Effect: Bow and Cannon's M-ATK and P-ATK +12%, CRIT DMG+10% |
+| Kison's Powerful Heart | Lv70 S Trials | 75.0 | STR+39 LCK+19 | N/A | 3-Piece Effect: Bow and Cannon's M-ATK and P-ATK +12%, CRIT Rate+116 |
+|  |  |  | Doublt Hit+1% |  |  |
+| Ryloth's Visiionary Wings | Lv70 S Trials | 75.0 | WIS+39 | Each attack has a 5% chance to increase Cast SPD+348; lasts 10 sec. | 3-Piece Effect: Guitar, Hammer Mace's M-ATK and P-ATK +12%, M-CRIT Rate+116 |
+|  |  |  | AGI+19 |  |  |
+| Silin's Tough Hhorn | Lv70 S Trials | 75.0 | WIS+39 | Each attack has a 5% chance to increase HP and MP+113; lasts 10 sec. | 3-Piece Effect: Guitar, Hammer Mace's M-ATK and P-ATK +12%, M-CRIT DMG+10% |
+|  |  |  | LCK+19 |  |  |
+| Fatal Gilles Claw | Lv70 S Trials | 75.0 | INT+39 | Each attack has a 5% chance to increase Cast SPD+348; lasts 10 sec. | 3-Piece Effect: Staff and Grimoire's M-ATK and P-ATK +12%, M-CRIT Crit+116 |
+|  |  |  | AGI+19 |  |  |
+| Cruel Kekabu's Shattered Tooth | Lv70 S Trials | 75.0 | INT+39 LCK+19 | N/A | 3-Piece Effect: Staff and Grimoire's M-ATK and P-ATK +12%, M-CRIT DMG+10% |
+|  |  |  | MP Cost-38 |  |  |
+| Moa's Angelic Carol | Trial: Guillotine | 80.0 | INT and LCK+30 | Each attack has a 5% chance to increase ATK SPD and Cast SPD+180; lasts 10 sec. | N/A |
+|  |  |  | All Elem.Res+5 |  |  |
+| Phalliedes's Thinking Mask | Trial: Guillotine | 80.0 | HP+595 | Each attack has a 5% chance to increase DEF+3965; lasts 10 sec. | N/A |
+|  |  |  | 2H: Parry 5% |  |  |
+| Gaddis' Baffled Core | Trial: Guillotine | 80.0 | HP+595 | Your attacks and skills have a 5% chance to increase INT+240 and LCK+120; lasts 10 sec | N/A |
+|  |  |  | Fire & Ice Res+5 |  |  |
+| Berserker Lizard's Flower Ring | Trial: Guillotine | 80.0 | WIS+60 | Your attacks and skills have a 5% chance to increase G-Healing+357; lasts 10 sec. | N/A |
+|  |  |  | -Malice 4% |  |  |
+| Balre's Beating Heart | Trial: Rage Cape | 80.0 | INT and WIS+30 | Each attack has a 5% chance to increase M-CRIT Rate+360; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-40 |  |  |
+| Drake's Signal Whistle | Trial: Rage Cape | 80.0 | WIS+60 | Your attacks and skills have a 5% chance to increase Cast SPD+360; lasts 10 sec. | N/A |
+|  |  |  | HP+595 |  |  |
+| Aquan's Spider Silk | Trial: Rage Cape | 80.0 | Dark Res+10 | Each attack has a 5% chance to decrease DEF-10% and all elemental resistances -5; lasts 10 sec. | N/A |
+|  |  |  | Dark DMG Dealt+118 |  |  |
+| Dilsas' Red Blood | Trial: Rage Cape | 80.0 | AGI+60 | When you kill a target, CRIT Rate increases+360; lasts 10 sec. | N/A |
+|  |  |  | Doublt Hit+1% |  |  |
+| Ruina's Protective Root | Trial: Vilespire Temple | 80.0 | STR+60 | Your blocks have a 5% chance of increasing all phys. res +10; lasts 10 sec. | N/A |
+|  |  |  | Block+5% |  |  |
+| Caldari's Swift Claw | Trial: Vilespire Temple | 80.0 | AGI+60 | Each attack has a 5% chance of cauasing target to lose -671 HP every sec; lasts 10 sec. | N/A |
+|  |  |  | CRIT Rate+120 |  |  |
+| Kinmo's Robe | Trial: Vilespire Temple | 80.0 | AGI+60 | Each attack has a 5% chance of decreasing target's ACC-180 and increases your EVA+180; lasts 10 sec. | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Toroto the Third's Curse | Trial: Vilespire Temple | 80.0 | INT+60 | When CRIT-ATK is activated, there is a 5% chance of increasing caster's M-ATK +1586 and ACC+180; lasts 10 sec. | N/A |
+| Ivocart's Ring of Conquest | Trial: Vilespire Temple | 80.0 | STR+60 | When being attacked, there is a 20% chance to rebound 10% DMG. | N/A |
+|  |  |  | P-ATK+476 |  |  |
+| Kumar's Blackblood Blade | Trial: Rose Temple | 80.0 | INT+60 | Each attack has a 5% chance of cauasing target to lose -671 HP every sec; lasts 10 sec. | N/A |
+|  |  |  | HP+595 |  |  |
+| Liarro's Forbidden Book Page | Trial: Rose Temple | 80.0 | INT+30 | Each attack has a 5% chance to increase Cast SPD+360; lasts 10 sec.<br>Each attack has a 5% chance to recover HP+714; lasts 10 sec. | N/A |
+|  |  |  | WIS+30 |  |  |
+| Aurora's Silver Badge | Trial: Rose Temple | 80.0 | STR+60 | Each attack has a 5% chance to increase P-ATK+3172; lasts 10 sec. | N/A |
+|  |  |  | All Phys.Res+5 |  |  |
+| Knight Morris' Bloody Headband | Trial: Rose Temple | 80.0 | LCK+60 | When CRIT-ATK is activated; there is a 5% chance of increasing caster's P-ATK+1586 and ACC+180; lasts 10 sec. | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Fantasy Beast's Immortal Tusk | Trial: Rose Temple | 80.0 | P-ATK+238 | Each attack has a 5% chance to recover HP+714; lasts 10 sec. | N/A |
+|  |  |  | HP+595<br>Malice+4% |  |  |
+| Temple Guard Gem | Purgatory: Temple Knights' Arena | 80.0 | HP+616 | When blocking, there is a 5% chance of increasing both of your ATK+1643 and Malice+30%; lasts 10 sec. | N/A |
+|  |  |  | Block+5% |  |  |
+| Guardian Knight Gem | Purgatory: Temple Knights' Arena | 80.0 | EVA+122 | Critical attacks that hit you have a 50% chance of increasing both your DEF+2738 and all elemental resistances +10%; lasts 10 sec. | N/A |
+|  |  |  | C-DMG Taken-3% |  |  |
+| Temple Warcry Gem | Purgatory: Temple Knights' Arena | 80.0 | STR+61 | Your attacks have a 5% chance of increasing your ATK+3286; lasts 10 sec. Your attack have a 4% chance of triggering a double hit. | N/A |
+| Knight's Warcry Gem | Purgatory: Temple Knights' Arena | 80.0 | LCK+61 | Your attacks have a 5% chance of increasign your CRIT Rate+366; lasts 10 sec. Your critical attacks have a 5% chance to increase both your AGI and LCK+183; lasts 10 sec. | N/A |
+| Temple Wisdom Gem | Purgatory: Temple Knights' Arena | 80.0 | INT+61 | Your attacks have a 5% chance of increasing your M-ATK+3286; lasts 10 sec. Your critical attacks have a 5% chance of increasing Cast SPD+244 and decreasing your skill MP cast-123; lasts 10 sec. | N/A |
+| Knight's Wisdom Gem | Purgatory: Temple Knights' Arena | 80.0 | INT+61 | Your attacks have a 5% chance of increasing M-CRIT Rate+366; lasts 10 sec. Your CRIT attacks have a 5% chance of increasing both INT and LCK+183; lasts 10 sec. | N/A |
+| Temple Blessing Gem | Purgatory: Temple Knights' Arena | 80.0 | WIS+61 | Your attacks have a 5% chance to increase Cast SPD+366; lasts 10 sec. | N/A |
+|  |  |  | -Malice 4% |  |  |
+| Knight's Blessing Gem | Purgatory: Temple Knights' Arena | 80.0 | WIS+61 | When attacked, you have a 3% chance to recover HP+1110. | N/A |
+|  |  |  | MP Cost-41 |  |  |
+| Frost Watcher Shell | Trial: Uncharted Cave | 85.0 | Ice Res+5 | All attacks have a 5% chance of decreasing target's Move SPD and ATK SPD -10%; lasts 10 sec. | N/A |
+|  |  |  | Ice DMG+128 |  |  |
+| Experiment No. 44 Parts | Trial: Uncharted Cave | 85.0 | HP+649 | When attacked, you have a 3% chance to recover HP and MP+1167; lasts 10 sec. | N/A |
+| Ulysses's Interogation Records | Trial: Uncharted Cave | 85.0 | INT+63 | Your attacks and skills have a 1% chance of rendering the target Immobile; lasts 5 sec. | N/A |
+|  |  |  | MP+519 |  |  |
+| Darphynius's Reins | Trial: Uncharted Cave | 85.0 | AGI+63 | Your attacks and skills have a 5% chance to increase MP+1556; lasts 10 sec. | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Papineau's Bloody Fang | Trial: Tranquil Hill | 85.0 | CRIT Rate+126 | Your CRIT attacks have an 8% chance of granting ATK+1730 and ACC+189; lasts 10 sec. | N/A |
+|  |  |  | Triple Hit+3% |  |  |
+| Daisy's Magic Eyepatch | Trial: Tranquil Hill | 85.0 | M-ATK+519 | Your attacks have a 5% chance of increasing your Cast SPD+252 and reduces skill MP Cost -129; lasts 10 sec. | N/A |
+|  |  |  | M-DMG+10% |  |  |
+| Zhoken's Forlorn Soul | Trial: Tranquil Hill | 85.0 | HP+649 | Received CRIT hits have a 50% chance of increasing your DEF+2882 and all elemental resistances +10; lats 10 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Quphie's Manifesto | Trial: Tranquil Hill | 85.0 | G-Healing+128 | Your attacks and skills have a 5% chance of granting WIS+189 and Malice -30%; lasts 10 sec. | N/A |
+|  |  |  | C-SPD+126 |  |  |
+| Natalia's Secret Stash | Dimension Trial: Graylin | 95.0 | MP Cost-200 | Your casts have a 5% chance of increasing Cast SPD+430; lasts 10 sec. | N/A |
+| LAB-TR-000's Heart | Dimension Trial: Graylin | 95.0 | All. Elem Res +5 | Your attacks have a 5% chance of increasing WIS+400 and All Elemental Resistances +12; lasts 10 sec. | N/A |
+| Forsinol's Bone | Dimension Trial: Graylin | 95.0 | Parry+5% | Your attacks have a 5% chance of increasing Max HP+1700 and reducing the target's ATK -4500; lasts 10 sec. | N/A |
+| Guardian of Graylin Power Cube | Dimension Trial: Graylin | 95.0 | Dark DMG+202 | Your attacks have a 3% chance to triple hit. | N/A |
+| Yagi's Power Gear | Dimension Trial: Kahlo Tower | 95.0 | WIS+120 | Your casts have a 5% chance of increasing Cast SPD+430; lasts 10 sec. | N/A |
+| Seven's Armor Key | Dimension Trial: Kahlo Tower | 95.0 | Block+5% | Your attacks have a 5% chance of increasing All Elemental Resistances +15; lasts 10 sec. | N/A |
+| Michelano's Spirit | Dimension Trial: Kahlo Tower | 95.0 | INT+120 | Your attacks have a 5% chance of increasing M-CRIT Rate+430; lasts 10 sec. | N/A |
+| Guardian of Kahlo Towers Power's Cube | Dimension Trial: Kahlo Tower | 95.0 | Fire Res+5 | When being attacked, you have a 5% chance to remove two random negative status effects. | N/A |
+| Luala's Lucid Jewel | Dimension Trial: Meteor Crater | 95.0 | STR+60 | Your attacks have a 5% chance of increasing ATK+7512 and CRIT Rate+200; lasts 10 sec. | N/A |
+|  |  |  | AGI+60 |  |  |
+| Stonmo's Hideous Mask | Dimension Trial: Meteor Crater | 95.0 | HP+2500 | Your attacks have a 5% chance of restoring HP and MP+1200; lasts 10 sec. | N/A |
+| Taipan's Golden Jewel | Dimension Trial: Meteor Crater | 95.0 | INT+60 | Your attacks have a 5% chance of increasing M-ATK+7512 and M-CRIT Rate+200; lasts 10 sec. | N/A |
+|  |  |  | AGI+60 |  |  |
+| Guardian of Meteor Crater Power's Cube | Dimension Trial: Meteor Crater | 95.0 | Fire DMG+202 | When being attacked, you have a 5% chance to lower received DMG -5%. | N/A |
+| Lino's Tusk | Dimension Trial: Rheutear Temple | 95.0 | M-DMG+10% | Your attacks have a 5% chance of increasing M-ATK+700 and ACC+320; lasts 10 sec. | N/A |
+| Lendar's Special Feather | Dimension Trial: Rheutear Temple | 95.0 | C-SPD+140 | Your attacks have a 5% chance of increasing ACC+400; lasts 10 sec. | N/A |
+| Wanda's Diamond | Dimension Trial: Rheutear Temple | 95.0 | DEF+2000 | M-DMG Received -10% | N/A |
+| Guardian of Rheutear Temple's Power Cube | Dimension Trial: Rheutear Temple | 95.0 | Ice Res+5 | When being attacked, you have a 5% chance to increase All Resistances +20 at the cost of 20% of your Max HP; lasts 10 sec. | N/A |
+| Kikino's Cracked Shell | Dimension Trials | 95.0 | STR+75 | Each attack has a 5% chance of increasing DEF+10%; lasts 10 sec. | 3-Piece Effect: Sword, Rapier, Club, Mace, Axe and Pike's P-ATK and M-ATK +10%, All Elemental Resistances+5. |
+| Oberon's Enchanted Steel Horn | Dimension Trials | 95.0 | INT+45 | Each attack has a 5% chance of increasing M-CRIT Rate+350; lasts 10 sec. | 3-Piece Effect: Staff and Grimoire's P-ATK and M-ATK +10%, M-CRIT DMG+10%. |
+|  |  |  | LCK+30 |  |  |
+| World Shell's Tree Stump | Dimension Trials | 95.0 | STR+30 | Each attack has a 5% chance of increasing ATK SPD+350; lasts 10 sec. | 3-Piece Effect: Gun, Bow, Sickleshot's P-ATK and M-ATK +10%, ATK SPD+140. |
+|  |  |  | AGI+45 |  |  |
+| Gore Render's Oversized Skull | Dimension Trials | 95.0 | STR+30 | Each attack has a 5% chance of increasing AGI and LCK+300; lasts 10 sec. | 3-Piece Effect: Sword, Rapier, Dagger, Club's P-ATK and M-ATK +10%, EVA+140. |
+|  |  |  | AGI+45 |  |  |
+| Bazuda's Antler | Dimension Trials | 95.0 | INT+30 | Each attack has a 5% chance of increasing Cast SPD+300, INT+100, LCK+100, M-ATK +2350; lasts 10 sec. | 3-Piece Effect: Staff and Grimoire's P-ATK and M-ATK +10%, Cast SPD+140. |
+|  |  |  | AGI+45 |  |  |
+| Oisadar's Legendary Medallion | Dimension Trials | 95.0 | INT+45 | Each attack has a 5% chance of increasing M-ATK+6500 and ACC+320; lasts 10 sec. | 3-Piece Effect: Hammer, Guitar, Mace's P-ATK and M-ATK +10%, M-CRIT DMG+10% |
+|  |  |  | LCK+30 |  |  |
+| Luisaka's Fang | Dimension Trials | 95.0 | STR+45 | Each attack has a 5% chance of increasing ATK+5500 and ACC+320; lasts 10 sec. | 3-Piece Effect: Axe, Katana, Greatsword's P-ATK and M-ATK +10%, CRIT DMG+10% |
+|  |  |  | LCK+30 |  |  |
+| Zorna's Toxic Fin | Dimension Trials | 95.0 | WIS+75 | N/A | 3-Piece Effect: WIS+15%, G-Healing+140. |
+|  |  |  | All Elem. Res+7 |  |  |
+| BlisterBreeze's Toxic Blood | Dimension Trials | 95.0 | STR+45 | Each attack deals an additonal Nature DMG+200. Each attack has a 1% chance to trigger a double hit. | 3-Piece Effect: Gun, Bow, Sickleshot's P-ATK and M-ATK +10%, CRIT DMG+10% |
+|  |  |  | LCK+30 |  |  |
+| Ladon's Dragon Flame | Dimension Trials | 95.0 | LCK+75 | Each attack has a 5% chance of increasing ATK and M-ATK+6000; lasts 10 sec. | 3-Piece Effect: Pike's P-ATK and M-ATK +10%, CRIT DMG & M-CRIT DMG+10% |
+| Blade's Chestplate of Valor | 4 Trials of the Dimension | 95.0 | STR+90 | Each attack has a 5% chance of increasing CRIT Rate+390; lasts 10 sec. | 2-Piece Effect: STR+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Isolda's Frozen Shield | 4 Trials of the Dimension | 95.0 | INT+90 | Each attack has a 5% chance of increasing M-ATK+8250; lasts 10 sec. | 2-Piece Effect: INT+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Ultimate Beast's Broken Wing | 4 Trials of the Dimension | 95.0 | N/A | When under attack, received DMG -2500; lasts 5 sec. | 2-Piece Effect: HP+2112, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Dragon Taming Rules Volume 2 | 4 Trials of the Dimension | 95.0 | WIS+90 | Each attack has a 5% chance of restoring HP and MP+1500; lasts 10 sec. | 2-Piece Effect: INT and WIS+5%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Maul's Treasured Eggs | 4 Trials of the Dimension | 95.0 | WIS+90 | Skill <Cure> Increases player's Max HP +15000; lasts 20 sec. | 2-Piece Effect: WIS+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Corken's Magic Core | 4 Trials of the Dimension | 95.0 | INT+90 | Each attack has a 5% chance of increasing M-CRIT Rate+390; lasts 10 sec. | 2-Piece Effect: INT and WIS+5%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Kequa's Lost Soul | 4 Trials of the Dimension | 95.0 | AGI+90 | Each attack has a 5% chance of increasing STR and AGI+10%; lasts 10 sec. | 2-Piece Effect: STR+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Kimba's Treasure | 4 Trials of the Dimension | 95.0 | LCK+90 | Each attack has a 5% chance of increasing ATK+8250; lasts 10 sec. | 2-Piece Effect: STR+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Sonyay's Emerald | 4 Trials of the Dimension | 95.0 | AGI+90 | Each attack has a 5% chance of increasing WIS+600 and Move SPD+10%; lasts 10 sec. | 2-Piece Effect: WIS+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Guff's Battle Axe | 4 Trials of the Dimension | 95.0 | STR+90 | Each attack has a 5% chance to triple hit. | 2-Piece Effect: STR+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Sam's Rusty Key | 4 Trials of the Dimension | 95.0 | HP+1100 | Each attack has a 5% chance of increasing all Elemental Resistances +10% and DEF+8115; lasts 10 sec. | 2-Piece Effect: HP+2112, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Petra's Crystal Ball | 4 Trials of the Dimension | 95.0 | LCK+90 | Each attack has a 5% chance of increasing INT and LCK+10%; lasts 10 sec. | 2-Piece Effect: INT+10%, All Phys. Resistances +7, All Elem. Resistances+15. |
+| Maul's Slime | Trial: Devastation Dimension | 100.0 | G-Healing+162 | Your attacks and casts have a 10% chance to grant surrounding allies within 15 meters "Slime Shield" status. Slime Shield: DMG Taken -10%. Note: Only affects party members. | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Corken's Mask | Trial: Devastation Dimension | 100.0 | INT+141 | M-ATK and M-CRIT Rate+10% | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Kequa's Confiscated Escape Plan | Trial: Devastation Dimension | 100.0 | HP+784 | Each attack grants a stack of Kequa's Guard for 5 seconds, stacks 5 times. Kequa's Guard: Reduces DMG Taken -5%, DMG Dealt -5%, and G-Healing -10%. | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Kimba's Dimension Stone | Trial: Devastation Dimension | 100.0 | STR+141 | ATK and CRIT Rate+10% | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Blade's Sacred Sword | Trial: Vingot Lab | 100.0 | P-ATK+523 | Your attacks have a 5% chance to reduce targets Physical Resistances -10; lasts 10 sec. | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Isolda's Forgotten Gem | Trial: Vingot Lab | 100.0 | M-ATK+729 | Your attacks have a 5% chance to reduce targets Elemental Resistances -10; lasts 10 sec. | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Ultimate Beast's Lucky Blood | Trial: Vingot Lab | 100.0 | N/A | When attacked you have a 5% chance to reduced received DMG -3021; lasts 5 sec. | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Marquis Saad's Lonely Ashes | Trial: Vingot Lab | 100.0 | WIS+132 | Your attacks and casts have a 5% chance to grant WIS+650 and Physical Resistances +5; lasts 10 sec. | 2-Piece Effect: HP+2054, Elemental Resistances +5 |
+| Kerus's Lost Dagger | Trial: Camodor Chastelands | 100.0 | All Phys. Res+3 | Your attacks have a 3% chance to deal triple hit DMG. | N/A |
+| Crystal Fragment | Trial: Camodor Chastelands | 100.0 | All Elem. Res+3 | Your attacks have a 10% chance to remove two positive status effects from targets. | N/A |
+| Sinash's Lucky Skull | Trial: Camodor Chastelands | 100.0 | N/A | DMG Taken-15% DMG Dealt -15% G-Healing-30% | N/A |
+| Ramona's Web | Trial: Camodor Chastelands | 100.0 | M-SPD +10% | Your attacks have a 5% chance to immobilize targets for 5 sec. | N/A |
+| Cooked Wolf Meat | Trial: Dark Tide Cave | 100.0 | HP+2425 | Your attacks have a 5% chance to restore HP and MP+2323; lasts 10 sec. | N/A |
+| Sorkin's Stash | Trial: Dark Tide Cave | 100.0 | N/A | EXP Gained+25% CP Gained+25% Awakening CP Gained+25%  Loot Rate+25% | N/A |
+| Lochero's Updated Scale | Trial: Dark Tide Cave | 100.0 | HP+782 | Your attacks have a 5% chance of increasing your P-ATK, M-ATK, and DEF+20%; lasts 7 sec. | N/A |
+| Dug's Shovel | Trial: Dark Tide Cave | 100.0 | All Phys. Res+3 | Your attacks lower Move SPD of enemies hit by -25%; lasts 3 sec. | N/A |
+| Tuala's Icy Shell | Dragon Trials: Crypticone | 110.0 | HP+2219<br>Ice Res+10 | M-Crit Rate+5% M-DMG +5%. Each attck has a 5% chance to reduce targets Ice Res-10 pts, lasts 10 sec. | N/A |
+| Tuala's Icy Shell++ | Dragon Trials: Crypticone | 110.0 | HP+2465<br>Ice Res+10<br>All Elem Res+3 | M-Crit Rate+5% M-DMG +5%. Each attck has a 5% chance to reduce targets Ice Res-15 pts, lasts 10 sec. | N/A |
+| Bass' Lost Eye | Dragon Trials: Crypticone | 110.0 | HP+2646<br>DMG Taken-3% | Each attack has a 10% chance to increase DEF+4643 pts, lasts 10 sec. | N/A |
+| Bass' Lost Eye++ | Dragon Trials: Crypticone | 110.0 | HP+2940<br>All Elem Res+3<br>DMG Taken-3% | Each attack has a 10% chance to increase DEF+5107 pts, lasts 10 sec. | N/A |
+| Percy Gray's Arm Guard | Dragon Trials:  Delphi Temple | 110.0 | HP+2646 | When attacked while under 30% HP. you will receive DMG Taken -3122 pts, lasts 3 sec. | N/A |
+| Percy Gray's Arm Guard++ | Dragon Trials:  Delphi Temple | 110.0 | HP+2940<br>All Elem Res+3 | When attacked while under 30% HP. you will receive DMG Taken -3371 pts, lasts 3 sec. | N/A |
+| Spirit of The Soultree | Dragon Trials:  Delphi Temple | 110.0 | HP+2219<br>INT+603<br>AGI+528 | When attacking you will be transformed into a Soul Tree for 10 sec. While you are a Soul Tree you will be granted M-ATK +17759 pts, Cast SPD+380 pts. | N/A |
+| Spirit of The Soultree++ | Dragon Trials:  Delphi Temple | 110.0 | HP+2219<br>INT+603.AGI+528<br>All Elem Res+3 | When attacking you will be transformed into a Soul Tree for 10 sec. While you are a Soul Tree you will be granted M-ATK +19723 pts, Cast SPD+422 pts. | N/A |
+| Pross' Wacky Potion | Dragon Trials:  Delphi Temple | 110.0 | HP+2219<br>INT+201<br>AGI+176 | Each attack has a 5% chance to increase M-ATK+10% and Cast SPD+429 pts, lasts 10 sec. | N/A |
+| Pross' Wacky Potion | Dragon Trials:  Delphi Temple | 110.0 | HP+2465<br>INT+223, AGI+196<br>All Elem Res+3 | Each attack has a 5% chance to increase M-ATK+10% and Cast SPD+429 pts, lasts 10 sec. | N/A |
+| Experimental Gear | Dragon Trials:  Delphi Temple | 110.0 | HP+2219<br>STR+201<br>AGI+176 | Each attack has a 5% chance to increase P-ATK+10% and ATK SPD+429 pts, lasts 10 sec. | N/A |
+| Experimental Gear++ | Dragon Trials:  Delphi Temple | 110.0 | HP+2465<br>STR+223, AGI+196<br>All Elem Res+3 | Each attack has a 5% chance to increase P-ATK+10% and ATK SPD+429 pts, lasts 10 sec. | N/A |
+| Bunny's Lost Berry | Dragon Trials:  Dragon's Keep | 110.0 | HP+2219<br>M-ATK+1145<br>M-Rate+246 | Your attacks and skills have a 3% chance to deal triple hit DMG. | N/A |
+| Bunny's Lost Berry++ | Dragon Trials:  Dragon's Keep | 110.0 | HP+2219<br>M-ATK+1273, M-CRIT+283<br>Elem Res+3 | Your attacks and skills have a 3% chance to deal triple hit DMG. | N/A |
+| Insidius' Ice Crystal | Dragon Trials:  Dragon's Keep | 110.0 | HP+2219<br>STR+201<br>LCK+176 | Each attack has a a 5% chance to increase physical DMG dealt+5%, lasts 10 sec. | N/A |
+| Insidius' Ice Crystal++ | Dragon Trials:  Dragon's Keep | 110.0 | HP+2465<br>STR+223, LCK+196<br>All Elem Res+3 | Each attack has a a 5% chance to increase physical DMG dealt+5%, lasts 10 sec. | N/A |
+| Viserion's Fang | Dragon Trials:  Dragon's Keep | 110.0 | HP+2646<br>WIS+201<br>LCK+176 | When attacked you have a 3% chance to remove 2 negative status from your self. | N/A |
+| Viserion's Fang++ | Dragon Trials:  Dragon's Keep | 110.0 | HP+2940<br>WIS+223,LCK+195<br>All Elem Res+3 | When attacked you have a 4% chance to remove 2 negative status from your self. | N/A |
+| Cerberus' Dog Bone | Dragon Trials: Palce of Dreams | 110.0 | HP+2219<br>STR+201<br>LCK+176 | Each attack has a 5% chance to increase P-ATK +10% and P-Crit Rate+429 pts, lasts 10 sec. | N/A |
+| Cerberus' Dog Bone++ | Dragon Trials: Palce of Dreams | 110.0 | HP+2465<br>STR+223, LCK+196<br>All Elem Res+3 | Each attack has a 5% chance to increase P-ATK +10% and P-Crit Rate+429 pts, lasts 10 sec. | N/A |
+| Alucard's Medallion | Dragon Trials: Palce of Dreams | 110.0 | HP+2646<br>WIS+201<br>LCK+176 | Each attack and cast has a 5% chance to increase WIS+605 and M-Crit Rate+429 pts, lasts 10 sec. | N/A |
+| Alucard's Medallion++ | Dragon Trials: Palce of Dreams | 110.0 | HP+2940<br>WIS+223, LCK+195<br>All Elem Res+3 | Each attack and cast has a 5% chance to increase WIS+666 and M-Crit Rate+429 pts, lasts 10 sec. | N/A |
+| Hades' Charged Crystal | Dragon Trials: Palce of Dreams | 110.0 | HP+2219<br>INT+201<br>LCK+176 | Each attack has a 5% chance to increase M-ATK +10% and M-Crit Rate+429 pts, lasts 10 sec. | N/A |
+| Hades' Charged Crystal++ | Dragon Trials: Palce of Dreams | 110.0 | HP+2465<br>INT+223, LCK+196<br>All Elem Res+3 | Each attack has a 5% chance to increase M-ATK +10% and M-Crit Rate+429 pts, lasts 10 sec. | N/A |
+| Arrons' Diary | Dragon Trials | 115.0 | All Elem Res+5 | Each attack has a 5% chance to increase M-ATK+10% and AGI+323 pts, lasts 10 sec | 3-Piece Effect: Staff and Grimoire P-ATK & M-ATK+15%. Your attacks have a 5%  chance to decrease target's Elemental Res-10%, lasts 10 sec. |
+| Erros' Key | Dragon Trials | 115.0 | All Elem Res+5 | Each attack has a 5% chance to increase P-ATK+10% and LCK+323 pts, lasts 10 sec | 3-Piece Effect: Rapier, Sword and Pike P-ATK & M-ATK+15%. Your attacks have a 5%  chance to decrease target's Physical Res-10%, lasts 10 sec. |
+| Frisaya's Essence | Dragon Trials | 115.0 | All Elem Res+5 | Each attack has a 5% chance to increase M-ATK+1% for 7 sec, stacks 20 times. | 3-Piece Effect: Rapier, Guitar and Mace P-ATK & M-ATK+15%. Your attacks have a 5%  chance to decrease target's Elemental Res-10%, lasts 10 sec. |
+| Gailett's Treasure Map | Dragon Trials | 115.0 | All Phys Res+5 | Each attack has a 5% chance to increase P-ATK+10905 pts and ATK SPD+382 pts, lasts 10 sec | 3-Piece Effect: Greatsword, Katana and Axe P-ATK & M-ATK+15%. Your attacks have a 5%  chance to decrease target's Physical Res-10%, lasts 10 sec. |
+| Oupella's Nightmare Feather | Dragon Trials | 115.0 | All Res+3 | Each attack has a 5% chance to increase P-ATK+10905 pts, M-ATK+12303 pts, STR & INT+323 pts, lasts 10 sec | 3-Piece Effect: Gun, Greatsword, Hammer and Pike P-ATK & M-ATK+15%. Your attacks have a 5%  chance to decrease target's All Res-5%, lasts 10 sec |
+| Casto's Lost Eye | Dragon Trials | 115.0 | DMG Dealt-8%<br>All Res+5 | Each attack and cast has a 5% chance to increase Malice and decrease damage Taken-15%, lats 10 sec | 3-Piece Effect: Club, Sword, Rapier, Greatsword, Axe and Pike P-ATK & M-ATK+15%. HP+15%. |
+| Kiriyata's Hair locks | Dragon Trials | 115.0 | All Elem Res+5 | Each attack has a 5% chance to increase P-ATK+10905 pts, STR & AGI +323, lasts 10 sec | 3-Piece Effect: Club, Cestus, Sword, Dagger and Hammer P-ATK & M-ATK+15%. P-ATK+8293 pts, P-Crit DMG+10%. |
+| Venom's Bloody Heart | Dragon Trials | 115.0 | M-ATK+10%<br>M-CRIT Rate+10%<br>M-Crit DMG+10% | N/A | 3-Piece Effect: Staff and Grimoire P-ATK & M-ATK+15%. M-Crit Rate+191 pts, M-DMG+10%. |
+| Mithos' Sharp Tooth | Dragon Trials | 115.0 | All Elem Res+5 | Each attack has a 5% chance to increase P-ATK+10905 pts and ACC+382 pts, lasts 10 sec | 3-Piece Effect: Bow, Gun and Sickleshot P-ATK & M-ATK+15%. P-ATK+8293 pts, P-Crit DMG+10%. |
+| Pachy's Formidable Dragon Scale | Dragon Trials | 115.0 | All Phys Res+5 | Each attack has a 5% chance to increase P-ATK & M-ATK+10%, LCK+323 pts, lasts 10 sec. | 3-Piece Effect: Pike, Dagger, Cestus and Mace P-ATK & M-ATK+15%. Your attacks have a 5%  chance to decrease target's All Res-5%, lasts 10 sec. |
+| Azula's Frozen Wing | Dragon Trials | 115.0 | All Phys Res+5 | Each attack and cast has a 5% chance to increase G-Healing+549 pts and LCK+323 pts, lasts 10 sec. | 3-Piece Effect: Mace, Guitar and Rapier P-ATK & M-ATK+15%. WIS+20% |
+| Morosh's Toxic Shroom | Trial: Duskmire Crypt | 130.0 | Nature Res +5. | Your attacks deal 870 pt of Nature DMG. Your attacks have a 5% chance to stun the target for 3 seconds. | N/A |
+| Ravenshade's Spine | Trial: Duskmire Crypt | 130.0 | P-ATK +3900 pts<br>ATK SPD +390 pts. | Your attacks have a 5% chance to increase P-ATK +13517 pts & ATK SPD +360 pts for 10 seconds. | N/A |
+| Posen's Spirit Fragments | Trial: Duskmire Crypt | 130.0 | HP +3900 pts<br>P-Heal +390 pts | Your attacks have a 10% chance to remove 3 positive status' from the target. | N/A |
+| Zovin's Dark Blade | Trial: Duskmire Crypt | 130.0 | P-ATK +3900 pts<br>P-CRIT +390 pts. | Your attacks have a 5% chance to increase P-DMG Dealt +5% for 10 seconds. | N/A |
+| Amye's Back Crystals | Trial: Ruined Bloom Sanctuary | 130.0 | CAST SPD +390 pts.<br>M-CRIT +390 pts. | Your attacks and casts have a 5% chance to increase G-Healing + 679 pts for 10 seconds. | N/A |
+| Ankan's Bloody Teeth | Trial: Ruined Bloom Sanctuary | 130.0 | P-ATK +3900 pts<br>ATK SPD +390 pts | Your attacks will increase P-AT K+2% & ATK SPD +1% for 5 seconds, stacks 10 times. | N/A |
+| Adaline's Blood Potion | Trial: Ruined Bloom Sanctuary | 130.0 | Healing Done +3%. | Your attacks and casts have a 5% chance to increase WIS +610 & AGI +198 pts for 10 seconds. | N/A |
+| Mortas' Broken Armor Fragments | Trial: Ruined Bloom Sanctuary | 130.0 | DEF +3900 pts<br>DMG Taken -390 pts | When attacked you have a 5% chance to reduce the targets DMG Dealt -10% for 7 seconds. | N/A |
+| Augsburg's Boney Horn | Trial: Crystalized Necropolis | 130.0 | DEF +3900 pts | When attacked yo uhave a 5% chance to increase Physical & Elemental Resistance +15 pts for 10 seconds. | N/A |
+| Lokham's Icy Crystal | Trial: Crystalized Necropolis | 130.0 | ATK & CAST SPD +390 pts | Your attacks have a 5% chance to decrease the targets ATK & CAST SPD -443 pts, and MOVE SPD -15% for 10 seconds. | N/A |
+| Menis' Cursed Bandage | Trial: Crystalized Necropolis | 130.0 | M-ATK +3900 pts<br>M-DMG +10%. | Your attacks have a 5% chance to increase M-ATK +168u96 pts & M-CRIT RATE +360 pts for 10 seconds. | N/A |
+| Shadow Dragon Pelt | Trial: Crystalized Necropolis | 130.0 | P-CRIT & M-CRIT DMG Taken -10%. | When parry triggers, you have a 5% chance to recover HP +12672 pts & remove 1 negative status. | N/A |
+| Kerdos' Venomous Fang | Trial: Stormcliff Keep | 130.0 | M-CRIT RATE +390 pts. | Your attacks deal 870 pts of nature DMG. Your attacks have a 5% chance to deal 3706 pts of DMG every second for 10 seconds. | N/A |
+| Aetos' Charged Stone | Trial: Stormcliff Keep | 130.0 | Ice, Fire, Lightning & Nature Res +10. | Your attacks have a 5% chance to decrease the targets Fire, Ice Lightning & Nature Resistance -10 pts for 10 seconds. | N/A |
+| Lunara's Cursed Rose | Trial: Stormcliff Keep | 130.0 | P-CRIT & M-CRIT RATE +390 | Your attacks deal 870 pts of Dark DMG. Your attacks have a 5% chance to deal Triple Hit DMG. | N/A |
+| Amron's Broken Bone | Trial: Stormcliff Keep | 130.0 | P-ATK & M-ATK +1950 | Your attacks have a 5% chance to increase P-ATK +13517 pts & M-ATK +16896 pts for 10 seconds. | N/A |
+
+**DREAM OF DESTRUCTION**
+
+| NAME: | LOCATION: |  | STATS: | EFFECT: | MULTI-PIECE EFFECT: |
+|---|---|---|---|---|---|
+| Holy - Mori Mori's Mucus | DoD: Angor Quarry 0/3, 0/10 | 90.0 | MP+704 | Your attacks have a 1% chance of transforming the target into a Mushroid for 3 sec. Doesn't affect bosses. | N/A |
+|  |  |  | All Elem. Res+5 |  |  |
+| Holy - Herak's Crystal | DoD: Angor Quarry 0/3, 0/10 | 90.0 | HP+704 | Your attacks have a 5% chance of increasing DEF+4694; lasts 10 sec. | N/A |
+|  |  |  | DMG Deal+124 |  |  |
+| Holy - Ketak's Hawk Conch | DoD: Fort Verdure 0/3, 0/10 | 90.0 | LCK+66 | Your attacks have a 5% chance of summoning an Orge to assist you in combat. | N/A |
+|  |  |  | MP Cost-47 |  |  |
+| Holy - Quade's Nine Disciplines | DoD: Fort Verdure 0/3, 0/10 | 90.0 | STR+66 | Your attacks have a 5% chance of increasing CRIT Rate+396; lasts 10 sec. | N/A |
+|  |  |  | A-SPD+132 |  |  |
+| Holy - Juan's Demon Stone | DoD: Tasos Channel  0/3, 0/10 | 90.0 | AGI+66 | Your attacks have a 15% chance of cancelling two random negative status effects. | N/A |
+|  |  |  | M-CRIT Rate+132 |  |  |
+| Holy - Angela's Demon Stone | DoD: Tasos Channel  0/3, 0/10 | 90.0 | INT+66 | Your attacks have a 5% chance of increasing Cast SPD+396; lasts 10 sec. | N/A |
+|  |  |  | Malice -5% |  |  |
+| Holy - Gun-RX79's Microchip | DoD: Shale Cavern 0/3, 0/10 | 90.0 | WIS+66 | Your attacks have a 5% chance of increasing P-Healing+422; lasts 20 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Holy - Robo VT080's Kinetic Energy Nucleus | DoD: Shale Cavern 0/3, 0/10 | 90.0 | AGI+66 | Your attacks have a 5% chance of restoring +4224 HP. Your attacks have a 5% chance of cancelling two random negative status effects. | N/A |
+| Holy - Salvio's Silver Bag | DoD: Eroda 0/3, 0/10 | 90.0 | INT+66 | Your attacks have a 5% chance of increasing Cast SPD+396; lasts 10 sec. | N/A |
+|  |  |  | M-CRIT Rate+132 |  |  |
+| Holy - Jiro's Eternal Heart | DoD: Eroda 0/3, 0/10 | 90.0 | ATK+563 | Your attacks have a 5% chance of increasing ATK SPD+396; lasts 10 sec. | N/A |
+|  |  |  | Doublt Hit+4% |  |  |
+| Holy - Ulicul's Love Charm | DoD: Morticora 0/3, 0/10 | 90.0 | INT+66 | Your attacks have a 5% chance of increasing M-ATK+9387; lasts 10 sec. | N/A |
+|  |  |  | MP+704 |  |  |
+| Holy - Guillaume's Soul Essence | DoD: Morticora 0/3, 0/10 | 90.0 | LCK+66 | Your attacks have a 5% chance of increasing ATK+7510; lasts 10 sec. Each attack additonally deals 248 Ice DMG. | N/A |
+| Holy - Axe Moss's Eternal Flame Candle | DoD: Vileshark HQ 0/3, 0/10 | 90.0 | STR+66 | Your attacks have a 5% chance to Disarm target; close combat weapons become ATK 0. lasts 10 sec; can't be canceled. Doesn't affect bosses. | N/A |
+|  |  |  | HP+704 |  |  |
+| Holy - Charles's Angellies Secret Scroll | DoD: Vileshark HQ 0/3, 0/10 | 90.0 | INT+33 | Each attack deals an additionaly 248 lighting DMG. Your attacks have a 2% chance to increase target's skill failure rate by 100%; lasts 5 sec. Doesn't affect bosses. Enters Mundane immunity. | N/A |
+|  |  |  | WIS+33 |  |  |
+| Holy - Kedar's Tidal Scroll | DoD: Vileshark HQ 0/3, 0/10 | 90.0 | MP Cost-47 | Your attacks and skills have a 5% chance of restoring HP and MP+ 310; lasts 10 sec. | N/A |
+|  |  |  | C-SPD+132 |  |  |
+| Holy - Roger's Great Nautical Map | DoD: Vileshark HQ 0/3, 0/10 | 90.0 | All Elem. Res+5 | Each attack deals an additional 248 DMG. Your attacks and skills have a 5% chance of increasing all stat +33; lasts 10 sec. Stacks up to 3 times. | N/A |
+| Holy - Acilino's Fang | DoD: Branda Root 0/3, 0/10 | 90.0 | WIS+66 | Your attacks and skills have a 5% chance of increasing G-Healing+422; lasts 10 sec. | N/A |
+|  |  |  | HP+704 |  |  |
+| Holy - Null Heart's Tentacle | DoD: Branda Root 0/3, 0/10 | 90.0 | STR+66 | Your attacks have a 5% chance of increasing P-Healing+422; lasts 10 sec. | N/A |
+|  |  |  | Block+10% |  |  |
+| Holy - Doubledoor's Research Diary | DoD: Malice Palace 0/3, 0/10 | 90.0 | HP+704 | Your attacks have a 15% chance of cancelling two random negative status effects. | N/A |
+|  |  |  | Holy Res+12 |  |  |
+| Holy - Garson's Eye Drops | DoD: Malice Palace 0/3, 0/10 | 90.0 | LCK+66 | Your attacks have a 5% chance of increasing CRIT Rate+396; lasts 10 sec. | N/A |
+|  |  |  | ATK+563 |  |  |
+| Holy - Sagharra's Tasty Bone | DoD: Malice Palace 0/3, 0/10 | 90.0 | AGI+66 | Your attacks have a 5% chance of increasing M-CRIT Rate+396; lasts 10 sec. | N/A |
+|  |  |  | M-ATK+563 |  |  |
+| Holy - Kenny's Black Flame Stone | DoD: Ulta Hall 0/3, 0/10 | 90.0 | AGI+66 | Your attacks have a 10% chance of cancelling two random positive enemy status effects. Doesn't affect bosses. | N/A |
+|  |  |  | Malice-5% |  |  |
+| Holy - Tiamat's Eternal Dragon Soul | DoD: Ulta Hall 0/3, 0/10 | 90.0 | HP+704 | Your attacks have a 8% chance of increasing All Resistances+12; lasts 12 sec. | N/A |
+|  |  |  | DEF+782 |  |  |
+| Holy - Gamera's Voodoo Turtle Shell | DoD: Ulta Hall 0/3, 0/10 | 90.0 | Fire Res+12 | Your attacks and skills have a 5% chance of restoring +620 MP. | N/A |
+|  |  |  | M-CRIT Rate+132 |  |  |
+| Holy - Kasin's Temple Discipline | DoD: Ulta Hall 0/3, 0/10 | 90.0 | Holy Res+12 | G-Healing+422 | N/A |
+|  |  |  | C-SPD+132 |  |  |
+| Holy - Ebaster's Heart | DoD: Baltaroi Core 0/3, 0/10 | 90.0 | Fire Res+12 | Your attacks and skills have a 15% chance of cancelling two random negative status effects. | N/A |
+|  |  |  | WIS+66 |  |  |
+| Holy - Haslett's Tentacle | DoD: Baltaroi Core 0/3, 0/10 | 90.0 | MP Cost-47 | Your attacks have a 2% chance of transforming the target into an Imp; lasts 3 sec. Doesn't affect bosses. | N/A |
+|  |  |  | All Stat+13 |  |  |
+| Holy - Baltaroi's Great Seal | DoD: Baltaroi Core 0/3, 0/10 | 90.0 | AGI/LCK+33 | Your attacks and skills have a 5% chance of increasing ATK SPD and Cast SPD+264; lasts 10 sec. | N/A |
+|  |  |  | All Phys. Res+5 |  |  |
+| Holy - Dana's Fashion Bracelet | DoD: Mayor's Dream 0/3, 0/10 | 90.0 | AGI+66 | Your attacks and skills have a 5% chance of increasing Cast SPD+396; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-47 |  |  |
+| Holy - Alice's Instruction | DoD: Mayor's Dream 0/3, 0/10 | 90.0 | LCK+66 | Your attacks have a 5% chance of increasing ATK SPD+396; lasts 10 sec. | N/A |
+|  |  |  | EVA+132 |  |  |
+| Holy - Alice's Dream Key | DoD: Mayor's Dream 0/3, 0/10 | 90.0 | M-SPD+5% | Your attacks have a 5% chance of summoning a Dream Maker to assist you in combat. | N/A |
+|  |  |  | Dark Res+12 |  |  |
+| Holy - Hank's Calibration Tool | DoD: Veninfang 0/3, 0/10 | 90.0 | WIS+66 | Your attacks have a 2% chance of stopping targets from using any skils; lasts 6 sec. Doesn't affect bosses. | N/A |
+|  |  |  | Strike Res+12 |  |  |
+| Holy - Ram Blood's Goreclaw | DoD: Veninfang 0/3, 0/10 | 90.0 | STR+66 | Your attacks have a 5% chance of increasing ATK+7510; lasts 8 sec. | N/A |
+|  |  |  | Slash Res+12 |  |  |
+| Holy - Wolfhowl's Beast Taming Tome | DoD: Veninfang 0/3, 0/10 | 90.0 | INT+66 | Your attacks have a 5% chance of increasing M-ATK+9387; lasts 10 sec. While active, each attack deals an additional 248 Fire DMG. | N/A |
+| Holy - Chino's Leader Mark | DoD: Veninfang 0/3, 0/10 | 90.0 | HP/MP+357 | Your attacks have a 2% chance of preventing targets from receiving any positive status effects; lasts 4 sec. Doesn't affect bosses. | N/A |
+|  |  |  | Lighting/Nature Res+8 |  |  |
+| Holy - Frightclaw's Dragon Contract | DoD: Veninfang 0/3, 0/10 | 90.0 | STR/INT+33 | Your attacks have a 2% chance of stopping targets from using any skils; lasts 6 sec. Doesn't affect bosses. | N/A |
+|  |  |  | All Phys. Res+5 |  |  |
+| Holy - Anderli's Feather | DoD: Slain 0/3, 0/10 | 90.0 | Parry+5% | Your attacks have a 5% chance of granting received DMG -1320; lasts 3 sec.<br> | N/A |
+|  |  |  | Malice+5% |  |  |
+| Holy - Bayard's Toxic Spine | DoD: Slain 0/3, 0/10 | 90.0 | HP+704 | Your attacks have a 2% chance of stunning the target; lasts 3 sec. Doesn't affect bosses. | N/A |
+|  |  |  | Lighting Res+12 |  |  |
+| Holy - Kassadiin's Hard Shell | DoD: Slain 0/3, 0/10 | 90.0 | INT+66 | Your attacks have a 5% chance of increasing M-ATK+9387; lasts 8 sec. | N/A |
+|  |  |  | MP+704 |  |  |
+| Holy - Tuka Tufa's Ice Breath | DoD: Crimson | 95.0 | WIS+66 | When attacking or casting any skill there is a 5% chance of increasing G-Healing +422; lasts 20 sec. | N/A |
+|  |  |  | MP Cost-94 |  |  |
+| Holy - Scion's Bloodlust Fire | DoD: Crimson | 95.0 | LCK+66 | When attacking, there is a 5% chance of increasing CRIT Rate+396; lasts 10 sec | N/A |
+|  |  |  | P-ATK+563 |  |  |
+| Holy - Garrotts Suzerainty | DoD: Crimson | 95.0 | STR+66 | When attacking, there is a 5% chance of increasing ATK SPD+396 lasts 10 sec | N/A |
+|  |  |  | Ice Res+12 |  |  |
+| Holy - Bloodtooth Tor's Bugle | DoD: Crimson | 95.0 | Nature Res+16 | Attacking has a 5% chance of increasing Cast SPD+396; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+132 |  |  |
+| Holy - Garrott's Demon Heart | DoD: Century | 95.0 | Parry +5% | When attacking, there is a 5% chance to deal damage -1320; lasts 3 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Holy - Loki's Jade Totem | DoD: Century | 95.0 | AGI+66 | When attacking, there is a 5% chance of increasing M-CRIT Rate+396; lasts 10 sec<br> | N/A |
+|  |  |  | M-ATK+563 |  |  |
+| Holy - Neondo's Imperial Contract | DoD: Century | 95.0 | M-SPD+5% | When attacking, there is a 5% chance to decrease enemy's DEF-10% and Elemental Resistance-5; lasts 10 sec. | N/A |
+|  |  |  | Slash Res+12 |  |  |
+| Holy - Valmar's Dark Pearl | DoD: Century | 95.0 | ACC+132 | When attacking, there is a 5% chance to increase DEF+4694 and EVA+396; lasts 10 sec. | N/A |
+|  |  |  | Block+5% |  |  |
+| Holy - Frederick's War Diary | DoD: Basel Border | 95.0 | AGI+66 | Each attack has a 5% chance to increase M-ATK+9387; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-94 |  |  |
+| Holy - MacDougal's Survival Note | DoD: Basel Border | 95.0 | WIS+66 | Each attack has a 3% chance to increase all attributes+33; lasts 10 sec. Stackable up to 3 times. | N/A |
+|  |  |  | G/P-Heal+211 |  |  |
+| Holy - Bassetts Natural Roar | DoD: Basel Border | 95.0 | STR and LCK+33 | Each attack or cast has a 15% chance to randomly cancel 2 negative status effects. | N/A |
+|  |  |  | EVA+132 |  |  |
+| Holy - Ellison's Honor Medal | DoD: Basel Border | 95.0 | HP+704 | Each attack has a 5% chance to increase ATK SPD+309; lasts 12 sec. | N/A |
+|  |  |  | Double Hit+4% |  |  |
+| Holy - Sylnestor's Secret Roar | DoD: Basel Border | 95.0 | All Stat+10 | When under attack there's a 20% chance of reflecting 10% DMG. | N/A |
+|  |  |  | Received DMG-124 |  |  |
+| Holy - Kasi's Steel Material | DoD: Federal Armory | 95.0 | DEF+1232 | Each attack has a 2% chance to stun targets; lasts 3 sec. | N/A |
+|  |  |  | HP+704 |  |  |
+| Holy - Sami's Cosmetics Box | DoD: Federal Armory | 95.0 | M-ATK+563 | Each attack has a 5% chance to increase M-CRIT Rate+396; lasts 10 sec. | N/A |
+|  |  |  | Malice+5% |  |  |
+| Holy - Mustachio's Military Key | DoD: Federal Armory | 95.0 | AGI and LCK+33 | Each attack has a 5% chance to decrease target's Phys. Resistances -7; lasts 10 sec. | N/A |
+|  |  |  | CRIT Rate+132 |  |  |
+| Holy - Robin's Control Room Key | DoD: Manor | 95.0 | STR+66 | When attacking, there is a 5% chance of increasing P-Healing+422; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Holy - Bob Johnson's Creation | DoD: Manor | 95.0 | G-Healing+139 | Attacking has a 5% chance of increasing WIS+396; lasts 10 sec | N/A |
+|  |  |  | MP Cost-94 |  |  |
+| Holy - Bank Johnson's Escape Plan | DoD: Manor | 95.0 | INT+66 | When attacking, there is a 5% chance of increasing M-CRIT Rate+396; lasts 10 sec | N/A |
+|  |  |  | -Malice 5% |  |  |
+| Holy - Jala's Execution Decree | DoD: Manor | 95.0 | M-SPD+5% | Attacking has a 5% chance of removing two random negative status effects. | N/A |
+|  |  |  | Dark Res+12 |  |  |
+| Holy - Skleros Time Candle | DoD: Manor | 95.0 | DEF+782 | Attacking or casting has a 5% chance of increasing all Elem. Resistances +12; lasts 12 sec | N/A |
+|  |  |  | P-Healing+139 |  |  |
+| Holy - Yuhidor's Cushion | DoD: Colossal Cauldron | 95.0 | AGI+66 | Each attack has a 5% chance to reduce HP-794; lasts 10 sec. | N/A |
+|  |  |  | CRIT Rate+132 |  |  |
+| Holy - Mosu's Super Chip | DoD: Colossal Cauldron | 95.0 | AGI+66 | Each attack has a 5% chance to reduce ACC-198 and increase EVA+198; lasts 10 sec. | N/A |
+|  |  |  | M-SPD+5% |  |  |
+| Holy - Spenja's Survival Book | DoD: Colossal Cauldron | 95.0 | STR+66 | Each attack has a 5% chance to increase all phys. resistances +10; lasts 12 sec. | N/A |
+|  |  |  | Block+5% |  |  |
+| Holy - Musaja's Mutation Gene | DoD: Colossal Cauldron | 95.0 | INT+66 | After killing the target this enchant increases M-CRIT Rate+396; lasts 10 sec. | N/A |
+|  |  |  | Malice -5% |  |  |
+| Holy - Zagdon's Dark Mark | DoD: Sturmfrau | 95.0 | M-ATK+563 | Attacking has a 5% chance to reduce M-SPD-10%; lasts 10 sec | N/A |
+|  |  |  | M-CRIT Rate+132 |  |  |
+| Holy - Gimu's Storm Shield | DoD: Sturmfrau | 95.0 | AGI+66 | Attacking has a 5% chance to reduce ACC-396; lasts 10 sec | N/A |
+|  |  |  | Block+5% |  |  |
+| Holy - Rysel's Spike Shell | DoD: Sturmfrau | 95.0 | Parry+5% | Each attack has a 5% chance to increase all Elem. Resistances  +12; lasts 10 sec. | N/A |
+|  |  |  | MP Cost-94 |  |  |
+| Holy - Myteis' Screaming Blade | DoD: Sturmfrau | 95.0 | CRIT Rate+132 | Each attack has a 3% chance to trigger a triple hit. | N/A |
+|  |  |  | Nature DMG+132 |  |  |
+
+**MISCELLANEOUS:**
+
+| NAME: | LOCATION: |  | STATS: | EFFECT: | MULTI-PIECE EFFECT: |
+|---|---|---|---|---|---|
+| Departure Crystal | Limestone Mountains Fame Chest | 8.0 | Max HP+26 | Attacking or casting skills has a 5% chance to increase all stats +8, lasts 10 sec. | N/A |
+| Departure Screw | Fegeral Valley Fame Chest | 8.0 | Max HP+26 | Attacking has a 5% chance to recover HP+22 per second, lasts 10 sec | N/A |
+| Grace Seed | Graceland Marsh Fame Chest | 8.0 | Max HP+26 | Attacking has a 5% chance to recover MP+15 | N/A |
+| Boxing Secret Handbook | Ursun Paw Mountains Fame Chest | 8.0 | Max HP+26 | Attacking has a 5% chance to decrease received DMG-8, lasts 6 sec | N/A |
+| Irritable Bison Hoof | Trainquil Hill: FWR Center NPC | 11.0 | N/A | Transforms your pet into an irritable bison if kept in your back pack | N/A |
+| Demons Left Eye | Tranquil Hill Fame Chest | 14.0 | Max HP+44 | Attacking has a 5% chance to increase M-ATK+589, lasts 10 sec | N/A |
+| 5 Beast Team Totem: Anura | Rainbowfall Forest Fame Chest | 19.0 | Max HP+64 | Attacking has a 5% chance to deal Ice DMG+85; lasts 10 sec | N/A |
+| Irrational Mushroid Tears | Goss Mountains: FWR Center NPC | 21.0 | N/A | Transforms your pet into an irrational mushroid if kept in your backpack | N/A |
+| Devout Gear Wheel | Goss Mountains Fame Chest | 24.0 | Max HP+86 | N/A | N/A |
+|  |  |  | G-Heal+17 |  |  |
+| Beluga Power | Beluga Bay Fame Chest | 29.0 | Max HP+112 | Attacking has a 5% chance to increase ATK+896 | N/A |
+| Putrid Forest Pixe Flower | Wetlands: FWR Center NPC | 31.0 | N/A | Transforms your pet into a putrid forest pixie if kept in your backpack | N/A |
+| 5 Beast Team Totem: Zumi | Wetlands Fame Chest | 33.0 | Max HP+135 | Attacking has a 5% chance to deal Lightning DMG+175, lasts 10 sec | N/A |
+| Mark of Love | Valley of the Kings Fame Chest | 37.0 | Max HP+159 | N/A | N/A |
+|  |  |  | P-Heal+32 |  |  |
+| 5 Beast Team Totem: Tuskar | Avila Volcano Fame Chest | 41.0 | Max MP+185 | Attacking has a 5% chance to deal Fire DMG+245, lasts 10 sec | N/A |
+| Tiny Drake Fang | Golden Plains: FWR Center NPC | 41.0 | N/A | Transforms your pet into a Tiny Drake if kept in your backpack. | N/A |
+| Demon's Right Eye | Golden Plains Fame Chest | 45.0 | MP+212 | N/A | N/A |
+|  |  |  | C-SPD+64 |  |  |
+| Champion Colossus | Arid Wilds Fame Chest | 48.0 | MP+234 | N/A | N/A |
+|  |  |  | DEF+520 |  |  |
+| Hot Blooded Tiger Eye | Blackflame Peak: FWR Center NPC | 51.0 | N/A | Transforms your pet into a Hot-Blooded Tiger if kept in your backpack. | N/A |
+| Hope Compass | Blackflame Peak Fame Chest | 54.0 | MP+280 | N/A | N/A |
+|  |  |  | -5% Malice |  |  |
+| 5 Beast Team Totem: Ursun | Delphi Forest Fame Chest | 51.0 | MP+256 | Attacking has a 5% chance to deal Nature damage +335; lasts 10 sec. | N/A |
+| Electromagnetic Transducer | Sunset Desert Fame CHest | 53.0 | HP+272 | Attacking has a 5% chance to increase ATK SPD+222; lasts 10 sec. | N/A |
+| Pilot Scarf | Skyreach Jungle Fame Chest | 54.0 | MP+280 | Attacking has a 5% chance to increase M-ATK+3728; lasts 10 sec. | N/A |
+| 5 Beast Team Totem: Toturra | Decay Swamp Fame Chest | 57.0 | MP+304 | Attacking has a 5% chance to deal Dark damage +400; lasts 10 sec. | N/A |
+| Crystal Anemoscope | Cyclone Basin Fame Chest | 58.0 | HP+312 | N/A | N/A |
+|  |  |  | CRIT-Rate+61 |  |  |
+| Jungle Adventure Badge | Viper's Forest Fame Chest | 60.0 | MP+328 | N/A | N/A |
+|  |  |  | M-CRIT Rate+83 |  |  |
+| Legendary Dragon Badge | FWR Center NPC (Any of them) | 60.0 | N/A | Transforms your pet intno a legendary dragon if kept in your backpack | N/A |
+| Holy King Badge | Highlands Fame Chest | 60.0 | MP+328 | N/A | N/A |
+|  |  |  | M-SPD+10% |  |  |
+| Marvel Energy Crystal Ball | Witchcraft Forest Fame Chest | 63.0 | MP+328 | Attacking or casting skills has a 5% chance to increase M-CRIT+261; lasts 10 sec | N/A |
+| Gate Sacred Stone | Gemsis Ridge Fame Chest | 64.0 | HP+363 | Attacking has a 5% chance to increase CRIT+267; lasts 10 sec | N/A |
+| Polar Freezing Flame | Shiver Peak Fame Chest | 65.0 | HP+371 | N/A | N/A |
+|  |  |  | Ice/Fire Res+5 |  |  |
+| Holy Spirit Badge | Death Valley Fame Chest | 66.0 | HP+426 | Attacking has a 5% chance to increase P-Heal+510; lasts 10 sec | N/A |
+| Moonlight Blossom Flute | Eyebloom Plain Fame Chest | 68.0 | MP+445 | Attacking has a 5% chance to increase M-ATK+2628; lasts 10 sec | N/A |
+| Temppest Cliff Badge | Tempest Cliff Fame Chest | 70.0 | HP+464 | Attacking has a 5% chance to increase ATK+2734; lasts 10 sec | N/A |
+| Flicker Ignite Cloak | Searing Valley Fame Chest | 71.0 | HP+503 | Each attack has a 5% chance to increase DEF+2234 and EVA+162; lasts 10 sec. | N/A |
+| Scales of Compassion | Sunrise Plains Fame Chest | 73.0 | MP+523 | Each attack has a 5% chance to increase WIS+165 and Move SPD+10%; lasts 10 sec. | N/A |
+| Iron Guard Honor Medal | Devastation Realm Fame Chest | 75.0 | HP+543 | Each attack has a 5% chance to reduce HP-612; lasts 10 sec. | N/A |
+| Fire Elf Sculpture | Anuran Racial Craft | 50.0 | All Stat+8 | N/A | N/A |
+|  |  |  | Fire Res+25 |  |  |
+| Ice Elf Sculpture | Anuran Racial Craft | 50.0 | All Stat+8 | N/A | N/A |
+|  |  |  | Ice Res+25 |  |  |
+| Thunder Elf Sculpture | Anuran Racial Craft | 55.0 | All Stat+8 | N/A | N/A |
+|  |  |  | Thunder Res+25 |  |  |
+| Nature Elf Sculpture | Anuran Racial Craft | 55.0 | All Stat+8 | N/A | N/A |
+|  |  |  | Nature Res+25 |  |  |
+| Darkness Elf Sculpture | Anuran Racial Craft | 60.0 | All Stat+8 | N/A | N/A |
+|  |  |  | Dark Res+25 |  |  |
+| Holy Light Elf Scultpure | Anuran Racial Craft | 60.0 | All Stat+8 | N/A | N/A |
+|  |  |  | Holy Res+25 |  |  |
+| Braider Armband | Eloise Plains Fame Chest | 76.0 | HP+553 | Each attack has a 5% chance to increase G-Healing+332; lasts 10 sec. | N/A |
+| Hayward Seavale Memorial Gold Coin | Hayward Seavale Fame Chest | 78.0 | MP+574 | Each attack has a 5% chance to increase WIS+176 and M-ATK+1350; lasts 10 sec. | N/A |
+| Durango Origin Myth Text | Durango Kingdom Fame Chest | 80.0 | HP+595 | Attacks have a chance to inflict Holy DMG+314; lasts 10 sec | N/A |
+| Forest Guardian's Whistle | Ethereal Dome Fame Chest | 81.0 | ATK+484 | Your CRIT attacks have a 5% chance to increase ATK SPD+242 and skill MP Cost -122; lasts 10 sec. | N/A |
+| Hot-Hand Crystal | Iceflame Highlands Fame Chest | 83.0 | MP+501 | Your CRIT attacks have a 5% chance to increase Cast SPD+246 and skill MP Cost -126; lasts 10 sec. | N/A |
+| Multi-Tool Pocket Watch | Meeryasha Fame Chest | 85.0 | WIS+63 | Your attacks have a 5% chance of granting G-Healing+195 and skill MP Cost -129; lasts 10 sec. | N/A |
+| Truenorth Compass | Mayland Jungle Fame Chest | 87.0 | Block+5% | Your attacks have a 5% chance of granting DEF+4470; lasts 10 sec. | 2-Piece Effect: HP+2079, DEF+2309. |
+| Senior Officer's Manual | Mayland Jungle Fame Chest | 90.0 | All Elem. Res+5% | Your attacks have a 5% chance of recovering +844 HP every sec, lasts 10 sec | 2-Piece Effect: HP+2079, DEF+2309. |
+| Zark's Golden Rock | Abyss: Elemental 's Battlefield | 120.0 | Lightn' Res+2%<br>All Phys Res+3% | Your attacks have a 5% chance to deal 3923 pts of dmg; lasts 10 sec. | N/A |
+| Avner's Magic Core | Abyss: Elemental 's Battlefield | 120.0 | Lightn' Res+2%<br>M-SPD+5% | Your attacks have a 5% chance to reduce the targets Fire, Ice, Nature & Dark Resistance -7 pts; lasts 10 sec. | N/A |
+| Randle's Life Tree | Abyss: Elemental 's Battlefield | 120.0 | Lightn' Res+2%<br>DMG Taken-2% | Your attacks and casts have a 5% chance to recover HP+8396 pts and remove 2 negative status'. | N/A |
+| Zaeldrut's Tail | Abyss: Elemental 's Battlefield | 120.0 | Lightn Res+2%<br>DMG Dealt+2% | Your attacks have a 5% chance to increase P-ATK & M-ATK+15333 pts; lasts 10 sec. | N/A |
+| Enchanted Marsh Certificate | Enchanted Marsh Fame Chest | 120.0 | HP+2673<br>MP+2673<br>Nature Res+8 | M-ATK +10%. M-CRIT DMG+10%. M-CRIT RATE+10%. | N/A |
+| Water Falls Certificate | Water Falls Fame Chest | 120.0 | HP+2726<br>MP+2726<br>Ice Res+8 | WIS+10%. M-CRIT RATE+10%. CAST SPD+10%. | N/A |
+| Death Mountains Certificate | Death Mountains Fame Chest | 120.0 | HP+2781<br>MP+2781<br>Fire Res+8 | WIS+10%. M-CRIT RATE+10%. CAST SPD+10%. | N/A |
+| Bleak Bog Certificate | Bleak Bog Fame Chest | 130.0 | HP+2894<br>MP+2894<br>Nature Res+8 | WIS+12%. M-CRIT RATE+12%. CAST SPD+15%. | N/A |
+| Scorched Marsh Certificate | Scorched Marsh Fame Chest | 130.0 | HP+2894<br>MP+2894<br>Fire Res+8 | P-ATK +12%. P-CRIT DMG+12%. P-CRIT RATE+12%. | N/A |
+| Wicked Chasm Certificate | Wicked Chasm Fame Chest | 130.0 | HP+2894<br>MP+2894<br>Dark Res+8 | M-ATK +12%. M-CRIT DMG+12%. M-CRIT RATE+12%. | N/A |
+

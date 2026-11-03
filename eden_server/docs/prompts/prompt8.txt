@@ -1,0 +1,39 @@
+
+C'est un énorme prompt (venant du fichier prompt8.txt dans le bureau), copie le contenu et suit le a la lettre, formation des points a codé pour chaque étape et détail précis du plan, quand c'est fait commence le plan et fait tout très précisément, t'en a pour plusieurs heures de dév donc n'oublie AUCUN détail, reviens plusieurs fois sur le plan pour te le remémorer et également pour le mettre a jour selon tes avancées.
+Tu ne dois pas te reposer sur moi (l'utilisateur), tu dois tout faire en autonomie.
+
+Site Limitless ->
+
+- j'ai ça un peu partout (ou même type d'erreur) sur le site web :
+The game database is unreachable right now — try again in a moment, je veux que tu l'améliore de fond en comble car y'a beaucoup a faire, déjà visuellement il est mieux mais ça ressemble bien trop a de l'IA, le site a l'air "mort", rend le plus animé, plus coloré, plus varié.
+Ensuite il faut aussi que tu fasses fonctionner le tout, plein de classement pas fonctionnel ou pas clair (par exemple un champ EXP mais dedans y'a écrit le level du joueur ??, et puis oublie pas qu'on aura 3 notion d'exp, l'exp Character, l'exp d'une des classes que le joueur a monter ou l'exp ultime pour les limitless level), je note aussi que le SEUL wiki qui fonctionne A PEINE c'est le Items wiki (on peut voir que la première page, on peut pas chercher un nom ou id, en gros il marche pas non plus). Je dois vraiment t'expliquer comment appelé une DB postgres avec du code backend et un frontend qui appelle le backend ???
+Le site manque de trop de chose, de contenu visuel, de propreté visuel, d'originalité, de clareté et enfin d'informations (le wiki c'est pas que des items ou des entité, c'est aussi des tuto comment jouer aux jeux qui peut être rédigé dans le site sous la partie ADMIN de celui-ci comme le font les CMS).
+
+Limitless Studio ->
+
+- Sur le limitless studio, je veux que tu améliores l'UX/UI car tu proposes de modifier les lignes raw, mais elles sont incompréhensible, il faudrait que le raw soit build dynamiquement selon des vrais champs compréhensible sur l'utilité de chaque .ini (surtout que certains endroit c'est en language asiatique)
+- Sur le limitless studio, je vois pas trop l'intérêt du panel des "Icons", on peut pas interagir avec les entités, les noms sont que des numéros (donc pas moyen de chercher genre box ou bonbon bleu), je dis pas que ça sert a rien mais concrètement le système de recherche avec de tel nom de fichier est peu utile, cherche une utilité concrète a l'interface Icons
+- Sur le limitless studio t'a mis un champs qui montre les .ini dupliqué ou avec des contenu de fichier différents, mais cette informations sert a quoi concrètement ? je te rappel que tu codes un logiciel d'édition qui doit être facile utiliser et a comprendre, là y'a RIEN de facile a comprendre ni a éditer, rien est clair, même pour modifier factuellement un item ou un mob c'est pas clair, et puis en plus modifier un .ini implique quoi ? (que .ini a modifier ou alors y'a d'autre endroits a regarder selon le .ini ?)
+
+En jeu Reforged ->
+
+- La banner Ultimate exp est tout en haut a droite, elle est pas parfaite mais franchement pas mal, par contre on peut pas la déplacer où on veut ni intéragir avec via un hover etc mais le jeu vois bien qu'elle est là et potentiellement intéractive (car dessous elle j'ai l'HUD de mini carte et je peux pas le bouger, donc la barre Ultimate exp est bien présente correctement), dessus j'ai d'écrit "ULTIMATE Lv1 EXP 200/400 Perks 1" sur un fond sombre, en dessous j'ai une barre d'exp pas de même taille mais propre également et fonctionnel (200/400 et la barre est au milieu du chargement).
+
+- Pour le strafe des montures c'est pas bon, je précise que les animations sont bonne, c'est pas un souci de choix d'animation quand je vais a gauche et a droite, le vrai souci c'est le fait que normalement la monture et le joueur dessus se tourne littéralement a 90° (l'avant de la tete doit être a gauche quand le joueur appuie sur la touche Q pour aller a gauche, et inversement pour aller a droite), et je précise que ça fonctionne déjà pour les mouvements en diagonal (genre avant droit, arrière droit et pareil pour a gauche), c'est uniquement les mouvement uniquement gauche ou droite qui sont mal fait.
+
+
+- Pour le buyback il est fonctionnel, mais il manque un tout dernier détail, quand on rachète son item, il doit disparaitre de l'interface buyback (sinon on peut juste vendre son item, puis spam buyback pour le dupliquer).
+
+- Commandes admin fonctionnels.
+
+- Consommation de mana c'est bon mais bizarre, quand j'utilise un skill mon mana max augmente a ma valeur de pv max, et quand je régénère le mana perdu, le mana max redescend a une autre valeur.
+
+- Status qui se retire fonctionnel (mais les buffs sur les skills sont toujours pas fonctionnel coté stats).
+
+- Partout dans le jeu il y a PLEIN de NPC ou mobs qui sont là alors qu'ils ne devrait pas (NPC test dév ou npc évènementiel etc), vérifie s'il n'y a pas de notions genre "event" ou des inscriptions qui montre que c'est "temporaire" sur les npc / monster, et pire encore j'ai des entité qui ne sont pas des "réelle" ennemie comme les crystaux dans les mondes qui sont attaquer par les légion les oeufs / coffres et autres petites entité qui sont a taper pour certains main quetes de l'histoire, ils sont mal fait car ils bougent (alors que ça bouge pas), puis ils ne devrait pas attaquer, et cas spécial pour les crystaux des légions (nommé Elites en jeu) ils sont a double cas, en gros si le crystal est bleu c'est qu'il a pas été attaqué donc c'est une entité allié qu'on peut pas attaquer, et s'il a été attaqué par un legion alors le crystal bleu disparait puis le crystal rouge le remplace (avec les Elites qui reste a coté du crystal rouge), quand le crystal rouge est tué par un joueur (et si les élites sont morts) alors les élites de la maps respawn environ 30 min après pour aller re-taper un des crystal bleu de la map.
+
+- Pour les limitless levels, essaie de créer une interface qu'on peut bind dans une touche (genre CTRL + L ou un truc dans le genre) avec un pass de combat avec les exemples que j'avais dis dans un des docs, un déroulé d'explication du fonctionnement du pass, comment le monter, les types de gains possibles etc et voir si on peut créer un .ini (pour ajouter, retirer, modifier des buffs pour chaque niveau du pass) pour le limitless pass).
+
+- Il y a encore des buff / stats sur le classe talent qui marche pas car on peut pas valider, c'est le cas du Sacred Duty du cleric mais vérifie qu'il y en a pas d'autre.
+
+

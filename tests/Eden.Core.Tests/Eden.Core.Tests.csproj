@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>EdenClient.NetTests</RootNamespace>
+    <AssemblyName>Eden.Core.Tests</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Eden.Core\Eden.Core.csproj" />
+    <!-- edenpack interne (writer + diff/apply/install) — tests E2E
+         crypto/distribution sur le vrai code d'écriture -->
+    <Compile Include="..\..\eden_godot\tools\edenpack\EpkWriter.cs" />
+    <Compile Include="..\..\eden_godot\tools\edenpack\PackOps.cs" />
+    <!-- constructeur du dictionnaire d'items (tools/item-dictionary) : test ItemDictionaryTests -->
+    <Compile Include="..\..\tools\item-dictionary\ItemDictionary\ItemDictionaryBuilder.cs" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.5.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+# Profil release EPK — exclusions mesurées (docs/packaging/AUDIT-PACK-BASELINE.md)
+# Sémantique : dernier glob qui matche gagne ; « ! » ré-inclut.
+# Usage : edenpack build <gamedata> <out.epk> --exclude-file tools/edenpack/release.excludes
+
+# Animations : GLB « fat » exclus — les .slim.glb couvrent 1:1 (audit).
+assets/anims/**/*.glb
+!assets/anims/**/*.slim.glb
+
+# Méta pipeline amont, jamais lues au runtime
+**/*.kfm.json
+
+# Dark/ : minimaps d'ombre — aucun lecteur dans scripts/ (audit §exclusions)
+**/dark/**
+
+# sknodemap : seul .smp est lu (MapLoader) — .fsmp/.pgp/.rar inutiles
+map/sknodemap/*.fsmp
+map/sknodemap/*.pgp
+map/sknodemap/*.rar
+
+# Binaires/outils embarqués, backups, OS
+**/*.exe
+**/*.bak
+**/*.old
+**/*~

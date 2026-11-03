@@ -1,0 +1,58 @@
+# Dreadlore Lab
+
+> Source : `src_csv/D_ Dreadlore Lab.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+| LEG | 75.0 | Magic Uplifting Music | Magic Uplifting Music Essence x3 | Mini Reactor x75 | LCK Plus Lv5 | M-CRIT Rate+28, Move SPD+1%, Malice -1%. |
+|---|---|---|---|---|---|---|
+|  | 85.0 | Storm Invasion | Storm Invasion Essence x3 | Mini Reactor x75 | LCK Accuracy Lv6 | P-CRIT Rate+31, EVA+31, A-SPD+31. |
+|  |  | Reinforced Glyph | Reiforced Glyph Essence x3 | Mini Reactor x75 | LCK Fatal Lv6 | M-CRIT Rate+16, AGI+16, INT+31. |
+
+**SECOND ROUND:**
+
+| HAND | 75.0 | Dominant Battle Bear | Dominant Battle Bear Essence x3 | Mini Reactor x75 | STR Defence Lv5 | CRIT Rate+28, CRIT DMG+2%, +26 Fire DMG. |
+|---|---|---|---|---|---|---|
+|  |  | Buster Falcon | Storm Invasion Essence x3 | Mini Reactor x75 | STR Plus Lv5 | A-SPD+28, ACC+28, Malice-1%. |
+|  | 85.0 | Void Aria | Void Aria Essence x3 | Mini Reactor x75 | STR Strike Lv6 | ACC+31, C-SPD+31, M-CRIT Rate+31. |
+|  |  | Revelation | Relevation Essence x3 | Mini Reactor x75 | STR Iron Shield Lv6 | LCK+16, AGI+16, INT+16. |
+
+**THIRD ROUND:**
+
+| HEAD | 75.0 | Severe Invasion | Severe Invasion Essence x3 | Mini Reactor x75 | INT Magic Elimination Lv5 | LCK+15, EVA+28, Move SPD+1%. |
+|---|---|---|---|---|---|---|
+|  |  | Predator's Heart | Predator's Heart Essence x3 | Mini Reactor x75 | INT Plus Lv5 | Move SPD+1%, M-CRIT Rate+28, M-CRIT DMG+2%. |
+|  | 85.0 | Bladecrush | Bladecrush Essence x3 | Mini Reactor x75 | INT Amplifier Lv6 | ACC+31, A-SPD+31, P-CRIT Rate+21. |
+|  |  | Nocturnal Magic | Nocturnal Magic Essence x3 | Mini Reactor x75 | INT Minus Lv6 | M-CRIT+31, AGI+16, INT+16. |
+
+**FOURTH ROUND:**
+
+| WAIST | 75.0 | Raging Wave Wolf | Raging Wave Wolf Essence x3 | Mini Reactor x75 | LCK Elimination Lv5 | ATK+108, CRIT Rate+28, Malice+1%. |
+|---|---|---|---|---|---|---|
+|  |  | Summoned Spirit Gem | Summoned Spirit Essence x3 | Mini Reactor x75 | AGI Fast Cast Lv5 | M-CRIT Rate+28, LCK+14, Malice-1%. |
+|  |  | Winds of Witchcraft | Winds of Witchcraft Essence x3 | Mini Reactor x75 | AGI Plus Lv5 | M-CRIT Rate+28, MP Cost-9, Move SPD+1%. |
+|  | 85.0 | Totem Spike | Totem Spike Essence x3 | Mini Reactor x75 | AGI Match Lv6 | ACC+31, P-CRIT Rate+31, P-DMG+2%. |
+|  |  | Spirit Plume | Spirit Plume Essence x3 | Mini Reactor x75 | AGI Ultimate Speed Lv6 | A-SPD+31, AGI+16, LCK+16. |
+
+**FIFTH ROUND:**
+
+| BODY | 75.0 | Earthly Ruler | Earthly Ruler Essence x3 | Mini Reactor x75 | WIS Plus Lv5 | All Elemental Resistance+1%, CRIT DMG Received-2%, Block+1%. |
+|---|---|---|---|---|---|---|
+|  |  | Sanctuary Gate | Sanctuary Gate Essence x3 | Mini Reactor x75 | WIS Defence Lv5 | All Elemental Resistance+1%, M-CRIT DMG Received-2%, WIS+14. |
+|  |  | Purified Reawakening | Purified Reawakening Essence x3 | Mini Reactor x75 | WIS Heal Lv5 | C-SPD+28, M-CRIT Rate+28, Malice-1%. |
+|  | 85.0 | Guardian's Heart | Guardian's Heart Essence x3 | Mini Reactor x75 | WIS Defence Lv6 | While attacking, 1% chance to recover +1100 HP, Block +1%, DEF+171. |
+|  |  | Angelic Hymn | Angelic Hymn Essence x3 | Mini Reactor x75 | WIS Heal Lv6 | WIS+16, C-SPD+31, G-Heal+30. |
+|  |  | Unwitting Healer | Unwitting Healer Essence x3 | Mini Reactor x75 | WIS Rehab Lv6 | Max HP and MP+157, C-SPD+31. |
+| SHIELD | 80.0 | Master of the Underworld | Champion Shield Essence x3 | Mini Reactor x75 | Claret Gore Defence Lv6 | Each attack has a 1% chance to trigger WIS+180 and AGI+180 for 10 sec. |
+|  |  | Cerberus | Champion Shield Essence x3 | Mini Reactor x75 | Claret Gore Iron Shield Lv6 | Each attack has a 1% chance to trigger C-SPD+120 and DEF+2643 for 10 sec. |
+|  |  | Winged Lion | Champion Shield Essence x3 | Mini Reactor x75 | Claret Gore Match Lv6 | Each attack has a 1% chance to trigger ATK and M-ATK+1586 for 10 sec. |
+| 1H-WEAPON | 80.0 | Lavaflow Dragon Fang | Champion 1H Essence x3 | Mini Reactor x75 | Claret Gore Plus Lv6 | Each attack has a 1% chance to trigger AGI+240 and EVA+240 for 10 sec. |
+|  |  | Dim Moonblade | Champion 1H Essence x3 | Mini Reactor x75 | Claret Gore Defence Lv6 | Each attack has a 1% chance to trigger DEF+2643 and All Elemental Resistance+10 for 10 sec. |
+|  |  | Arrival of Orochi | Champion 1H Essence x3 | Mini Reactor x75 | Claret Gore Iron Shield Lv6 | Each attack has a 1% chance to trigger ATK+1586 and ACC+240 for 10 sec. |
+|  |  | Night Sky Orbmace | Champion 1H Essence x3 | Mini Reactor x75 | Claret Gore Match Lv6 | Each attack has a 1% chance to trigger WIS+180 and M-ATK+1586 for 10 sec. |
+|  |  | Nightmare | Champion 1H Essence x3 | Mini Reactor x75 | Claret Gore Plus Lv6 | Each attack has a 1% chance to trigger WIS+180 and AGI+180 for 10 sec. |
+| 2H-WEAPON | 80.0 | Deadbreaker | Champion 2H Essence x3 | Mini Reactor x75 | Mana Defence Lv6 | Each attack has a 1% chance to trigger AGI+240 and ACC+240, but DEF-1942 for 10 sec. |
+|  |  | Magnus | Champion 2H Essence x3 | Mini Reactor x75 | Mana Iron Shield Lv6 | Each attack has a 1% chance to trigger x2 DMG. |
+|  |  | Burning Soul | Champion 2H Essence x3 | Mini Reactor x75 | Mana Match Lv6 | Each attack has a 1 % chance to trigger C-SPD+360 for 10 sec. |
+|  |  | Topaz Glimmer Electric Sheen | Champion 2H Essence x3 | Mini Reactor x75 | Mana Plus Lv6 | Each attack has a 1% chance to trigger M-ATK+4758, M-CRIT+240 and MP Cost+237 for 10 sec. |
+|  |  | Slaughter Manual | Champion 2H Essence x3 | Mini Reactor x75 | Mana Defence Lv6 | Each attack has a 1% chance to trigger C-SPD+300, Move SPD+10% and MP Cost+119 for 10 sec. |
+|  |  | Dawn | Champion 2H Essence x3 | Mini Reactor x75 | Mana Iron Shield Lv6 | Each attack has a 1% chance to trigger ATK+1586 and Malice for 30% for 10 sec. |
+

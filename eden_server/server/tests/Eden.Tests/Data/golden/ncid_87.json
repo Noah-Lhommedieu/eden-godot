@@ -1,0 +1,25 @@
+{
+ "ncid": 87,
+ "cases": [
+  {
+   "dir": "D",
+   "body": "0200f1030000ffff",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "0100f2030000ffff",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "0200f4030000ffff",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "D",
+   "body": "0100f5030000ffff",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

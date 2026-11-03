@@ -1,0 +1,57 @@
+﻿TROPHIES:,,,,,,,,,,,,,,
+DUNGEON REWARDS,,,,,,,,,,,,,,
+NAME:,,BASE EFFECT:,,EFFECT:,,,,,,,,,,COST:
+Zark's Golden Rock,,"Lughtning Res+2
+Physical Res+3.",,Your attacks have a 5% chance to deal +3925 pts of DMG every second; lasts 10 sec.,,,,,,,,,,x120 Ocean Elemental Stone.
+Avner's Magic Core,,"Lightning Res+2
+MOVE SPD+5%.",,"Your attacks have a 5% chance to reduce the target's Fire, Ice, Nature & Dark Resistance -7 pts; lasts 10 sec.",,,,,,,,,,x120 Ocean Elemental Stone.
+Randle's Life Tree,,"Lightning Res+2
+DMG Taken-2%.",,"Your attacks and casts have a 5% chance to recover HP+8396 pts, removing 2 neagtive status'.",,,,,,,,,,x120 Ocean Elemental Stone.
+Zaeldrut's Tail,,"Lightning Res+2
+DMG Dealt+2%.",,Your attacks have a 5% chance to increase P-ATK & M-ATK+15333 pts; lasts 10 sec.,,,,,,,,,,x120 Ocean Elemental Stone.
+GUILD TOWN RELICS:,,,,,,,,,,,,,,
+STATUE:,,,,,EFFECT:,,,,,,COST:,,,
+"Warrior's Heart",,,,,"DMG Taken-3%, Max HP+10%, P-Healing+5%, All Resistances +3 pts.",,,,,,x100 Flame Elemental Stone.,,,
+"Executioner's Honor",,,,,"Physical DMG Dealt+5%, P-CRIT RATE+5%, ATK SPD+5%, MOVE SPD+5%.",,,,,,x100 Flame Elemental Stone.,,,
+"Priest's Balance",,,,,"G-Healing+5%, M-CRIT RATE+5%, CAST SPD+5%, All Resistances+3 pts.",,,,,,x100 Flame Elemental Stone.,,,
+Sorcerer's Book,,,,,"Magic DMG Dealt+5%, M-CRIT RATE+5%, CAST SPD+5%, EVA+5%.",,,,,,x100 Flame Elemental Stone.,,,
+FUSED RELICS:,,,,,,,,,,,,,,
+Warrior's Heart & Executioner's Honor,,,,,"Physical DMG Dealt+7%, DMG Taken-5%, P-CRIT RATE+7%, All resistance+5 pts.",,,,,,x200 Flame Elemental Stone.,,,
+Warrior's Heart & Priest's Balance,,,,,"DMG Taken-5%, MAX HP+15%, G-Healing & P-Healing+7%, CAST SPD+7%.",,,,,,x200 Flame Elemental Stone.,,,
+Warrior's Heart & Sorcerer's Book,,,,,"Magic DMG Dealt+7%, DMG Taken -5%, M-CRIT RATE+7%, All Resistenances+5 pts.",,,,,,x200 Flame Elemental Stone.,,,
+Executioner's Honor & Priest's Balance,,,,,"Physical DMG Dealt+7%, G-Healing+7%, P-CRIT & M-CRIT RATE+5%, EVA+7%, MOVE SPD+5%.",,,,,,x200 Flame Elemental Stone.,,,
+Executioner's Honor & Sorcerer's Book,,,,,"DMG Dealt+7%, P-CRIT & M-CRIT RATE+5%, EVA+7%, MOVE SPD+5%.",,,,,,x200 Flame Elemental Stone.,,,
+Priest's Balance & Executioner's Honor,,,,,"Physical DMG Dealt+7% G-Healing+7% P-CRIT RATE & M-CRIT RATE+5%, ATK SPD & CAST SPD+5%.",,,,,,x200 Flame Elemental Stone.,,,
+Priest Balance & Sorcerer's Book,,,,,"Magical DMG Dealt+7%, G-Healing+7% M-CRIT RATE+7%, All Resistance+5 pts.",,,,,,x200 Flame Elemental Stone.,,,
+DUNGEON REWARDS:,,,,,,,,,,,,,,
+NAME:,,,,,,,,,,,,ACQUISITION:,,
+Treasure: Avner's Face Mask,,,,,,,,,,,,,,
+Treasure: Legendary Drake Wings,,,,,,,,,,,,,,
+Treasure: Dragon Slaying Sword,,,,,,,,,,,,,,
+Enraged Zark,,,,,,,,,,,,,,
+PETS:,,,,,,,,,,,,,,
+NAME:,,,,PRAYS & BATTLE SKILLS:,,,,,,,,,,COST:
+Fox Spirit Sakya,,,,"Cracking Skulls: Dagger, Cestus, Club & Rapier's P-ATK/M-ATK+10%.
+Nature's Armor: Nature Resistance+7%.",,,,,,,,,,x120 Ocean Elemental Stone.
+,,,,"Shattering Earth: Deals Nature DMG to all enemies within a 20 meteor cross shaped area, reducing their Nature Resistance-20 pts; lasts 10 sec.
+Slam: Deals P-DMG to the target, If the target is in ""Resonating Blow"" status there is a 10% chance to Knock them down; lasts 4 sec.",,,,,,,,,,
+Rockhard Elvin,,,,"Blade Master: Sword, Greatsword, Katana & Axe's P-ATK/M-ATK+10%.
+Thunder Armor: Lightning Resistance+7%.",,,,,,,,,,x120 Ocean Elemental Stone.
+,,,,"Slam: Deals P-DMG to the target, If the target is in ""Resonating Blow"" status there is a 10% chance to Knock them down; lasts 4 sec.
+Frienzied Flurry: Deals Quintuple Hit P-DMG to the target.",,,,,,,,,,
+Blazing Spirit Scarlet,,,,"The Hunt: MOVE SPD, ATK SPD & CAST SPD+5%.
+Fire Armor: Fire Resistance+7%.",,,,,,,,,,x120 Ocean Elemental Stone.
+,,,,"Vocal Bomb: Deals Fire DMG to the target, if the target is in ""Earth Shock"" status there is a 10% chance to knock them down; lasts 4 sec.
+Flame Impact: Deals Fire DMG to all enemies within a 20 foot radius, has a 60% chance of triggering double hit and a 5% chance of inflicting 800 Fire DMG every second; lasts 8 sec.",,,,,,,,,,
+Gypsy Diara,,,,"Magic Man: Mace, Staff & Grimoire's P-ATK/M-ATK+10%.
+Ice Armor: Ice Resistance+7%.",,,,,,,,,,x120 Ocean Elemental Stone.
+,,,,"Ice Strike: Deals Ice DMG to all enemies within a 20 meter cross shaped area, reducing their Ice Resistance -20 pts; lasts 10 sec.
+Rapid Frost: Deals Ice DMG to all targets within a 25-foot fan-shaped area. Also has a 5% chance of decreasing target's P-Healing -5%; Lasts 5 sec. Effect is canceled once character is attacked.",,,,,,,,,,
+Magic Master Albert,,,,"Scared Angel: Adjudicator, Life Worshipper, Totem Master, Glacier Knight & Paladin Skill Healing+7%.
+Holy Armor: Holy Resistance+7%.",,,,,,,,,,x120 Ocean Elemental Stone.
+,,,,"Sunder Armor: Deals physical DMG to enemies within a 20 meter fan shaped area, lowering their DEF-50%; lasts 7 sec.
+Rainbow Rays:Deals Holy DMG to selected target. Also has 40% chance of causing the caster to recover +2% HP when hit. Lasts 5 sec.",,,,,,,,,,
+Abyss Elite Marvin,,,,"Wise Sage: WIS+10%.
+Dark Armor: Dark Resistance+7%.",,,,,,,,,,x120 Ocean Elemental Stone.
+,,,,"Darkness Rising: Deals Dark DMG to all enemies within a 20 meter cross shaped area, reducing their Dark resistance-20 pts; lasts 10 sec.
+Nightmare Attack: Deals Dark DMG to an enemy and reduces its Dark Resistance -5 points for 8 sec.",,,,,,,,,,

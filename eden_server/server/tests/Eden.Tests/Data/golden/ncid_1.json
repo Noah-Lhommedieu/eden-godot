@@ -1,0 +1,85 @@
+{
+ "ncid": 1,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "02c2eb0b02c2eb0b7f0000017f0000012627f9c584f941861308",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "02c2eb0b02c2eb0b7f0000017f00000126270399cd033dbd3d7c",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "02c2eb0b02c2eb0b7f0000017f0000012627ec092d0d87f0ea6c",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "02c2eb0b02c2eb0b7f0000017f0000012627bd807418e9dd1645",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "02c2eb0b02c2eb0b7f0000017f0000012627cf12c92da1d44f61",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "04c2eb0b04c2eb0b7f0000017f0000012627f2261030e1f87755",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "04c2eb0b04c2eb0b7f0000017f0000012627220cb58167230705",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "00006974a343064598430080a04350249643ae90673f0700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "00001a44a3433d2298431a44a3433d229843ae90673f0700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "00001a44a3433d22984304bb9e43c76999437941ec3f0700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "00001029a24362de9843be769e43a2ca9b4382590f400700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "00001e0da143edbe9943cc5a9d432dab9c4382590f400700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "000074cb9f4383689a435e6a9b431e269c43ea7cf93f0700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "000020779e43c7ef9a430a169a4362ad9c43ea7cf93f0700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "D",
+   "body": "000086669e4361f69a4386669e4361f69a43ea7cf93f0700",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "02c2eb0b02c2eb0b7f0000017f0000012627c4689c9c9b769a18",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

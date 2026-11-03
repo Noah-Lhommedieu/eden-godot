@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://animmatrix001"]
+
+[ext_resource type="Script" path="res://scripts/debug/AnimMatrix.cs" id="1_am"]
+
+[node name="AnimMatrix" type="Node3D"]
+script = ExtResource("1_am")

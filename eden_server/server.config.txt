@@ -1,0 +1,37 @@
+# server.config.txt — config gameplay à chaud (plan 3.3.1).
+# Éditer + sauvegarder : rechargé en <2 s, sans redémarrage (voir log [ServerConfig]).
+# Une clé absente = comportement par défaut. Chemin alternatif : EDEN_SERVER_CONFIG.
+
+# --- Taux d'expérience (multiplicateurs ; env EXP_RATE défaut 100 si absent) ---
+ExpRate = 100            # exp personnage (kills)
+ClassExpRate = 100       # exp de classe (classes 1-20)
+WakenClassExpRate = 100  # exp de classe éveil (21-60)
+
+# --- Drop / or / craft ---
+DropRate = 1             # x chances de drop normal
+ClassDropRate = 1        # x chances des drops de classe
+GoldRate = 1             # x or lâché
+CraftSuccessBonusPct = 0 # points de % ajoutés aux réussites de craft/combine/cube
+
+# --- Déplacement : multiplicateur brut (100 = natif) ; la vitesse dev passe par un buff enchant 2051 ---
+MoveSpeedBasePct = 100
+# Enchant dev posé à l'entrée (0 = aucun) : commande 2051|<Pct> (+200 % => x3, plafond MoveSpeedCapPct).
+DevMoveSpeedBuffId = 65001
+DevMoveSpeedBuffPct = 200
+
+# --- Break Point : jauge = patience S_Monster col 13, faiblesses = masque col 11 (plan 13) ; BpGaugePct OBSOLETE (ignoré) ---
+BpGaugePct = 15
+
+# --- Procs multi-frappe (double/triple hit) ---
+MultiStrokeChanceMult = 1   # x sur chaque chance de frappe extra
+MultiStrokeDamageMult = 1   # x sur le dégât des frappes extra
+MultiStrokeMaxHits = 2      # 0 = aucun proc, 1 = double hit max, 2 = triple hit max
+
+# --- Événements (on/off + bonus) ---
+Event.Christmas = off
+Event.Christmas.ExpPct = 20
+Event.Christmas.DropPct = 20
+# Event.Christmas.DropItem = <itemId>:<chance%>[:qté]
+Event.Halloween = off
+Event.Halloween.DropPct = 30
+# Event.Halloween.DropItem = <itemId>:<chance%>[:qté]

@@ -1,0 +1,501 @@
+# Furniture Guide (WIP)
+
+> Source : `src_csv/M_ Furniture Guide (WIP).csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+| FURNITURE NAME: | LOCATION: | MOB/NPC/DUNGEON: | STATS: |
+|---|---|---|---|
+
+**IN-GAME FURNITURE ITEMS**
+
+| Spiny Cactus Potted Plant | Tranquil Hill | Starshell Hermit Crab | Rarity +12 |
+|---|---|---|---|
+|  | Rainbowfall Forest | Dark Marsh Soldier |  |
+|  | Goss Mountains | Long Mane Puma |  |
+|  | Beluga Bay | Vileshark Vanguard |  |
+| Radish Tree Potted Plant | Witchcraft Forest | Cyclonicore | Comfort +!2<br>Rarity +3 |
+|  | Gemsis Ridge | Fanged Sickleback |  |
+|  | Shiver Peak | Reflectorscale |  |
+|  | Vengeance Spirit | Death Valley |  |
+|  | Vilebranch Conjurer | Death Valley |  |
+| Velvetear Flower Potted Plant | Wetlands | Wetland Crystal Eye | Luxury +2<br>Rarity +10 |
+|  | Valley of Kings | Carmela Mage |  |
+|  | Avila Volcano | Hades Statue |  |
+|  | Golden Plains | Rock Horn Bull |  |
+| Gleamfruit Potted Plant | Limestone Mountain | Limestone Forged | Luxury +3<br>Rarity +12 |
+|  | Ursun Paw Mountain | Demonscarab |  |
+|  | Graceland Marsh | Sweet-tooth Peeper |  |
+|  | Fegeral Valley | Ancient Defender |  |
+| Sweetberry Potted Flower Plant | Decay Swamp | Venomsaw Mantis | Luxury +7<br>Comfort +5 |
+|  | Highlands | Toroto Boxer |  |
+|  | Witchcraft Forest | Rune Dryad |  |
+|  | Shiver Peak | Hamanzi Death Warrior |  |
+| Pottery Plant Decor | Wothcraft Forest | Black Hand Guard | Comfort +12 |
+|  | Gemsis Ridge | Baalu Leader |  |
+|  | Shiver Peak | Hailion |  |
+| Gumpetal Potted Plant | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +6<br>Comfort +6 |
+| Knotblossom Potted Plant | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Comfort +10<br>Rarity +5 |
+| Priority Package | Arid Wilds | Desert Rats Sneaker | Rarity +15 |
+|  | Sunset Desert | Mind Muncher |  |
+|  | Delphi Forest | Raging Steel Beast |  |
+|  | Skyreach Jungle | Rolling Rock Turtle |  |
+|  | Viper's Forest | Mycolic Dragon |  |
+|  | Cyclone Basin | Venomstorm Eagle |  |
+|  | Blackflame Peak | Mara Cult Thief |  |
+|  | Decay Swamp | Bestial Bellwort |  |
+|  | Highlands | Toroto Pioneer |  |
+| Newspaper Basket | Tranquil Hill | Tyrian Eagle | Comfort +10<br>Rarity +5 |
+|  | Rainbowfall Forest | Rose Blossom Crab |  |
+|  | Goss Mountains | Goss Stone Elder |  |
+|  | Beluga Bay | Tribal Killer |  |
+| Cozy Vintage Oil Lamp | Limestone Mountain | Rainbow Angelly | Luxury +6<br>Comfort +6 |
+|  | Tranquil Hill | Iron Hide Boar |  |
+|  | Ursun Paw Mountain | Obsidian Fiend |  |
+|  | Rainbowfall Forest | Leaf Sprite |  |
+|  | Goss Mountains | Stone Tooth Puma |  |
+|  | Beluga Bay | Acid Angelly |  |
+|  | Graceland Marsh | Petal Lizard |  |
+|  | Stonecap Mushroid | Fegeral Valley |  |
+| Doublesoft Cushion | Wetlands | Noxious Blossom | Luxury +5<br>Comfort +10 |
+|  | Valley of Kings | Wind Cliff Hawkman |  |
+|  | Avila Volcano | Ambush Savage |  |
+|  | Golden Plains | Crested Raptor |  |
+| Wooden Chessboard | Witchcraft Forest | Savagemaw | Luxury +10<br>Rarity +2 |
+|  | Gemsis Ridge | Hermit Crystal Friend |  |
+|  | Shiver Peak | Dulong Warrior |  |
+| Ursun Gumshoe: Volume 3 | Wetlands | Red Magi Mushroid | Comfort +12 |
+|  | Valley of Kings | Camela Fighter |  |
+|  | Avila Volcano | Iron Grin Drake |  |
+|  | Golden Plains | Wolfeye Bandit |  |
+|  | Arid Wilds | Winged Wolfman |  |
+|  | Delphi Forest | Ivory Manticore |  |
+|  | Sunset Desert | Redbreast Eagle |  |
+|  | Skyreach Jungle | Wooden Clockwork |  |
+|  | Blackflame Peak | Mining Chopper |  |
+| Relics Rune Blueprint | Arid Wilds | Sand Storm Worm | Comfort +5<br>Rarity +10 |
+|  | Delphi Forest | Cinder Griffin |  |
+|  | Sunset Desert | Dread Mopkin |  |
+|  | Skyreach Jungle | Brain Chomper |  |
+|  | Blackflame Peak | Bloody Eye Owl |  |
+| Mysterious Letter | Cyclone Basin | Ryke Soul Guardian | Comfort +14<br>Rarity +4 |
+|  | Toxic Worm | Viper's Forest |  |
+|  | Decay Swamp | Deadlycap Mushroid |  |
+|  | Highlands | Giant Iron Demon |  |
+| Elegant Red Wine Set | Tranquil Hill | Eagle Gang Robber | Luxury +6<br>Comfort +6 |
+|  | Rainbowfall Forest | Fragant Lily |  |
+|  | Goss Mountains | Golden Claw Mage |  |
+|  | Beluga Bay | Iron Claw Eagle |  |
+|  | Wetlands | Old Draco Turtle |  |
+|  | Valley of Kings | Valley Sentinel |  |
+|  | Avila Volcano | Zealot Bloodletter |  |
+|  | Golden Plains | Pungent Thorner |  |
+| Drakin Statue | Death Valley<br>NOTE: Can be purchased in the item mall. | Vilebranch Shaman | Comfort +4<br>Rarity +8 |
+|  | Tempest Cliff<br>NOTE: Can be purchased in the item mall. | Bloody Silver Axe |  |
+| Potion Accelerator | Eyebloom Plain | Engima Soultree | Luxury +3<br>Rarity +9 |
+|  |  | Ghostly Statue |  |
+|  |  | Duskwater Ghost |  |
+| Wool Shag Rug | Death Valley<br>NOTE: Can be purchased in the item mall. | Forbidden Rock Beast | Luxury +6<br>Comfort +6 |
+|  | Eyebloom Plain<br>NOTE: Can be purchased in the item mall. | Plumed Vulture |  |
+|  | Templest Cliff<br>NOTE: Can be purchased in the item mall. | Deep Sea Devil Ray |  |
+| Purple Totem Rug | Devastation Realm<br>NOTE: Can be purchased in the item mall. | Devastation Guardian Treasure Chest | Luxury +8<br>Rarity +4 |
+|  | Durango<br>NOTE: Can be purchased in the item mall. | Durango Kingdom's Guardian Treasure Chest |  |
+|  | Meeryasha<br>NOTE: Can be purchased in the item mall. | Meeryasha's Guardian Treasure Chest |  |
+| Puppets on Parade | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Rarity +15 |
+| Naughty Children's Magic Book | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +8<br>Rarity +4 |
+| Tidy Encylopedia | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +2<br>Comfort +10 |
+| Spontaneous Encylopedia | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +10<br>Comfort +5 |
+| Antique Floor Lamp | Arid Wilds | Desert Pincher Larva | Luxury +8<br>Comfort +4 |
+|  | Delphi Forest | Blood Sucking Lily |  |
+|  | Sunset Desert | Prickly Pear |  |
+|  | Skyreach Jungle | Gates Navigator |  |
+|  | Blackflame Peak | Cursed Toroto Knight |  |
+| Wooden Storage Shelf | Cyclone Basin | Bedlam Pharmacist | Luxury +10<br>Rarity +5 |
+|  | Viper's Forest | Alazarin Leopard |  |
+|  | Decay Swamp | Pond Muddy |  |
+|  | Highlands | Traitor Machinist |  |
+|  | Witchcraft Forest | Black Hand Sentinel |  |
+|  | Gemsis Ridge | Spike Ceratop |  |
+|  | Shiver Peak | Forbidden Wanderer |  |
+| Ruby Luxurious Sofa | Cyclone Basin | Disaster Wraith | Luxury +2<br>Comfort +10 |
+|  | Decay Swamp | Darksong Killer |  |
+|  | Highlands | Tyrol Exile Guard |  |
+| Ruby Luxurious Loveseat | Witchcraft Forest | Black Hand Steel Warrior | Luxury +2<br>Comfort +13 |
+|  | Gemsis Ridge | Baalu Digger |  |
+|  | Shiver Peak | Fetidblossom |  |
+| Painting: Limestone Mountain Glory | Limestone Mountain | Sharp Horn Yak | Luxury +5<br>Rarity +10 |
+|  |  | Rocky High Mushroid |  |
+| Painting: Landscape of Tranquil Hill | Tranquil Hill | Eagle Gang Butcher | Luxury +5<br>Comfort +10 |
+|  |  | Red Rock Hermit Crab |  |
+|  |  | Eagle Gang Swordsman |  |
+| Painting: Rainbowfall | Rainbowfall Forest | Forest Giant | Luxury +10<br>Comfort +5 |
+|  |  | Island Turtle |  |
+|  |  | Dark Marsh Wizard |  |
+| Painting: Goss Mountains | Goss Mountains | Bat Wing Gorilla | Luxury +5<br>Rarity +10 |
+|  |  | Rock Scale Drake |  |
+|  |  | Golden Claw Assassin |  |
+| Painting: Beluga Bay | Beluga Bay | Tribal Trapper | Luxury +7<br>Comfort +8 |
+|  |  | Azul Enforcer |  |
+|  |  | Vileshark Thief |  |
+| Painting: Perpetual Miasma | Wetlands | Swamp Soultree | Luxury +5<br>Rarity +10 |
+|  |  | Wetland Exile |  |
+|  |  | Behelder Devil |  |
+| Painting: Valley of Kings | Valley of Kings | Shovel Pinch Worm | Luxury +10<br>Comfort +5 |
+|  |  | Camela Wizard |  |
+| Painting: Avila Volcano | Avila Volcano | Raging Horned Lion | Luxury +6<br>Comfort +9 |
+|  |  | Lava Turtle |  |
+|  |  | Zealot Witch |  |
+| Painting: Golden Plains | Golden Plains | Spiked Harrier | Luxury +3<br>Comfort +12 |
+|  |  | Wolfeye Killer |  |
+|  |  | Stampede Yak |  |
+| Painting: Delphi Forest Splendor | Delphi Forest | Volcanic Crab | Luxury +3<br>Comfort +12 |
+|  |  | Bloodtooth Cutter |  |
+|  |  | Pross Digger |  |
+| Painting: Blackflame Peak | Blackflame Peak | Mining Bully | Luxury +12<br>Comfort +3 |
+|  |  | Toroto Priest |  |
+|  |  | Mara Cult Fighter |  |
+| Painting: Decay Swamp's Majesty | Decay Swamp | DeadVine Turtle | Comfort +3<br>Rarity +12 |
+|  |  | Cadaver Blossom |  |
+| Painting: Our Highlands | Highlands | Traitor Scout | Luxury +7<br>Comfort +8 |
+|  |  | Tyrol Puppet |  |
+|  |  | Toroto Beserker |  |
+| Painting: The Mayor's Dwelling | Golden Pains | Wolfeye Berserker | Luxury +8<br>Comfort +7 |
+| Painting: Arid Wilds | Arid Wilds | Desert Rats Bandit | Luxury +7<br>Rarity +8 |
+|  |  | Desert Rats Fighter |  |
+|  |  | Amur Wanderer |  |
+| Painting: Fegeral Valley | Fegeral Valley | Sweet Fruit Bat | Comfort +7<br>Rarity +8 |
+|  |  | Sour Fruit Bat |  |
+|  |  | Iron Mine Golem |  |
+| Painting: Sunset Desert | Sunset Desert | Hopping Cactus | Luxury +10<br>Comfort +5 |
+|  |  | Crazy Tech |  |
+|  |  | Power Sucking Beast |  |
+| Painting: Skyreach Jungle | Skyreach Jungle | Eden Fruit Mouse | Comfort +5<br>Rarity +10 |
+|  |  | Primal Gorilla |  |
+|  |  | Gates  Boatswain |  |
+| Painting: Andrew V. Mine | Limestone Mountain | Limestone Golem | Luxury +4<br>Rarity +8 |
+| Painting: Angor Quarry | Angor Quarry | Limestone Mountain | Luxury +10<br>Comfort +2 |
+| Painting: Fort Verdure | Fort Verdure | Tranquil Hill | Luxury +6<br>Comfort +6 |
+| Painting: Engmatic Tasos Channel | Tasos Channel | Rainbowfall Forest | Luxury +5<br>Comfort +7 |
+| Painting: Shale Cavern | Shale Cavern | Goss Mountains | Comfort +2<br>Rarity +10 |
+| Painting: Depths of Eroda | Eroda | Goss Mountains | Luxury +6<br>Rarity +6 |
+| Painting: Morticora | Morticora | Beluga Bay | Luxury +8<br>Rarity +4 |
+| Painting: Vileshark HQ | Vileshark HQ | Beluga Bay | Luxury +10<br>Rarity +5 |
+| Painting: Branda Root | Branda Root | Wetlands | Comfort +3<br>Rarity +9 |
+| Painting: Malice Palace | Malice Palace | Wetlands | Luxury +10<br>Rarity +5 |
+| Painting: Rotten | Rotten | Valley of Kings | Luxury +2<br>Rarity +10 |
+| Painting: Ulta Hall | Ulta Hall | Valley of Kings | Luxury +12<br>Comfort +3 |
+| Painting: Baram's Chasm | Baram's Chasm | Avila Volcano | Luxury +6<br>Rarity +6 |
+| Painting: Baltaroi Core | Baltaroi Core | Avila Volcano | Luxury +12<br>Comfort +3 |
+| Painting: Mayor's Dream | Mayor's Dream | Golden Plains | Luxury +10<br>Comfort +2 |
+| Painting: Veninfang | Veninfang | Golden Plains | Luxury +2<br>Rarity +13 |
+| Painting: Slain | Slain | Arid Wilds | Luxury +2<br>Rarity +10 |
+| Painting: Baira's Chamber | Dianack | Arid Wilds | Luxury +8<br>Rarity +7 |
+| Painting: Crypticrone | Crypticrone | Delphi Forest | Comfort +6<br>Rarity +6 |
+| Painting: Dephi Temple | Delphi Temple | Delphi Forest | Luxury +8<br>Rarity +4 |
+| Painting: Crimson | Crimson | Delphi Forest | Luxury +3<br>Rarity +12 |
+| Painting: Crooked Vein | Crooked Vein | Blackflame Peak | Luxury +2<br>Rarity +10 |
+| Painting: Tragedy of Mara Cult Altar | Mara Cult Altar | Blackflame Peak | Rarity +12 |
+| Painting: Century | Century | Blackflame Peak | Luxury +6<br>Rarity +9 |
+| Painting: Soulmor Falls | Soulmor Falls | Decay Swamp | Luxury +4<br>Rarity +8 |
+| Painting: Vortek | Vortek | Decay Swamp | Luxury +6<br>Rarity +6 |
+| Painting: Federal Armory | Federal Armory | Highlands | Comfort +5<br>Rarity +10 |
+| Painting: Basel Border | Basel Border | Highlands | Luxury +5<br>Rarity +10 |
+| Painting: Manor | Manor | Highlands | Comfort +10<br>Rarity +5 |
+| Painting: Eden Glen | Eden Glen<br>NOTE: Can be purchased in the item mall. | Energy Chest | Comfort +11<br>Rarity +10 |
+| Painting: Eden Peak | Eden Peak<br>NOTE: Can be purchased in the item mall. | Energy Chest | Comfort +11<br>Rarity +10 |
+| Strongman Bust | Searing Valley | Greenhorn Crab | Comort +6<br>Rarity +6 |
+|  | Sunrise Plains | Vinescale Dragon |  |
+|  | Devastation Realm | Dark Troll |  |
+|  | Eloise Plains | Supersonic Rock Monster |  |
+|  | Durango Kingdom | Pristine Hoof Monster |  |
+| Crystal Stalagmite | Devastation Realm | Vile Devil | Luxury +11<br>Rarity +4 |
+|  |  | Forbidden Blaze Demon |  |
+|  |  | Lunar Mucher |  |
+|  | Hayward Seavale | Stony Sorcerer |  |
+|  | Durango Kingdom | Blue Gun Beast |  |
+|  |  | Sharp-Bladed Armor |  |
+| Crystal Ball | Searing Valley | Indus Soultree | Luxury +8<br>Comfort +4 |
+|  |  | Jade Merman |  |
+|  |  | Rebel Toroto Magician |  |
+|  | Eloise Plains | Fanged Ramwing |  |
+| Eerie Candle Holder | Death Valley | Vilebranch Inspector | Comfort +6<br>Rarity +6 |
+|  | Eyebloom Plain | Blushblossom Beast |  |
+|  | Tempest Cliff | Calamity Demon |  |
+| Biology Kit | Sunrise Plains | Rioting Villager | Comfort +4<br>Rarity +8 |
+|  |  | Raven Assassin |  |
+|  |  | Raven Magician |  |
+|  | Hayward Seavale | Wicked Femme Gunner |  |
+|  |  | Flaming Meteorite Monster |  |
+| Original Shelf | Searing Valley | Searing Valley's Guardian Treasure Chest<br>Legion Elite Chest | Luxury +8<br>Comfort +4 |
+|  | Eloise Plains | Eloise Plains Guardian Treasure Chest<br>Legion Elite Chest |  |
+|  | Ethreal Dome | Ethereal Dome's Guardian Treasure Chest |  |
+| Sofa | Searing Valley | Rebel Toroto Knight | Luxury +10<br>Comcort +2 |
+|  | Sunrise Plains | Steel Claw Leodragon |  |
+|  | Devastation Realm | Cannibalpede |  |
+|  | Hayward Seavale | Biological Weapon |  |
+|  | Durango Kingdom | Fierce Brawler |  |
+| Wooden Round Chair | Eden Glen<br>NOTE: Can be purchased in the item mall. | Eden Glen Energy Chest | Luxury +13<br>Rarity +8 |
+|  | Eden Peak<br>NOTE: Can be purchased in the item mall. | Eden Peak Energy Chest |  |
+| Cloth Cloud Chair | Eden Glen<br>NOTE: Can be purchased in the item mall. | Eden Glen Energy Chest | Comfort +15<br>Rarity +6 |
+|  | Eden Peak<br>NOTE: Can be purchased in the item mall. | Eden Peak Energy Chest |  |
+| Equisite Model Ship | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +8<br>Rarity +7 |
+| Carved Chair | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +10<br>Rarity +11 |
+| Carved Candle Holder | Tempest Cliff | Ancient Lizard | Luruxy +10<br>Rarity +8 |
+|  |  | Crystal Deep Sea Spider |  |
+|  |  | Black Mast Wind Mage |  |
+| Painting: Brutal Forest Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest<br>NOTE: Can be purchased in the item mall. | Territory Chest | Luxury +6<br>Comfort +15 |
+| Painting: Desert Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest<br>NOTE: Can be purchased in the item mall. | Territory Chest | Luxury +6<br>Comfort +15 |
+| Painting: Oceanside Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest<br>NOTE: Can be purchased in the item mall. | Territory Chest | Luxury +9<br>Comfort +12 |
+| Painting: Crystal Mine Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +6<br>Comfort +15 |
+| Painting: Sporefall Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +6<br>Comfort +15 |
+| Painting: Stygian Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +6<br>Comfort +15 |
+| Painting: Toxic Marsh Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +6<br>Comfort +15 |
+| Painting: Ancient Ruins Battle | Territory Wars, Guild vs Guild, Guild Arena, Territory Wars Quests, 3v3s Arena Quest, Monster Battle Arena Quest | Territory Chest | Luxury +6<br>Comfort +15 |
+| Marshmallow Chair | N/A | N/A | Comfort +8<br>Rarity +4 |
+| Sapphire Wooden Storage Shelf | N/A | N/A | Luxury +10<br>Rarity +2 |
+| Wooden Wine Barrel | N/A | N/A | Luxury +7<br>Comfort +5 |
+| Naughty Children's Encylopedia | N/A | N/A | Comfort +12 |
+| Book of Knowledge | N/A | N/A | Luxury +10<br>Comfort +2 |
+| Painting: Starry Coast | N/A | N/A | Luxury +8<br>Comfort +7 |
+| Double Red Wine Bottle Set | N/A | N/A | Luxury +6<br>Comfort +6 |
+| Potted Cacti Set | N/A | N/A | Rarity +12 |
+
+**NPC FURNITURE ITEMS**
+
+| Babysitter Puppet Trio | Aven. | Wee Rowan | Rarity +12 |
+|---|---|---|---|
+| Forlorn Puppet | Aven. | Wee Rowan | Rarity +12 |
+| Twin Puppets | Aven. | Wee Rowan | Rarity +15 |
+| Secrets of Magic Collections | Aven. | Wee Rowan | Luxury +12<br>Rarity +3 |
+| Enigmatic Diary | Aven. | Wee Rowan | Comfort +10<br>Rarity +2 |
+| Green With Envy Sofa | Aven. | Wee Rowan | Comfort +12 |
+| Green With Envy Loveseat | Aven. | Wee Rowan | Comfort +15 |
+| Swirled Conch Shell | Aven. | Wee Rowan | Luxury +6<br>Rarity +6 |
+| Mysterious Planet Model | Aven. | Wee Rowan | Luxury +9<br>Rarity +12 |
+| Green Garden Elf | Aven. | Wee Rowan | Comfort +10<br>Rarity +2 |
+| Timber Table | Aven. | Wee Rowan | Comfort +15 |
+| Lovely Lapis Bedframe | Aven. | Wee Rowan | Luxury +5<br>Comfort +10 |
+| Classic Bedframe | Aven. | Wee Rowan | Comfort +15 |
+| Crimson Carpet | Aven. | Wee Rowan | Luxury +15 |
+| Painting: Blossoming Rose | Aven. | Wee Rowan | Luxury +10<br>Rarity +2 |
+| Painting: Imbibe and Indulge | Aven. | Wee Rowan | Luxury +2<br>Comfort +10 |
+| Deer's Head Sculpture | Aven. | Wee Rowan | Luxury +13<br>Rarity +8 |
+| Painting: Flame Eagle Arena | Aven. | Wee Rowan | Rarity +21 |
+| Wrapped Package | Aven. | Aven Inkeeper | Luxury +4<br>Rarity +8 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Collective Language Dictionary | Aven. | Aven Inkeeper | Luxury +6<br>Comfort +6 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Gallant's Book | Aven. | Aven Inkeeper | Comfort +6<br>Rarity +6 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Nautical Sofa | Aven. | Aven Inkeeper | Luxury +6<br>Comfort +6 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Nautical Loveseat | Aven. | Aven Inkeeper | Luxury +4<br>Comfort +8 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Bottle Flower Potted Plant | Aven. | Aven Inkeeper | Comfort +6<br>Rarity +6 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Calming Cactus Potted Plant | Aven. | Aven Inkeeper | Luxury +6<br>Rarity +6 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Azure Couture Table | Aven. | Aven Inkeeper | Luxury +8<br>Rarity +4 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Deep Thoughts 4- Shelf Bookcase | Aven. | Aven Inkeeper | Luxury +4<br>Comfort +8 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Academia 2- Shelf Bookcase | Aven. | Aven Inkeeper | Comfort +10<br>Rarity +2 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Scholar's Choice 6- Shelf Bookcase | Aven. | Aven Inkeeper | Luxury +10<br>Comfort +2 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Azure Sky Wood Bookcase | Aven. | Aven Inkeeper | Comfort +8<br>Rarity +4 |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Sunshine Wooden Floor (Living Room) | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Chocolate Wooden Floor (Living Room) | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Sunshine Wooden Floor (Bedroom) | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Chocolate Wooden Floor (Bedroom) | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Chocolate Bedroom Carpet | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Moss Bedroom Carpet | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+| Eggshell Tile Wallpaper | Aven. | Aven Inkeeper | N/A |
+|  | Eden Glen & Eden Peak | Eden Inkeeper |  |
+|  | Golden Plains | Golden Plains Inkeeper |  |
+
+**ITEM MALL FURNITURE ITEMS**
+
+| Playful Sprite Sculpture | Item Mall "Upgrade" Section. | Item Mall: Page 3 | Comfort +6<br>Rarity +12 |
+|---|---|---|---|
+| Kitsu Pen Holder | Item Mall "Upgrade" Section. | Item Mall: Page 3 | Luxury +6<br>Rarity +12 |
+| Clay Tea Set | Item Mall "Upgrade" Section. | Item Mall: Page 3 | Luxury +6<br>Rarity +12 |
+| Rose Pot | Item Mall "Upgrade" Section. | Item Mall: Page 3 | Luxury +12<br>Rarity +12 |
+| Porcelain Tea Set | Item Mall "Upgrade" Section. | Item Mall: Page 3 |  |
+| Anuran Statue | Item Mall "Upgrade" Section. | Item Mall: Page 3 |  |
+| Anuran Sculpture | Item Mall "Upgrade" Section. |  |  |
+| Wedding Table | Item Mall "Upgrade" Section. | Item Mall: Page 4 |  |
+| Tea Set | Item Mall "Upgrade" Section. |  |  |
+| Doily Table/Wedding Table | Item Mall "Upgrade" Section. |  |  |
+| Mysterious Lawn Elf | Item Mall "Upgrade" Section. |  |  |
+| Mysterious Kitsu Pen Container | Item Mall "Upgrade" Section. |  |  |
+| Painting: Central Continent | Item Mall "Upgrade" Section. |  |  |
+| Painting: Aven's Pride | Item Mall "Upgrade" Section. |  |  |
+| Painting: Eden Glen | Item Mall "Upgrade" Section. |  |  |
+| Painting: Eden Peak | Item Mall "Upgrade" Section. |  |  |
+| Painting: Brutal Forest Battle | Item Mall "Upgrade" Section. |  |  |
+| Painting: Desert Battle | Item Mall "Upgrade" Section. |  |  |
+| Painting: Oceanside Battle | Item Mall "Upgrade" Section. |  |  |
+| Painting: Flame Eagle Arena | Item Mall "Upgrade" Section. |  |  |
+| Bamboo Hammock | Item Mall "Upgrade" Section. |  |  |
+| Small Golden Goddess Sculpture | Item Mall "Upgrade" Section. |  |  |
+| Gargantuan Golden Goddess Sculpture | Item Mall "Upgrade" Section. |  |  |
+| Praying Goddess Statue | Item Mall "Upgrade" Section. |  |  |
+| Life-size Praying Goddess Statue | Item Mall "Upgrade" Section. |  |  |
+| Aubergine Living Room Carpet (Living Room) | Item Mall "Upgrade" Section. |  |  |
+| Aubergine Living Room Carpet (Bedroom) | Item Mall "Upgrade" Section. |  |  |
+| Cherry Shagadelic Living Room Carpet | Item Mall "Upgrade" Section. |  |  |
+| Cherry Shagadelic Bedroom Carpet | Item Mall "Upgrade" Section. |  |  |
+| Frosted Rose Wallpaper | Item Mall "Upgrade" Section. |  |  |
+| Extra Fluff Anuran Doll | Item Mall "Upgrade" Section. |  |  |
+| Fluff Buddy Anuran Doll | Item Mall "Upgrade" Section. |  |  |
+| Extra Fluff Zumi Doll | Item Mall "Upgrade" Section. |  |  |
+| Fluff Buddy Zumi Doll | Item Mall "Upgrade" Section. |  |  |
+| Extra Fluff Ogre Doll | Item Mall "Upgrade" Section. |  |  |
+| Fluff Buddy Ogre Doll | Item Mall "Upgrade" Section. |  |  |
+| Larger-than-life Froggie Plush | Item Mall "Upgrade" Section. |  |  |
+| Small Froggie Plush | Item Mall "Upgrade" Section. |  |  |
+| Larger-than-life Mousy Plush | Item Mall "Upgrade" Section. |  |  |
+| Small Mousy Plush | Item Mall "Upgrade" Section. |  |  |
+| Mini Ogre Plush | Item Mall "Upgrade" Section. |  |  |
+| Frighteninig Ogre Plush | Item Mall "Upgrade" Section. |  |  |
+| Alpaca Rug | Item Mall "Upgrade" Section. |  |  |
+| Rose Woven Rug | Item Mall "Upgrade" Section. |  |  |
+| Green Totem Rug | Item Mall "Upgrade" Section. |  |  |
+| Pink Totem Rug | Item Mall "Upgrade" Section. |  |  |
+| Hapmster Mat | Item Mall "Upgrade" Section. |  |  |
+| Love Anuran Bathmat | Item Mall "Upgrade" Section. |  |  |
+| Putrid Forest Pixie Bathmat | Item Mall "Upgrade" Section. |  |  |
+| Eden Contemporary Rug | Item Mall "Upgrade" Section. |  |  |
+| Modern Squre Rug | Item Mall "Upgrade" Section. |  |  |
+| Tiger Fur Rug | Item Mall "Upgrade" Section. |  |  |
+| White Tiger Fur Rug | Item Mall "Upgrade" Section. |  |  |
+| Sweet Afternoon Tea Mat | Item Mall "Upgrade" Section. |  |  |
+| Emergency Exit Mat | Item Mall "Upgrade" Section. |  |  |
+| Bud of Love Chandelier | Item Mall "Upgrade" Section. |  |  |
+| Short Bud of Love Chandelier | Item Mall "Upgrade" Section. |  |  |
+| Chibi Sakura Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Alice Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Gaia Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Aryn Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Koharu Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Nalani Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Luna Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Belle Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Lenna Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Afallo Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Claire Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Zaro Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Melody Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Chibi Gogo Cardboard | Item Mall "Upgrade" Section. |  |  |
+| Sweet Newlyweds Board | Item Mall "Upgrade" Section. |  |  |
+| Legendary Board of Invincibility | Item Mall "Upgrade" Section. |  |  |
+| Classic Legendary Board | Item Mall "Upgrade" Section. |  |  |
+| Twin Saga Bed | Item Mall "Upgrade" Section. |  |  |
+
+**EVENT EXCLUSIVE FURNITURE ITEMS**
+
+| Anniversary Alpaca Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+|---|---|---|
+| Shirley's Signboard | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Cookie Table | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Macaron Stool | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Cupcake Bed | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Frosted Vanity | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Tea Set | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Strawberry Shortcake | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Waffle Rug | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Waffle Rug | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sugarland Candy Chandelier | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Romantic Floral Bouquet | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Plush Penguin | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Building Model | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Jellyfish Lamp | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Champagne | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Romantic Presents | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rose Princess's Piano Stool | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Elegant Mannequin | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rose Princess's Floor Mirror | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Moonlight Sakura Tree | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Katana Stand | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Japanese Lantern | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Laptop | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Pinball Machine | Eden Eternal Vendetta: Event Exclusive | N/A |
+| PlayStation 4 | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Middy's Royal Doll | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sakura Starfall Queen's Royal Doll | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Servent Paige | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Servent Dreamy | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Servent Snowy | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Drummer Doll | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Night Flute Doll | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Lampchop Musician Doll | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Royal Palaquin Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Ancient Carriage Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rustic Dining Table | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rustic Chair | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rustic Bookshelf | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rustic Bed | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Armchair | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Loveseat | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Bed | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Anchor Clock | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Rustic Lace Rug | Eden Eternal Vendetta: Event Exclusive | N/A |
+| LCD TV | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Romantic Chandelier | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Marine Pendent Lamp | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Electric Fan | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Annivesary Board A | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Anniversary Board B | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Christmas Tree Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Swamp King Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Dimension Lord Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Angry Pharoah Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Pong Keeper Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Pile of Pimpkins Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Angel Cat Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Devious Cat Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Halloween Altar Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Halloween Chair Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Pumpkin Tree Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Happy Pumpkin Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Sad Pumpkin Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Vicious Reptile Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Glacial Dragon Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Desert Serpent Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Abyssal Dragon Ornament | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Zombie Statue Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Forest Sprite Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Pile of Pimpkins Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Spooky Cutout Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Pumpkin Cutout Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Happy Black Cat Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Snowman Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Snowkitten Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Christmas Scene Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Special Snow Globe Decoration | Eden Eternal Vendetta: Event Exclusive | N/A |
+| Expertly Decorated Christmas Tree | Eden Eternal Vendetta: Event Exclusive | N/A |
+

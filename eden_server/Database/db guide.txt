@@ -1,0 +1,6 @@
+serverstatus.sql
+create a new query on edenfr_account db copy and paste content of serverstatus.sql, change the ip to your local ip and run the query.
+____________________________
+worlds.sql
+create a new query on edenfr_db db copy and paste content of worlds.sql, change the ip to your local ip and run the query.
+

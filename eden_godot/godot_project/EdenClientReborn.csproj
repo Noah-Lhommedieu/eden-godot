@@ -1,0 +1,19 @@
+<Project Sdk="Godot.NET.Sdk/4.8.0-beta.2">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>EdenClient</RootNamespace>
+    <!-- Big5 (CP950) : CodePagesEncodingProvider inclus dans le framework net10 -->
+  </PropertyGroup>
+  <!-- B1 (partiel) : formats natifs du Core compilés tels quels, une seule source.
+       Fichiers du Core absents de scripts/ ; les fichiers divergents (EdenVfs,
+       WorldConv…) restent à fusionner (ADR-0003). -->
+  <ItemGroup>
+    <Compile Include="..\..\src\Eden.Core\Game\KfmStateMachine.cs;..\..\src\Eden.Core\Game\AnimTextKeys.cs;..\..\src\Eden.Core\Game\NativeBoneNames.cs;..\..\src\Eden.Core\Formats\NifFile.cs;..\..\src\Eden.Core\Formats\KfFile.cs;..\..\src\Eden.Core\Formats\KfPose.cs;..\..\src\Eden.Core\Formats\KfmFile.cs;..\..\src\Eden.Core\Formats\DdsInfo.cs;..\..\src\Eden.Core\Formats\DdsDecode.cs;..\..\src\Eden.Core\Pkg\**\*.cs;..\..\src\Eden.Core\Fx\**\*.cs" LinkBase="CoreLinked" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,38 @@
+# ZoneLoop livelock — capture dotnet-dump 'dumpasync' (2026-10-26 ~02:24)
+# Contexte : burst de 200 entrées; ~70 sessions mortes en cours d'entrée
+# avec file d'envoi pleine. La boucle attend SendFrameAsync → chaque
+# destinataire mort coûte ~5 s de SendTimeout, séquentiellement.
+# État : ticks figés (eden_zone_tick_ms count=855), file 208-213,
+# drain ~1 cmd/min, disconnects 'envoi échoué (IOException)' croissants.
+# Processus tué par SIGKILL après >6 min de blocage.
+
+STACK 237
+<< Awaiting: 00007f497511c158 00007f512a5ce408 System.Runtime.CompilerServices.ValueTaskAwaiter >>
+  00007f497511c318 00007f512d4f0d50 (0) Eden.Core.Networking.Session.NetSession+<SendFrameAsync>d__97
+    00007f497511c368 00007f512d4f0fc8 (0) Eden.Core.Networking.Session.NetSession+<SendPacketAsync>d__96
+      00007f49750ffb58 00007f512d4f3f50 (0) Eden.Zone.ZoneEntryFlow+<AnnounceSelfToWatchersAsync>d__676
+        00007f49750ffba8 00007f512d4f1240 (6) Eden.Zone.ZoneEntryFlow+<UpdateSightAsync>d__694
+          00007f49750ffbf8 00007f512d4f7798 (0) Eden.Zone.ZoneEntryFlow+<SpawnSceneEntitiesAsync>d__695
+            00007f4975084658 00007f512c904ad8 (3) Eden.Zone.ZoneEntryFlow+<HandleMigrationDoneAsync>d__492
+              00007f49750846a8 00007f512c73a2c0 (5) Eden.Zone.ZoneEntryFlow+<TryHandleOnLoopAsync>d__202
+                00007f49750846f8 00007f512c73a590 (0) Eden.Zone.ZoneEntryFlow+<>c__DisplayClass197_1<System.Boolean>+<<RunOnLoopAsync>b__0>d
+                  00007f4975084748 00007f512c73a808 (0) Eden.Zone.ZoneLoop+<>c__DisplayClass15_0+<<PostAsync>b__0>d
+                    00007f4978f3b310 00007f512b9f6770 (0) Eden.Zone.ZoneLoop+<RunAsync>d__19
+                      00007f4978f5ca80 00007f5129bbfee8 ( ) System.Threading.Tasks.UnwrapPromise<System.Threading.Tasks.VoidTaskResult>
+
+STACK 238
+<< Awaiting: 00007f4978f39ab0 00007f512b7e6708 System.Runtime.CompilerServices.ValueTaskAwaiter<System.Int32> >>
+  00007f4978f39f68 00007f512b8cc8b0 (4) Eden.Zone.Links.ZoneWorldLink+<ConnectAndServeAsync>d__32
+    00007f4978f39fb8 00007f512b8ccda8 (0) Eden.Zone.Links.ZoneWorldLink+<RunLoopAsync>d__31
+      00007f4978f494e8 00007f5129bbfee8 ( ) System.Threading.Tasks.UnwrapPromise<System.Threading.Tasks.VoidTaskResult>
+
+STACK 239
+<< Awaiting: 00007f4978f3c588 00007f512b7e6708 System.Runtime.CompilerServices.ValueTaskAwaiter<System.Int32> >>
+  00007f4978f3ca40 00007f512b8cb378 (4) Eden.Zone.Links.ZoneMissionLink+<ConnectAndServeAsync>d__17
+    00007f4978f3ca90 00007f512b8cb868 (0) Eden.Zone.Links.ZoneMissionLink+<RunLoopAsync>d__16
+      00007f4978f49618 00007f5129bbfee8 ( ) System.Threading.Tasks.UnwrapPromise<System.Threading.Tasks.VoidTaskResult>
+
+STACK 240
+<< Awaiting: 00007f4978f52270 00007f512b8bbe30 System.Runtime.CompilerServices.ConfiguredValueTaskAwaitable<System.Boolean>+ConfiguredValueTaskAwaiter >>
+  00007f4978f52370 00007f512b8c15e8 (0) Eden.Zone.CharacterWriteBehind+<FlushLoopAsync>d__12
+    00007f4978f4fe80 00007f5129bbfee8 ( ) System.Threading.Tasks.UnwrapPromise<System.Threading.Tasks.VoidTaskResult>

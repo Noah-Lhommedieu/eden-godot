@@ -1,0 +1,6 @@
+**/bin/
+**/obj/
+
+# Certificat TLS dev auto-signé (phase 4-c : régénéré par
+# TlsCertificateProvider — jamais versionné, clé privée locale)
+server/certs/

@@ -1,0 +1,4 @@
+unpack_report — 2026-10-24 20:12
+cmd: pkgfs_unpack.py verify $REFORGED/pkg --against $REFORGED --jobs 12
+entrées=78233 ok=78233
+EXIT=0

@@ -1,0 +1,25 @@
+; Godot 4.8-beta2 mono (épinglé : ../../engine) — Eden Limitless EDENFR
+; Scène racine minimale : Node3D + Camera3D + script C# (scripts/Main.cs).
+; Les assets convertis vivent sous assets/ (.gdignore : Godot ne les importe
+; pas tant que le pipeline nif2gltf tourne).
+
+config_version=5
+
+[application]
+
+config/name="Eden Limitless"
+run/main_scene="res://scenes/boot.tscn"
+
+[autoload]
+
+SettingsApplier="*res://scenes/settings_applier.tscn"
+HudExtensions="*res://scenes/hud_extensions.tscn"
+
+[dotnet]
+
+project/assembly_name="EdenClientReborn"
+
+[gui]
+
+theme/custom="res://ui_textures/eden_default_theme.tres"
+timers/tooltip_delay_sec=0.0

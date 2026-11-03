@@ -1,0 +1,10 @@
+{
+ "ncid": 60,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "0100010001002c010000",
+   "src": "mitm_native_entry.log"
+  }
+ ]
+}

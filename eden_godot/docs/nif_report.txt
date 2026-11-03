@@ -1,0 +1,16 @@
+nif2gltf report — 2026-10-31 18:46:02
+files processed: 4  converted: 4  failed: 0  (0s)
+  ext_.nif : 4
+
+== measured bounding boxes (NIF units, Z-up) ==
+
+== counters ==
+  nodes                    24
+  psys_nodes               8
+
+== skipped block types (unparsed) ==
+  ?                                                  2
+
+== top warnings ==
+
+== failures ==

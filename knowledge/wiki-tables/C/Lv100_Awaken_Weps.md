@@ -1,0 +1,194 @@
+# Lv100 Awaken Weps.
+
+> Source : `src_csv/C_ Lv100 Awaken Weps..csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+> ⚠️ **Hors périmètre (lvl>90)** : Armes éveillées niv. 100. Données conservées pour référence.
+
+**Lv100 Awakened Weapons**
+
+| Note: Completing one book will give you both weapons (if applicable) |  | # | ITEMS REQUIRED | NPC / BOSS / MONSTER | LOCATION | COST |
+|---|---|---|---|---|---|---|
+| Daggers | Night Stalker | x1 | Legendary Dagger Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Tooth Shards | Mutated Snow Predator | Crystal Utopia(Beast Campsite) | N/A |
+|  |  | x1 | Defeat: Solaris | Solaris | Trial: Dark Tide Cave | N/A |
+|  |  | x1 | Defeat: Katus | Katus | Trial: Camodor Chastelands | N/A |
+|  |  | x1 | Bag of Eyes | Jarroda | Aven | 1.500 CCM. |
+|  | Angelic Blade | x1 | Enchanted Stone | Cass | Aven | 50 Trial Coins. |
+|  |  | x1 | Gem of Thunder | Gal'Lunaburakku | Dragonside Ridge | N/A |
+|  |  | x50 | Defeat: Rhodri | Rhodri | Whispering Woods | N/A |
+|  |  | x1 | Broken Hallowed Slicer | Sorkin | Trial: Dark Tide Cave | N/A |
+|  |  | x1 | Broken Satanic Slasher | Kerus | Trial: Camodor Chastelands | N/A |
+| Rapiers | Evil Demon Rapier<br> | x1 | Legendary Rapier Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Legendary Harpie Feather | Mutated Harpie | Whispering Woods (Sprite Falls) | N/A |
+|  |  | x1 | Defeat: Azula | Azula | Crystal Utopia | N/A |
+|  |  | x1 | Ice Queen's Rapier | Isolda | Trial: Vingot Lab | N/A |
+|  |  | x1 | Yin and Yang Stone | Cass | Aven | 20 Trial Coins. |
+|  | Golden Angel Rapier | x1 | Bar of Gold | Jarroda | Aven | 1.500 CCM. |
+|  |  | x1 | Defeat: Gal'Lunaburakku | Gal'Lunaburakku | Dragonside Ridge | N/A |
+|  |  | x125 | Collect: Fallen Soul | Dimension Soul Knight | Dimension of Souls | N/A |
+|  |  | x1 | Broken Seraphic Bayonet | Blade | Trial: Vingot Lab | N/A |
+|  |  | x1 | Broken Demonic Bayonet | Isolda | Trial: Vingot Lab | N/A |
+| Swords | Excalibur | x1 | Legendary Sword Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Snow Predator | Mutated Snow Predator | Crystal Utopia (Beast Campsite) | N/A |
+|  |  | x1 | Fossil Fragment | Pachy | Roaming Hills | N/A |
+|  |  | x1 | Defeat: Blade | Blade | Trial: Vingot Lab | N/A |
+|  |  | x1 | Holy Forging Hammer | Jarroda | Aven | 4.000 CCM. |
+|  | The Dark Blade | x1 | Rare Bone Fragment | Ko'Harumi | Dragonside Ridge | N/A |
+|  |  | x50 | Collect: Broken Blade Shards | Protective Trainer | Singing Valley | N/A |
+|  |  | x1 | Defeat: Zigbar | Zigbar | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Sunrise Blade | Blade | Trial: Vingot Lab | N/A |
+|  |  | x1 | Broken Twilight Sword | Sinash | Trial: Camodor Chastelands | N/A |
+| Cestus | Arctic Storm Fist | x1 | Legendary Cestus Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Snow Beast's Knuckles | Mutated Snow Predator | Crystal Utopia (Beast Campsite) | N/A |
+|  |  | x1 | Molten Rocks | Dug | Trial: Dark Tide Cave | N/A |
+|  |  | x10 | Defeat: Demon Crystal | Katus | Trial: Camodor Chastelands | Spawns during the fight. |
+|  |  | x1 | Protective Gloves | Jarroda | Aven | 1.500 CCM. |
+|  |  | x1 | Steel Bar | Grace (Amber Eye) | Aven | 50,000 Fame |
+|  | Fire Storm Gauntlet | x75 | Defeat: Icy Demon | Icy Demon | Crystal Utopia | N/A |
+|  |  | x1 | Defeat: Hak'Zurk | Hak'Zurk | Dragonside Ridge | N/A |
+|  |  | x1 | Tyke's Cestus Guide | Tyke | Trial: Crimson | 50 Martial Artist Medals Req. |
+|  |  | x1 | Broken Sentinel's Grip | Sorkin | Trial: Dark Tide Cave | N/A |
+|  |  | x1 | Broken Doomsday Fist | Kequa | Trial: Devastation Dimension | N/A |
+|  |  | N/A | N/A | N/A | N/A | N/A |
+| Katana | Kenshi's Nodachi of Sorrow | x1 | Legendary Katana Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Demonic Flowertrap | Mutated Demonic Flowertrap | Roaming Hills | N/A |
+|  |  | x1 | Defeat: Soul King | Soul King | Dimension of Souls | N/A |
+|  |  | x1 | Medal of Completion | Cass | Aven | 35 Trial Coins. |
+|  |  | x1 | Demon's Spirit | Jarroda | Aven | 5.000 CCM. |
+|  |  | x1 | Blade's Foundry Location | Blade | Trial: Vingot Lab | N/A |
+|  |  | x1 | Blade's Ultimate Recipe | N/A | Blade's Foundry Location | Coords written on Blade's Foundry Location. |
+|  |  | x75 | Defeat: Ridgeside Hunter | Ridgeside Hunter | Dragonside Ridge | N/A |
+|  |  | x1 | Broken River of Sorrow | Dug | Trial: Dark Tide Cave | N/A |
+| Greatswords | The Great Holy Blade | x1 | Legendary Greatsword Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Broken Blade | Mutated Terrible Traitor | Roaming Hills | N/A |
+|  |  | x1 | Steel Fragments | Sorkin | Trial: Dark Tide Cave | N/A |
+|  |  | x1 | King's Blood | Soul King | Dimension of Souls | N/A |
+|  |  | x1 | Holy Blade | Jarroda | Aven | 3.000 CCM, 15 Trial Coins. Golem Shards x60/e. |
+|  |  | x60 | Collect: Rock Golem Blade Shards | Rock Golem | Whispering Woods | N/A |
+|  | The Great Demon Slayer | x60 | Collect: Stone Golem Blade Shards | Stone Golem | Whispering Woods | N/A |
+|  |  | x1 | Forging Guide | Elma (Silver Needle) | Aven | 50,000 Fame |
+|  |  | x50 | Collect: Sacrificial Greatsword | Ridgeside Berserker | Dragonside Ridge | N/A |
+|  |  | x30 | Defeat: Starving General | Zigbar | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Fortune Sword | Ultimate Beast | Trial: Vingot Lab | N/A |
+|  |  | x1 | Broken Wicked Tradedy | Katus | Trial: Camodor Chastelands | N/A |
+| Axe | Holy Heaven Slicer | x1 | Legendary Axe Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Spocky Treant | Mutated Spooky Treant | Whispering Woods | N/A |
+|  |  | x1 | Defeat: Mithos | Mithos | Singing Valley | N/A |
+|  |  | x1 | Kimba's Blade Recipe | Kimba | Trial: Devastation Dimension | N/A |
+|  |  | x1 | Healing Spirit | Jarroda | Aven | 1.500 CCM., Trial Coin x40, Warrior H. Medal x40 |
+|  |  | x1 | Hak'Zurk's Axe Blade | Hak'Zurk | Dragonside Ridge | N/A |
+|  |  | x25 | Collect: Sacrificial Axe | Ridgeside Soldier | Dragonside Ridge | N/A |
+|  |  | x30 | Defeat: Tree Giant | Tree Giant | Singing Valley | N/A |
+|  |  | x1 | Broken Heavenly Halcyon Axe | Kimba | Trial: Devastation Dimension | N/A |
+| Club | Archangel's Punishment | x1 | Legendary Club Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Demon Beast | Mutated Demon Beast | Singing Valley | N/A |
+|  |  | x1 | Defeat: Casto | Casto | Shaxia Basin | N/A |
+|  |  | x1 | Reinforced Enchantment | Katus | Trial: Camodor Chastelands | N/A |
+|  |  | x1 | Dinosaur Horn | Jarroda | Aven | 1.500 CCM. |
+|  |  | x1 | Bone Handle | Utem (Arthur Hammer) | Aven | 50,000 Fame |
+|  |  | x1 | Defeat: Wormmy | Wormmy | Dimension of Souls | N/A |
+|  |  | x50 | Defeat: Mushroid | Mushroid | Singing Valley | N/A |
+|  |  | x1 | Broken Archangel Club | Sorkin | Trial: Dark Tide Cave | N/A |
+| Shield | Sacred Spirit Barrier | x1 | Legendary Shield Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Strength of the Yeti | Mutated Icy Yeti | Crystal Utopia | N/A |
+|  |  | x1 | Defeat: Kiriyata | Kiriyata | Viroona Vale | N/A |
+|  |  | x1 | Core of the Beast | Ultimate Beast | Trial: Vingot Lab | N/A |
+|  |  | x1 | Swamp King's Cloned Heart | Jarroda | Aven | 1.500 CCM. |
+|  |  | x1 | Scale of The Beast | Wormmy | Dimension of Souls | N/A |
+|  |  | x1 | Defeat: Lucchese | Lucchese | Gates of Pandemonium | N/A |
+|  |  | x50 | Collect: Yeti Soul | Icy Yeti | Crystal Utopia | N/A |
+|  |  | x1 | Broken God's Fortress | Lochero | Trial: Dark Tide Cave | N/A |
+| Pike | Legendary Dragon Hunter | x1 | Legendary Pike Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Terrible Traitor | Mutated Terrible Traitor | Roaming Hills | N/A |
+|  |  | x1 | Dragon Magic | Marquis Saad | Trial: Vingot Lab | N/A |
+|  |  | x1 | Defeat: Sinash | Sinash | Trial: Camodor Chastelands | N/A |
+|  |  | x1 | Dragon Bone | Jarroda | Aven | 3.000 CCM. |
+|  |  | x40 | Dragon Spirit (Dragon Bait) | Cass | Aven | 18 Trial Coins. |
+|  |  | x1 | Dragon's Breath | Ka'Nenellos | Dragonside Ridge | N/A |
+|  |  | x20 | Collect: Dragon Soul | DSR (Elite Monsters) | Dragonside Ridge | N/A |
+|  |  | x1 | Defeat: Asmodeus | Asmodeus | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Wyvern Pike | Marquis Saad | Trial: Vingot Lab | N/A |
+| Maces | Angel Soul Mace | x1 | Legendary Mace Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Wild Grass Sprout | Mutated Wild Grass Sprout | Singing Valley | N/A |
+|  |  | x1 | Maul's Experimental Heart | Maul | Trial: Devastation Dimension | N/A |
+|  |  | x1 | Holy Necklace | Jarroda | Aven | 3.000 CCM |
+|  |  | x1 | Dark Crystal | Cass | Aven | 35 Trial Coins. |
+|  | Demon Soul Mace | x1 | Defeat: Harkat | Harkat | Dimension of Souls | N/A |
+|  |  | x1 | Acquire: Joneena's Blessing | Joneena | Ursun Paw MTN | Activate In "Protection Zone" |
+|  |  | x1 | Defeat: Kur'Zakk | Kur'Zakk | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Immaculate Angel Mace | Corken | Trial: Devastation Dimension | N/A |
+|  |  | x1 | Broken Defective Demon Mace | Isolda | Trial: Vingot Lab | N/A |
+| Guitars | Sacred Melody | x1 | Legendary Guitar Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Eternal Cotten | Mutated Wild Grass Sprout | Singing Valley | N/A |
+|  |  | x1 | Enchanted Threads | Venom | Whispering Woods | N/A |
+|  |  | x1 | Holy Threads | Ramona | Trial: Camodor Chastelands | N/A |
+|  |  | x1 | Guitar Base | Jarroda | Aven | 3.500 CCM |
+|  |  | x1 | Pyrowind Rare Oak | Brigtte (Pyrowinds) | Aven | 50,000 Fame |
+|  | Rift of The Dead | x1 | Bottle of Dark Magic | Cass | Aven | 35 Trial Coins. |
+|  |  | x1 | Eternal Water | Harkat | Dimension of Souls | N/A |
+|  |  | x1 | Defeat: Hamon | Hamon | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Melody of Faith | Maul | Trial: Devastation Dimension | N/A |
+|  |  | x1 | Broken Melody of Fear | Katus | Trial: Camodor Chastelands | N/A |
+|  |  | N/A |  | N/A | N/A | N/A |
+| Staff | Goddess of the Faling Star | x1 | Legendary Staff Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Enchanted Tree Branch | Mutated Spooky Treant | Whispering Woods | N/A |
+|  |  | x1 | Eternal Snow Flake | Azula | Crystal Utopia | N/A |
+|  |  | x1 | Corken's Magic | Corken | Trial: Devastation Dimension | N/A |
+|  |  | x3 | Collect: Magic Totem | Shyman | Dimension of Souls | Can be completed once a day |
+|  |  | x1 | Gemstone | Cass | Aven | 35 Trial Coins. |
+|  | Hades Blood Crystal Staff | x20 | Collect: Scared Oak Dew | Nature Seekers Fame | Aven | 50,000 Fame |
+|  |  | x1 | Hecate's Spirit | Jarroda | Aven | 4.000 CCM. |
+|  |  | x1 | Kahl Mund's Element | Kahl Mund | Dimension of Souls | N/A |
+|  |  | x1 | Fire Element, Ice Element, Wind Element, Thunder Element. | Kerus | Trial: Camdor Chastelands | N/A |
+|  |  | x1 | Broken Hades Inferno | Kimba | Trial :Devastation Dimension | N/A |
+|  |  | x1 | roken Cosmic Star | Ramona | Trial: Camdor Chastelands | N/A |
+| Hammer | The Messiah | x1 | Lgendary Hammer Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Icy Yeti | Mutated Icy Yeti | Crystal Utopia | N/A |
+|  |  | x1 | Defeat: Pachy | Pachy | Roaming Hills | N/A |
+|  |  | x1 | Fromula: Messiah's Hammer (Messiah's Blessing) | Cass | Aven | 35 Trial Coins |
+|  |  | x1 | Thor's Hammer | Utem (Arthur Hammer) | Aven | 50,000 Fame |
+|  |  | x1 | Defeat: Hak'Zurk | Hak'Zurk | Dragonside Ridge | N/A |
+|  |  | x1 | Defeat: Hakaar | Hakaar | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Messiah's Call | Ultimate Beast | Trial: Vingot Lab | N/A |
+| Bow | Sacred Arrow | x1 | Legendary Bow Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Defeat: Mutated Harpie | Mutated Harpie | Whispering Woods | N/A |
+|  |  | x1 | Defeat: Maul | Maul | Trial: Devastation Dimension | N/A |
+|  |  | x1 | Defeat: Oupella | Oupella | Mayland Jungle | N/A |
+|  |  | x1 | Sniper Enchant | General Merchant | Roaming Hills | 30 Trial Coins |
+|  |  | x1 | Silver Bolts | (Elma Silver Needle) | Aven | 50,000 Fame |
+|  |  | x1 | Steel Claws | Ko'Harumi | Dragonside Ridge | N/A |
+|  |  | x125 | Collect: Fairy Crystal | Crystal Fairy & Icy Crystal Fairy | Crystal Utopia | N/A |
+|  |  | x1 | Broken Immortal Arrow | Maul | Trial: Devastation Dimension | N/A |
+| Artillery Guns | Infinite Light Cannon | x1 | Legendary Gun Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Demonic Core | Mutated Demonic Flowertrap | Roaming Hills | N/A |
+|  |  | x1 | Defeat: Sinash | Sinash | Trial: Camodor Chastelands | N/A |
+|  |  | x20 | Defeat: Ramona's Underling | Romana | Trial: Camodor Chastelands | Note: spawns during the fight. |
+|  |  | x1 | Mechanism | Jarroda | Aven | 2,150 CCM |
+|  |  | x1 | Defeat: Ko'Harumi | Ko'Harumi | Dragonside Ridge | N/A |
+|  | Infinite Darkness Cannon | x75 | Collect: Mechanical Gear | Robot 007 & Robot 008 | Crystal Utopia | N/A |
+|  |  | x1 | Guff's Magnetic Gear | Guff | The Battle of Time and Space | N/A |
+|  |  | x1 | Broken Moon Eclipse Gun | Marquis Saad | Trial: Vingot Lab | N/A |
+|  |  | x1 | Broken Sun Eclipse Gun | Kequa | Trial: Devastation Dimension | N/A |
+|  |  | x5 | Collect: Arcanum Gear | Hettie (Arcanum) | Aven | 50,000 Fame |
+|  |  | x5 | Collect: Amber Coil | Grace (Amber Eye) | Aven | 50,000 Fame |
+| Sickleshot | Soul Harvester | x1 | Legendary Sickle Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Demon Spirit | Mutated Demon Beast | Singing Valley | N/A |
+|  |  | x1 | Defeat: Ramona | Ramona | Trial: Camodor Chastelands | N/A |
+|  |  | x1 | Defeat: Dug | Dug | Trial: Camodor Chastelands | N/A |
+|  |  | x1 | Energy in a Bottle | Jarroda | Aven | 3.500 CCM. |
+|  |  | x1 | Medal of Completion | Cass | Aven | 35 Trial Coins. |
+|  |  | x1 | Defeat: Ka'Nenellos | Ka'Nenellos | Dragonside Ridge | N/A |
+|  |  | x3 | Collect: Reaper Badge | Dodola | Dragonside Ridge | N/A |
+|  |  | x1 | Defeat: Reaper | Reaper | Gates of Pandemonium | N/A |
+|  |  | x1 | Broken Death Wish | Dug | Trial: Camodor Chastelands | N/A |
+| Grimoire | Evil Book of Demon Summoning | x1 | Legendary Grimoire Book | Caresha | Aven | 6,000g |
+|  |  | x1 | Blood of the Flowertrap | Mutated Demonic Flowertrap | Roaming Hills | N/A |
+|  |  | x1 | Defeat: Venom | Venom | Whispering Woods | N/A |
+|  |  | x1 | Defeat: Isolda | Isolda | Trial: Vingot Lab | N/A |
+|  |  | x1 | Guide to Evil Magic | Jarroda | Aven | 1.750 CCM |
+|  |  | x1 | Evil Eye | Cass | Aven | 20 Trial Coins. |
+|  |  | x1 | Defeat: Kahl Mund | Kahl Mund | Dimension of Souls | N/A |
+|  |  | x1 | Holy Spirit Stone | Nadal (Sage Stone) | Aven | 50,000 Fame |
+|  |  | x125 | Collect: Demon Soul | Demon Beast & Demon Boar | Singing Valley | N/A |
+|  |  | x1 | Defeat: Petra | Petra | The Battle of Time and Space | N/A |
+|  |  | x1 | Broken Paranormal Fantasy | Corken | Trial: Devastation Dimension | N/A |
+

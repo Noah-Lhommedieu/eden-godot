@@ -1,0 +1,716 @@
+# Traductions manuelles des chaînes UI des .layout CEGUI (Big5/UTF-8
+# chinois → anglais) non couvertes par l'alignement
+# c_textindex.ini ↔ t_textindex.ini/_T_TextIndex.ini.
+#
+# Format : <chinois exact>\t<anglais>
+# — les chaînes sont matchées sur la valeur exacte de la propriété
+#   (Text/Tooltip) après trim des espaces ASCII seulement (les espaces
+#   fullwidth et \n embarqués restent significatifs dans la clé).
+# — préfixes d'exemple concepteurs : x/X/Test/String/暫代 sont gérés
+#   dans gen_ui_text.py (dépréfixage + re-lookup) — inutile de les
+#   dupliquer ici sauf traduction irrégulière.
+一大堆小擲斧	Pile of Throwing Axes
+布衣	Cloth Armor
+建鎮申請書	Town Charter Application
+皮甲	Leather Armor
+積分加成	Point Bonus
+鎧甲	Plate Armor
+－	-
+*請勿洩露個人資訊	*Do not share personal information
+00：00：00	00:00:00
+0天	0 days
+0點聲望	0 Fame
+12月	Dec
+13天	13 days
+1職業積分加成清單	1Class Point Bonus List
+31日	31st
+3v3隊伍資訊	3v3 Team Info
+5分鐘	5 min
+999999點聲望	999999 Fame
+999╱999	999/999
+999／999	999/999
+99分99秒	99m 99s
+L09.煉金小屋	L09. Alchemy Hut
+L10 煉金小屋	L10 Alchemy Hut
+LV01～30副本討伐	LV01~30 Dungeon Hunt
+LV01～30副本討伐完成率：0.00％	LV01~30 Dungeon Hunt Completion: 0.00%
+String任務追蹤	Quest Tracker
+String推薦任務追蹤	Recommended Quest Tracker
+Test99分99秒	99m 99s
+Test使用道具	Use Item
+Test所需時間	Time Required
+Test所需費用	Required Cost
+Test有機會獲得：	Chance to receive:
+Test特殊虛寶	Special Item
+Test送出委託	Send Request
+Test關閉	Close
+XXX的個人商店	XXX's Personal Shop
+X副本傳送	Dungeon Teleport
+X廣播招募	Broadcast Recruitment
+X戰鬥狀態	Combat Status
+X提示資訊	Hint
+X搜尋	Search
+X殺人數	Kills
+X特殊寶物	Special Treasure
+X當日累積	Daily Total
+X當月累積	Monthly Total
+X確定	Confirm
+X積分	Points
+X舉辦宴會	Host Banquet
+X裝備成長	Gear Growth
+X設定招募	Recruit Settings
+X輔助寵物	Support Pet
+X輸出攻擊	Attack Output
+X進階寵物	Advanced Pet
+X開始進階	Start Advance
+X關閉	Close
+X點擊確定後，進入貪婪島開戰	Click OK to enter the Greed Island battle
+string一般場景分配	Normal Loot Rule
+string一般場景分配：	Normal Loot Rule:
+string互助清單	Assist List
+string他人加入時進行確認	Confirm when others join
+string副本擲骰	Dungeon Dice Roll
+string副本擲骰　　：	Dungeon Dice Roll:
+string創建隊伍	Create Party
+string加入隊伍	Join Party
+string尋找城鎮	Find Town
+string左鍵點選副本   ( 2 / 4 )	Left-click a dungeon   ( 2 / 4 )
+string戰士	Warrior
+string戰士專研高深的戰術技巧，並穿著厚重的鎧甲，優秀的近戰、防禦技巧讓戰士適合衝鋒、防守角色。活耀於各種場合。	Warriors master advanced tactics and wear heavy armor; their melee and defensive skills suit vanguard roles in any situation.
+string找玩家	Find Player
+string找隊伍	Find Party
+string服裝預覽	Outfit Preview
+string申請加入	Apply to Join
+string登錄到組隊清單	Register to Party List
+string白色品質以上的裝備	Gear of white quality or better
+string綠色品質以上的裝備	Gear of green quality or better
+string自由制	Free-for-all
+string英雄特質	Hero Traits
+string藍色品質以上的裝備	Gear of blue quality or better
+string邀請組隊	Invite to Party
+string開啟追蹤	Enable Tracking
+string開始尋找	Start Search
+string開始搜尋	Start Search
+string關閉	Close
+string隊伍目的	Party Goal
+string隊伍設定	Party Settings
+string隨機制	Random
+string離開隊伍	Leave Party
+string魔法師	Mage
+ 阿卡貝拉友愛之鎮(搜尋到 5 位)	Arcabella Friendship Town (5 found)
+※每周例行維護時將清空煉金累積值	※Alchemy progress resets at weekly maintenance
+※若強化失敗裝備將會消失若強化失敗裝備將會消	※Item will be destroyed if fortification fails
+オークション価格	Auction Price
+キアラクタ-	Character
+一	1
+一二三四	1234
+一二三四五	12345
+一二三四五六	123456
+一二三四五六\n	123456\n
+一二三四五六七	1234567
+一二三四五六七八	12345678
+一二三四五六七八九十	12345678910
+一二三四五六七八九十一二三四	123456789101234
+一二三四五六七八九十一二三四五六	12345678910123456
+一二三四五六七八九十一二三四五六七八九十	1234567891012345678910
+一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十	12345678910123456789101234567891012345678910
+一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十	1234567891012345678910123456789101234567891012345678910123456789101234567891012345678910
+一二三四五六七八九十一二三四五六七八九時一二三四五六七八九十	1234567891012345678910h12345678910
+一二三四五六七八九十對你說	12345678910 says to you
+一二三四五六七八九哈	123456789 ha
+一二三四五六七八對你施展復活技能	12345678 casts Revive on you
+一般暫代	General
+伊二三四五伊二三四五伊二三四五伊二三四五伊二三四五	12345 12345 12345 12345 12345
+使用傳送水晶	Use Teleport Crystal
+修理裝備	Repair Equipment
+個人房間	Private Room
+倒數計時...	Countdown...
+傳送到	Teleport to
+傳送口	Portal
+傳送石	Teleport Stone
+儲 值	Top Up
+儲存	Save
+先天特性\n\n\n	Innate Traits\n\n\n
+內容	Content
+公會任務-副	Guild Task - Sub
+公會任務-野	Guild Task - Field
+公會清單	Guild List
+共用技能爹斯	Shared Skill
+分享任務	Share Quest
+刺殺系	Assassination
+剩餘抽獎次數：　　次	Draws left:
+剩餘時間：59秒	Time left: 59s
+剩餘空間 100篇	Space left: 100
+剩餘空間 99 篇	Space left: 99
+創鎮資格：	Town Charter Eligibility:
+勝利宣言 :	Victory Declaration :
+參賽者資訊	Contestant Info
+受到暫代	Received
+只顯示已收藏的寶物	Show collected treasures only
+只顯示遊戲內寶物	Show in-game treasures only
+可以接受工作等級99以下的委託	Can accept requests up to job lv99
+品質：	Quality:
+哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈	Sample Text
+商 品	Items
+善惡	Alignment
+嚇人炸彈試作品	Scary Bomb Prototype
+回到城鎮	Return to Town
+回復	Recover
+國國國	Sample Text
+國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國	Sample Text
+團隊評價副本 01	Team Rating Dungeon 01
+團隊陣亡數上限：	Team Death Limit:
+坐騎商人	Mount Merchant
+城鎮傳送陣	Town Portal
+城鎮公告：	Town Notice:
+城鎮列表	Town List
+城鎮暫代	Town
+外框	Frame
+夜晚	Night
+天上天下唯我獨尊	Sample Title
+失落的糯米聚合體	Lost Sticky Blob
+好評：	Rating:
+寄送人	Sender
+密語暫代	Whisper
+寶盒結果	Box Result
+寶箱＿x999000	Chest_ x999000
+寶翀	Chest
+建物收藏冊	Building Collection
+強制?ܩ?	Force
+強化捲軸	Fortify Scroll
+強忀	Fortify
+彈出對話框	Pop-up Dialog
+您還有2次機會	You have 2 chances left
+情侶技能一	Couple Skill 1
+情侶暫代	Couple
+愛情硬幣	Love Coin
+成功機率 100.00％	Success Rate 100.00%
+成功機率：	Success Rate:
+我同意留言規章	I agree to the message rules
+我想對他說	I want to tell them
+我要留言	Leave a Message
+戰場暫代	Battlefield
+戰鬥報告	Battle Report
+戰鬥擊殺積分：	Kill Points:
+找尋城鎮	Find Town
+承接任務 25/25 件	Quests 25/25
+抽重消失機率90%	90% chance of losing on redraw
+招攬人員	Recruit
+捲軸	Scroll
+排行資訊	Ranking Info
+推薦任務	Recommended Quest
+換裝	Change Outfit
+揪愛歐北造	Sample Text
+搜尋結果（共有15隊）	Search Results (15 parties)
+搜尋：	Search:
+擊殺怪物數量	Monsters Killed
+擊殺怪物：	Monsters Killed:
+擊殺王怪數量	Bosses Killed
+擊殺王怪：	Bosses Killed:
+擊殺精英數量	Elites Killed
+擊殺精英：	Elites Killed:
+收尋列表	Search List
+收藏綠：0.0％	Collected: 0.0%
+攻擊速度	Attack Speed
+放棄任務	Abandon Quest
+放置繼承能力的裝備	Place gear with inheritable ability
+新手引導	Beginner Guide
+早晨	Morning
+是否領取？	Claim?
+暫代傷害	Damage
+暫代物品	Item
+暫代經驗	EXP
+暫代聲望	Fame
+暫代金錢	Money
+暫代頻道	Channel
+會員	Member
+會長三四五六七八九十	Guild Master 345678910
+會長：一二三四五六七八九十	Guild Master: 12345678910
+未接任務清單(主線)	Available Quests (Main)
+本月表現	This Month's Performance
+榮譽之心	Heart of Honor
+標題：	Title:
+橘色	Orange
+檔案下載中， 如想要更順暢遊戲 請重新起動後  完整更新 遊戲，再進行遊戲。或待遊戲下載完後即可進行遊戲。	Downloading files. For smoother play, restart after the update finishes, or wait for the download to complete.
+此染劑有機會染成以下顏色	This dye may produce the following colors
+死零法師哈哈	Necromancer Sample
+死靈法師職業加成 1 階	Necromancer Class Bonus Stage 1
+毀損：100 / 999	Damage: 100 / 999
+活動日期：2011/99/99~2011/99/99	Event dates: 2011/99/99~2011/99/99
+測試	Test
+滑鼠速度bar	Mouse speed bar
+灰岩山 LV1~8	Limestone Mtn. LV1~8
+無隊伍	No Party
+營業稅率：	Sales Tax:
+狀態暫代	Status
+獲得暫代	Obtained
+獲得物品後將自動榜定	Item will be bound automatically once obtained
+生命	HP
+生涯成就 : 99999999	Lifetime Achievements : 99999999
+生涯成就報告	Lifetime Achievement Report
+留言板	Message Board
+留言者	Poster
+留言規章	Message Rules
+疲勞 2	Fatigue 2
+發表日期	Post Date
+白天	Day
+白色品質裝備	White quality gear
+白裝	White gear
+白裝三四五六妻	White gear sample
+目前玩家積分	Current Player Points
+直接附活	Attach
+確定領取	Confirm Claim
+確�	OK
+禮卷商城	Gift Voucher Mall
+禮卷：999999	Vouchers: 999999
+穫得2000成就	Earned 2000 achievement points
+穫得2000成就擊敗英國炸魚一二三四五六七八九十	Earned 2000 achievement: defeated British Fish 12345678910
+第8天	Day 8
+第三位	3rd
+第二位	2nd
+第四位	4th
+等級：	Level:
+管翀	Manage
+系統暫代	System
+紅利商城	Bonus Mall
+結束遊戲	Exit Game
+綠色品質裝備	Green quality gear
+綠裝	Green gear
+綠裝三四五六妻	Green gear sample
+維修費	Repair Cost
+聲望：999999/999999	Fame: 999999/999999
+職業介面	Class Interface
+職業專屬技能「」	Class-Exclusive Skill 「」
+職業專屬技能【】	Class-Exclusive Skill 【】
+職業技能爹死	Class Skills
+職業積分好加成不加嗎	Class Point Bonus
+職業等級 75 級	Class Level 75
+職業總積分99999分	Total Class Points 99999
+職業總積分99999分職業總積分99999分	Total Class Points 99999Total Class Points 99999
+背光效果	Backlight Effect
+能量	Energy
+自動組隊	Auto Party
+落敗感言 :	Defeat Comment :
+藍色品質裝備	Blue quality gear
+藥劑	Potion
+視窗模式	Windowed Mode
+訊息暫代	Message
+設 定 感 言	Set Message
+評價副本挑戰紀錄	Rated Dungeon Challenge Record
+調整主畫面UI大小	Adjust main UI size
+請選擇移除哪一位共乘者	Select which rider to remove
+謠言暫代	Rumor
+販售	Sell
+貪婪	Greed
+買 回	Buy Back
+超級爽的遭遇                 exp+5%，持續30分鐘。	Super Encounter                 EXP +5% for 30 min.
+轉化額外獎勵	Convert Bonus Reward
+轉移能力：	Transfer Ability:
+轉移虛寶：	Transfer Item:
+這事第一位共乘者	This is the first rider
+造成暫代	Caused
+進入領地	Enter Territory
+進行轉移	Transfer
+遊戲說明	Game Guide
+選擇場景：	Select Scene:
+選擇建鎮地區：	Select Town Location:
+重抽	Redraw
+重生點	Respawn Point
+重置x	Reset
+鎮民稅率：100％	Resident Tax: 100%
+鎮長：一二三四五六七八九十	Mayor: 12345678910
+開啟招募	Open Recruitment
+開放追蹤	Enable Tracking
+關 閉	Close
+阿卡貝拉友愛之鎮	Arcabella Friendship Town
+隊伍明細（3/5）	Party Details (3/5)
+隊伍暫代	Party
+隊伍積分	Party Points
+隊員招募	Member Recruitment
+離開戰鬥	Leave Combat
+需要	Required
+額外抽獎次數：　　次	Extra draws:
+顏色校正參數	Color Calibration
+願意參加	Willing to Join
+顯示所有隊員x	Show All Members
+顯示離線鎮民	Show Offline Residents
+餓死抬頭	Sample Title
+騎乘	Mount
+黃昏	Dusk
+點卷商城	Point Voucher Mall
+點數：999999	Points: 999999
+：	:
+Ｘ	X
+�� 99 ��點數	99 Points
+LV.30魔法的小喜馬拉雅犬	LV.30 Magic Himalayan Pup
+成就：2點	Achievement: 2 pts
+怪物討伐積分	Monster Hunt Points
+城鎮成就積分	Town Achievement Points
+24小時27分	24h 27m
+100小時59分	100h 59m
+僅顯示「已獲得稱號」	Show only obtained titles
+中國一定強對不隊	Sample Team
+3v3炎鷹競技場	3v3 Firehawk Arena
+21:00 開始	Starts at 21:00
+時間表	Schedule
+下限	Lower Limit
+上限	Upper Limit
+丟棄	Discard
+灰岩山時空戰場	Limestone Mtn. Battlefield
+條件1	Condition 1
+條件2	Condition 2
+條件3	Condition 3
+ɥ	Sample
+人口：300/300，300位線上	Population: 300/300, 300 online
+威望：	Prestige:
+城鎮事件	Town Event
+當月英雄公會榜　第99名	This Month's Hero Guild Rank  99th
+當月開拓公會榜　第99名	This Month's Pioneer Guild Rank  99th
+開啟網頁	Open Web Page
+請選擇副本中的定位	Choose your role in the dungeon
+請輸入密保卡號：	Enter security card number:
+水晶十字勳章	Crystal Cross Medal
+世界暫代	World
+區域暫代	Zone
+互助暫代	Assist
+城鎮頻道	Town Channel
+系統頻道	System Channel
+反向排列	Reverse Order
+製作	Craft
+全啟/全關	All On/All Off
+存取/套用	Load/Apply
+目前隊伍人數：1	Current party size: 1
+隊長名稱：一二三四五六七八	Leader: 12345678
+所屬公會：一二三四五六七八	Guild: 12345678
+成立遠征隊	Form Expedition
+法色	Highlight Color
+左瞳色	Left Eye Color
+右瞳色	Right Eye Color
+海綿寶寶	SpongeBob
+派大星	Patrick
+公會淘汰賽場地	Guild Elimination Arena
+傳奇網路	X-Legend
+聖境傳說要八個字	Eden Eternal Eight Words
+公會01	Guild 01
+聖境傳說	Eden Eternal
+0：00：0	0:00:0
+藍軍殺人數	Blue Team Kills
+紅軍殺人	Red Team Kills
+個人殺人	Personal Kills
+人物契約收藏冊	Character Contract Collection
+鑄造	Forge
+魔池	Mana Pool
+會長：一二三四五六七巴	Guild Master: 12345678
+L01.阿卡貝拉友愛之鎮	L01. Arcabella Friendship Town
+聲望：	Fame:
+會員：	Member:
+城鎮類型：	Town Type:
+使用	Use
+使用這個命運圖捲?	Use this Destiny Scroll?
+命運條	Destiny Bar
+動作鈕	Action Button
+剩餘次數 : 9	Tries left: 9
+點數操作列	Points Bar
+貪婪島剩餘時間	Greed Island Time Left
+殺人數：	Kills:
+積分：	Points:
+進入房間	Enter Room
+小屋倉庫	House Storage
+目前沒有承租房屋	No house currently rented
+租金費用	Rent Cost
+支付租金	Pay Rent
+寶箱錢幣：9999000	Chest Coins: 9999000
+寶箱＿x999000	Chest_ x999000
+寶箱?¥٣＿999000	Chest_ 999000
+精工	精工
+證照組合（目前可裝備的證照數：７）	Certificate Combo (equippable certs: 7)
+證照組合（目前可裝備的證照數：２）	Certificate Combo (equippable certs: 2)
+剩餘 70 知識點數	70 Knowledge Points left
+已投入 99 知識點數	99 Knowledge Points spent
+已�9��點數	9 Points Spent
+當周表現	This Week's Performance
+剩餘 96865 點JP可用	96865 JP left
+剩餘 80060 金 124 銀可用	80060g 124s left
+第1天	Day 1
+第2天	Day 2
+第3天	Day 3
+第4天	Day 4
+第5天	Day 5
+第6天	Day 6
+第7天	Day 7
+第9天	Day 9
+第10天	Day 10
+第11天	Day 11
+第12天	Day 12
+第13天	Day 13
+第14天	Day 14
+第15天	Day 15
+第16天	Day 16
+第17天	Day 17
+第18天	Day 18
+第19天	Day 19
+第20天	Day 20
+第21天	Day 21
+第22天	Day 22
+第23天	Day 23
+第24天	Day 24
+第25天	Day 25
+第26天	Day 26
+第27天	Day 27
+第28天	Day 28
+紅橙黃	Red Orange Yellow
+刀槍砲劍	Sample Weapons
+魔方能量	Cube Energy
+魔方力量	Cube Power
+布諾拉克方塊x	Bunorac Cube
+機率%	Chance %
+配方	Recipe
+方塊功能名稱	Cube Function Name
+物品名稱	Item Name
+新布蘭德方塊詳細資料	New Brandt Cube Details
+詳細資料類型	Detail Type
+新布蘭德方塊	New Brandt Cube
+系統記憶體	System Memory
+程式記憶體	Process Memory
+顯示記憶體	Video Memory
+請放置舉辦宴會的功能物品	Place the banquet item
+繳交物品	Turn In Item
+爆擊/魔爆	Crit/M.Crit
+當前等級：%s1級	Current level: %s1
+戰鬥2	Combat 2
+祈禱1	Prayer 1
+休息0	Rest 0
+活力值：100/100	Energy: 100/100
+放棄寵物	Abandon Pet
+數量：10/20	Count: 10/20
+召喚作戰 / 取消作戰	Summon / Dismiss
+施展祈禱 / 取消祈禱	Pray / Cancel Prayer
+綁定封印	Bind Seal
+商城封印	Mall Seal
+排行表列表	Ranking List
+您於此排行榜上的名次為	Your rank on this leaderboard:
+第999名	Rank 999
+百大冒險者	Top 100 Adventurers
+更新時間　14：00	Updated at 14:00
+僅顯示尚未攻略副本	Show uncleared dungeons only
+傷害承擔	Damage Taken
+請選擇副本中要扮演的腳色定位	Choose your dungeon role
+請左鍵點選至多4個欲參加的副本	Left-click up to 4 dungeons
+選擇要找的隊友	Choose teammates to find
+繼續	Continue
+一階加成 3% 攻擊 999999	Tier 1 Bonus 3% Attack 999999
+若在有失敗加成下做其他操作時，會遺失該加成效果	Performing other actions while a fail bonus is active will lose it
+南方舊曠口【一般模式】LV7 (1/2)	South Old Mine [Normal] LV7 (1/2)
+藍軍水晶數	Blue Team Crystals
+紅軍水晶數	Red Team Crystals
+時間倒數	Countdown
+領地戰	Territory War
+領先公會	Leading Guild
+紅軍公會	Red Guild
+藍軍公會	Blue Guild
+個人擊殺	Personal Kills
+個人排名	Personal Rank
+最高通關層數	Highest Floor Cleared
+本週記錄層數	This Week's Floor
+隊伍記錄層數	Party Record Floor
+99／99	99/99
+在地圖上使用滑鼠滾輪可以縮放地圖大小，按住左鍵可以移動地圖。	Use the mouse wheel to zoom the map; hold left click to move it.
+招待券	Invitation
+啟源	Origin
+金錢	Money
+貨幣資訊	Currency Info
+ӝɷڙع	Sample Text
+ڙعƃʭ	Sample Text
+Ϡďۡɺ	Sample Text
+ȺѯĨʫ	Sample Text
+一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十 一二三四五六七八九十一二三四五六七八九十 一二三四五六七八九十一二三四五六七八九十	Sample Text Sample Text Sample Text
+寶箱＿ x999000	Chest_ x999000
+�業��	Sample Text
+��	Sample Text
+國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國	Sample Text
+國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國國	Sample Text
+Bonus Skill	Compétence bonus
+No Bonus	Aucun bonus
+Class Level	Niveau de classe
+Rewards:	Récompenses :
+In progress	En cours
+Ready to turn in	À rendre
+Checked	Vérifiée
+Class Talents	Talents de classe
+Shop	Boutique
+Quest	Quête
+Craft	Fabrication
+Drop	Butin
+Opened from	Obtenu en ouvrant
+Archive Categories	Catégories d'archive
+Archive Points	Points d'archive
+Right-click a card to take it out	Clic droit sur une carte pour la retirer
+Drag an item onto the slot, or drop it on the grid	Glissez un objet sur l'emplacement ou sur la grille
+Show in-game treasures only	Trésors du jeu
+Show mall treasures only	Trésors de la boutique
+Show collected only	Seulement archivés
+Reverse order	Ordre inversé
+Search:	Recherche :
+Collection rate: 	Taux de collection : 
+Other	Autre
+How to obtain	Obtention
+Archived	Archivé
+Not archived	Non archivé
+Archive points: 	Points d'archive : 
+Next reward: 	Prochaine récompense : 
+All archive rewards reached.	Toutes les récompenses d'archive sont atteintes.
+points	points
+All	Tous
+Weapons	Armes
+Armor	Armures
+Costumes	Costumes
+Pet Gear	Équipement de familier
+Mounts	Montures
+Accessories	Accessoires
+Pets	Familiers
+Preview on me	Aperçu sur moi
+Use / Equip	Utiliser / Équiper
+Take out	Retirer
+Offense	Attaque
+Accuracy & Evasion	Précision & Esquive
+Critical hits	Coups critiques
+Defence	Défense
+Speed	Vitesse
+Base physical damage of your attacks. Strength, gear and weapon are added, then multiplied by your % bonuses.	Dégâts physiques de base de vos attaques. La Force, l'équipement et l'arme s'additionnent, puis sont multipliés par vos bonus en %.
+(100 + ATK%) x (STR x 5 + gear + weapon) / 100 + flat bonus	(100 + ATQ%) × (FOR × 5 + équipement + arme) / 100 + bonus fixe
+Each STR point gives +5 physical attack.	Chaque point de FOR donne +5 d'attaque physique.
+Base magic damage of your spells. Intelligence, gear and weapon are added, then multiplied by your % bonuses.	Dégâts magiques de base de vos sorts. L'Intelligence, l'équipement et l'arme s'additionnent, puis sont multipliés par vos bonus en %.
+(100 + M-ATK%) x (INT x 5 + gear + weapon) / 100 + flat bonus	(100 + ATQ MAG%) × (INT × 5 + équipement + arme) / 100 + bonus fixe
+Each INT point gives +5 magic attack.	Chaque point d'INT donne +5 d'attaque magique.
+Random spread of the weapon: every hit deals between (100 - variance)% and (100 + variance)% of its base damage.	Dispersion de l'arme : chaque coup inflige entre (100 - variance)% et (100 + variance)% de ses dégâts de base.
+damage x (100 +/- variance)%	dégâts × (100 ± variance)%
+Your chance to hit, compared with the target's Dodge. The higher it is, the fewer misses.	Votre chance de toucher, comparée à l'Esquive de la cible. Plus elle est haute, moins vous ratez.
+((gear + weapon + buff + LCK x factor) x (1 + bonus%)) / level divisor + base	((équipement + arme + buff + CHA × facteur) × (1 + bonus%)) / diviseur de niveau + base
+Hit chance cap: 300%.	Plafond de chance de toucher : 300%.
+Your chance to avoid a physical hit, compared with the attacker's Hit Rate.	Votre chance d'éviter un coup physique, comparée à la Précision de l'attaquant.
+((gear + buff + AGI x factor) x (1 + bonus%)) / level divisor + base + flat	((équipement + buff + AGI × facteur) × (1 + bonus%)) / diviseur de niveau + base + fixe
+Cap: 100%.	Plafond : 100%.
+Chance that a physical hit is critical (extra damage).	Chance qu'un coup physique soit critique (dégâts supplémentaires).
+((gear + buff + LCK x 0.8) x (1 + bonus%)) / level divisor + base	((équipement + buff + CHA × 0,8) × (1 + bonus%)) / diviseur de niveau + base
+LCK gives +0.8 critical rating per point.	Chaque point de CHA donne +0,8 de taux critique.
+Chance that a spell is critical (extra damage).	Chance qu'un sort soit critique (dégâts supplémentaires).
+((gear + buff + LCK x 1) x (1 + bonus%)) / level divisor + base	((équipement + buff + CHA × 1) × (1 + bonus%)) / diviseur de niveau + base
+LCK gives +1 magic critical rating per point.	Chaque point de CHA donne +1 de taux critique magique.
+Damage multiplier of a physical critical hit.	Multiplicateur de dégâts d'un coup critique physique.
+base 150% + gear + buff	base 150% + équipement + buff
+Cap: 300%.	Plafond : 300%.
+Damage multiplier of a magic critical hit.	Multiplicateur de dégâts d'un coup critique magique.
+Reduces the extra damage taken from critical hits.	Réduit les dégâts supplémentaires subis lors des coups critiques.
+clamp(DEF / (Lv^1.6 + 30), 0, 70)	borné(DÉF / (Niv^1,6 + 30), 0, 70)
+Cap: 70%.	Plafond : 70%.
+Chance to parry a hit and halve its damage. Two-handed weapons only.	Chance de parer un coup et d'en diviser les dégâts par deux. Armes à deux mains uniquement.
+(gear + buff + AGI x 0.8) / level divisor	(équipement + buff + AGI × 0,8) / diviseur de niveau
+Chance to block a hit and cancel its damage. Shield only.	Chance de bloquer un coup et d'en annuler les dégâts. Bouclier uniquement.
+(gear + buff + STR x 1) / level divisor	(équipement + buff + FOR × 1) / diviseur de niveau
+Cap: 50%.	Plafond : 50%.
+Share of physical damage absorbed by your Defence.	Part des dégâts physiques absorbée par votre Défense.
+clamp(DEF x factor / (Lv^1.6 + 30), 0, 70)	borné(DÉF × facteur / (Niv^1,6 + 30), 0, 70)
+How much faster you attack. Agility, gear and buffs are added then divided by the level divisor.	Rapidité d'attaque. L'Agilité, l'équipement et les buffs s'additionnent puis sont divisés par le diviseur de niveau.
+((gear + buff + AGI x 0.5) x (1 + bonus%)) / level divisor	((équipement + buff + AGI × 0,5) × (1 + bonus%)) / diviseur de niveau
+How much faster you cast spells (shorter cast time).	Rapidité d'incantation (temps de lancement plus court).
+((gear + buff + AGI x factor) x (1 + bonus%)) / level divisor	((équipement + buff + AGI × facteur) × (1 + bonus%)) / diviseur de niveau
+Your running speed relative to the base speed, including mount and buffs.	Votre vitesse de course par rapport à la vitesse de base, montures et buffs inclus.
+base x min(1 + (mount/buff % + AGI x factor %), cap)	base × min(1 + (% monture/buff + AGI × facteur %), plafond)
+Cap: 200%.	Plafond : 200%.
+Why	Rôle
+Your values	Vos valeurs
+Note	Note
+How to read: gear = bonus from equipment, buff = bonus from buffs, talents and certificates, Lv = your level, level divisor = (Lv x 0.4 + 1) which scales ratings with level.	Lecture : équipement = bonus des équipements, buff = bonus des buffs, talents et certificats, Niv = votre niveau, diviseur de niveau = (Niv × 0,4 + 1) qui adapte les taux au niveau.
+Value in the formula	Valeur dans la formule
+Cloth Armor (Current Gear)	Armure de tissu (équipement actuel)
+Light Armor	Armure légère
+Heavy Armor	Armure lourde
+Gear Upgrade	Amélioration d'équipement
+Gear Swap	Changement d'équipement
+Character Stats	Caractéristiques
+Title	Titre
+Fame	Renommée
+Achievement	Succès
+Total Achievement	Total des succès
+Monster Conquest	Conquête de monstres
+Town Achievement	Succès de ville
+Victory Quote	Déclaration de victoire
+Defeat Quote	Déclaration de défaite
+Set Quote	Définir
+Accept Revive	Accepter la résurrection
+Refuse Revive	Refuser la résurrection
+Attach	Joindre
+Auto Party	Groupe auto
+Browse	Parcourir
+Classic	Classique
+Content	Contenu
+Count Down 10 sec	Compte à rebours 10 s
+Family Storage	Coffre familial
+Global	Global
+I agree to the message rules	J'accepte le règlement des messages
+Leave a Message	Laisser un message
+Mailbox	Boîte aux lettres
+Message Board	Tableau d'affichage
+Message Rules	Règlement des messages
+My Sales	Mes ventes
+My Stall	Mon étal
+Open Recruitment	Recrutement ouvert
+Post Date	Date de publication
+Rent Cost	Coût de location
+Take Gold	Prendre l'or
+No destiny road.	Aucune Route du Destin.
+No house currently rented	Aucune maison louée actuellement
+on sale	en vente
+cancel	annuler
+close	fermer
+forever	permanent
+RESET	RÉINITIALISER
+Item Mall	Boutique d'objets
+Loyalty Shop	Boutique de fidélité
+Special	Spécial
+Rubex Kube	Cube Rubex
+Starts at 21:00	Commence à 21:00
+Admin	Admin
+Opt.	Opt.
+Day 1	Jour 1
+Day 2	Jour 2
+Day 3	Jour 3
+Day 4	Jour 4
+Day 5	Jour 5
+Day 6	Jour 6
+Day 7	Jour 7
+Day 8	Jour 8
+Day 9	Jour 9
+Day 10	Jour 10
+Day 11	Jour 11
+Day 12	Jour 12
+Day 13	Jour 13
+Day 14	Jour 14
+Day 15	Jour 15
+Day 16	Jour 16
+Day 17	Jour 17
+Day 18	Jour 18
+Day 19	Jour 19
+Day 20	Jour 20
+Day 21	Jour 21
+Day 22	Jour 22
+Day 23	Jour 23
+Day 24	Jour 24
+Day 25	Jour 25
+Day 26	Jour 26
+Day 27	Jour 27
+Day 28	Jour 28
+Day 29	Jour 29
+Day 30	Jour 30
+Day 31	Jour 31
+Day 32	Jour 32
+Main Quest	Quête principale
+Side Quest	Quête secondaire
+Repeat Quest	Quête répétable
+Daily Quest	Quête quotidienne
+Special Quest	Quête spéciale
+Guild Quest	Quête de guilde
+Awakening Quest	Quête d'éveil
+Class Quest	Quête de classe
+Missed Quests	Quêtes manquées
+No forgotten quests at your level.	Aucune quête oubliée à votre niveau.

@@ -1,0 +1,20 @@
+ calls | total_ms | mean_ms | max_ms |                                             q                                              
+-------+----------+---------+--------+--------------------------------------------------------------------------------------------
+ 55392 |   1315.0 |   0.024 |    1.6 | INSERT INTO recommend_activities (player_id, recommend_id, target_number, is_finished) VAL
+ 89050 |    737.6 |   0.008 |    1.0 | DISCARD ALL
+   300 |    243.8 |   0.813 |    8.1 | INSERT INTO fast_dress (player_id, id, item_id, container_index, from_loc, from_index, pag
+   300 |     83.9 |   0.280 |    4.1 | INSERT INTO player_works (player_id, work_num) SELECT $1, n FROM generate_series($2, $3) A
+   600 |     56.6 |   0.094 |    2.8 | INSERT INTO daily_awards (id, day_index, login_time, cooldown_time, award_days, award_reco
+   300 |     43.2 |   0.144 |    1.6 | INSERT INTO player_life_skill (player_id, life_skill_id, exp, due_date) SELECT $1, s.id, $
+   600 |     42.3 |   0.071 |    5.5 | SELECT id, item_id, container_index, from_loc, from_index, page, tar_loc FROM fast_dress W
+   468 |     40.2 |   0.086 |    0.6 | UPDATE player_characters SET node_id = $1, x = $2, y = $3, z = $4, face_dir = $5 WHERE id 
+   300 |     37.1 |   0.124 |    4.4 | INSERT INTO battlefield_career (player_id, player_name, player_lv, player_class, join_coun
+   300 |     35.5 |   0.118 |    2.0 | SELECT * FROM player_works WHERE player_id = $1 ORDER BY work_num
+   300 |     34.7 |   0.116 |    2.4 | INSERT INTO custom_class_data (player_id, "index", equip_type, weapon_type, spell_1, spell
+  1508 |     32.7 |   0.022 |    2.7 | SELECT id, player_id, loc, item_id, durability, cur_maxdurability, strengthen, bind, creat
+   300 |     30.5 |   0.102 |    0.4 | UPDATE player_characters SET node_id = $1, x = $2, y = $3, z = $4, face_dir = $5 WHERE id 
+   407 |     27.6 |   0.068 |    0.4 | UPDATE player_characters SET node_id = $1, x = $2, y = $3, z = $4, face_dir = $5, hp = $6,
+   300 |     26.7 |   0.089 |    1.8 | INSERT INTO battlefield_month (player_id, player_name, player_lv, player_class, join_count
+(15 rows)
+
+calls total: 181261

@@ -1,0 +1,253 @@
+# ============================================================
+#  EDEN ETERNAL (eden-godot) - SERVER STACK (C# .NET 10)
+#  Orchestration microservices & PostgreSQL 17 + Redis 7
+#  Base unique edenfr (schémas game/account/member — DB-2, Database/022-merge-schemas.sh)
+#  (isolation données — jamais les bases du dépôt portage).
+# ============================================================
+name: edengodot
+
+services:
+  # ----------------------------------------------------------
+  #  1. Base de données PostgreSQL 17 (socle de vérité)
+  #     Port hôte 5433 : le portage (PG12) peut rester sur 5432.
+  # ----------------------------------------------------------
+  postgres:
+    image: postgres:17
+    container_name: edengodot-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    command: >
+      postgres
+      -c shared_preload_libraries=pg_stat_statements
+      -c pg_stat_statements.track=all
+      -c pg_stat_statements.max=10000
+      -c max_connections=300
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database.out:/docker-entrypoint-initdb.d/10-database.sql:ro
+      - ./Database/worlds.sql:/docker-entrypoint-initdb.d/20-worlds.sql:ro
+      - ./Database/serverstatus.sql:/docker-entrypoint-initdb.d/30-serverstatus.sql:ro
+      - ./Database/001-initial-schema.sql:/docker-entrypoint-initdb.d/40-initial-schema.sql:ro
+      - ./Database/login-poc.sql:/docker-entrypoint-initdb.d/50-login-poc.sql:ro
+      - ./Database/002-awakened-classes-data.sql:/docker-entrypoint-initdb.d/52-awakened-classes.sql:ro
+      - ./Database/004-player-works.sql:/docker-entrypoint-initdb.d/53-player-works.sql:ro
+      - ./Database/005-inventory-bag4.sql:/docker-entrypoint-initdb.d/54-inventory-bag4.sql:ro
+      - ./Database/006-inventory-native-base32.sql:/docker-entrypoint-initdb.d/55-inventory-native-base32.sql:ro
+      - ./Database/007-message-board.sql:/docker-entrypoint-initdb.d/56-message-board.sql:ro
+      - ./Database/009-family-building-container.sql:/docker-entrypoint-initdb.d/57-family-building-container.sql:ro
+      - ./Database/008-fortune-bag.sql:/docker-entrypoint-initdb.d/58-fortune-bag.sql:ro
+      - ./Database/010-archive-legacy.sql:/docker-entrypoint-initdb.d/60-archive-legacy.sql:ro
+      - ./Database/010-family-visit.sql:/docker-entrypoint-initdb.d/62-family-visit.sql:ro
+      - ./Database/011-drop-edenfr_member1.sql:/docker-entrypoint-initdb.d/70-drop-edenfr_member1.sql:ro
+      - ./Database/012-item-serial-sequence.sql:/docker-entrypoint-initdb.d/72-item-serial.sql:ro
+      - ./Database/013-account-password-hash.sql:/docker-entrypoint-initdb.d/74-account-password-hash.sql:ro
+      - ./Database/014-player-mail-item-id-int.sql:/docker-entrypoint-initdb.d/76-player-mail-item-id.sql:ro
+      - ./Database/015-trade-items.sql:/docker-entrypoint-initdb.d/78-trade-items.sql:ro
+      - ./Database/016-dead-tables-archive.sql:/docker-entrypoint-initdb.d/79-dead-tables-archive.sql:ro
+      - ./Database/017-player-characters-columns.sql:/docker-entrypoint-initdb.d/79b-player-characters-columns.sql:ro
+      - ./Database/020-pg-stat-statements.sql:/docker-entrypoint-initdb.d/80-pg-stat-statements.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  1b. Redis 7 — tickets inter-services + mutations chaudes
+  #      (DB-3 : TicketRepository, SetGold, position, vitals).
+  #      Port hôte 6380 pour cohabiter avec un éventuel redis local.
+  # ----------------------------------------------------------
+  redis:
+    image: redis:7
+    container_name: edengodot-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  2. TicketServer (Validation des jetons de connexion)
+  # ----------------------------------------------------------
+  ticket:
+    build:
+      context: ./server
+      dockerfile: src/Eden.Ticket/Dockerfile
+    container_name: edengodot-ticket
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      EDEN_OBSERVABILITY_BIND: "http://0.0.0.0"
+      EDEN_OBSERVABILITY_PORT: "9096"
+    ports:
+      - "2067:2067"
+      - "9096:9096"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  3. GatewayServer (Passerelle & Heartbeat)
+  # ----------------------------------------------------------
+  gateway:
+    build:
+      context: ./server
+      dockerfile: src/Eden.Gateway/Dockerfile
+    container_name: edengodot-gateway
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      EDEN_OBSERVABILITY_BIND: "http://0.0.0.0"
+      EDEN_OBSERVABILITY_PORT: "9091"
+    ports:
+      - "5560:5560"
+      - "9091:9091"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  4. LoginServer (Authentification & Liste des mondes)
+  # ----------------------------------------------------------
+  login:
+    build:
+      context: ./server
+      dockerfile: src/Eden.Login/Dockerfile
+    container_name: edengodot-login
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # POC : IP/port annoncés au client dans la liste des channels.
+      POC_ADVERTISE_IP: ${POC_ADVERTISE_IP:-127.0.0.1}
+      POC_ADVERTISE_PORT: ${POC_ADVERTISE_PORT:-${WORLD_PORT:-5200}}
+      EDEN_OBSERVABILITY_BIND: "http://0.0.0.0"
+      EDEN_OBSERVABILITY_PORT: "9092"
+      # Lien interne → TicketServer (nom docker du réseau `eden`).
+      TICKET_IP: ticket
+    ports:
+      - "6543:6543"
+      - "9092:9092"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  5. WorldServer (Gestion personnages, sélection, tickets zone)
+  # ----------------------------------------------------------
+  world:
+    build:
+      context: ./server
+      dockerfile: src/Eden.World/Dockerfile
+    container_name: edengodot-world
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      EDEN_OBSERVABILITY_BIND: "http://0.0.0.0"
+      EDEN_OBSERVABILITY_PORT: "9093"
+      # Lien interne → TicketServer (nom docker). ZONE_IP reste à
+      # 127.0.0.1 : annoncée aux clients dans les tickets zone.
+      TICKET_IP: ticket
+    ports:
+      - "5200:5200"
+      - "9093:9093"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  6. ZoneServer (Gestion instance de jeu, combat, déplacement)
+  # ----------------------------------------------------------
+  zone:
+    build:
+      context: ./server
+      dockerfile: src/Eden.Zone/Dockerfile
+    container_name: edengodot-zone
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Gamedata native — dump décodé monté read-only + tables client
+      # EDENFR (corpus/fr-full/data/db) comme référence de validation.
+      DATA_DIR: /data/db_decoded
+      SCENE_DIR: /data/scene
+      EDEN_REFORGED_DB: /reforged-db
+      # Liens inter-services — noms docker du réseau `eden`
+      # (.env garde 127.0.0.1 pour l'usage host via start-native.sh).
+      TICKET_IP: ticket
+      WORLD_LINK_IP: world
+      MISSION_HOST: mission
+      EDEN_OBSERVABILITY_BIND: "http://0.0.0.0"
+      EDEN_OBSERVABILITY_PORT: "9094"
+    volumes:
+      - ./server_us/Data:/data:ro
+      - ${EDEN_CLIENT_DB_HOST_DIR:-../corpus/fr-full/data/db}:/reforged-db:ro
+    ports:
+      - "5201:5201"
+      - "9094:9094"
+    depends_on:
+      - world
+    networks:
+      - eden
+
+  # ----------------------------------------------------------
+  #  7. MissionServer (Quêtes globales, classements, activités)
+  # ----------------------------------------------------------
+  mission:
+    build:
+      context: ./server
+      dockerfile: src/Eden.Mission/Dockerfile
+    container_name: edengodot-mission
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATA_DIR: /data/db_decoded
+      EDEN_DATA: /data/db_decoded
+      SCENE_DIR: /data/scene
+      EDEN_REFORGED_DB: /reforged-db
+      EDEN_OBSERVABILITY_BIND: "http://0.0.0.0"
+      EDEN_OBSERVABILITY_PORT: "9095"
+    volumes:
+      - ./server_us/Data:/data:ro
+      - ${EDEN_CLIENT_DB_HOST_DIR:-../corpus/fr-full/data/db}:/reforged-db:ro
+    ports:
+      - "5202:5202"
+      - "9095:9095"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eden
+
+networks:
+  eden:
+    driver: bridge
+
+volumes:
+  # Volumes repris de la pile eden-flax (2026-11-02) : base edenfr et
+  # Redis conservés tels quels.
+  pgdata:
+    name: edenflax_pgdata
+    external: true
+  redisdata:
+    name: edenflax_redisdata
+    external: true

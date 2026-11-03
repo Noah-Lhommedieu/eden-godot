@@ -1,0 +1,2 @@
+rel	kind	status	classes	glbNodes	natNodes	glbV	natV	glbT	natT	glbBones	natBones
+monster/model/M025	monster	DIFF	nodes-missing(Node3D:M0252|MeshInstance3D:M025|MeshInstance3D:KNOCK) nodes-extra(Node3D:M0253|Node3D:M025|Node3D:KNOCK+2) tex(m02501/m02502)	18	20	1579	1579	2219	2219	16	16

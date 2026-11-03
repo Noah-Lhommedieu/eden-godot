@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://edenrebornglbprobe"]
+
+[ext_resource type="Script" path="res://scripts/debug/GlbProbe.cs" id="1_probe"]
+
+[node name="GlbProbe" type="Node3D"]
+script = ExtResource("1_probe")

@@ -1,0 +1,156 @@
+# Abyss
+
+> Source : `src_csv/D_ Abyss.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+> ⚠️ **Hors périmètre (lvl>90)** : Donjon Vendetta niv. ~115. Données conservées pour référence.
+
+**ABYSS**
+
+**TROPHIES:**
+
+**DUNGEON REWARDS**
+
+| NAME: | BASE EFFECT: | EFFECT: | 2-PIECE EFFECT: | BOSS: |
+|---|---|---|---|---|
+
+**BOSSES**
+
+| Sakuya's Pact | All Ele Res+3. PVE DMG Dealt+1% | Your attacks have a 5% chance to decrease targets physical resistance -10 pts & ACC-650 pts, lasts 5 sec. | MAX HP+4711 pts, P-ATK+3%, AGI+225 pts. | Sakuya |
+|---|---|---|---|---|
+| Sakuya's Broken Soul | All Ele Res+3. PVE DMG Dealt+1% | Your attacks have a 5% chance to increase P-ATK+14653 pts, P-CRIT Rate+400 pts, lasts 5 sec. |  | Sakuya |
+| Esh-Baal's Pact | All Ele Res+3. PVE DMG Dealt+1% | Your attacks have a 5% chance to increase P-ATK & M-ATK+13188 pts, lasts 5 sec. | MAX HP+4711 pts, P-ATK & M-ATK+2%, AGI+225 pts. | Esh-Baal |
+| Esh-Baal's Broken Soul | All Ele Res+3. PVE DMG Dealt+1% | Your attacks have a 5% chance to increase ACC+400 pts & EVA+400 pts, lasts 5 sec |  | Esh-Baal |
+| Leonic's Pact | All Ele Res+3. PVE DMG Taken-2% | Your attacks have a 5% chance to increase DEF+40% & recover MP+400 pts, lasts 5 sec. | MAX HP+4711 pts, DEF+3%, AGI+225 pts. | Leonic |
+| Leonic's Broken Soul | All Ele Res+3. PVE DMG Taken-2% | Your attacks and casts have a 5% chance to recover HP+7500 pts & remove 2 negative status'. |  | Leonic |
+| Willow One-Eye's Pact | All Ele Res+3. PVE CAST SPD+5% | Your attacks and casts have a 5% chance to increase WIS+725 pts & DEF+20%; lasts 5 sec. | MAX HP+4711 pts, WIS+3%, AGI+225 pts. | Willow One-Eye |
+| Willow One-Eye's Broken Soul | All Ele Res+3. PVE CAST SPD+5% | Your attacks and casts have a 5% chance to increase G-Healing+35% & M-SPD+10%; lasts 5 sec. |  | Willow One-Eye |
+| Ferelwing's Pact | All Ele Res+3. PVE DMG Dealt+1% | Your attacks have a 5% chance to increase M-ATK+17584 pts & CAST SPD+15%; lasts 5 sec. | MAX HP+4711 pts, M-ATK+3%, AGI+225 pts. | Ferelwing |
+| Ferelwing's Broken Soul | All Ele Res+3. PVE DMG Dealt+1% | Your attacks have a 6% chance to deal double hit DMG & a 3% chance to deal triple hit DMG. |  | Ferelwing |
+
+**TRADE SYSTEM REWARDS:**
+
+**UPGRADED TROPHIES:**
+
+| NAME: |  | EFFECT: |  |  |  | 2-PIECE EFFECT: |  | COST: |
+|---|---|---|---|---|---|---|---|---|
+| Abyss: Sakuya's Pact |  | All Ele Res+5. DMG Dealt+1% P-ATK+5%. | Your attacks have a 5% chance to decrease targets physical resistance -10 pts & ACC-650 pts, lasts 8 sec. |  |  | MAX HP+5233 pts, P-ATK+6%, AGI & LCK+250 pts. |  | Abyssal Soul x200. |
+| Abyss: Sakuya's Broken Soul |  | All Ele Res+5. DMG Dealt+1% P-ATK+5%. | Your attacks have a 5% chance to increase P-ATK+14653 pts, P-CRIT Rate+400 pts, lasts 8 sec. |  |  |  |  | Abyssal Soul x200. |
+| Abyss: Esh-Baal's Pact |  | All Ele Res+5. DMG Dealt+1% P-ATK & M-ATK+3% | Your attacks have a 5% chance to increase P-ATK & M-ATK+13188 pts, lasts 8 sec. |  |  | MAX HP+5233 pts, P-ATK & M-ATK+4%, AGI & LCK+250 pts. |  | Abyssal Soul x200. |
+| Abyss: Esh-Baal's Broken Soul |  | All Ele Res+5. DMG Dealt+1% P-ATK & M-ATK+3% | Your attacks have a 5% chance to increase ACC+400 pts & EVA+400 pts, lasts 8 sec. |  |  |  |  | Abyssal Soul x200. |
+| Abyss: Leonic's Pact |  | All Ele/Phys Res+5. DMG Taken-5%. | Your attacks have a 5% chance to increase DEF+40% & recover MP+400 pts, lasts 8 sec. |  |  | MAX HP+5233 pts, DEF+6%, AGI & LCK+250 pts. |  | Abyssal Soul x200. |
+| Abyss: Leonic's Broken Soul |  | All Ele/Phys Res+5. DMG Taken-5%. | Your attacks and casts have a 5% chance to recover HP+7500 pts & remove 2 negative status'. |  |  |  |  | Abyssal Soul x200. |
+| Abyss: Willow One-Eye's Pact |  | All Ele Res+5. CAST SPD/WIS+5% | Your attacks and casts have a 5% chance to increase WIS+725 pts & DEF+20%; lasts 8 sec. |  |  | MAX HP+5233 pts, WIS+6%, AGI & LCK+250 pts. |  | Abyssal Soul x200. |
+| Abyss: Willow One-Eye's Broken Soul |  | All Ele Res+5. CAST SPD/WIS+5% | Your attacks and casts have a 5% chance to increase G-Healing+35% & M-SPD+10%; lasts 8 sec. |  |  |  |  | Abyssal Soul x200. |
+| Abyss: Ferelwing's Pact |  | All Ele Res+5. DMG Dealt+1% M-ATK+5%. | Your attacks have a 5% chance to increase M-ATK+17584 pts & CAST SPD+15%; lasts 8 sec. |  |  | MAX HP+5233 pts, M-ATK+6%, AGI & LCK+250 pts. |  | Abyssal Soul x200. |
+| Abyss: Ferelwing's Broken Soul |  | All Ele Res+5. DMG Dealt+1% M-ATK+5%. | Your attacks have a 6% chance to deal double hit DMG & a 3% chance to deal triple hit DMG. |  |  |  |  | Abyssal Soul x200. |
+| OTHER TRADES: |  |  |  |  | MATERIAL TRADES: |  |  |  |
+| PETS |  |  |  |  | MATERIALS: |  | COST: |  |
+| NAME: | PRAYS |  | BATTLE SKILLS | COST: | Abyss Head Armor Fragment |  | Abyssal Soul x150. |  |
+| Esh-Baal | Magic Energy: Guitar, Pike & Hammer's P-ATK/M-ATK+10%.<br>Fire Armor: Fire Resistance+7%. |  |  | Abyssal Soul x250 | Abyss Body Armor Fragment |  | Abyssal Soul x150. |  |
+|  |  |  |  |  | Abyss Waist Armor Fragment |  | Abyssal Soul x150. |  |
+|  | Bone Gnash: Deals physical DMG to select target. Also has 40% chance of reflecting 2% of the attack DMG. Lasts 3 sec.<br> |  |  |  | Abyss Hand Armor Fragment |  | Abyssal Soul x150. |  |
+|  |  |  |  |  | Abyss Foot Armor Fragment |  | Abyssal Soul x150. |  |
+|  | Resonating Blow: Inflicts Physical DMG per second upon an enemy for 8 sec., stacking up to 5 times. |  |  |  | Fox Spirit Essence |  | Abyssal Soul x150. |  |
+|  |  |  |  |  | Fire Dragon Essence |  | Abyssal Soul x150. |  |
+| Oriel | Cracking Skulls: Dagger, Cestus, Club & Rapier's ATK & M-ATK +10%. <br>Dark Armor: Dark Resistance+7 pts. |  |  | Abyssal Soul x250 | Molten Monster Essence |  | Abyssal Soul x150. |  |
+|  |  |  |  |  | Tangle Beast Essence |  | Abyssal Soul x150. |  |
+|  | Flame Combust: Deals fire DMG to all targets within a 20 foot radius. Also has a 5% chance to knocking back target. |  |  |  | Phoenix Seal Essence |  | Abyssal Soul x150. |  |
+|  | Vocal Bomb: Deals Fire DMG to an enemy; if enemy is under the Earth Shock effect, there is a 10% chance to knock the enemy down. Lasts 4 sec. |  |  |  |  |  |  |  |
+
+**LV115 ARMOR SETS:**
+
+| NAME: | 2-PIECE EFFECT: | 3-PIECE EFFECT: | 5-PIECE EFFECT: | COST: | MATERIALS: |
+|---|---|---|---|---|---|
+
+**HEAVY ARMORS**
+
+| Liberator's Helmet | WIS+130 pts, AGI+75 pts. | G-Healing+321 pts, M-CRIT Rate+331 pts, M-CRIT DMG+10%, CAST SPP+331 pts. | WIS+10%, CAST SPD+10%, Glacier Knight <Ice Blessing>, Paladin <Light - Blessing Aura> & <Defense - Blessing Aura> Healing+5%. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Phoenix Seal Essence x4. |
+|---|---|---|---|---|---|
+| Liberator's Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Phoenix Seal Essence x5 |
+| Liberator's Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Tangle Beast Essence x2. |
+| Liberator's Gauntlets |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Tangle Beast Essence x3 |
+| Liberator's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Tangle Beast Essence x4 |
+| Guardian Knight's Helmet | STR+110 pts, WIS+110 pts. | Max HP+3388 pts, P-Healing+331, ATK SPD+331, BLOCK+10%. | DMG Taken-10%, All Resistance+5 pts, Malice+30%. When attacked you have a 5% chance to grant surrounding allies within 15 meters "Guardian" Status for 2 seconds, recovering HP+3% & reducing -5% DMG Taken every second. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Fire Dragon Essence x4. |
+| Guardian Knight's Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Fire Dragon Essence x5 |
+| Guardian Knight's Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Fox Spirit Essence x2. |
+| Guardian Knight's Gauntlets |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Fox Spirit Essence x3 |
+| Guardian Knight's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Fox Spirit Essence x4 |
+| Titan Warrior's Helmet | STR+75 pts, AGI+130 pts, INT+75 pts. | AGI+130 pts, ATK SPD+331 pts, P-CRIT Rate & M-CRIT Rate+331 pts, EVA+331 pts. | P-ATK & M-ATK +10%. Your attacks have a 5% chance to deal Triple Hit DMG. Your attacks have a 3% chance to grant immunity to the next received attack. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Molten Monster Essence x4. |
+| Titan Warrior's Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Molten Monster Essence x5 |
+| Titan Warrior's Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Phoenix Seal Essence x2. |
+| Titan Warrior's Gauntlets |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Phoenix Seal Essence x3 |
+| Titan Warrior's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Phoenix Seal Essence x4 |
+| Evil Conqueror's Helmet | STR+180 pts, INT+180 pts. | MAX MP+3388 pts, P-CRIT Rate & M-CRIT Rate+331 pts, P-CRIT DMG & M-DMG +10%, ACC+331 pts. | P-ATK & M-ATK+15%, DMG Dealt+5%. Your attacks have a 5% chance to Reduce target's Physical & Elemental Resistance -5%, stacks 2 times. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Fox Spirit Essence x4. |
+| Evil Conqueror's Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Fox Spirit Essence x5 |
+| Evil Conqueror's Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Molten Monster Essence x2. |
+| Evil Conqueror's Gauntlets |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Molten Monster Essence x3 |
+| Evil Conqueror's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Molten Monster Essence x4 |
+
+**LIGHT ARMORS**
+
+| Dark Ninja Hat | STR+130 pts, LCK+75 pts. | MAX HP+3227 pts, STR+100 pts, AGI+60 pts, P-CRIT Rate +331 pts, P-DMG +10%. | P-ATK+15%, DMG Dealt+5%, M-SPD+10%. Your attacks have a 5% chance to deal Double Hit DMG. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Tangle Beast Essence x4. |
+|---|---|---|---|---|---|
+| Dark NInja Brigandine |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Tangle Beast Essence x5 |
+| Dark NInja Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Molten Monster Essence x2. |
+| Dark NInja Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Molten Monster Essence x3 |
+| Dark NInja Shoes |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Molten Monster Essence x4 |
+| Revelation Crown | INT+130 pts, LCK+75 pts. | MAX MP+3227 pts, INT+100 pts, AGI+60 pts, M-CRIT Rate +331 pts, ACC+336 pts. | M-ATK+15%, DMG Dealt+5%. Your attacks inflict +798 pts Dark DMG. Your attacks will increase M-ATK+1% & DMG Dealt+1% for 5 secs, stacks 10 times. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Phoenix Seal Essence x4. |
+| Revelation Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Phoenix Seal Essence x5 |
+| Revelation Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Tangle Beast Essence x2. |
+| Revelation Gauntlets |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Tangle Beast Essence x3 |
+| Revelation Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Tangle Beast Essence x4 |
+| Divine Zealot's Leather Hat | STR+75 pts, AGI+130 pts. | LCK+130 pts, ATK SPD+331 pts, P-CRIT Rate+331 pts, EVA+336 pts. | P-ATK+10%, DMG Taken-5%, M-SPD+10%. When evading your next attack will deal Triple Hit DMG. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Fire Dragon Essence x4 |
+| Divine Zealot's Leather Body |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Fire Dragon Essence x5 |
+| Divine Zealot's Leather Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Molten Monster Essence x2. |
+| Divine Zealot's Leather Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Molten Monster Essence x3 |
+| Divine Zealot's Leather Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Molten Monster Essence x4 |
+| Wrathful Rhymester's Hat | AGI+130 pts, INT+75 pts. | LCK+130 pts, CAST SPD+331 pts, M-CRIT Rate+331 pts, EVA+336 pts. | M-ATK+10%. Your attacks have a 2% chance to deal Double Hit DMG. Your attacks will reduce target's P-CRIT Rate & M-CRIT Rate -372 pts, ACC-372 pts for 3 seconds. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Fox Spirit Essence x4. |
+| Wrathful Rhymester's Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Fox Spirit Essence x5 |
+| Wrathful Rhymester's Band |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Phoenix Seal Essence x2. |
+| Wrathful Rhymester's Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Phoenix Seal Essence x3 |
+| Wrathful Rhymester's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Phoenix Seal Essence x4 |
+| Requiem Crown | WIS+180 pts. | WIS+130 pts, G-Healing+321 pts, M-CRIT Rate+331 pts, CAST SPP+331 pts. | CAST SPD+10%, M-SPD+10%. Support Skill <Cure>, Life Worshipper <Forceful Rhythm> Healing+7%. Life Worshipper <Battle Hymn> Will now additionally remove 2 negative status' from affected targets. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Tangle Beast Essence x4. |
+| Requiem Leather Armor |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Tangle Beast Essence x5 |
+| Requiem Band |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Fox Spirit Essence x2. |
+| Requiem Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Fox Spirit Essence x3 |
+| Requiem Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Fox Spirit Essence x4 |
+| Holy Spirit's Hat | AGI+75 pts, WIS+130 pts. | MAX HP+3227 pts, WIS+100 pts, LCK+60 pts, G-Healing+331 pts, EVA+336 pts. | DMG Taken-5%, All Resistance+5, pts, M-SPD+5%. When attacked and under 50% HP you will receive DMG Taken-15% for 2 seconds. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Molten Monster Essence x4. |
+| Holy Spirit's Brigandine |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Molten Monster Essence x5 |
+| Holy Spirit's Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Fire Dragon Essence x2. |
+| Holy Spirit's Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Fire Dragon Essence x3 |
+| Holy Spirit's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Fire Dragon Essence x4 |
+
+**CLOTH ARMORS**
+
+| Abyssal Doom Crown | INT+180 pts. | MAX MP+2749 pts, INT+130 pts, M-CRIT RATE+331 pts, M-CRIT DMG+10%. | M-ATK+15%, DMG Dealt+7%. Your attacks inflict an additional +798 pts of Ice DMG. Your attacks have a 4% chance to deal Double Hit DMG. Your attacks have a 1% chance to deal Triple Hit DMG. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Tangle Beast Essence x4. |
+|---|---|---|---|---|---|
+| Abyssal Doom Robe |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Tangle Beast Essence x5 |
+| Abyssal Doom Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Fox Spirit Essence x2. |
+| Abyssal Doom Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Fox Spirit Essence x3 |
+| Abyssal Doon Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Fox Spirit Essence x4 |
+| Magical Sundering Hat | AGI+130 pts, INT+75 pts. | MAX HP+2749 pts, M-CRIT Rate+331, CAST SPD+331 pts, EVA+336 pts. | M-ATK+10%, M-SPD+5%. Your attacks have a 5% chance to remove 1 negative status. Your attacks have a 1% chance to grant -100% DMG Taken for 3s, cooldown 20s. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Phoenix Seal Essence x4. |
+| Magical Sundering Robe |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Phoenix Seal Essence x5 |
+| Magical Sundering Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Fire Dragon Essence x2. |
+| Magical Sundering Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Fire Dragon Essence x3 |
+| Magical Sundering Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Fire Dragon Essence x4 |
+| Breath of Life Crown | WIS+180 pts. | MAX MP+2749 pts, G-Healing+321, M-CRIT Rate+331 pts, CAST SPD+331 pts. | WIS+10%, CAST SPD+10%, M-SPD+5%. Adjudicator <Light of Truth>, Druid <Unicorn Morph>, Totem Master <Let It Rain> Healing+5%. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Molten Monster Essence x4. |
+| Breath of Life Robe |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Molten Monster Essence x5 |
+| Breath of Life Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Tangle Beast Essence x2. |
+| Breath of Life Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Tangle Beast Essence x3 |
+| Breath of Life Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Tangle Beast Essence x4 |
+| Battle Medic's Crown | AGI+75 pts, WIS+130 pts. | MAX HP+2749 pts, G-Healing+321, CAST SPD+331 pts, EVA+336 pts. | DMG Taken-7%, Block+10%. Removes 1 negative status every 5 seconds. Your attacks will increase your DEF+6262 pts for 2 seconds. | Fragmented Abyssal Soul x50. | H. Armor Fragment x5, Fox Spirit Essence x4 |
+| Battle Medic's Robe |  |  |  | Fragmented Abyssal Soul x80. | B. Armor Fragment x5, Fox Spirit Essence x5 |
+| Battle Medic's Belt |  |  |  | Fragmented Abyssal Soul x30. | W.Armor Fragment x5, Phoenix Seal Essence x2. |
+| Battle Medic's Gloves |  |  |  | Fragmented Abyssal  Soul x45. | H. Armor Fragment x5, Phoenix Seal Essence x3 |
+| Battle Medic's Boots |  |  |  | Fragmented Abyssal Soul x45. | B. Armor Fragment x5, Phoenix Seal Essence x4. |
+
+**NOTE:  All sets have an overall random blueprint bag that cost x50 Abyssal Souls per.**
+
+**QUEST REWARDS:**
+
+| QUEST: | REWARDS: |  |
+|---|---|---|
+| Enter The Abyss. | N/A |  |
+| Explore The Abyss I. | EXP: 7034067917. Money: 87g 344s. | N/A |
+| Explore The Abyss II. | EXP: 7034067917. Money: 87g 344s. | N/A |
+| Explore The Abyss III. | Abyss Head Armor Fragment. Abyss Body Armor Fragment. Abyss Waist Armor Fragment. Abyss Hand Armor Fragment. Abyss Foot Armor Fragment. EXP: 7034067917. Money: 87g 344s. | Note: Quest gives all fragments. |
+

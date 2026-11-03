@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Vérifie des arbres de fichiers contre le manifeste officiel EDENFR.
+
+  tools/edenfr-verify/edenfr-verify [--manifest M] [--out TSV] RACINE...
+
+Chaque ligne de GameDataFileList.txt (`chemin:date:taille:CRC`) est cherchée
+(insensible à la casse) dans les racines, dans l'ordre : la première copie de
+bonne taille ET de bon CRC32C gagne (statut OK-<n° racine>). Sinon le statut
+dit pourquoi (CRC/TAILLE/ABSENT). CRC = CRC32C (Castagnoli), retrouvé sur
+pkg.idx : le champ crc de chaque entrée vaut celui du manifeste.
+"""
+import argparse, ctypes, os, sys
+from concurrent.futures import ThreadPoolExecutor
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+lib = ctypes.CDLL(os.path.join(HERE, 'libcrc32c.so'))
+lib.crc32c_file.restype = ctypes.c_int64
+lib.crc32c_file.argtypes = [ctypes.c_char_p, ctypes.POINTER(ctypes.c_uint64)]
+DEFAULT_MANIFEST = os.path.expanduser('~/Téléchargements/EDENFR/GameDataFileList.txt')
+
+
+def index(root):
+    m = {}
+    for d, _, fs in os.walk(root):
+        for f in fs:
+            p = os.path.join(d, f)
+            m.setdefault(os.path.relpath(p, root).replace(os.sep, '/').lower(), []).append(p)
+    return m
+
+
+def check(path, size, crc):
+    sz = ctypes.c_uint64()
+    c = lib.crc32c_file(path.encode(), ctypes.byref(sz))
+    if c < 0: return 'ILLISIBLE'
+    if sz.value != size: return 'TAILLE'
+    return 'OK' if c == crc else 'CRC'
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--manifest', default=DEFAULT_MANIFEST)
+    ap.add_argument('--out')
+    ap.add_argument('roots', nargs='+')
+    a = ap.parse_args()
+    idx = [index(r) for r in a.roots]
+    man = []
+    for l in open(a.manifest, encoding='latin-1'):
+        p = l.rstrip('\r\n').split(':')
+        if len(p) >= 4:
+            man.append((p[0].replace('\\', '/'), int(p[2]), int(p[3])))
+
+    def one(e):
+        name, size, crc = e
+        key = name.lower()
+        why = []
+        for i, ix in enumerate(idx):
+            if key in ix:
+                for p in ix[key]:   # variantes de casse : toutes essayées
+                    r = check(p, size, crc)
+                    if r == 'OK': return (name, 'OK-%d' % i, p)
+                    why.append('%s@%d' % (r, i))
+        return (name, 'AUCUNE-SOURCE' if why else 'ABSENT', ','.join(why))
+
+    with ThreadPoolExecutor(os.cpu_count()) as ex:
+        res = list(ex.map(one, man))
+    cnt = {}
+    for _, s, _ in res: cnt[s] = cnt.get(s, 0) + 1
+    if a.out:
+        with open(a.out, 'w') as f:
+            for r in res: f.write('\t'.join(r) + '\n')
+    for s, n in sorted(cnt.items()): print('%-16s %d' % (s, n))
+    ok = sum(n for s, n in cnt.items() if s.startswith('OK'))
+    print('conformes : %d/%d' % (ok, len(res)))
+    sys.exit(0 if ok == len(res) else 1)
+
+
+if __name__ == "__main__":
+    main()

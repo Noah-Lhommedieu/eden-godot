@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://edenrebornhudext"]
+
+[ext_resource type="Script" path="res://scripts/hud/HudExtensions.cs" id="1_ext"]
+
+[node name="HudExtensions" type="Node"]
+script = ExtResource("1_ext")

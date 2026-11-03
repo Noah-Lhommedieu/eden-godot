@@ -1,0 +1,15 @@
+# Dragon Slaying Expedition niv. 95
+
+> Source : `raw/guides-fr/2017/06/14/dragon-slaying-expedition.html` — publié le 2017/06/14 (site WordPress edenfr.wordpress.com)
+
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/slaying.png?w=800)
+La Dragon Slaying Expedition est une instance PVE de masse qui regroupe jusqu’à 25 joueurs pour une entrée journalière. Elle con- siste à tuer le dragon Quetzalcoatl, sur la grande aire où il attend ses assaillants. C’est une instance exclusive du serveur Vendetta.
+**Déroulement de l’instance**
+* * *
+Pour **rejoindre l’instance** , il faut passer par l’interface de recherche [ J ], dernier onglet et faire une recherche. Si une instance est lancée, on peut la rejoindre en cliquant sur _Join_ pour solliciter le lead soit directement soit par chucho. On peut également lancer soi-même un groupe si on a le droit de recruter dans sa guilde. Une fois le groupe complet, le lead peut lancer la téléportation vers la zone de combat et il suffit aux joueurs de confirmer sur la petite pop-up. A noter que la téléportation ne fonctionnera pas, pour personne dans le groupe, si un ou plusieurs membres ont déjà fait l’instance. On peut également crash sans perdre son entrée ; il suffit de redemander la TP au lead.
+Une fois à l’intérieur il faut prendre la quête « Dragon Slaying Expedition » au PNJ et tuer les _Stormy Ridge Spirits_ pour en obtenir des _Stormy Mountain Stones_. Par défaut, tout le monde fait nécessité dessus. Pour valider la quête, il faut **participer au combat contre Quetzalcoatl**. Le boss est entouré de cristaux qu’il faut impérativement détruire pour limiter les effets de ses attaques et leurs propres compétences (stun de groupe par exemple). Malgré les désagréments que cela peut occasionner, il est aussi recommandé de jouer avec quelques effets pour visualiser les petites auras blanches qui l’encerclent. On peut en effet y obtenir un buff contre ses grandes attaques de zone.
+Une fois le boss tué, on peut quitter l’instance via le gardien de l’âme. On sera téléporté à Aven devant le PNJ Kane, à qui on rend la quête journalière. Il faut penser à se dégrouper car la manip’ n’est pas automatique.
+**Récompenses**
+* * *
+La quête journalière permet d’obtenir 50 _Stormy Mountain Stones_. Ces items permettent de créer des [statues de guilde](guilde-et-ville-de-guile.md) exclusives. Avoir tapé le boss permet en outre de recevoir une récompense supplémentaire par messagerie. En ouvrant l’item, on peut obtenir diverses [compos de craft](compos-de-craft.md) gold HL mais également des [costumes](costumes-legendaires-disponibles-en-jeu.md) et [une monture](montures-disponibles-en-jeu.md) (1 jour et permanente) légendaires.
+Quetzalcoatl loot également divers items pour les [quêtes de sets éveillés 95](armures-eveillees-lvl-95.md). Le loot n’est pas systématique mais a priori, il ne peut pas tomber dans le sac de quelqu’un qui n’a pas la quête correspondante (contrairement aux items des worldboss de Dimension of Soul où ce sont des butins communs).

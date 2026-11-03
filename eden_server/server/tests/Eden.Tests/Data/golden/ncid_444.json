@@ -1,0 +1,45 @@
+{
+ "ncid": 444,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "0d93c9880000000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "000000000000000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "faf4ffff0000000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "faf4ffff0004c2eb0b",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0aabffff0000000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0aabffff0002c2eb0b",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0babffff0000000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0babffff0002c2eb0b",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "ncid": 554,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "0100030001000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0300030009000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "030003000a000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "030003000b000000",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

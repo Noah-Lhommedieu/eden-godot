@@ -1,0 +1,7 @@
+# server/.dockerignore — allège le contexte de build .NET
+**/bin/
+**/obj/
+**/.vs/
+**/.idea/
+*.user
+*.suo

@@ -1,0 +1,30 @@
+start t=0 rssMB=3555
+t=49s fps=45 frame=22,3ms(3,7-134,8) rss=3738MB static=351MB vram=3220MB tex=3097MB draws=480 objs=1095 prims=365662 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=50s fps=220 frame=4,5ms(3,7-18,8) rss=3738MB static=350MB vram=3218MB tex=3097MB draws=480 objs=1095 prims=365662 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=51s fps=215 frame=4,6ms(3,7-29,7) rss=3738MB static=350MB vram=3218MB tex=3097MB draws=480 objs=1095 prims=365662 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=52s fps=213 frame=4,7ms(3,8-20,6) rss=3740MB static=350MB vram=3218MB tex=3097MB draws=480 objs=1095 prims=365662 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=53s fps=219 frame=4,6ms(3,9-23,3) rss=3740MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=54s fps=220 frame=4,6ms(3,8-20,0) rss=3743MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=55s fps=215 frame=4,6ms(3,8-57,9) rss=3737MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=56s fps=218 frame=4,6ms(0,6-51,3) rss=3737MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=57s fps=219 frame=4,6ms(3,9-40,9) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=58s fps=210 frame=4,8ms(0,7-66,0) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=59s fps=223 frame=4,5ms(3,9-35,6) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=60s fps=214 frame=4,7ms(3,9-26,7) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=61s fps=219 frame=4,6ms(3,8-18,3) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=62s fps=222 frame=4,5ms(3,0-20,5) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=63s fps=216 frame=4,6ms(3,9-17,8) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=64s fps=219 frame=4,6ms(3,9-17,5) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=65s fps=227 frame=4,4ms(3,8-15,7) rss=3737MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=66s fps=222 frame=4,5ms(3,9-40,7) rss=3737MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=67s fps=217 frame=4,6ms(3,3-52,0) rss=3737MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=68s fps=216 frame=4,6ms(3,9-48,7) rss=3737MB static=352MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=69s fps=216 frame=4,6ms(0,5-51,4) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=70s fps=219 frame=4,6ms(3,9-47,6) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=71s fps=218 frame=4,6ms(3,8-18,2) rss=3737MB static=351MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=72s fps=216 frame=4,6ms(3,8-20,2) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=73s fps=220 frame=4,5ms(3,8-13,7) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=74s fps=213 frame=4,7ms(3,3-23,9) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+t=75s fps=215 frame=4,7ms(0,6-16,6) rss=3737MB static=350MB vram=3218MB tex=3097MB draws=478 objs=1087 prims=365646 nodes=16993 res=63 cache=147tex/169glb scene=16771n/3020mi/442mm/35lbl
+perf-done t=75s n=5756 fps avg=211,1 min=7,4 max=1965,6 peak_rss=3743MB
+perf-done t=75s n=5756 fps avg=211,1 min=7,4 max=1965,6 peak_rss=3743MB

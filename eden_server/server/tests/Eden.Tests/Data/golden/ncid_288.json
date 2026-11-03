@@ -1,0 +1,45 @@
+{
+ "ncid": 288,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "0b000000faf4ffff76c34f0000004c8830437ca78f4300000000fe0300000000000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "24000000faf4ffff5bc3140000004c883043afda8f4300000000ba0b00000000000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "35000000faf4ffff5bc3140000004c883043afda8f4300000000ba0b00000000000000",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "010000000aabffff66c3140000004ba98642f937494200000000140c00000000000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "010000000aabffff65c314000000991077420a462c4200000000140c00000000000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "010000000babffff65c3140000005db54e42a8695d4200000000140c00000000000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "010000000babffff66c314000000b5e055424f93604200000000140c00000000000000",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "010000000babffff65c314000000749b6942b085594200000000140c00000000000000",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://edenreborngame"]
+
+[ext_resource type="Script" path="res://scripts/GameScene.cs" id="1_game"]
+[ext_resource type="Script" path="res://scripts/hud/CraftWindow.cs" id="2_craft"]
+[ext_resource type="Script" path="res://scripts/hud/ClassChangeDialog.cs" id="3_class"]
+
+[node name="GameScene" type="Node3D"]
+script = ExtResource("1_game")
+
+[node name="ZoneWindows" type="CanvasLayer" parent="."]
+layer = 9
+
+[node name="CraftWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("2_craft")
+
+[node name="ClassChangeDialog" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("3_class")
+
+[node name="DebugUI" type="CanvasLayer" parent="."]
+
+[node name="DebugLabel" type="Label" parent="DebugUI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 500.0
+offset_bottom = 90.0
+text = "Eden Limitless — chargement…"

@@ -1,0 +1,20 @@
+{
+ "ncid": 313,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "020001367aa343334998437eac1c40",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "02000157ad984324b79f43d80fc93f",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "640001c14a6342fafebd41e6cb9640",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

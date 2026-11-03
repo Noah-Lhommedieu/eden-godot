@@ -1,0 +1,104 @@
+nif2gltf report — 2026-10-27 20:59:15
+files processed: 3955  converted: 3955  failed: 0  (28s)
+  ext_.kf : 2
+  ext_.kfm : 2
+  ext_.nif : 3951
+
+== measured bounding boxes (NIF units, Z-up) ==
+  map/model/JEFF.nif                                           min=[-45.369, -93.734, -0.077] size=[90.812, 206.943, 118.972]
+  map/model/S018/S018.nif                                      min=[-48.81, -99.372, -87.836] size=[114.794, 192.453, 155.646]
+  map/model/S035/S035.nif                                      min=[-305.375, -435.979, -189.337] size=[485.882, 601.929, 689.337]
+  map/model/S039/S039.nif                                      min=[-255.333, -306.495, -181.284] size=[787.38, 898.82, 384.657]
+  map/model/S040/S040.nif                                      min=[-171.425, -261.888, -112.612] size=[395.165, 862.829, 400.318]
+  map/model/S041/S041.nif                                      min=[-1275.938, -969.073, -212.712] size=[2551.871, 2177.958, 1517.17]
+  map/model/S043/S043.nif                                      min=[-49.418, -48.211, -21.754] size=[80.034, 82.638, 59.615]
+  map/model/S044/S044.nif                                      min=[-49.418, -48.211, -21.754] size=[80.034, 82.638, 59.615]
+  map/model/S095/S095.nif                                      min=[-49.392, -18.79, -21.471] size=[69.837, 52.576, 50.754]
+  map/model/S097/S097.nif                                      min=[-211.021, -202.647, -166.224] size=[533.455, 492.373, 354.351]
+  map/model/S100/S100.nif                                      min=[-469.411, -395.806, -1035.712] size=[888.249, 840.956, 3163.06]
+  map/model/S101/S101.nif                                      min=[-7826.568, -909.95, -1170.103] size=[11672.328, 4421.708, 3275.972]
+  map/model/S102/S102.nif                                      min=[-252.831, -139.044, -165.161] size=[1854.851, 464.948, 495.769]
+  map/model/S103/S103.nif                                      min=[-237.359, -130.441, -159.592] size=[397.112, 354.939, 270.658]
+  map/model/S104/S104.nif                                      min=[-151.666, -233.181, -133.611] size=[313.436, 368.66, 234.672]
+  map/model/S105/S105.nif                                      min=[-2628.182, -909.95, -349.302] size=[2730.438, 2358.424, 1850.795]
+  map/model/S107/S107.nif                                      min=[-1526.322, -7672.756, -1460.444] size=[2257.296, 8095.957, 1603.257]
+  map/model/S108/S108.nif                                      min=[-318.805, -328.849, -69.525] size=[477.744, 519.801, 155.029]
+  map/model/S109/S109.nif                                      min=[-547.192, -327.294, -129.926] size=[691.535, 546.204, 238.734]
+  map/model/S110/S110.nif                                      min=[-380.918, -334.344, -33.801] size=[650.118, 506.216, 185.102]
+  map/model/S111/S111.nif                                      min=[-566.529, -501.866, -85.603] size=[1215.964, 832.062, 304.417]
+  map/model/S112/S112.nif                                      min=[-187.953, -169.573, -57.619] size=[395.257, 553.539, 361.101]
+  map/model/S113/S113.nif                                      min=[-5099.27, -3375.328, -1190.76] size=[5847.419, 3797.387, 1370.613]
+  map/model/S114/S114.nif                                      min=[-189.905, -287.541, -423.264] size=[460.364, 424.465, 777.558]
+  map/model/S115/S115.nif                                      min=[-2281.53, -545.216, -206.163] size=[2661.644, 1881.965, 960.845]
+  map/model/S116/S116.nif                                      min=[-469.411, -395.806, -1035.712] size=[976.141, 840.956, 3163.06]
+  map/model/S117/S117.nif                                      min=[-256.404, -434.729, -397.165] size=[902.387, 801.486, 536.777]
+  map/model/S118/S118.nif                                      min=[-293.124, -277.066, -90.976] size=[1040.004, 698.027, 256.123]
+  map/model/S120/S120.nif                                      min=[-325.845, -807.882, -103.867] size=[896.131, 1001.959, 317.372]
+  map/model/S121/S121.nif                                      min=[-204.679, -227.501, -172.487] size=[411.457, 534.158, 327.983]
+
+== counters ==
+  meshes                   101682
+  verts                    27352166
+  tris                     27232384
+  nodes                    206425
+  skins                    247
+  multi_parent_dups        4014
+  skinned_meshes           247
+  uv_sets                  91889
+  vcolor_meshes            49500
+  alpha_materials          18226
+  missing_textures         3831
+  anims                    443
+  anim_channels            31386
+  kfm_anims                2
+  billboards               30217
+  psys_nodes               5332
+
+== skipped block types (unparsed) ==
+  ?                                                  33
+  NiDeferredPointLight                               4
+== other skip counters ==
+  prop_NiStencilProperty                             5340
+  prop_NiZBufferProperty                             5118
+  tex_extra_maps                                     206
+  prop_NiDitherProperty                              82
+  prop_NiSpecularProperty                            79
+  bspline_incomplete_Scale                           7
+  prop_NiShadeProperty                               5
+  bspline_incomplete_Rotation                        4
+  interp_nodata                                      3
+  prop_NiTexturingProperty                           1
+
+== top warnings ==
+     104  missing texture UB05353.dds
+      69  missing texture UD07501.dds
+      63  missing texture UC01551.dds
+      56  missing texture EFS201051.dds
+      51  missing texture UB28153.dds
+      36  missing texture UD07101.dds
+      32  missing texture UD12551.dds
+      30  missing texture EFS40002.dds
+      28  missing texture UD07103.dds
+      26  missing texture UD07304.dds
+      24  missing texture UB07052.dds
+      24  missing texture UD06751.dds
+      24  missing texture UE16551.dds
+      23  missing texture EFS50701.dds
+      21  missing texture UD12352.dds
+      21  missing texture UD13352.dds
+      20  missing texture UC11451.dds
+      20  missing texture UD07303.dds
+      19  missing texture UD06451.dds
+      18  missing texture UB01354.dds
+      18  missing texture UB05855.dds
+      18  missing texture UD06351.dds
+      18  missing texture UD07601.dds
+      17  missing texture UD07602.dds
+      17  missing texture UE73054.dds
+      16  missing texture UB05856.dds
+      16  missing texture UD0703.dds
+      16  missing texture UD08552.dds
+      16  missing texture UE16103.dds
+      15  missing texture UB05402.dds
+
+== failures ==

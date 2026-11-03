@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <!-- Cas golden wire générés par tools/gen_golden_data.py depuis
+       captures/*.bin — régénérer après toute nouvelle capture. -->
+  <ItemGroup>
+    <Content Include="Data\golden\*.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Data\known_incomplete.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Eden.Core\Eden.Core.csproj" />
+    <ProjectReference Include="..\..\src\Eden.Login\Eden.Login.csproj" />
+    <ProjectReference Include="..\..\src\Eden.World\Eden.World.csproj" />
+    <ProjectReference Include="..\..\src\Eden.Zone\Eden.Zone.csproj" />
+    <ProjectReference Include="..\..\src\Eden.Ticket\Eden.Ticket.csproj" />
+    <ProjectReference Include="..\..\src\Eden.Mission\Eden.Mission.csproj" />
+  </ItemGroup>
+
+</Project>

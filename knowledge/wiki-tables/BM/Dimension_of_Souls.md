@@ -1,0 +1,71 @@
+# Dimension of Souls
+
+> Source : `src_csv/BM_ Dimension of Souls.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+> ⚠️ **Hors périmètre (lvl>90)** : Battle map niv. 95. Données conservées pour référence.
+
+| NECKLACES | Mystic Soul Necklace |  | Your attacks have a 5% chance to increase AGI and WIS +210 for 10 sec. |  |  |  |  |  | 2.0 |
+|---|---|---|---|---|---|---|---|---|---|
+|  | Storm Soul Necklace |  | Your attacks have a 5% chance to increase Attack SPD +280 and ACC +230 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Warrior Soul Necklace |  | Your attacks have a 5% chance to increase STR and LCK +210 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Guardian Soul Necklace |  | Your attacks have a 5% chance to increase DEF +3400 and Elemental Resistance +10 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Demon Soul Necklace |  | Your attacks have a 5% chance to increase Cast SPD +280 and EVA +230 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Magic Soul Necklace |  | Your attacks have a 5% chance to increase INT and LCK +210 for 10 sec. |  |  |  |  |  | 2.0 |
+| RINGS | Dimension Spirit of Compassion |  | Your attacks have a 5% chance to increase G-Heal +390 and Move SPD +10% for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Spirit of Thunder |  | Your attacks have a 5% chance to increase AGI +300, P-CRIT Rate +215 and Move SPD +10% for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension's Brutal Spirit |  | Your attacks have a 5% chance to increase P-ATK +5840 and ACC +150 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Spirit of Protection |  | Your attacks have a 5% chance to increase All Resistance +10 pts for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Agile Spirit |  | Your attacks have a 5% chance to increase AGI+ 300, M-CRIT Rate +215 and Move SPD +10% for 10 secs. |  |  |  |  |  | 2.0 |
+|  | Dimension Spirit of Witchcraft |  | Your attacks have a 5% chance to increase M-ATK +7300 and ACC +150 for 10 sec. |  |  |  |  |  | 2.0 |
+| CAPES | Dimension Darkness Cloak |  | Your attacks have a 5% chance to increase LCK +350 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Thunder Cloak |  | Your attacks have a 5% chance to reduce target's Physical Resistance -7 pts for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Ice Cloak |  | Your attacks have a 5% chance to increase AGI +350 for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Flame Cloak |  | Your attacks have a 5% chance to reduce target's Elemental Resistance -7 pts for 10 sec. |  |  |  |  |  | 2.0 |
+|  | Dimension Holy Cloak |  | Your attacks have a 5% chance to increase WIS +210 and DEF +2300. |  |  |  |  |  | 2.0 |
+|  | Dimension Nature Cloak |  | Your attacks have a 5% chance to reduce DMG Taken -5% for 10 sec. |  |  |  |  |  | 2.0 |
+| MOUNTS | Ostrich (Legendary) |  | Move SPD increases +90% while mounted. Can't be traded. |  |  |  |  |  | 10.0 |
+|  | Grassland Alpaca (Legendary) |  | Move SPD increases +90% while mounted. Can't be traded. |  |  |  |  |  | 10.0 |
+|  | Shadow Hyena (Legendary) |  | Move SPD increases +90% while mounted. Can't be traded. |  |  |  |  |  | 10.0 |
+|  | Chubby Bird (Prime) |  | Move SPD increases +75% while mounted. Tradeable. |  |  |  |  |  | 10.0 |
+| POTIONS (MOUSE OVER FOR EFFECT) |  |  |  |  | DIMENSION OF SOULS MONSTERS |  |  |  |  |
+| POTION NAME: |  | MATERIALS // AMOUNT REQUIRED: |  | # RECIEVED: |  |  | NAME: | QUEST ITEM: |  |
+| Devastation HP Potion |  | Fragmented Soul Token | x1 | x25 | BOSSES | 95.0 | Wormmy | Swamp King's Great Horn |  |
+| Soul MP Potion |  | Fragmented Soul Token | x1 | x25 |  | 95.0 | Soul King | Soul King's Skull |  |
+| Enhanced Life Support Potion Lv7 |  | Life Support Potion Lv7 | x10 | x10 |  | 95.0 | Kahl Mund | Kahl Mund's Crown |  |
+|  |  | Soul Knight's Rapier | x3 |  |  | 95.0 | Harkat | Harkat's Heart |  |
+|  |  | Soul Fighter's Helmet | x3 |  | ELITES | 94.0 | Dimension Soul | Dimension Soul's Spirit |  |
+|  |  | Soul Legion's Honor | x1 |  |  | 94.0 | Dimension Soul Legion | Soul Legions' Honor |  |
+| Enhanced Energy Support Potion Lv7 |  | Energy Support Potion Lv7 | x10 | x10 |  | 94.0 | Dimension Dragon | Dimension Dragon Fire |  |
+|  |  | Dimension Demon Horn | x3 |  |  | 95.0 | Mantis King | Mantis King's Shell |  |
+|  |  | Dimension Devil Blood | x3 |  |  | 95.0 | Great Fish Soul | Great Fish Scale |  |
+|  |  | Dimension Dragon Fire | x1 |  |  | 95.0 | Dimension Warrior | Warriors Greatsword |  |
+| Enhanced Malice Ward Lv7 |  | Malice Ward Lv7 | x10 | x10 |  | 95.0 | Bane Prince Follower | Bane Prince Followers Scythe |  |
+|  |  | Mantis King's Shell | x1 |  | MONSTERS | 93.0 | Dimension Soul Knight | Soul Knights Rapier |  |
+|  |  | Soul Legion's Honor | x1 |  |  | 93.0 | Dimension Soul Fighter | Soul Fighters Helmet |  |
+| Enhanced Energy Explosion Potion Lv7 |  | Energy Explosion Potion Lv7 | x10 | x10 |  | 93.0 | Dimension Demon | Dimension Demons Horn |  |
+|  |  | Warriors Greatsword | x1 |  |  | 93.0 | Dimension Devil | Dimension Devil Blood |  |
+|  |  | Dimension Soul's Spirit | x1 |  |  | 93.0 | Bane Prince Illusion | Bane Prince Ashes |  |
+| Enhanced Mana Explosion Potion Lv7 |  | Mana Explosion Potion Lv7 | x10 | x10 |  | 93.0 | Bane Prince Mistress | Bane Prince Orb |  |
+|  |  | Bane Prince Follower's Scythe | x1 |  |  | 93.0 | Bane Prince Madam | Bane Prince Cloth |  |
+|  |  | Dimension Dragon Fire | x1 |  |  | 95.0 | Dimension Illusion | Dimension Illusions Wing |  |
+| Enhanced Complete Support Potion Lv7 |  | Complete Support Potion Lv7 | x10 | x10 |  | 95.0 | Dimension Worm | Dimension Worm's Goo |  |
+|  |  | Bane Prince Ashes | x2 |  |  | 95.0 | Dimension Bug | Dimension Bug's Slime |  |
+|  |  | Bane Prince Cloth | x2 |  |  | 95.0 | Mantis of the Dimension | Dimension Mantis Wing |  |
+|  |  | Bane Prince Orb | x2 |  |  | 95.0 | Dimension Pond Frog | Dimension Frog Spawn |  |
+|  |  | Dimension Soul's Spirit | x1 |  |  | 95.0 | Mutated Dimension Pond Frog | Mutated Toxin |  |
+| Enhanced Quick Recovery Potion  Lv7 |  | Quick Recovery Potion Lv7 | x10 | x10 |  | 95.0 | Dimension Shaman | Dimension Shamans Staff |  |
+|  |  | Great Fish Scale | x1 |  |  | 95.0 | Iron Statue of the Dimension | Iron Statues Stone |  |
+| Enhanced Strength Potion Lv7 |  | Strength Potion Lv7 | x10 | x10 |  | 95.0 | Pharaoh's Clone | Clone Bandage |  |
+|  |  | Dimension Shaman's Staff | x4 |  |  |  |  |  |  |
+|  |  | Iron Statue's Stone | x2 |  |  |  |  |  |  |
+| Enhanced Agility Potion Lv7 |  | Agility Potion Lv7 | x10 | x10 |  |  |  |  |  |
+|  |  | Dimension Bug's Slime | x4 |  |  |  |  |  |  |
+|  |  | Dimensino Mantis Wing | x2 |  |  |  |  |  |  |
+| Enhanced Intelligence Potion Lv7 |  | Intelligence Potion Lv7 | x10 | x10 |  |  |  |  |  |
+|  |  | Clone Bandage | x6 |  |  |  |  |  |  |
+| Enhanced Wisdom Potion Lv7 |  | Wisdom Potion Lv7 | x10 | x10 |  |  |  |  |  |
+|  |  | Dimension Frog Spawn | x4 |  |  |  |  |  |  |
+|  |  | Mutated Toxin | x1 |  |  |  |  |  |  |
+| Enhanced Luck Potion Lv7 |  | Luck Potion Lv7 | x10 | x10 |  |  |  |  |  |
+|  |  | DImension Worm's Goo | x4 |  |  |  |  |  |  |
+|  |  | Dimension Illusion's Wing | x4 |  |  |  |  |  |  |
+

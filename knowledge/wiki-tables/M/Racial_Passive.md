@@ -1,0 +1,72 @@
+# Racial Passive
+
+> Source : `src_csv/M_ Racial Passive.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+
+| CLASS: | CLASS PASSIVE: | ADDITIONAL PASSIVE: | RACIAL PASSIVE |  |  |  |  |
+|---|---|---|---|---|---|---|---|
+|  | Note: All races get this passive | Note: All races get this passive | HUMAN: | HALFKIN: | ZUMI (MOUSE): | ANURAN (FROG): | URSUN (BEAR): |
+| WARRIOR | Immune to Fear | N/A | Increases P-ATK and M-ATK+15% when equipped with an Axe | Increases P-ATK and M-ATK+30% when equipped with a Sword | Increases P-ATK and M-ATK+15% when equipped with a Club | Increases P-ATK and M-ATK+15% when equipped with a Greatsword | Each attack has a 3% chance to inflict Fear upon the target for 6 sec |
+| BERSERKER | Immune to Fear | Increases P-ATK+5% |  |  |  |  |  |
+| SHIELDER | Immune to Fear | Received CRIT-DMG-10% |  |  |  |  |  |
+| KNIGHT | Immune to Hypnosis | N/A | Increases P-ATK and M-ATK+15% when equipped with a Rapier | Received CRIT DMG-30% | Increases P-ATK and M-ATK+15% when equipped with a Sword | ATTACK SPD+15% when equipped with 1H-Bladed Weapon | Increases Block and DEF+10% when equipped with a Shield |
+| EXECUTIONER | Immune to Hypnosis | Increases P-ATK+5% |  |  |  |  |  |
+| GLACIER KNIGHT | Immune to Hypnosis | Received CRIT-DMG-10% |  |  |  |  |  |
+| TEMPLAR | Immune to Stun | N/A | Increases DEF & Block+15% when equipped with a Shield | All Elemental Resistance+10 | Increases P-ATK and M-ATK+15 when equipped with a Mace | CAST SPD+30% when equipped with a Mace | Received CRIT DMG-30% |
+| BLOOD KNIGHT | Immune to Stun | P-ATK & M-ATK+10% | P-ATK+5% & M-SPD+5% |  |  |  |  |
+| PALADIN | Immune to Stun | All Physical Resistance+10 | Increases DEF & Block+15% when equipped with a Shield |  |  |  |  |
+| DRAGON KNIGHT | Increases P-ATK and M-ATK+15% when equipped with a Pike | N/A | Each attack has a 2% chance of increasing P-DMG+5% and M-DMG+15% for 10 sec | Each attack has a 2% chance of decreasing target's Fire Resistance -20% for 10 secs | When attacked, 2% chance of reflecting 30% of recieved P-CRIT DMG | When attacked, 2% chance of reflecting 30% of received M-CRIT DMG | Each attack has a 5% chance of removing one positive effect from the target |
+| DRAGON SOUL | Increases P-ATK and M-ATK+30% when equipped with a Pike | Parry+30% |  |  |  |  |  |
+| DRAGON EMPEROR | Increases P-ATK and M-ATK+30% when equipped with a Pike | EVA+15% |  |  |  |  |  |
+| THIEF | Increases ATTACK SPD and EVA +30% | N/A | Increase P-ATK and M-ATK+15% when equipped with a Dagger | CRIT Rate+30% | Move SPD+10% | Malice caused by attacks-30% | Each attack has a 5% chance to reduce target's Move SPD-50% |
+| ASSASSIN | Increases ATTACK SPD and EVA +30% | CRIT DMG+15% |  |  |  |  |  |
+| KAGE | Increases ATTACK SPD and EVA +30% | All Physical Resistance+10 |  |  |  |  |  |
+| MARTIAL ARTIST | Increases P-ATK and M-ATK +15% | N/A | Each attack has a 2% chance to stun an enemy for 3 sec | ACC+30% | ATTACK SPD+10% when equipped with a 1H-Blunt Weapon | Double Hit Rate +2% | Each attack has a 2% chance to Mundane the target for 6 sec |
+| ASURA | Increases P-ATK and M-ATK+18% | CRIT Rate+5% |  |  |  |  |  |
+| RAKSHASA | Increases P-ATK and M-ATK+15%, CRIT-DMG+5% | CRIT DMG+5% |  |  |  |  |  |
+| BLADE DANCER | Move SPD+5% | N/A | Increases P-ATK and M-ATK+15% when equipped with a Sword | Malice caused by attacks -30% | ATTACK SPD+15% when equipped with a 1H-Bladed Weapon | Move SPD+5% | P-CRIT Rate+30% |
+| BLADE ACROBAT | Move SPD+5% | EVA+5% |  |  |  |  |  |
+| ELEGANT DANCER | Move SPD+5% | Max HP+5% |  |  |  |  |  |
+| SAMURAI | Increases P-ATK and M-ATK+15% when equipped with a Katana | N/A | Increases CRIT Rate+20% | Parry+30% when equipped with a 2H-Weapon | Double Hit Rate +2% | DEF+10% | ACC+30% |
+| BLADE MASTER | Increases P-ATK and M-ATK+25% when equipped with a Katana | All Resistance+10 |  |  |  |  |  |
+| MASTER FENCER | Increases P-ATK and M-ATK+25% when equipped with a Katana | Max HP+15% |  |  |  |  |  |
+| HUNTER | Increases P-ATK and M-ATK+30% when equipped with a Bow | N/A | ACC+30% | ATTACK SPD+20% | Each attack has a 5% chance to knock the enemy back 10 feet | Nature, Ice and Holy Resistance+10 | Double Hit Rate +2% |
+| TRAINER | Increases P-ATK and M-ATK+30% when equipped with a Bow | Move SPD+5% |  |  |  |  |  |
+| DEVIL HUNTER | Increases P-ATK and M-ATK+30% when equipped with a Bow | ATTACK SPD+5% |  |  |  |  |  |
+| ENGINEER | Increases P-ATK and M-ATK+15% when equipped with an Artillery Gun | N/A | Received P-DMG-5% | EVA+30% | M-CRIT DMG Received -5% | Move SPD+5% | Each attack has a 2% chance to decrease targets Pierce Resistance-10 |
+| MECHA ARES | Increases P-ATK and M-ATK+15% when equipped with an Artillery Gun | DEF+5% |  |  |  |  |  |
+| ANNIHILATOR | Increases P-ATK and M-ATK+15% when equipped with an Artillery Gun | Increases P-ATK & M-ATK+5% |  |  |  |  |  |
+| RANGER | CRIT Rate increases+30% | N/A | All Elemental Resistance+10 | Each attack has a 2% chance to Immobilise the target for 6 sec | Double Hit Rate +2% | Each attack has a 2% chance to stun the target for 3 sec | ATTACK SPD+20% |
+| LETHAL ARROW | CRIT Rate increases+30% | Move SPD+10% |  |  |  |  |  |
+| CELESTIAL ARROW | CRIT Rate increases+30% | ATTACK SPD+10% |  |  |  |  |  |
+| INQUISITOR | Increases P-ATK and M-ATK+30% when equipped with a Sickleshot | N/A | DMG Received-10% | DMG Dealt+10% | CRIT Rate+20% | All Elemental Resistance+10 | All Physical Resistance+10 and DEF+10% |
+| REAVER | Increases P-ATK and M-ATK+40% when equipped with a Sickleshot | Move SPD+10% |  |  |  |  |  |
+| RIFLETEER | Increases P-ATK and M-ATK+40% when equipped with a Sickleshot | ATTACK SPD+10% |  |  |  |  |  |
+| AGENT | Increases P-ATK and M-ATK+15% when equipped with Dual Pistols. | N/A | EVA+20% | ACC+20% | DMG Dealt +5% | DMG Taken -5% | Double Hit Rate +2% |
+| SPECIAL AGENT | Increases P-ATK and M-ATK+30% when equipped with Dual Pistols. | Healing Done +5%. |  |  |  |  |  |
+| GUNSLINGER | Increases P-ATK and M-ATK+30% when equipped with Dual Pistols. | N/A |  |  |  |  |  |
+| CLERIC | Increases CAST SPD+20% when equipped with a Mace, Guitar or Grimoire | N/A | Received M-CRIT DMG-10% | M-CRIT Rate+20% | Shield DEF & Block +5% | G-Heal+10% | EVA+20% |
+| ADJUDICATOR | Increases CAST SPD+20% when equipped with a Mace, Guitar or Grimoire | G-Heal+6% |  |  |  |  |  |
+| EQUILIBRIAN | Increases CAST SPD+20% when equipped with a Mace, Guitar or Grimoire | M-CRIT DMG+10% |  |  |  |  |  |
+| BARD | Increases P-ATK and M-ATK +30% when equipped with a Guitar | N/A | Double Hit Rate+2% | CAST SPD+5% | G-Heal+10% | Each song's duration increases+2 sec | M-CRIT DMG+20% |
+| BATTLEFIELD POET | Increases P-ATK and M-ATK +30% when equipped with a Guitar | DEF+5% |  |  |  |  |  |
+| LIFE WORSHIPPER | Increases P-ATK and M-ATK +30% when equipped with a Guitar | Move SPD+5% |  |  |  |  |  |
+| SHAMAN | Increases CAST SPD+20% when equipped with a Staff | N/A | Received P-DMG-5% | G-Heal+10% | Nature, Fire and Lightning Resistance +10% | M-CRIT Rate+20% | Each totem's duration increases+30 seconds |
+| DRUID | Increases CAST SPD+20% when equipped with a Staff | Increases P-ATK & M-ATK of Staff +10% |  |  |  |  |  |
+| TOTEM MASTER | Increases CAST SPD+20% when equipped with a Staff | Move SPD+10% |  |  |  |  |  |
+| SAGE | Increases P-ATK and M-ATK+30% when equipped with a Hammer | N/A | Received P-DMG-5% | M-CRIT Rate+20% | Move SPD+5% | Received M-CRIT DMG-5% | Parry +5% |
+| HOLY SAGE | Increases P-ATK and M-ATK+30% when equipped with a Hammer | DMG Received -15% |  |  |  |  |  |
+| ANGEL OF JUSTICE | Increases P-ATK and M-ATK+30% when equipped with a Hammer | DMG Received -10%, Move SPD+10% |  |  |  |  |  |
+| MAGICIAN | Increases P-ATK and M-ATK+15% when equipped with a Staff | N/A | CAST SPD+5% | M-CRIT DMG+20% | EVA+30% | PARRY+10% | All Elemental Resistance +5 |
+| ARCH-ELEMENTALIST | Increases P-ATK and M-ATK+15% when equipped with a Staff | Increases P-ATK & M-ATK of Staff +3% |  |  |  |  |  |
+| GRAVITY MANIPULATOR | Increases P-ATK and M-ATK+15% when equipped with a Staff | Move SPD+5% |  |  |  |  |  |
+| ILLUSIONIST | Increases P-ATK and M-ATK+30% when equipped with a Grimoire | N/A | Malice caused by attacks -10% | Double Hit Rate+2% | Received CRIT DMG-15% | Received M-CRIT DMG-5% | M-CRIT Rate+20% |
+| DEMON SUMMONER | Increases P-ATK and M-ATK+35% when equipped with a Grimoire | M-CRIT DMG+15% |  |  |  |  |  |
+| TIME MANIPULATOR | Increases P-ATK and M-ATK+40% when equipped with a Grimoire | CAST SPD+10% |  |  |  |  |  |
+| WARLOCK | Immune to Fear | N/A | M-CRIT Rate+20% | Move SPD+5% | Received M-CRIT DMG-15% | Lightning, Fire and Dark Resistance+10% | Parry +10% |
+| DEMON TAMER | Immune to Fear | Dark & Fire Resistance+20 |  |  |  |  |  |
+| CONJURER | Immune to Fear | Lightning & Ice Resistance+20 |  |  |  |  |  |
+| LUMINARY | Increases M-CRIT Rate+20%, Caster will receive "Chaos Incarnate" after gaining "Holy Blessing" or "Darkness Descends" status | N/A | Immune to Knockdown | Combo Hit Rate +5% | Move SPD+5% | CAST SPD+5% | M-CRIT DMG+25% |
+| DARKNESS BLADE | Increases P-ATK and M-ATK when equipped with a Rapier | P-CRIT & M-CRIT+20% |  |  |  |  |  |
+| HOLY BLADE | Increases P-ATK and M-ATK when equipped with a Greatsword | P-CRIT & M-CRIT+20% |  |  |  |  |  |
+| WYVERN LORD | Increases P-ATK & M-ATK +15% when equipped with a Nunchaku. | N/A | Double Hit Rate +2%. | Your attacks have a 5% chance to increase targets Magic DMG Taken +5% for 7 seconds. | Your attacks have a 2% chance to decrease the targets DEF-10% and Elemental Resistance -5 pts for 7 seconds. | Your attacks have a 2% chance to decrase targets Move Speed -15% for 7 seconds. | M-ATK +5%. |
+

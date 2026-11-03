@@ -1,0 +1,68 @@
+#!/bin/bash
+# Racine du dépôt déduite du script (dépôt déplaçable).
+EDEN_ROOT="$(cd "$(dirname "$0")" && pwd)"
+
+cat /dev/null > /var/log/syslog
+cat /dev/null > /var/log/wtmp 
+cat /dev/null > /var/log/maillog
+cat /dev/null > /var/log/messages
+cat /dev/null > /var/log/openwebmail.log
+cat /dev/null > /var/log/maillog
+cat /dev/null > /var/log/secure
+
+find . -name "*.log.*" -type f -print -exec rm -rf {} \;  
+
+LANG=
+LC_CTYPE="POSIX"
+LC_NUMERIC=en_US.UTF-8
+LC_TIME="POSIX"
+LC_COLLATE="POSIX"
+LC_MONETARY="POSIX"
+LC_MESSAGES="POSIX"
+LC_PAPER="POSIX"
+LC_NAME="POSIX"
+LC_ADDRESS="POSIX"
+LC_TELEPHONE="POSIX"
+LC_MEASUREMENT="POSIX"
+LC_IDENTIFICATION="POSIX"
+export LC_ALL=C
+
+
+killall -9 LoginServer
+
+killall -9 GatewayServer
+
+killall -9 TicketServer
+
+killall -9 MissionServer
+
+killall -9 WorldServer
+
+killall -9 ZoneServer
+
+killall -9 WorldServer2
+
+killall -9 ZoneServer2
+
+killall -9 HTTPAServer
+
+
+cd "$EDEN_ROOT/server_us/TicketServer/"
+./TicketServer -p 2067 &
+sleep 5
+cd "$EDEN_ROOT/server_us/GatewayServer/"
+./GatewayServer &
+sleep 5
+cd "$EDEN_ROOT/server_us/LoginServer/"
+./LoginServer &
+sleep 5
+cd "$EDEN_ROOT/server_us/MissionServer/"
+
+./MissionServer &
+sleep 5
+cd "$EDEN_ROOT/server_us/WorldServer/"
+./WorldServer &
+sleep 5
+cd "$EDEN_ROOT/server_us/ZoneServer/"
+./ZoneServer &
+

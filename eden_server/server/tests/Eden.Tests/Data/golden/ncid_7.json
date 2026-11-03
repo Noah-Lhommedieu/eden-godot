@@ -1,0 +1,10 @@
+{
+ "ncid": 7,
+ "cases": [
+  {
+   "dir": "D",
+   "body": "0000020000000100ffff0000",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

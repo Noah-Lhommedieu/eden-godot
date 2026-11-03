@@ -1,0 +1,26 @@
+# Costumes / fashions
+
+> Source : `raw/guides-fr/2017/07/04/costumes.html` — publié le 2017/07/04 (site WordPress edenfr.wordpress.com)
+
+Le personnage est par défaut vêtu du costume de la classe qu’il joue et ses armes apparaissent telles qu’elles sont. Des costumes supplémentaires, communément appelés « fashions », peuvent s’y superposer pour créer un « skin », une seconde peau plus au goût du joueur, en amenant également quelques bonus importants.
+**Les costumes de classe**
+* * *
+C’est le « skin » par défaut du personnage, qui ne peut pas se promener tout nu. Il s’agit de costumes spécifiques à chaque classe, débloqués au fur et à mesure que cette dernière prend des points d’expérience. Certaines classes comptent une demi-douzaine de costumes différents, d’autres plus récentes n’en proposent qu’un.
+Les costumes de classe ne figurent pas matériellement parmi les objets détenus pour les joueurs. Il n’y a pas d’icône, pas d’échange ou de ligature. C’est une composante de classe commune à tous les joueurs. Leurs seuls points communs avec les fashions sont de pouvoir être teints (avec des teintures simples) et partiellement affichés.
+**Les fashions**
+* * *
+Les fashions se superposent aux costumes de classe et procurent des **bonus complémentaires** en fonction de leur qualité. Ils sont gé- néralement déclinés dans les deux genres (féminin et masculin) et dans toutes les qualités avec quelques altérations de couleur. Pour prévisualiser un fashion, il suffit de clic gauche dessus depuis un lien ou les archives. S’il est destiné à l’autre sexe, le personna- ge sera transformé pour le visuel.
+Il existe **6 types** de fashions. Quand ils sont équipés : les costumes d’arme donnent ATQ & ATQ MAG et guérison générale ; les coiffes et costumes de visage réduisent le coût en PM ; les costumes de bouche et de corps (plastrons) donnent PV & PM max ; les costumes de dos donnent du Taux Crit & Taux Crit Mag.
+Les fashions blancs n’offrent aucun bonus. Les fashions verts donnent des boosts +1 / +2 / +5 et les bleus +2,5 / +5 / +10 en fonction du type de fashion. Les légendaires offrent des bonus complémentaires qui ne sont pas forcément homogènes. Il est donc plus sûr de se renseigner au cas par cas, ou en consultant le [sujet de référencement des armes légendaires](http://www.aeriagames.com/forums/fr/viewtopic.php?p=1797098#1797098) sur le forum officiel.
+Cela peut ainsi représenter un gain cumulé non-négligeable, d’autant que certains items peuvent recevoir une **[infusion](infusion-de-mana.md)** (légendaires) ou inclus dans le Panthéon (toutes qualités). Le **Panthéon** est accessible via la Liste d’Evénements (valise orange de la mini-map). Il octroie donc des bonus au joueur qui équipe au moins un des costumes indiqués. Bénédiction Totale donne +4% à toutes les stats principales, et les bénédictions d’Intelligence, Agilité, Sagesse et Force apportent +4% à la statistique correspondante. Les bonus restent actifs même si les fashions ne sont pas affichés.
+Les fashions se trouvent en boutique officielle, via les surprises alpaga et le chemin de la destinée, l’autel de cristal et de gemmes, les récompenses d’arène et de certaines quêtes, certains events et quelques instances. Il n’y a donc pas de stock permanent mais une disponibilité ponctuelle. On peut consulter ici la [liste des fashions légendaires disponibles en jeu](costumes-legendaires-disponibles-en-jeu.md).
+**Fashions et boîte mystique**
+* * *
+Il est toutefois possible de recréer des costumes dans la [boîte mystique](la-boite-mystique.md), pour transformer un costume bleu en un autre de même qualité ou pour transformer une série de costumes en un seul de qualité supérieure.
+**– Troc de costumes**
+Le troc de costume consiste à transformer plusieurs costumes identiques de même qualité en un seul costume aléatoire de qualité supérieure, de blanc en vert et de vert en bleu. Le taux de réussite de cette opération est relativement bas : 25% pour transformer le blanc en vert, 10% pour transformer le vert en bleu. On peut alors s’aider des « arts du troc ». Ces consommables augmentent les chances de 5 à 75%. Ainsi on peut obtenir 100% de succès avec du blanc, mais on ne dépassera pas 85% avec le vert.
+**– Essences de costumes**
+Les essences de costume permettent de transformer des costumes bleus en d’autres costumes bleus. En gros, le but est de transformer des fashions moches archivés de longue date, liés et/ou invendables, en beaux fashions. Les essences de costumes sont obtenus en reforgeant des fashions bleus, qui sont donc sacrifiés. Il en existe pour chaque type de fashion : tête, corps, arme, etc… On obtient deux essences par costume et du même type que ce costume, en principê échangeables et revendables. Le résultat de la transformation est aléatoire mais le taux de réussite est toujours de 100%. A noter que si on utilise un costume lié avec une essence, le nouveau costume sera également lié.
+**Les teintures**
+* * *
+Comme les costumes de classe, il est possible de teindre certains costumes, notamment des costumes bleus et légendaires. Les tein- tures à utiliser sont celles avec une petite étoile, qu’elles soient normales ou scintillantes. Les costumes d’arme ne peuvent pas être teints.

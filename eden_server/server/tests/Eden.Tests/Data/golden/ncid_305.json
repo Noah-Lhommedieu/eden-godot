@@ -1,0 +1,25 @@
+{
+ "ncid": 305,
+ "cases": [
+  {
+   "dir": "E",
+   "body": "faf4ffff04c2eb0b00",
+   "src": "zsniff_cs_entry_success.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0aabffff02c2eb0b00",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "0babffff02c2eb0b00",
+   "src": "zsniff_native_entry.bin"
+  },
+  {
+   "dir": "E",
+   "body": "08abffff02c2eb0b00",
+   "src": "zsniff_native_entry.bin"
+  }
+ ]
+}

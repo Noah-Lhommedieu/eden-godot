@@ -1,0 +1,73 @@
+# Donjons héroïques (HQ) 50
+
+> Source : `raw/guides-fr/2017/06/20/donjons-heroiques-hq-50.html` — publié le 2017/06/20 (site WordPress edenfr.wordpress.com)
+
+**SOMMAIRE :**
+Carrière Angor | Fort Verdure | Salle Ulta | Base Vilrequin
+---|---|---|---
+**HQ50 : Carrière Angor**
+* * *
+**Herak** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_007.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_026.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50herak757c.png?w=800) | Trophée : Cristal d’Herak | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_019.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0521.png?w=800) | Masse : Sainte Exécution | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_004.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0254.png?w=800) | Rapière : Aube chaotique | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_017.png?w=800) |  |  |
+A la fin du couloir aux champignons, dès le passage d’un membre du groupe sous le portique de **Mori Mori** , un ver géant apparaîtra. Il parcourera le couloir et reviendra dans la salle du boss, au risque de gêner le combat et de faire lui-même des dégâts importants.
+**Mori Mori** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_005.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_015.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50morid6e1.jpg?w=800) | Trophée : Mucus de Mori Mori | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_010.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0321.png?w=800) | Griffe : Toucher gelé | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_025.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0224.png?w=800) | Gourdin : Diapason sonnant | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_019.png?w=800) |  |  |
+**HQ50 : Fort Verdure**
+* * *
+**Quade** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_007.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50quadec658.jpg?w=800) | Trophée : Neuf Disciplines de Quade | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_012.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0381.png?w=800) | Arc : Traître Violent | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_021.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0194.png?w=800) | Guitare : Tempo Démoniaque | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_008.png?w=800) |  |  |
+Après avoir passé le dernier palier précédent **Ketak** , une paire d’ogres commenceront à patrouiller dans le donjon. Ils viendront prêter main forte au boss et réapparaîtront en boucle tant que celui-ci ne sera pas vaincu.
+**Ketak** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_005.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0022.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50ketak0d9c.png?w=800) | Trophée : Conque du Faucon de Ketak | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_025.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0571.png?w=800) | Marteau : Pouvoir du Tonnerre du Démon | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_019.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0056.png?w=800) | Fusil : Pistoflamme du Seigneur de Guerre | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_022.png?w=800) |  |  |
+**HQ50 : Salle Ulta**
+* * *
+Après avoir tué Kenny et Gamera, un membre du groupe devra rattraper les zumis en fuite dans les escaliers menant vers l’entrée. Il faut impérativement les avoir tué les deux zumis pour accéder au dernier boss.
+**Kenny** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_005.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_015.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50kenny3e01.jpg?w=800) | Trophée : Pierre de Noireflamme de Kenny | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_025.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0371.png?w=800) | Poignard : Lacérateur Obscur | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_012.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0214.png?w=800) | Fusil : Gicleur Brûlant | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_022.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0591.png?w=800) | Rapière : Vecteur de mort | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_017.png?w=800)
+**Georges** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0022.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_026.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50georges9ccc.jpg?w=800) | Trophée : Âme Éternelle de Georges | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_017.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0461.png?w=800) | Bâton : Griffe Hérétique | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_010.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0311.png?w=800) | Epée 1 Main : Cauchemar Horrible | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_014.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0541.png?w=800) | Hache : Hurlement du Démon Nocturne | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_019.png?w=800)
+**Gamera** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_005.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_026.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50gamera23e8.jpg?w=800) | Trophée : Carapace Vaudou de Gamera | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_010.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0184.png?w=800) | Grimoire : Guide des Tortures Sanglantes | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_027.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0531.png?w=800) | Marteau : Marteau-turbine | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_004.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0451.png?w=800) | Gourdin : Bâton du Tisseur de Mort | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_025.png?w=800)
+Pour débloquer le passage vers **Kasin** , un joueur doit parler à la tortue se trouvant sur l’un des pontons vers Gamera, à l’ouest. Le reste du groupe pourra suivre sans reparler au PNJ. Par contre, il est impératif d’avoir tué les deux zumis en fuite après Kenny et Gamera pour que le passage puisse d’ouvrir.
+L’une des principales difficultés sur Kasin est la transformation du tank en petit cochon. Chaque coup que le boss porte sur un joueur transformé restaure une partie de sa vie. Il faut donc se dégager rapidement de la mêlée ou s’arranger pour qu’une autre personne prenne l’aggro, d’autant plus que Kasin fait occasionnellement usage d’un sort d’attraction.
+**Capitaine Kasin** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_007.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_006.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_036.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50kasin03f1.jpg?w=800) | Trophée : Discipline du Temple de Kasin | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_004.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0284.png?w=800) | Bouclier : Déserteur de Lumière Sacrée | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_019.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0392.png?w=800) | Anneau : Anneau de Destination Finale | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_017.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0331.png?w=800) | Anneau : Anneau du Voyage Divin | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_011.png?w=800)
+**HQ50 : Base Vilrequin**
+* * *
+Pour faire apparaître **Charles** , il faut avoir préalablement tué toutes les angelées du donjon, les grosses de l’angle nord-ouest comme celles qui pop à proximité d’autres groupes de monstres.
+**Charles** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_005.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_026.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50charles93c9.jpg?w=800) | Trophée : Parchemin Secret des Angelées | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_022.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0084.png?w=800) | Bâton : Baguette de Colère Primitive | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_010.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0244.png?w=800) | Masse : Masse Légère Terrible | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_004.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0511.png?w=800) | Griffe : Arrogance Sauvage | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_025.png?w=800)
+**Kedar** appelle à sa rescousse une petite escouade de pirates. Pour éviter leur apparition, il faut ne pas dépasser les dernières poutres de son ponton. Immédiatement après avoir vaincu Kedar, le groupe devra protéger le **PNJ Avril** apparue avec ses agresseurs dans la petite zone sud-ouest. Si elle meurt, le dernier boss ne sera pas débloqué.
+**Kedar** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_007.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50kedar85ef.jpg?w=800) | Trophée : Parchemin de Marée de Kédar | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_027.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0155.png?w=800) | Arc : Arc de Tempête à Plumes | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_021.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0402.png?w=800) | Bouclier : Barrière Magique Cruelle | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_004.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0481.png?w=800) | Guitare : Disc-Jockey | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_008.png?w=800)
+Pour faire apparaître **Hache Mousseuse** , il est nécessaire d’avoir nettoyé au préalable tous les monstres de type drakai.
+**Hache Mousseuse** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0022.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_026.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50hachebb25.png?w=800) | Trophée : Chandelle de Hache Mousseuse | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_017.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0114.png?w=800) | Hache : Désintégration Neutronique | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_019.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0491.png?w=800) | Poignard : Découpeur de Crânes | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_012.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0302.png?w=800) | Grimoire : Présentations des Éléments | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_027.png?w=800)
+Le passage vers le repaire de **Taen** se trouve à proximité du PNJ Avril, qu’il faut donc avoir sauvé après le combat contre Kedar.
+**Taen le Borgne** ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_005.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_023.png?w=800) ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_009.png?w=800)
+---
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/hq50taen15cd.jpg?w=800) | Trophée : Grande Carte Nautique de Taen | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_025.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0144.png?w=800) | Epée 1 Main : Seigneur de Guerre d’Acier | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_014.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0234.png?w=800) | Anneau : Anneau du Conte de la Tempête | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_010.png?w=800) | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_0294.png?w=800) | Anneau : Chevalière Antique | ![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/fetch_021.png?w=800)
+![](https://edenfr.wordpress.com/wp-content/uploads/2017/06/visiondemoniaquec1d6.png?w=800) | Plan : Vision démoniaque |  |  |  |

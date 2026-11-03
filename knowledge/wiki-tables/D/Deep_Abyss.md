@@ -1,0 +1,230 @@
+# Deep Abyss
+
+> Source : `src_csv/D_ Deep Abyss.csv` — feuille du classeur `Eden_Eternal_Vendetta_Wiki.xlsx`.
+> ⚠️ **Hors périmètre (lvl>90)** : Donjon Vendetta niv. ~125. Données conservées pour référence.
+
+**DEEP ABYSS**
+
+**DUNGEON REWARDS:**
+
+| NAME: | BASE EFFECT: | EFFECT: | 3-PIECE EFFECT: | BOSS: |
+|---|---|---|---|---|
+
+**BOSSES**
+
+| Electra's Desert Treasure Ring | N/A | Your attacks have a 5% chance to increase M-ATK +9089 pts, LCK +180 pts; lasts 10 sec. | 3 Piece Effect: Max HP +3228 pts, Max MP +3228 pts, M-ATK +15%, M-CRIT RATE +427 pts, CAST SPD + 427 pts, M-CRIT DMG +15%. | Electra |
+|---|---|---|---|---|
+| Electra's Serpent Ring | N/A | Your attacks have a 5% chance to decrease the targets Elemental Resistance -10 pts; lasts 10 sec. |  | Electra |
+| Electra's Rough Skin | MP/HP +4984. <br>M-DMG Dealt +2%. | Your attacks have a 5% chance to deal Triple Hit DMG. |  | Electra |
+| Spike's Bloodthirsty Ring | N/A | Your attacks have a 5% chance to increase P-ATK +6892 pts, ATK SPD +312 pts; lasts 10 sec. | 3 Piece Effect: Max HP +3228 pts, Max MP +3228 pts, P-ATK +15%, P-CRIT RATE +427 pts, ATK SPD + 427 pts, P-CRIT DMG +15%. | Spike |
+| Spike's Emerald Eye Ring | N/A | Your attacks have a 5% chance to decrease targets DEF -15%; lasts 10 sec. |  | Spike |
+| Spike's Sharp Back Spike | MP/HP +4984. <br>P-DMG Dealt +2%. | Your attacks decrease the targets Physical Reistance -1 pt; lasts 7 sec, stacks 15 times. |  | Spike |
+| Glacieron's Frosty Wing Ring | N/A | Your attacks and casts have a 5% chance to increase G-Healing +512 pts, Physical Reistance +5 pts; lasts 10 sec. | 3 Piece Effect: Max HP +3228 pts, Max MP +3228 pts, WIS +25%, M-CRIT RATE +427 pts, CAST SPD + 427 pts, Physical Resistance +10%. | Glacieron |
+| Glacieron's Ice Crystal Ring | N/A | Your attacks and casts have a 5% chance to increase WIS +370 pts, M-SPD +5%; lasts 10 sec. |  | Glacieron |
+| Glacieron's Rainbow Ice | MP/HP +4984. <br>G-Healing +2%. | Your attacks and casts have a 5% chance to remove 3 negative status'. |  | Glacieron |
+
+**AWAKEN TRADE SYSTEM REWARDS:**
+
+| NAME: | COST: |
+|---|---|
+| Abyssal Soul Conversion | Fragmented Abyssal Soul x25 |
+| Blueprint: Enhanced Vicious Essence | Abyssal Soul x75 |
+| Blueprint: Enhanced Frosty Essence | Abyssal Soul x75 |
+| Blueprint: Enhanced Shocking Essence | Abyssal Soul x75 |
+| Vicious Essence | Abyssal Soul x175 |
+| Frosty Essence | Abyssal Soul x175 |
+| Shocking Essence | Abyssal Soul x175 |
+| Partial Enchant Box Lv9 - Upper Armor | Abyssal Soul x60 |
+| Partial Enchant Box Lv9 - Lower Armor | Abyssal Soul x60 |
+| Partial Enchant Box Lv9 - Weapon | Abyssal Soul x60 |
+| Partial Enchant Box Lv9 - Acessory | Abyssal Soul x60 |
+| Abyss Head Armor Fragment | Abyssal Soul x100 |
+| Abyss Body Armor Fragment | Abyssal Soul x100 |
+| Abyss Waist Armor Fragment | Abyssal Soul x100 |
+| Abyss Hand Armor Fragment | Abyssal Soul x100 |
+| Abyss Foot Armor Fragment | Abyssal Soul x100 |
+
+**LV125 ARMOR SETS:**
+
+| NAME: | 2-PIECE EFFECT: | 3-PIECE EFFECT: | 5-PIECE EFFECT: | COST: | MATERIALS: |
+|---|---|---|---|---|---|
+
+**HEAVY ARMORS**
+
+| Ancient Spirit Helmet | WIS+200 pts. | G-Healing +345 pts, M-CRIT RATE +356 pts, M-CRIT DMG +5%, CAST SPD +356 pts. | WIS+7%, CAST SPD +5%. <br>Glacier Knight Skill <Ice Blessing>, Paladin Skill <Light - Blessing Aura> and <br><Defense - Blessing Aura> Healing+3%. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Spirit Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+|---|---|---|---|---|---|
+| Ancient Spirit Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Spirit Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Ancient Spirit Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Spirit Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Ancient Spirit Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Spirit Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Ancient Spirit Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Spirit Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Paladin's Resolve Helmet | AGI +80, WIS +150 pts. | Max HP +3642 pts, P-Healing +345 pts, Block +5%. | DMG Taken -7%, Physical & Elemental Resistance +5 pts, Malice +10%. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Paladin's Honor Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Paladin's Resolve Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Paladin's Honor Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Paladin's Resolve Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Paladin's Honor Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Paladin's Resolve Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Paladin's Honor Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Paladin's Resolve Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Paladin's Honor Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Moonlight Vow Helmet | STR +80, AGI +150, INT +80 pts. | P-CRIT RATE & M-CRIT RATE +356 pts, ATK SPD +356 pts, EVA +356 pts. | P-ATK & M-ATK +7%, DMG Taken -4%, MOVE SPD +3%. Your attacks have a 4% chance to deal Triple Hit DMG. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Moonlight Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Moonlight Vow Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Moonlight Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Moonlight Vow Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Moonlight Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Moonlight Vow Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Moonlight Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Moonlight Vow Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Moonlight Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Demonic Fury Helmet | STR +200 pts. | P-CRIT RATE +356 pts, P-CRIT DMG +5%. Your attacks inflict an additional 858 pts of Fire DMG. | P-ATK +10%, DMG Dealt +4%. Your attacks have a 5% chance to decrease the targets Physical Resistance -10 pts; lasts 5 sec. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Demonic Power Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Demonic Fury Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Demonic Power Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Demonic Fury Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Demonic Power Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Demonic Fury Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Demonic Power Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Demonic Fury Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Demonic Power Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Infused Magic Helmet | INT +150 pts, LCK +80 pts. | M-CRIT RATE +356 pts, M-CRIT DMG +5%, ACC +356 pts. | M-ATK +10%, DMG Dealt +4%. Your attacks have a 5% chance to increase the targets Magic DMG Taken +5%; lasts 5 sec. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Enchanted Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Infused Magic Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Enchanted Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Infused Magic Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Enchanted Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Infused Magic Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Enchanted Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Infused Magic Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Enchanted Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+
+**LIGHT ARMORS**
+
+| Cursed Spirit Helmet | STR +150 pts, LCK +80 pts. | P-CRIT RATE +356 pts, P-CRIT DMG +5%, ACC +356 pts. | P-ATK +10%, DMG Dealt +4%. Your attacks have a 1% chance to deal Double Hit DMG. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Cursed Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+|---|---|---|---|---|---|
+| Cursed Spirit Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Cursed Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Cursed Spirit Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Cursed Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Cursed Spirit Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Cursed Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Cursed Spirit Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Cursed Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Evil Magic Eye Crown | INT +200 pts. | Max MP +3642 pts, M-CRIT RATE +356 pts, M-CRIT DMG +10%. | M-ATK +10%, DMG Dealt +4%. Your attacks inflict an additional 858 pts of Dark DMG. Your attacks have a 2% chance to deal Triple Hit DMG. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Evil Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Evil Magic Eye Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Evil Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Evil Magic Eye Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Evil Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Evil Magic Eye Gloves |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Evil Gloves x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Evil Magic Eye Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Evil Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Martial Warrior Helmet | AGI +150 pts, LCK +80 pts. | Max HP +3642 pts, P-CRIT RATE +178 pts, ATK SPD +178 pts, EVA +356 pts. | P-ATK +7%, DMG Taken -4%. When evading your next attack will deal Triple Hit DMG. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Martial Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Martial Warrior Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Martial Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Martial Warrior Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Martial Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Martial Warrior Gloves |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Martial Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Martial Warrior Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Martial Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Enhanced Illusion Hat | AGI +150 pts, LCK +80 pts. | Max HP +3642 pts, M-CRIT RATE +178 pts, CAST SPD +178 pts, EVA +356 pts. | M-ATK +7%, DMG Taken -4%. Your attacks inflict an additional 858 pts of Holy DMG.	<br>		<br> | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Illusions Hat x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Enhanced Illusion Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Illusions Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Enhanced Illusion Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Illusions Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Enhanced Illusion Gloves |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Illusions Gloves x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Enhanced Illusion Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Illusions Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Blessed Feather Helmet | WIS +200 pts. | G-Healing +345 pts, M-CRIT RATE +356 pts, CAST SPD +356 pts. | WIS +140 pts, MOVE SPD +5%. <br>Support Skill <Cure> and Life Worshipper Skill <Forceful Rhythm> Healing +7%. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Blessed Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Blessed Feather Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Blessed Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Blessed Feather Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Blessed Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Blessed Feather Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Blessed Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Blessed Feather Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Blessed Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Eternal Champion Helmet | AGI +80 pts, WIS +150 pts. | Max HP +3642 pts, G-Healing +345 pts, CAST SPD +178 pts, EVA +178 pts. | DMG Taken -4%, Physical & Elemental Resistance +5 pts. When attacked you have a 5% chance to decrease DMG Taken -2664 pts; lasts 7 sec. This effect will not reactivate while it is already active. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Eternal Helmet x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Eternal Champion Armor |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Eternal Armor x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Eternal Champion Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Eternal Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Eternal Champion Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Eternal Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Eternal Champion Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Eternal Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Venomous Serpent Hat | INT +150 pts, LCK +80 pts. | M-CRIT RATE +356 pts, M-CRIT DMG +5%, ACC +356 pts. | M-ATK +10%, DMG Dealt +4%. Your attacks inflict an additional 858 pts of Nature DMG.  Your attacks have a 2% chance to deal Triple Hit DMG. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Serpent Hat x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Venomous Serpent Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Serpent Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Venomous Serpent Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Serpent Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Venomous Serpent Gauntlets |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Serpent Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Venomous Serpent Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Serpent Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Dark Charmer's Hat | AGI +80 pts, INT +150 pts. | Max HP +3642 pts, M-CRIT RATE +178 pts, CAST SPD +178 pts, EVA +356 pts. | M-ATK +7%, DMG Taken -4%. Your attacks have a chance to decrease targets Elemental Resistance -5 pts; lasts 5 sec, stacks 3 times. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Charming Hat x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Dark Charmer's Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Charming Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Dark Charmer's Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Charming Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Dark Charmer's Gloves |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Charming Gloves x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Dark Charmer's Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Charming Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Sacred Spirit Hat | WIS +200 pts. | G-Healing +345 pts, M-CRIT RATE +356 pts, CAST SPD +356 pts. | WIS +140 pts, CAST SPD +5%. <br>Adjudicator Skill <Light of Truth>, Druid Skill <Unicorn Morph> and Totem Master Skill <Let It Rain> Healing +5%. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Sacred Hat x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Sacred Spirit Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Sacred Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Sacred Spirit Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Sacred Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Sacred Spirit Gloves |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Sacred Gloves x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Sacred Spirit Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Sacred Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+| Exalted Armor Hat | AGI +80 pts, WIS +150 pts. | Max HP +3642 pts, G-Healing +345 pts, CAST SPD +178 pts, EVA +178 pts. | DMG Taken -4%, Block +5%. Removes 1 negative status every 5 sec. | Fragmented Abyssal Soul x100. Head Armor Fragment x3. | Exalted Hat x1. Abyssal Essence x2, Head Armor Fragment x5. |
+| Exalted Armor Robe |  |  |  | Fragmented Abyssal Soul x100. Body Armor Fragment x3. | Exalted Robe x1. Abyssal Essence x5, Body Armor Fragment x5. |
+| Exalted Armor Belt |  |  |  | Fragmented Abyssal Soul x100. Waist Armor Fragment x3. | Exalted Belt x1. Abyssal Essence x1, Waist Armor Fragment x5. |
+| Exalted Armor Gloves |  |  |  | Fragmented Abyssal Soul x100. Hand Armor Fragment x3. | Exalted Gauntlets x1. Abyssal Essence x2, Hand Armor Fragment x5. |
+| Exalted Armor Boots |  |  |  | Fragmented Abyssal Soul x100. Foot Armor Fragment x3. | Exalted Boots x1. Abyssal Essence x3, Foot Armor Fragment x5. |
+
+**NOTE:  YOU MUST USE THE TABLET ON THE ORANGE PIECES TO OBTAIN THE GOLD ARMOR.**
+
+**LV125 AWAKEN ARMOR SETS:**
+
+| NAME: | 2-PIECE EFFECT: | 3-PIECE EFFECT: | 5-PIECE EFFECT: | COST: | MATERIALS: |
+|---|---|---|---|---|---|
+
+**HEAVY ARMORS**
+
+| Awakened Ancient Spirit Helmet | WIS +220 pts. | G-Healing + 369 pts, M-CRIT RATE +381 pts, M-CRIT DMG +10%, CAST SPD + 381 pts. | WIS+10%, CAST SPD +5%. <br>Glacier Knight Skill <Ice Blessing>, Paladin Skill <Light - Blessing Aura> and <br><Defense - Blessing Aura> Healing+3%. <br>When attacked you have a 2% chance to remove 1 negative status. | Abyssal Soul x75. Head Armor Fragment x2. | Heavy Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+|---|---|---|---|---|---|
+| Awakened Ancient Spirit Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Heavy Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Ancient Spirit Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Heavy Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Ancient Spirit Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Heavy Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Ancient Spirit Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Heavy Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Paladin's Resolve Helmet | AGI +90 pts, WIS +170 pts. | Max HP +3896 pts, P-Healing +369 pts, Block +10%, Malice +15%. | DMG Taken -10%, Physical & Elemental Resistance +5 pts. <br>Your attacks have a 5% chance to recover the casters HP +5% and decrease the targets P-ATK & M-ATK -6854 pts, P-CRIT RATE & M-CRIT RATE -505 pts; lasts 7 sec. | Abyssal Soul x75. Head Armor Fragment x2. | Heavy Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Paladin's Resolve Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Heavy Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Paladin's Resolve Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Heavy Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Paladin's Resolve Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Heavy Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Paladin's Resolve Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Heavy Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Moonlight Vow Helmet | STR +90 pts, AGI +170 pts, INT +90 pts. | P-CRIT RATE & M-CRIT RATE +381 pts, ATK SPD +381 pts, EVA +381 pts, M-SPD +5%. | P-ATK & M-ATK +10%, DMG Dealt +2%, DMG Taken -5%, Your attacks have a 7% chance to deal Triple Hit DMG. | Abyssal Soul x75. Head Armor Fragment x2. | Heavy Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Moonlight Vow Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Heavy Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Moonlight Vow Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Heavy Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Moonlight Vow Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Heavy Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Moonlight Vow Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Heavy Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Demonic Fury Helmet | STR +220 pts. | Max MP +3896 pts, P-CRIT RATE +381 pts, P-CRIT DMG +10%. Your attacks inflict an additional +918 pts of Fire DMG. | P-ATK +15%, DMG Dealt +5%. Your attacks have a 10% chance to decrease the targets Physical Resistance -5 pts, M-SPD -10%; lasts 5 sec, stacks 3 times. | Abyssal Soul x75. Head Armor Fragment x2. | Heavy Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Demonic Fury Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Heavy Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Demonic Fury Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Heavy Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Demonic Fury Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Heavy Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Demonic Fury Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Heavy Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Infused Magic Helmet | INT +170 pts, LCK +90 pts. | Max MP +3896 pts, M-CRIT RATE +381 pts, M-CRIT DMG +10%, ACC +381 pts. | M-ATK +15%, DMG Dealt +5%. Your attacks have a 10% chance to increase the targets Magic DMG Taken +5%, decrease their ACC -252 pts; lasts 5 sec, stacks 2 times. | Abyssal Soul x75. Head Armor Fragment x2. | Heavy Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Infused Magic Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Heavy Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Infused Magic Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Heavy Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Infused Magic Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Heavy Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Infused Magic Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Heavy Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+
+**LIGHT ARMORS**
+
+| Awakened Cursed Spirit Helmet | STR +170 pts, LCK +90 pts | Max MP +3896 pts, P-CRIT RATE +381 pts, P-CRIT DMG +10%, ACC +381 pts. | P-ATK +15%, DMG Dealt +5%. <br>Your attacks have a 2% chance to deal Double Hit DMG. Your attacks have a 5% chance to increase the casters P-ATK +6854 pts and decrease the targets DEF -3427 pts; lasts 7 sec. | Abyssal Soul x75. Head Armor Fragment x2. | Light Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+|---|---|---|---|---|---|
+| Awakened Cursed Spirit Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Light Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Cursed Spirit Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Light Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Cursed Spirit Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Light Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Cursed Spirit Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Light Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Evil Magic Eye Crown | INT +220 pts. | Max MP +3896 pts, M-CRIT RATE +381 pts, M-CRIT DMG +10%, ACC +381 pts. | M-ATK +15%, DMG Dealt +5%. <br>Your attacks inflict an additional +918 pts of Dark DMG. Your attacks have a 4% chance to deal Triple Hit DMG. | Abyssal Soul x75. Head Armor Fragment x2. | Light Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Evil Magic Eye Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Light Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Evil Magic Eye Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Light Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Evil Magic Eye Gloves |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Light Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Evil Magic Eye Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Light Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Martial Warrior Helmet | AGI +170 pts, LCK +90 pts. | Max HP +3896 pts, P-CRIT RATE +381 pts, ATK SPD +381 pts, EVA +381 pts. | P-ATK +10%, DMG Dealt +2%. DMG Taken -5%. <br>When evading your next attack will deal Triple Hit DMG. Your attacks have a 20% chance to decrease the targets ACC -252 pts; lasts 5 sec. | Abyssal Soul x75. Head Armor Fragment x2. | Light Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Martial Warrior Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Light Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Martial Warrior Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Light Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Martial Warrior Gloves |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Light Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Martial Warrior Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Light Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Enhanced Illusion Hat | AGI +170 pts, LCK +90 pts. | Max HP +3896 pts, M-CRIT RATE +381 pts, CAST SPD +381 pts, EVA +381 pts. | M-ATK +10%, DMG Dealt +2%. DMG Taken -5%. <br>Your attacks inflict an additional +918 pts of Holy DMG. When evading you have a20% chance to increase your Magic DMG Dealt +10%; lasts 3 sec. | Abyssal Soul x75. Head Armor Fragment x2. | Light Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Enhanced Illusion Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Light Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Enhanced Illusion Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Light Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Enhanced Illusion Gloves |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Light Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Enhanced Illusion Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Light Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Blessed Feather Helmet | WIS +220 pts. | G-Healing +369 pts, M-CRIT RATE +381 pts, CAST SPD +381 pts, MOVE SPD +5%. | WIS +154 pts, Support Skill <Cure> & Life Worshipper Skill < Forceful Rhythm> Healing +10%. Life Worshipper Skill <Battle Hymn> Will now additonally remove 2 negative status' from affected targets. | Abyssal Soul x75. Head Armor Fragment x2. | Light Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Blessed Feather Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Light Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Blessed Feather Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Light Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Blessed Feather Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Light Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Blessed Feather Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Light Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Eternal Champion Helmet | AGI +90 pts, WIS +170 pts. | Max HP +3896 pts, G-Healing +369 pts, CAST SPD +381 pts, EVA +381 pts. | DMG Taken -5%. Physical & Elemental Reistance +5 pts. When attacked you have a 5% chance to remove 2 negative status and decrease DMG Taken -2664 pts; lasts 7 sec. This effect will not reactive while it is already active. | Abyssal Soul x75. Head Armor Fragment x2. | Light Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Eternal Champion Armor |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Light Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Eternal Champion Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Light Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Eternal Champion Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Light Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Eternal Champion Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Light Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+
+**CLOTH ARMORS**
+
+| Awakened Venomous Serpent Hat | INT +170 pts, LCK +90 pts. | Max MP +3896 pts, M-CRIT RATE +381 pts, M-CRIT DMG +10%, ACC +381 pts. | M-ATK +15%, DMG Dealt +5%. Your attacks inflict an additional +918 pts of Nature DMG. Your attacks havea 4% chance to deal Triple Hit DMG. | Abyssal Soul x75. Head Armor Fragment x2. | Cloth Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+|---|---|---|---|---|---|
+| Awakened Venomous Serpent Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Cloth Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Venomous Serpent Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Cloth Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Venomous Serpent Gauntlets |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Cloth Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Venomous Serpent Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Cloth Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Dark Charmer's Hat | AGI +170 pts, INT +90 pts. | Max HP +3896 pts, M-CRIT RATE +381 pts, CAST SPD +381 pts, EVA +381 pts. | M-ATK +10%, DMG Dealt +2%. DMG Taken -5%. Your attacks have a 10% chance to decrease the targets Elemental Resistance -5 pts & ACC -168 pts; lasts 5 seconds, stacks 3 times. | Abyssal Soul x75. Head Armor Fragment x2. | Cloth Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Dark Charmer's Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Cloth Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Dark Charmer's Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Cloth Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Dark Charmer's Gloves |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Cloth Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Dark Charmer's Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Cloth Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Sacred Spirit Hat | WIS +220 pts. | Max MP +3896 pts, G-Healing +369 pts, M-CRIT RATE +381 pts, CAST SPD +381 pts. | WIS +154 pts, CAST SPD +10%. Adjudicator Skill <Light of Truth>, Druid Skill <Unicorn Morph>, and Totem Master Skill <Let It Rain> Healing +10%. | Abyssal Soul x75. Head Armor Fragment x2. | Cloth Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Sacred Spirit Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Cloth Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Sacred Spirit Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Cloth Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Sacred Spirit Gloves |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Cloth Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Sacred Spirit Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Cloth Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+| Awakened Exalted Armor Hat | AGI +170 pts, WIS +90 pts. | Max HP +3896 pts, G-Healing +369 pts, CAST SPD +381 pts, EVA +381 pts. | DMG Taken -5%, Block +5%. Removes 1 negative status every 5 seconds. When attacked you have a 10% chnace to decrease the targets P-ATK & M-ATK -3427 pts, ATK & CAST SPD -252 pts; lasts 7 sec, stacks 2 times. | Abyssal Soul x75. Head Armor Fragment x2. | Cloth Armor Head Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Exalted Armor Robe |  |  |  | Abyssal Soul x120. Body Armor Fragment x2. | Cloth Armor Body Tablet x1, Enhanced Frosty Essence x10. |
+| Awakened Exalted Armor Belt |  |  |  | Abyssal Soul x45. Waist Armor Fragment x2. | Cloth Armor Waist Tablet x1, Enhanced Shocking Essence x5. |
+| Awakened Exalted Armor Gloves |  |  |  | Abyssal Soul x70. Hand Armor Fragment x2. | Cloth Armor Hand Tablet x1, Enhanced Vicious Essence x5 |
+| Awakened Exalted Armor Boots |  |  |  | Abyssal Soul x70. Foot Armor Fragment x2. | Cloth Armor Foot Tablet x1, Enhanced Vicious Essence x5. |
+
+**NOTE:  YOU MUST USE THE AWAKEN TABLET ON THE GOLD PIECES TO OBTAIN THE AWAKEN ARMOR ONCE EXP IS MAXED.**
+

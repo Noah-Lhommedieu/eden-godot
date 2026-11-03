@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>EdenClient</RootNamespace>
+    <AssemblyName>Eden.Core</AssemblyName>
+    <!-- Module PUR : jamais de référence FlaxEngine.* ici
+         (.devin/rules/flax-code-quality.md). -->
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Eden.Core.Tests" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
+  </ItemGroup>
+</Project>

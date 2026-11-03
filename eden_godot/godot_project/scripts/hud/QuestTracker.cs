@@ -658,7 +658,6 @@ public partial class QuestTracker : Control
 
     private void RefreshCore()
     {
-        using var _pt = EdenClient.Perf.PerfTrace.Scope("quest.refresh"); // TEMP-DIAG
         if (_list == null) return;
         // RemoveChild avant QueueFree : sinon anciens + nouveaux
         // enfants coexistent jusqu'à la fin de frame → reflow visible.

@@ -240,6 +240,7 @@ uniform vec3 emissive = vec3(0.0);
 uniform vec3 uv_offset = vec3(0.0);
 uniform vec3 uv_scale = vec3(1.0);
 uniform vec3 uv_center = vec3(0.5, 0.5, 0.0);
+uniform vec2 uv_clamp = vec2(0.0);
 uniform float uv_rot = 0.0;
 uniform float alpha_cut = 0.5;
 uniform bool use_tex = true;
@@ -249,6 +250,10 @@ void fragment() {{
     vec2 p = (UV - uv_center.xy) * uv_scale.xy;
     float c = cos(uv_rot), s = sin(uv_rot);
     p = vec2(c * p.x - s * p.y, s * p.x + c * p.y) + uv_center.xy + uv_offset.xy;
+    // ClampMode mixte NIF (1 = clamp S, 2 = clamp T) : un seul axe se borne,
+    // l'autre garde la répétition (défilement UV animé).
+    if (uv_clamp.x > 0.5) p.x = clamp(p.x, 0.0, 1.0);
+    if (uv_clamp.y > 0.5) p.y = clamp(p.y, 0.0, 1.0);
     vec4 t = use_tex ? texture(albedo_texture, p) : vec4(1.0);
     ALBEDO = (t.rgb * albedo.rgb + emissive) * vcol.rgb;
     {alpha}
@@ -281,6 +286,10 @@ void fragment() {{
         if (alpha != null && alpha.Test) sm.SetShaderParameter("alpha_cut", alpha.Threshold / 255f);
         if (tex?.Base is { } b)
         {
+            // Clamp par axe : 0 = les deux, 1 = S seul, 2 = T seul. Mode 0 passe aussi
+            // par repeat_disable du sampler (halo de filtrage en bord de quad).
+            if (repeat && b.ClampMode is 1 or 2)
+                sm.SetShaderParameter("uv_clamp", new Godot.Vector2(b.ClampMode == 1 ? 1 : 0, b.ClampMode == 2 ? 1 : 0));
             if (b.HasTransform) { st.Tu = b.Translation.X; st.Tv = b.Translation.Y; st.Su = b.Scale.X; st.Sv = b.Scale.Y; st.Rot = b.Rotation; st.Center = b.Center; }
             if (b.File != null) st.SetTextureFile(b.File, o);
             else if (b.Source?.Pixels is { } px) st.Texture = PixelTexture(px);

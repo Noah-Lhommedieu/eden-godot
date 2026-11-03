@@ -1619,7 +1619,6 @@ public partial class EntityRegistry : Node3D
     {
         if (_session == null && SessionCarry.Session is { } s)
             BindSession(s);
-        using var _ptd = EdenClient.Perf.PerfTrace.Scope("reg.drain"); // TEMP-DIAG
         while (_netPending.TryDequeue(out var act))
         {
             try { act(); }

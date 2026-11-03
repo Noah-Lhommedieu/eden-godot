@@ -649,8 +649,7 @@ public partial class InventoryWindow : Control
     /// porté par la cellule pour drag/drop/double-clic).</summary>
     private void RefreshCells()
     {
-        using var _pt0 = EdenClient.Perf.PerfTrace.Scope("inv.cells"); // TEMP-DIAG
-        { using var _ = EdenClient.Perf.PerfTrace.Scope("inv.slotschanged"); SlotsChanged?.Invoke(); } // TEMP-DIAG
+        SlotsChanged?.Invoke();
         EnsureItemTable();
         RefreshBagSlots();
         // Vue unifiée « Extension » : sac de base puis chaque sac équipé
@@ -741,7 +740,6 @@ public partial class InventoryWindow : Control
         UpdateHeld();
         if (_session == null && SessionCarry.Session is { } s)
             BindSession(s);
-        using var _ptd = EdenClient.Perf.PerfTrace.Scope("inv.drain"); // TEMP-DIAG
         while (_pending.TryDequeue(out var act))
         {
             try { act(); }

@@ -47,12 +47,17 @@ public partial class SettingsApplier : Node
     /// FogCeiling/Grass et les particules.</summary>
     private int _gfxApplyIn;
     private int _qaTab = -1;
-    /// <summary>Frames restantes pour poser le thème dès que le HUD et
-    /// son atlas existent (le HUD se monte après le chargement des
+    /// <summary>Secondes restantes pour poser le thème dès que le HUD
+    /// et son atlas existent (le HUD se monte après le chargement des
     /// settings : sans attente le thème sauvegardé n'était appliqué
-    /// qu'au premier changement de réglage).</summary>
-    private int _themeWait;
-    private const int ThemeWaitFrames = 1800;
+    /// qu'au premier changement de réglage). BUDGET EN SECONDES :
+    /// l'ancien compte à rebours en frames (1800) s'épuisait pendant
+    /// le chargement asynchrone de la map — les _Process autoload
+    /// défilent à 200-600 fps alors que MountHud n'arrive qu'en fin
+    /// de GameScene._Ready, bien après l'épuisement → thème/palette/
+    /// ui_scale jamais posés en live.</summary>
+    private float _themeWait;
+    private const float ThemeWaitSeconds = 120f;
 
     public override void _Ready()
     {
@@ -202,13 +207,13 @@ public partial class SettingsApplier : Node
             _drvReg = null;
             _drvPlayer = null;
             _applyIn = 5;           // laisse la scène se monter
-            _themeWait = ThemeWaitFrames;
+            _themeWait = ThemeWaitSeconds;
             _hud = null;
             _hudReadyHooked = false;
             _menuHooked = false;
         }
         TickRender(delta);
-        TickThemeBoot();
+        TickThemeBoot(delta);
         if (_applyIn > 0 && --_applyIn == 0)
         {
             ApplyGraphics();
@@ -434,21 +439,24 @@ public partial class SettingsApplier : Node
     /// <summary>Attend le HUD (nœud + atlas) puis pose le thème
     /// sauvegardé et branche HudReady : déterministe quel que soit
     /// l'ordre d'init autoload / scène.</summary>
-    private void TickThemeBoot()
+    private void TickThemeBoot(double delta)
     {
-        if (_themeWait <= 0) return;
-        _themeWait--;
         var hud = FindHud();
-        if (_themeWait % 300 == 0)
-            GD.Print($"[theme-boot] wait={_themeWait} hud={(hud == null ? "null" : "ok")} tex={(hud?.Tex == null ? "null" : "ok")} scene={_scene?.Name}");
         // S'abonner à HudReady DÈS que le nœud HUD existe — c'est le
         // seul signal fiable « atlas construit » (émis en fin de
-        // BuildAll) : si l'attente rate sa fenêtre ou est déjà
-        // épuisée, OnHudReady pose quand même thème+palette.
+        // BuildAll) : OnHudReady pose thème+palette+ui_scale même si
+        // le budget d'attente ci-dessous s'est épuisé avant le montage.
         if (hud != null) HookHud(hud);
+        if (_themeWait <= 0f) return;
+        _themeWait -= (float)delta;
         if (hud == null || Ui.UiThemeBoot.MustWait(true, hud.Tex != null))
+        {
+            if (_themeWait <= 0f && hud != null)
+                GD.PrintErr("[theme] HUD présent mais atlas jamais " +
+                    "prêt (120 s) — thème non appliqué");
             return;
-        _themeWait = 0;
+        }
+        _themeWait = 0f;
         ApplyTheme(hud, S.Theme);
     }
 

@@ -60,7 +60,12 @@ internal sealed class NiParticleRuntime : IFxDriver
         var zb = ps.Properties.OfType<NifZBufferProperty>().FirstOrDefault();
         var (mat, st) = NativeFx.MakeMaterial(nm, tex, al, zb, true, host.Options, true);
         host.AllMats.Add(st);
-        if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "1") { Diag(ps, tex, al, st); GD.Print("[psdiag] warn " + string.Join(" | ", host.Nif.Warnings.Where(w => w.Contains("ixel") || w.Contains("21")))); }
+        if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "1")
+        {
+            Diag(ps, tex, al, st);
+            var ws = host.Nif.Warnings.Where(w => w.Contains("ixel") || w.Contains("21")).ToList();
+            if (ws.Count > 0) GD.Print("[psdiag] warn " + string.Join(" | ", ws));
+        }
         foreach (var p in ps.Properties) host.RegisterMat(p.Block, st);
 
         var quad = new QuadMesh { Size = new Godot.Vector2(2, 2), Material = mat };

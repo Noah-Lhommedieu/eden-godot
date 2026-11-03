@@ -7,6 +7,8 @@ r014-fix2). Graphe + tests NetTests/Eden.Core à jour au moment de la
 rédaction.
 Revue visuelle du 2026-11-04 (sweep 58/58 OK, captures cam90+cam270,
 correction VfsReadGuardTests) reportée dans le tableau ci-dessous.
+Session 2026-11-03 soir : fix boucle caméra ride-debug (`_faceBase`),
+diagnostic émetteurs skinnés bind-posés (r014/r253), alpha M609 vérifié.
 Anomalies tranchées le 2026-11-03 : halos r014 (émissif non texturé →
 fix shader `NativeFx`), badge épée type ≠ 0 (type 1 = montures à
 sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
@@ -20,6 +22,7 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
 | Textures manquantes = surfaces référençant `nif_tex` sans albedo ; meshes cachés/aides sans texture ≠ trou de données. **Analyse du 2026-11-03 : les 29 FAIL du sweep ont TOUS `notex>0`, aucun ne manque `stand01`** — faux positifs de l'ancien critère (toute surface sans AlbedoTexture, ex. 21 surfaces sur r253) | verified (code + tsv) | `RideLab.Finish` — `notex` ne compte que les références non résolues (`nif_tex` meta copiée par `ToonMaterializer` :414,515), `untx` = info |
 | `move01` non requis pour le statut OK (ex. r711 « Tour à Canon » sans marche, natif) | verified (code) | `RideLab.Finish`, note `noMove` |
 | Anims directionnelles montées : A→`move02`/yaw +90, D→`move03`/yaw −90, WA/WD ±45° (`DirectionalLocomotion`, `MountSideAnims`) | verified (tests + **captures 2026-11-04**) | `DirectionalLocomotionTests` ; `artifacts/ride-lab/{cam90,cam270}` — r253/r014 : A = arrière cam90 / face cam270, D = miroir exact → **non inversés** ; r091 : modèle symétrique ±90 identique au pixel (pivot prouvé via STAND≠A) ; r711 : aucune anim de marche (donnée native, `noMove`) |
+| **« Inversion » live des anims directionnelles = boucle de rétroaction caméra debug, PAS le mapping anim** — `_Process` recuisait `_yaw = ModelYaw + _dbgYaw` alors que `ModelYaw` contient déjà le `FaceOffset` ±90° : le cap gonflait à chaque frame (run avant : `modelYaw` 644→1889→2036°, `camYaw` 2036° en ~4 s). Fix `PlayerController.cs` : `_faceBase` = cap hors `FaceOffset` (clavier→`_yaw` hors debug, clic→`targetYaw`, **gelé sous `_dbgYawOn`** car `_yaw` y est dérivé) ; la caméra debug lit `_faceBase + _dbgYaw`. | verified (**run réel input 2026-11-03**) | `tools/ride-script.sh 14010` (touches injectées via `Input.ParseInputEvent`, `DebugCam` actif — même chemin que le live `ride_key.txt`) : camYaw **120° constant**, modelYaw STAND=0 / W=120 / **A=210 (+90)** / **D=30 (−90)** / S=120, anims `move01/02/03/04` correctes (`artifacts/ride-script/14010/run.log` ; le run avant-fix montrait `modelYaw` 644→1889→2036° et `camYaw` 2036° — chiffres consignés ici, PNG écrasés) |
 | Vitesse d'anim : monté 100 %→×1.0, 150 %→×1.5, pied 20 %→×1.0, bornes 1–3 | verified | `MoveAnimSpeedTests` (InlineData 100/150/200/35/900, 0/20/30/40) |
 | Vitesse distante : dérivée du déplacement snapshot (`EntityRegistry.ObserveSpeed`, base pied 6 u/s, lissage 0.4) — pas de champ protocole ajouté (pas de preuve native) | verified (code) | `ServerMoveSpeedTests` |
 | Combat monté : routage `attack01-04`, `magic01/09/19/20`, `shoot*` (natif `FUN_00778660`/`FUN_007785d0`) ; `magic03`/`magic02` NON routés nativement → repli pose cavalier | verified (tests + désasm + **captures 2026-11-04**) | `MountCombatRules.RoutedAction` + NetTests `MountRulesTests` ; ride-lab : `attack01`/`rattack01`/`magic01`/`rmagic01` joués sur montures de combat seules (253020 type 2, 711010 type 1) — non routés sur non-combat (14010, 91010), conforme à l'auto-dismount natif |
@@ -80,6 +83,41 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
   `2152`/`7003`/`2034` hors stats (chaîne runtime / tag formule).
   `verified` pour 3024/2055 (sémantique native tracée), `not done`
   pour le port du heal-à-la-pose.
+- **Particules monture « mal placées » (r014, r253) — cause racine
+  tranchée (2026-11-03)** : l'émetteur `NiPSysMeshEmitter` prélève des
+  meshes **skinnés**, mais `NifParticleMapper.BuildEmitter`
+  (`src/Eden.Core/Fx/NifParticleMapper.cs:164-176`) cuit une fois les
+  `sh.Vertices` = **pose de bind** ; `ParticleSim`/`NiParticleRuntime`
+  ne re-skinnent jamais (EmitterTransform = un seul repère, celui du
+  nœud psys). Mesure CPU `KfPose` (skin 4 poids, `r014.kf`/`r253.kf`) :
+  r014 `Editable Mesh` #114 (os L/R Foot+Hand+Tail04) écart bind→posé
+  **moy. 0,47 m / max 2,21 m en stand01**, 0,94–1,93 m en move01/02 ;
+  r253 pattes #384/#505/#491/#498 **moy. 0,24–1,06 m**, queues #360
+  0,95–2,12 m, corps #331 0,67–2,23 m → en marche/strafe les flammes
+  et lueurs restent collées aux positions bind (~0,5–1 m à côté des
+  membres animés, jusqu'à ~2,2 m aux pointes de queue).
+  **Pas un bug d'attache** : le psys suit bien son parent NIF
+  (`PArrayNN-Emitter`, sous `@` #211 r253 / Scene Root r014 — nœud
+  gizmo statique, normal) ; `L17` n'est parent d'aucun psys — c'est
+  l'os de **selle cavalier** (déjà animé via KF, cf. ligne 19). Le fix
+  = émetteur skinné par frame (`KfPose`-équivalent ou os dominant pour
+  les meshes mono-os, ex. pattes r253) — porte sur `Eden.Core` +
+  `NiParticleRuntime`, hors périmètre d'édition de cette tâche.
+  Statut : `verified` (structure + mesures ; captures
+  `artifacts/ride-lab/m2/` : flammes r014 sur corps en stand car
+  idle≈bind, détachement non visible à l'arrêt).
+- **Alpha « Germe Fétide » (mob 58160 → `M609`) — déjà correct, aucun
+  patch requis (2026-11-03)** : chaîne `t_monster` 58160 → `c_monster`
+  M609010 → `monsterlist` `m609.kfm`/M60901.dds. L'unique shape
+  `Object02` porte `NiAlphaProperty` 0x12EC = **alpha-test pur, seuil
+  125** (pas de blend) → `NifMaterial.For` (`scripts/native/NifMaterial.cs:234-238`)
+  rend `AlphaScissor` + `AlphaScissorThreshold=125/255≈0,49` ;
+  `ToonMaterializer` préserve le StandardMaterial (alphaish), désactive
+  le cull. Captures `/tmp/m609*.png` : fond visible entre les brins de
+  la toile, **0 pixel noir** dans la silhouette → le « rectangle noir »
+  signalé n'est pas reproductible sur le chemin natif actuel. `verified`
+  (flags NIF + captures) ; la comparaison pixel-perfect avec le client
+  oracle reste `hypothesis`.
 - Caméra ride-lab : `--cam=…,dist` est un facteur de la hauteur
   (×h/6, plancher 3) — pour les grosses montures boîte (r091), dist
   < ~8 place la caméra DANS la coque ; les runs cam90/cam270 du

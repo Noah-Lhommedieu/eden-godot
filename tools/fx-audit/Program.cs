@@ -22,6 +22,41 @@ var present = Directory.Exists(texDir)
         .Select(n => n!.ToLowerInvariant()).ToHashSet()
     : new HashSet<string>();
 
+// --nif f.nif [...] : dump par système (émetteur, ctlrs, courbe BirthRate, spawn),
+// sans balayer tout le corpus.
+if (rest.FirstOrDefault() == "--nif")
+{
+    foreach (var w in rest.Skip(1))
+    {
+        var f = Directory.EnumerateFiles(root, "*.nif", SearchOption.AllDirectories)
+            .FirstOrDefault(p => string.Equals(Path.GetFileName(p), w, StringComparison.OrdinalIgnoreCase));
+        if (f == null) { Console.WriteLine($"{w}: absent"); continue; }
+        var nif = NifFile.Load(f);
+        Console.WriteLine($"== {w} psys={nif.ParticleSystems.Count}");
+        foreach (var ps in nif.ParticleSystems)
+        {
+            var e = ps.Of<NifPSysEmitter>().FirstOrDefault();
+            Console.WriteLine($"  {ps.Name} block={ps.Block} ws={ps.WorldSpace} max={ps.Data?.MaxParticles} " +
+                $"emit={(e == null ? "none" : $"speed={e.Speed}±{e.SpeedVariation} decl={e.Declination}±{e.DeclinationVariation} " +
+                $"planar={e.PlanarAngle}±{e.PlanarAngleVariation} radius={e.Radius} life={e.LifeSpan}±{e.LifeSpanVariation} " +
+                $"meshes={e.MeshBlocks.Length}")}");
+            Console.WriteLine($"    mods={string.Join(",", ps.Modifiers.Select(m => m.Type))}");
+            foreach (var c in ps.ControllerList)
+            {
+                var ip = c.Interpolator;
+                var fl = ip?.Floats;
+                string keys = fl == null ? "-" : string.Join(";", fl.Times.Zip(fl.Values, (t, v) => $"{t:0.##}={v:0.##}").Take(8));
+                var vi = c.VisibilityInterpolator;
+                string vkeys = vi?.Bools == null ? "-" : string.Join(";", vi.Bools.Times.Zip(vi.Bools.Values, (t, v) => $"{t:0.##}={v}").Take(8));
+                Console.WriteLine($"    ctl {c.Type} tgt={c.TargetBlock} t=[{c.StartTime:0.##},{c.StopTime:0.##}] freq={c.Frequency} cyc={c.Cycle} " +
+                    $"ip={ip?.Type ?? "null"} fv={ip?.FloatValue.ToString("0.##") ?? "-"} flags={c.Flags} keys=[{keys}] " +
+                    $"vis={vi?.Type ?? "-"} bv={vi?.BoolValue.ToString() ?? "-"} vkeys=[{vkeys}]");
+            }
+        }
+    }
+    return 0;
+}
+
 var stat = new Dictionary<string, int>();
 void Tally(string k, int n = 1) => stat[k] = stat.GetValueOrDefault(k, 0) + n;
 var rows = new List<string>();

@@ -9,6 +9,18 @@ document est écrit. Complète `docs/knowledge/class-skills-audit.md` (côté
 client) et le bug C de `docs/knowledge/rankbuff-server-audit.md` (côté
 serveur).
 
+> **Correctifs livrés 2026-11-03** (statuts détaillés dans
+> `known-bugs.md` § « Statuts des correctifs ») : D1 → **KB-03 TESTED**
+> (`ClassUnlockRules` + appels à `GrantClassPoint`/`GrantKillExp`/1er
+> MigrationDone ; alignement des colonnes prérequis revérifié sur les 61
+> lignes locales et les bandes raciales de `S_Class.ini` décodé) ;
+> D2+D6 → **KB-04 TESTED** (éveillées lv80/aa80, certs, sorts +0x5c à
+> 80, JPAward, migration) ; D3 → **KB-06 TESTED** (`ClassFor` bande
+> `(race-1)*100` aux 11 sites) ; D4 → **KB-07 TESTED** (flag race col 14
+> parsé, filtres `RaceAllows`) ; D5 → **KB-18 TESTED** (`lv/10+1`) ;
+> D7 → **KB-19 IMPLEMENTED** (489 = possédées, 168 refusé sinon — à
+> vérifier live) ; D8 = informationnel, non traité.
+
 Données serveur : `eden_server/server_us/Data/db_decoded/S_Class.ini`
 (305 lignes = 61 classes × 5 races, ids `index_race×100 + classe`, index 0 =
 Humain…4 = Halfkin) et `S_Spell.ini` (V.8) ; données client de référence

@@ -6,6 +6,13 @@ relus directement dans `corpus/fr-full/data/db/` (Big5) et
 de `IniTable` (record complet à `N+1` cellules, le `|` final laisse une
 cellule vide).
 
+> **Correctif livré 2026-11-03** : §3.1 → **KB-01 TESTED**
+> (`EnchantParser.NormalizeRow` : réinsère la cellule elf-pet en index 6
+> sur lignes FR 61/56-cellules ; copies client `scripts/data/tables/
+> EnchantTable.cs` et `src/Eden.Core/Data/tables/EnchantTable.cs`
+> alignées ; doc `EnchantService` corrigée). §3.2 (achievements) et
+> §3.3 (collection) non traités — autres lots.
+
 ## 1. Qui lit quoi
 
 ### Serveur (`eden_server/server/`)

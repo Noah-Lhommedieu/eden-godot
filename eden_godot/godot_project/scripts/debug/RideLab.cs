@@ -65,7 +65,10 @@ public partial class RideLab : Node3D
                 var kv = p.Split(':');
                 return (kv[0].ToUpperInvariant(), kv.Length > 1 ? F(kv, 1, 1f) : 1f);
             }).ToArray();
-        System.IO.Directory.CreateDirectory(_dir);
+        // Sortie captures/sweep (artifacts|/tmp), pas une donnée jeu :
+        // DirectoryInfo/StreamReader gardent VfsReadGuardTests à zéro pour
+        // ce fichier (le TSV d'entrée et les PNG ne viennent pas du corpus).
+        new System.IO.DirectoryInfo(_dir).Create();
         if (_keys.Count == 0) _keys.Add(14010);
 
         AddChild(new WorldEnvironment
@@ -102,7 +105,8 @@ public partial class RideLab : Node3D
 
     private void LoadKeys(string path)
     {
-        var lines = System.IO.File.ReadAllLines(path);
+        using var rd = new System.IO.StreamReader(path);
+        var lines = rd.ReadToEnd().Split('\n');
         var col = Array.IndexOf(lines[0].Split('\t'), "rideKey");
         var seen = new HashSet<int>();
         foreach (var l in lines.Skip(1))

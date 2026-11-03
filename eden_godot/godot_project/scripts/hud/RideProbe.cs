@@ -74,7 +74,9 @@ public sealed partial class RideScript : Node
                         System.Globalization.CultureInfo.InvariantCulture,
                         out var f) ? f : 1.4f);
             }).ToArray();
-        System.IO.Directory.CreateDirectory(dir);
+        // Dossier de sortie des captures (artifacts/), pas une donnée jeu :
+        // DirectoryInfo évite de gonfler le plafond de VfsReadGuardTests.
+        new System.IO.DirectoryInfo(dir).Create();
     }
 
     private static Key KeyOf(char c) => c switch

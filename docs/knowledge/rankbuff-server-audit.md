@@ -4,6 +4,16 @@ Statut : **verified** pour les constats de code (chemins fichier:ligne cités,
 désasm `re/ghidra/zone/decompiled.c` relu) et **hypothesis** pour l'ampleur
 in-game (quels persos sont réellement affectés dépend des classes débloquées).
 Audit **statique** du 2026-11-03 : aucun build ni test exécuté, lecture seule.
+
+> **Correctifs livrés 2026-11-03** : Bug A → **KB-02 TESTED**
+> (`FindClassRankBuff` par champ 1 à `Program.cs`) ; Bug B → **KB-05
+> TESTED** (case 2047 modes 4/5 → canaux `HealGivenFlat/HealTakenFlat`
+> jusqu'aux formules Heal/BeHeal) ; Bug C = D2 → **KB-04 TESTED** ;
+> Bug D → absorbé par KB-04 (`ProfileStatEmitter` re-émis dans
+> `GrantNewClassAsync`). **Reste** : le même défaut de clé côté client
+> (`ClassRankBuffTable.cs` ×2, tooltip « Class Ability Bonus ») et G24
+> (bonus serveur sans affichage FR pour 12 éveillées — gap données).
+
 Données attendues : `artifacts/corpus-inventory/class-rankbuff-expected.tsv`
 + `class-rankbuff-notes.md`, mécanique native dans `native-constants.md` §1.
 

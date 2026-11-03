@@ -4,6 +4,13 @@ Statut : **verified** (code × données corpus × paquets × captures croisés) 
 2026-11-03 — lecture seule, aucune modif, aucun build/test (demande explicite ;
 le code reste en mouvement sur un autre agent).
 
+> **Correctifs livrés 2026-11-03** : `Pay==9` → **KB-14 TESTED** ;
+> `EnsureLoaded` → **KB-15 TESTED** ; 471 type 1 → **KB-16 TESTED** ;
+> compteur certs `lv/10+1` → **KB-18 TESTED**. Panneau : talents par
+> classe (éveil compris) + 3 icônes base/éveils cliquables + aperçu
+> lecture seule des classes non possédées — captures
+> `artifacts/shots/20261103-18{2830,3306,3951}-S001-class-*.png`.
+
 Objet : demande 11 du `docs/reports/HANDOFF-2026-11-02.md` — « Panneau Classe :
 TOUS les skills manquants ; talents non dynamiques par arbre de classe/éveil »,
 d'après la capture `artifacts/shots/20261102-113239-S001-hud-class-inv.png`

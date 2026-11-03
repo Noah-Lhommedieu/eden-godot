@@ -30,3 +30,46 @@ Lecture :
   la scène chaque seconde.
 - N = 3 runs, une seule machine, une seule scène. Avant d'étendre la
   conclusion, ajouter S002 et une scène de combat avec HUD.
+
+## Freeze post-kill (loot 274) — 2026-11-03 — statut **verified**
+
+Scénario : `tools/run.sh -- --login=test123:test123 --channel --char
+--kill-loop=6,79` (serveur natif, drop 100 %). La fenêtre « post-kill »
+agrège les 2 s suivant chaque mort.
+
+Cause mesurée : un NCID 274 déclenchait **deux** `PlayerBag.RaiseChanged`
+(bind `HudExtensions` + bind `InventoryWindow`), chacun notifiant 7-8
+abonnés ; les fenêtres cachées reconstruisaient quand même leur grille
+(`QueueFree` + cellules + textures + `ItemTooltip.Bind`), et le premier
+loot payait le parse paresseux `c_item.ini`/`c_itemmall.ini` (~9 Mo,
+~1 s).
+
+Correctifs (`PlayerBag.cs`, `InventoryWindow.cs`, `Bank/Shop/Vending/
+FamilyStorage/Neobank/ArchiveWindow.cs`, hook `SlotsChanged` de
+`QuestTracker.cs`) :
+
+- `RaiseChanged` coalescé à une levée `Changed` par frame (CallDeferred ;
+  synchrone hors moteur pour NetTests) ;
+- repaint ignoré fenêtre cachée : les abonnés gardent leurs dicts à jour
+  (`PlayerBag.Items` relu) mais ne reconstruisent pas les cellules ; la
+  grille est repeinte à la réouverture (`VisibilityChanged` +
+  `_repaintPending`) ;
+- parse `c_item` pré-chauffé en `Task.Run` au montage du HUD (équivalent
+  de `DataWarmup`, hors frame de loot).
+
+Mesures (même machine, même scénario, run propre — sans build/test en
+parallèle) :
+
+| | pire image par kill | fenêtre post-kill |
+|---|---|---|
+| Avant | 150, 129, 140, 131, 84 ms (5 kills) | p99 ≈ 84-150 ms |
+| Après | 19, 22, 21, 14, 15, 26 ms (6 kills) | n=1340, p50=8,5, p95=11,1, **p99=14,3**, max=25,7 ms |
+
+Limites :
+
+- Un run intermédiaire sous charge (builds/tests parallèles) affichait
+  p99=34 ms / max=119 ms — bruit de machine, pas du scénario ;
+- kill #1 de ce même run chargeait encore un proto natif paresseux
+  (`g00004.nif`, FX de mort — hors scope, côté `scripts/native`/fx) ;
+- `TradeWindow` reste abonné à `Changed` sans garde de visibilité
+  (hors périmètre de la tâche ; coalescing le borne à 1×/frame).

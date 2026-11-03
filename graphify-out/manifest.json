@@ -1104,9 +1104,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/player/PlayerController.cs": {
-    "mtime": 1793733395.1085637,
-    "seen": 1793733737.0540905,
-    "ast_hash": "740e0d81b1dfe9cd55e994e2fe4c0af0",
+    "mtime": 1793734531.7574117,
+    "seen": 1793734718.942397,
+    "ast_hash": "b3c8317d4bf55999e229f3652f09aa24",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/AppearanceCodec.cs": {
@@ -11640,9 +11640,9 @@
     "semantic_hash": ""
   },
   "eden_server/docs/temp-plans/2026-11-03-certificats-classe-stats.md": {
-    "mtime": 1793734095.5860555,
-    "seen": 1793734464.1656916,
-    "ast_hash": "228b7d1ed440ba947bae26c7043587f9",
+    "mtime": 1793734505.803568,
+    "seen": 1793734718.944141,
+    "ast_hash": "dfca2512b6ba3eea253087d5e0fde939",
     "semantic_hash": ""
   }
 }

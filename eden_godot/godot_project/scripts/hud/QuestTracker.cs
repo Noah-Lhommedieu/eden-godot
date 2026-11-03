@@ -71,10 +71,19 @@ public partial class QuestTracker : Control
         // Layout natif CEGUI prioritaire ; repli visuel proche sinon.
         if (!TryBuildNative(hud)) BuildFallback();
         // « Use » : le tracker se repeint quand l'inventaire change
-        // (item de quête obtenu / consommé).
+        // (item de quête obtenu / consommé). Coalescé à un repeint
+        // par frame : un loot lève plusieurs SlotsChanged (mutation +
+        // recharge sac) et Refresh reconstruit toute la liste.
         InventoryWindow.SlotsChanged += () =>
         {
-            if (GodotObject.IsInstanceValid(this)) Refresh();
+            if (!GodotObject.IsInstanceValid(this) || _slotsDirty)
+                return;
+            _slotsDirty = true;
+            Callable.From(() =>
+            {
+                if (GodotObject.IsInstanceValid(this))
+                    FlushSlotsChanged();
+            }).CallDeferred();
         };
         World.MobDanger.LevelChanged += () =>
         {
@@ -623,6 +632,17 @@ public partial class QuestTracker : Control
         var goal = TextResolver.MissionDescription(mid)
             ?? TextResolver.MissionZone(mid) ?? "";
         return (title ?? UiTextEn.Translate($"Quest #{mid}"), goal);
+    }
+
+    /// <summary>1 = un repeint différé <see cref="SlotsChanged"/> est
+    /// déjà posté pour la fin de la frame courante.</summary>
+    private bool _slotsDirty;
+
+    /// <summary>Flush du repeint coalescé (hook SlotsChanged).</summary>
+    private void FlushSlotsChanged()
+    {
+        _slotsDirty = false;
+        Refresh();
     }
 
     /// <summary>Repeint la liste des quêtes suivies, puis ajuste la plaque au contenu.</summary>

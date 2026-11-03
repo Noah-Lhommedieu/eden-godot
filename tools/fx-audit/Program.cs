@@ -57,6 +57,31 @@ if (rest.FirstOrDefault() == "--nif")
     return 0;
 }
 
+// --sim f.nif t1 t2 ... : fait tourner ParticleSim (Core pur) jusqu'à chaque t
+// et imprime le nombre de particules vivantes — diagnostique les "0 particule".
+if (rest.FirstOrDefault() == "--sim")
+{
+    var w = rest.Skip(1).First();
+    var times = rest.Skip(2).Select(x => float.Parse(x, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+    var f = Directory.EnumerateFiles(root, "*.nif", SearchOption.AllDirectories)
+        .FirstOrDefault(p => string.Equals(Path.GetFileName(p), w, StringComparison.OrdinalIgnoreCase));
+    if (f == null) { Console.WriteLine($"{w}: absent"); return 1; }
+    var nif = NifFile.Load(f);
+    foreach (var ps in nif.ParticleSystems)
+    {
+        var map = EdenClient.Fx.NifParticleMapper.Map(nif, ps);
+        var sim = new EdenClient.Fx.ParticleSim(map.Def, 0xC0FFEE);
+        Console.WriteLine($"== {w}/{ps.Name} notes={string.Join(",", map.Notes)}");
+        float t = 0;
+        foreach (var target in times.OrderBy(x => x))
+        {
+            while (t < target) { var dt = Math.Min(1f / 60f, target - t); sim.Step(dt); t += dt; }
+            Console.WriteLine($"  t={target:0.##} count={sim.Count}");
+        }
+    }
+    return 0;
+}
+
 var stat = new Dictionary<string, int>();
 void Tally(string k, int n = 1) => stat[k] = stat.GetValueOrDefault(k, 0) + n;
 var rows = new List<string>();

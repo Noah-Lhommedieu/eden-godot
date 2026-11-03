@@ -324,4 +324,29 @@ public class CombatCastTests
         PlayerBag.Clear();
         Assert.Empty(PlayerBag.Items);
     }
+
+    [Fact]
+    public void PlayerBag_RaiseChangedFires()
+    {
+        // Hors moteur (pas de SceneTree), la levée reste synchrone :
+        // le coalesce à une fois par frame n'existe que sous GODOT.
+        var n = 0;
+        void OnChanged() => n++;
+        PlayerBag.Changed += OnChanged;
+        try
+        {
+            PlayerBag.ApplyPutItem(new ZonePutItem
+            {
+                ItemId = 1003, Bag = 0, Slot = 2,
+            });
+            Assert.Equal(1, n);
+            PlayerBag.RaiseChanged();
+            Assert.Equal(2, n);
+        }
+        finally
+        {
+            PlayerBag.Changed -= OnChanged;
+            PlayerBag.Clear();
+        }
+    }
 }

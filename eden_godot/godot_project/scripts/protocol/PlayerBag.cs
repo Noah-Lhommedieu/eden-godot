@@ -1,3 +1,6 @@
+#if GODOT
+using Godot;
+#endif
 using EdenClient.Net;
 
 namespace EdenClient.Protocol;
@@ -131,8 +134,47 @@ public static class PlayerBag
 
     /// <summary>Lève <see cref="Changed"/> — à poster sur le thread
     /// principal par les handlers réseau (les abonnés sont des
-    /// fenêtres Godot).</summary>
-    public static void RaiseChanged() => Changed?.Invoke();
+    /// fenêtres Godot). Sous le moteur, la levée est <b>coalescée à
+    /// une fois par frame</b> (différée en fin de frame) : plusieurs
+    /// mutations dans la même frame — un loot 274 déclenche à la fois
+    /// le bind <c>HudExtensions</c> et celui de l'inventaire — ne
+    /// donnent qu'un seul passage d'abonnés, qui relisent alors l'état
+    /// le plus récent. Hors moteur (NetTests) : synchrone, inchangé.
+    /// </summary>
+    public static void RaiseChanged()
+    {
+#if GODOT
+        if (Engine.GetMainLoop() is SceneTree)
+        {
+            // Première demande de la frame → un flush différé unique ;
+            // les suivantes voient le drapeau posé et n'ajoutent rien.
+            if (Interlocked.Exchange(ref _flushQueued, 1) != 0) return;
+            FlushChangedCallable.CallDeferred();
+            return;
+        }
+#endif
+        Changed?.Invoke();
+    }
+
+#if GODOT
+    /// <summary>1 = un flush <see cref="Changed"/> déjà posté pour la
+    /// fin de la frame courante.</summary>
+    private static int _flushQueued;
+
+    /// <summary>Flush différé (Callable partagé — aucune allocation
+    /// par notification).</summary>
+    private static readonly Callable FlushChangedCallable =
+        Callable.From(FlushChanged);
+
+    /// <summary>Fin de frame : une seule levée de <see cref="Changed"/>
+    /// quel que soit le nombre de <see cref="RaiseChanged"/> reçus
+    /// depuis la frame précédente.</summary>
+    private static void FlushChanged()
+    {
+        Volatile.Write(ref _flushQueued, 0);
+        Changed?.Invoke();
+    }
+#endif
 
     /// <summary>Vide le sac (déconnexion/sortie de zone).</summary>
     public static void Clear()

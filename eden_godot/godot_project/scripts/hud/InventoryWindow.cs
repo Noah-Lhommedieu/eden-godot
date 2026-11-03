@@ -321,12 +321,29 @@ public partial class InventoryWindow : Control
             LayoutWindow();
         }
         EnsureCells(hud);
+        // Le parse c_item/c_itemmall (~9 Mo) était paresseux : le
+        // premier loot le payait dans un abonné Changed (~1 s de
+        // freeze mesuré). Pré-chauffé en tâche de fond au montage du
+        // HUD — parse de fichiers pur, aucune mutation de scène (même
+        // méthode que DataWarmup post-load).
+        _ = Task.Run(EnsureItemTable);
         // Le 312 peut arriver avant le montage de la fenêtre
         // (SetItems alors perdu) : l'état canonique vit dans
         // PlayerBag — on s'y abonne et on le relit à l'ouverture,
         // comme Bank/Shop/Vending.
         PlayerBag.Changed += () => SetItems(PlayerBag.Items);
         SetItems(PlayerBag.Items);
+        // Repeinte différée : une mutation reçue fenêtre cachée ne
+        // reconstruit pas les 420 cellules (icônes + tooltips) — le
+        // repaint part à la réouverture.
+        win.VisibilityChanged += () =>
+        {
+            if (win.Visible && _repaintPending)
+            {
+                _repaintPending = false;
+                RefreshCells();
+            }
+        };
         DragHelper.Persist(win, "backpack");
         win.Visible = false;
         MountProbe(hud);
@@ -555,14 +572,17 @@ public partial class InventoryWindow : Control
     }
 
     /// <summary>c_item.ini + t_item.ini chargés à la demande (~9 Mo,
-    /// parse paresseux). Interne → public pour EquipSlotsPanel.</summary>
+    /// parse paresseux). Interne → public pour EquipSlotsPanel.
+    /// Thread-safe : la table est construite en local puis publiée —
+    /// le pré-chauffage de <see cref="Build"/> tourne en tâche de fond
+    /// pendant que le thread principal peut déjà lire.</summary>
     internal static void EnsureItemTable()
     {
-        if (_items != null) return;
+        if (Volatile.Read(ref _items) != null) return;
         var path = AssetCatalog.ResolveRawAsset("data/db/c_item.ini");
         try
         {
-            _items = path != null
+            var items = path != null
                 ? ItemTable.Load(path)
                 : new Dictionary<int, ItemTable.ItemDef>();
             // Items du mall (costumes, montures, ids 40001+...) : seuls
@@ -571,12 +591,17 @@ public partial class InventoryWindow : Control
             var mall = AssetCatalog.ResolveRawAsset("data/db/c_itemmall.ini");
             if (mall != null)
                 foreach (var (id, def) in ItemTable.Load(mall))
-                    _items.TryAdd(id, def);
+                    items.TryAdd(id, def);
+            // Publication atomique : le dictionnaire est COMPLET avant
+            // d'être visible (le cas échéant un second parse concurrent
+            // produit un contenu identique — bénin).
+            Volatile.Write(ref _items, items);
         }
         catch (Exception e)
         {
             GD.PrintErr($"[hud] c_item.ini : {e.Message}");
-            _items = new Dictionary<int, ItemTable.ItemDef>();
+            Volatile.Write(ref _items,
+                new Dictionary<int, ItemTable.ItemDef>());
         }
         // Noms/descriptions EN : TextResolver (t_item.ini) — chargé
         // paresseusement au premier tooltip.
@@ -598,7 +623,30 @@ public partial class InventoryWindow : Control
             _slots[(it.Bag, it.Slot)] = it;
             _sharedSlots[(it.Bag, it.Slot)] = it;
         }
-        RefreshCells();
+        RepaintCells();
+    }
+
+    /// <summary>Un repaint des cellules est attendu à la prochaine
+    /// ouverture (mutation reçue fenêtre cachée).</summary>
+    private bool _repaintPending;
+
+    /// <summary>Repeint la grille seulement si la fenêtre est visible —
+    /// sinon marque un repaint pour la réouverture. Les dicts
+    /// <see cref="_slots"/>/<see cref="_sharedSlots"/> sont déjà à jour
+    /// (SharedSlots sert les compteurs du tracker de quêtes : il faut
+    /// donc lever <see cref="SlotsChanged"/> dans les deux cas).</summary>
+    private void RepaintCells()
+    {
+        if (_window?.IsVisibleInTree() == true)
+        {
+            _repaintPending = false;
+            RefreshCells();
+        }
+        else
+        {
+            _repaintPending = true;
+            SlotsChanged?.Invoke();
+        }
     }
 
     /// <summary>Icône + tooltip du sac équipé sur chaque emplacement
@@ -728,7 +776,7 @@ public partial class InventoryWindow : Control
         }
         // Re-peint complet : sous un onglet filtré la cellule ne
         // correspond plus forcément au même slot.
-        RefreshCells();
+        RepaintCells();
     }
 
     // ------------------------------------------------------------------

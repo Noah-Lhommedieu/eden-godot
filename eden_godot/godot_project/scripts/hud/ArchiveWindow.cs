@@ -204,14 +204,23 @@ public partial class ArchiveWindow : Control
             if (_win.Visible) { Query(); BuildTree(); Refresh(); }
         };
         PlayerProfileState.Changed += OnProfileChanged;
-        PlayerBag.Changed += Refresh;
+        PlayerBag.Changed += OnBagChanged;
     }
 
     public override void _ExitTree()
     {
         PlayerProfileState.Changed -= OnProfileChanged;
-        PlayerBag.Changed -= Refresh;
+        PlayerBag.Changed -= OnBagChanged;
         base._ExitTree();
+    }
+
+    /// <summary>Sac muté : la grille de cartes (jusqu'à 1200 cellules
+    /// + tooltips) n'est reconstruite que fenêtre ouverte — la
+    /// réouverture relance Query+BuildTree+Refresh
+    /// (<c>_win.VisibilityChanged</c>).</summary>
+    private void OnBagChanged()
+    {
+        if (_win?.IsVisibleInTree() == true) Refresh();
     }
 
     private void OnProfileChanged(string section)

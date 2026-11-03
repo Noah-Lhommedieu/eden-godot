@@ -81,7 +81,7 @@ public partial class VendingWindow : Control
         // StallPanel = bouton Work).
         Visible = true;
         VendingState.Changed += Refresh;
-        PlayerBag.Changed += RefreshSellList;
+        PlayerBag.Changed += OnBagChanged;
         PlayerVitals.GoldChanged += RefreshGold;
         VendingState.SelfCharId =
             (uint)(SessionCarry.Character?.Id ?? 0);
@@ -90,9 +90,17 @@ public partial class VendingWindow : Control
     public override void _ExitTree()
     {
         VendingState.Changed -= Refresh;
-        PlayerBag.Changed -= RefreshSellList;
+        PlayerBag.Changed -= OnBagChanged;
         PlayerVitals.GoldChanged -= RefreshGold;
         base._ExitTree();
+    }
+
+    /// <summary>Sac muté : la liste de staging n'est reconstruite que
+    /// si le panneau vente est visible — la réouverture du StallPanel
+    /// rappelle <see cref="RefreshSellList"/> (VisibilityChanged).</summary>
+    private void OnBagChanged()
+    {
+        if (_sellWnd?.IsVisibleInTree() == true) RefreshSellList();
     }
 
     // ------------------------------------------------------------------

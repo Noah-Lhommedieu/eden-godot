@@ -287,9 +287,14 @@ public static class CharVisual
         {
             tex = FaceTexture(letter, faceStyle, skinColor);
             if (tex == null) return;
+            var tinted = tex;
             tex = (skinColor & 1) == 1
                 ? TintedFaceMask(tex, TintFor(bodyCode, skinColor, skin: true))
                 : FaceOverSkin(tex, TintFor(bodyCode, skinColor, skin: true));
+            if (VisDbg)
+                GD.Print($"[visdbg] face fallback src={tex.ResourcePath} " +
+                    $"same={ReferenceEquals(tex, tinted)} " +
+                    $"mainThread={IsMainThread()}");
         }
         foreach (var mi in body
                      .FindChildren("*", "MeshInstance3D", true, false)
@@ -910,9 +915,7 @@ public static class CharVisual
         System.Environment.GetEnvironmentVariable("EDEN_VISDBG") == "1";
 
     private static bool IsMainThread() =>
-        System.Environment.CurrentManagedThreadId == _mainThreadId;
-    private static readonly int _mainThreadId =
-        System.Environment.CurrentManagedThreadId;
+        System.Environment.CurrentManagedThreadId == 1;
 
     private static Texture2D FaceOverSkin(Texture2D src, Godot.Color skin)
     {

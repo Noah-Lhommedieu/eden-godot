@@ -86,7 +86,7 @@ public partial class NeobankWindow : Control
         DragHelper.Persist(_window ?? this, "neobank");
         Visible = false;
         StorageState.Changed += OnStorageChanged;
-        PlayerBag.Changed += RefreshBag;
+        PlayerBag.Changed += OnBagChanged;
         NeobankLocks.Changed += RefreshGrid;
         PlayerVitals.GoldChanged += RefreshGold;
     }
@@ -94,10 +94,20 @@ public partial class NeobankWindow : Control
     public override void _ExitTree()
     {
         StorageState.Changed -= OnStorageChanged;
-        PlayerBag.Changed -= RefreshBag;
+        PlayerBag.Changed -= OnBagChanged;
         NeobankLocks.Changed -= RefreshGrid;
         PlayerVitals.GoldChanged -= RefreshGold;
         base._ExitTree();
+    }
+
+    /// <summary>Sac muté : la liste de dépôt n'est reconstruite que si
+    /// la fenêtre est visible — à l'ouverture,
+    /// <see cref="OnStorageChanged"/>/<see cref="Open"/>/
+    /// <see cref="EnsureDemo"/> appellent <see cref="RefreshBag"/>
+    /// qui relit <see cref="PlayerBag.Items"/>.</summary>
+    private void OnBagChanged()
+    {
+        if (IsVisibleInTree()) RefreshBag();
     }
 
     // ------------------------------------------------------------------

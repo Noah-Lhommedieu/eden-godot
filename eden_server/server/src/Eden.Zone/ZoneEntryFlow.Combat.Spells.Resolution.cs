@@ -94,14 +94,6 @@ public sealed partial class ZoneEntryFlow
     private static bool SpellSpecHostile(int spec) =>
         spec is -99 or -93 or -91;
 
-    /// <summary>Rayon AoE natif = `(short)(u16(CSpellData+0x6e) ×
-    /// 0.5f)` = S_Spell col30 × 0.5 (SpellDef.Duration), TRONQUÉ
-    /// entier (LoadAllSpellData @0x08380130). 0 = pas de zone —
-    /// les HitTest natifs n'énumèrent des victimes que si
-    /// `mod(AttrSpellRadius) + base ≥ 1`.</summary>
-    private static float AreaRadius(SpellParser.SpellDef def) =>
-        def.Duration > 0 ? (int)(def.Duration * 0.5f) : 0f;
-
     /// <summary>blastIdx du fil — le natif n'envoie PAS la col3 brute
     /// ni -1 : `ISpell::OnBlast` (@0x84f0be0+) appelle
     /// `IKfm::GetBlastID(entity, SSpellData, &id, &motionTime)`
@@ -453,14 +445,19 @@ public sealed partial class ZoneEntryFlow
         // (CastToLife @0x081545a0). Le rayon effectif ajoute le mod
         // kind 1 (AttrSpellRadius). Les victimes sont collectées au
         // HitTest indépendamment du roll de la primaire — le splash
-        // part même si celle-ci a miss. Approximation documentée :
-        // hit-test circulaire pour les trois shapes directionnelles.
+        // part même si celle-ci a miss. Géométrie native exacte par
+        // forme (voir <see cref="SpellAreaGeometry"/>) : le point est la
+        // position de la cible, l'axe = lanceur→cible ; direction/croix/
+        // secteur s'ancrent sur le LANCEUR.
         if (def != null &&
             kind is SpellHitKind.Physical or SpellHitKind.Magic &&
             DerivedShape(def) is 0 or 2 or 5 or 6)
         {
+            // Rayon natif du cercle = base tronquée + trunc(mod/2)
+            // (HitTest @0x084f9300 — pas le mod entier).
             var splashR = (int)(def.Duration * 0.5f)
-                + GetSpellAttrModify(st, 1, spellId);
+                + SpellAreaGeometry.RadiusModHalf(
+                    GetSpellAttrModify(st, 1, spellId));
             if (splashR >= 1)
                 await SpellSplashAsync(session, st, mob, spellId, def,
                     kind, mob.X, mob.Y, splashR);
@@ -510,18 +507,51 @@ public sealed partial class ZoneEntryFlow
     }
 
     /// <summary>Splash d'un sort à shape de zone résolu sur une cible
-    /// (<see cref="SpellHitImpactAsync"/>) : hit-test circulaire
-    /// natif de rayon col30 × 0.5 autour de l'épicentre, puis même
-    /// pipeline que <see cref="ApplyAreaSpellAsync"/> — ResolveSpell
-    /// par victime (hit/crit natifs), attr 0, 281, aggro de groupe,
-    /// mort éventuelle. La cible primaire est exclue (déjà touchée).
-    /// </summary>
+    /// (<see cref="SpellHitImpactAsync"/>) : hit-test natif EXACT par
+    /// forme via <see cref="SpellAreaGeometry"/> — shape 0 = cercle sur
+    /// la cible (rayon col30 × 0.5 + mod), 2 = bande 2R du lanceur vers
+    /// la cible (longueur L + mod/2), 5 = croix de largeur R centrée sur
+    /// le lanceur (demi-longueur L + mod/2), 6 = cône du lanceur
+    /// (longueur L, demi-angle asin(min(R,L)/L)) — puis même pipeline
+    /// que <see cref="ApplyAreaSpellAsync"/> : ResolveSpell par victime
+    /// (hit/crit natifs), attr 0, 281, aggro de groupe, mort éventuelle.
+    /// La cible primaire est exclue (déjà touchée).</summary>
     private async Task SpellSplashAsync(NetSession session,
         EntryState st, ZoneLiveWorld.LiveMob primary, ushort spellId,
         SpellParser.SpellDef def, SpellHitKind kind, float cx, float cz,
         float radius)
     {
-        var r2 = radius * radius;
+        var shape = DerivedShape(def);
+        var modHalf = SpellAreaGeometry.RadiusModHalf(
+            GetSpellAttrModify(st, 1, spellId));
+        var baseR = SpellAreaGeometry.AreaRadius(def);
+        // Direction/croix ajoutent trunc(mod/2) à la LONGUEUR ; le
+        // secteur n'applique aucun mod (HitTest lit +0x40/+0x48 bruts).
+        var areaLen = SpellAreaGeometry.AreaLength(def);
+        // Axe natif : (point − lanceur) normalisé ; le point est la
+        // position de la cible en CastToLife (@0x081545a0).
+        var axisOk = SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
+            cx, cz, out var ax, out var ay);
+        // HitTest natif par forme. Axe invalide (lanceur == point) :
+        // l'axe natif reste le vecteur nul — l'onde/croix/cône ne
+        // s'étendent nulle part et la zone dégénère en disque de rayon
+        // R sur le lanceur (along=0 pour tous, seul le critère
+        // perpendiculaire ≤ R survit).
+        bool SplashHitTest(ZoneLiveWorld.LiveMob mob, int shape, bool axis) =>
+            shape switch
+            {
+                _ when !axis && shape is 2 or 5 or 6 =>
+                    SpellAreaGeometry.ContainsCircle(st.PosX, st.PosZ,
+                        baseR, mob.X, mob.Y),
+                2 => SpellAreaGeometry.ContainsDirection(st.PosX, st.PosZ,
+                    ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
+                5 => SpellAreaGeometry.ContainsCross(st.PosX, st.PosZ,
+                    ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
+                6 => SpellAreaGeometry.ContainsSector(st.PosX, st.PosZ,
+                    ax, ay, areaLen, baseR, mob.X, mob.Y),
+                _ => SpellAreaGeometry.ContainsCircle(cx, cz, radius,
+                    mob.X, mob.Y),
+            };
         var spLvl = await PlayerSpellLevelAsync(st, spellId);
         foreach (var mob in _services.Live.MobsOf(st.NodeId,
             st.InstanceGroup).ToList())
@@ -529,8 +559,7 @@ public sealed partial class ZoneEntryFlow
             // Pet elf (IsA==0x50b) — IsMyEnemy false natif, immunisé ;
             // cible primaire déjà résolue par le chemin mono-cible.
             if (!mob.Alive || mob.IsElfPet || mob == primary) continue;
-            var dx = mob.X - cx; var dz = mob.Y - cz;
-            if (dx * dx + dz * dz > r2) continue;
+            if (!SplashHitTest(mob, shape, axisOk)) continue;
 
             var sres = NativeCombatFormulas.ResolveSpell(
                 PlayerSnapshot(st), MobSnapshot(mob), def,
@@ -1013,14 +1042,20 @@ public sealed partial class ZoneEntryFlow
                 CancellationToken.None);
         }
 
-        // HitTest circulaire natif (CSpellToLocation::HitTest
-        // @0x084f9300) : rayon = *(short*)(SSpellData+0x48) +
-        // SpellAttrModify/2. LoadAllSpellData @0x08380130 :
-        // +0x48 = (short)(u16(CSpellData+0x6e) × 0.5f) — soit
-        // S_Spell col30 × 0.5 (SpellDef.Duration).
-        var radius = AreaRadius(def)
-            + GetSpellAttrModify(st, 1, spellId) * 0.5f;
-        var r2 = radius * radius;
+        // HitTest natif par forme via <see cref="SpellAreaGeometry"/>
+        // — cercle : CSpellToLocation::HitTest @0x084f9300, rayon =
+        // s16(+0x48) + trunc(AttrSpellRadius/2), énumération refusée
+        // pour spec -91 ; direction/croix/secteur : géométrie exacte
+        // des HitTest @0x084f6ad0/@0x084f5020/@0x084fb410 sur l'axe
+        // lanceur→point (CastToLocation @0x08154210).
+        var shape = DerivedShape(def);
+        var modHalf = SpellAreaGeometry.RadiusModHalf(
+            GetSpellAttrModify(st, 1, spellId));
+        var baseR = SpellAreaGeometry.AreaRadius(def);
+        var areaLen = SpellAreaGeometry.AreaLength(def);
+        var radius = baseR + modHalf;
+        var axisOk = SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
+            x, z, out var ax, out var ay);
         var spLvl = await PlayerSpellLevelAsync(st, spellId);
         var spec = SpellTargetSpecOf(def);
         if (!SpellSpecHostile(spec))
@@ -1033,14 +1068,35 @@ public sealed partial class ZoneEntryFlow
                 spec, x, z, (int)radius);
             return;
         }
+        // Gate natif du cercle au sol : spec -91 (« toute entité »)
+        // saute le GridRangeSearch → aucune victime (HitTest @0x084f9300
+        // teste +0x1a != -0x5b). Les formes directionnelles valident
+        // chaque victime via CanCastTarget(-91 = toujours vrai) et
+        // restent actives.
+        var enumerate = shape != 1 || SpellAreaGeometry.AreaEnumerationEnabled(spec);
+        bool AreaHitTest(ZoneLiveWorld.LiveMob mob) => shape switch
+        {
+            _ when !axisOk && shape is 2 or 5 or 6 =>
+                // Axe nul natif : la zone dégénère en disque R sur le
+                // lanceur (l'onde/croix/cône ne s'étendent nulle part).
+                SpellAreaGeometry.ContainsCircle(st.PosX, st.PosZ,
+                    baseR, mob.X, mob.Y),
+            2 => SpellAreaGeometry.ContainsDirection(st.PosX, st.PosZ,
+                ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
+            5 => SpellAreaGeometry.ContainsCross(st.PosX, st.PosZ,
+                ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
+            6 => SpellAreaGeometry.ContainsSector(st.PosX, st.PosZ,
+                ax, ay, areaLen, baseR, mob.X, mob.Y),
+            _ => SpellAreaGeometry.ContainsCircle(x, z, radius,
+                mob.X, mob.Y),
+        };
         var hitAny = false;
         foreach (var mob in _services.Live.MobsOf(st.NodeId,
             st.InstanceGroup).ToList())
         {
             // Pet elf (IsA==0x50b) — IsMyEnemy false natif, immunisé AoE.
             if (!mob.Alive || mob.IsElfPet) continue;
-            var dx = mob.X - x; var dz = mob.Y - z;
-            if (dx * dx + dz * dz > r2) continue;
+            if (!enumerate || !AreaHitTest(mob)) continue;
 
             var sres = NativeCombatFormulas.ResolveSpell(
                 PlayerSnapshot(st), MobSnapshot(mob), def,

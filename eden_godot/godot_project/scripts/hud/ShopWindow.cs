@@ -58,7 +58,7 @@ public partial class ShopWindow : Control
         Visible = false;
         ShopState.Changed += OnShopChanged;
         PlayerVitals.GoldChanged += RefreshGold;
-        PlayerBag.Changed += RefreshSell;
+        PlayerBag.Changed += OnBagChanged;
         MiscPackets.Received += OnMiscPacket;
     }
 
@@ -66,9 +66,18 @@ public partial class ShopWindow : Control
     {
         ShopState.Changed -= OnShopChanged;
         PlayerVitals.GoldChanged -= RefreshGold;
-        PlayerBag.Changed -= RefreshSell;
+        PlayerBag.Changed -= OnBagChanged;
         MiscPackets.Received -= OnMiscPacket;
         base._ExitTree();
+    }
+
+    /// <summary>Sac muté : la liste de vente n'est reconstruite que si
+    /// la fenêtre est visible — à l'ouverture,
+    /// <see cref="OnShopChanged"/> appelle <see cref="RefreshSell"/>
+    /// qui relit <see cref="PlayerBag.Items"/>.</summary>
+    private void OnBagChanged()
+    {
+        if (IsVisibleInTree()) RefreshSell();
     }
 
     // ------------------------------------------------------------------

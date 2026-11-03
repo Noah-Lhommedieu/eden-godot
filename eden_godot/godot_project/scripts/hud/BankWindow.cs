@@ -72,15 +72,25 @@ public partial class BankWindow : Control
         Visible = false;
         StorageState.Changed += OnStorageChanged;
         PlayerVitals.GoldChanged += RefreshGold;
-        PlayerBag.Changed += RefreshBag;
+        PlayerBag.Changed += OnBagChanged;
     }
 
     public override void _ExitTree()
     {
         StorageState.Changed -= OnStorageChanged;
         PlayerVitals.GoldChanged -= RefreshGold;
-        PlayerBag.Changed -= RefreshBag;
+        PlayerBag.Changed -= OnBagChanged;
         base._ExitTree();
+    }
+
+    /// <summary>Sac muté : le panneau n'est reconstruit que si la
+    /// fenêtre est visible — à l'ouverture,
+    /// <see cref="OnStorageChanged"/>/<see cref="EnsureDemo"/>
+    /// appellent <see cref="RefreshBag"/> qui relit
+    /// <see cref="PlayerBag.Items"/>.</summary>
+    private void OnBagChanged()
+    {
+        if (IsVisibleInTree()) RefreshBag();
     }
 
     private void BuildContent()

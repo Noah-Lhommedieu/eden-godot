@@ -1,27 +1,27 @@
 # Graph Report - eden-godot  (2026-11-03)
 
 ## Corpus Check
-- 1886 files · ~2,965,604 words
+- 1889 files · ~2,969,696 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 396 file(s) not represented in the graph (top: .uid 317, .import 25, .tscn 19)
 
 ## Summary
-- 49362 nodes · 115697 edges · 1378 communities (1232 shown, 146 thin omitted)
-- Extraction: 79% EXTRACTED · 21% INFERRED · 0% AMBIGUOUS · INFERRED: 24371 edges (avg confidence: 0.87)
+- 49411 nodes · 115826 edges · 1527 communities (1405 shown, 122 thin omitted)
+- Extraction: 79% EXTRACTED · 21% INFERRED · 0% AMBIGUOUS · INFERRED: 24372 edges (avg confidence: 0.87)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9b6592ff`
+- Built from commit: `58ff38b3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - BinWriter
 - BinReader
-- protocol/WorldMessages.cs
+- GoldenMessageTests.WorldCharPassword_WireLayout
 - NetCommand
 - ZoneEntryFlow
-- MiscPackets.BindZone
+- Protocol/ZoneMiscMessages.cs
 - ShopHandlers.Register
 - ZoneMessages.g.cs
 - OutBinStream
@@ -30,10 +30,10 @@
 - ZoneServer (871 NCIDs)
 - NetMessage
 - protocol/ZoneClientToServerMessages.cs
-- TerrainTile
+- WaterAnimator
 - HudExtensions.BindEntryData
 - MissionServer (205 NCIDs)
-- MiscPackets.BindZone
+- protocol/ZoneMiscMessages.cs
 - Equipe / social — 31/53 traites
 - Commerce / echanges — 28/42 traites
 - Inventaire / equipement — 46/58 traites
@@ -45,20 +45,19 @@
 - EdenSession
 - Vector3
 - EdenSession
-- EdenClient.Protocol
-- NativeFx
+- godot
+- HpLossAnim
 - BuffBar
 - FamilyStorageState
 - PropBatcher
-- 🎯 Roadmap d'Implémentation (100+ systèmes)
-- protocol/ZoneStorageMessages.cs
-- NifParticleMapper.Map
+- RankingService
+- ZoneFamilyStoragePut
 - Feature-matrix protocole — generee par `tools/gen_feature_matrix.py`
 - Protocol/ZoneSocialMessages.cs
 - InventoryWindow
 - ZonePlayerDestinyRoad
 - NifFile.cs
-- ElfWindow
+- TopLeftVitals.Find
 - Eden.Core.Data.Parsers
 - BinWriter.WriteUShort
 - Perso / progression — 22/31 traites
@@ -71,27 +70,26 @@
 - AuctionState
 - InBinStream
 - HousingHandlers.Register
-- OutBinStream.WriteFloat
 - LoginServer (35 NCIDs)
 - TradeWindow.BindSession
-- Protocol/ZoneTradeMessages.cs
+- NetMessage
 - protocol/ZoneElfMessages.cs
 - QuestWindow
-- ZoneClientHello
+- ZoneEmptyRequest
 - CharacterSummary
-- TransportWindow
-- Protocol/WorldMessages.cs
+- WorldFamilyInfo
+- WorldCreateCharacterData
 - CeguiNode
-- Control
+- Color
 - Vector2
 - Deplacement / monde — 14/17 traites
-- EeSkin
-- CNC_CL_ClientGetWorldServers
+- Texture2D
+- CNC_CL_ClientHello
 - CNE_ZW_ZoneServerUpdateFortuneBag
 - NeobankWindow
 - GameDataService
 - Eden.Core.Logging
-- Protocol/ZoneMessages.cs
+- ZoneEnterNodeNodeData
 - ZonePutItem
 - CNC_CZ_ClientElfAdd
 - CharSelectScreen
@@ -104,7 +102,7 @@
 - CombatantSnapshot
 - InvalidDataException
 - CeguiLookNFeel
-- Action
+- WorldClientUpdateFortuneBagContentList
 - re
 - CubeService
 - IniTable.Parse
@@ -112,9 +110,9 @@
 - StatContribution
 - EdenConfig
 - PlayerVitals
-- HotCharacterStore
+- ElfBridge.OnAction
 - Theory
-- system_buffers_binary
+- EdenClient.Vfs
 - EnchantService
 - LevelRow
 - Eden.Core.Database.Repositories
@@ -125,10 +123,10 @@
 - convert.py
 - CNE_DBA_ClientMissionState
 - EpkWriter.Build
-- ItemTipFormat
-- Combat / sorts — 15/17 traites
+- ItemPreviewWindow
+- ZoneLotGTests
 - CharTintTests
-- Eden.Core.Networking
+- CharacterNumberEntity
 - ReadOnlySpan
 - ZoneClientSearchTeamInfo
 - WeddingService
@@ -136,18 +134,18 @@
 - CharColorTable
 - NifFileTests
 - Prompt5 — suivi des 3 chantiers Limitless
-- Protocol/ZoneMailMessages.cs
+- ZoneMailSend
 - CNC_CZ_ClientEnterNodeElfContainer
-- HudBinder.Compute
+- IEnumerable
 - BotResult
 - FsmFile
 - ZoneLoverInfo
 - ParticleSim
-- TalentService.GetTree
+- TalentService
 - ZoneTeamAllMembersInfo
 - Pathfinder.Find
 - SkillCast.BindSession
-- Protocol/ZoneItemMallMessages.cs
+- WorldItemMallBuyRequest
 - MissionService
 - AltarKind
 - ZoneEntityRegistry
@@ -155,23 +153,23 @@
 - CeguiWidgetLook
 - Lot : 10 derniers entrants `CNE_CW_` non gérés
 - MissionBridge
-- VarintCodec.TryReadVarint
-- SkinViewer
-- CharacterListChunk
+- PacketReceiveBuffer
+- ZoneLiveWorld
+- ClientConfig
 - CNC_CZ_ClientQueryPlayerCard
 - HudRoot
 - MapEnvIni
 - EpkReader
-- ZoneChangeEquip
+- Account
 - os
 - ItemDef
 - KfFile
 - NativeFxHost
 - LiveHudData
-- ZoneSeeChar
+- ZoneSeeTreasure
 - NetMessage.ToPayload
 - NpcDef
-- CNE_ZMis_ZoneServerAuctionSellList
+- ItemMallState
 - MonsterEntity
 - Family
 - GameDataParsers
@@ -187,13 +185,13 @@
 - CNC_CZ_ClientMailRead
 - LegendaryWiki.Classify
 - CNC_ZMis_ZoneServerPutItem
-- Protocol/ZoneStorageMessages.cs
-- CNC_ZMis_MissionServerCrossZone
+- ZoneFamilyStorageGet
+- OutBinStream.WriteLong
 - WorldBossTextTests
 - GroundTreasureService
 - DestinyTable
 - LootService
-- MailWindow
+- ZoneLotS6S8Tests
 - UiNodeSpec
 - SkillCast
 - CNE_DBA_ClientAllLover
@@ -204,13 +202,13 @@
 - CNC_ZMis_ZoneServerBuyBackGetItem
 - ItemDef
 - MonsterSpawn
-- Protocol/ZoneEnchantMessages.cs
+- ZoneEnchantAdd
 - EdenVfs
 - ClassDef
 - MonsterDef
 - BankItemEntity
 - CNC_CZ_ClientChangeEquip
-- SettingsApplier
+- Distribution — client Eden Reborn autonome
 - CNC_CZ_ClientSeeMob
 - CeguiTests
 - ZoneRoom
@@ -218,12 +216,12 @@
 - CNE_ZMis_ZoneServerBuyBackGetItem
 - CNE_ZMis_ZoneServerPutItem
 - ClientConfig
-- MissionDef
-- Label
+- ItemDictionaryBuilder.Build
+- Control
 - PkgArchive
 - LicenseService
 - CNE_ZMis_ZoneServerMailRead
-- Scene
+- LiveMob
 - CNC_CZ_ClientFamilyTownQuery
 - LiveMob
 - ZoneClientModifyItemInfo
@@ -254,37 +252,37 @@
 - ElfHandlers.Register
 - FortuneBagDef
 - CNC_CZ_ClientFamilyStoragePutItem
-- protocol/ZoneDialogMessages.cs
+- ZoneBattlefieldJoin
 - pack_audit.py
 - struct
-- CNE_ZMis_ZoneServerMailList
-- UiBuildReport
+- LegendaryWiki.Classify
+- CNC_CL_ClientGetWorldServers
 - CNC_CZ_ClientLotteryResult
-- KfAnimation
+- CNC_CZ_ClientTradeAddItem
 - 4. Système de Party/Team/Guild
 - FamilyRow
 - CNC_DBA_ClientAllFamily
 - CNC_CW_ClientQueryFamilyInfo
-- RedisTicketStore
+- PasswordHasher
 - ZoneDisplayDialogView
 - AuctionWindow
-- system_collections_generic
+- system_text
 - CNC_CZ_ClientLookElfPetEquip
-- Node
+- PerfProbe
 - ClientUiSettings
 - TradeState
 - LotteryService
 - Reader
 - ZoneClientLookElfPetEquip
 - Plan d'action — Eden EPK : pack chiffré, allègement, perf chargement
-- CNC_CZ_ClientFamilyBattleInfo
+- ItemMallState
 - ZoneClientLookElfPetEquip
 - ZoneSeeChar
 - ZoneUpdateEquipmentView
 - SceneParser.Parse
 - ClassSkillTree
 - CeguiImageset
-- SceneEvent
+- P2LogicTests.Roll_Ultimate_Trait_Portal_Costume
 - TextResolver
 - time
 - inventory.py
@@ -300,16 +298,16 @@
 - SpellDef
 - CNC_CG_ClientGetContainerItem
 - SplatBake
-- LoginAccount
+- LoginServerHello
 - HudPrefs
 - ZoneEnchantAdd
-- CustomClassPackets.Build
+- CNE_ZMis_ZoneServerQueryPlayerCard
 - CNE_DBA_ClientFastDress
 - CNC_CG_ClientDataTest
 - CNC_CZ_ClientAttrRefresh
 - CNC_CZ_ClientTextOutputItem
 - export_web_data.py
-- Texture2D
+- Scene
 - ZoneClientRoomData
 - ZoneClientTextOutputItem
 - ZoneClientPetLotteryResult
@@ -327,10 +325,10 @@
 - Harvest ref-shots — système de classes (UI de référence)
 - Progression du Projet - Eden Eternal Server
 - DirectionalLocomotion.FaceOffset
-- LimitlessService.GetPassTiers
+- NativeFxAttach
 - ZoneClientEvaluateInfo
 - ZoneClientFamilyTownQuery
-- BattleRoyaleService
+- MissionDef
 - Scene
 - CNC_ZMis_ZoneServerAuctionBuyList
 - CNC_CZ_ClientEvaluateInfo
@@ -339,22 +337,22 @@
 - ZoneClientFamilyTownQuery
 - PartnerDef
 - CNC_ZMis_ZoneServerAuctionSellList
-- Protocol/LoginMessages.cs
+- LoginAccount
 - ItemTipFormat
-- ItemDictionaryBuilder.Build
+- CNE_ZMis_ZoneServerFamilyContainerUpdate
 - WorkSlot
 - ZoneClientRollTreasure
 - Phase 1.1.C - Network Handlers - Status
-- LifeSkillService
+- RoomService
 - CNC_ZMis_ZoneServerMailList
 - CNC_CZ_ClientRollTreasure
 - List
 - ZoneClientRollTreasure
-- SceneEvent
-- Phase 2 — Chargement d'entrée hors-boucle (ZoneLoop non bloquée)
-- ZoneSwitchItemLocation
+- ZonePlayerWorkResult
+- CNC_CZ_ClientPVPRankLookEquip
+- CastLock.Expired
 - ZoneAdvStatsInfo
-- TerrainTile
+- ZoneClientSpellBlastToLife
 - FamilyBuildingItem
 - CNC_CW_ClientUpdateFriendMember
 - RollTreasureService
@@ -362,11 +360,12 @@
 - ProtocolAndSerializationTests.GatewayMessages_ShouldSerializeAndDeserializeCorrectly
 - Godot Deployment Guide
 - Entry
-- CNE_ZMis_ZoneServerBuyBackList
+- TerritoryPacketsTests
+- GameplayTests.MeleeAttack_WireLayout
 - Phase 1.1.B - Validation & Équipement - Status
 - CNE_CZ_ZoneServerStrengthenItem
 - CNC_CZ_ClientDisplayChar
-- ZoneClientQueryPlayerCard
+- CNC_CZ_ClientUpdateRoom
 - TeamService.CreateTeam
 - CI Integration for Godot Testing
 - ZoneClientPutItemIntoContainer
@@ -376,7 +375,7 @@
 - HudExtensions.BindSession
 - CNC_CZ_ClientPutItemIntoContainer
 - ZoneClientPutItemIntoContainer
-- VendingWindow
+- DragHelper.EnsureTitleBar
 - protocol/ZoneDestinyMessages.cs
 - ZoneClientEnterNodeElfContainer
 - ZoneClientPutItemIntoStorage
@@ -397,12 +396,12 @@
 - ZoneClientRankInfo
 - ServicePanels
 - KfPose
-- CostumeVisual.Merge
+- NativeCombatFormulas.Movement
 - gen_ui_text.py
 - MonsterDef
 - clean_text
 - QuestCatalog.Missed
-- WorldFamilyOp
+- BinWriter.ToArray
 - 03 - Stats et Profil Joueur
 - CNC_CZ_ClientSeeTreasure
 - PaySystemParser.Parse
@@ -416,10 +415,10 @@
 - 04 - Système d'Inventaire et Sacs
 - ZoneSeeMob
 - Mail
-- ClientSeeCharCodec.LifeFlags
+- WorkCollectDef
 - CNC_ZMis_ZoneServerBuyBackList
 - GdUnit4 Assertions
-- TicketBody
+- EdenClient.Protocol
 - ZoneSeeChar
 - ZoneSeeMob
 - ZoneClientBattlefieldResult
@@ -432,10 +431,10 @@
 - GameScene.RegisterZoneDispatch
 - ZoneClientBattlefieldResult
 - TeamEntity
-- CNE_DBA_ClientAllFamily
+- CNC_ZMis_MissionServerItemMallMailSend
 - MissionDb
 - UiControlKind
-- SceneEvent
+- ClassEntity
 - CNC_ZMis_MissionServerUpdatePlayerCard
 - EvaluateTests
 - RecruitBoard
@@ -444,25 +443,25 @@
 - BotSession
 - CNE_CW_ServerLookingForGroup
 - ItemMallService
-- ZonePlayerClassList
+- CNE_ZM_ZoneServerSetRebornMonsterResult
 - CNC_CZ_ClientTeamNewMemberInfo
 - raw_assets/ — cartographie des dossiers
 - ArchiveWindow
 - GraphicsPreset
 - mission
-- MiscHandlers.Register
+- EdenDir
 - CNC_CZ_ClientFamilyInstanceData
 - CNC_CZ_ClientTeamCheckNotify
 - VersionGate.HandshakeAsync
 - CNC_ZMis_ZoneServerBattleCrusadeInfo
-- Tuto IA — faire de l'UI et corriger des bugs sur Eden Portage
+- ItemCooldownService
 - CNC_ZMis_ZoneServerTerritoryQuery
-- IniTable.ParseFile
+- IniTable.GetInt
 - EndToEndGameplayLoopTests.Test_FullGameplayLoop_Authentication_To_ZoneMovement
-- ChatPanel
+- CNE_CW_ServerIllPluginInfo
 - GdUnit4 Scene Runner
 - 01 - Système de Classes et Changement de Classe
-- MyCrypt
+- IniTable
 - MatchmakingService
 - Appearance
 - Technical Design
@@ -479,18 +478,18 @@
 - LimitlessService
 - Limitless Level & Exp Ultime — Design technique
 - MinimapPanel
-- PerfTrace
+- CNC_CZ_ClientSpellBlastToLife
 - StallGood
-- Protocol/ZoneEntryDataMessages.cs
+- List
 - CNC_ZMis_ZoneServerFamilyContainerUpdate
 - CNC_ZMis_ZoneServerUpdateRoom
-- CharModelSpec.BodyStem
+- WorldCreateCharacterData
 - GameDataManifest
 - ClassRankTable.Load
 - ZoneDivideItem
 - MissionObjectives
 - Baked
-- collections
+- zsniff_decode.py
 - ChatMessage
 - ZoneClientDisplayCharSimple
 - ZoneClientPetLotteryResult
@@ -499,7 +498,7 @@
 - 07 - Hôtel des Ventes (Auction)
 - 📋 Next Session Plan - Phase 1.1.A → 1.1.B
 - ZoneClientFamilyInstanceData
-- Plan — Destiny Road / Destiny Dice (chemin d'éveil)
+- ZoneClientTradeAddItem
 - CeguiScheme
 - ZoneClientTradeAddItem
 - CNC_DBA_ClientFamilyAllMember
@@ -509,9 +508,9 @@
 - WorkOrderService
 - CardRow
 - ZoneClientUpdateLottery
-- KfAnimation
+- Report
 - build_official.py
-- Award
+- PaletteSlot
 - Data/ClientSettings.cs
 - FastDressSlots
 - EventArea
@@ -521,7 +520,7 @@
 - EdenSessionOptions
 - CeguiNode
 - EpkFormat
-- AppearanceCodec.Encode
+- ZoneUpdateEquipmentView
 - GdUnit4 Quickstart
 - raw_assets/UI + uidata — inventaire fichier par fichier
 - MapAreaFile
@@ -529,16 +528,16 @@
 - Audit technique — état actuel du projet Eden Server C#/.NET 8
 - 06 - Système d'Échange P2P (Trade)
 - Action
-- WorkCombineDef
+- CombineStationTests
 - GameBalance
-- MapLoader
+- Node3D
 - TerritoryState
-- HeroTraitAndPhaseCTests
+- MonsterParser.Parse
 - DbRole
 - CNC_CW_ClientUpdateFamilyMember
 - ZoneClientTerritoryQuery
 - WorldClientFamilyAchievementUpdate
-- StorageView
+- CNC_CZ_ClientFamilyContainerPutItem
 - EPK natif : notes d'outillage et lectures hors EdenVfs (P1, P2, P3, P5)
 - ZoneAttrRefresh
 - ZoneClientLotteryResult
@@ -551,7 +550,7 @@
 - PlayerStatsEntity
 - ZoneClientFamilyTownMemberQuery
 - CNC_CZ_ClientChangeSpell
-- CNE_ZMis_ZoneServerAuctionBuyList
+- CNC_CZ_ClientMagicBoxResult
 - CharRow
 - CNC_ZMis_ZoneServerSearchRoomResult
 - ZoneClientSpellFlyToLocation
@@ -571,9 +570,9 @@
 - Plan Maître d'Implémentation - Eden Eternal Server (.NET 8)
 - Phase 1.1 - Système de Classes - Status Détaillé
 - 📊 Phase 1.1.A - Parsing et Chargement - Rapport Complétion
-- Stall
+- CNC_CZ_ClientSpellBlastOK
 - CNC_ZMis_ZoneServerWeddingsInfo
-- DdsInfo.TryParse
+- ZoneMovePrediction
 - ItemMallItemEntity
 - ZoneMailSend
 - CNC_ZMis_ZoneServerListDialogue
@@ -583,7 +582,7 @@
 - VersionGate
 - 2. Symboles lapis:: Analysés
 - AchievementDef
-- Account
+- PlayerCharacterEntity
 - ZoneClientFamilyBattleInfo
 - ZoneClientVersusInstanceInfo
 - DailyView
@@ -596,54 +595,54 @@
 - Status Phase 1.1 - Système de Classes
 - CNC_CZ_ClientEnterNodePlayerCard
 - ReceivableDto
-- LotteryService
+- Row
 - CNC_MW_WorldServerItemMallMailCheckOK
 - CNC_ZMis_ZoneServerFamilyTownMemberQuery
 - CNC_ZMis_ZoneServerMailSendResult
-- CharColorTable
-- PlayerTitles
+- ZoneMovePrediction
+- GoldenBytesTests
 - ZoneClientIdentifyItem
-- OutBinStream.WriteLong
+- ClientSeeCharCodec.Build
 - WorldServerRow
 - SettingsTests
 - CNC_CZ_ClientLoverInfo
-- AchievementService
-- StallService
-- ZoneServerExecuteMagicBox
+- ClassStatsEntity
+- CNC_CZ_ClientSwitchItemLocationOK
+- CNC_ZMis_MissionServerOnDialogueSelected
 - VersusService
 - ZoneClientUpdateRoom
-- ZoneServerSaveCollection
+- EpkCrypto
 - inflate64.c
 - ClassDataParser
-- CNC_CW_ClientGetWorldServers
-- CNC_CZ_ClientPlayerDestinyRoad
+- P2LogicTests.Couple_Social_Text
+- Audit pack — baseline Étape 0 (corpus mesuré)
 - ZoneTeamInvite
-- BinReader.ReadUShort
+- ZoneUpdateEquipmentView
 - ZoneClientColosseumQuery
 - 🎯 Plan d'Action - Phase 1.1 (Système de Classes)
-- CNC_CZ_ClientPetLotteryEnd
+- Mode
 - CNC_ZMis_ZoneServerTransitionCommands
 - ZoneClientPlayEffect
 - RewardScoreParser
 - ZoneClientSearchInfo
 - ClassLicRow
-- CNC_ZMis_MissionServerArrangeItem
+- Plan 2026-10-23 — Buffs/statuts, pets en zone, montures, cast Reforged
 - CNC_ZM_ZoneServerSetRebornMonsterResult
 - CNC_ZMis_ZoneServerMessageList
 - ZoneClientUpdateFastDressData
-- CNC_ZM_MonsterServerModifyRebornMonster
-- DdsDecode
+- CNC_CZ_ClientIdentifyItem
+- Entry
 - CNC_CZ_ClientFamilyContainerData
-- DdsFormat
+- CNC_CZ_ClientTeamRecruitMsg
 - FxCatalog
 - ZoneClientFamilyInstanceData
 - AchievementView
 - EPK v1 — format de pack Eden (spec figée)
-- protocol/ZoneEntityMessages.cs
+- CNC_ZMis_MissionServerSendSystemMail
 - MonsterSpawn
 - ClientSettings
-- CharModelSpec
-- ZoneServerSaveCollection
+- WorldClientUpdateFortuneBagContentList
+- ZonePutItem
 - ZoneClientFamilyTownMemberQuery
 - eden_headless.py
 - EntryState
@@ -657,21 +656,21 @@
 - CardRowDto
 - Row
 - StateRow
-- PlayerEquipment
-- Eden.Core.Game.Classes
+- ZoneTradeCancel
+- CustomClassSlot
 - ZoneClientGreedyIslandInfo
 - CNC_ZMis_ZoneServerGMToolGetInfo
 - CNE_ZM_MonsterServerModifyRebornMonster
 - ZoneClientMessageList
 - ZoneClientDisplayChar
 - ZoneClientResetSpell
-- CNC_CZ_ClientSpellFlyToLocation
+- Rc4.ProcessCopy
 - ZoneSwitchItemLocationOk
 - MallView
-- TreasureRulesTests
+- WorldClientLookingForMemberResult
 - CNC_CZ_ClientSpellBlastToLocation
 - 3. Plan d'action priorisé
-- NpcSpawn
+- WorldItemMallBuyRequest
 - MonsterSpawn
 - ZoneTeamInviteAnswer
 - BreakPointUi
@@ -689,32 +688,31 @@
 - CNC_CZ_ClientPlayerClassList
 - Plan — Exp de groupe native + distribution de loot (2026-10-25)
 - Verdict
-- StallError
+- CNC_CL_ServerLoginAccount
 - CNC_ZMis_ZoneServerBattlefieldList
 - CNC_ZMis_ZoneServerTerritoryInfo
 - CNE_ZM_MonsterServerSetRebornMonster
 - CNE_ZMis_MissionServerMailSend
 - ZoneClientEffectReport
 - ZoneClientPetLotteryEnd
-- Preuves natives (zone/decompiled.c)
+- LevelCost
 - LotteryWeekPoints
-- ZoneServerGoLottery
 - PlayerAchievements
 - ZoneClientUpdateLottery
-- ZonePlayerClassList
-- CraftView.Recipes
+- CinemaTimeline
+- WorldClientLookingForMemberResult
 - ZoneClientFamilyContainerPutItem
 - ZoneClientMagicBoxResult
-- ZoneServerFamilyContainerPutItem
-- Protocol/ZoneCombatMessages.cs
+- ZoneModifyItemSlot
+- ZoneClientSpellBlastToLife
 - CharCreateBodySpec
 - Format `.fsm` — scène/terrain par map (Eden Eternal, moteur lapis/HighLand)
-- ZoneServerRecordFastDressInfo
+- KillLoopProbe
 - ZoneClientTerritoryInfo
 - CreateCharacterRequest
 - CNC_CZ_ClientVersusInstanceInfo
 - WorldClientMutuallyHelpUpdate
-- Protocol/ZoneElfMessages.cs
+- ZoneElfAction
 - redis
 - Direction visuelle — portail Limitless (web + Studio)
 - ClassDataParser.ParseClassFile
@@ -735,18 +733,18 @@
 - CollectRecipe
 - ZoneClientFamilyContainerData
 - ZoneClientEnterStrengthen
-- CNC_CZ_ClientTeamInviteNotice
+- WorldClientQueryExploitRank
 - ZoneClientSpellFlyToLocation
 - InterpBuffer
-- Phase 4 — Observabilité et robustesse
+- ZoneRecommendActivities
 - export_certificates
 - Guilde / Hall de famille — référence
-- Row
+- merge_anim_glb.py
 - ZoneAuctionSell
 - ZoneClientChanceLuckyBagResult
 - ZoneClientPlayEffect
 - ZoneClientSearchInfo
-- VendorStallTests
+- DateTime
 - services
 - gateway
 - Plan d'Action & Spécification Rétro-Ingénierie : Eden.Ticket & Eden.Mission
@@ -759,15 +757,15 @@
 - CNE_ZMis_MissionServerCrossZone
 - CNE_ZMis_MissionServerItemMallMailCheck
 - CNE_ZMis_MissionServerOnDialogueSelected
-- NifSkeleton.Analyze
+- Builder
 - CNC_CZ_ClientUpdateLottery
-- DateTime
+- WorldBossPlan12Tests
 - CNC_CZ_ClientPlayEffect
-- CNC_CZ_ClientUpdateElfMixElf
+- CNC_ZMis_MissionServerMobDieReport
 - WorldServerEntry
 - ZoneEnterMissionList
-- CNC_CG_ClientCharacter
-- PetRules.PickLootTarget
+- CNC_CZ_ClientBattleRoyaleInfo
+- 8. Système de Dungeons et Instances
 - ZoneClientIdentifyItem
 - BattlefieldService
 - zhook.c
@@ -777,26 +775,26 @@
 - WorldUpdateFamilyMember
 - ZoneClientUpdateFastDressData
 - Lot 10 — prompt10 : identité site, i18n FR/EN/BR, data wiki, Studio refait, fixes jeu
-- ZonePlayerAction
+- CNC_ZMis_MissionServerChannelMsg
 - MISSION : refondre la stack Eden (serveur C#/.NET + client Godot) pour Godot UNIQUEMENT — propre, mesurée, optimisée, prête pour ~50 joueurs simultanés
 - ZoneModifyAttr
 - QuestPlan01Tests
 - CollectRecipe
-- Rapport — portage UI CEGUI → Control Godot 4
-- Plan d'Action & Spécification Rétro-Ingénierie : Eden.Zone (ZoneServer)
+- Slot
+- ZoneClientMeleeAttack
 - ZoneClientResetSpell
-- `limitless_pass.ini` — récompenses du Limitless Pass
+- WorldClientQueryExploitRank
 - Architecture native observée
 - Lot 10 — notes G1-G4 (serveur/jeu)
 - postgres
-- Lot 12 — prompt10c : HUD stylé, talents canoniques+stats, site data, help Studio
+- ZoneServerFamilyContainerPutItem
 - fndb1 — base de jeu (156 objets)
 - ClassData
 - 6. Implémentation C#
 - ZoneDamageMessage
 - 2026-10-24 — Lot live 4 : pets / talents / buffs / AoE / buyback / rf_game
 - QuestKind
-- Protocol/WorldMiscMessages.cs
+- MiscPackets.BindZone
 - ZoneClientBattlefieldMemberInfo
 - ZoneClientElfWorkResult
 - TraceRow
@@ -813,17 +811,17 @@
 - ZoneClientStrengthenItemResult
 - CNE_ZMis_ZoneServerGMToolGetInfo
 - ZoneClientSummonPet
-- Gateway
+- ZoneClientSpellCast
 - SceneBubbleLogic
 - NativeEquipmentSlots
-- 5. Plan d'action (reverse vers serveur propre C#)
-- CNC_CZ_ClientElfWorkResult
+- ZoneElfUpdateSkill
+- ZoneAttrRefresh
 - ZoneClientDuelResult
 - ZoneClientGladiatorTeamInfo
 - Patcher le client binaire (game_.exe / dlls Reforged)
-- CharColorTests.RealFile_HairAndEyes_Bases
-- St
-- Visionneuse de skins (`tools/skinview.sh`)
+- ZoneLimitlessState
+- ZoneClientCanJoinTeam
+- Kind
 - LevelTable
 - Eden.Core.Tests.csproj
 - VendingView
@@ -832,14 +830,14 @@
 - Terminologie — enchant / buff / statut (référence projet)
 - ZoneClientElfWorkResult
 - export_classes
-- ZoneClientSay
+- Slot
 - ZoneClientBattleMemberPosition
 - TitleDef
 - ZonePlayerDestinyRoad
 - ZoneClientEnterStrengthen
 - ZoneClientLifeFloat
 - ZoneClientModifyItemStrengthen
-- protocol/WorldMiscMessages.cs
+- MiscPackets.BindZone
 - KnownSpell
 - MobDanger
 - ZoneClientPlayerAction
@@ -861,41 +859,42 @@
 - CNE_ZMis_MissionServerBattleRoyaleClose
 - ZoneClientTradeStart
 - ZoneClientUseSkillPointOK
-- Protocol/ZoneAuctionMessages.cs
+- ZoneAuctionBuyQuery
 - ZoneDisplayMonster
-- FamilyStoragePackets.WriteStorageItem
+- SkillBarWindow
 - AntialiasMode
 - ZoneClientBattlefieldList
-- ZoneClientEquipTrainItemChanged
+- WorldClientTell
 - 🔍 Symboles Clés Extraits
 - EntityRegistry
-- ZonePlayerWorkResult
+- ZonePlayerWorkUpdate
 - TextRow
 - TitleDef
 - NeobankSettings
 - SpellTable
-- 2. Analyse complète de la stack
+- ZoneEnterWorks
 - CNC_CZ_ClientHeroTrait
 - _talents_from
 - LfgFilterTests
 - CNC_ZMis_ZoneServerStartVersusInstance
-- 9. Le dossier `rea-rea-agents-6.5.0` (REA) — comment l'utiliser
+- ZonePlayerWork
 - CNE_ZMis_MissionServerListDialogue
 - AGENTS.md — eden-godot
 - EquipTypeDef
 - LevelTable
-- ZoneClientLifeSkillUpdate
+- ZoneItemMallUseItem
 - PartyMenu
-- net/ManifestHash.cs
+- ZoneClientLifeFloat
+- ZoneFamilyStorageGet
 - ZoneClientGreedyIslandInfo
 - DecompileFunction.java
 - LoginWorldReply
 - ZoneSetMissionTrace
-- ZoneClientDestShutdown
-- ZoneClientOpenInstanceDialog
+- 45 — POC Login : authentification + liste des channels
+- 7. Système de Mariage et Relations
 - ZoneDisplayDialogView
 - ZoneClientOpenMagicBoxDialog
-- CNC_CZ_ClientMessageList
+- 1. Inventaire NCID du périmètre
 - Card
 - Classes éveillées — textes UI, quêtes, ref-shots — harvest
 - ZoneClientOpenMissionShop
@@ -913,7 +912,7 @@
 - Implémentation (zone-locale — la couche mission de consentement
 - ZoneClientRecruitInstanceResult
 - ZoneItemUse
-- Implémenté dans ce lot
+- Lot 8 — prompt8 : site, Studio, gameplay, client (exécution autonome)
 - CNC_ZMis_ZoneServerAchievementUpdate
 - CNC_ZMis_ZoneServerBattlefieldEraseMember
 - CNC_ZMis_ZoneServerBattlefieldJoinResult
@@ -925,13 +924,13 @@
 - CNE_ZMis_MissionServerChannelMsg
 - ZoneClientSafeQuitCancel
 - CNE_ZMis_MissionServerCrossZoneRequest
-- ZoneClientUpdateBattleCrusadeInfo
+- CNC_CZ_ClientLifeFloat
 - ZoneClientFamilyContainerDeleteItem
 - CNE_ZMis_MissionServerPlayerCCDataSave
 - ZoneClientArrangeItemOK
 - CNC_CZ_ClientBattlefieldList
 - ZoneClientItemRent
-- CNC_CZ_ClientDuelResult
+- DuelTests.Emit
 - ZoneClientPlayerEvent
 - ✅ T_Class.ini Parsing (100%)
 - ZoneClientEffectReport
@@ -942,28 +941,28 @@
 - 📁 Fichiers Créés/Modifiés
 - EntityAnimator
 - ClassText
-- MoveAnimSpeed.Scale
+- MountRulesTests
 - TestPaths
 - ZoneBaseAttrRefresh
 - TradeView
 - 📝 Notes Techniques
 - KfmStateMachine
 - DirectionalLocomotion
-- Plan — Autels Eden Crystal / Eden Gem (lottery natif)
-- Points d'édition
+- WorldClientTell
+- ZoneClientSpellHitToLife
 - ZoneClientLotteryEnd
 - CNE_ZMis_MissionServerMobDieReport
-- Audit vague 3 — maps, items, monstres (résultats)
+- ZoneClientPVPRankLookEquip
 - CNC_ZMis_ZoneServerGreedyIslandJoin
-- BankDueDates
-- Lazy
+- ZoneEnterWorks
+- ZonePlayerWork
 - Ponytail Help
 - ExpertiseView
 - ÉTAT DU SYSTÈME DE STATS — sources, ordre, provenance (2026-10-30, maj phase C + A4.5)
-- ServerMoveSpeed.Multiplier
+- ZoneElfMix
 - ZoneClientBagDueDate
 - ZoneClientItemUse
-- ZoneClientEnterExchageItemService
+- ZoneEnchantRemove
 - ZoneSwitchItemLocationOk
 - Kind
 - CNC_ZMis_ZoneServerColosseumModeUpdate
@@ -974,8 +973,8 @@
 - Phase 1.2: Character Creation & Deletion
 - Méthodologie Opérationnelle — IA -> Reverse -> Recoder le Serveur
 - Rapport d'Avancement — Réécriture du Serveur Eden en C# (.NET 8)
-- ZoneClientBattlefieldMemberInfo
-- ZoneClientCanJoinTeam
+- ZoneModelModify
+- ZoneUpdateZoneMonster
 - Preuves natives
 - Rapport complet — Reverse Engineering du serveur Eden (`server_us`)
 - Plan — sous-système salles personnelles (PlayerRoom / housing)
@@ -984,72 +983,74 @@
 - Plan — NCID 163 NodeGroupReset + NCID 220 RecruitInstance (LFG instance)
 - ZoneClientChangeSpell
 - FastDressRow
-- ZoneClientEnterRepairShop
+- ZonePlayerLifeSkill
 - CNC_DBA_ClientLotteryCount
 - ZoneClientLotteryUpdatePlus
 - ZoneClientElfGoToWork
 - CNC_ZMis_ZoneServerMailReceive
 - CNC_ZMis_ZoneServerMessageRead
-- ZoneClientLotteryEnd
+- ZoneItemMallUseItem
 - Tâches
 - CNC_ZMis_ZoneServerUpdateNPCSymbols
-- Lot — Expansion de stockage (NCID 373/374)
+- CeguiImageryComponent
 - CNE_ZMis_MissionServerCheckFamilyInvite
 - ZoneClientStrengthenItemResult
 - ZoneClientSummonPet
-- CNE_ZMis_ZoneServerAchievementUpdate
+- ZoneTradeConfirm
 - ZoneClientOpenInstanceDialog
 - UiBuildReport
 - export_npcs
-- ZoneClientPayEventOK
+- PlayerCoins
 - DailyAwardDef
 - ZoneClientRecruitInstanceResult
-- ClassText
-- ZoneClientResetCoord
-- ZoneClientSellOut
+- ZoneSpellCastToLocation
+- ZoneClientLoadCubeItems
+- ZoneMoveChar
 - EnchantEntry
 - CNE_ZMis_MissionServerColosseumClose
 - CNE_ZMis_MissionServerGetTeamInviteeID
-- EventArea
+- WorldItemMallBuyResult
 - CNE_ZM_MonsterServerRemoveRebornMonster
 - EdenConnection
 - ZoneClientTeamCheckNotify
 - ZoneClientTurnChar
 - ZoneClientUpdateRoomItem
 - ZoneClientUseItemTimeBreak
-- MountCombatRules
+- ZoneClientUpdateEvaluateInfo
 - ReceiveBuffer
 - native_stack.sh
 - ZoneClientBattleMemberPosition
 - LoginClientHello
-- Shot
-- ZoneClientAskIdentifyGold
+- TempleBackdrop
+- Inventaire des Symboles lapis:: par Catégorie
 - 🔑 Clés Apprentissage
 - ZoneDivideItem
 - ZoneClientMessageRead
 - 🏁 Conclusion
-- PlayerHandlers.Register
-- Protocol/ZoneMissionMessages.cs
+- ZoneServices
+- WorldClientCrossZone
 - Matrice de captures — Godot vs ref-shots
 - 🎯 Recommandations Prochaines Étapes
-- Plan — OpenFortuneBag (sacs instantanés [49001,50001)∪[51001,53001)) + compteurs fortune
-- CostumeVisual.Merge
+- PlayerCoins
+- ZoneClientSpellCastOK
 - fx-audit.sh
 - ZoneUpdateZoneMonster
 - AudioCatalog
-- 10. IDE & extensions VS Code / Cursor pour le reverse
+- ZoneClientTreasurePickupOK
 - mount-sweep-lab.sh
 - ZoneClientTerritoryFamilyScore
 - ride-lab.sh
 - ride-script.sh
-- TexCodec
+- EpkFormat
 - 11. Conteneurisation Docker
-- 14. Annexes — inventaires extraits du binaire
-- 7. IA locale (100 % hors cloud) pour le reverse
-- StateFlagWordTests
+- ZoneDropItem
+- ZoneSpellCastToLocation
+- ZoneClientLookEquip
 - skinview.sh
 - CNE_MW_MissionServerTextExCmdRemoteZone
 - ZoneClientChanceLuckyBagResult
+- ZoneClientReceiveShortcutOfPage
+- ZoneStrengthenCasting
 - volumes
 - world
 - ZoneClientOpenBattleCrusadeDialog
@@ -1062,14 +1063,17 @@
 - Observabilité Eden — Phase 0
 - ZoneClientTerritoryKilledInfo
 - ZoneClientUseSkillPointOK
-- ZoneServerExecuteMagicBox
+- ZoneElfEvent
+- ZoneElfReturn
 - Guide de Reconstruction et Déploiement : Eden Eternal Server Suite (.NET 8)
 - CNE_CZ_ZoneServerItemUse
 - Lot — mot d'état 302, icônes fantômes équipement, lottery weekClaim, find_item
+- ZoneElfUpdateAttr
 - Lot 6 — Refonte Web Portal (prompt5 chantier 1)
 - Lot 19 — prompt10j : statut monture migration, proc stats, devises, GM guilde
 - LotteryRewardRow
 - GradeRule
+- ZoneSendPetCmd
 - LotteryEffectKind
 - CNE_ZMis_MissionServerBattlefieldList
 - ZoneClientPlayerAction
@@ -1078,12 +1082,14 @@
 - CNC_ZMis_ZoneServerMailDeleteResult
 - ZoneUseSkillPoint
 - CNC_CZ_ClientStrengthenItemResult
-- Net/ManifestHash.cs
+- ZoneUpdateElfSpell
+- ZoneEnchantStart
 - CNE_ZMis_MissionServerNodeCreate
 - CNE_ZMis_MissionServerSendTargetLocation
 - CNE_ZMis_MissionServerUpdatePKList
 - ZoneClientHateReport
 - ZoneClientTerritoryKilledInfo
+- ZoneClientGoto
 - WorkProduct
 - ZoneClientAltarState
 - ZoneClientAskIdentifyGold
@@ -1094,34 +1100,47 @@
 - ZoneClientAskRepairOneItemGold
 - ZoneClientBattlefieldJoinResult
 - ZoneClientDuelBegin
-- Node3D
+- Func
 - ZoneClientDuelResult
-- ZoneClientFamilyContainerDeleteItem
+- ZoneDisplayMonster
 - ZoneClientGetSpell
 - ZoneUpdateDailyAwards
 - ZoneClientItemRent
+- ZoneClientNewPlayerGuide
 - ZoneClientPlayerEvent
 - Format pkg EDENFR (`pkg/pkg.idx` + `pkgNNN.pkg`)
 - IGmCharRuntime
 - ZoneClientPlaySound
-- ZoneGiveUpMission
-- ZoneClientSloganUpdate
+- ZoneCommandFailReturn
+- ZoneEnterNodePlayerCard
+- ZoneUpdateBFData
+- ZoneUpdateCollection
+- ZoneUpdateNodeTimes
+- ZoneUpdateSystemVar
+- ZoneServerDropItem
+- ZonePlayerAction
 - CNC_ZMis_ZoneServerDropItem
 - RideList
-- CNC_CZ_ClientMailList
+- MemberEntry
 - NetMessage
-- 8. Outils de décompilation pilotables par IA (Ghidra & co)
+- ZoneClientAltarState
+- ZoneClientBattlefieldUpdateScore
+- ZoneFamilyStoragePutNotify
 - ThemePalette
 - Mise à jour du moteur
 - MASTER-PLAN — eden-godot
 - CNE_ZM_MonsterServerRegenerationReport
+- ZoneDie
 - ZoneClientElfReturnEffect
-- InvStack
+- ZoneModifyAttr
+- ProfileView.cs
 - CNC_ZMis_ZoneServerTextExCmd
 - EquipSetPool
-- UiStyleKind
-- GmCommandTests
-- Temp-plan — 18 Oct : analyses Reforged, architecture, modding client, outils d'édition
+- ZoneTradeRemoveItem
+- WorldList
+- ZoneEnterBattlefieldAnswer
+- GmCommandService
+- WorldItemMallReceiveResult
 - ZoneClientElfDecompose
 - Plan — Pets (Elf), cast en mouvement, stabilité combat, fréquence position→mobs
 - ticket
@@ -1130,12 +1149,17 @@
 - 14 - Proc d'Items et Enchants
 - 20 - Système de Donjons
 - Hook client — Exp Ultime + Limitless Pass (NCIDs 2032/2033)
+- ZoneMarryOpRequest
 - Utilité de QuickBMS
+- ZoneClientDuelRequestResult
 - CNE_ZMis_MissionServerFindCharacter
 - ZoneClientUpdateLifelongPoint
+- ZoneClientUpdateLifelongPoint
 - 📋 À Faire (Priorité Haute)
+- ZoneTradeModifyGold
 - Plan de lot — station combine (service 10, CCombineOp op 0x27)
 - Correctif prioritaire — slots équipement, faux DOT et profils
+- ZoneVendorClose
 - Plan — reboot combat freeze + pets + chase + EXP chat (2026-10-21)
 - Lot 11 — S1 : boutons "?" par champ → wiki complet (Studio)
 - 2026-10-24 — Bugs remontés au retest live client
@@ -1145,39 +1169,56 @@
 - Lot 18 — prompt10i : work orders temps, craft consommation, strafe migration, anims, stacks
 - Phase 1 — Préchauffage boot des maps « chaudes » (EnsureNodePopulated)
 - Plan — 2.4.1/2.4.2 MultiStroke : args + sources indépendantes
+- 1. Système de Classes
+- 2. Système d'Inventaire
 - ZoneClientModifyItemStrengthen
+- 3. Système d'Enchantement (250+ fonctions)
 - Preuves déjà établies
-- ZoneClientMobChangeAI
+- Plan — Argon2id + rehash-at-login (Phase 4 / T2)
 - CNC_ZMis_ZoneServerSearchInfo
+- 2.3.3 — Commandes résultat manquantes (batch 1)
 - CNC_ZMis_ZoneServerTerritoryJoin
+- Plan — géométrie native des sorts de zone (formes 1/2/5/6) côté serveur
 - ZoneClientSelectFamilyEmblem
+- GuildRank
+- LoginWorldSelect
+- WorldCharPassword
 - ZoneClientBattlefieldJoinResult
 - ZoneClientPlaySound
-- ZoneClientR25UpdateFamily
+- WorldCreateCharacterName
+- WorldItemMallReceivableQuery
 - CNE_ZMis_MissionServerTextExCmdRemoteWorld
 - ZoneClientBackItem
 - EdenDir
+- ZoneChangeAppellation
 - ZoneClientElfDecompose
 - ZoneClientEnterSpellShop
 - CNC_DBA_ClientChannelMsg
+- ZoneAuctionBuyList
 - ZoneClientLifeSkillUpdate
 - CNC_ZM_ZoneServerMessageToCharacter
-- ZoneClientPlayMonsterAction
+- ZoneAuctionSellQuery
 - CNC_ZMis_ZoneServerLoverUpdate
+- ZoneClientCommandFailReturn
 - CNC_CZ_ClientUpdateCoolDown
 - ZoneClientTerritoryPlayerInfo
+- ZoneClientSpellBreak
 - ZoneClientUpdateSpellAttr
-- Protocol/ZoneDestinyMessages.cs
+- ZoneQueryDestinyRoad
 - WorkTypes
-- protocol/ZoneCombatMessages.cs
+- ZoneSpellCastToLife
+- ZoneMessageWrite
 - TreasureRules
-- 13. Risques, légal et limites
+- ZoneElfReturnOk
 - CastLock
-- 4. Le protocole réseau et le chiffrement
+- ZoneElfWork
+- ZoneUpdateMixElf
 - CNC_ZMis_ZoneServerAuctionCancelOK
+- ZoneNodeExit
 - CNE_ZMis_MissionServerBattlefieldJoin
-- ProfileView.Compute
-- TreasureCodec
+- ZoneEnterNodePlayerRoom
+- ZoneEnterStarWayData
+- ZoneClientEquipTrainItemChanged
 - Ui/GridResizeMath.cs
 - TileMath.Spans
 - ADR-0001 — Moteur Godot 4.8-beta2 .NET épinglé
@@ -1187,15 +1228,30 @@
 - Godot
 - MoveAnimSpeed
 - TODO/FIXME recensés — point pour le parent (lot G, qualité light)
+- ZoneClientUpdateRecommendActivities
+- WorldItemMallBuyResult
+- ZoneLoverInvite
+- ZoneLoverInviteRequest
+- ZoneLoverUpdate
 - ZoneModelModify
 - ZoneClientTeamRadarAttention
+- ZoneMarryOpRequest
+- ZoneMailQuery
 - Eden Client Reborn — plan et faits établis
-- 6. Tutoriel complet : reverse d'un serveur comme celui-là
-- ZoneClientBagDueDate
-- CNC_CZ_ClientLevelUp
-- ZoneClientColosseumLeaveJoinResult
-- CNC_CZ_ClientUpdateZoneMonster
-- ZoneClientDuelRequest
+- ZoneMissionListOp
+- ZoneNewPlayerGuide
+- ZoneClientBackItem
+- ZoneClientDuelRequestResult
+- ZoneFamilyStorageDelete
+- ZoneStorageExpandResult
+- ZoneClientTradeModifyGold
+- ZoneClientTradeModifyGoldFail
+- ZoneClientTradeStart
+- ZoneTradeModifyGold
+- CeguiFontTable
+- Analyse `re/` — flux de chargement natif (Bloc J)
+- WorldTicket
+- WorldCancelCreateCharacter
 - edenpack.csproj
 - 16 - Système de Party (Groupe)
 - 17 - Système de Raid (25 joueurs)
@@ -1205,17 +1261,21 @@
 - 37 - Système de Mail
 - ZoneClientElfReturnEffect
 - ZoneClientElfStoneUse
+- WorldCancelCreateCharacterResp
 - CNC_CZ_ClientDisplayDialogView
-- ZoneEntryFlow.IsPlayerEnemy
+- WorldQueryFriendInfo
+- WorldSelectCharacter
 - Lot : TradeRequest natif (distance + invite) — 2026-10-20
 - 2026-10-23 — Crash capacité sac (déséquipement login, achat NPC, loot)
 - 2026-10-23 — Système « binded item »
 - Plan — EXP du familier (CKFElf::GainExp)
 - Retests live lot 2 — retours joueur Reforged
 - Lot 20 — prompt10k : proc stats éternelles (2e) + devises inutilisables
-- ZoneClientEnterRepairShop
-- ZoneClientTerritoryEnd
-- ZoneClientUIControlNotify
+- WorldSelectZone
+- WorldServerHello
+- WorldVerifyNameResult
+- ZoneAuctionBuyOk
+- ZoneUseSkillPointMax
 - TeamMember
 - ZoneClientOpenExploitRank
 - NeobankLocks
@@ -1224,43 +1284,53 @@
 - ponytail-audit/SKILL.md
 - Ponytail Gain
 - ponytail-review/SKILL.md
-- ZoneClientCoRideInvite
+- ZoneBattlefieldLeave
 - Ponytail
 - ZoneClientGladiatorTeamInfo
 - ZoneClientOpenPaySystem
 - ZoneClientUpdateInteraction
+- ZoneDuelRequest
 - ProcHitEvent
+- ZoneDuelRequestAnswer
 - FamilyPushKind
 - lapis.lua
 - ZoneClientResetCoord
+- ZoneMessageDelete
 - Contrat de tâche agent
 - EdenClientReborn
 - TerritoryBattle
 - CNC_ZMis_ZoneServerFamilyStorageLog
 - CNC_ZMis_ZoneServerMessageWriteResult
-- protocol/ZoneAuctionMessages.cs
+- ZoneAuctionBuyQuery
 - HeadlessBot.csproj
 - NetSmoke.csproj
-- HeroTrait
+- ZoneClientTextOutputIndex
 - 📋 Fichiers de Données
 - 📊 Métriques Attendues
 - 📊 Règles de Validation
+- ZoneLoverMessage
+- ZoneClientEnterExchageItemService
+- ZoneClientEnterFamilyInstanceCreation
 - ZoneClientTicketInvalid
 - package_dist.sh
 - CNC_ZMis_ZoneServerTextOutput
 - Chantier 3 — Consolider la connaissance protocole (audit §3)
 - Lot 8 prompt8 — notes d'exécution G5-G7 (spawn/monde)
 - RewardBox
+- ZoneClientEnterGladiatorTeamCreation
 - make_archive.sh
 - StatSplit
 - PickCore
+- ZoneClientMobChangeAI
 - protocol/ZoneMailMessages.cs
-- protocol/ZoneTradeMessages.cs
+- ZoneTradeAddItem
 - 🏗️ Architecture Technique
 - 🔬 Tests à Implémenter
 - 🗄️ Schema Base de Données
 - Index de la documentation
 - Protocole Eden — inventaire des messages (repérage statique)
+- ZoneClientOpenHotel
+- ZoneClientPlayerEmotion
 - engine-update.sh
 - setup.sh
 - eden-server-stack/SKILL.md
@@ -1287,29 +1357,57 @@
 - run.sh
 - test.sh
 - validate-assets.sh
+- ZoneClientR25UpdateFamily
 - ItemEntity
-- ZoneClientElfStoneUse
-- Protocol/ZoneVendingMessages.cs
+- ZoneClientTeamCheckNotify
+- ZoneClientUpdateRoomItem
+- ZoneClientUseItemTimeBreak
+- WorldFamilyQuit
+- WorldFriendInvitationAnswer
+- WorldRemoveFriend
+- ZoneClientVendorStatus
 - native-parity.sh
+- ZoneStorageExpandResult
+- ZoneTradeRequest
+- ZoneVendorCloseView
+- CreateCharacterResult
 - ZoneClientRideSpell
 - package.sh
-- LoverBridge.BindSession
+- ZoneWhoIs
+- ZoneLoverInviteRequest
+- LoginClientHello
 - ZoneClientUpdateBattleCrusadeInfo
+- WorldCancelCreateCharacter
+- WorldCancelCreateCharacterResp
+- WorldCharPasswordResult
 - DailyAwardDef
-- CNC_CZ_ClientEnterNodeShortcut
-- Game/ServerMoveSpeed.cs
+- WorldClientHello
+- WorldItemMallPointInfoQuery
+- WorldLoginTicket
+- WorldQueryFriendInfo
+- WorldRemoveCharacter
+- WorldSelectCharacter
+- WorldSelectZone
+- WorldServerHello
 - BinReader.ReadBytes
 - harvest/README.md
+- WorldClientSelectCharEnableBtn
+- ZoneAddAppellation
 - ZoneClientCoRideInvite
 - ZoneClientDuelBegin
+- ZoneUpdateAppellation
 - InlayService.ValidateWitchcraft
+- ZoneAuctionSellResult
+- ZoneClientReviveInfo
 - ZoneClientElfCastEnchant
 - Ponytail, lazy senior dev mode
 - Graphes de code (graphify + reagraph)
 - ponytail-debt/SKILL.md
 - ZoneClientUpdateAttrNewHp
-- ZoneClientUseItemTime
-- Plan — freeze combat/migration : bit fantôme sel=1 du NCID 302
+- ZoneSpellBreak
+- ZoneTreasurePickup
+- ZonePlayerWorkResultEnd
+- CNC_CZ_ClientEnterNodeInventory
 - CNC_ZMis_ZoneServerBattlefieldChangeCharNum
 - CNC_ZMis_ZoneServerColosseumLeaveJoinResult
 - CNC_ZMis_ZoneServerMailGetItemOK
@@ -1317,24 +1415,38 @@
 - CNE_ZMis_MissionServerAddFamilyMessage
 - CNE_ZMis_MissionServerGiveUpMission
 - CNE_ZMis_MissionServerTextExCmdRemoteZone
-- Protocol/ZoneDialogMessages.cs
-- ZoneClientElfCastEnchant
-- Crusade (siège guild-vs-guild) — design d'implémentation
+- ZonePlayerWorkResultOK
+- ZoneDestinyDiceFailed
+- ZoneMessageExit
+- ZoneMessageListQuery
+- ZoneElfAdd
+- ZonePetModeChange
+- ZonePetUpgradeCancel
+- ZoneEnchantCancel
+- ZoneEnchantPauseRequest
+- ZoneEnchantStartRequest
+- ZoneBattlefieldJoin
+- ZoneEnchantUpdateRequest
+- MailTakenItemRow
 - ZoneClientEnterSpellShop
 - ZoneClientSetSpellStone
 - ZoneClientTerritoryPlayerInfo
 - ZoneClientUpdateSpellAttr
-- ZoneClientUseItemTime
+- ZoneLeaveNode
 - native-selftest.sh
+- ZoneLifeEradicate
 - ZoneClientCanLogout
-- ZoneClientLotteryUpdatePlus
+- ZoneTextCommand
 - ZoneClientOpenAreaDialog
-- ZoneClientPayEvent
+- ZoneUpdateEquipment
+- WorldItemMallAnythingQuery
 - ZoneClientResetDailyMission
-- ZoneClientTurnChar
+- ZoneLoverBreak
+- ZoneLoverMessage
 - ZoneClientUIControlNotify
-- ZoneClientUpdateFloorInfo
-- Décodage natif (preuves)
+- ZoneMailGetGold
+- ZoneMailGetGoldResult
+- ZoneMailGetItemResult
 - WeekRow
 - JoinResult
 - CNC_ZMis_ZoneServerBuybackInitAllocate
@@ -1342,28 +1454,64 @@
 - CNC_ZMis_ZoneServerEnterBattlefield
 - CNC_ZMis_ZoneServerReportID
 - CNC_ZMis_ZoneServerResetNodeTimes
-- ZoneEntryFlow.ShouldRestoreEnchant
+- ZoneMailOpenBox
+- ZoneMailReadResult
+- ZoneMailReturn
+- ZoneMailSendResult
+- ZoneDailyAwardOp
+- ZoneMigrationDone
+- ZoneQueryRecommendActivities
+- ZoneReplyDialog
+- ZoneSearchOpt
+- ZoneTalkToNpc
 - capture-fx.sh
 - native-coverage.sh
 - InputBindings
+- ZoneUpdateBotData
+- ZoneClientCanLogout
 - ZoneClientOpenAreaDialog
-- ZoneClientOpenHotel
-- ZoneClientOpenMagicBoxDialog
+- ZoneClientColosseumLeaveJoinResult
+- ZoneClientDestShutdown
 - ZoneClientPayEvent
 - ZoneClientPlayerEmotion
+- ZoneClientDuelRequest
 - class_outfits.py
-- BlobCodec
+- ZoneClientOpenMissionShop
 - MODELS-CATALOG.md
-- PackFlags
+- ZoneClientOpenPaySystem
 - ProcEffectReport
-- Side
+- ZoneClientTicketInvalid
+- ZoneClientUpdateFloorInfo
+- ZoneEnterFamilyStorage
+- ZoneFamilyStorageQueryLog
 - ItemTable
-- ItemTable
+- ZoneClientTradeConfirm
+- ZoneClientTradeRemoveItem
+- ZoneTradeConfirm
+- ZoneTradeRequest
+- ZoneClientVendorCloseView
+- ZoneClientVendorContainer
+- ZoneAttrLevelRefresh
+- TransportZones
 - Ui/CeguiBuilder.cs
+- LoginFail
+- CharacterDataChunk
+- WorldCharPasswordResult
+- WorldCheckCharPasswordResult
+- WorldClientHello
+- LoginServerHello
+- WorldCheckCharPassword
+- WorldCreateNameCheck
+- WorldQueryFamilyInfo
 - Lot 7 — Autonomie du dépôt, HUD Limitless in-game, bugs live, refonte Web + Studio
+- ItemMallEntry
+- ZoneGetStorageData
+- ZoneUseTicket
+- ZoneClientSetRoomResult
+- ZoneClientUpdateLifelongGold
 - Sol coupé en morceaux (demande 5) — CORRIGÉ (confirmé par le propriétaire, pas de preuve chiffrée)
+- CeguiColour
 - LotteryInfo
-- FeedbackFx
 - FIX-E-particules.md
 - FIX-K-camera.md
 - mount-sweep.sh
@@ -1376,18 +1524,18 @@
 4. `NetMessage` - 1386 edges
 5. `InBinStream` - 1341 edges
 6. `NetCommand` - 1271 edges
-7. `ZoneEntryFlow` - 991 edges
+7. `ZoneEntryFlow` - 990 edges
 8. `Feature-matrix protocole — generee par `tools/gen_feature_matrix.py`` - 873 edges
 9. `ZoneServer (871 NCIDs)` - 872 edges
 10. `NetSession` - 653 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `2.6 Recommandations d'optimisation client (pour évaluation externe)` --references--> `GameScene`  [INFERRED]
-  eden_server/RAPPORT-STACK-SERVEUR-CLIENT.md → eden_godot/godot_project/scripts/GameScene.cs
-- `4. Plantes / champignons / toutes textures — NON REPRODUIT, audit chiffré` --references--> `RenderAudit`  [INFERRED]
-  docs/reports/FIX-B-textures-2026-11-02.md → eden_godot/godot_project/scripts/debug/RenderAudit.cs
-- `Règles par vague` --references--> `DragHelper`  [INFERRED]
-  eden_server/docs/temp-plans/2026-10-27-phase6-completude-ncid-client.md → eden_godot/godot_project/scripts/hud/DragHelper.cs
+- `Ordre et parallélisme` --references--> `AssetCatalog`  [INFERRED]
+  docs/architecture/PLAN-ACTION-NATIF-EDENFR.md → eden_godot/godot_project/scripts/AssetCatalog.cs
+- `Phase G — Retrait des formats convertis` --references--> `AssetCatalog`  [INFERRED]
+  docs/architecture/PLAN-ACTION-NATIF-EDENFR.md → eden_godot/godot_project/scripts/AssetCatalog.cs
+- `Anomalies précédentes — état après corrections` --references--> `FogCeiling`  [INFERRED]
+  docs/reference/MAPS.md → eden_godot/godot_project/scripts/world/FogCeiling.cs
 - `6. Lacunes / à vérifier` --references--> `ShopAndMiscParsers`  [INFERRED]
   docs/reference/harvest/expertise-stats.md → eden_server/server/src/Eden.Core/Data/Parsers/ShopAndMiscParsers.cs
 - `7. Vitesse de déplacement — les deux mécanismes` --references--> `ServerConfig`  [INFERRED]
@@ -1396,39 +1544,39 @@
 ## Import Cycles
 - None detected.
 
-## Communities (1378 total, 146 thin omitted)
+## Communities (1527 total, 122 thin omitted)
 
 ### Community 0 - "BinWriter"
 Cohesion: 0.01
-Nodes (6): BinWriter, Length, WrittenSpan, BinStreamTests, TicketBody, BinStreamTests
+Nodes (5): BinWriter, Length, WrittenSpan, TicketBody, TicketBody
 
 ### Community 1 - "BinReader"
 Cohesion: 0.01
-Nodes (3): BinReader, Remaining, ElfRecord
+Nodes (5): BinReader, Remaining, EquippedItem, ElfRecord, EquippedItem
 
-### Community 2 - "protocol/WorldMessages.cs"
-Cohesion: 0.03
-Nodes (63): CharacterDataChunk, Blob, Name, Opcode, WorldApexBuffer, Buffer, Flag, Name (+55 more)
+### Community 2 - "GoldenMessageTests.WorldCharPassword_WireLayout"
+Cohesion: 0.06
+Nodes (28): LoginAccount, Account, Name, Opcode, PasswordHash, Version, LoginWorldSelect, Account (+20 more)
 
 ### Community 3 - "NetCommand"
 Cohesion: 0.00
-Nodes (1173): ZoneServer (871 NCIDs), Sortants jamais emis (264), Zone → Monde (C>S), CNC_CG_ClientChannel, Field1, Field2, Field3, Field4 (+1165 more)
+Nodes (1109): Bilan, Feature-matrix protocole — generee par `tools/gen_feature_matrix.py`, Sortants jamais emis (264), Zone → Monde (C>S), CNC_CG_ClientCharacterList, Field1, Field2, Field3 (+1101 more)
 
 ### Community 4 - "ZoneEntryFlow"
 Cohesion: 0.01
-Nodes (64): LifelongCounters, AltarConfig, Context, WorkTypes, CNC_CZ_ClientPlayerLicense, Licenses, Name, Opcode (+56 more)
+Nodes (58): PHASE 1 — Boucle zone et réseau serveur, AltarConfig, PayEventCmd, Context, CNC_CZ_ClientPlayerLicense, Licenses, Name, Opcode (+50 more)
 
-### Community 5 - "MiscPackets.BindZone"
+### Community 5 - "Protocol/ZoneMiscMessages.cs"
 Cohesion: 0.01
-Nodes (246): ZoneClientAltarState, Field1, Field2, Field3, Field4, Name, Opcode, ZoneClientAskRepairEquipGold (+238 more)
+Nodes (148): ZoneClientAskRepairEquipGold, Name, Opcode, Value, ZoneClientColosseumModeQueryResult, Name, Opcode, Value (+140 more)
 
 ### Community 6 - "ShopHandlers.Register"
 Cohesion: 0.02
-Nodes (109): P15 — Item mall + commandes admin AP/EP, Fix, Hors scope (rapport), Plan chantier — séquences d'allocation d'ids (item / elf / mail), Points d'édition, Symptôme prouvé par audit, Phase 3 — Persistance & transactions économiques, Résiduel (suivi) (+101 more)
+Nodes (76): Fix, Hors scope (rapport), Plan chantier — séquences d'allocation d'ids (item / elf / mail), Points d'édition, Symptôme prouvé par audit, Phase 3 — Persistance & transactions économiques, Résiduel (suivi), Vérification (+68 more)
 
 ### Community 7 - "ZoneMessages.g.cs"
 Cohesion: 0.00
-Nodes (834): Paquets sortants (S>C) — emis, CNC_CGIZ_ClientTextOutput, Name, Opcode, Value, CNC_CZ_ClientArrangeItemOK, Field1, Field2 (+826 more)
+Nodes (939): ZoneServer (871 NCIDs), Combat / sorts — 15/17 traites, Paquets sortants (S>C) — emis, Migration World→Zone — protocole CTicket (phase 4), CNC_CGIZ_ClientTextOutput, Name, Opcode, Value (+931 more)
 
 ### Community 8 - "OutBinStream"
 Cohesion: 0.01
@@ -1436,47 +1584,47 @@ Nodes (3): OutBinStream, Length, WrittenSpan
 
 ### Community 9 - "Task"
 Cohesion: 0.01
-Nodes (137): Points d'attention, Services, Lot — Métiers / LifeSkill (S_LifeSkill, recettes, analyse & production), Modèle natif décodé, Points d'édition, 2. Audit architecture — extensibilité gameplay ✅, Exclusions déviation documentées, Implémentation (+129 more)
+Nodes (159): Services, 1. Client Reforged — connexion ch01 + bypass launcher + compat ✅, 2. Audit architecture — extensibilité gameplay ✅, 3. Modding clients — faisabilité ✅, 4. Outils d'édition de contenu ✅, Temp-plan — 18 Oct : analyses Reforged, architecture, modding client, outils d'édition, Exclusions déviation documentées, Implémentation (+151 more)
 
 ### Community 10 - "Fact"
 Cohesion: 0.01
-Nodes (59): ZoneMeleeAttack, AttackSlot, Name, Opcode, TargetId, PickCore, QuestObjectiveLogic, ZoneAdvStatsQuery (+51 more)
+Nodes (65): ItemTipFormat, TreasureRules, ServerMoveSpeed, QuestObjectiveLogic, WorldCreateCharacterName, Field2, Field3, Name (+57 more)
 
 ### Community 11 - "ZoneServer (871 NCIDs)"
 Cohesion: 0.00
-Nodes (530): Divers — 68/124 traites, CNE_CG_ServerLogin, Field1, Field2, Name, Opcode, CNE_CG_ServerTextCommand, Name (+522 more)
+Nodes (488): Divers — 68/124 traites, CNE_CG_ServerLogin, Field1, Field2, Name, Opcode, CNE_CG_ServerTextCommand, Name (+480 more)
 
 ### Community 12 - "NetMessage"
-Cohesion: 0.01
-Nodes (367): NetMessage, Name, Opcode, ZoneQueryAppellation, CharId, Name, Opcode, ZoneArrangeItem (+359 more)
+Cohesion: 0.00
+Nodes (375): ZoneArrangeItem, Bag, Name, Opcode, Reserved, ZoneServerApplyFastDressData, Field1, Field2 (+367 more)
 
 ### Community 13 - "protocol/ZoneClientToServerMessages.cs"
-Cohesion: 0.01
-Nodes (340): ZoneArrangeItem, Bag, Name, Opcode, Reserved, ZoneServerApplyFastDressData, Field1, Field2 (+332 more)
+Cohesion: 0.00
+Nodes (376): ZoneArrangeItem, Bag, Name, Opcode, Reserved, ZoneServerApplyFastDressData, Field1, Field2 (+368 more)
 
-### Community 14 - "TerrainTile"
-Cohesion: 0.04
-Nodes (40): Arborescence réelle, Architecture — état réel (2026-11-02) et cible, Cible (plan source §3, à atteindre par lots), Frontières, Bake production, DISPLAY=:0 (mips + S3TC — fidèle prod), Headless (2 runs, écart < 3 %), Limites (+32 more)
+### Community 14 - "WaterAnimator"
+Cohesion: 0.06
+Nodes (12): Fuites à la sortie (2026-11 — `--perf-seconds` sortie propre, solo S001), CharBodyCache, PerfTrace, Enabled, Span, PreGameWarmup, SlowFree, WaterAnimator (+4 more)
 
 ### Community 15 - "HudExtensions.BindEntryData"
 Cohesion: 0.01
-Nodes (197): ZoneClientReceiveShortcutOfPage, Extras, Mask, Name, Opcode, Page, Values, PlayerProfileState (+189 more)
+Nodes (189): WorldRepeatedLogin, Name, Opcode, Value, WorldUpdateSpecialCoin, CoinId, Entries, Name (+181 more)
 
 ### Community 16 - "MissionServer (205 NCIDs)"
 Cohesion: 0.01
 Nodes (297): MissionServer (205 NCIDs), Mission — 165 classes, CNC_DBA_ClientRemoveFamily, Field1, Field2, Name, Opcode, CNC_MW_WorldTextCommand (+289 more)
 
-### Community 17 - "MiscPackets.BindZone"
+### Community 17 - "protocol/ZoneMiscMessages.cs"
 Cohesion: 0.01
-Nodes (246): MiscPackets, Latest, ZoneClientAskRepairEquipGold, Name, Opcode, Value, ZoneClientCanCloseConnection, Name (+238 more)
+Nodes (173): ZoneClientAskRepairEquipGold, Name, Opcode, Value, ZoneClientBagDueDate, Field1, Field2, Name (+165 more)
 
 ### Community 18 - "Equipe / social — 31/53 traites"
 Cohesion: 0.01
-Nodes (343): Equipe / social — 31/53 traites, Preuves natives (toutes vérifiées dans les exports Ghidra), Requête 174 — `CNE_CZ_ZoneServerFamilyTownQuery` (zone), Requête 175 — `CNE_CZ_ZoneServerFamilyTownMemberQuery` (zone), Réponse 502 — `CNC_CZ_ClientFamilyTownQuery` (zone→client), Réponse 503 — `CNC_CZ_ClientFamilyTownMemberQuery`, 225 `CNE_CZ_ZoneServerFamilyBattleAskInfo` — wire `[s16 type]`, CNC_CZ_ClientEnchantAdd (+335 more)
+Nodes (332): Equipe / social — 31/53 traites, Preuves natives (toutes vérifiées dans les exports Ghidra), Requête 174 — `CNE_CZ_ZoneServerFamilyTownQuery` (zone), Requête 175 — `CNE_CZ_ZoneServerFamilyTownMemberQuery` (zone), Réponse 502 — `CNC_CZ_ClientFamilyTownQuery` (zone→client), Réponse 503 — `CNC_CZ_ClientFamilyTownMemberQuery`, CNC_CZ_ClientFamilyTownMemberQuery, Field1 (+324 more)
 
 ### Community 19 - "Commerce / echanges — 28/42 traites"
 Cohesion: 0.01
-Nodes (242): Commerce / echanges — 28/42 traites, 2. Symboles lapis:: Analysés, Bank Storage, Network, 2. Symboles lapis:: Analysés, Network, Trade System, 2. Symboles lapis:: Analysés (+234 more)
+Nodes (321): Commerce / echanges — 28/42 traites, 2. Symboles lapis:: Analysés, Bank Storage, Network, 2. Symboles lapis:: Analysés, Network, Trade System, 2. Symboles lapis:: Analysés (+313 more)
 
 ### Community 20 - "Inventaire / equipement — 46/58 traites"
 Cohesion: 0.01
@@ -1488,99 +1636,95 @@ Nodes (81): ShopEntry, ShopState, Entries, IsOpen, NpcUid, StoreId, StorageConta
 
 ### Community 22 - "Instances / PvP / events — 18/40 traites"
 Cohesion: 0.01
-Nodes (250): Instances / PvP / events — 18/40 traites, État actuel, 1. Modèle natif décodé, NCID 163 `CNE_CZ_ZoneServerNodeGroupReset` — payload vide, NCID 220 `CNE_CZ_ZoneServerRecruitInstance`, CNE_CZ_ZoneServerBattleCrusadeJoin, Name, Opcode (+242 more)
+Nodes (239): Instances / PvP / events — 18/40 traites, État actuel, CNE_CZ_ZoneServerBattleCrusadeJoin, Name, Opcode, Value, CNE_CZ_ZoneServerBattlefieldJoin, Field1 (+231 more)
 
 ### Community 23 - "MiscHandlers.Register"
 Cohesion: 0.02
-Nodes (70): PHASE 1 — Boucle zone et réseau serveur, PHASE 4 — Transport et protocole (Godot-only), 1.2 Couche réseau, 4. Buffer de réception `List<byte>` — copie double + memmove O(n) par paquet, 0.3 Transport TCP complet ✅ (cassé par désassemblage), Différence de sémantique (acceptée, documentée), Objectif, Phase 1 — `PacketReceiveBuffer` sur les liens inter-serveurs de la zone (+62 more)
+Nodes (60): PHASE 4 — Transport et protocole (Godot-only), 4. Buffer de réception `List<byte>` — copie double + memmove O(n) par paquet, 0.3 Transport TCP complet ✅ (cassé par désassemblage), Différence de sémantique (acceptée, documentée), Changement, Hors scope de ce lot, Phase 1 — lot « envois non bloquants sur la boucle acteur » (anti-livelock), Points d'édition (+52 more)
 
 ### Community 24 - "NifFile"
 Cohesion: 0.08
-Nodes (36): Cur, Remaining, NifCamera, NifFile, AvByBlock, BlockCount, BlockTypeCounts, Cameras (+28 more)
+Nodes (36): Cur, Remaining, NifFile, AvByBlock, BlockCount, BlockTypeCounts, Cameras, ControllerByBlock (+28 more)
 
 ### Community 25 - "ZoneLotGTests"
 Cohesion: 0.02
-Nodes (101): ZoneNewPlayerGuide, Field1, Field2, Name, Opcode, ZoneTurnSelf, Name, Opcode (+93 more)
+Nodes (120): ZoneMigrationDone, Name, Opcode, ZoneNewPlayerGuide, Field1, Field2, Name, Opcode (+112 more)
 
 ### Community 26 - "EdenSession"
 Cohesion: 0.10
 Nodes (14): EdenSession, AccountId, Characters, LastDisconnectReason, LastWorldList, Login, PingMs, SelectedCharId (+6 more)
 
 ### Community 27 - "Vector3"
-Cohesion: 0.06
-Nodes (21): Basis3, Identity, RideSeatMath, StartSetting, WorldConv, RideSeatMathTests, Matrix3x3, Column0 (+13 more)
+Cohesion: 0.04
+Nodes (33): Basis3, Identity, RideSeatMath, StartSetting, TerrainVertex, WorldConv, RideSeatMathTests, Matrix3x3 (+25 more)
 
 ### Community 29 - "EdenSession"
-Cohesion: 0.05
-Nodes (42): Entry, LoginFail, Code, Name, Opcode, WorldList, LastWorldId, Name (+34 more)
+Cohesion: 0.08
+Nodes (18): ZoneTicket, Name, Opcode, Ticket, EdenSession, AccountId, Characters, LastDisconnectReason (+10 more)
 
-### Community 30 - "EdenClient.Protocol"
-Cohesion: 0.02
-Nodes (34): EdenClient.Game, EdenClient.Net, EdenClient.Debugging, EdenTools.ItemDictionary, EdenClient.Protocol, EdenClient.GameInput, EdenClient.Player, EdenClient.Session (+26 more)
+### Community 30 - "godot"
+Cohesion: 0.03
+Nodes (20): EdenClient.Debugging, EdenClient.Player, EdenClient.Session, EdenClient.Hud, EdenClient.World, EdenClient.Ui.P2, EdenClient.Screens, EdenClient.Data (+12 more)
 
-### Community 31 - "NativeFx"
-Cohesion: 0.05
-Nodes (24): 4. Attestation (389 codes, mode loose, 0 FAIL), Anomalies précédentes — état après corrections, Audit du plan (agent A — terminé) : `docs/reports/FIX-A-audit.md`, Fichiers modifiés par les agents (à relire, aucun build global prouvé), Les 14 demandes, une par une, Ordre de reprise recommandé, Passation — corrections demandées par le propriétaire (2026-11-02), État global honnête (+16 more)
+### Community 31 - "HpLossAnim"
+Cohesion: 0.13
+Nodes (6): HpBar3D, HpLossAnim, Active, Frac, Now, Seg
 
 ### Community 32 - "BuffBar"
-Cohesion: 0.04
-Nodes (30): 1. HUD permanent (toujours visible en jeu), A4.1 — Minimap : boutons + drag, A4.2 — MenuIcons (bas-droite) : cause racine prouvée, A4.3 — Status HUD : entête drag + resize = cases pas taille  - NON FAIT (les cases spawn a droite a la place de spawn a gauche, impossible d'augmenter verticalement la size de l'hud), A4.4 — FPS + ping (option préférences), A4.5 — TopLeftVitals + EXP bar : logos trait héroïque, A4. HUD, BreakPointUi (+22 more)
+Cohesion: 0.03
+Nodes (35): A2.1 Settings : bascule native et contenu (2026-10-30), Audit panels : langue + thème (A5.8), Checklist fenêtres (MakeWindow / EnsureTitleBar), Fait dans ce lot (2e passage), Hotkeys, Mécanismes centraux, Preferences, Reste (+27 more)
 
 ### Community 33 - "FamilyStorageState"
-Cohesion: 0.05
-Nodes (33): FamilyStorageLogEntry, FamilyStorageState, IsOpen, Log, NpcUid, ZoneEnterFamilyStorage, Name, NpcUid (+25 more)
+Cohesion: 0.04
+Nodes (37): FamilyStorageLogEntry, FamilyStorageState, IsOpen, Log, NpcUid, ZoneEnterFamilyStorage, Name, NpcUid (+29 more)
 
 ### Community 34 - "PropBatcher"
 Cohesion: 0.05
-Nodes (27): Ce que le natif ne règle pas (décision propriétaire), Lot 2 — Remplacer les dérivés (GLB/PNG/JSON) par les formats natifs EDENFR, Principe : un seul entonnoir, le même contrat d'arbre de nœuds, Risques, État de départ (audit 2026-11-02), Murs invisibles - recapitulatif par map (147 maps), Lot G2 — batching des props statiques (`world/PropBatcher.cs`), Mesures S001 (même commande que ci-dessus, env de test llvmpipe — (+19 more)
+Nodes (24): Lot G2 — batching des props statiques (`world/PropBatcher.cs`), Mesures S001 (même commande que ci-dessus, env de test llvmpipe —, ColliderConsolidator, CollisionBuilder, HelperSpec, GrassRenderer, MaxInstances, GrassSource (+16 more)
 
-### Community 35 - "🎯 Roadmap d'Implémentation (100+ systèmes)"
-Cohesion: 0.03
-Nodes (56): 0.1 Décodage MyCrypt ✅, 0.2 Vrais opcodes réseau ✅, 0.3 Tables de configuration ✅, 0.4 Payloads bouclés CNC ✅ (18 layouts reversés au désassembleur), 10.1 Maps et Téléportation 🚧, 10.2 Fast Travel, 11.1 Mail System, 11.2 Taxation et Revenus (+48 more)
-
-### Community 36 - "protocol/ZoneStorageMessages.cs"
+### Community 35 - "RankingService"
 Cohesion: 0.09
-Nodes (19): FamilyStorageItemCodec, ZoneFamilyStoragePut, Bag, Loc, Name, Opcode, Slot, StorageIndex (+11 more)
+Nodes (18): 9.1 Familiers (Pets/Elfs), 9.2 Montures (Rides), 9.3 Maisons Personnalisables, 9.5 Dream of Destruction (Facultatif), 9.6 Ranking et Leaderboards, PHASE 9: Systèmes Alternatifs, RankAwardRow, Category (+10 more)
 
-### Community 37 - "NifParticleMapper.Map"
-Cohesion: 0.07
-Nodes (30): NiParticleRuntime, Count, Sim, NifAlphaProperty, Blend, DstBlend, NoSorter, SrcBlend (+22 more)
+### Community 36 - "ZoneFamilyStoragePut"
+Cohesion: 0.25
+Nodes (7): ZoneFamilyStoragePut, Bag, Loc, Name, Opcode, Slot, StorageIndex
 
 ### Community 38 - "Feature-matrix protocole — generee par `tools/gen_feature_matrix.py`"
 Cohesion: 0.00
-Nodes (919): WorldServer (204 NCIDs), 1. Contexte & Architecture Native, 2. Table des Commandes Réseau Clés (Lobby & Personnages), 3. Détail des Structures et Sérialisation Binaire, 4. Machine à États du Lobby de Personnage, `CNC_CW_ClientGetCharacters` (World -> Client), `CNC_CW_ClientReceiveTicketToZoneServer` (World -> Client), `CNC_CW_ServerCreateCharacterData` (Client -> World) (+911 more)
+Nodes (886): WorldServer (204 NCIDs), 1. Contexte & Architecture Native, 2. Table des Commandes Réseau Clés (Lobby & Personnages), 3. Détail des Structures et Sérialisation Binaire, 4. Machine à États du Lobby de Personnage, `CNC_CW_ClientGetCharacters` (World -> Client), `CNC_CW_ClientReceiveTicketToZoneServer` (World -> Client), `CNC_CW_ServerCreateCharacterData` (Client -> World) (+878 more)
 
 ### Community 39 - "Protocol/ZoneSocialMessages.cs"
 Cohesion: 0.01
-Nodes (176): FamilyOps, FriendEntry, GuildBoardMessage, GuildLogEntry, GuildMember, GuildRecruitEntry, WorldAddFriend, FriendType (+168 more)
+Nodes (166): FamilyOps, FriendEntry, GuildBoardMessage, GuildLogEntry, GuildRecruitEntry, TeamMember, WorldAddFriend, FriendType (+158 more)
 
 ### Community 40 - "InventoryWindow"
-Cohesion: 0.02
-Nodes (42): 2. Fenêtres principales (menu/raccourci), 5. Dialogues et flux NPC, 7. Ponts réseau / nœuds logiques (pas de rendu direct), 9. Raccourcis et clés de test, HUD & Interfaces — Eden Client Reborn (Godot), État vague « layouts natifs » (nov. 2026), A1.3 — Clic gauche dans le vide pendant drag item → annule  - NON FAIT, BagTipProbe (+34 more)
+Cohesion: 0.04
+Nodes (34): A1.3 — Clic gauche dans le vide pendant drag item → annule  - NON FAIT, 3. Cas d'école B — bugs gameplay (chaque ligne = un raisonnement type), B1. Deux montures en même temps / monture perdue au changement de map, B2. Rendre une quête avec un sac trop plein, B3. Arc (2 mains) + épée (1 main) visibles en même temps, B4. CTRL + clic gauche dans l'Archive, B5. Animations de recul / diagonales arrière, B6. « Grosses marques au sol » (coutures terrain) (+26 more)
 
 ### Community 41 - "ZonePlayerDestinyRoad"
 Cohesion: 0.01
-Nodes (119): DestinyState, Current, DestinyVit, LastEventId, Shared, Route, ZoneDestinyDiceFailed, Name (+111 more)
+Nodes (128): DestinyState, Current, DestinyVit, LastEventId, Shared, Route, ZoneDestinyDiceFailed, Name (+120 more)
 
 ### Community 42 - "NifFile.cs"
 Cohesion: 0.05
-Nodes (57): Builder, Block, GeomHead, NifAv, Hidden, Properties, NifBoundingVolume, NifBSplineData (+49 more)
+Nodes (64): Block, NifControlledBlock, NifController, Active, Cycle, ManagerControlled, PlayBackwards, NifControllerSequence (+56 more)
 
-### Community 43 - "ElfWindow"
-Cohesion: 0.07
-Nodes (12): ElfBook, CombatStats, Elfs, Equip, MixTemplateId, Shared, Summoned, SummonedLoc (+4 more)
+### Community 43 - "TopLeftVitals.Find"
+Cohesion: 0.04
+Nodes (23): ChatEntry, ChatPanel, InputFocused, ChatProbe, ElfBook, CombatStats, Elfs, Equip (+15 more)
 
 ### Community 44 - "Eden.Core.Data.Parsers"
-Cohesion: 0.03
-Nodes (19): Eden.Core.Game, Eden.Core.Game.Services, Eden.Core.Game.Party, Eden.Core.Game.Stats, Eden.Core.Data, Eden.Zone.Codecs, Eden.Tests.Data.Parsers, Eden.Tests (+11 more)
+Cohesion: 0.02
+Nodes (21): Eden.Core.Game.Work, Eden.Core.Game, Eden.Core.Game.Services, Eden.Core.Game.Social, Eden.Core.Game.Family, Eden.Core.Game.Classes, Eden.Core.Game.Stats, Eden.Zone.Codecs (+13 more)
 
 ### Community 45 - "BinWriter.WriteUShort"
 Cohesion: 0.03
-Nodes (17): RejectReason, Malformed, TooNew, UpdateRequired, Reply, UpdateRequiredException, MinClientVersion, ServerManifestHash (+9 more)
+Nodes (29): ManifestHash, Result, Hex, RejectReason, Malformed, TooNew, UpdateRequired, Reply (+21 more)
 
 ### Community 46 - "Perso / progression — 22/31 traites"
 Cohesion: 0.01
-Nodes (148): Perso / progression — 22/31 traites, Messages Réseau, CNE_CZ_ZoneServerChangeClass, Name, Opcode, Value, CNE_CZ_ZoneServerLifeSkill, Field1 (+140 more)
+Nodes (137): Perso / progression — 22/31 traites, Messages Réseau, CNE_CZ_ZoneServerChangeClass, Name, Opcode, Value, CNE_CZ_ZoneServerCheckUpdateLottery, Field1 (+129 more)
 
 ### Community 47 - "MotionTable"
 Cohesion: 0.08
@@ -1588,7 +1732,7 @@ Nodes (10): CombatFx, MotionTable, Count, Shared, MonsterActionAnim, CombatFx, M
 
 ### Community 48 - "Dictionary"
 Cohesion: 0.03
-Nodes (52): ClassIconMap, ItemSources, ClassRankBuffTable, ClassTable, LevelEntry, CertCode1, CertCode2, Flag (+44 more)
+Nodes (47): ClassIconMap, ItemSources, ClassRankBuffTable, ClassTable, LevelEntry, CertCode1, CertCode2, Flag (+39 more)
 
 ### Community 49 - "Entry"
 Cohesion: 0.02
@@ -1596,142 +1740,138 @@ Nodes (133): Entry, A1, A10, A11, A12, A13, A14, A2 (+125 more)
 
 ### Community 50 - "SocialRepository"
 Cohesion: 0.02
-Nodes (88): Commandes admin dans le chat (test / debug), Debug camera montures, Donner les montures de test, Pourquoi « ca ne marchait pas » (causes corrigees / a connaitre), Utilisation, Éditions, Flux natifs décodés, Hors scope (lot ville/bâtiments ultérieur) (+80 more)
+Nodes (69): Plan — Autels Eden Crystal / Eden Gem (lottery natif), Preuves natives (zone/decompiled.c), Tables DB (réelles, peuplées), Vérification, Éditions, Flux natifs décodés, Hors scope (lot ville/bâtiments ultérieur), Implémentation (+61 more)
 
 ### Community 51 - "NativeCombatFormulas"
 Cohesion: 0.10
-Nodes (5): 25 Oct — exp de groupe native + loot d'équipe, Implémentation (notre archi : repo zone direct, équivalent DBA), NativeCombatFormulas, TempMoveSpeedMul, Params
+Nodes (5): Lots implémentés — session 2026-10-20 (commits), 25 Oct — exp de groupe native + loot d'équipe, NativeCombatFormulas, TempMoveSpeedMul, Params
 
 ### Community 52 - "FsmFile.Load"
-Cohesion: 0.07
-Nodes (10): Cell, GrassLayout, IflFile, Frames, Gameplay2Tests, FsmSource, IflFile, Frames (+2 more)
+Cohesion: 0.09
+Nodes (6): Cell, GrassLayout, Gameplay2Tests, FsmSource, Gameplay2Tests, V7PropsTests
 
 ### Community 53 - "AuctionState"
-Cohesion: 0.05
-Nodes (27): AuctionEntry, ZoneAuctionBuyList, Category, Entries, Name, Opcode, ZoneAuctionSellList, Entries (+19 more)
+Cohesion: 0.06
+Nodes (26): AuctionEntry, ZoneAuctionBuyList, Category, Entries, Name, Opcode, ZoneAuctionSellList, Entries (+18 more)
 
 ### Community 54 - "InBinStream"
 Cohesion: 0.01
-Nodes (12): TerritoryEntry, TerritoryScheduleEntry, FamilyTownMemberEntry, InBinStream, Remaining, BuyLine, BuyRequest, SellEntry (+4 more)
+Nodes (15): TerritoryEntry, TerritoryScheduleEntry, FamilyTownMemberEntry, InBinStream, Remaining, ShortcutBar, Extras, Slots (+7 more)
 
 ### Community 55 - "HousingHandlers.Register"
-Cohesion: 0.01
-Nodes (129): CNE_CZ_ZoneServerApplyFastDressData, Field1, Field2, Name, Opcode, CNE_CZ_ZoneServerChangeRoomTexture, Field1, Field2 (+121 more)
-
-### Community 56 - "OutBinStream.WriteFloat"
-Cohesion: 0.03
-Nodes (9): ZoneMoveMessage, EntityId, FacingDirection, MoveSpeed, Name, Opcode, PositionX, PositionY (+1 more)
+Cohesion: 0.02
+Nodes (117): CNE_CZ_ZoneServerApplyFastDressData, Field1, Field2, Name, Opcode, CNE_CZ_ZoneServerChangeRoomTexture, Field1, Field2 (+109 more)
 
 ### Community 57 - "LoginServer (35 NCIDs)"
 Cohesion: 0.01
-Nodes (208): GatewayServer (23 NCIDs), LoginServer (35 NCIDs), NCIDs Eden — table complète, TicketServer (6 NCIDs), 2. Spécification TicketServer (Billetterie & Jetons Inter-Serveurs), Cycle de Vie d'un Billet, Gateway — 11 classes, Protocoles internes (serveur<->serveur) (+200 more)
+Nodes (222): GatewayServer (23 NCIDs), LoginServer (35 NCIDs), NCIDs Eden — table complète, TicketServer (6 NCIDs), 2. Spécification TicketServer (Billetterie & Jetons Inter-Serveurs), Cycle de Vie d'un Billet, Gateway — 11 classes, Protocoles internes (serveur<->serveur) (+214 more)
 
 ### Community 58 - "TradeWindow.BindSession"
 Cohesion: 0.04
 Nodes (40): ZoneClientTradeAddItemFail, Name, Opcode, Reason, TradeSlot, ZoneClientTradeCancel, Name, Opcode (+32 more)
 
-### Community 59 - "Protocol/ZoneTradeMessages.cs"
-Cohesion: 0.02
-Nodes (106): ZoneClientTradeAddItem, Count, HasItem, ItemId, ItemName, LocExtra, Name, Opcode (+98 more)
+### Community 59 - "NetMessage"
+Cohesion: 0.00
+Nodes (492): NetMessage, Name, Opcode, GetTicket, Name, Opcode, UseTicketReply, Name (+484 more)
 
 ### Community 60 - "protocol/ZoneElfMessages.cs"
-Cohesion: 0.01
-Nodes (156): ElfBridge, Book, ElfEquipSlot, ZoneChangeElf, CharId, ElfDefId, ElfName, Name (+148 more)
+Cohesion: 0.02
+Nodes (92): ZoneChangeElf, CharId, ElfDefId, ElfName, Name, Opcode, ZoneElfAction, Field1 (+84 more)
 
 ### Community 61 - "QuestWindow"
 Cohesion: 0.03
-Nodes (36): Cause racine, Correctif, FIX J-quetes — quêtes terminées affichées « en cours », Limites, DataWarmup, TextResolver, Language, NativeOnly (+28 more)
+Nodes (43): Cause racine, Correctif, FIX J-quetes — quêtes terminées affichées « en cours », Limites, TextResolver, Language, NativeOnly, DialogOption (+35 more)
 
-### Community 62 - "ZoneClientHello"
-Cohesion: 0.05
-Nodes (29): ZoneClientHello, Name, Opcode, Value, ZoneEmptyRequest, Name, Opcode, ZoneMigrationDone (+21 more)
+### Community 62 - "ZoneEmptyRequest"
+Cohesion: 0.40
+Nodes (3): ZoneEmptyRequest, Name, Opcode
 
 ### Community 63 - "CharacterSummary"
 Cohesion: 0.03
 Nodes (57): 1. Eden.Login, 2. Eden.World, 4. Eden.Ticket & Eden.Mission, Service-by-Service Reconstruction Strategy, CharacterListRequest, AccountId, Name, Opcode (+49 more)
 
-### Community 64 - "TransportWindow"
-Cohesion: 0.15
-Nodes (4): EdenWindow, PageDef, Pin, TransportWindow
+### Community 64 - "WorldFamilyInfo"
+Cohesion: 0.03
+Nodes (47): GuildState, InGuild, WorldFamilyInfo, BusinessTax, CreateTime, Emblem, Exp, Exploit (+39 more)
 
-### Community 65 - "Protocol/WorldMessages.cs"
-Cohesion: 0.02
-Nodes (111): CharacterDataChunk, Blob, Name, Opcode, WorldApexBuffer, Buffer, Flag, Name (+103 more)
+### Community 65 - "WorldCreateCharacterData"
+Cohesion: 0.29
+Nodes (7): WorldCreateCharacterData, Appearance, ClassId, Flag, Name, Opcode, Race
 
 ### Community 66 - "CeguiNode"
-Cohesion: 0.11
-Nodes (12): CeguiNode, Children, IsAutoWindow, Name, PropLists, Props, Type, FalagardMapping (+4 more)
+Cohesion: 0.09
+Nodes (19): UiBuildReport, Errors, IgnoredProps, LayoutsFailed, LayoutsOk, PrefixTypes, UnknownTypes, CeguiNode (+11 more)
 
-### Community 67 - "Control"
-Cohesion: 0.03
-Nodes (26): StatSplit, AdvancedStatsWindow, Dim, Gold, Ink, Last, ArrowGlyph, ClassWindow (+18 more)
+### Community 67 - "Color"
+Cohesion: 0.04
+Nodes (19): StatSplit, AdvancedStatsWindow, Dim, Gold, Ink, Last, Host, ItemTooltip (+11 more)
 
 ### Community 68 - "Vector2"
-Cohesion: 0.03
-Nodes (21): DropArea, SellDropSlot, Item, CostumeWindow, SlotCell, DragHelper, DragProbe, HudWindowDrag (+13 more)
+Cohesion: 0.02
+Nodes (36): A1.1 — Lockups après combat/kill + Espace qui rouvre un panneau, A1.2 — Clic droit dans le vide → deselect targetframe, A1. Fondations input — causes racine prouvées, TreasurePickup, PickRadiusPx, PickupRange, DropArea, SellDropSlot (+28 more)
 
 ### Community 69 - "Deplacement / monde — 14/17 traites"
 Cohesion: 0.02
-Nodes (86): Deplacement / monde — 14/17 traites, Migration World→Zone — protocole CTicket (phase 4), CNC_CZ_ClientMigrationDone, Name, Opcode, Value, CNC_CZ_ClientTicketInvalid, Name (+78 more)
+Nodes (95): Deplacement / monde — 14/17 traites, 2026-10-15 — Entrée en jeu E2E validée (World C# + Zone native), CNC_CZ_ClientEnterStarWayData, Field1, Field2, Field3, Field4, Field5 (+87 more)
 
-### Community 70 - "EeSkin"
+### Community 70 - "Texture2D"
+Cohesion: 0.04
+Nodes (37): ADR-0006 — Thèmes et atlas UI du portage 4.7 (exception à « EDENFR pur »), Conséquences, Contexte, Décision, Architecture, Constructions Falagard ignorées (compteur `CeguiLookNFeel.Ignored`), Démo, Géométrie : UnifiedAreaRect → ancres Godot (+29 more)
+
+### Community 71 - "CNC_CL_ClientHello"
 Cohesion: 0.06
-Nodes (26): ADR-0006 — Thèmes et atlas UI du portage 4.7 (exception à « EDENFR pur »), Conséquences, Contexte, Décision, PaletteSlot, DarkLine, GreyBtn, GreyBtnHover (+18 more)
-
-### Community 71 - "CNC_CL_ClientGetWorldServers"
-Cohesion: 0.03
-Nodes (76): 1. Contexte & Architecture Native, 2. Table des Commandes Réseau (Opcodes), 3. Détail des Structures et Sérialisation Binaire, 4. Machine à États et Cycle de Vie Session, 5. Interactions Base de Données (`fnaccount` & `fndb1`), Opcode 0 : `CNC_CL_ServerHello` (Serveur -> Client), Opcode 1 : `CNC_CL_ServerLoginAccount` (Client -> Serveur), Opcode 2 : `CNC_CL_ServerLoginWorld` (Client -> Serveur) (+68 more)
+Nodes (38): 1. Contexte & Architecture Native, 2. Table des Commandes Réseau (Opcodes), 3. Détail des Structures et Sérialisation Binaire, 4. Machine à États et Cycle de Vie Session, 5. Interactions Base de Données (`fnaccount` & `fndb1`), Opcode 0 : `CNC_CL_ServerHello` (Serveur -> Client), Opcode 1 : `CNC_CL_ServerLoginAccount` (Client -> Serveur), Opcode 3 : `CNC_CL_ClientHello` (Client -> Serveur) (+30 more)
 
 ### Community 72 - "CNE_ZW_ZoneServerUpdateFortuneBag"
-Cohesion: 0.02
-Nodes (115): Monde → Zone (S>C), Table des commandes ZW, 2026-10-15 — Entrée en jeu E2E validée (World C# + Zone native), CNC_CZ_ClientEnterStarWayData, Field1, Field2, Field3, Field4 (+107 more)
+Cohesion: 0.01
+Nodes (131): 46 — Lien World↔Zone (ZW) et entrée en jeu, Captures de référence, Format `CNC_ZW_ZoneServerUpdateStarWay` (NCID 29), MissionServer — switches de features, Monde → Zone (S>C), Pourquoi StarWay bloquait l'entrée (le bug "Server connection: Failure"), Restes connus, Séquence d'enregistrement de la zone (+123 more)
 
 ### Community 73 - "NeobankWindow"
 Cohesion: 0.04
-Nodes (24): ItemTableCache, BankWindow, FamilyStorageWindow, NeobankWindow, StorageItemCell, ContIndex, Item, Kind (+16 more)
+Nodes (20): BankWindow, FamilyStorageWindow, NeobankWindow, ShopWindow, StorageItemCell, ContIndex, Item, Kind (+12 more)
 
 ### Community 74 - "GameDataService"
 Cohesion: 0.02
-Nodes (90): Ajouter du contenu, Arborescence requise (source unique), Ce que sont les .ini, Gamedata — les fichiers .ini : d'où ils viennent, pourquoi pas en DB, Le problème qu'il y avait (corrigé), Pourquoi pas en base de données ?, Addendum post-crash — finalisation, Corrections (+82 more)
+Nodes (111): Ajouter du contenu, Arborescence requise (source unique), Ce que sont les .ini, Gamedata — les fichiers .ini : d'où ils viennent, pourquoi pas en DB, Le problème qu'il y avait (corrigé), Pourquoi pas en base de données ?, Addendum post-crash — finalisation, Corrections (+103 more)
 
 ### Community 75 - "Eden.Core.Logging"
 Cohesion: 0.03
-Nodes (35): Eden.Zone.Links, Eden.Core.Game.WorldBoss, Eden.Core.Game.Work, Eden.Zone.Combat, Eden.Core.Game.Social, Eden.Core.Networking.Messages.Generated, Eden.Core.Game.Family, Eden.Core.Networking (+27 more)
+Nodes (32): Eden.Zone.Links, Eden.Core.Game.WorldBoss, Eden.Core.Networking.Transport, Eden.Login.Handlers, Eden.Zone.Combat, Eden.Core, Eden.Core.Networking.Messages.Generated, Eden.Core.Networking (+24 more)
 
-### Community 76 - "Protocol/ZoneMessages.cs"
-Cohesion: 0.02
-Nodes (100): ZoneClientHello, Name, Opcode, Value, ZoneDailyAwardOp, Field1, Field2, Name (+92 more)
+### Community 76 - "ZoneEnterNodeNodeData"
+Cohesion: 0.25
+Nodes (8): ZoneEnterNodeNodeData, Field1, Field2, Name, Opcode, X, Y, Z
 
 ### Community 77 - "ZonePutItem"
-Cohesion: 0.05
-Nodes (31): PlayerBag, Items, ZoneDropItem, ContainerIndex, ContainerType, Name, Opcode, Slot (+23 more)
+Cohesion: 0.06
+Nodes (30): PlayerBag, Items, ZoneDropItem, ContainerIndex, ContainerType, Name, Opcode, Slot (+22 more)
 
 ### Community 78 - "CNC_CZ_ClientElfAdd"
 Cohesion: 0.02
-Nodes (100): Pet / elf — 14/15 traites, A. Sous-système pets natif (CKFElf / CElfPet), Implémentation, Preuves natives, CNC_CZ_ClientElfAdd, Field1, Field10, Field11 (+92 more)
+Nodes (105): Combat : codé, mais incomplet, Etat des NCIDs — protocole client <-> zone, Paquets entrants (C>Z), Pet / elf — 14/15 traites, Quêtes — régression compteur, Verdict — les gros systèmes sont-ils codés ?, A. Sous-système pets natif (CKFElf / CElfPet), Implémentation (+97 more)
 
 ### Community 79 - "CharSelectScreen"
 Cohesion: 0.03
-Nodes (31): 4. Équipement, gemmes, fortify, costumes, 4b. A4.5 trait héroïque, combos boîte magique, gold, guilde, 6. Écrans hors-HUD (chaîne de connexion), A5.7 — Loading screen : langue + positionnement, BootScreen, ChannelSelectScreen, Mgr, CharCreateScreen (+23 more)
+Nodes (41): 4b. A4.5 trait héroïque, combos boîte magique, gold, guilde, 6. Écrans hors-HUD (chaîne de connexion), Bake production, DISPLAY=:0 (mips + S3TC — fidèle prod), Headless (2 runs, écart < 3 %), Limites, Méthodologie, Observations pour l'étape bake (hors gate) (+33 more)
 
 ### Community 80 - "PlayerController"
 Cohesion: 0.03
-Nodes (47): A1.1 — Lockups après combat/kill + Espace qui rouvre un panneau, A1.2 — Clic droit dans le vide → deselect targetframe, A1. Fondations input — causes racine prouvées, AutoAttack, AttackReach, Engaged, RechaseInterval, Registry (+39 more)
+Nodes (51): Contrôles caméra / déplacement, Notes gameplay — comportements du client originel (spec), Références serveur pour les paquets, À implémenter (ordre), État animations (25/10), Murs invisibles - recapitulatif par map (147 maps), AutoAttack, AttackReach (+43 more)
 
 ### Community 81 - "ZoneLoop"
-Cohesion: 0.03
-Nodes (57): 7. PLAN (phases ordonnées), PHASE 0 — AGENTS.md, baseline et banc d'essai, PHASE 2 — Entrée de session et base de données (priorité n°1 des mesures), PHASE 3 — Combat/kill et persistance progressive, PHASE 5 — Ressenti gameplay client (ajouts utilisateur 2026-10-26), Phase 2 — modèle acteur par zone, Phase 0-bis — plateforme, Phase 0 — gains rapides (+49 more)
+Cohesion: 0.02
+Nodes (72): 7. PLAN (phases ordonnées), PHASE 0 — AGENTS.md, baseline et banc d'essai, PHASE 2 — Entrée de session et base de données (priorité n°1 des mesures), PHASE 3 — Combat/kill et persistance progressive, PHASE 5 — Ressenti gameplay client (ajouts utilisateur 2026-10-26), Serveur, 1.1 Packages NuGet, 1.2 Couche réseau (+64 more)
 
 ### Community 82 - "PartyHud.BindSession"
 Cohesion: 0.03
-Nodes (59): Entry, AaPoint, ClassExp, ClassId, ClassLevel, ClassPoints, Licenses, Style (+51 more)
+Nodes (59): ZoneClientTeamRadarAttention, Field1, Field2, Field3, Name, Opcode, NpcSymbol, ZoneUpdateNpcSymbols (+51 more)
 
 ### Community 83 - "OutBinStream.ToArray"
-Cohesion: 0.03
-Nodes (14): ColosseumPackets, TeamMember, FamilyBattlePackets, FamilyPackets, ItemMallPackets, EvaluatePackets, FastDressPackets, CNC_CZ_ClientEchoPong (+6 more)
+Cohesion: 0.02
+Nodes (22): P14 — Guilde / famille, ColosseumPackets, TeamMember, FamilyBattlePackets, FamilyPackets, RejectReason, Malformed, TooNew (+14 more)
 
 ### Community 84 - "CNE_ZMis_ZoneServerStartColosseum"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (26): CNE_ZMis_ZoneServerStartColosseum, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+18 more)
 
 ### Community 85 - "GrassInstance"
@@ -1740,39 +1880,39 @@ Nodes (16): GrassInstance, Flags, ParamA, ParamB, Position, Scale, TypeId, Grass
 
 ### Community 86 - "CombatantSnapshot"
 Cohesion: 0.02
-Nodes (93): CombatantSnapshot, AgiPct, AgiTotal, BonusAttackSpeed, BonusAttackSpeedPercent, BonusBlockRate, BonusCastSpeed, BonusCastSpeedPercent (+85 more)
+Nodes (92): CombatantSnapshot, AgiPct, AgiTotal, BonusAttackSpeed, BonusAttackSpeedPercent, BonusBlockRate, BonusCastSpeed, BonusCastSpeedPercent (+84 more)
 
 ### Community 87 - "InvalidDataException"
 Cohesion: 0.10
-Nodes (8): ReceiveBuffer, MaxFrameSize, Pending, VarintCodec, ReceiveBufferTests, VarintCodecTests, ReceiveBufferTests, VarintCodecTests
+Nodes (9): Frame, ReceiveBuffer, MaxFrameSize, Pending, VarintCodec, ReceiveBufferTests, VarintCodecTests, ReceiveBufferTests (+1 more)
 
 ### Community 88 - "CeguiLookNFeel"
 Cohesion: 0.04
-Nodes (65): CeguiColourRect, CeguiFrameComponent, ColourRectProperty, Colours, Images, CeguiImageryComponent, ColourProperty, ColourRectProperty (+57 more)
+Nodes (57): CeguiColourRect, CeguiFrameComponent, ColourRectProperty, Colours, Images, CeguiImageryComponent, ColourProperty, ColourRectProperty (+49 more)
 
-### Community 89 - "Action"
-Cohesion: 0.03
-Nodes (62): DestinyBridge, LoverBridge, WorldClientLookingForMemberResult, Field1, Field2, Field3, Field4, Field5 (+54 more)
+### Community 89 - "WorldClientUpdateFortuneBagContentList"
+Cohesion: 0.18
+Nodes (11): WorldClientUpdateFortuneBagContentList, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
 
 ### Community 90 - "re"
 Cohesion: 0.03
-Nodes (67): main(), merge_stem(), orphan_stems(), read_glb(), write_glb(), main(), motion_names_by_stem(), read_glb() (+59 more)
+Nodes (63): main(), motion_names_by_stem(), read_glb(), trim(), write_glb(), direction_of(), load_client_protocol(), load_gen_opcodes() (+55 more)
 
 ### Community 91 - "CubeService"
-Cohesion: 0.14
-Nodes (8): CostCheck, AuxItemIds, AuxQualities, Consumed, CubeService, RecipeCount, ProducedItem, CubeServiceTests
+Cohesion: 0.11
+Nodes (13): Implémentation, Limites assumées (marquées HYPOTHESIS/TODO en code), Lot — Cube Horadric (S_ItemChest) — portage CItemFactory::CheckCubeCosts/ExecuteCubeOp, Preuves natives (zone/decompiled.c), CostCheck, AuxItemIds, AuxQualities, Consumed (+5 more)
 
 ### Community 92 - "IniTable.Parse"
-Cohesion: 0.04
-Nodes (24): IniTable, ColumnCount, Rows, Separator, Version, Baked, ColCount, Rows (+16 more)
+Cohesion: 0.05
+Nodes (19): IniTable, ColumnCount, Rows, Separator, Version, Baked, ColCount, Rows (+11 more)
 
 ### Community 93 - "SocialWindow.BindWorldHandlers"
-Cohesion: 0.01
-Nodes (199): FamilyOps, FriendEntry, GuildBoardMessage, GuildLogEntry, GuildMember, GuildRecruitEntry, GuildState, InGuild (+191 more)
+Cohesion: 0.02
+Nodes (103): GuildBoardMessage, GuildLogEntry, GuildMember, GuildRecruitEntry, SocialState, WorldFamilyEmblem, Data, FamilyId (+95 more)
 
 ### Community 94 - "StatContribution"
-Cohesion: 0.03
-Nodes (59): Ordre de travail, PLAN D'ACTION — UI, gameplay et systèmes (v2, 2026-10-30), Références obligatoires par item, J. STATS — ordre d'application (demande user), 1. Pets — « Pets unavailable in this zone! » (8350) — ✅ FAIT, 2. Statuts/buffs — les stats ne bougent pas — ✅ FAIT, 3. Monture — strafe sans rotation du corps — ✅ côté serveur (à retester), 4. Montures de combat — anims d'attaque — ✅ FAIT (à retester) (+51 more)
+Cohesion: 0.04
+Nodes (50): Ordre de travail, PLAN D'ACTION — UI, gameplay et systèmes (v2, 2026-10-30), Références obligatoires par item, P5 — Stats & effets d'équipement, Provider, StatContribution, AttackSpeedAdd, AttackSpeedRatePercent (+42 more)
 
 ### Community 95 - "EdenConfig"
 Cohesion: 0.02
@@ -1782,237 +1922,245 @@ Nodes (84): EdenConfig, AccountDbConn, AdvertiseIp, AdvertisePort, ClassExpRate,
 Cohesion: 0.03
 Nodes (56): PlayerVitals, AaPoint, ActiveClass, BaseStats, ClassExp, Exp, Gold, Hp (+48 more)
 
-### Community 97 - "HotCharacterStore"
-Cohesion: 0.19
-Nodes (6): HotCharacterStore, DirtySet, HotPosition, HotSnapshot, IsEmpty, HotVitals
+### Community 97 - "ElfBridge.OnAction"
+Cohesion: 0.04
+Nodes (46): PetClientRules, ZoneElfChangeName, Loc, Name, NewName, Opcode, ZoneElfMix, LocConsumed (+38 more)
 
 ### Community 98 - "Theory"
-Cohesion: 0.05
-Nodes (3): HeroTraitWire, HeroTrait, ScenePlan02Tests
+Cohesion: 0.04
+Nodes (9): CostumeVisual, HeroTraitWire, UiThemeBoot, CharModelSpecTests, HeroTrait, PrestigeTests, RideLoginTests, ScenePlan02Tests (+1 more)
 
-### Community 99 - "system_buffers_binary"
-Cohesion: 0.06
-Nodes (5): Eden.Bots, EdenPack, EdenClient.Vfs, BotCharacter, CharacterDirectory
+### Community 99 - "EdenClient.Vfs"
+Cohesion: 0.04
+Nodes (7): Eden.Bots, EdenPack, EdenClient.Vfs, EdenClient.Fx, BotCharacter, CharacterDirectory, EntryReplay
 
 ### Community 100 - "EnchantService"
 Cohesion: 0.03
-Nodes (55): Limites / à vérifier, Politique adoptée (lot 12), Résumé des divergences, Table complète, TABLES-DIVERGENCE — audit S_* serveur vs tables client Reforged, 11 - Système d'Enchantement, 1. Description, 2. Symboles lapis:: (+47 more)
+Nodes (59): Limites / à vérifier, Politique adoptée (lot 12), Résumé des divergences, Table complète, TABLES-DIVERGENCE — audit S_* serveur vs tables client Reforged, 11 - Système d'Enchantement, 1. Description, 2. Symboles lapis:: (+51 more)
 
 ### Community 101 - "LevelRow"
 Cohesion: 0.02
 Nodes (76): ✅ 1.1 Système de Classes et Changement de Classe, ✅ 1.2 Création et Suppression de Personnage, 🟡 1.3 Stats et Profil Joueur, 1.3 Stats et Profil Joueur, ✅ PHASE 1: Systèmes Fondamentaux du Personnage (Priorité MAX), EquipSetDef, Id, PositionLists (+68 more)
 
 ### Community 102 - "Eden.Core.Database.Repositories"
-Cohesion: 0.06
-Nodes (8): Eden.Core.Database.Repositories, Eden.Core.Game.Trade, Eden.Core.Hot, Eden.Core.Game.Auction, Eden.Core.Game.Bank, Eden.Core.Database, Eden.Core.Game.Limitless, Stats
+Cohesion: 0.04
+Nodes (10): Eden.Core.Database.Repositories, Eden.Core.Game.Trade, Eden.Core.Hot, Eden.Core.Game.Auction, Eden.Core.Game.Bank, Eden.Core.Database, Eden.Core.Game.Mall, Eden.Core.Game.Limitless (+2 more)
 
 ### Community 103 - "GameScene"
-Cohesion: 0.04
-Nodes (37): GameScene, MobTestActive, ZoneTextCommand, Name, Opcode, Text, ZoneChannelMsg, Blob (+29 more)
+Cohesion: 0.03
+Nodes (51): GameScene, MobTestActive, ZoneTextCommand, Name, Opcode, Text, ZoneChannelMsg, Blob (+43 more)
 
 ### Community 104 - "Protocol/ZoneHudMessages.cs"
-Cohesion: 0.02
+Cohesion: 0.03
 Nodes (71): PlayerHudData, InventorySlot, NativeInventoryParser, LastFailure, NativePlayerDataParser, PlayerHudData, ZoneChannelMsg, Blob (+63 more)
 
 ### Community 105 - "ItemCombo"
 Cohesion: 0.03
-Nodes (59): 09 - Système de Craft de Base, 1. Description, 2. Symboles lapis::, 3. Données décodées (MyCrypt), 4. Implémentation C#, 5. Tests, 6. TODO / À reverser, S_ElfCombine.ini — `V.5,23,` (957 recettes, séparateur `,`) (+51 more)
+Nodes (61): 09 - Système de Craft de Base, 1. Description, 2. Symboles lapis::, 3. Données décodées (MyCrypt), 4. Implémentation C#, 5. Tests, 6. TODO / À reverser, S_ElfCombine.ini — `V.5,23,` (957 recettes, séparateur `,`) (+53 more)
 
 ### Community 106 - "ZoneAchievementUpdate"
 Cohesion: 0.05
 Nodes (31): PlayerAchievements, Counters, HuntPoints, LastKind4Ids, LastKind5Ids, Points, TotalPoints, TownPoints (+23 more)
 
 ### Community 107 - "convert.py"
-Cohesion: 0.07
-Nodes (11): convert_kf(), keygroup_keys(), _lst(), quat_mul(), SceneBuilder, mark(), static_transform_channels(), transform_data_channels() (+3 more)
+Cohesion: 0.05
+Nodes (26): _accumulate(), convert_kf(), convert_one(), keygroup_keys(), _lst(), main(), mat3_cols(), nitransform_to_mat4() (+18 more)
 
 ### Community 108 - "CNE_DBA_ClientMissionState"
 Cohesion: 0.03
-Nodes (76): Combat : codé, mais incomplet, Etat des NCIDs — protocole client <-> zone, Paquets entrants (C>Z), Quetes / missions — 6/10 traites, Quêtes — régression compteur, Verdict — les gros systèmes sont-ils codés ?, CNE_CZ_ZoneServerCloseMissionBrief, Name (+68 more)
+Nodes (71): Quetes / missions — 6/10 traites, CNE_CZ_ZoneServerCloseMissionBrief, Name, Opcode, CNE_CZ_ZoneServerGiveUpMission, Name, Opcode, Value (+63 more)
 
 ### Community 109 - "EpkWriter.Build"
-Cohesion: 0.06
-Nodes (13): EpkCrypto, EpkEncryptor, EpkFormat, EpkManifest, PackRef, CryptoSpec, SignKeyId, PackOps (+5 more)
+Cohesion: 0.08
+Nodes (9): EpkManifest, PackRef, CryptoSpec, SignKeyId, PackOps, EpkCryptoTests, EpkManifest, PackRef (+1 more)
 
-### Community 110 - "ItemTipFormat"
-Cohesion: 0.09
-Nodes (3): ItemTipFormat, ItemTipFormatTests, ItemTipFormatTests
+### Community 110 - "ItemPreviewWindow"
+Cohesion: 0.05
+Nodes (16): Debug / preuve visuelle, Implémentation client, Montures — position/orientation d'attache du cavalier (nœud `L17`), Source et sémantique (natif), RideLab, SkinTest, ItemPreviewWindow, Instance (+8 more)
 
-### Community 111 - "Combat / sorts — 15/17 traites"
-Cohesion: 0.02
-Nodes (79): Combat / sorts — 15/17 traites, CNE_CZ_ZoneServerBuySpell, Name, Opcode, Value, CNE_CZ_ZoneServerElfRevive, Name, Opcode (+71 more)
+### Community 111 - "ZoneLotGTests"
+Cohesion: 0.07
+Nodes (4): TerrainSampler, FsmTests, FsmTests, ZoneLotGTests
 
 ### Community 112 - "CharTintTests"
-Cohesion: 0.12
-Nodes (6): CharTint, Kind, Hair, None, Skin, CharTintTests
+Cohesion: 0.08
+Nodes (9): CharTint, Kind, Hair, None, Skin, CharTintTests, DdsInfoTests, DdsBc2Tests (+1 more)
 
-### Community 113 - "Eden.Core.Networking"
-Cohesion: 0.07
-Nodes (16): Eden.Core.Networking.Transport, Eden.Login.Handlers, Eden.Core, Eden.Core.Security, Eden.World, Eden.Core.Database.Entities, Eden.Ticket.Services, Eden.Core.Networking.Messages.Zone (+8 more)
+### Community 113 - "CharacterNumberEntity"
+Cohesion: 0.40
+Nodes (4): CharacterNumberEntity, AccountId, CharacterCount, WorldId
 
 ### Community 114 - "ReadOnlySpan"
-Cohesion: 0.04
-Nodes (28): CStrings, GrassType, ModelName, TypeId, Matrix3x3, Column0, Column1, Column2 (+20 more)
+Cohesion: 0.05
+Nodes (27): CStrings, GrassType, ModelName, TypeId, Matrix3x3, Column0, Column1, Column2 (+19 more)
 
 ### Community 115 - "ZoneClientSearchTeamInfo"
 Cohesion: 0.11
 Nodes (16): MemberEntry, TeamEntry, Members, ZoneClientSearchTeamInfo, Name, Opcode, Teams, Value (+8 more)
 
 ### Community 116 - "WeddingService"
-Cohesion: 0.08
-Nodes (15): Wedding, ApplicantId, LoveId, Name1, Name2, Partner1Id, Partner2Id, Status (+7 more)
+Cohesion: 0.09
+Nodes (13): Wedding, ApplicantId, LoveId, Name1, Name2, Partner1Id, Partner2Id, Status (+5 more)
 
 ### Community 117 - "MissionSession"
-Cohesion: 0.10
-Nodes (8): + CRUSADE V1 (commits récents), Lot : message board (panneau d'affichage) — CNE_CZ 138-142, Éditions, Incréments proposés, Battle, CrusadeService, TickEvent, MissionServer
+Cohesion: 0.06
+Nodes (21): Crusade (siège guild-vs-guild) — design d'implémentation, Différence vs battlefield, Natif — crusade = CBattleCrusadeFactory + CCrusadeEventCmds, Note — S_Crusade.ini est descriptif, Plan V1, Pont siège — réutilise le système CEventCmd zone existant, Preuve native — StartBattleCrusade zone = STUB VIDE, Références (+13 more)
 
 ### Community 118 - "CharColorTable"
-Cohesion: 0.21
-Nodes (3): CharColorTable, Rgb, CharColorTests
+Cohesion: 0.12
+Nodes (6): CharColorTable, Rgb, CharColorTests, CharColorTable, Rgb, CharColorTests
 
 ### Community 120 - "Prompt5 — suivi des 3 chantiers Limitless"
 Cohesion: 0.03
 Nodes (75): Avancement V1 (commits ef8d12c+), Backend complet (build 0 err), Backend — ProgressController (commité, build 0 err), Backend V1 étendu (build 0 err), Battlefield — précision audit, Bilan définitif de session autonome, BILAN FINAL — builds tous propres (zone/studio/backend 0 err), Bilan final de session (+67 more)
 
-### Community 121 - "Protocol/ZoneMailMessages.cs"
-Cohesion: 0.03
-Nodes (72): ZoneMailDelete, Ids, MailId, Name, Opcode, ZoneMailDeleteResult, MailId, Name (+64 more)
+### Community 121 - "ZoneMailSend"
+Cohesion: 0.18
+Nodes (11): ZoneMailSend, Body, CodAmount, Flag, Gold, ItemBag, ItemSlot, Name (+3 more)
 
 ### Community 122 - "CNC_CZ_ClientEnterNodeElfContainer"
 Cohesion: 0.07
 Nodes (30): CNC_CZ_ClientEnterNodeElfContainer, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
-### Community 123 - "HudBinder.Compute"
-Cohesion: 0.27
-Nodes (4): HudBinder, HudNodeValue, HudPanelDef, HudModelTests
+### Community 123 - "IEnumerable"
+Cohesion: 0.06
+Nodes (17): Lot — Métiers / LifeSkill (S_LifeSkill, recettes, analyse & production), Modèle natif décodé, Points d'édition, Points d'édition, C1. Interface profil = stats fake + types d'armure faux, C. PROFIL / STATS — refonte complète, Points d'édition, ILifeSkillRepository (+9 more)
 
 ### Community 124 - "BotResult"
 Cohesion: 0.10
 Nodes (20): BotResult, Attacks, CharacterId, CharacterName, Echoes, Entered, Entities, EntryMs (+12 more)
 
 ### Community 125 - "FsmFile"
-Cohesion: 0.04
-Nodes (37): Pièges vérifiés, FsmFile, FormatRevision, GrassInstances, GrassTypes, Header, SceneObjects, Tiles (+29 more)
+Cohesion: 0.03
+Nodes (58): Pièges vérifiés, Arborescence réelle, Architecture — état réel (2026-11-02) et cible, Cible (plan source §3, à atteindre par lots), Frontières, SessionCarry, FsmFile, FormatRevision (+50 more)
 
 ### Community 126 - "ZoneLoverInfo"
-Cohesion: 0.03
-Nodes (68): ZoneLoverBreak, Name, Opcode, Value, ZoneLoverBreakRequest, Name, Opcode, ZoneLoverInfo (+60 more)
+Cohesion: 0.12
+Nodes (17): ZoneLoverInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field2 (+9 more)
 
 ### Community 127 - "ParticleSim"
-Cohesion: 0.02
-Nodes (102): BillboardView, ParticleRenderData, Colors, InstanceCount, Transforms, Particle, ParticleSim, BoundsMax (+94 more)
+Cohesion: 0.03
+Nodes (104): GeomHead, BillboardView, ParticleRenderData, Colors, InstanceCount, Transforms, Particle, ParticleSim (+96 more)
 
-### Community 128 - "TalentService.GetTree"
+### Community 128 - "TalentService"
 Cohesion: 0.07
-Nodes (11): KillLoopProbe, PerfProbe, Enabled, HitchMs, C — Client mod (`clientmod/limitless/**`, 1 agent), G — Jeu serveur (`server/**`, 1 agent), Journal, Lot 11 — prompt10b : régressions + achèvement (site, studio, jeu) (+3 more)
+Nodes (21): C — Client mod (`clientmod/limitless/**`, 1 agent), G — Jeu serveur (`server/**`, 1 agent), Journal, Lot 11 — prompt10b : régressions + achèvement (site, studio, jeu), S — Studio (`limitless/studio/**`, 1 agent), W — Site web (`limitless/web/frontend/**`, 1 agent), C — HUD (`clientmod/limitless/**`), G — Talents canoniques (`server/**`, S_Talent/C_Talent) (+13 more)
 
 ### Community 129 - "ZoneTeamAllMembersInfo"
-Cohesion: 0.14
-Nodes (8): PartyState, InTeam, LeaderId, ZoneTeamAllMembersInfo, Members, Name, Opcode, TeamMode
+Cohesion: 0.17
+Nodes (5): ZoneTeamAllMembersInfo, Members, Name, Opcode, TeamMode
 
 ### Community 130 - "Pathfinder.Find"
 Cohesion: 0.05
 Nodes (16): NodeMapFile, Cols, Height, Rows, Width, Pathfinder, NodeMapTests, PathfinderTests (+8 more)
 
 ### Community 131 - "SkillCast.BindSession"
-Cohesion: 0.02
-Nodes (92): ZoneClientCommandFailReturn, FailedOpcode, Name, Opcode, Param, ZoneClientSpellBlastOK, BlastId, Flag (+84 more)
+Cohesion: 0.04
+Nodes (48): ZoneClientDie, Flags, Killer, Name, Opcode, Victim, ZoneClientCommandFailReturn, FailedOpcode (+40 more)
 
-### Community 132 - "Protocol/ZoneItemMallMessages.cs"
-Cohesion: 0.03
-Nodes (56): ItemMallLimit, ItemMallReceipt, ItemMallResults, WorldItemMallAnything, Anything, Name, Opcode, WorldItemMallAnythingQuery (+48 more)
+### Community 132 - "WorldItemMallBuyRequest"
+Cohesion: 0.20
+Nodes (10): WorldItemMallBuyRequest, Amount, Field5, Field7, Index, Key, Name, Opcode (+2 more)
 
 ### Community 133 - "MissionService"
 Cohesion: 0.04
 Nodes (46): 1. Description, 2. Symboles lapis::, 39 - Système de Quêtes, 3. Données : S_Mission.ini (`|V.5|28|`), 4. Implémentation C#, 5. Tests, 6. TODO / À reverser, Langage de script (27 commandes recensées) (+38 more)
 
 ### Community 134 - "AltarKind"
-Cohesion: 0.22
+Cohesion: 0.18
 Nodes (7): ILotteryRepository, LotteryRepository, AltarKind, Diamond, InGame, Normal, PlayerLotteryState
 
 ### Community 135 - "ZoneEntityRegistry"
-Cohesion: 0.08
+Cohesion: 0.07
 Nodes (15): EntDanger, Aggressive, LowLevel, Passive, Unknown, EntDangerRules, EntKind, Monster (+7 more)
 
 ### Community 136 - "QuestEngine"
-Cohesion: 0.10
-Nodes (7): MissionSession, Tap, DialogAction, QuestEngine, TalkEntry, CharContext, Data
+Cohesion: 0.11
+Nodes (6): MissionSession, DialogAction, QuestEngine, TalkEntry, CharContext, Data
 
 ### Community 137 - "CeguiWidgetLook"
 Cohesion: 0.06
-Nodes (33): CeguiBuilder, Report, UiPart, Bottom, BottomLeft, BottomRight, Center, Left (+25 more)
+Nodes (39): CeguiBuilder, Report, UiPart, Bottom, BottomLeft, BottomRight, Center, Left (+31 more)
 
 ### Community 138 - "Lot : 10 derniers entrants `CNE_CW_` non gérés"
 Cohesion: 0.40
 Nodes (4): Limites assumées, Lot : 10 derniers entrants `CNE_CW_` non gérés, Preuves natives (world), SCharacter (fill `IsAccountHaveCharacter` @0x809fb50)
 
 ### Community 139 - "MissionBridge"
-Cohesion: 0.06
-Nodes (18): Debug / preuve visuelle, Implémentation client, Montures — position/orientation d'attache du cavalier (nœud `L17`), Source et sémantique (natif), AnimMatrix, Entry, MissionBridge, Transport (+10 more)
+Cohesion: 0.09
+Nodes (14): MissionBridge, Transport, PortalArrival, Pending, Version, Req, RideDebug, Verbose (+6 more)
 
-### Community 142 - "CharacterListChunk"
-Cohesion: 0.20
-Nodes (8): CharacterListChunk, Characters, Name, Opcode, Entry, Preview, PreviewItem, PreviewItem
+### Community 140 - "PacketReceiveBuffer"
+Cohesion: 0.09
+Nodes (15): Phase 0-bis — plateforme, Phase 0 — gains rapides, Phase 1 — harnais wire, Plan — Fiabilisation Phases 0 / 0-bis / 1 (22 oct. 2026), Objectif, Phase 1 — `PacketReceiveBuffer` sur les liens inter-serveurs de la zone, Points d'édition, Sémantique de framing à conserver (+7 more)
+
+### Community 141 - "ZoneLiveWorld"
+Cohesion: 0.08
+Nodes (12): Fichiers, Modèle, Plan — Instancing des nœuds de donjon (CNodeGroup natif), Problème, Risques / points de vigilance, Tests, SeenEntity, ZoneLiveWorld (+4 more)
+
+### Community 142 - "ClientConfig"
+Cohesion: 0.06
+Nodes (28): CharacterListChunk, Characters, Name, Opcode, Entry, Preview, PreviewItem, Entry (+20 more)
 
 ### Community 143 - "CNC_CZ_ClientQueryPlayerCard"
 Cohesion: 0.03
-Nodes (71): CNC_CZ_ClientBagDueDate, Field1, Field2, Name, Opcode, CNC_CZ_ClientMessageRead, Field1, Field2 (+63 more)
+Nodes (62): CNC_CZ_ClientMessageRead, Field1, Field2, Field3, Name, Opcode, CNC_CZ_ClientQueryPlayerCard, CharId (+54 more)
 
 ### Community 144 - "HudRoot"
 Cohesion: 0.02
-Nodes (43): A5.8 — Audit exhaustif panels : langue + thème (transverse), CastBar, Instance, ClassSwitchFx, HudRoot, Banner, Chat, ChatHasFocus (+35 more)
+Nodes (69): 1. HUD permanent (toujours visible en jeu), 9. Raccourcis et clés de test, État vague « layouts natifs » (nov. 2026), A5.8 — Audit exhaustif panels : langue + thème (transverse), 0. Les 7 règles d'or, 1. Boucle de travail standard, 2. Cas d'école A — refondre l'UI du panneau Settings, 4. Anti-patterns à éviter (+61 more)
 
 ### Community 145 - "MapEnvIni"
-Cohesion: 0.05
-Nodes (39): MapEnvIni, Sections, Version, Phase, Day, Night, Sunrise, Sunset (+31 more)
+Cohesion: 0.04
+Nodes (42): MapEnvIni, Sections, Version, Phase, Day, Night, Sunrise, Sunset (+34 more)
 
 ### Community 146 - "EpkReader"
 Cohesion: 0.03
 Nodes (44): EpkEntry, EpkIndex, EpkDecryptor, EpkReader, ChunkShift, Decryptor, Flags, IsEncrypted (+36 more)
 
-### Community 147 - "ZoneChangeEquip"
-Cohesion: 0.11
-Nodes (15): ZoneClientDie, Flags, Killer, Name, Opcode, Victim, ZoneChangeEquip, CharId (+7 more)
+### Community 147 - "Account"
+Cohesion: 0.14
+Nodes (20): Account, HealthOfflineTime, HealthOnlineTime, Id, IdCard, ItemMallPassword, LastSaveHealthTime, Password (+12 more)
 
 ### Community 148 - "os"
 Cohesion: 0.04
-Nodes (37): idx(), newcase(), pad(), collect_jobs(), _convert_one(), _copy_one(), dds_format_info(), _expected_dds_bytes() (+29 more)
+Nodes (50): idx(), newcase(), collect_jobs(), _convert_one(), _copy_one(), dds_format_info(), _expected_dds_bytes(), _magick() (+42 more)
 
 ### Community 149 - "ItemDef"
 Cohesion: 0.03
 Nodes (67): ItemDef, AttackElement, AttackRange, AttackSpeed, BagCapacity, Bindable, BonusAgi, BonusHp (+59 more)
 
 ### Community 150 - "KfFile"
-Cohesion: 0.04
-Nodes (54): KfAuxKind, Bool, Float, Point3, KfAuxTrack, KfBSpline, Dim, Ncp (+46 more)
+Cohesion: 0.03
+Nodes (72): KfAnimation, Enabled, KfAuxKind, Bool, Float, Point3, KfAuxTrack, KfBakedSequence (+64 more)
 
 ### Community 151 - "NativeFxHost"
-Cohesion: 0.06
-Nodes (30): Plan d'action 2 — finir le natif et la parité de jeu, IFxDriver, NativeFxReport, NativeFxHost, Culled, Nif, Options, ParticleCount (+22 more)
+Cohesion: 0.04
+Nodes (38): Plan d'action 2 — finir le natif et la parité de jeu, Phase F — Effets, particules et contrôleurs animés (tous les objets, buffs/états, montures, armes, sorts), DemoTree, NativeFxDemo, IFxDriver, MatState, NativeFx, NativeFxOptions (+30 more)
 
 ### Community 152 - "LiveHudData"
 Cohesion: 0.05
-Nodes (41): LiveHudData, Banner, Buffs, Chat, Hotbar, Position, Quests, SelfCharId (+33 more)
+Nodes (45): LiveHudData, Banner, Buffs, Chat, Hotbar, Position, Quests, SelfCharId (+37 more)
 
-### Community 153 - "ZoneSeeChar"
-Cohesion: 0.02
-Nodes (119): ZoneAttrRefresh, Field21, Fields15to18, Fields19to20, Fields1to14, Fields22to29, Fields30to35, Name (+111 more)
+### Community 153 - "ZoneSeeTreasure"
+Cohesion: 0.13
+Nodes (15): ZoneSeeTreasure, Count, Count2, Field10, Field2, Field3, Field9, Handle (+7 more)
 
 ### Community 154 - "NetMessage.ToPayload"
-Cohesion: 0.05
-Nodes (41): ZoneEnterNodePlayerData, CharId, CharName, Name, Opcode, Rest, ZoneLeaveNode, Name (+33 more)
+Cohesion: 0.07
+Nodes (22): ZoneEnterNodePlayerData, CharId, CharName, Name, Opcode, Rest, ZoneLeaveNode, Name (+14 more)
 
 ### Community 155 - "NpcDef"
-Cohesion: 0.05
-Nodes (43): 12.1 Système de Quêtes, 12.2 Dialogue System, PHASE 12: Systèmes de Quêtes et Missions, DialogOption, LifeSkillNode, Id, Products, RequiredLevel (+35 more)
+Cohesion: 0.02
+Nodes (92): 0.1 Décodage MyCrypt ✅, 0.2 Vrais opcodes réseau ✅, 0.3 Tables de configuration ✅, 0.4 Payloads bouclés CNC ✅ (18 layouts reversés au désassembleur), 10.1 Maps et Téléportation 🚧, 10.2 Fast Travel, 11.1 Mail System, 11.2 Taxation et Revenus (+84 more)
 
-### Community 156 - "CNE_ZMis_ZoneServerAuctionSellList"
-Cohesion: 0.10
-Nodes (21): CNE_ZMis_ZoneServerAuctionSellList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+13 more)
+### Community 156 - "ItemMallState"
+Cohesion: 0.09
+Nodes (22): ItemMallReceipt, ItemMallState, AnythingReceivable, Bonus, Entries, LastStatus, Points, Receipts (+14 more)
 
 ### Community 157 - "MonsterEntity"
-Cohesion: 0.04
-Nodes (36): 1. `MonsterService._instances` : `Dictionary` muté depuis le thread timer + threads sessions, 1. Description, 27 - Système de Monstres et Boss, 2. Symboles lapis::, 3. Données : S_Monster.ini (`|V.6|62|`, 12 896 monstres), 4. Implémentation C#, 5. Tests, 5bis. Mort d'un mob — séquence native livrée (18 Oct) (+28 more)
+Cohesion: 0.08
+Nodes (19): MonsterEntity, CurrentHP, CurrentMP, DeadAt, Definition, Facing, InstanceId, IsAlive (+11 more)
 
 ### Community 158 - "Family"
 Cohesion: 0.03
@@ -2020,23 +2168,23 @@ Nodes (79): Family, BeCreateTime, BusinessTax, ElfkingTid, Emblem, EmblemData, E
 
 ### Community 159 - "GameDataParsers"
 Cohesion: 0.03
-Nodes (71): Lecture d'une table `S_*`, Règle d'édition, S_Achievement.ini (15 col), S_Enchant.ini (61 col) — EnchantParser.cs, S_Item.ini (78 col) — ItemParser.cs, S_Level.ini (27 col), S_Mission.ini (28 col) — MissionParser.cs, S_Monster.ini (62 col) — MonsterParser.cs (+63 more)
+Nodes (74): Lecture d'une table `S_*`, Règle d'édition, S_Achievement.ini (15 col), S_Enchant.ini (61 col) — EnchantParser.cs, S_Item.ini (78 col) — ItemParser.cs, S_Level.ini (27 col), S_Mission.ini (28 col) — MissionParser.cs, S_Monster.ini (62 col) — MonsterParser.cs (+66 more)
 
 ### Community 160 - "CombatHandlers.Register"
 Cohesion: 0.02
-Nodes (99): 4.3 Breakpoints de Combat, 11. Services de jeu basés sur les vraies données, 12. Nouveaux parsers de données (vrais fichiers), Lot — Dégâts de combat natifs (CCharFormula), Paramètres S_Parameter (valeurs vérifiées), Points d'édition, Preuves natives (désasm `re/ghidra/zone/decompiled.c` + .rodata), Symptôme (+91 more)
+Nodes (83): 4.3 Breakpoints de Combat, 11. Services de jeu basés sur les vraies données, 12. Nouveaux parsers de données (vrais fichiers), 13. Protocole réseau — vrais opcodes extraits ⭐, 1. Système de Classes et Changement de Classe, 2. Création et Suppression de Personnage, 3. Stats et Profil Joueur, 4. Inventaire et Sacs (+75 more)
 
 ### Community 161 - "InlayService"
-Cohesion: 0.16
-Nodes (4): InlayService, InlayValidation, InlayServiceTests, SeqRandom
+Cohesion: 0.17
+Nodes (5): Éditions — ✅ toutes faites, InlayService, InlayValidation, InlayServiceTests, SeqRandom
 
 ### Community 162 - "ScenePlan02ClientTests"
-Cohesion: 0.06
-Nodes (17): PlayerStateLocks, Any, Cinema, NoAnySkill, NoAttack, NoKungfu, NoMagic, NoMove (+9 more)
+Cohesion: 0.05
+Nodes (23): PlayerStateLocks, Any, Cinema, NoAnySkill, NoAttack, NoKungfu, NoMagic, NoMove (+15 more)
 
 ### Community 163 - "Node"
 Cohesion: 0.04
-Nodes (38): A2.1 — Settings : refonte thème + contenu natif, A2.2 — Profile / journal : contraste, A2. Thème & contraste global, A5.1 — QuestTracker : reflow + mini-titre mob  - NON FAIT, A5.2 — QuestLog : refonte fidèle + objectifs cliquables  - NON FAIT, A5.3 — Profile : hover descriptions stats (table prête), A5.4 — « Position Score de Classe » = `ExpertiseWindows.cs`, A5.5 — « Statistiques avancées » (+30 more)
+Nodes (24): A5.1 — QuestTracker : reflow + mini-titre mob  - NON FAIT, A5.2 — QuestLog : refonte fidèle + objectifs cliquables  - NON FAIT, A5.3 — Profile : hover descriptions stats (table prête), A5.4 — « Position Score de Classe » = `ExpertiseWindows.cs`, A5.5 — « Statistiques avancées », A5.6 — Achievements : refonte + légendaires, A5. Panneaux — refontes, AutoRoute (+16 more)
 
 ### Community 164 - "CNC_ZMis_ZoneServerMailRead"
 Cohesion: 0.03
@@ -2048,63 +2196,63 @@ Nodes (21): CNE_ZMis_ZoneServerRankInfo, Field1, Field10, Field11, Field12, Fiel
 
 ### Community 166 - "AchievementWindow"
 Cohesion: 0.09
-Nodes (4): AchievementProgress, AchievementWindow, AllTitles, Instance
+Nodes (3): AchievementWindow, AllTitles, Instance
 
 ### Community 167 - "DataPaths"
-Cohesion: 0.02
-Nodes (78): Donnée absente, Données EDENFR, Pièges connus, Reconvertir un asset depuis fr-full, Règles (ADR-0002, ADR-0004), Phases (chacune livrée avec ses preuves, dans cet ordre), Défauts connus (2026-11-02, signalés par le propriétaire, non résolus sauf mention), Faits établis (mesurés le 2026-11-02) (+70 more)
+Cohesion: 0.05
+Nodes (31): Donnée absente, Données EDENFR, Pièges connus, Reconvertir un asset depuis fr-full, Règles (ADR-0002, ADR-0004), 1. Comment les données sont chargées aujourd'hui, 2. Format d'origine (référence), 3. Chiffrement — réponse honnête (+23 more)
 
 ### Community 168 - "CNC_CZ_ClientTerritoryQuery"
-Cohesion: 0.09
-Nodes (22): CNC_CZ_ClientTerritoryQuery, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+14 more)
+Cohesion: 0.03
+Nodes (58): 189 `CNE_CZ_ZoneServerTerritoryQuery` — wire VIDE (aucun champ), 190 `CNE_CZ_ZoneServerTerritoryJoin` — wire `[i32 territory_id][s16 type]`, 225 `CNE_CZ_ZoneServerFamilyBattleAskInfo` — wire `[s16 type]`, 515 `CNC_CZ_ClientTerritoryQuery` — Serialize zone @0x82043d0, 561 `CNC_CZ_ClientFamilyBattleInfo` — Serialize zone @0x81e8580, Décodage natif (preuves), CNC_CZ_ClientFamilyBattleInfo, Field1 (+50 more)
 
 ### Community 169 - "CNC_CZ_ClientMailRead"
 Cohesion: 0.03
 Nodes (60): CNC_CZ_ClientMailRead, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+52 more)
 
 ### Community 170 - "LegendaryWiki.Classify"
-Cohesion: 0.05
-Nodes (17): LegendaryWiki, All, Result, OutOfScope, Row, UiTextEn, LegendaryAchievementTests, UiTextIsTranslationTests (+9 more)
+Cohesion: 0.08
+Nodes (9): UiTextEn, UiTextIsTranslationTests, LegendaryWiki, All, Result, OutOfScope, Row, UiTextEn (+1 more)
 
 ### Community 171 - "CNC_ZMis_ZoneServerPutItem"
 Cohesion: 0.03
 Nodes (59): CNC_ZMis_ZoneServerPutItem, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+51 more)
 
-### Community 172 - "Protocol/ZoneStorageMessages.cs"
-Cohesion: 0.03
-Nodes (51): FamilyStorageItemCodec, FamilyStorageLogEntry, ZoneEnterFamilyStorage, Name, NpcUid, Opcode, ZoneFamilyStorageData, Items (+43 more)
+### Community 172 - "ZoneFamilyStorageGet"
+Cohesion: 0.25
+Nodes (7): ZoneFamilyStorageGet, Bag, Loc, Name, Opcode, Slot, StorageIndex
 
-### Community 173 - "CNC_ZMis_MissionServerCrossZone"
-Cohesion: 0.05
-Nodes (40): 46 — Lien World↔Zone (ZW) et entrée en jeu, Captures de référence, Format `CNC_ZW_ZoneServerUpdateStarWay` (NCID 29), MissionServer — switches de features, Pourquoi StarWay bloquait l'entrée (le bug "Server connection: Failure"), Restes connus, Séquence d'enregistrement de la zone, Séquence ZW d'entrée d'un personnage (+32 more)
+### Community 173 - "OutBinStream.WriteLong"
+Cohesion: 0.07
+Nodes (12): ItemMallPackets, GatewayAccountLoginRequest, ClientVersion, Name, Opcode, SessionToken, Username, GatewayHeartbeatMessage (+4 more)
 
 ### Community 174 - "WorldBossTextTests"
 Cohesion: 0.09
 Nodes (3): WorldBossText, WorldBossTextTests, WorldBossTextTests
 
 ### Community 175 - "GroundTreasureService"
-Cohesion: 0.15
-Nodes (10): Modèle, Plan — Instancing des nœuds de donjon (CNodeGroup natif), Problème, Risques / points de vigilance, Tests, État — TERMINÉ (build 0/0, 957/957 verts), GroundTreasureService, Treasure (+2 more)
+Cohesion: 0.12
+Nodes (7): État — TERMINÉ (build 0/0, 957/957 verts), TreasureCodec, GroundTreasureService, Treasure, GroundTreasureTests, InstancingTests, PetRulesTests
 
 ### Community 176 - "DestinyTable"
 Cohesion: 0.05
 Nodes (27): DestinyTable, EventDef, Code, Group, Id, Param2, Type, Value (+19 more)
 
 ### Community 177 - "LootService"
-Cohesion: 0.04
-Nodes (51): 1. Description, 28 - Système de Drops et Loot, 2. Symboles lapis::, 3. Données, 4. Implémentation C#, 6. TODO / À reverser, S_ClassDropItem.ini (`|V.3|85|`, 290 tables), S_DropItem.ini (`|V.3|176|`, 5 049 entrées) (+43 more)
+Cohesion: 0.03
+Nodes (52): 1. Description, 28 - Système de Drops et Loot, 2. Symboles lapis::, 3. Données, 4. Implémentation C#, 5. Tests, 6. TODO / À reverser, S_ClassDropItem.ini (`|V.3|85|`, 290 tables) (+44 more)
 
-### Community 178 - "MailWindow"
-Cohesion: 0.11
-Nodes (5): DriveProbe, MailWindow, MailEntry, HasAttachment, IsUnread
+### Community 178 - "ZoneLotS6S8Tests"
+Cohesion: 0.07
+Nodes (13): ZoneChangeClass, ClassId, Name, Opcode, ZonePlayerWorkResultEnd, Name, Opcode, WorkNum (+5 more)
 
 ### Community 179 - "UiNodeSpec"
-Cohesion: 0.05
-Nodes (38): UiNodeSpec, Alpha, Anchors, Background, BbText, CaptionColour, CeguiType, Children (+30 more)
+Cohesion: 0.04
+Nodes (45): UiNodeSpec, Alpha, Anchors, Background, BbText, CaptionColour, CeguiType, Children (+37 more)
 
 ### Community 180 - "SkillCast"
-Cohesion: 0.04
-Nodes (31): Session 4 (2026-11-03, suite), Colonnes C_Spell utilisées, CastLock, GroundTargeter, Active, Center, Spell, UseScreenCenter (+23 more)
+Cohesion: 0.06
+Nodes (18): Session 4 (2026-11-03, suite), GroundTargeter, Active, Center, Spell, UseScreenCenter, SkillCast, CastingSpell (+10 more)
 
 ### Community 181 - "CNE_DBA_ClientAllLover"
 Cohesion: 0.04
@@ -2116,7 +2264,7 @@ Nodes (24): cmd_extract(), cmd_list(), cmd_verify(), Entry, _extract_one(), filt
 
 ### Community 185 - "ItemDef"
 Cohesion: 0.04
-Nodes (54): ItemDef, AtkSpeedBonus, AttackElement, AttackRange, AttackSpeed, BagCapacity, Block, BonusAgi (+46 more)
+Nodes (55): ItemDef, AtkSpeedBonus, AttackElement, AttackRange, AttackSpeed, BagCapacity, Block, BonusAgi (+47 more)
 
 ### Community 186 - "CNC_ZMis_ZoneServerBuyBackGetItem"
 Cohesion: 0.04
@@ -2127,16 +2275,16 @@ Cohesion: 0.04
 Nodes (53): ItemDef, AtkSpeedBonus, AttackElement, AttackRange, AttackSpeed, Block, BonusAgi, BonusHp (+45 more)
 
 ### Community 188 - "MonsterSpawn"
-Cohesion: 0.04
-Nodes (49): EventArea, Description, Facing, Id, Radius, Shape, Type, X (+41 more)
+Cohesion: 0.03
+Nodes (63): Branch, Actions, Conds, Cmd, Args, Name, EventArea, Description (+55 more)
 
-### Community 189 - "Protocol/ZoneEnchantMessages.cs"
-Cohesion: 0.04
-Nodes (54): ZoneEnchantAdd, Counter2, EffectId, FlagBits, Handle, Level, Name, Opcode (+46 more)
+### Community 189 - "ZoneEnchantAdd"
+Cohesion: 0.18
+Nodes (11): ZoneEnchantAdd, Counter2, EffectId, FlagBits, Handle, Level, Name, Opcode (+3 more)
 
 ### Community 190 - "EdenVfs"
-Cohesion: 0.06
-Nodes (16): ADR-0002 — Données EDENFR pures, anglais en pause, Conséquences, Décision, Client Godot — règles locales, EdenEncoding, Big5, Cp1252, HasPacks (+8 more)
+Cohesion: 0.10
+Nodes (9): ADR-0002 — Données EDENFR pures, anglais en pause, Conséquences, Décision, Client Godot — règles locales, HasPacks, LooseAllowed, Packs, ReleaseBuild (+1 more)
 
 ### Community 191 - "ClassDef"
 Cohesion: 0.05
@@ -2147,23 +2295,23 @@ Cohesion: 0.04
 Nodes (53): MonsterDef, AggroCells, AggroRadius, AiId, AttackElement, AttackMotionId, AttackPower, AttackRangeMax (+45 more)
 
 ### Community 193 - "BankItemEntity"
-Cohesion: 0.06
-Nodes (23): 🔄 Session — Réseau/Gameplay : réponses CNC + famille/mail/couple, Contexte & preuve, Lot : drop d'item (destruction native) — 2026-10-20, Nota, Plan, Implémenté, BankRepository, IBankRepository (+15 more)
+Cohesion: 0.04
+Nodes (42): 🔄 Session — Réseau/Gameplay : réponses CNC + famille/mail/couple, Contexte & preuve, Lot : drop d'item (destruction native) — 2026-10-20, Nota, Plan, Implémenté, Lot — Expansion de stockage (NCID 373/374), Preuve native (+34 more)
 
 ### Community 194 - "CNC_CZ_ClientChangeEquip"
 Cohesion: 0.06
 Nodes (31): CNC_CZ_ClientChangeEquip, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+23 more)
 
-### Community 195 - "SettingsApplier"
-Cohesion: 0.06
-Nodes (12): Config serveur, Construire, Distribution — client Eden Reborn autonome, Lancer, Notes / limites, Résolution des chemins (scripts/DataPaths.cs), Tester le client packagé (dev), Étape EPK — le layout `gamedata/` devient des packs (+4 more)
+### Community 195 - "Distribution — client Eden Reborn autonome"
+Cohesion: 0.22
+Nodes (8): Config serveur, Construire, Distribution — client Eden Reborn autonome, Lancer, Notes / limites, Résolution des chemins (scripts/DataPaths.cs), Tester le client packagé (dev), Étape EPK — le layout `gamedata/` devient des packs
 
 ### Community 196 - "CNC_CZ_ClientSeeMob"
 Cohesion: 0.07
 Nodes (27): CNC_CZ_ClientSeeMob, DisplayName, EntityId, Facing, Flag0, Handle, Hp, Kind (+19 more)
 
 ### Community 197 - "CeguiTests"
-Cohesion: 0.09
+Cohesion: 0.08
 Nodes (7): CeguiAnchors, CeguiLayout, UnifiedRect, CeguiTests, CeguiAnchors, UnifiedRect, CeguiTests
 
 ### Community 198 - "ZoneRoom"
@@ -2183,40 +2331,40 @@ Cohesion: 0.04
 Nodes (53): CNE_ZMis_ZoneServerPutItem, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+45 more)
 
 ### Community 202 - "ClientConfig"
-Cohesion: 0.05
-Nodes (34): ClientConfig, Account, ClientVersion, GamedataDir, Host, LoginPort, MachineId, ShowIds (+26 more)
+Cohesion: 0.09
+Nodes (18): ClientConfig, Account, ClientVersion, GamedataDir, Host, LoginPort, MachineId, ShowIds (+10 more)
 
-### Community 203 - "MissionDef"
-Cohesion: 0.05
-Nodes (38): MissionDef, Actions, Category, CompleteLimit, Conditions, Flags, GiverNpc, GiverStepId (+30 more)
+### Community 203 - "ItemDictionaryBuilder.Build"
+Cohesion: 0.06
+Nodes (30): Constats transversaux, FIX-A-audit — audit des méthodes réelles (PLAN-ACTION-2 + MASTER-PLAN), MASTER-PLAN, Non vérifié par moi, PLAN-ACTION-2, Tableau lot -> méthode réelle -> limite -> statut honnête, VISUALLY_VALIDATED à rétrograder, MissionDef (+22 more)
 
-### Community 204 - "Label"
+### Community 204 - "Control"
 Cohesion: 0.03
-Nodes (23): Mécanismes centraux, 2. Cas d'école A — refondre l'UI du panneau Settings, Checklist « nouveau panneau », Correctif appliqué (à imiter), Diagnostic (ce qu'il faut regarder), Symptômes rapportés, AltarWindow, Currencies (+15 more)
+Nodes (29): A2.1 — Settings : refonte thème + contenu natif, A2.2 — Profile / journal : contraste, A2. Thème & contraste global, AltarWindow, Currencies, Description, Title, ArrowGlyph (+21 more)
 
 ### Community 205 - "PkgArchive"
 Cohesion: 0.09
 Nodes (14): EdenClient.Pkg, Phase A — Données EDENFR authentiques (corrige les ~1 061 NIF, 37 KF de montures et 19 fenêtres), Phase P — Client packagé EPK, natif, chiffré et signé (ADR-0005), CRC du manifeste `GameDataFileList.txt`, Vecteurs de test, EdenfrManifest, Count, Entries (+6 more)
 
 ### Community 206 - "LicenseService"
-Cohesion: 0.12
-Nodes (13): LicenseEntity, ItemId, Loc, PlayerId, LicenseService, SpellStoneState, Owned, SetEnchant (+5 more)
+Cohesion: 0.09
+Nodes (15): ILicenseRepository, LicenseRepository, LicenseEntity, ItemId, Loc, PlayerId, LicenseService, SpellStoneState (+7 more)
 
 ### Community 207 - "CNE_ZMis_ZoneServerMailRead"
 Cohesion: 0.04
 Nodes (52): CNE_ZMis_ZoneServerMailRead, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+44 more)
 
-### Community 208 - "Scene"
-Cohesion: 0.10
-Nodes (20): Scene, BornPositionIndex, EventAreas, Events, ExtraSections, FsmFile, Gateways, MapCode (+12 more)
+### Community 208 - "LiveMob"
+Cohesion: 0.09
+Nodes (15): Changements, Hors périmètre, Plan — 2.3.2 Cast temporisé complet, Verdict runtime (live S002, stack Release), État constaté, LiveMob, AttackLocked, CombatGeneration (+7 more)
 
 ### Community 209 - "CNC_CZ_ClientFamilyTownQuery"
 Cohesion: 0.06
 Nodes (36): CNC_CZ_ClientFamilyTownQuery, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+28 more)
 
 ### Community 210 - "LiveMob"
-Cohesion: 0.02
-Nodes (83): 1.1 `ZoneEntryFlow` = god object (5 043 lignes / 14 partials), 1.2 Gameplay hardcodé — le vrai risque « petit simulateur », 1.3 Doublons structurels, 1.4 Ce qui est déjà bon (à garder), 1. Audit — ce qui pose problème aujourd'hui, A1. Sorts de soin KO — aucun soin appliqué [CORRIGÉ — commit en cours], Corrections à faire, Fichiers (+75 more)
+Cohesion: 0.03
+Nodes (43): Hors scope (autres cases P16), P16.3 — Timing natif swing/projectile (fin des délais fixes 300 ms), Plan, Preuves natives (déjà collectées), CNC_CZ_ClientCommandFailReturn, Field1, Field2, Name (+35 more)
 
 ### Community 211 - "ZoneClientModifyItemInfo"
 Cohesion: 0.04
@@ -2243,16 +2391,20 @@ Cohesion: 0.08
 Nodes (26): UiControlKind, Button, CheckBox, ColorRect, Control, HScrollBar, HSlider, ItemList (+18 more)
 
 ### Community 217 - "CeguiContext"
-Cohesion: 0.10
+Cohesion: 0.09
 Nodes (19): CeguiContext, Fonts, Imagesets, LookNFeel, Scheme, CeguiFontTable, CeguiScheme, Fonts (+11 more)
 
 ### Community 219 - "EnchantDef"
 Cohesion: 0.05
-Nodes (32): EnchantDef, Code, Description, Id, IsBuff, MaxStack, Name, NoAbandon (+24 more)
+Nodes (31): EnchantDef, Code, Description, Id, IsBuff, MaxStack, Name, NoAbandon (+23 more)
 
 ### Community 220 - "TradeState"
 Cohesion: 0.08
 Nodes (16): TradeState, Completed, IsOpen, MyGold, MyItems, OutgoingInviteCharId, OutgoingInviteName, PartnerCharId (+8 more)
+
+### Community 221 - "BreakPointUi"
+Cohesion: 0.08
+Nodes (3): BreakPointUi, BreakPointUiTests, BreakPointUiTests
 
 ### Community 222 - "CNC_CZ_ClientFamilyStorageData"
 Cohesion: 0.04
@@ -2271,8 +2423,8 @@ Cohesion: 0.04
 Nodes (49): ZoneClientBuyBackList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+41 more)
 
 ### Community 226 - "EdenVfs"
-Cohesion: 0.09
-Nodes (7): Case, GoldenBytesTests, EdenVfs, HasPacks, LooseAllowed, Packs, ReleaseBuild
+Cohesion: 0.11
+Nodes (5): EdenVfs, HasPacks, LooseAllowed, Packs, ReleaseBuild
 
 ### Community 227 - "server/src/Eden.Core/Eden.Core.csproj"
 Cohesion: 0.05
@@ -2287,8 +2439,8 @@ Cohesion: 0.04
 Nodes (49): ZoneClientBuyBackList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+41 more)
 
 ### Community 230 - "UiTextEn.Translate"
-Cohesion: 0.02
-Nodes (38): 3. Commerce, stockage, services, 4. Événements, PvP, services instanciés, PHASE 6 — Complétude HUD/NCID/contenu (suivi `eden_server/docs/temp-plans/2026-10-27-phase6-completude-ncid-client.md`), BattlefieldWindow, CoupleWindow, Instance, CraftWindow, DestinyWindow (+30 more)
+Cohesion: 0.03
+Nodes (28): 2. Fenêtres principales (menu/raccourci), 4. Événements, PvP, services instanciés, 5. Dialogues et flux NPC, HUD & Interfaces — Eden Client Reborn (Godot), CoupleWindow, Instance, CraftWindow, GuildWindow (+20 more)
 
 ### Community 231 - "MagicBoxService"
 Cohesion: 0.09
@@ -2312,19 +2464,19 @@ Nodes (8): Changements, UseCommand, MobEnchantDispelHandler, CommandIds, SpellEf
 
 ### Community 236 - "ElfHandlers.Register"
 Cohesion: 0.03
-Nodes (67): 10. Parsers de données (toutes les tables clés), 13. Protocole réseau — vrais opcodes extraits ⭐, 1. Système de Classes et Changement de Classe, 2. Création et Suppression de Personnage, 3. Stats et Profil Joueur, 4. Inventaire et Sacs, 5. Banque et Stockage, 6. Système d'Échange P2P (Trade) (+59 more)
+Nodes (56): 10. Parsers de données (toutes les tables clés), Couverture commandes : 80 → 262/262 (100%), Helpers ajoutés, Refactorisation (qualité), Session — 262/262 commandes zone + refactorisation anti-patterns, État, BattlefieldDef, Id (+48 more)
 
 ### Community 237 - "FortuneBagDef"
-Cohesion: 0.06
+Cohesion: 0.05
 Nodes (43): Implémentation, Infra fortune_bag (world→zone), Lot — Sac chanceux (ChanceLuckyBag) + infra FortuneBag, Preuves natives (zone), Reste, FortuneBagDef, FirstSet, Id (+35 more)
 
 ### Community 238 - "CNC_CZ_ClientFamilyStoragePutItem"
 Cohesion: 0.04
 Nodes (47): CNC_CZ_ClientFamilyStoragePutItem, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+39 more)
 
-### Community 239 - "protocol/ZoneDialogMessages.cs"
-Cohesion: 0.04
-Nodes (43): ZoneBattlefieldJoin, Field1, Field2, Field3, Name, Opcode, ZoneBattlefieldLeave, Name (+35 more)
+### Community 239 - "ZoneBattlefieldJoin"
+Cohesion: 0.29
+Nodes (6): ZoneBattlefieldJoin, Field1, Field2, Field3, Name, Opcode
 
 ### Community 240 - "pack_audit.py"
 Cohesion: 0.14
@@ -2332,27 +2484,27 @@ Nodes (9): fmt_size(), is_dark_path(), main(), perf_baseline(), scan_tree(), sni
 
 ### Community 241 - "struct"
 Cohesion: 0.05
-Nodes (36): _accumulate(), bspline_eval(), convert_one(), destrip(), main(), mat3_cols(), nitransform_to_mat4(), out_path_for() (+28 more)
+Nodes (28): blocked(), load(), rate(), load(), main(), bspline_eval(), destrip(), quat_from_mat3() (+20 more)
 
-### Community 242 - "CNE_ZMis_ZoneServerMailList"
-Cohesion: 0.10
-Nodes (20): CNE_ZMis_ZoneServerMailList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+12 more)
+### Community 242 - "LegendaryWiki.Classify"
+Cohesion: 0.11
+Nodes (8): AchievementProgress, LegendaryWiki, All, Result, OutOfScope, Row, LegendaryAchievementTests, LegendaryAchievementTests
 
-### Community 243 - "UiBuildReport"
-Cohesion: 0.29
-Nodes (7): UiBuildReport, Errors, IgnoredProps, LayoutsFailed, LayoutsOk, PrefixTypes, UnknownTypes
+### Community 243 - "CNC_CL_ClientGetWorldServers"
+Cohesion: 0.08
+Nodes (27): Opcode 2 : `CNC_CL_ServerLoginWorld` (Client -> Serveur), Login — 10 classes, CNC_CL_ClientGetWorldServers, LastWorldId, Name, Opcode, Worlds, CNC_CL_ClientSCardInfo (+19 more)
 
 ### Community 244 - "CNC_CZ_ClientLotteryResult"
 Cohesion: 0.10
 Nodes (20): CNC_CZ_ClientLotteryResult, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+12 more)
 
-### Community 245 - "KfAnimation"
-Cohesion: 0.11
-Nodes (7): KfAnimSet, WarmPending, KfSource, Kf, Path, PathMap, Signature
+### Community 245 - "CNC_CZ_ClientTradeAddItem"
+Cohesion: 0.07
+Nodes (30): CNC_CZ_ClientTradeAddItem, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
 ### Community 246 - "4. Système de Party/Team/Guild"
-Cohesion: 0.04
-Nodes (45): 1. Système de Classes, 3. Système d'Enchantement (250+ fonctions), 4. Système de Party/Team/Guild, 5. Système de Combat et Effects, 7. Système de Mariage et Relations, 8. Système de Dungeons et Instances, Battle Crusade, Battle Crusade Factory (+37 more)
+Cohesion: 0.20
+Nodes (10): 4. Système de Party/Team/Guild, Battle Crusade Family, Battlefield Team, Character Team Operations, Colosseum Team, Events, Family/Guild, Party Effects (+2 more)
 
 ### Community 247 - "FamilyRow"
 Cohesion: 0.04
@@ -2366,37 +2518,41 @@ Nodes (46): CNC_DBA_ClientAllFamily, Field1, Field10, Field11, Field12, Field13,
 Cohesion: 0.04
 Nodes (46): CNC_CW_ClientQueryFamilyInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+38 more)
 
+### Community 250 - "PasswordHasher"
+Cohesion: 0.12
+Nodes (8): PasswordHasher, Phc, Hash, Iterations, MemoryKiB, Parallelism, Salt, PasswordHasherTests
+
 ### Community 251 - "ZoneDisplayDialogView"
-Cohesion: 0.08
-Nodes (23): DialogEntry, DisplayId, EntryName, Flag, Label, DialogueState, IsOpen, NpcUid (+15 more)
+Cohesion: 0.10
+Nodes (18): DialogEntry, DisplayId, EntryName, Flag, Label, ZoneDisplayDialogView, ContextId, ContextText (+10 more)
 
 ### Community 252 - "AuctionWindow"
 Cohesion: 0.10
-Nodes (6): AuctionWindow, DriveProbe, ZoneAuctionBuy, AuctionId, Name, Opcode
+Nodes (7): AuctionWindow, DriveProbe, ZoneAuctionSellQuery, Field1, Field2, Name, Opcode
 
-### Community 253 - "system_collections_generic"
-Cohesion: 0.02
-Nodes (66): EdenClient.Perf, PlayerCoins, AlpacaCoin, LifelongGold, LifelongPoint, WarCoin, ZoneClientLoadCubeItems, Name (+58 more)
+### Community 253 - "system_text"
+Cohesion: 0.04
+Nodes (8): EdenTools.ItemDictionary, Eden.Core.Data, Eden.Tests.Data.Parsers, Eden.Mission.Services, EdenClient.Perf, ManifestHash, Result, Hex
 
 ### Community 254 - "CNC_CZ_ClientLookElfPetEquip"
 Cohesion: 0.05
 Nodes (44): CNC_CZ_ClientLookElfPetEquip, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+36 more)
 
-### Community 255 - "Node"
-Cohesion: 0.06
-Nodes (15): Audit animations / effets de sorts (client Godot), Couverture données (sorts « classe » payants, par classe), Restes, État APRÈS (`scripts/combat/SpellFx.cs`), État AVANT ce lot, Phase 3 — Bake GLB → `.scn` (le levier « parse GLB »), GlbProbe, RenderAudit (+7 more)
+### Community 255 - "PerfProbe"
+Cohesion: 0.12
+Nodes (8): Leviers (non mesurés, par gain/effort estimé), Performance rendu/CPU — Godot 4.8, Règle, Références, Étapes, PerfProbe, Enabled, HitchMs
 
 ### Community 256 - "ClientUiSettings"
 Cohesion: 0.06
 Nodes (27): ClientUiSettings, Huds, Options, Version, Windows, HudPlacement, X, Y (+19 more)
 
 ### Community 257 - "TradeState"
-Cohesion: 0.08
+Cohesion: 0.09
 Nodes (16): TradeState, Completed, IsOpen, MyGold, MyItems, OutgoingInviteCharId, OutgoingInviteName, PartnerCharId (+8 more)
 
 ### Community 258 - "LotteryService"
-Cohesion: 0.11
-Nodes (13): LotteryReward, Bulletin, CantGoNext, ItemAmount, ItemId, ItemIndex, Probability, ResetBonus (+5 more)
+Cohesion: 0.12
+Nodes (15): LotteryReward, Bulletin, CantGoNext, ItemAmount, ItemId, ItemIndex, Probability, ResetBonus (+7 more)
 
 ### Community 259 - "Reader"
 Cohesion: 0.04
@@ -2407,12 +2563,12 @@ Cohesion: 0.05
 Nodes (44): ZoneClientLookElfPetEquip, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+36 more)
 
 ### Community 261 - "Plan d'action — Eden EPK : pack chiffré, allègement, perf chargement"
-Cohesion: 0.07
-Nodes (27): A. Phase 3 requalifiée : gate de PoC (blocage `.scn`/EPK), B. Format de bloc — indépendance complète, C. Cryptographie — clé par fichier, nonce = compteur, Cycle contenu (quand on touche les data), Cycle quotidien (inchangé), D. Bootstrap et intégrité loose, E. Corrections de détail, F. Ordre révisé (+19 more)
+Cohesion: 0.06
+Nodes (29): A. Phase 3 requalifiée : gate de PoC (blocage `.scn`/EPK), B. Format de bloc — indépendance complète, C. Cryptographie — clé par fichier, nonce = compteur, Cycle contenu (quand on touche les data), Cycle quotidien (inchangé), D. Bootstrap et intégrité loose, E. Corrections de détail, F. Ordre révisé (+21 more)
 
-### Community 262 - "CNC_CZ_ClientFamilyBattleInfo"
-Cohesion: 0.11
-Nodes (18): CNC_CZ_ClientFamilyBattleInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+10 more)
+### Community 262 - "ItemMallState"
+Cohesion: 0.08
+Nodes (19): ItemMallLimit, WorldItemMallLimit, Name, Opcode, Rows, Version, ItemMallState, AnythingReceivable (+11 more)
 
 ### Community 263 - "ZoneClientLookElfPetEquip"
 Cohesion: 0.05
@@ -2423,64 +2579,68 @@ Cohesion: 0.07
 Nodes (27): ZoneSeeChar, AtkSpeedL, AtkSpeedR, CastingSpell, CharId, ClassLevel, Facing, FloatDuration (+19 more)
 
 ### Community 265 - "ZoneUpdateEquipmentView"
-Cohesion: 0.05
-Nodes (21): ZoneUpdateEquipmentView, CharId, Hidden, Items, LocMask, Name, Opcode, ZoneItemActions (+13 more)
+Cohesion: 0.07
+Nodes (14): ZoneItemActions, ZoneItemUse, ContainerIndex, ContainerType, Name, Opcode, Param, Slot (+6 more)
 
 ### Community 266 - "SceneParser.Parse"
-Cohesion: 0.06
-Nodes (22): NpcSpawn, Facing, LocalId, ModelCode, Name, NpcId, Param, X (+14 more)
+Cohesion: 0.04
+Nodes (44): Branch, Actions, Conds, Cmd, Args, Name, Words, Gateway (+36 more)
 
 ### Community 267 - "ClassSkillTree"
-Cohesion: 0.06
-Nodes (25): ClassSkillTree, Log, Skill, Family, IconCode, Id, Mask, Pay (+17 more)
+Cohesion: 0.12
+Nodes (11): ClassSkillTree, Log, Skill, Family, IconCode, Id, Mask, Pay (+3 more)
 
 ### Community 268 - "CeguiImageset"
 Cohesion: 0.08
-Nodes (18): CeguiImageRegion, CeguiImageset, ImageFile, Name, NativeHeight, NativeWidth, Regions, TextureResourcePath (+10 more)
+Nodes (20): CeguiImageRegion, CeguiImageset, ImageFile, Name, NativeHeight, NativeWidth, Regions, TextureResourcePath (+12 more)
 
-### Community 269 - "SceneEvent"
-Cohesion: 0.12
-Nodes (15): Branch, Actions, Conds, Cmd, Args, Name, Words, SceneEvent (+7 more)
+### Community 269 - "P2LogicTests.Roll_Ultimate_Trait_Portal_Costume"
+Cohesion: 0.11
+Nodes (13): Costume, HeroTraitState, Current, IconPath, Lottery, PortalArrivalState, CurrentNode, Pending (+5 more)
 
 ### Community 270 - "TextResolver"
-Cohesion: 0.11
-Nodes (3): TextResolver, Language, NativeOnly
+Cohesion: 0.07
+Nodes (12): ClassText, DetailedDescription, Id, MinCharacterLevel, Name, RequirementText, ShortDescription, Trait (+4 more)
 
 ### Community 271 - "time"
-Cohesion: 0.05
-Nodes (36): blocked(), load(), rate(), load(), main(), pack_nif(), Audit des broadcasts génériques (2026-11-05, suite), Plan temporaire — Visibilité joueur↔joueur (265 ClientSeeChar) (+28 more)
+Cohesion: 0.07
+Nodes (24): Audit des broadcasts génériques (2026-11-05, suite), Plan temporaire — Visibilité joueur↔joueur (265 ClientSeeChar), Preuve native, Validation live (2026-11-05, headless ×2 sessions), Validation live — instance d'équipe en donjon (2026-11-05, suite), decode_len(), encode_len(), log() (+16 more)
 
 ### Community 272 - "inventory.py"
 Cohesion: 0.14
 Nodes (17): classify(), db_role(), dds_meta(), img_meta(), ini_meta(), load_icon_items(), load_maps(), load_models_catalog() (+9 more)
+
+### Community 273 - "EpkReader"
+Cohesion: 0.13
+Nodes (4): EpkCrypto, EpkEncryptor, Program, UsageException
 
 ### Community 274 - "Data"
 Cohesion: 0.05
 Nodes (40): 1. Ghidra (Décompilation principale), 2. REA (Reverse Engineering Agent) - MCP — NE PAS UTILISER, 3. nm (Extraction de symboles), 4. objdump (Analyse détaillée), Architecture, 🚀 Automatisation Future, Binaires Non-Stripped, 📦 Binaires Serveur à Analyser (+32 more)
 
 ### Community 275 - "DdsInfo"
-Cohesion: 0.12
-Nodes (11): ADR-0005 — Client packagé : EPK (format du portage), pas `.pkg` EDENFR, Conséquences, Décision, Options, DdsInfo, BlockBytes, DataOffset, Format (+3 more)
+Cohesion: 0.08
+Nodes (21): ADR-0005 — Client packagé : EPK (format du portage), pas `.pkg` EDENFR, Conséquences, Décision, Options, DdsFormat, Bc1, Bc2, Bc3 (+13 more)
 
 ### Community 276 - "MotionParser"
 Cohesion: 0.08
 Nodes (10): G — Jeu serveur (`server/src/**`, 3 agents), GA — Anims skills toujours absentes, GP — Proc stats + cap crit, GT — Town list v2, Journal, Lot 15 — prompt10f : proc stats, cap crit, town list v2, anims skills, SNAPSHOT (lot 15 en cours), MotionParser (+2 more)
 
 ### Community 277 - "FrameStats"
-Cohesion: 0.13
-Nodes (13): FrameStats, AllocMean, Count, Max, Mean, P50, P95, P99 (+5 more)
+Cohesion: 0.09
+Nodes (16): PlayerStats, FrameStats, AllocMean, Count, Max, Mean, P50, P95 (+8 more)
 
 ### Community 278 - "SpellFx"
-Cohesion: 0.11
-Nodes (8): Video (effets réels), Fx, Layer, SpellFx, ActiveFx, Instance, SpellFxTable, SpellFxWarmup
+Cohesion: 0.04
+Nodes (45): Audit animations / effets de sorts (client Godot), Colonnes C_Spell utilisées, Couverture données (sorts « classe » payants, par classe), Restes, État APRÈS (`scripts/combat/SpellFx.cs`), État AVANT ce lot, Video (effets réels), Fx (+37 more)
 
 ### Community 279 - "WorkOrderTests"
-Cohesion: 0.17
+Cohesion: 0.16
 Nodes (7): Product, ItemId, Name, Quantity, Rate, SeqRandom, WorkOrderTests
 
 ### Community 280 - "SceneTable.Load"
-Cohesion: 0.11
-Nodes (18): Gateway, Description, EventAreaId, KeyId, LinkKey, RowId, ScriptEventId, PatrolRoute (+10 more)
+Cohesion: 0.04
+Nodes (51): Branch, Actions, Conds, Cmd, Args, Name, EventArea, Description (+43 more)
 
 ### Community 281 - "EdenSessionOptions"
 Cohesion: 0.10
@@ -2498,9 +2658,9 @@ Nodes (39): CNC_CG_ClientGetContainerItem, Field1, Field10, Field11, Field12, Fi
 Cohesion: 0.09
 Nodes (12): Formats natifs, Méthode, Où, ADR-0003 — Source de vérité du Core, Constat, Proposition, Risques, Layer (+4 more)
 
-### Community 285 - "LoginAccount"
-Cohesion: 0.12
-Nodes (16): LoginAccount, Account, Name, Opcode, PasswordHash, Version, LoginServerHello, Name (+8 more)
+### Community 285 - "LoginServerHello"
+Cohesion: 0.50
+Nodes (4): LoginServerHello, Name, Opcode, Value
 
 ### Community 286 - "HudPrefs"
 Cohesion: 0.06
@@ -2508,11 +2668,11 @@ Nodes (34): BarRole, Mob, Other, Self, HudPrefs, BarMobs, BarOthers, BarSelf (+2
 
 ### Community 287 - "ZoneEnchantAdd"
 Cohesion: 0.06
-Nodes (26): BuffBridge, BuffInst, Remaining, EntityBuffs, ZoneEnchantAdd, Counter2, EffectId, FlagBits (+18 more)
+Nodes (25): BuffInst, Remaining, EntityBuffs, ZoneEnchantAdd, Counter2, EffectId, FlagBits, Handle (+17 more)
 
-### Community 288 - "CustomClassPackets.Build"
-Cohesion: 0.29
-Nodes (6): 2026-11-05 — Crash client Reforged à l'entrée : NCID 592 malformé, Bug, Diagnostic (preuves binaires `rf_game`), Fix, Rappel méthodo, Symptôme
+### Community 288 - "CNE_ZMis_ZoneServerQueryPlayerCard"
+Cohesion: 0.08
+Nodes (23): CNE_ZMis_ZoneServerQueryPlayerCard, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+15 more)
 
 ### Community 289 - "CNE_DBA_ClientFastDress"
 Cohesion: 0.05
@@ -2534,9 +2694,9 @@ Nodes (38): CNC_CZ_ClientTextOutputItem, Field1, Field10, Field11, Field12, Fiel
 Cohesion: 0.15
 Nodes (10): convert_icons(), _convert_one(), export_missions(), _f(), main(), mission_type(), mob_spawn_index(), parse_script_conditions() (+2 more)
 
-### Community 294 - "Texture2D"
+### Community 294 - "Scene"
 Cohesion: 0.05
-Nodes (25): AttackProbe, ZoneClientMeleeAttack, Attacker, Damage, HitType, MotionKfId, Name, Opcode (+17 more)
+Nodes (9): QuestItemRules, Refusal, None, PositionMissing, WrongNode, SummonSpec, SceneEventRules, TextCommand (+1 more)
 
 ### Community 295 - "ZoneClientRoomData"
 Cohesion: 0.05
@@ -2551,16 +2711,16 @@ Cohesion: 0.10
 Nodes (21): ZoneClientPetLotteryResult, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+13 more)
 
 ### Community 298 - "IReadOnlyCollection"
-Cohesion: 0.11
-Nodes (33): Audit effets de sorts (28/10/2026), Mise à jour 28/10 — exécuteur générique, 2.3.3 — Commandes résultat manquantes (batch 1), Batch 2 (même journée), Batch 3 (même journée), Implémenté, Limites connues, Preuve live batch 3 (+25 more)
+Cohesion: 0.14
+Nodes (28): Audit effets de sorts (28/10/2026), Mise à jour 28/10 — exécuteur générique, Batch 3 (même journée), Implémenté, Preuve live batch 3, AttrHateHotHandler, CommandIds, AttrHateResetHandler (+20 more)
 
 ### Community 299 - "ZoneVendorSellItem"
 Cohesion: 0.13
 Nodes (14): SellEntry, ZoneVendorSellItem, Entries, Name, Opcode, RegionType, Title, SellEntry (+6 more)
 
 ### Community 300 - "PlayerTitles"
-Cohesion: 0.21
-Nodes (5): PlayerTitles, Active, Others, Owned, SetTitleSender
+Cohesion: 0.10
+Nodes (10): PlayerTitles, Active, Others, Owned, SetTitleSender, PlayerTitles, Active, Others (+2 more)
 
 ### Community 301 - "CNC_CZ_ClientEnterNodePlayerRoom"
 Cohesion: 0.05
@@ -2583,8 +2743,8 @@ Cohesion: 0.04
 Nodes (45): UiTextAlign, Centre, Left, Right, UiVertAlign, Bottom, Centre, Top (+37 more)
 
 ### Community 306 - "DailyRewardWindow"
-Cohesion: 0.12
-Nodes (11): DailyRewardWindow, Instance, ZoneUpdateDailyAwards, AwardDays, AwardRecords, DayIndex, Flag, Kind (+3 more)
+Cohesion: 0.10
+Nodes (16): DailyRewardWindow, Instance, ZoneUpdateDailyAwards, AwardDays, AwardRecords, DayIndex, Flag, Kind (+8 more)
 
 ### Community 307 - "IV. Fenêtres / panels"
 Cohesion: 0.05
@@ -2606,9 +2766,9 @@ Nodes (47): 15 NCIDs morts en natif identifiés, Audit — reste, Base de Donné
 Cohesion: 0.15
 Nodes (3): DirectionalLocomotion, DirectionalLocomotionTests, DirectionalLocomotionTests
 
-### Community 312 - "LimitlessService.GetPassTiers"
-Cohesion: 0.21
-Nodes (6): Ce qui a été fait (lot 11), Encodage des libellés Limitless (NCID 2033) — chaîne du mojibake, La chaîne : seed → DB → wire → CEGUI → police, Règle pour les admins / futurs seeds, C — Client mod (`clientmod/limitless/**`, binaries), LimitlessPassIniTests
+### Community 312 - "NativeFxAttach"
+Cohesion: 0.09
+Nodes (15): Inventaire quêtes et montures (EDENFR, corpus/fr-full) — 2026-11-02, Montures, Quêtes, 1. Ce que prouve ce document, et ce qu'il ne prouve pas, 3. Règles de classification (appliquées par `build_docs.py`), 4. Attestation (389 codes, mode loose, 0 FAIL), 5. Lacunes authentiques (archive) restantes, 6. Constats et corrections (état 2026-11-02) (+7 more)
 
 ### Community 313 - "ZoneClientEvaluateInfo"
 Cohesion: 0.06
@@ -2618,9 +2778,13 @@ Nodes (36): ZoneClientEvaluateInfo, Field1, Field10, Field11, Field12, Field13, 
 Cohesion: 0.06
 Nodes (36): ZoneClientFamilyTownQuery, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+28 more)
 
+### Community 315 - "MissionDef"
+Cohesion: 0.11
+Nodes (19): MissionDef, Actions, Category, CompleteLimit, Conditions, Flags, GiverNpc, GiverStepId (+11 more)
+
 ### Community 316 - "Scene"
-Cohesion: 0.05
-Nodes (37): Scene, BornPositionIndex, EventAreas, Events, ExtraSections, FsmFile, Gateways, MapCode (+29 more)
+Cohesion: 0.03
+Nodes (57): Scene, BornPositionIndex, EventAreas, Events, ExtraSections, FsmFile, Gateways, MapCode (+49 more)
 
 ### Community 317 - "CNC_ZMis_ZoneServerAuctionBuyList"
 Cohesion: 0.06
@@ -2643,20 +2807,20 @@ Cohesion: 0.06
 Nodes (36): ZoneClientFamilyTownQuery, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+28 more)
 
 ### Community 322 - "PartnerDef"
-Cohesion: 0.07
+Cohesion: 0.08
 Nodes (24): PartnerDef, BattleSpells, Grow, GrowType, IconCode, IntegrateSpells, ItemId, MaxHp (+16 more)
 
 ### Community 323 - "CNC_ZMis_ZoneServerAuctionSellList"
 Cohesion: 0.06
 Nodes (35): CNC_ZMis_ZoneServerAuctionSellList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+27 more)
 
-### Community 324 - "Protocol/LoginMessages.cs"
-Cohesion: 0.06
-Nodes (33): LoginAccount, Account, Name, Opcode, PasswordHash, Version, LoginClientHello, Name (+25 more)
+### Community 324 - "LoginAccount"
+Cohesion: 0.33
+Nodes (6): LoginAccount, Account, Name, Opcode, PasswordHash, Version
 
-### Community 326 - "ItemDictionaryBuilder.Build"
-Cohesion: 0.13
-Nodes (11): Constats transversaux, FIX-A-audit — audit des méthodes réelles (PLAN-ACTION-2 + MASTER-PLAN), MASTER-PLAN, Non vérifié par moi, PLAN-ACTION-2, Tableau lot -> méthode réelle -> limite -> statut honnête, VISUALLY_VALIDATED à rétrograder, ItemDictionaryTests (+3 more)
+### Community 326 - "CNE_ZMis_ZoneServerFamilyContainerUpdate"
+Cohesion: 0.09
+Nodes (22): CNE_ZMis_ZoneServerFamilyContainerUpdate, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+14 more)
 
 ### Community 327 - "WorkSlot"
 Cohesion: 0.09
@@ -2670,10 +2834,6 @@ Nodes (34): ZoneClientRollTreasure, Field1, Field10, Field11, Field12, Field13, 
 Cohesion: 0.06
 Nodes (33): 1. ClassPackets.cs (300 lignes), 1. Network Session Management (0%), 2. ClassChangeHandler.cs (250 lignes), 2. Zone System (0%), 3. Tests (100 lignes), 🎯 Architecture Réseau, Blockers:, ✅ Ce qui Fonctionne (+25 more)
 
-### Community 330 - "LifeSkillService"
-Cohesion: 0.18
-Nodes (8): GatherJob, CharacterId, NodeId, PendingItems, RemainingSeconds, LifeSkillService, NodeCount, LifeSkillGmTests
-
 ### Community 331 - "CNC_ZMis_ZoneServerMailList"
 Cohesion: 0.06
 Nodes (34): CNC_ZMis_ZoneServerMailList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+26 more)
@@ -2683,32 +2843,32 @@ Cohesion: 0.06
 Nodes (34): CNC_CZ_ClientRollTreasure, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+26 more)
 
 ### Community 333 - "List"
-Cohesion: 0.05
-Nodes (28): LifeSkillParser, Recipe, Materials, Results, CharacterListRow, PreviewItems, ColosseumService, DurationSec (+20 more)
+Cohesion: 0.07
+Nodes (18): BattleRoyaleService, ColosseumService, DurationSec, IsOpen, Mode, JoinCode, BadScene, Failed (+10 more)
 
 ### Community 334 - "ZoneClientRollTreasure"
 Cohesion: 0.06
 Nodes (34): ZoneClientRollTreasure, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+26 more)
 
-### Community 335 - "SceneEvent"
-Cohesion: 0.13
-Nodes (14): Branch, Actions, Conds, Cmd, Args, Name, SceneEvent, Branches (+6 more)
+### Community 335 - "ZonePlayerWorkResult"
+Cohesion: 0.11
+Nodes (19): WorkProduct, ZonePlayerWorkResult, Failed, FmName, Name, Opcode, Products, WorkId (+11 more)
 
-### Community 336 - "Phase 2 — Chargement d'entrée hors-boucle (ZoneLoop non bloquée)"
-Cohesion: 0.15
-Nodes (12): Autres fichiers, Hors scope, Invariants à préserver, Mesures, Phase 2 — Chargement d'entrée hors-boucle (ZoneLoop non bloquée), Points d'édition, Symptôme, Validation (+4 more)
+### Community 336 - "CNC_CZ_ClientPVPRankLookEquip"
+Cohesion: 0.11
+Nodes (18): Bug découvert (live), Lot — NCID 231 PVPRankLookEquip + fix routage broadcasts ZMis, NCID 231 — preuves natives, Wire 571 `CNC_CZ_ClientPVPRankLookEquip` (Serialize @0x08205af0), CNC_CZ_ClientPVPRankLookEquip, CharId, Entries, Name (+10 more)
 
-### Community 337 - "ZoneSwitchItemLocation"
-Cohesion: 0.15
-Nodes (10): ZoneItemActions, ZoneSwitchItemLocation, DstIndex, DstSlot, DstType, Name, Opcode, SrcIndex (+2 more)
+### Community 337 - "CastLock.Expired"
+Cohesion: 0.27
+Nodes (3): CastLock, CastLockTests, CastLockTests
 
 ### Community 338 - "ZoneAdvStatsInfo"
 Cohesion: 0.09
 Nodes (20): Formula, Source, ZoneAdvStatsInfo, ChanceMult, DamageMult, Formulas, MaxHits, Name (+12 more)
 
-### Community 339 - "TerrainTile"
-Cohesion: 0.13
-Nodes (14): TerrainTile, CellSize, GridH, GridW, Index, Kind, OriginX, OriginY (+6 more)
+### Community 339 - "ZoneClientSpellBlastToLife"
+Cohesion: 0.11
+Nodes (18): ZoneClientSpellBlastToLife, BlastId, BlastIdx, Caster, Field10, Field11, Field12, Field8 (+10 more)
 
 ### Community 340 - "FamilyBuildingItem"
 Cohesion: 0.06
@@ -2716,10 +2876,10 @@ Nodes (18): FamilyHallRules, FamilyBuildingItem, ContainerIndex, DueDate, Durabi
 
 ### Community 341 - "CNC_CW_ClientUpdateFriendMember"
 Cohesion: 0.05
-Nodes (43): 0. INFRA — CORRECTION MAJEURE (cause racine transverse), A2. Sorts à cast time → 0 dégât [CORRIGÉ — même cause], A3. (lié) ordre d'application des stats — voir §C, A. COMBAT — feedback & sorts, B1. Quantités affichées fausses (stack toujours 1) + pas de cooldown potion ET consommables a temps de cooldown (monture, star stone et autre), B2. Achat PNJ : or débité, item invisible (inventaire pas mis a jour visuellement), B3. Montures non équipables [CORRIGÉ — commit en cours], B4. Objectif "collecter" : 0/1 + item absent de l'inventaire, vérifier tous les autres objectif (+35 more)
+Nodes (39): 0. INFRA — CORRECTION MAJEURE (cause racine transverse), A2. Sorts à cast time → 0 dégât [CORRIGÉ — même cause], A3. (lié) ordre d'application des stats — voir §C, A. COMBAT — feedback & sorts, D1. Tracker de quête (panneau droit) disparu, D2. Icône de choix NPC : "talk" au lieu de "!" quête [CORRIGÉ], D3. Objectifs autres que "defeat mob" [IMPLÉMENTÉ — à tester], D. QUÊTES (+31 more)
 
 ### Community 342 - "RollTreasureService"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (11): P17 — Balayage final NCID-ETAT, Roll, RollCheckResult, AlreadyAnswered, Complete, NotParticipant, Recorded, RollEntry (+3 more)
 
 ### Community 343 - "ZoneClientColosseumQuery"
@@ -2727,8 +2887,8 @@ Cohesion: 0.11
 Nodes (19): ZoneClientColosseumQuery, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+11 more)
 
 ### Community 344 - "ProtocolAndSerializationTests.GatewayMessages_ShouldSerializeAndDeserializeCorrectly"
-Cohesion: 0.07
-Nodes (22): Eden.Core.Networking.Messages.Gateway, GatewayAccountLoginRequest, ClientVersion, Name, Opcode, SessionToken, Username, GatewayAccountLoginResponse (+14 more)
+Cohesion: 0.12
+Nodes (12): Eden.Core.Networking.Messages.Gateway, GatewayAccountLoginResponse, AccountId, Message, Name, Opcode, Success, GatewayKickUserMessage (+4 more)
 
 ### Community 345 - "Godot Deployment Guide"
 Cohesion: 0.06
@@ -2736,11 +2896,11 @@ Nodes (31): Command Line Export, Cross-Origin Headers, Deployment Platforms, Des
 
 ### Community 346 - "Entry"
 Cohesion: 0.02
-Nodes (112): Entry, Members, Member, ZoneClientFamilyBattleKilledRank, Entries, Name, Opcode, ZoneClientSearchRoomResult (+104 more)
+Nodes (122): Entry, Members, Member, ZoneClientFamilyBattleKilledRank, Entries, Name, Opcode, ZoneClientSearchRoomResult (+114 more)
 
-### Community 348 - "CNE_ZMis_ZoneServerBuyBackList"
-Cohesion: 0.09
-Nodes (22): CNE_ZMis_ZoneServerBuyBackList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+14 more)
+### Community 348 - "GameplayTests.MeleeAttack_WireLayout"
+Cohesion: 0.16
+Nodes (3): PickCore, GameplayTests, GameplayTests
 
 ### Community 349 - "Phase 1.1.B - Validation & Équipement - Status"
 Cohesion: 0.06
@@ -2754,13 +2914,13 @@ Nodes (31): Fait, Implémentation, Lot banque (commit suivant), Lot courrier (co
 Cohesion: 0.06
 Nodes (32): CNC_CZ_ClientDisplayChar, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+24 more)
 
-### Community 352 - "ZoneClientQueryPlayerCard"
-Cohesion: 0.14
-Nodes (13): ZoneClientQueryPlayerCard, CharId, ClassId, ClassLv, CollectionFlags, CollectionShorts, FamilyName, Intro (+5 more)
+### Community 352 - "CNC_CZ_ClientUpdateRoom"
+Cohesion: 0.12
+Nodes (17): CNC_CZ_ClientUpdateRoom, Field1, Field10, Field11, Field12, Field13, Field14, Field2 (+9 more)
 
 ### Community 353 - "TeamService.CreateTeam"
-Cohesion: 0.14
-Nodes (5): Distribution de loot native (`GetLooter`), Vague 4 — `GetLooter`/`GetTreasureLooter` natifs (distribution réelle), TeamService, AllTeams, TeamServiceTests
+Cohesion: 0.11
+Nodes (6): Distribution de loot native (`GetLooter`), Modifications, Vague 4 — `GetLooter`/`GetTreasureLooter` natifs (distribution réelle), TeamService, AllTeams, TeamServiceTests
 
 ### Community 354 - "CI Integration for Godot Testing"
 Cohesion: 0.06
@@ -2771,20 +2931,20 @@ Cohesion: 0.06
 Nodes (31): ZoneClientPutItemIntoContainer, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+23 more)
 
 ### Community 356 - "RESUME SESSION — lot5 + prompt5 (reprise contexte)"
-Cohesion: 0.07
-Nodes (29): Bugs restants à traiter (ordre), Deploy actuel :5201 (Release), Données utiles, MAJ 10 — Autels : le service lottery se fait par op STRING, MAJ 11 — Autels : point exact du blocage service, MAJ 12 — Pets : code de suivi complet, cause en amont, MAJ 13 — SpawnPet vérifié OK, MAJ 14 — Talents → profile : la chaîne EXISTE, trou = per-spell (+21 more)
+Cohesion: 0.06
+Nodes (30): Bugs restants à traiter (ordre), Deploy actuel :5201 (Release), Données utiles, MAJ 10 — Autels : le service lottery se fait par op STRING, MAJ 11 — Autels : point exact du blocage service, MAJ 12 — Pets : code de suivi complet, cause en amont, MAJ 13 — SpawnPet vérifié OK, MAJ 14 — Talents → profile : la chaîne EXISTE, trou = per-spell (+22 more)
 
 ### Community 357 - "EvaluateInstance"
 Cohesion: 0.07
 Nodes (25): EvaluateInstance, BossKills, BossScore, Boxes, Deaths, Def, DieBonus, ElapsedSeconds (+17 more)
 
 ### Community 358 - "ServerConfig"
-Cohesion: 0.10
-Nodes (15): EventDef, EventDrop, ServerConfig, ActiveEvents, BpGaugePct, CraftSuccessBonusPct, Current, DevMoveSpeedBuffId (+7 more)
+Cohesion: 0.09
+Nodes (16): EventDef, EventDrop, ServerConfig, ActiveEvents, BpGaugePct, CraftSuccessBonusPct, Current, DevMoveSpeedBuffId (+8 more)
 
 ### Community 359 - "HudExtensions.BindSession"
 Cohesion: 0.03
-Nodes (73): ZoneSetAppellation, Name, Opcode, TitleId, StallEntry, VendingState, Goods, IsSelfStall (+65 more)
+Nodes (76): ZoneSetAppellation, Name, Opcode, TitleId, ZoneClientSpellBlastOK, BlastId, Flag, Name (+68 more)
 
 ### Community 360 - "CNC_CZ_ClientPutItemIntoContainer"
 Cohesion: 0.06
@@ -2793,6 +2953,10 @@ Nodes (31): CNC_CZ_ClientPutItemIntoContainer, Field1, Field10, Field11, Field12
 ### Community 361 - "ZoneClientPutItemIntoContainer"
 Cohesion: 0.06
 Nodes (31): ZoneClientPutItemIntoContainer, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+23 more)
+
+### Community 362 - "DragHelper.EnsureTitleBar"
+Cohesion: 0.02
+Nodes (46): 3. Commerce, stockage, services, 7. Ponts réseau / nœuds logiques (pas de rendu direct), PHASE 6 — Complétude HUD/NCID/contenu (suivi `eden_server/docs/temp-plans/2026-10-27-phase6-completude-ncid-client.md`), BattlefieldWindow, BuffBridge, DeathWindow, DestinyBridge, DragHelper (+38 more)
 
 ### Community 363 - "protocol/ZoneDestinyMessages.cs"
 Cohesion: 0.13
@@ -2823,15 +2987,15 @@ Cohesion: 0.07
 Nodes (30): CNC_ZMis_ZoneServerRankInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
 ### Community 370 - "CNC_CZ_ClientSearchTeamInfoV2"
-Cohesion: 0.13
-Nodes (15): CNC_CZ_ClientSearchTeamInfoV2, Entries, Field1, Field3, Name, Opcode, Member, CharId (+7 more)
+Cohesion: 0.22
+Nodes (9): Member, CharId, ClassId, Level, M3, M4, M5, M6 (+1 more)
 
 ### Community 371 - "CNC_CZ_ClientEnterNodeEquipAndSpell"
 Cohesion: 0.07
 Nodes (30): CNC_CZ_ClientEnterNodeEquipAndSpell, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
 ### Community 372 - "CNC_CZ_ClientPutItemIntoInventory"
-Cohesion: 0.06
+Cohesion: 0.07
 Nodes (30): CNC_CZ_ClientPutItemIntoInventory, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
 ### Community 373 - "CNC_CZ_ClientPutItemIntoStorage"
@@ -2843,8 +3007,8 @@ Cohesion: 0.07
 Nodes (30): CNC_CZ_ClientRankInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
 ### Community 375 - "CNC_CZ_ClientSeeChar"
-Cohesion: 0.07
-Nodes (30): CNC_CZ_ClientSeeChar, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
+Cohesion: 0.06
+Nodes (37): 1. Contexte & Architecture Native, 2. Table des Commandes Réseau Fondamentales (Gameplay Loop), 3. Moteur Spatial & Grille Area of Interest (AOI), 4. Moteur de Combat & Cycle de Vie Entités, 5. Synchronisation et Persistance DB (`fndb1`), Partitionnement Spatial, Plan d'Action & Spécification Rétro-Ingénierie : Eden.Zone (ZoneServer), CNC_CZ_ClientSeeChar (+29 more)
 
 ### Community 376 - "CNC_CZ_ClientPetLotteryResult"
 Cohesion: 0.10
@@ -2867,16 +3031,16 @@ Cohesion: 0.07
 Nodes (30): ZoneClientRankInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+22 more)
 
 ### Community 381 - "ServicePanels"
-Cohesion: 0.05
-Nodes (17): Battlefield, Costume, HeroTraitState, Current, IconPath, Hotel, Inspect, Lottery (+9 more)
+Cohesion: 0.08
+Nodes (4): Battlefield, Hotel, Inspect, ServicePanels
 
 ### Community 382 - "KfPose"
-Cohesion: 0.16
-Nodes (7): KfPose, _indexByBlock, NodeCount, NodeOrder, UnmatchedTracks, World, KfTests
+Cohesion: 0.12
+Nodes (8): KfPose, _indexByBlock, NodeCount, NodeOrder, UnmatchedTracks, World, NifSkin, KfTests
 
-### Community 383 - "CostumeVisual.Merge"
-Cohesion: 0.14
-Nodes (5): CostumeVisual, GridResizeMath, PreviewPanMath, Plan22Tests, Plan22Tests
+### Community 383 - "NativeCombatFormulas.Movement"
+Cohesion: 0.18
+Nodes (6): B1 — Auto-follow / pathfinding réel, B2 — Move speed 300 % → buff stat + config.txt  - NON FAIT (a vérifier l'existant), B3 — Portal stone : TP gratuit par état  - NON FAIT (a vérifier car je ne vois pas de status), B4 — Coffres rareté : voir A6.3 · B5 — Ping : voir A4.4, PHASE B — Gameplay / systèmes, RideSpeedTests
 
 ### Community 384 - "gen_ui_text.py"
 Cohesion: 0.24
@@ -2894,9 +3058,9 @@ Nodes (9): bp_drops(), class_group_names(), class_rank_buffs(), clean_text(), ex
 Cohesion: 0.08
 Nodes (14): QuestCatalog, QuestKind, Awakening, Class, Daily, Guild, Main, Other (+6 more)
 
-### Community 388 - "WorldFamilyOp"
-Cohesion: 0.10
-Nodes (16): WorldFamilyOp, A, B, Name, Op, Opcode, S1, S2 (+8 more)
+### Community 388 - "BinWriter.ToArray"
+Cohesion: 0.01
+Nodes (85): WorldItemMallPointInfoQuery, Name, Opcode, ZoneClientReviveInfo, Area, Name, Opcode, ZoneSpellCastToNearby (+77 more)
 
 ### Community 389 - "03 - Stats et Profil Joueur"
 Cohesion: 0.07
@@ -2908,7 +3072,7 @@ Nodes (15): CNC_CZ_ClientSeeTreasure, Field1, Field10, Field11, Field12, Field2,
 
 ### Community 391 - "PaySystemParser.Parse"
 Cohesion: 0.11
-Nodes (10): Hors scope (documenté), Lot : NCID 253 PayEventSelect (système pay-events complet), Plan, Preuve native (zone server_us), PayCostItem, PayEventDef, PaySystemParser, PayEventCmd (+2 more)
+Nodes (9): Hors scope (documenté), Lot : NCID 253 PayEventSelect (système pay-events complet), Plan, Preuve native (zone server_us), PayCostItem, PayEventDef, PaySystemParser, PayEventCmdParser (+1 more)
 
 ### Community 392 - "ZoneMissionStates"
 Cohesion: 0.18
@@ -2946,9 +3110,9 @@ Nodes (27): ZoneSeeMob, DisplayName, EntityId, FieldSpeed, FieldZ, Flag0, Handle
 Cohesion: 0.12
 Nodes (16): Mail, AttachedGold, AttachedItemIds, AttachmentsClaimed, Body, CodAmount, ExpiresAt, Id (+8 more)
 
-### Community 402 - "ClientSeeCharCodec.LifeFlags"
-Cohesion: 0.25
-Nodes (7): C — Strafe : pivot monture UNIQUEMENT (`clientmod` + binaries), J — Jeu serveur (2 agents), JS — Skills + procs, JT — Town list + Go to Base, Lot 14 — prompt10e : strafe monture seulement, skills thief, procs, town list, SNAPSHOT 2 (lot 14), SNAPSHOT (lot 14 en cours)
+### Community 402 - "WorkCollectDef"
+Cohesion: 0.12
+Nodes (15): WorkCollectDef, BuildingDamage, BuildingDamageChance, BuildingExp, BuildingLevel, CatalystAmount, CatalystItemId, Duration (+7 more)
 
 ### Community 403 - "CNC_ZMis_ZoneServerBuyBackList"
 Cohesion: 0.07
@@ -2958,9 +3122,9 @@ Nodes (28): CNC_ZMis_ZoneServerBuyBackList, Field1, Field10, Field11, Field12, F
 Cohesion: 0.07
 Nodes (26): Array Assertions, Assert Failure, Basic Pattern, Boolean, Common Patterns, Custom Failure Messages, Dictionary Assertions, Equality (+18 more)
 
-### Community 405 - "TicketBody"
-Cohesion: 0.08
-Nodes (25): GetTicket, Name, Opcode, GetTicketReply, Name, Opcode, TicketBody, UseTicket (+17 more)
+### Community 405 - "EdenClient.Protocol"
+Cohesion: 0.02
+Nodes (51): EdenClient.Game, EdenClient.Net, EdenClient.Protocol, NetTests, EdenClient.Windows, EdenClient.NetTests, GetTicketReply, Name (+43 more)
 
 ### Community 406 - "ZoneSeeChar"
 Cohesion: 0.07
@@ -2995,8 +3159,8 @@ Cohesion: 0.07
 Nodes (27): CNC_CZ_ClientBattlefieldResult, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+19 more)
 
 ### Community 415 - "GameScene.RegisterZoneDispatch"
-Cohesion: 0.03
-Nodes (60): AuctionState, BuyList, IsOpen, LastSellResult, NpcUid, PendingBuyId, PendingCancelId, SellList (+52 more)
+Cohesion: 0.02
+Nodes (103): AuctionState, BuyList, IsOpen, LastSellResult, NpcUid, PendingBuyId, PendingCancelId, SellList (+95 more)
 
 ### Community 416 - "ZoneClientBattlefieldResult"
 Cohesion: 0.07
@@ -3006,25 +3170,25 @@ Nodes (27): ZoneClientBattlefieldResult, Field1, Field10, Field11, Field12, Fiel
 Cohesion: 0.08
 Nodes (22): Contexte & preuve (`CNE_CZ_ZoneServerTeamOperation::Execute` zone/decompiled.c:532135), Lot : TeamOperation natif (loot/roll/raid) — 2026-10-20, Plan, Modifications vague 2, Preuves complémentaires, Vague 2 — flags `CForceTeam` + `GiveGold` natifs (même jour), Vérification, TeamEntity (+14 more)
 
-### Community 418 - "CNE_DBA_ClientAllFamily"
-Cohesion: 0.03
-Nodes (70): CNC_ZMis_MissionServerItemMallMailCheck, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+62 more)
+### Community 418 - "CNC_ZMis_MissionServerItemMallMailSend"
+Cohesion: 0.15
+Nodes (13): CNC_ZMis_MissionServerItemMallMailSend, Field1, Field10, Field2, Field3, Field4, Field5, Field6 (+5 more)
 
 ### Community 419 - "MissionDb"
-Cohesion: 0.05
-Nodes (8): V1 implémenté (commit), BoardMessage, CoupleIds, MailTakenItem, MissionDb, DataSource, PlayerCardFull, RoomService
+Cohesion: 0.06
+Nodes (6): BoardMessage, CoupleIds, MailTakenItem, MissionDb, DataSource, PlayerCardFull
 
 ### Community 420 - "UiControlKind"
 Cohesion: 0.08
 Nodes (26): UiControlKind, Button, CheckBox, ColorRect, Control, HScrollBar, HSlider, ItemList (+18 more)
 
-### Community 421 - "SceneEvent"
-Cohesion: 0.13
-Nodes (14): Branch, Actions, Conds, Cmd, Args, Name, SceneEvent, Branches (+6 more)
+### Community 421 - "ClassEntity"
+Cohesion: 0.12
+Nodes (14): ClassEntity, BaseClassId, Description, DetailedDescription, HeroicTrait, Id, IsAwakened, IsBeginningJob (+6 more)
 
 ### Community 422 - "CNC_ZMis_MissionServerUpdatePlayerCard"
-Cohesion: 0.11
-Nodes (18): CNC_ZMis_MissionServerUpdatePlayerCard, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+10 more)
+Cohesion: 0.03
+Nodes (54): CNC_CW_ClientGetWorldServers, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+46 more)
 
 ### Community 424 - "RecruitBoard"
 Cohesion: 0.17
@@ -3050,9 +3214,9 @@ Nodes (18): 26 - Recherche Communauté, Implémentation, Symboles, TODO, 7.1 Ami
 Cohesion: 0.15
 Nodes (15): 2.5 Boutiques (AP/EP Item Mall), Currency, AP, EP, ItemMallService, CatalogCount, MallItem, Category (+7 more)
 
-### Community 430 - "ZonePlayerClassList"
-Cohesion: 0.14
-Nodes (14): Entry, AaPoint, ClassExp, ClassId, ClassLevel, ClassPoints, Licenses, Style (+6 more)
+### Community 430 - "CNE_ZM_ZoneServerSetRebornMonsterResult"
+Cohesion: 0.12
+Nodes (16): CNE_ZM_ZoneServerSetRebornMonsterResult, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+8 more)
 
 ### Community 431 - "CNC_CZ_ClientTeamNewMemberInfo"
 Cohesion: 0.12
@@ -3064,7 +3228,7 @@ Nodes (23): Assets 3D par catégorie, Audio, `char/` — personnages joueurs (~7
 
 ### Community 433 - "ArchiveWindow"
 Cohesion: 0.08
-Nodes (15): Card, Category, Group, Id, NameBig5, Order, Points, Special (+7 more)
+Nodes (16): Award, Conds, Enchant, Id, Card, Category, Group, Id (+8 more)
 
 ### Community 434 - "GraphicsPreset"
 Cohesion: 0.17
@@ -3073,6 +3237,10 @@ Nodes (10): GraphicsPreset, Custom, High, Low, Medium, Ultra, OutlineMode, All (
 ### Community 435 - "mission"
 Cohesion: 0.12
 Nodes (24): DATA_DIR, EDEN_DATA, EDEN_OBSERVABILITY_BIND, EDEN_OBSERVABILITY_PORT, EDEN_REFORGED_DB, MISSION_HOST, POC_ADVERTISE_IP, POC_ADVERTISE_PORT (+16 more)
+
+### Community 436 - "EdenDir"
+Cohesion: 0.24
+Nodes (3): EdenDir, EdenDirTests, EdenDirTests
 
 ### Community 437 - "CNC_CZ_ClientFamilyInstanceData"
 Cohesion: 0.08
@@ -3086,25 +3254,25 @@ Nodes (22): Compteurs & score (CEvaluate @0x845c000+), Contexte natif (preuves z
 Cohesion: 0.08
 Nodes (23): Plan chantier — croisade siège (CBattleCrusade natif), Preuves natives collectées (mission/decompiled.c), État actuel C#, CNC_ZMis_ZoneServerBattleCrusadeInfo, Field1, Field2, Field3, Field4 (+15 more)
 
-### Community 441 - "Tuto IA — faire de l'UI et corriger des bugs sur Eden Portage"
-Cohesion: 0.14
-Nodes (13): 0. Les 7 règles d'or, 1. Boucle de travail standard, 3. Cas d'école B — bugs gameplay (chaque ligne = un raisonnement type), 4. Anti-patterns à éviter, 5. Recettes pratiques, 6. Modèle de compte rendu final, B1. Deux montures en même temps / monture perdue au changement de map, B2. Rendre une quête avec un sac trop plein (+5 more)
+### Community 441 - "ItemCooldownService"
+Cohesion: 0.25
+Nodes (7): B1. Quantités affichées fausses (stack toujours 1) + pas de cooldown potion ET consommables a temps de cooldown (monture, star stone et autre), B2. Achat PNJ : or débité, item invisible (inventaire pas mis a jour visuellement), B3. Montures non équipables [CORRIGÉ — commit en cours], B4. Objectif "collecter" : 0/1 + item absent de l'inventaire, vérifier tous les autres objectif, B. INVENTAIRE / ITEMS, ItemCooldownService, ItemCooldownTests
 
 ### Community 442 - "CNC_ZMis_ZoneServerTerritoryQuery"
 Cohesion: 0.08
 Nodes (24): CNC_ZMis_ZoneServerTerritoryQuery, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+16 more)
 
-### Community 443 - "IniTable.ParseFile"
+### Community 443 - "IniTable.GetInt"
 Cohesion: 0.02
-Nodes (97): 1. Description, 2. Données, 32 - Succès et Titres, 3. Implémentation C#, 4. TODO / À reverser, S_Achievement.ini (`|V.4|15|`, 3 844 entrées), S_Title.ini (`|V.3|6|`, 337 entrées), 13.1 Life Skills (+89 more)
+Nodes (89): A3.1 — Tooltip item par type (le gros morceau)  - NON FAIT (il manque simplement le fait que la durabilité est totalement mal faite car mauvaise durabilité et parfois item qui n'ont pas de durabilité mais indiqué quand même, le reste c'est bon), A3.2 — IDs au hover (items + skills + classes), A3. Item tooltip refonte + IDs, Contexte, Déroulé, Hors scope (lots suivants), Plan de lot — player_works (ordres de fabrication), Preuves natives VERIFIÉES (zone/decompiled.c) (+81 more)
 
 ### Community 444 - "EndToEndGameplayLoopTests.Test_FullGameplayLoop_Authentication_To_ZoneMovement"
-Cohesion: 0.18
-Nodes (6): Eden.Zone.Spatial, GridCell, CellX, CellY, SpatialGrid, CellSize
+Cohesion: 0.22
+Nodes (5): GridCell, CellX, CellY, SpatialGrid, CellSize
 
-### Community 445 - "ChatPanel"
-Cohesion: 0.12
-Nodes (4): ChatEntry, ChatPanel, InputFocused, ChatProbe
+### Community 445 - "CNE_CW_ServerIllPluginInfo"
+Cohesion: 0.13
+Nodes (15): CNE_CW_ServerIllPluginInfo, Field1, Field10, Field11, Field12, Field2, Field3, Field4 (+7 more)
 
 ### Community 446 - "GdUnit4 Scene Runner"
 Cohesion: 0.09
@@ -3114,13 +3282,17 @@ Nodes (22): Accessing the Scene, Buttons, Click at Position, Complete Example, C
 Cohesion: 0.09
 Nodes (23): 01 - Système de Classes et Changement de Classe, 1. Description du Système, 3. Fichiers de Données Associés, 4. Protocole Réseau, 5. Base de Données PostgreSQL, 7. Tests de Validation, 8. À Faire (TODO), 9. Notes de Reverse Engineering (+15 more)
 
-### Community 449 - "MatchmakingService"
+### Community 448 - "IniTable"
 Cohesion: 0.10
+Nodes (6): MyCrypt, IniTable, ColumnCount, Rows, Separator, Version
+
+### Community 449 - "MatchmakingService"
+Cohesion: 0.11
 Nodes (18): 5.1 Party (Groupe), 5.2 Raid (25+ joueurs), 5.3 Random/Matchmaking, 5.4 Guildes/Familles, PHASE 5: Systèmes de Groupe et Contenu Multijoueur, MatchmakingService, QueueCount, MatchResult (+10 more)
 
 ### Community 450 - "Appearance"
-Cohesion: 0.12
-Nodes (11): Lot : Eden.Admin — CLI création comptes/personnages, Points d'édition, Preuves natives, Reste, Symptôme / besoin, Vérification live, Appearance, AppearanceBlob (+3 more)
+Cohesion: 0.09
+Nodes (15): Appearance, AppearanceCodec, AppearanceCodecTests, Lot : Eden.Admin — CLI création comptes/personnages, Points d'édition, Preuves natives, Reste, Symptôme / besoin (+7 more)
 
 ### Community 451 - "Technical Design"
 Cohesion: 0.09
@@ -3136,7 +3308,7 @@ Nodes (23): CNC_ZMis_ZoneServerQueryPlayerCard, Field1, Field10, Field11, Field1
 
 ### Community 454 - "Avancement (2026-11-02)"
 Cohesion: 0.05
-Nodes (28): Avancement (2026-11-02), Inventaire quêtes et montures (EDENFR, corpus/fr-full) — 2026-11-02, Montures, Quêtes, 1. Particules en rectangles — correctif agent E confirmé à l'image, 4. Plantes / champignons / toutes textures — NON REPRODUIT, audit chiffré, Autres correctifs, Première attaque (6) — mesuré (`--combat-test` live, A/B `EDEN_ATTACK_LEGACY=1`) (+20 more)
+Nodes (32): Avancement (2026-11-02), 1. Particules en rectangles — correctif agent E confirmé à l'image, 3. Joueur : couleurs aberrantes — CORRIGÉ (VISUALLY_VALIDATED sur 1 perso), 4. Plantes / champignons / toutes textures — NON REPRODUIT, audit chiffré, Autres correctifs, Première attaque (6) — mesuré (`--combat-test` live, A/B `EDEN_ATTACK_LEGACY=1`), Session 2 — captures du propriétaire (formes noires, carrés, glitch monture), Session 2 (suite) — HUD et classe (+24 more)
 
 ### Community 455 - "BotOptions"
 Cohesion: 0.09
@@ -3155,8 +3327,8 @@ Cohesion: 0.09
 Nodes (21): API Reference, Custom Port, Debugging, E2E Testing Example, Game State Control, How It Works, Input Simulation, Installation (+13 more)
 
 ### Community 459 - "ItemMallWindow"
-Cohesion: 0.07
-Nodes (10): ItemMallWindow, ShopWindow, ItemMallEntry, EffectivePrice, Group, MoneyUnit, WorldItemMallReceiveAttempt, Name (+2 more)
+Cohesion: 0.11
+Nodes (6): DataWarmup, ItemMallWindow, WorldItemMallReceiveAttempt, Name, Opcode, ReceiptId
 
 ### Community 460 - "InterpBuffer"
 Cohesion: 0.18
@@ -3167,28 +3339,28 @@ Cohesion: 0.16
 Nodes (3): ClientSettings, FontSize, UiScale
 
 ### Community 462 - "LimitlessService"
-Cohesion: 0.15
-Nodes (11): 4.1 `LimitlessService` (Eden.Core.Game.Services), 4.2 Traque « skill lancée » — `CombatantSnapshot` / `LiveMob`, 4.3 Attribution — `Combat.Rewards` (GainExp du kill), 4.4 Application des Perks, 4.5 Émissions réseau, 4. Logique backend (zone C#), GrantResult, LimitlessService (+3 more)
+Cohesion: 0.09
+Nodes (15): Exemple livré, Format, `[level]` — courbe de coût (optionnelle), `limitless_pass.ini` — récompenses du Limitless Pass, `[reward]` — perks/buffs par palier, Sémantique de la fusion, GrantResult, LimitlessService (+7 more)
 
 ### Community 463 - "Limitless Level & Exp Ultime — Design technique"
-Cohesion: 0.14
-Nodes (13): 1. Vision, 2.1 Cap dynamique, 2.2 Gain d'Exp Ultime par kill — règles strictes, 2.3 Limitless Pass, 2.4 Persistance & multi-personnage, 2. Règles métier (figées côté design), 3. Architecture BDD, 5.1 Barre d'Exp Ultime (profile) (+5 more)
+Cohesion: 0.10
+Nodes (19): 1. Vision, 2.1 Cap dynamique, 2.2 Gain d'Exp Ultime par kill — règles strictes, 2.3 Limitless Pass, 2.4 Persistance & multi-personnage, 2. Règles métier (figées côté design), 3. Architecture BDD, 4.1 `LimitlessService` (Eden.Core.Game.Services) (+11 more)
 
 ### Community 464 - "MinimapPanel"
 Cohesion: 0.05
-Nodes (13): MinimapPanel, MapCode, NodeId, Scene, SelfPos, WorldSpan, ZoomProbe, RegionMapWindow (+5 more)
+Nodes (15): MinimapPanel, MapCode, NodeId, Scene, SelfPos, WorldSpan, ZoomProbe, SocialWindow (+7 more)
 
-### Community 465 - "PerfTrace"
-Cohesion: 0.16
-Nodes (4): PerfTrace, Enabled, Span, SeqRandom
+### Community 465 - "CNC_CZ_ClientSpellBlastToLife"
+Cohesion: 0.13
+Nodes (15): CNC_CZ_ClientSpellBlastToLife, Field1, Field10, Field11, Field12, Field2, Field3, Field4 (+7 more)
 
 ### Community 466 - "StallGood"
 Cohesion: 0.08
 Nodes (24): StallGood, Clone2e, Combo, Container, DueDate, Durability, EmbeddedIds, ExtraCombos (+16 more)
 
-### Community 467 - "Protocol/ZoneEntryDataMessages.cs"
-Cohesion: 0.01
-Nodes (123): ZoneClientMigrationDone, Name, Opcode, Value, ZoneClientNewPlayerGuide, F1, F2, Name (+115 more)
+### Community 467 - "List"
+Cohesion: 0.02
+Nodes (121): ZoneClientLookEquip, CharId, ItemUids, Name, Opcode, U1, U2, ZoneClientPVPRankLookEquip (+113 more)
 
 ### Community 468 - "CNC_ZMis_ZoneServerFamilyContainerUpdate"
 Cohesion: 0.09
@@ -3198,9 +3370,9 @@ Nodes (22): CNC_ZMis_ZoneServerFamilyContainerUpdate, Field1, Field10, Field11, 
 Cohesion: 0.09
 Nodes (22): CNC_ZMis_ZoneServerUpdateRoom, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+14 more)
 
-### Community 470 - "CharModelSpec.BodyStem"
-Cohesion: 0.07
-Nodes (29): WorldCreateCharacterData, Appearance, ClassId, Flag, Name, Opcode, Race, WorldCreateCharacterName (+21 more)
+### Community 470 - "WorldCreateCharacterData"
+Cohesion: 0.10
+Nodes (12): WorldCreateCharacterData, Appearance, ClassId, Flag, Name, Opcode, Race, ZoneAdvStatsQuery (+4 more)
 
 ### Community 471 - "GameDataManifest"
 Cohesion: 0.18
@@ -3211,20 +3383,20 @@ Cohesion: 0.17
 Nodes (10): ClassRankTable, RankDef, ClassId, Tiers, RankTier, ClassRankTable, RankDef, ClassId (+2 more)
 
 ### Community 473 - "ZoneDivideItem"
-Cohesion: 0.04
-Nodes (43): ZoneWhoIs, CharId, Flag, Name, Opcode, ZoneClientScreenMessage, Kind, Name (+35 more)
+Cohesion: 0.20
+Nodes (9): ZoneDivideItem, Count, DstBag, DstSlot, Kind, Name, Opcode, SrcBag (+1 more)
 
 ### Community 474 - "MissionObjectives"
 Cohesion: 0.13
 Nodes (13): Kind, AreaTravel, ItemCollect, ItemGiven, ItemGot, Kill, MultiTalk, NpcItem (+5 more)
 
 ### Community 475 - "Baked"
-Cohesion: 0.16
+Cohesion: 0.17
 Nodes (8): Baked, ColCount, Rows, Sep, Version, LazyRows, Count, TableBin
 
-### Community 476 - "collections"
-Cohesion: 0.23
-Nodes (14): doc_anims(), doc_av(), doc_index(), doc_misc(), doc_models(), doc_scenes(), doc_tables(), doc_textures() (+6 more)
+### Community 476 - "zsniff_decode.py"
+Cohesion: 0.18
+Nodes (6): frames(), main(), RC4, read_pcap(), rsa_decrypt(), Stream
 
 ### Community 477 - "ChatMessage"
 Cohesion: 0.12
@@ -3258,9 +3430,9 @@ Nodes (20): 📋 Checklist, 📊 Expected Results, 📁 Files to Modify, Ghidra 
 Cohesion: 0.12
 Nodes (16): ZoneClientFamilyInstanceData, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+8 more)
 
-### Community 485 - "Plan — Destiny Road / Destiny Dice (chemin d'éveil)"
-Cohesion: 0.29
-Nodes (6): Machine d'état (DestinyRoadAction), Plan — Destiny Road / Destiny Dice (chemin d'éveil), S_Item destiny fields, Sources natives (preuves), Écarts documentés vs natif, Événements (DestinyDiceEvent)
+### Community 485 - "ZoneClientTradeAddItem"
+Cohesion: 0.13
+Nodes (15): ZoneClientTradeAddItem, Count, HasItem, ItemId, ItemName, LocExtra, Name, Opcode (+7 more)
 
 ### Community 486 - "CeguiScheme"
 Cohesion: 0.14
@@ -3287,8 +3459,8 @@ Cohesion: 0.11
 Nodes (17): AchievementDef, AppellationId, Code, Description, GroupKey, Id, ItemCol10, ItemReward (+9 more)
 
 ### Community 492 - "WorkOrderService"
-Cohesion: 0.21
-Nodes (6): StartPlan, Materials, Texts, WorkError, Ok, WorkOrderService
+Cohesion: 0.16
+Nodes (7): WorkTypes, StartPlan, Materials, Texts, WorkError, Ok, WorkOrderService
 
 ### Community 493 - "CardRow"
 Cohesion: 0.10
@@ -3298,17 +3470,17 @@ Nodes (21): CardRow, B, BD, BM, ClassId, ClassLv, FamilyName, G (+13 more)
 Cohesion: 0.12
 Nodes (16): ZoneClientUpdateLottery, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+8 more)
 
-### Community 495 - "KfAnimation"
-Cohesion: 0.33
-Nodes (6): KfAnimation, Enabled, KfBakedSequence, TextKeys, Tracks, KfBakedTrack
+### Community 495 - "Report"
+Cohesion: 0.24
+Nodes (4): Acc, EpkWriter, NativeHooks, Report
 
 ### Community 496 - "build_official.py"
 Cohesion: 0.14
 Nodes (12): _cjk(), cp1252_to_utf8(), cp950_to_utf8(), find_db(), _fr_line(), load_list(), _norm_dir(), _pipe_extra() (+4 more)
 
-### Community 497 - "Award"
-Cohesion: 0.50
-Nodes (4): Award, Conds, Enchant, Id
+### Community 497 - "PaletteSlot"
+Cohesion: 0.14
+Nodes (14): PaletteSlot, DarkLine, GreyBtn, GreyBtnHover, GreyBtnLine, InsetBg, InsetLine, None (+6 more)
 
 ### Community 498 - "Data/ClientSettings.cs"
 Cohesion: 0.10
@@ -3335,16 +3507,16 @@ Cohesion: 0.10
 Nodes (21): EdenSessionOptions, Account, CharId, ClientVersion, EntryListenSeconds, Host, LoginPort, MachineId (+13 more)
 
 ### Community 505 - "CeguiNode"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (8): CeguiLayout, CeguiNode, Children, IsAutoWindow, Name, PropLists, Props, Type
 
 ### Community 506 - "EpkFormat"
 Cohesion: 0.10
 Nodes (16): BlobCodec, Raw, Tombstone, Zstd, EpkFormat, PackFlags, Encrypted, IndexZstd (+8 more)
 
-### Community 507 - "AppearanceCodec.Encode"
-Cohesion: 0.26
-Nodes (4): Appearance, AppearanceCodec, AppearanceCodecTests, AppearanceCodecTests
+### Community 507 - "ZoneUpdateEquipmentView"
+Cohesion: 0.16
+Nodes (7): ZoneUpdateEquipmentView, CharId, Hidden, Items, LocMask, Name, Opcode
 
 ### Community 508 - "GdUnit4 Quickstart"
 Cohesion: 0.10
@@ -3363,40 +3535,44 @@ Cohesion: 0.10
 Nodes (20): ZoneClientLotteryResult, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+12 more)
 
 ### Community 512 - "Audit technique — état actuel du projet Eden Server C#/.NET 8"
-Cohesion: 0.06
-Nodes (26): 1.1 Packages NuGet, 1.3 Persistance et entités, 1. Architecture C# et stack technologique, 2.1 Workflow actuel (après refonte `reindex`), 2.2 Méthodologie C++ → C#, 2. Traitement du pseudo-code (`decompiled.c`), 3.1 Outils existants (souvent sous-estimés), 3.2 Ce qui manque (le vrai gap) (+18 more)
+Cohesion: 0.10
+Nodes (19): 2.1 Workflow actuel (après refonte `reindex`), 2.2 Méthodologie C++ → C#, 2. Traitement du pseudo-code (`decompiled.c`), 3.1 Outils existants (souvent sous-estimés), 3.2 Ce qui manque (le vrai gap), 3. Analyse réseau et RE dynamique, 4.1 Inventaire, 4.2 Ce qui manque pour garder le fil (+11 more)
 
 ### Community 513 - "06 - Système d'Échange P2P (Trade)"
 Cohesion: 0.10
 Nodes (19): 06 - Système d'Échange P2P (Trade), 1. Description du Système, 3. Fichiers de Données Associés, 4. Protocole Réseau, 5. Base de Données PostgreSQL, 6.1 Entités, 6.2 Service de Trade, 6. Implémentation C# (+11 more)
 
 ### Community 514 - "Action"
-Cohesion: 0.06
-Nodes (15): A2.1 Settings : bascule native et contenu (2026-10-30), Audit panels : langue + thème (A5.8), Bascule `OptionControlUIVer2.layout` : NON retenue, Checklist fenêtres (MakeWindow / EnsureTitleBar), Fait dans ce lot (2e passage), Hotkeys, Preferences, Reste (+7 more)
+Cohesion: 0.03
+Nodes (15): Bascule `OptionControlUIVer2.layout` : NON retenue, Correctif appliqué (à imiter), SkinViewer, ClassChangeDialog, Classes, CinemaMode, InputBindings, Instance (+7 more)
 
-### Community 515 - "WorkCombineDef"
-Cohesion: 0.04
-Nodes (54): A3.1 — Tooltip item par type (le gros morceau)  - NON FAIT (il manque simplement le fait que la durabilité est totalement mal faite car mauvaise durabilité et parfois item qui n'ont pas de durabilité mais indiqué quand même, le reste c'est bon), A3.2 — IDs au hover (items + skills + classes), A3. Item tooltip refonte + IDs, Contexte, Déroulé, Hors scope (lots suivants), Plan de lot — player_works (ordres de fabrication), Preuves natives VERIFIÉES (zone/decompiled.c) (+46 more)
+### Community 515 - "CombineStationTests"
+Cohesion: 0.23
+Nodes (4): CombineCheck, CombineStationService, Texts, CombineStationTests
 
 ### Community 516 - "GameBalance"
-Cohesion: 0.12
-Nodes (15): Checklist, Décisions, Limitless Pass UI + .ini rewards (lot 8 — C2/C3), Preuves reverse collectées, Reste à valider en jeu (visuel), GameBalance, AgiToMoveSpeed, BlockRateCapPct (+7 more)
+Cohesion: 0.08
+Nodes (22): Checklist, Décisions, Limitless Pass UI + .ini rewards (lot 8 — C2/C3), Preuves reverse collectées, Reste à valider en jeu (visuel), Bilan final — Phase 4 clôturée (2026-10-24), Critères, P4.1 — ILogger par catégorie (+14 more)
 
-### Community 517 - "MapLoader"
+### Community 517 - "Node3D"
 Cohesion: 0.03
-Nodes (58): 1. Ce que prouve ce document, et ce qu'il ne prouve pas, 2. Comment un node devient une géométrie (preuve par le code), 3. Règles de classification (appliquées par `build_docs.py`), 5. Lacunes authentiques (archive) restantes, 7. Non vérifié, 8. Table par map attestée, Atlas et attestation des maps (EDENFR, client natif Godot 4.8), Analyse `re/` — flux de chargement natif (Bloc J) (+50 more)
+Nodes (45): 2. Comment un node devient une géométrie (preuve par le code), Notre flux (Godot) — comparaison, Phases de chargement, Phase 0 — EdenVfs + EPK v1 en clair (socle), C5 — mesure `--perf` du flux réel (28/10/2026), Constaté déjà en place (pas de travail nécessaire), Mesure RAM « top 5 postes » (2026-11, `--perf` + `tex-postes`), Mesures (spawn joueur, 1280×720, RTX 4060, preset Medium, solo) (+37 more)
 
 ### Community 518 - "TerritoryState"
 Cohesion: 0.12
 Nodes (17): TerritoryState, AttachedNodeId, AttackerChars, AttackerFamilies, BattleNodeId, BeginEpoch, DefenderChars, DefenderFamilies (+9 more)
+
+### Community 519 - "MonsterParser.Parse"
+Cohesion: 0.15
+Nodes (9): 1. Description, 27 - Système de Monstres et Boss, 2. Symboles lapis::, 3. Données : S_Monster.ini (`|V.6|62|`, 12 896 monstres), 4. Implémentation C#, 5. Tests, 5bis. Mort d'un mob — séquence native livrée (18 Oct), 6. TODO / À reverser (+1 more)
 
 ### Community 520 - "DbRole"
 Cohesion: 0.18
 Nodes (7): DbConnectionFactory, DbRole, Account, Game, Member, DbConnectionFactoryTests, TestDb
 
 ### Community 521 - "CNC_CW_ClientUpdateFamilyMember"
-Cohesion: 0.10
-Nodes (20): CNC_CW_ClientUpdateFamilyMember, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+12 more)
+Cohesion: 0.07
+Nodes (28): CNC_CW_ClientUpdateFamilyMember, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+20 more)
 
 ### Community 522 - "ZoneClientTerritoryQuery"
 Cohesion: 0.09
@@ -3405,6 +3581,10 @@ Nodes (22): ZoneClientTerritoryQuery, Field1, Field10, Field11, Field12, Field13
 ### Community 523 - "WorldClientFamilyAchievementUpdate"
 Cohesion: 0.12
 Nodes (17): WorldClientFamilyAchievementUpdate, Field1, Field10, Field11, Field12, Field13, Field14, Field2 (+9 more)
+
+### Community 524 - "CNC_CZ_ClientFamilyContainerPutItem"
+Cohesion: 0.14
+Nodes (14): CNC_CZ_ClientFamilyContainerPutItem, Field1, Field10, Field11, Field2, Field3, Field4, Field5 (+6 more)
 
 ### Community 525 - "EPK natif : notes d'outillage et lectures hors EdenVfs (P1, P2, P3, P5)"
 Cohesion: 0.17
@@ -3419,12 +3599,12 @@ Cohesion: 0.10
 Nodes (20): ZoneClientLotteryResult, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+12 more)
 
 ### Community 528 - "TerritoryWarService"
-Cohesion: 0.21
-Nodes (4): Implémentation, TerritoryWarService, AllTerritories, TerritoryWarTests
+Cohesion: 0.11
+Nodes (11): Cycle guerre natif (désasm zone — sortants), Cycle implémenté (P14.3), Données, Implémentation, Lot Territoire + Family Battle — NCIDs 189/190/225 → 515/516/561, Side, Blue, Red (+3 more)
 
 ### Community 529 - "HudExtensions.BindEntryData"
 Cohesion: 0.02
-Nodes (100): WorldRepeatedLogin, Name, Opcode, Value, WorldUpdateFamilyMember, CharId, CharName, Name (+92 more)
+Nodes (70): WorldUpdateFamilyMember, CharId, CharName, Name, Nums, Opcode, Text1, Text2 (+62 more)
 
 ### Community 530 - "ZoneClientFamilyContainerData"
 Cohesion: 0.13
@@ -3454,9 +3634,9 @@ Nodes (15): ZoneClientFamilyTownMemberQuery, Field1, Field10, Field11, Field12, 
 Cohesion: 0.11
 Nodes (19): Restes différés (documentés AUDIT-EFFETS-SORTS), CNC_CZ_ClientChangeSpell, Field1, Field2, Field3, Field4, Field5, Field6 (+11 more)
 
-### Community 537 - "CNE_ZMis_ZoneServerAuctionBuyList"
-Cohesion: 0.09
-Nodes (22): CNE_ZMis_ZoneServerAuctionBuyList, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+14 more)
+### Community 537 - "CNC_CZ_ClientMagicBoxResult"
+Cohesion: 0.14
+Nodes (14): CNC_CZ_ClientMagicBoxResult, Field1, Field10, Field11, Field2, Field3, Field4, Field5 (+6 more)
 
 ### Community 538 - "CharRow"
 Cohesion: 0.11
@@ -3499,20 +3679,20 @@ Cohesion: 0.10
 Nodes (19): 1. Passifs raciaux par classe (race × classe), 2. Sorts raciaux par branche (race × branche), 3. Fonctionnement récapitulé, 4. Divergences entre sources (à trancher via les binaires/données), 5. Données MANQUANTES (non trouvées dans les wikis), Branche DPS Corps à corps, Branche DPS Magique, Branche DPS à Distance (+11 more)
 
 ### Community 548 - "NativeElfCodec"
-Cohesion: 0.05
-Nodes (34): Phase 0 — base réseau, Phase 1 — harnais wire, Phase 3 — codecs générés (12 vagues), Phase 4 — observabilité, 🆕 Sessions 22–24 Oct — fiabilisation (phases 0–2) + Phase 3 codecs + Phase 4 observabilité, Incidents live bloquants à traiter d'abord, Lot familiers de combat + stabilité combat (session en cours), Matrice complète du prompt — tous les domaines repartent « à vérifier » (+26 more)
+Cohesion: 0.04
+Nodes (41): Incidents live bloquants à traiter d'abord, Lot familiers de combat + stabilité combat (session en cours), Matrice complète du prompt — tous les domaines repartent « à vérifier », Méthode d'audit obligatoire pour chaque ligne, Plan d'action — prompt3 (correctifs live 2026-10-21), PROMPT ORIGINAL (copie verbatim), Reprise intégrale — audit à zéro (2026-10-21), Suivi courant (+33 more)
 
 ### Community 549 - "ZoneClientColosseumTeamInfo"
 Cohesion: 0.11
 Nodes (19): ZoneClientColosseumTeamInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field15 (+11 more)
 
 ### Community 550 - "EnchantDispel.Pick"
-Cohesion: 0.17
+Cohesion: 0.16
 Nodes (7): Hors périmètre, Plan — 2.3.1 Registre d'enchants sur mobs, Preuves natives, Vérif runtime (2026-10-29), DispelCandidate, DispelRule, EnchantDispel
 
 ### Community 551 - "ZoneSwitchItemLocation"
 Cohesion: 0.05
-Nodes (15): PetClientRules, ZoneSwitchItemLocation, DstIndex, DstSlot, DstType, Name, Opcode, SrcIndex (+7 more)
+Nodes (22): ZoneSwitchItemLocation, DstIndex, DstSlot, DstType, Name, Opcode, SrcIndex, SrcSlot (+14 more)
 
 ### Community 552 - "ZoneClientFamilyBattleInfo"
 Cohesion: 0.11
@@ -3534,17 +3714,17 @@ Nodes (18): A. Décompilation Ghidra (MAINTENANT), B. Parser T_Class.ini, C. Dé
 Cohesion: 0.11
 Nodes (17): Class Mapping Table (60 entries), ClassDataParser Flow, Code Statistics, Data Coverage, 🚧 En Attente - S_Class.ini, Format S_Class.ini:, ⚙️ Implémentation Détails, 📊 Métriques (+9 more)
 
-### Community 557 - "Stall"
-Cohesion: 0.23
-Nodes (5): Stall, Goods, OwnerId, Title, Viewers
+### Community 557 - "CNC_CZ_ClientSpellBlastOK"
+Cohesion: 0.14
+Nodes (14): CNC_CZ_ClientSpellBlastOK, BlastId, Flag, Name, Opcode, Power, Serial, SpellId (+6 more)
 
 ### Community 558 - "CNC_ZMis_ZoneServerWeddingsInfo"
 Cohesion: 0.11
 Nodes (17): 2026-10-22 — Cérémonies de mariage natives (relais Mission↔Zone), Hors scope (lot suivant), Preuves natives (déjà relues byte-par-byte), Résultat, Symptômes, Éditions, CNC_ZMis_ZoneServerWeddingsInfo, Field1 (+9 more)
 
-### Community 559 - "DdsInfo.TryParse"
-Cohesion: 0.27
-Nodes (3): DdsInfoTests, DdsBc2Tests, DdsLum8Tests
+### Community 559 - "ZoneMovePrediction"
+Cohesion: 0.15
+Nodes (13): ZoneMovePrediction, CurPos, CurX, CurY, DstPos, DstX, DstY, Facing (+5 more)
 
 ### Community 560 - "ItemMallItemEntity"
 Cohesion: 0.11
@@ -3567,12 +3747,12 @@ Cohesion: 0.14
 Nodes (14): ZoneClientBattleRoyaleInfo, Field1, Field10, Field11, Field2, Field3, Field4, Field5 (+6 more)
 
 ### Community 565 - "ZoneClientLevelUp"
-Cohesion: 0.10
-Nodes (20): ZoneClientEquipTrainItemChanged, ContainerType, Index, Key, Name, Opcode, ZoneClientLevelUp, Field1 (+12 more)
+Cohesion: 0.25
+Nodes (8): ZoneClientLevelUp, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
 ### Community 566 - "VersionGate"
-Cohesion: 0.13
-Nodes (11): Options, Result, VersionGate, Hello, ProtocolVersion, RejectReason, Malformed, TooNew (+3 more)
+Cohesion: 0.15
+Nodes (9): Phase 4 (d) — Handshake de version + manifest gamedata (Godot-only), Points d'édition, Vérifs — fait 2026-10-27, Wire (NCIDs Godot-only, hors plage native <2000), Options, Result, VersionGate, Hello (+1 more)
 
 ### Community 567 - "2. Symboles lapis:: Analysés"
 Cohesion: 0.18
@@ -3582,9 +3762,9 @@ Nodes (11): 2. Symboles lapis:: Analysés, Base de Données, Classes Principales
 Cohesion: 0.11
 Nodes (17): AchievementDef, AppellationId, Code, Description, GroupKey, Id, ItemCol10, ItemReward (+9 more)
 
-### Community 569 - "Account"
+### Community 569 - "PlayerCharacterEntity"
 Cohesion: 0.02
-Nodes (129): 2. Implémentation POC (déviation assumée), 3. Compte POC, 45 — POC Login : authentification + liste des channels, 4. Mise en route, 5. Tests, Lancement local (sans Docker), Status (validé wire-level end-to-end, 2026-10-15), Implémentation (+121 more)
+Nodes (74): Mise à jour documentaire (après les fixes), Plan d'action temporaire — inventaire, shop, class skills, drops, exp, regen, HP, Résultats (18/10 — implémenté, Zone redéployée), Implémentation, Delivery Steps, ✓ Step 1: Reverse-Engineering & Implementation of Eden.Login, ✓ Step 2: Reverse-Engineering & Implementation of Eden.World, ✓ Step 3: Reverse-Engineering & Implementation of Eden.Zone (+66 more)
 
 ### Community 570 - "ZoneClientFamilyBattleInfo"
 Cohesion: 0.11
@@ -3630,6 +3810,10 @@ Nodes (17): CNC_CZ_ClientEnterNodePlayerCard, Field1, Field10, Field11, Field12,
 Cohesion: 0.18
 Nodes (11): ReceivableDto, Amount, Id, ItemColor, ItemId, ItemQuantity, MailName, PlayerName (+3 more)
 
+### Community 582 - "Row"
+Cohesion: 0.15
+Nodes (12): Row, EquipType, Idx, Spell1, Spell2, Spell3, Spell4, Spell5 (+4 more)
+
 ### Community 583 - "CNC_MW_WorldServerItemMallMailCheckOK"
 Cohesion: 0.18
 Nodes (11): CNC_MW_WorldServerItemMallMailCheckOK, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
@@ -3642,13 +3826,17 @@ Nodes (17): CNC_ZMis_ZoneServerFamilyTownMemberQuery, Field1, Field10, Field11, 
 Cohesion: 0.12
 Nodes (17): CNC_ZMis_ZoneServerMailSendResult, Field1, Field10, Field11, Field12, Field13, Field14, Field2 (+9 more)
 
-### Community 587 - "PlayerTitles"
-Cohesion: 0.18
-Nodes (5): PlayerTitles, Active, Others, Owned, SetTitleSender
+### Community 586 - "ZoneMovePrediction"
+Cohesion: 0.15
+Nodes (13): ZoneMovePrediction, CurPos, CurX, CurY, DstPos, DstX, DstY, Facing (+5 more)
 
 ### Community 588 - "ZoneClientIdentifyItem"
 Cohesion: 0.15
 Nodes (13): ZoneClientIdentifyItem, Field1, Field10, Field2, Field3, Field4, Field5, Field6 (+5 more)
+
+### Community 589 - "ClientSeeCharCodec.Build"
+Cohesion: 0.08
+Nodes (11): C — Strafe : pivot monture UNIQUEMENT (`clientmod` + binaries), J — Jeu serveur (2 agents), JS — Skills + procs, JT — Town list + Go to Base, Lot 14 — prompt10e : strafe monture seulement, skills thief, procs, town list, SNAPSHOT 2 (lot 14), SNAPSHOT (lot 14 en cours), Implémentation (+3 more)
 
 ### Community 590 - "WorldServerRow"
 Cohesion: 0.22
@@ -3658,13 +3846,17 @@ Nodes (9): WorldServerRow, id, ip, maxnum_user, name, online_user, port, show_or
 Cohesion: 0.12
 Nodes (17): CNC_CZ_ClientLoverInfo, Field1, Field10, Field11, Field12, Field13, Field14, Field2 (+9 more)
 
-### Community 593 - "AchievementService"
-Cohesion: 0.23
-Nodes (5): AchievementService, DefinitionCount, PlayerAchievements, ActiveTitleId, CharacterId
+### Community 593 - "ClassStatsEntity"
+Cohesion: 0.17
+Nodes (11): ClassStatsEntity, AgiBonus, ClassId, ConBonus, DexBonus, HpBonus, IntBonus, Level (+3 more)
 
-### Community 595 - "ZoneServerExecuteMagicBox"
-Cohesion: 0.20
-Nodes (10): ZoneServerExecuteMagicBox, MainBag, MainSlot, MallBag, MallSlot, Name, Opcode, Sacrifices (+2 more)
+### Community 594 - "CNC_CZ_ClientSwitchItemLocationOK"
+Cohesion: 0.18
+Nodes (10): CNC_CZ_ClientSwitchItemLocationOK, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
+
+### Community 595 - "CNC_ZMis_MissionServerOnDialogueSelected"
+Cohesion: 0.17
+Nodes (12): CNC_ZMis_MissionServerOnDialogueSelected, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
 ### Community 596 - "VersusService"
 Cohesion: 0.38
@@ -3674,10 +3866,6 @@ Nodes (3): VersusMatch, VersusService, VersusServiceTests
 Cohesion: 0.12
 Nodes (17): ZoneClientUpdateRoom, Field1, Field10, Field11, Field12, Field13, Field14, Field2 (+9 more)
 
-### Community 598 - "ZoneServerSaveCollection"
-Cohesion: 0.20
-Nodes (10): ZoneServerSaveCollection, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
-
 ### Community 599 - "inflate64.c"
 Cohesion: 0.21
 Nodes (8): bits(), codes(), construct(), decode(), dynamic(), fixed(), inflate64(), stored()
@@ -3686,21 +3874,17 @@ Nodes (8): bits(), codes(), construct(), decode(), dynamic(), fixed(), inflate64
 Cohesion: 0.17
 Nodes (8): ClassDataParser, ClassPrerequisite, ClassId, MinLevel, ClassRequirements, MinCharacterLevel, Prerequisites, QuestRequirements
 
-### Community 601 - "CNC_CW_ClientGetWorldServers"
-Cohesion: 0.08
-Nodes (24): CNC_CW_ClientGetWorldServers, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+16 more)
-
-### Community 602 - "CNC_CZ_ClientPlayerDestinyRoad"
-Cohesion: 0.04
-Nodes (49): CNC_CZ_ClientCanJoinTeam, Field1, Field2, Field3, Field4, Field5, Field6, Name (+41 more)
+### Community 602 - "Audit pack — baseline Étape 0 (corpus mesuré)"
+Cohesion: 0.18
+Nodes (10): 0. Verdicts, 1. Catégories (fichiers / octets), 2. Couverture `.slim.glb` 1:1 — **critère bloquant du plan**, 3. Exclusions mesurées (octets économisables), 4. Textures — histogramme extensions (`assets/textures/`), 5. Tables chaudes — `.ini` > 500 ko sous `data/` (24 au total, top 15), 6. Top 30 plus gros fichiers du corpus packageable, 7. Estimation pack cible (mesurée, hors compression) (+2 more)
 
 ### Community 603 - "ZoneTeamInvite"
-Cohesion: 0.22
+Cohesion: 0.25
 Nodes (8): ZoneTeamInvite, CharId, ClassId, Flags, Level, Name, Opcode, PlayerName
 
-### Community 604 - "BinReader.ReadUShort"
-Cohesion: 0.02
-Nodes (36): EquippedItem, EquippedItem, ZoneUpdateEquipmentView, CharId, Hidden, Items, LocMask, Name (+28 more)
+### Community 604 - "ZoneUpdateEquipmentView"
+Cohesion: 0.29
+Nodes (7): ZoneUpdateEquipmentView, CharId, Hidden, Items, LocMask, Name, Opcode
 
 ### Community 605 - "ZoneClientColosseumQuery"
 Cohesion: 0.11
@@ -3710,9 +3894,9 @@ Nodes (19): ZoneClientColosseumQuery, Field1, Field10, Field11, Field12, Field13
 Cohesion: 0.20
 Nodes (10): A. Analyser CPlayerFactory, B. Analyser CCharacter (ZoneServer), C. Analyser Messages Réseau, D. Analyser CClassDBO (Database Object), 🎯 Plan d'Action - Phase 1.1 (Système de Classes), Étape 1: Extraction depuis les Binaires (MAINTENANT), Étape 2: Parser T_Class.ini (Code), Étape 3: Décoder S_Class.ini (Stats) (+2 more)
 
-### Community 607 - "CNC_CZ_ClientPetLotteryEnd"
-Cohesion: 0.20
-Nodes (10): CNC_CZ_ClientPetLotteryEnd, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
+### Community 607 - "Mode"
+Cohesion: 0.18
+Nodes (11): Mode, Arrow, ArrowDim, Attack, Busy, DragBad, DragOk, Forbid (+3 more)
 
 ### Community 608 - "CNC_ZMis_ZoneServerTransitionCommands"
 Cohesion: 0.12
@@ -3734,9 +3918,9 @@ Nodes (12): ZoneClientSearchInfo, Field1, Field2, Field3, Field4, Field5, Field6
 Cohesion: 0.12
 Nodes (15): ClassLicRow, AaPoint, CharacterId, ClassExp, ClassId, ClassLevel, ClassPoints, Lic1 (+7 more)
 
-### Community 613 - "CNC_ZMis_MissionServerArrangeItem"
-Cohesion: 0.20
-Nodes (10): CNC_ZMis_MissionServerArrangeItem, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
+### Community 613 - "Plan 2026-10-23 — Buffs/statuts, pets en zone, montures, cast Reforged"
+Cohesion: 0.18
+Nodes (10): 1. Pets — « Pets unavailable in this zone! » (8350) — ✅ FAIT, 2. Statuts/buffs — les stats ne bougent pas — ✅ FAIT, 3. Monture — strafe sans rotation du corps — ✅ côté serveur (à retester), 4. Montures de combat — anims d'attaque — ✅ FAIT (à retester), 5. Cast en mouvement (client Reforged) — ✅ patché (à retester), 6. Bind sur montures + unbind — ✅ FAIT + validé headless, 7. Doc méthode patch client — ✅ FAIT, 8. Guilde / famille — ✅ BUG BLOQUANT TROUVÉ + FIXÉ (+2 more)
 
 ### Community 614 - "CNC_ZM_ZoneServerSetRebornMonsterResult"
 Cohesion: 0.12
@@ -3750,17 +3934,21 @@ Nodes (16): CNC_ZMis_ZoneServerMessageList, Field1, Field10, Field11, Field12, F
 Cohesion: 0.17
 Nodes (12): ZoneClientUpdateFastDressData, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
-### Community 617 - "CNC_ZM_MonsterServerModifyRebornMonster"
-Cohesion: 0.13
-Nodes (15): CNC_ZM_MonsterServerModifyRebornMonster, Field1, Field10, Field11, Field12, Field2, Field3, Field4 (+7 more)
+### Community 617 - "CNC_CZ_ClientIdentifyItem"
+Cohesion: 0.02
+Nodes (97): CNC_CG_ClientChannel, Field1, Field2, Field3, Field4, Field5, Field6, Name (+89 more)
+
+### Community 618 - "Entry"
+Cohesion: 0.18
+Nodes (11): Entry, CharacterCount, Flags, Id, Ip, MaxNum, Name, Online (+3 more)
 
 ### Community 619 - "CNC_CZ_ClientFamilyContainerData"
 Cohesion: 0.13
 Nodes (15): CNC_CZ_ClientFamilyContainerData, Field1, Field10, Field11, Field12, Field2, Field3, Field4 (+7 more)
 
-### Community 620 - "DdsFormat"
-Cohesion: 0.20
-Nodes (10): DdsFormat, Bc1, Bc2, Bc3, Bc4, Bc5, Bgra32, Lum8 (+2 more)
+### Community 620 - "CNC_CZ_ClientTeamRecruitMsg"
+Cohesion: 0.18
+Nodes (11): CNC_CZ_ClientTeamRecruitMsg, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
 
 ### Community 621 - "FxCatalog"
 Cohesion: 0.21
@@ -3778,9 +3966,9 @@ Nodes (4): AchievementView, FilterGroup, Hundred, Node
 Cohesion: 0.13
 Nodes (14): Bloc crypto (si ENCRYPTED) — 60 o après le header, Bloc signature (si SIGNED) — 68 o, Builds déterministes, Cryptographie des chunks (ENCRYPTED), Entrée index (88 o), EPK v1 — format de pack Eden (spec figée), Espace de clés (chemins relatifs), Flux de chunks d'un blob (+6 more)
 
-### Community 625 - "protocol/ZoneEntityMessages.cs"
-Cohesion: 0.11
-Nodes (17): ZoneEnterNodeEquipAndSpell, Body, Name, Opcode, ZoneEnterNodeInventory, Body, Name, Opcode (+9 more)
+### Community 625 - "CNC_ZMis_MissionServerSendSystemMail"
+Cohesion: 0.18
+Nodes (11): CNC_ZMis_MissionServerSendSystemMail, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
 
 ### Community 626 - "MonsterSpawn"
 Cohesion: 0.15
@@ -3790,9 +3978,13 @@ Nodes (13): MonsterSpawn, AreaId, Count, DropTableId, Facing, ModelCode, Monster
 Cohesion: 0.14
 Nodes (7): EdenWindowMode, Borderless, Fullscreen, Windowed, ClientSettings, FontSize, UiScale
 
-### Community 629 - "ZoneServerSaveCollection"
-Cohesion: 0.20
-Nodes (10): ZoneServerSaveCollection, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
+### Community 628 - "WorldClientUpdateFortuneBagContentList"
+Cohesion: 0.18
+Nodes (11): WorldClientUpdateFortuneBagContentList, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
+
+### Community 629 - "ZonePutItem"
+Cohesion: 0.18
+Nodes (11): ZonePutItem, Amount, Bag, Durability, Flags, ItemId, MaxDurability, Name (+3 more)
 
 ### Community 630 - "ZoneClientFamilyTownMemberQuery"
 Cohesion: 0.13
@@ -3804,7 +3996,7 @@ Nodes (9): decode_varint(), drain(), encode_varint(), handshake(), main(), RC4, 
 
 ### Community 632 - "EntryState"
 Cohesion: 0.05
-Nodes (19): 3. Ordre réel des stages (Program.cs, ordre d'enregistrement), Implémentation, FastDressRepository, FastDressRecord, IsEmpty, FastDressState, StatFetch, EntryState (+11 more)
+Nodes (23): 1.1 `ZoneEntryFlow` = god object (5 043 lignes / 14 partials), 1.2 Gameplay hardcodé — le vrai risque « petit simulateur », 1.3 Doublons structurels, 1. Audit — ce qui pose problème aujourd'hui, Implémentation, FastDressRepository, FastDressRecord, IsEmpty (+15 more)
 
 ### Community 633 - "Prochaines Étapes - Extraction des Binaires"
 Cohesion: 0.13
@@ -3815,8 +4007,8 @@ Cohesion: 0.13
 Nodes (14): Admin (`/api/admin`, rôle Admin), Auth, certificates (60 = 20 classes × 3, I+II fusionnés), classes (61 entrées — ids 1-61 ; variantes races 101+ retirées), Datasets — formes clés, Divers, Filtres `f` (répétables, ET logique), items (+6 more)
 
 ### Community 635 - "CastShape"
-Cohesion: 0.07
-Nodes (18): CastPlan, CastRoute, ToLife, ToLocation, ToNowhere, CastShape, Cross, Direction (+10 more)
+Cohesion: 0.09
+Nodes (15): CastPlan, CastRoute, ToLife, ToLocation, ToNowhere, CastShape, Cross, Direction (+7 more)
 
 ### Community 636 - "ZoneUpdateElfMixElf"
 Cohesion: 0.20
@@ -3827,12 +4019,12 @@ Cohesion: 0.20
 Nodes (10): CNC_CG_ClientGetMissionState, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
 ### Community 638 - "PartyHud"
-Cohesion: 0.10
-Nodes (10): PartyHud, TeamMember, ZoneTeamRadarAttention, Kind, Name, Opcode, X, Z (+2 more)
+Cohesion: 0.09
+Nodes (14): PartyHud, TeamMember, ZoneTeamLeave, CharId, Name, Opcode, ZoneTeamRadarAttention, Kind (+6 more)
 
 ### Community 639 - "SocialPackets.BuildFriendMemberPackets"
-Cohesion: 0.16
-Nodes (5): FriendEntry, MutuallyHelpEntry, SearchEntry, SocialPackets, SocialPacketsTests
+Cohesion: 0.12
+Nodes (9): FriendEntry, MutuallyHelpEntry, SearchEntry, SocialPackets, MutuallyHelpHandlers, Services, Characters, WorldServerId (+1 more)
 
 ### Community 640 - "CardRowDto"
 Cohesion: 0.13
@@ -3846,13 +4038,13 @@ Nodes (15): Row, FortuneBag, ItemColor, ItemGroup, ItemId, ItemIndex, ItemNum, L
 Cohesion: 0.13
 Nodes (15): StateRow, CanGoNext, Counts, CrystalB, CrystalC, EventFlag, ExtraCounts, ExtraItemId (+7 more)
 
-### Community 643 - "PlayerEquipment"
-Cohesion: 0.20
-Nodes (3): PlayerEquipment, ModelItemIds, Worn
+### Community 643 - "ZoneTradeCancel"
+Cohesion: 0.16
+Nodes (9): ZoneClientTradeUnConfirm, Name, Opcode, PartnerCharId, ZoneTradeCancel, Name, Opcode, PartnerCharId (+1 more)
 
-### Community 644 - "Eden.Core.Game.Classes"
-Cohesion: 0.03
-Nodes (47): Eden.Core.Game.Classes, Implémentation, Plan — Classes personnalisées / « angel style » (CCData), Preuves natives, Vérifs, CustomClassRepository, Row, EquipType (+39 more)
+### Community 644 - "CustomClassSlot"
+Cohesion: 0.10
+Nodes (14): Implémentation, Plan — Classes personnalisées / « angel style » (CCData), Preuves natives, Vérifs, 2026-11-05 — Crash client Reforged à l'entrée : NCID 592 malformé, Bug, Diagnostic (preuves binaires `rf_game`), Fix (+6 more)
 
 ### Community 645 - "ZoneClientGreedyIslandInfo"
 Cohesion: 0.18
@@ -3878,49 +4070,53 @@ Nodes (9): ZoneClientDisplayChar, Appearance, CharId, CharName, ClassId, Level, 
 Cohesion: 0.18
 Nodes (11): ZoneClientResetSpell, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
 
-### Community 651 - "CNC_CZ_ClientSpellFlyToLocation"
-Cohesion: 0.13
-Nodes (15): CNC_CZ_ClientSpellFlyToLocation, Field1, Field10, Field11, Field12, Field2, Field3, Field4 (+7 more)
+### Community 651 - "Rc4.ProcessCopy"
+Cohesion: 0.31
+Nodes (3): Rc4, Rc4Tests, Rc4Tests
 
 ### Community 652 - "ZoneSwitchItemLocationOk"
 Cohesion: 0.18
 Nodes (11): ZoneSwitchItemLocationOk, DstIndex, DstSlot, DstType, Name, Ok, Opcode, Result (+3 more)
 
 ### Community 653 - "MallView"
-Cohesion: 0.10
-Nodes (15): WorldItemMallBuyRequest, Amount, Field5, Field7, Index, Key, Name, Opcode (+7 more)
+Cohesion: 0.17
+Nodes (9): ItemMallEntry, EffectivePrice, Group, MoneyUnit, MallView, Group, MoneyUnit, Page (+1 more)
 
-### Community 654 - "TreasureRulesTests"
+### Community 654 - "WorldClientLookingForMemberResult"
 Cohesion: 0.20
-Nodes (3): TreasureRules, TreasureRulesTests, TreasureRulesTests
+Nodes (10): WorldClientLookingForMemberResult, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
 ### Community 655 - "CNC_CZ_ClientSpellBlastToLocation"
 Cohesion: 0.13
 Nodes (15): CNC_CZ_ClientSpellBlastToLocation, BlastId, DstX, DstY, DstZ, Name, Opcode, Power (+7 more)
 
 ### Community 656 - "3. Plan d'action priorisé"
-Cohesion: 0.08
-Nodes (24): 1.1 Entrants client → zone (tous ont au moins un handler), 1.2 Équipement / inventaire / sacs, 1.3 Personnage / stats / classes, 1.4 Quêtes, 1.5 Pet / Elf (requis — le familier DOIT vivre dans son interface), 1.6 Internes absents touchant le périmètre, 1.7 Sortants jamais émis (hors internes), 1. Inventaire NCID du périmètre (+16 more)
+Cohesion: 0.12
+Nodes (15): 2. Bugs live → causes identifiées / à prouver, 3. Plan d'action priorisé, 4. Dépendances, 5. Points de preuve à collecter par étape, P0 — Taxonomie d'items & validation des slots (bloque la corruption), P10 — Combat social & PvP, P1 — Inventaire : capacité, bitmap, « plein » cohérent, P2 — Quêtes : compteurs d'objectifs (+7 more)
 
-### Community 657 - "NpcSpawn"
-Cohesion: 0.22
-Nodes (9): NpcSpawn, Facing, LocalId, ModelCode, Name, NpcId, Param, X (+1 more)
+### Community 657 - "WorldItemMallBuyRequest"
+Cohesion: 0.20
+Nodes (10): WorldItemMallBuyRequest, Amount, Field5, Field7, Index, Key, Name, Opcode (+2 more)
 
 ### Community 658 - "MonsterSpawn"
 Cohesion: 0.12
 Nodes (17): MonsterSpawn, AnnounceFlag, AnnounceTextId, AreaId, Count, ExtraShorts, Facing, InitiallyActive (+9 more)
 
 ### Community 659 - "ZoneTeamInviteAnswer"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (7): ZoneTeamInviteAnswer, Accepted, InviterId, Name, Opcode, ReplyType, Tail
 
 ### Community 661 - "ZoneClientSpellBlastToLocation"
 Cohesion: 0.13
 Nodes (15): ZoneClientSpellBlastToLocation, BlastId, DstX, DstY, DstZ, Name, Opcode, Power (+7 more)
 
+### Community 662 - "Encoding"
+Cohesion: 0.10
+Nodes (9): EdenEncoding, Big5, Cp1252, EdenEncoding, Big5, EdenEncoding, Big5, BinReader (+1 more)
+
 ### Community 663 - "Audit qualité du code C# — 2026-10-20"
-Cohesion: 0.11
-Nodes (18): 10. `CombatHandlers` = mort-vivant partiel, 11. Log par paquet sur le chemin chaud, 12. Session Gateway : pas de framing (lecture brut par read), 13. `BroadcastAllAsync` séquentielle, 2. `NetSession.DisposeAsync` dispose `_sendLock` pendant des envois en vol, 3. `st.CastCts` non annulé à la déconnexion, 5. Double copie `payload[2..]` + `payload.AsSpan(2).ToArray()` par paquet (zone & monde), 6. `SendPacketAsync`/`MissionSession.SendAsync` : buffer intermédiaire superflu (+10 more)
+Cohesion: 0.10
+Nodes (19): 10. `CombatHandlers` = mort-vivant partiel, 11. Log par paquet sur le chemin chaud, 12. Session Gateway : pas de framing (lecture brut par read), 13. `BroadcastAllAsync` séquentielle, 1. `MonsterService._instances` : `Dictionary` muté depuis le thread timer + threads sessions, 2. `NetSession.DisposeAsync` dispose `_sendLock` pendant des envois en vol, 3. `st.CastCts` non annulé à la déconnexion, 5. Double copie `payload[2..]` + `payload.AsSpan(2).ToArray()` par paquet (zone & monde) (+11 more)
 
 ### Community 664 - "ZoneClientArrangeItemOK"
 Cohesion: 0.20
@@ -3966,9 +4162,9 @@ Nodes (13): Modifications, `NativeCombatFormulas.cs`, Objectif, Plan — Exp de 
 Cohesion: 0.18
 Nodes (8): QuestShareRules, Verdict, Completed, Full, NonShareable, NotApproved, Ok, OnQuest
 
-### Community 675 - "StallError"
-Cohesion: 0.14
-Nodes (14): StallError, BadPrice, BadRegion, BadVectors, CannotStall, EmptyTitle, GoodsCollision, InArenaQueue (+6 more)
+### Community 675 - "CNC_CL_ServerLoginAccount"
+Cohesion: 0.29
+Nodes (6): CNC_CL_ServerLoginAccount, Field1, Field2, Field3, Name, Opcode
 
 ### Community 676 - "CNC_ZMis_ZoneServerBattlefieldList"
 Cohesion: 0.14
@@ -3994,13 +4190,9 @@ Nodes (10): ZoneClientEffectReport, Field1, Field2, Field3, Field4, Field5, Fiel
 Cohesion: 0.20
 Nodes (10): ZoneClientPetLotteryEnd, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
-### Community 682 - "Preuves natives (zone/decompiled.c)"
-Cohesion: 0.22
-Nodes (8): 2026-10-22 — Sorts de soin + dégâts des sorts à cast (mapping S_Spell corrigé), `CalculateMagicSkillHeal` @0x83f9310, Dispatch `OnHitLife` @0x84f2080 — type = col18, `HitRestoreSkill` @0x84f1f40, Mapping colonnes S_Spell — `CSpellQuery::Deserialize` @0x862b000, Paquets `OnHitLife` @0x84f2080+, Preuves natives (zone/decompiled.c), Symptômes live
-
-### Community 684 - "ZoneServerGoLottery"
-Cohesion: 0.22
-Nodes (9): ZoneServerGoLottery, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
+### Community 682 - "LevelCost"
+Cohesion: 0.06
+Nodes (35): 1.4 Ce qui est déjà bon (à garder), A1. Sorts de soin KO — aucun soin appliqué [CORRIGÉ — commit en cours], 2026-10-22 — Sorts de soin + dégâts des sorts à cast (mapping S_Spell corrigé), `CalculateMagicSkillHeal` @0x83f9310, Corrections à faire, Dispatch `OnHitLife` @0x84f2080 — type = col18, `HitRestoreSkill` @0x84f1f40, Mapping colonnes S_Spell — `CSpellQuery::Deserialize` @0x862b000 (+27 more)
 
 ### Community 685 - "PlayerAchievements"
 Cohesion: 0.14
@@ -4010,9 +4202,13 @@ Nodes (8): PlayerAchievements, Counters, HuntPoints, LastKind4Ids, LastKind5Ids,
 Cohesion: 0.12
 Nodes (16): ZoneClientUpdateLottery, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+8 more)
 
-### Community 687 - "ZonePlayerClassList"
-Cohesion: 0.11
-Nodes (17): ZoneChangeClass, ClassId, Name, Opcode, ZoneChangeClassShortcut, Bars, Extras, Name (+9 more)
+### Community 687 - "CinemaTimeline"
+Cohesion: 0.20
+Nodes (5): CinemaTimeline, Active, BarFraction, Elapsed, Shared
+
+### Community 688 - "WorldClientLookingForMemberResult"
+Cohesion: 0.20
+Nodes (10): WorldClientLookingForMemberResult, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
 ### Community 689 - "ZoneClientFamilyContainerPutItem"
 Cohesion: 0.14
@@ -4022,13 +4218,13 @@ Nodes (14): ZoneClientFamilyContainerPutItem, Field1, Field10, Field11, Field2, 
 Cohesion: 0.14
 Nodes (14): ZoneClientMagicBoxResult, Field1, Field10, Field11, Field2, Field3, Field4, Field5 (+6 more)
 
-### Community 691 - "ZoneServerFamilyContainerPutItem"
-Cohesion: 0.25
-Nodes (8): ZoneServerFamilyContainerPutItem, Field1, Field2, Field3, Field4, Field5, Name, Opcode
+### Community 691 - "ZoneModifyItemSlot"
+Cohesion: 0.20
+Nodes (9): ZoneModifyItemSlot, ContainerIndex, ContainerType, Count, Field6, MaxDurability, Name, Opcode (+1 more)
 
-### Community 692 - "Protocol/ZoneCombatMessages.cs"
-Cohesion: 0.02
-Nodes (117): SpellHitConst, ZoneClientCommandFailReturn, FailedOpcode, Name, Opcode, Param, ZoneClientReviveInfo, Area (+109 more)
+### Community 692 - "ZoneClientSpellBlastToLife"
+Cohesion: 0.13
+Nodes (15): ZoneClientSpellBlastToLife, BlastId, Field10, Field11, Field12, Field8, Field9, Name (+7 more)
 
 ### Community 693 - "CharCreateBodySpec"
 Cohesion: 0.19
@@ -4038,16 +4234,12 @@ Nodes (6): Bounds, CharCreateBodySpec, RaceSpec, Bounds, CharCreateBodySpec, Rac
 Cohesion: 0.15
 Nodes (12): 1. En-tête (0x58 octets, little-endian), 2. Chunks `{u32 tag, u32 size}`, 3. `LAY0` — terrain, 4. `GRL ` — types d'herbe, 5. `GRS ` — instances d'herbe, 6. `OBJ ` — objets de scène (validé 2321/3769 records, 92 o), 7. Fichiers voisins (hors .fsm), 8. Inconnus restants (+4 more)
 
-### Community 695 - "ZoneServerRecordFastDressInfo"
-Cohesion: 0.25
-Nodes (8): ZoneServerRecordFastDressInfo, Field1, Field2, Field3, Field4, Field5, Name, Opcode
-
 ### Community 696 - "ZoneClientTerritoryInfo"
 Cohesion: 0.20
 Nodes (10): ZoneClientTerritoryInfo, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
 ### Community 697 - "CreateCharacterRequest"
-Cohesion: 0.14
+Cohesion: 0.15
 Nodes (11): CreateCharacterRequest, ClassId, FaceStyle, GenderId, GivenName, HairColor, HairStyle, RaceId (+3 more)
 
 ### Community 698 - "CNC_CZ_ClientVersusInstanceInfo"
@@ -4058,9 +4250,9 @@ Nodes (18): CNC_CZ_ClientVersusInstanceInfo, Field1, Field10, Field11, Field12, 
 Cohesion: 0.17
 Nodes (12): WorldClientMutuallyHelpUpdate, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
-### Community 700 - "Protocol/ZoneElfMessages.cs"
-Cohesion: 0.01
-Nodes (134): ZoneChangeElf, CharId, ElfDefId, ElfName, Name, Opcode, ZoneElfAction, Field1 (+126 more)
+### Community 700 - "ZoneElfAction"
+Cohesion: 0.22
+Nodes (9): ZoneElfAction, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
 ### Community 701 - "redis"
 Cohesion: 0.19
@@ -4079,8 +4271,8 @@ Cohesion: 0.15
 Nodes (12): Dégâts de sorts, Lot : formules de combat natives (CCharFormula), MagicDamage (joueur) @0x83f97a0 — miroir avec intTerm×para307(5),, MeleeDamage (joueur) @0x83fa430, Objectif, Pipeline mêlée joueur → cible (`CalculatePhysicalDamage` @0x83fd8c0), Pipeline mêlée mob → cible (@0x83fdec0), Preuves natives (déjà décodées, désasm zone) (+4 more)
 
 ### Community 705 - "NativeBuild.Run"
-Cohesion: 0.11
-Nodes (8): Acc, EpkWriter, NativeHooks, Report, Crc32c, NativeBuild, Official, Options
+Cohesion: 0.21
+Nodes (4): Crc32c, NativeBuild, Official, Options
 
 ### Community 706 - "2026-10-24 — Lot live 5 : sémantique combat, pets, shop, skills, autels, client"
 Cohesion: 0.15
@@ -4091,8 +4283,8 @@ Cohesion: 0.15
 Nodes (12): PARTIE 0 — Retours user du 24/10 (verbatim, priorité absolue), PARTIE 1 — Prompt original des bugs (verbatim, à traiter un par un), PARTIE 2 — prompt5.txt (3 chantiers — verbatim résumé), Phase A — Bugs serveur vérifiables headless (fichiers zone/core), Phase B — Patches client (rf_game.dll Reforged), Phase C — Web : recode 100% (charte sombre + fonctionnel), Phase D — Studio thème, Phase E — prompt5 restant + NCIDs (+4 more)
 
 ### Community 708 - "RecruitPost"
-Cohesion: 0.12
-Nodes (10): Modifications, RecruitPost, Enabled, F2, F3, F4, F5, Message (+2 more)
+Cohesion: 0.22
+Nodes (9): RecruitPost, Enabled, F2, F3, F4, F5, Message, OwnerCharId (+1 more)
 
 ### Community 709 - "Plan — Audit des 641 NCIDs « NON PROUVE » (26 oct. 2026)"
 Cohesion: 0.15
@@ -4142,9 +4334,9 @@ Nodes (15): ZoneClientFamilyContainerData, Field1, Field10, Field11, Field12, Fi
 Cohesion: 0.25
 Nodes (8): ZoneClientEnterStrengthen, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 721 - "CNC_CZ_ClientTeamInviteNotice"
+### Community 721 - "WorldClientQueryExploitRank"
 Cohesion: 0.22
-Nodes (9): CNC_CZ_ClientTeamInviteNotice, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
+Nodes (9): WorldClientQueryExploitRank, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
 ### Community 722 - "ZoneClientSpellFlyToLocation"
 Cohesion: 0.13
@@ -4154,9 +4346,9 @@ Nodes (15): ZoneClientSpellFlyToLocation, Field1, Field10, Field11, Field12, Fie
 Cohesion: 0.31
 Nodes (3): InterpBuffer, Count, State
 
-### Community 724 - "Phase 4 — Observabilité et robustesse"
-Cohesion: 0.25
-Nodes (7): Bilan final — Phase 4 clôturée (2026-10-24), Critères, P4.1 — ILogger par catégorie, P4.2 — System.Diagnostics.Metrics, P4.3 — Rate limiting, P4.4 — Config typée, Phase 4 — Observabilité et robustesse
+### Community 724 - "ZoneRecommendActivities"
+Cohesion: 0.22
+Nodes (6): ZoneRecommendActivities, Entries, Field, Name, Opcode, Value
 
 ### Community 725 - "export_certificates"
 Cohesion: 0.25
@@ -4166,9 +4358,9 @@ Nodes (4): _cert_slug(), _cert_stat(), ee_cert_combos(), export_certificates()
 Cohesion: 0.17
 Nodes (11): 1. Tables fndb1, 2. NPCs posables en guilde, 2a. Contrats natifs (S_Item kind 0x2a → NPC), 2b. NPCs de service posés dans les halls de test (pas de contrat dédié → `item_tid` 39049), 3. Bâtiments (`S_Buliding.ini` — faute de frappe native), 4. Commandes GM (handlers `Eden.Zone/Handlers/GmGuildHandlers.cs`), 5. Contenu de test existant (fndb1), 6. NCIDs guilde implémentés (+3 more)
 
-### Community 727 - "Row"
-Cohesion: 0.18
-Nodes (11): Row, Bind, ContainerIndex, CreateTime, CurMaxDurability, Durability, Id, ItemId (+3 more)
+### Community 727 - "merge_anim_glb.py"
+Cohesion: 0.33
+Nodes (5): main(), merge_stem(), orphan_stems(), read_glb(), write_glb()
 
 ### Community 728 - "ZoneAuctionSell"
 Cohesion: 0.16
@@ -4185,6 +4377,10 @@ Nodes (12): ZoneClientPlayEffect, Field1, Field2, Field3, Field4, Field5, Field6
 ### Community 731 - "ZoneClientSearchInfo"
 Cohesion: 0.17
 Nodes (12): ZoneClientSearchInfo, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
+
+### Community 732 - "DateTime"
+Cohesion: 0.05
+Nodes (23): CoupleRow, Stall, Goods, OwnerId, Title, Viewers, StallError, BadPrice (+15 more)
 
 ### Community 733 - "services"
 Cohesion: 0.17
@@ -4219,8 +4415,8 @@ Cohesion: 0.17
 Nodes (11): Changements livrés, Le bug qui expliquait ~80% des symptômes, Mana/vitals — l'inversion cur/max, MP figé à 69 (Onrush & co), Plan session — objectifs live, consommables, XP classe, portails, Preuves natives trouvées, Session 19 oct — CAUSE RACINE trouvée : DB morte sur les 2 services, Shortcuts par classe — décalage positionnel (+3 more)
 
 ### Community 741 - "AnimEventKind"
-Cohesion: 0.08
-Nodes (19): KfTextKey, AnimEvent, AnimEventKind, EffectSpawn, End, Footstep, Hit, Marker (+11 more)
+Cohesion: 0.07
+Nodes (18): AnimEvent, AnimEventKind, EffectSpawn, End, Footstep, Hit, Marker, Metadata (+10 more)
 
 ### Community 742 - "CNE_ZMis_MissionServerCrossZone"
 Cohesion: 0.17
@@ -4234,21 +4430,25 @@ Nodes (12): CNE_ZMis_MissionServerItemMallMailCheck, Field1, Field2, Field3, Fie
 Cohesion: 0.17
 Nodes (12): CNE_ZMis_MissionServerOnDialogueSelected, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
+### Community 745 - "Builder"
+Cohesion: 0.10
+Nodes (17): Phase B — Socle, Builder, NifScene, NifSkeleton, NifSkelGroup, NifAv, Hidden, Properties (+9 more)
+
 ### Community 746 - "CNC_CZ_ClientUpdateLottery"
 Cohesion: 0.12
 Nodes (16): CNC_CZ_ClientUpdateLottery, Field1, Field10, Field11, Field12, Field13, Field2, Field3 (+8 more)
 
-### Community 747 - "DateTime"
-Cohesion: 0.03
-Nodes (36): Eden.Mission.Handlers, CoupleRow, Action, ActionKind, Expire, Spawn, ActiveMutant, MutantScheduler (+28 more)
+### Community 747 - "WorldBossPlan12Tests"
+Cohesion: 0.05
+Nodes (22): Action, ActionKind, Expire, Spawn, ActiveMutant, MutantScheduler, Active, Options (+14 more)
 
 ### Community 748 - "CNC_CZ_ClientPlayEffect"
 Cohesion: 0.17
 Nodes (12): CNC_CZ_ClientPlayEffect, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
-### Community 749 - "CNC_CZ_ClientUpdateElfMixElf"
-Cohesion: 0.05
-Nodes (40): CNC_CZ_ClientTeamMemberEnchant, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+32 more)
+### Community 749 - "CNC_ZMis_MissionServerMobDieReport"
+Cohesion: 0.20
+Nodes (10): CNC_ZMis_MissionServerMobDieReport, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
 ### Community 750 - "WorldServerEntry"
 Cohesion: 0.15
@@ -4258,17 +4458,21 @@ Nodes (13): WorldServerEntry, CharacterCount, IpAddress, MaxNum, Ping, Populatio
 Cohesion: 0.29
 Nodes (7): ZoneEnterMissionList, Arg, Arg3, Name, NpcUid, Op, Opcode
 
-### Community 752 - "CNC_CG_ClientCharacter"
-Cohesion: 0.18
-Nodes (11): CNC_CG_ClientCharacter, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
+### Community 752 - "CNC_CZ_ClientBattleRoyaleInfo"
+Cohesion: 0.02
+Nodes (115): CNC_CG_ClientCharacter, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+107 more)
+
+### Community 753 - "8. Système de Dungeons et Instances"
+Cohesion: 0.22
+Nodes (9): 8. Système de Dungeons et Instances, Battle Crusade, Battle Crusade Factory, Battle Royale, Battlefield, Battlefield Factory, Colosseum, Door (Instance Entry) (+1 more)
 
 ### Community 754 - "ZoneClientIdentifyItem"
 Cohesion: 0.15
 Nodes (13): ZoneClientIdentifyItem, Field1, Field10, Field2, Field3, Field4, Field5, Field6 (+5 more)
 
 ### Community 755 - "BattlefieldService"
-Cohesion: 0.08
-Nodes (21): Architecture native (mission @ decompiled), Audit final NCIDs bataille, Battlefield (champ de bataille PvP) — design d'implémentation, DÉPLOIEMENT — mission :7654 relancée (battlefield live), NCIDs concernés (FEATURE-MATRIX, tous NON PROUVE), Plan V1 (incrémental, chaque étape testable), Reste pour match jouable, Reward item — point de conception (+13 more)
+Cohesion: 0.05
+Nodes (33): Architecture native (mission @ decompiled), Audit final NCIDs bataille, Battlefield (champ de bataille PvP) — design d'implémentation, DÉPLOIEMENT — mission :7654 relancée (battlefield live), NCIDs concernés (FEATURE-MATRIX, tous NON PROUVE), Plan V1 (incrémental, chaque étape testable), Points d'attention, Reste pour match jouable (+25 more)
 
 ### Community 756 - "zhook.c"
 Cohesion: 0.36
@@ -4287,20 +4491,20 @@ Cohesion: 0.17
 Nodes (12): ZoneClientBattlefieldList, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
 ### Community 760 - "WorldUpdateFamilyMember"
-Cohesion: 0.09
-Nodes (18): WorldRepeatedLogin, Name, Opcode, Value, WorldUpdateFamilyMember, CharId, CharName, Name (+10 more)
+Cohesion: 0.22
+Nodes (8): WorldUpdateFamilyMember, CharId, CharName, Name, Nums, Opcode, Text1, Text2
 
 ### Community 761 - "ZoneClientUpdateFastDressData"
 Cohesion: 0.17
 Nodes (12): ZoneClientUpdateFastDressData, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
 ### Community 762 - "Lot 10 — prompt10 : identité site, i18n FR/EN/BR, data wiki, Studio refait, fixes jeu"
-Cohesion: 0.25
-Nodes (7): G — Serveur/jeu (`server/src/Eden.Zone/**`, spawn), Journal, Lot 10 — prompt10 : identité site, i18n FR/EN/BR, data wiki, Studio refait, fixes jeu, S — Studio (`limitless/studio/**`, UN agent — refondre jusqu'à 100%), W — Site (deux agents : WD = data/backend, WF = frontend/i18n/UI), WD — Données & backend (`limitless/web/backend/**`, `tools/export_web_data.py`, `limitless/web/App_Data`, datasets JSON), WF — Frontend/UI/i18n (`limitless/web/frontend/**` hors lib/datasets)
+Cohesion: 0.12
+Nodes (12): Ce qui a été fait (lot 11), Encodage des libellés Limitless (NCID 2033) — chaîne du mojibake, La chaîne : seed → DB → wire → CEGUI → police, Règle pour les admins / futurs seeds, C — Client mod (`clientmod/limitless/**`, binaries), G — Serveur/jeu (`server/src/Eden.Zone/**`, spawn), Journal, Lot 10 — prompt10 : identité site, i18n FR/EN/BR, data wiki, Studio refait, fixes jeu (+4 more)
 
-### Community 763 - "ZonePlayerAction"
-Cohesion: 0.29
-Nodes (7): ZonePlayerAction, Action, Name, Opcode, Param1, Param2, Param3
+### Community 763 - "CNC_ZMis_MissionServerChannelMsg"
+Cohesion: 0.22
+Nodes (9): CNC_ZMis_MissionServerChannelMsg, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
 ### Community 764 - "MISSION : refondre la stack Eden (serveur C#/.NET + client Godot) pour Godot UNIQUEMENT — propre, mesurée, optimisée, prête pour ~50 joueurs simultanés"
 Cohesion: 0.18
@@ -4311,28 +4515,28 @@ Cohesion: 0.29
 Nodes (7): ZoneModifyAttr, AttrId, Handle, Name, Opcode, Value, Value64
 
 ### Community 766 - "QuestPlan01Tests"
-Cohesion: 0.07
-Nodes (13): BuffObjective, QuestBuffRules, QuestSymbolRules, ActiveQuest, Packed, NpcSymbolRelay, QuestItemRules, Refusal (+5 more)
+Cohesion: 0.10
+Nodes (7): BuffObjective, QuestBuffRules, QuestSymbolRules, ActiveQuest, Packed, NpcSymbolRelay, QuestPlan01Tests
 
 ### Community 767 - "CollectRecipe"
 Cohesion: 0.18
 Nodes (11): CollectRecipe, CatalystItemId, CatalystQty, Category, DurationMin, Exp, Gold, Id (+3 more)
 
-### Community 768 - "Rapport — portage UI CEGUI → Control Godot 4"
-Cohesion: 0.14
-Nodes (13): Architecture, Constructions Falagard ignorées (compteur `CeguiLookNFeel.Ignored`), Démo, Géométrie : UnifiedAreaRect → ancres Godot, Limites / reste pour pixel-perfect, Mapping implémenté, Propriétés ignorées les plus fréquentes (compteur `IgnoredProps`), Propriétés supportées (+5 more)
+### Community 768 - "Slot"
+Cohesion: 0.22
+Nodes (7): Slot, MaxPoints, PrePoints, PreSpell, RequiredLevel, SpellId, TalentTable
 
-### Community 769 - "Plan d'Action & Spécification Rétro-Ingénierie : Eden.Zone (ZoneServer)"
-Cohesion: 0.29
-Nodes (7): 1. Contexte & Architecture Native, 2. Table des Commandes Réseau Fondamentales (Gameplay Loop), 3. Moteur Spatial & Grille Area of Interest (AOI), 4. Moteur de Combat & Cycle de Vie Entités, 5. Synchronisation et Persistance DB (`fndb1`), Partitionnement Spatial, Plan d'Action & Spécification Rétro-Ingénierie : Eden.Zone (ZoneServer)
+### Community 769 - "ZoneClientMeleeAttack"
+Cohesion: 0.22
+Nodes (8): ZoneClientMeleeAttack, Attacker, Damage, HitType, MotionKfId, Name, Opcode, Target
 
 ### Community 770 - "ZoneClientResetSpell"
 Cohesion: 0.18
 Nodes (11): ZoneClientResetSpell, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
 
-### Community 771 - "`limitless_pass.ini` — récompenses du Limitless Pass"
-Cohesion: 0.29
-Nodes (6): Exemple livré, Format, `[level]` — courbe de coût (optionnelle), `limitless_pass.ini` — récompenses du Limitless Pass, `[reward]` — perks/buffs par palier, Sémantique de la fusion
+### Community 771 - "WorldClientQueryExploitRank"
+Cohesion: 0.22
+Nodes (9): WorldClientQueryExploitRank, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
 ### Community 772 - "Architecture native observée"
 Cohesion: 0.29
@@ -4346,9 +4550,9 @@ Nodes (6): G1 — NPC manquants (Gisèle & autres), G2 — NPC tous tournés par
 Cohesion: 0.18
 Nodes (11): POSTGRES_DB, POSTGRES_PASSWORD, command, container_name, environment, image, networks, ports (+3 more)
 
-### Community 775 - "Lot 12 — prompt10c : HUD stylé, talents canoniques+stats, site data, help Studio"
-Cohesion: 0.29
-Nodes (6): C — HUD (`clientmod/limitless/**`), G — Talents canoniques (`server/**`, S_Talent/C_Talent), Journal, Lot 12 — prompt10c : HUD stylé, talents canoniques+stats, site data, help Studio, S — Studio (`limitless/studio/**`), W — Site (`limitless/web/frontend/**` + backend si nécessaire)
+### Community 775 - "ZoneServerFamilyContainerPutItem"
+Cohesion: 0.22
+Nodes (8): ZoneServerFamilyContainerPutItem, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
 ### Community 776 - "fndb1 — base de jeu (156 objets)"
 Cohesion: 0.18
@@ -4363,20 +4567,20 @@ Cohesion: 0.18
 Nodes (11): 6.1 Entités, 6.2 Parser de T_Class.ini, 6.3 Repository, 6.4 Service de Changement de Classe, 6. Implémentation C#, ClassChangeService.cs, ClassDataParser.cs, ClassEntity.cs (+3 more)
 
 ### Community 779 - "ZoneDamageMessage"
-Cohesion: 0.11
-Nodes (13): 3. Eden.Zone, ZoneDamageMessage, AttackerEntityId, DamageAmount, IsCritical, IsDodged, Name, Opcode (+5 more)
+Cohesion: 0.07
+Nodes (22): 3. Eden.Zone, ZoneDamageMessage, AttackerEntityId, DamageAmount, IsCritical, IsDodged, Name, Opcode (+14 more)
 
 ### Community 780 - "2026-10-24 — Lot live 4 : pets / talents / buffs / AoE / buyback / rf_game"
 Cohesion: 0.13
 Nodes (14): 1. Pets, 2026-10-24 — Lot live 4 : pets / talents / buffs / AoE / buyback / rf_game, 2. Talents de classe (icônes + stats), 3. Buffs de skills (ni icône ni effet), 4. AoE multi-hit toujours KO, 5. Buyback (packet 512), 6. Doc terminologie, 7. rf_game (client Reforged) (+6 more)
 
 ### Community 781 - "QuestKind"
-Cohesion: 0.20
+Cohesion: 0.18
 Nodes (10): QuestKind, Awakening, Class, Daily, Guild, Main, Other, Repeat (+2 more)
 
-### Community 782 - "Protocol/WorldMiscMessages.cs"
-Cohesion: 0.04
-Nodes (47): WorldClientApexBufferTransfer, Buffer, Field1, Name, Opcode, WorldClientCancelCreateCharacterResp, Name, Opcode (+39 more)
+### Community 782 - "MiscPackets.BindZone"
+Cohesion: 0.01
+Nodes (137): WorldClientApexBufferTransfer, Buffer, Field1, Name, Opcode, WorldClientCancelCreateCharacterResp, Name, Opcode (+129 more)
 
 ### Community 783 - "ZoneClientBattlefieldMemberInfo"
 Cohesion: 0.22
@@ -4438,17 +4642,17 @@ Nodes (15): CNE_ZMis_ZoneServerGMToolGetInfo, Field1, Field10, Field11, Field12,
 Cohesion: 0.22
 Nodes (9): ZoneClientSummonPet, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 799 - "Gateway"
-Cohesion: 0.29
-Nodes (7): Gateway, Description, EventAreaId, KeyId, LinkKey, RowId, ScriptEventId
+### Community 799 - "ZoneClientSpellCast"
+Cohesion: 0.22
+Nodes (9): ZoneClientSpellCast, Caster, Flag, Name, Opcode, SpellId, Target, X (+1 more)
 
-### Community 802 - "5. Plan d'action (reverse vers serveur propre C#)"
-Cohesion: 0.25
-Nodes (8): 5. Plan d'action (reverse vers serveur propre C#), Phase 0 — Cadrage & sauvegarde (1 jour), Phase 1 — Cartographie statique assistée par IA (3–5 jours), Phase 2 — Protocole (le plus important) (1–2 semaines), Phase 3 — Socle C# du serveur propre (1 semaine), Phase 4 — Portage fonctionnel incrémental (le gros du travail), Phase 5 — Durcissement & configuration, Phase 6 — Conteneurisation & déploiement
+### Community 802 - "ZoneElfUpdateSkill"
+Cohesion: 0.22
+Nodes (9): ZoneElfUpdateSkill, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 803 - "CNC_CZ_ClientElfWorkResult"
-Cohesion: 0.10
-Nodes (19): CNC_CZ_ClientElfUpdateSoulAbility, Field1, Field2, Field3, Field4, Field5, Name, Opcode (+11 more)
+### Community 803 - "ZoneAttrRefresh"
+Cohesion: 0.22
+Nodes (9): ZoneAttrRefresh, Field21, Fields15to18, Fields19to20, Fields1to14, Fields22to29, Fields30to35, Name (+1 more)
 
 ### Community 804 - "ZoneClientDuelResult"
 Cohesion: 0.29
@@ -4462,13 +4666,17 @@ Nodes (7): ZoneClientGladiatorTeamInfo, Field1, Field2, Field3, Field4, Name, Op
 Cohesion: 0.18
 Nodes (10): Ancien dossier « caméra pendant timed cast » (2026-10-24), B2 — Strafe monture : REVERT du swap L/R des records (2026-11-06), B3 — Strafe monture : sélection forcée des records monture (2026-11-06, v3), Limites & maintenabilité, Méthode pas à pas, Patch ALAudio.dll — déblocage du chargeur de plugins (2026-10-24), Patcher le client binaire (game_.exe / dlls Reforged), Patches posés à ce jour (+2 more)
 
-### Community 808 - "St"
-Cohesion: 0.29
-Nodes (7): St, Exception, Info, Missing, Ok, OkFuzzy, Undecodable
+### Community 807 - "ZoneLimitlessState"
+Cohesion: 0.22
+Nodes (8): ZoneLimitlessState, CharId, Exp, Level, Name, NextExp, Opcode, Perks
 
-### Community 809 - "Visionneuse de skins (`tools/skinview.sh`)"
-Cohesion: 0.33
-Nodes (5): Arguments, Lancer, Mesure de teinte, Panneau, Visionneuse de skins (`tools/skinview.sh`)
+### Community 808 - "ZoneClientCanJoinTeam"
+Cohesion: 0.22
+Nodes (9): ZoneClientCanJoinTeam, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
+
+### Community 809 - "Kind"
+Cohesion: 0.25
+Nodes (8): Kind, Block, Crit, CritTaken, Damage, Heal, Miss, Taken
 
 ### Community 811 - "Eden.Core.Tests.csproj"
 Cohesion: 0.08
@@ -4494,9 +4702,9 @@ Nodes (11): ZoneClientElfWorkResult, Field1, Field2, Field3, Field4, Field5, Fie
 Cohesion: 0.25
 Nodes (4): export_classes(), parse_class_requirements(), _spell_block_start(), srows_items()
 
-### Community 818 - "ZoneClientSay"
-Cohesion: 0.33
-Nodes (6): ZoneClientSay, Blob, CharId, Message, Name, Opcode
+### Community 818 - "Slot"
+Cohesion: 0.25
+Nodes (7): Slot, MaxPoints, PrePoints, PreSpell, RequiredLevel, SpellId, TalentTable
 
 ### Community 819 - "ZoneClientBattleMemberPosition"
 Cohesion: 0.33
@@ -4522,12 +4730,12 @@ Nodes (8): ZoneClientLifeFloat, Field1, Field2, Field3, Field4, Field5, Name, Op
 Cohesion: 0.25
 Nodes (8): ZoneClientModifyItemStrengthen, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 825 - "protocol/WorldMiscMessages.cs"
-Cohesion: 0.04
-Nodes (47): WorldClientApexBufferTransfer, Buffer, Field1, Name, Opcode, WorldClientCancelCreateCharacterResp, Name, Opcode (+39 more)
+### Community 825 - "MiscPackets.BindZone"
+Cohesion: 0.01
+Nodes (160): WorldClientApexBufferTransfer, Buffer, Field1, Name, Opcode, WorldClientCancelCreateCharacterResp, Name, Opcode (+152 more)
 
 ### Community 826 - "KnownSpell"
-Cohesion: 0.14
+Cohesion: 0.22
 Nodes (8): KnownSpell, SpellName, PlayerSkills, Spells, KnownSpell, SpellName, PlayerSkills, Spells
 
 ### Community 827 - "MobDanger"
@@ -4610,17 +4818,13 @@ Nodes (5): ZoneClientTradeStart, Name, Opcode, PartnerCharId, PartnerName
 Cohesion: 0.25
 Nodes (8): ZoneClientUseSkillPointOK, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 847 - "Protocol/ZoneAuctionMessages.cs"
-Cohesion: 0.04
-Nodes (45): AuctionEntry, ZoneAuctionBuy, AuctionId, Name, Opcode, ZoneAuctionBuyOk, Name, Opcode (+37 more)
+### Community 847 - "ZoneAuctionBuyQuery"
+Cohesion: 0.20
+Nodes (10): ZoneAuctionBuyQuery, Category, Filter, MaxPrice, MinPrice, Name, Opcode, Page (+2 more)
 
 ### Community 848 - "ZoneDisplayMonster"
 Cohesion: 0.29
 Nodes (7): ZoneDisplayMonster, EnchantIds, MobHandle, Name, Opcode, OwnerGeneration, OwnerHandle
-
-### Community 849 - "FamilyStoragePackets.WriteStorageItem"
-Cohesion: 0.16
-Nodes (4): P14 — Guilde / famille, FamilyStoragePackets, FamilyStorageTests, PrestigeTests
 
 ### Community 850 - "AntialiasMode"
 Cohesion: 0.33
@@ -4630,9 +4834,9 @@ Nodes (6): AntialiasMode, Fxaa, Msaa2, Msaa4, Msaa8, None
 Cohesion: 0.17
 Nodes (12): ZoneClientBattlefieldList, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+4 more)
 
-### Community 852 - "ZoneClientEquipTrainItemChanged"
-Cohesion: 0.10
-Nodes (20): ZoneClientEquipTrainItemChanged, ContainerType, Index, Key, Name, Opcode, ZoneClientLevelUp, Field1 (+12 more)
+### Community 852 - "WorldClientTell"
+Cohesion: 0.25
+Nodes (8): WorldClientTell, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
 ### Community 853 - "🔍 Symboles Clés Extraits"
 Cohesion: 0.33
@@ -4640,11 +4844,11 @@ Nodes (6): Ajout/Suppression, Changement de Classe, Effects, Messages Réseau, �
 
 ### Community 854 - "EntityRegistry"
 Cohesion: 0.03
-Nodes (43): 8. Entités monde (rattachées au HUD), Création de personnage — NCIDs réels (canal World), Modèle personnage (preuve), Reste pour « comparable au natif », Séquence réseau (EdenSession réutilisée — jamais reloguée), Tests / preuve live, UX Flow — chaîne de jeu complète (24/10/2026), État rendu (textures / UV / yaw / eau) (+35 more)
+Nodes (38): 8. Entités monde (rattachées au HUD), Création de personnage — NCIDs réels (canal World), Modèle personnage (preuve), Reste pour « comparable au natif », Séquence réseau (EdenSession réutilisée — jamais reloguée), Tests / preuve live, UX Flow — chaîne de jeu complète (24/10/2026), État rendu (textures / UV / yaw / eau) (+30 more)
 
-### Community 855 - "ZonePlayerWorkResult"
-Cohesion: 0.02
-Nodes (100): WorkOrder, EventId, FmName, WorkId, WorkNum, WorkType, WorkProduct, ZoneEnterWorks (+92 more)
+### Community 855 - "ZonePlayerWorkUpdate"
+Cohesion: 0.10
+Nodes (20): WorkOrder, EventId, FmName, WorkId, WorkNum, WorkType, ZonePlayerWorkUpdate, Name (+12 more)
 
 ### Community 856 - "TextRow"
 Cohesion: 0.24
@@ -4662,9 +4866,9 @@ Nodes (6): NeobankSettings, Columns, Enabled, Rows, ScrollMode, SlotsPerPage
 Cohesion: 0.21
 Nodes (6): SpellDef, IconCode, Id, Range, TargetType, SpellTable
 
-### Community 860 - "2. Analyse complète de la stack"
-Cohesion: 0.29
-Nodes (7): 2.1 Identification des binaires (preuves `readelf`/`file`), 2.2 Le moteur interne : `lapis`, 2.3 Persistance : PostgreSQL 12, 2.4 Données de jeu (fichiers `.ini`), 2.5 Stack logicielle d'exploitation actuelle, 2.6 Synthèse de la stack, 2. Analyse complète de la stack
+### Community 860 - "ZoneEnterWorks"
+Cohesion: 0.25
+Nodes (8): ZoneEnterWorks, BuildingId, Field4, Field5, Name, NpcUid, Opcode, WorkType
 
 ### Community 861 - "CNC_CZ_ClientHeroTrait"
 Cohesion: 0.40
@@ -4674,13 +4878,17 @@ Nodes (4): CNC_CZ_ClientHeroTrait, Name, Opcode, Trait
 Cohesion: 0.33
 Nodes (3): export_talents(), export_talents_reforged(), _talents_from()
 
+### Community 863 - "LfgFilterTests"
+Cohesion: 0.18
+Nodes (4): LfgEntry, MiscHandlers, LfgCharacters, LfgFilterTests
+
 ### Community 864 - "CNC_ZMis_ZoneServerStartVersusInstance"
 Cohesion: 0.22
 Nodes (9): CNC_ZMis_ZoneServerStartVersusInstance, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 865 - "9. Le dossier `rea-rea-agents-6.5.0` (REA) — comment l'utiliser"
-Cohesion: 0.29
-Nodes (7): 9.1 Ce que c'est, 9.2 Ce qu'il sait analyser (extrait pertinent ici), 9.3 Installation & mise en route, 9.4 Configurer un provider d'analyse (Ghidra), 9.5 Outils MCP natifs les plus utiles pour VOUS, 9.6 Workflow recommandé avec REA + LLM local, 9. Le dossier `rea-rea-agents-6.5.0` (REA) — comment l'utiliser
+### Community 865 - "ZonePlayerWork"
+Cohesion: 0.25
+Nodes (8): ZonePlayerWork, BoostBag, BoostSlot, CatalystBag, CatalystSlot, Name, Opcode, WorkId
 
 ### Community 866 - "CNE_ZMis_MissionServerListDialogue"
 Cohesion: 0.22
@@ -4694,17 +4902,21 @@ Nodes (18): AGENTS.md — eden-godot, Audits de référence (`docs/knowledge/`),
 Cohesion: 0.20
 Nodes (9): EquipTypeDef, AltLoc, Category, EquipLoc, Id, IsEquipable, Label, Name (+1 more)
 
-### Community 870 - "ZoneClientLifeSkillUpdate"
-Cohesion: 0.33
-Nodes (6): ZoneClientLifeSkillUpdate, Field1, Field2, Field3, Name, Opcode
+### Community 870 - "ZoneItemMallUseItem"
+Cohesion: 0.25
+Nodes (8): ZoneItemMallUseItem, ContainerIndex, Name, Opcode, Params, Sel, Slot, UiItemId
 
 ### Community 871 - "PartyMenu"
-Cohesion: 0.33
+Cohesion: 0.29
 Nodes (6): PartyMenu, InviteTarget, Kick, Leave, Promote, Whisper
 
-### Community 873 - "net/ManifestHash.cs"
-Cohesion: 0.40
-Nodes (3): ManifestHash, Result, Hex
+### Community 872 - "ZoneClientLifeFloat"
+Cohesion: 0.25
+Nodes (8): ZoneClientLifeFloat, Field1, Field2, Field3, Field4, Field5, Name, Opcode
+
+### Community 873 - "ZoneFamilyStorageGet"
+Cohesion: 0.25
+Nodes (7): ZoneFamilyStorageGet, Bag, Loc, Name, Opcode, Slot, StorageIndex
 
 ### Community 874 - "ZoneClientGreedyIslandInfo"
 Cohesion: 0.18
@@ -4715,16 +4927,16 @@ Cohesion: 0.40
 Nodes (5): LoginWorldReply, Address, Name, Opcode, WorldId
 
 ### Community 877 - "ZoneSetMissionTrace"
-Cohesion: 0.40
+Cohesion: 0.50
 Nodes (4): ZoneSetMissionTrace, MissionIds, Name, Opcode
 
-### Community 878 - "ZoneClientDestShutdown"
-Cohesion: 0.40
-Nodes (3): ZoneClientDestShutdown, Name, Opcode
+### Community 878 - "45 — POC Login : authentification + liste des channels"
+Cohesion: 0.25
+Nodes (7): 2. Implémentation POC (déviation assumée), 3. Compte POC, 45 — POC Login : authentification + liste des channels, 4. Mise en route, 5. Tests, Lancement local (sans Docker), Status (validé wire-level end-to-end, 2026-10-15)
 
-### Community 879 - "ZoneClientOpenInstanceDialog"
-Cohesion: 0.40
-Nodes (5): ZoneClientOpenInstanceDialog, Field1, Field2, Name, Opcode
+### Community 879 - "7. Système de Mariage et Relations"
+Cohesion: 0.25
+Nodes (8): 7. Système de Mariage et Relations, Character Lover, Effects, Events, Friend, Lover/Couple, Lover Operations, Wedding
 
 ### Community 880 - "ZoneDisplayDialogView"
 Cohesion: 0.15
@@ -4734,13 +4946,13 @@ Nodes (13): DialogEntry, DisplayId, EntryName, Flag, Label, ZoneDisplayDialogVie
 Cohesion: 0.40
 Nodes (3): ZoneClientOpenMagicBoxDialog, Name, Opcode
 
-### Community 882 - "CNC_CZ_ClientMessageList"
-Cohesion: 0.18
-Nodes (11): CNC_CZ_ClientMessageList, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
+### Community 882 - "1. Inventaire NCID du périmètre"
+Cohesion: 0.25
+Nodes (8): 1.1 Entrants client → zone (tous ont au moins un handler), 1.2 Équipement / inventaire / sacs, 1.3 Personnage / stats / classes, 1.4 Quêtes, 1.5 Pet / Elf (requis — le familier DOIT vivre dans son interface), 1.6 Internes absents touchant le périmètre, 1.7 Sortants jamais émis (hors internes), 1. Inventaire NCID du périmètre
 
 ### Community 883 - "Card"
-Cohesion: 0.22
-Nodes (9): Card, Category, Group, Id, NameBig5, Order, Points, Special (+1 more)
+Cohesion: 0.14
+Nodes (14): Award, Conds, Enchant, Id, Card, Category, Group, Id (+6 more)
 
 ### Community 884 - "Classes éveillées — textes UI, quêtes, ref-shots — harvest"
 Cohesion: 0.20
@@ -4753,10 +4965,6 @@ Nodes (5): ZoneClientOpenMissionShop, Field1, Field2, Name, Opcode
 ### Community 886 - "CombineRecipe"
 Cohesion: 0.17
 Nodes (12): CombineRecipe, Category, CurseRate, DurationMin, Gold, Id, Instant, Materials (+4 more)
-
-### Community 887 - "ChatLocalizer.Localize"
-Cohesion: 0.19
-Nodes (3): ChatLocalizer, UiThemeBoot, UiBootTextTests
 
 ### Community 888 - "eden_server/docs/INDEX.md"
 Cohesion: 0.31
@@ -4806,9 +5014,9 @@ Nodes (5): ZoneClientRecruitInstanceResult, Field1, Field2, Name, Opcode
 Cohesion: 0.18
 Nodes (11): ZoneItemUse, ContainerIndex, ContainerType, Name, Opcode, Param, Slot, Target (+3 more)
 
-### Community 900 - "Implémenté dans ce lot"
-Cohesion: 0.17
-Nodes (10): 162 QueryBattlefieldData — FAIT, 164 UpdateBotData — TRIVIAL, 218 NewPlayerGuide, 224 UpdateLotteryBonus — FAIT, 258 DailyAwardOP — système calendrier de connexion, Analyse des restes (désasm zone), Fichiers, Implémenté dans ce lot (+2 more)
+### Community 900 - "Lot 8 — prompt8 : site, Studio, gameplay, client (exécution autonome)"
+Cohesion: 0.25
+Nodes (7): Attribution de vérif (rappel), C — Client Reforged (`clientmod/**`, `reforged/`, `re/`), G — Gameplay serveur (`server/**` + données), Journal, Lot 8 — prompt8 : site, Studio, gameplay, client (exécution autonome), S — Limitless Studio (`limitless/studio/**`), W — Site web (`limitless/web/**`, `tools/export_web_data.py`, données backend)
 
 ### Community 901 - "CNC_ZMis_ZoneServerAchievementUpdate"
 Cohesion: 0.22
@@ -4835,7 +5043,7 @@ Cohesion: 0.22
 Nodes (9): CNC_ZMis_ZoneServerReturnTeamInviteeID, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
 ### Community 907 - "NodeMapGrid"
-Cohesion: 0.21
+Cohesion: 0.26
 Nodes (4): NodeMapGrid, Height, Width, NodeMapGridTests
 
 ### Community 908 - "CNC_ZMis_ZoneServerTextOutputIndex"
@@ -4854,9 +5062,9 @@ Nodes (3): ZoneClientSafeQuitCancel, Name, Opcode
 Cohesion: 0.22
 Nodes (9): CNE_ZMis_MissionServerCrossZoneRequest, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 912 - "ZoneClientUpdateBattleCrusadeInfo"
-Cohesion: 0.40
-Nodes (3): ZoneClientUpdateBattleCrusadeInfo, Name, Opcode
+### Community 912 - "CNC_CZ_ClientLifeFloat"
+Cohesion: 0.25
+Nodes (8): CNC_CZ_ClientLifeFloat, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
 ### Community 913 - "ZoneClientFamilyContainerDeleteItem"
 Cohesion: 0.29
@@ -4877,10 +5085,6 @@ Nodes (12): CNC_CZ_ClientBattlefieldList, Field1, Field2, Field3, Field4, Field5
 ### Community 917 - "ZoneClientItemRent"
 Cohesion: 0.29
 Nodes (7): ZoneClientItemRent, Field1, Field2, Field3, Field4, Name, Opcode
-
-### Community 918 - "CNC_CZ_ClientDuelResult"
-Cohesion: 0.07
-Nodes (26): CNC_CZ_ClientDuelBegin, Field1, Field2, Field3, Field4, Name, Opcode, CNC_CZ_ClientDuelRequest (+18 more)
 
 ### Community 919 - "ZoneClientPlayerEvent"
 Cohesion: 0.29
@@ -4915,20 +5119,24 @@ Cohesion: 0.40
 Nodes (5): 📁 Fichiers Créés/Modifiés, MODIFIED: `Eden.Core/Game/Services/CharacterCreationService.cs`, NEW: `Eden.Core/Data/Parsers/ClassDataParser.cs` (370 lines), NEW: `Eden.Core/Data/Parsers/ClassStatsParser.cs` (90 lines), NEW: `Eden.Core/Game/Classes/ClassDataService.cs` (120 lines)
 
 ### Community 927 - "EntityAnimator"
-Cohesion: 0.04
-Nodes (38): Leviers (non mesurés, par gain/effort estimé), Performance rendu/CPU — Godot 4.8, Règle, Références, Étapes, 1. Résultat, 2.1 Records de direction (`DAT_00fe49a8`, 9 × 0x38 octets), 2.2 Callbacks → slots de vtable → action KFM (+30 more)
+Cohesion: 0.03
+Nodes (47): Ce que le natif ne règle pas (décision propriétaire), Lot 2 — Remplacer les dérivés (GLB/PNG/JSON) par les formats natifs EDENFR, Phases (chacune livrée avec ses preuves, dans cet ordre), Principe : un seul entonnoir, le même contrat d'arbre de nœuds, Risques, État de départ (audit 2026-11-02), 1. Résultat, 2.1 Records de direction (`DAT_00fe49a8`, 9 × 0x38 octets) (+39 more)
 
 ### Community 928 - "ClassText"
 Cohesion: 0.18
 Nodes (9): ClassText, DetailedDescription, Id, MinCharacterLevel, Name, RequirementText, ShortDescription, Trait (+1 more)
+
+### Community 929 - "MountRulesTests"
+Cohesion: 0.10
+Nodes (4): MountCombatRules, MoveAnimSpeed, MountRulesTests, MoveAnimSpeedTests
 
 ### Community 930 - "TestPaths"
 Cohesion: 0.40
 Nodes (3): TestPaths, RepoRoot, ServerUsData
 
 ### Community 931 - "ZoneBaseAttrRefresh"
-Cohesion: 0.06
-Nodes (32): ZoneAttrLevelRefresh, Fields, Name, Opcode, ZoneBaseAttrRefresh, Hp, Mp, Name (+24 more)
+Cohesion: 0.22
+Nodes (9): ZoneBaseAttrRefresh, Hp, Mp, Name, Opcode, Run, Stats, Timings (+1 more)
 
 ### Community 933 - "📝 Notes Techniques"
 Cohesion: 0.40
@@ -4936,15 +5144,15 @@ Nodes (5): Classes Éveillées Confirmées, Format T_Class.ini, IDs Classes, �
 
 ### Community 934 - "KfmStateMachine"
 Cohesion: 0.05
-Nodes (47): Phase E — Personnages, monstres, PNJ, montures, familiers, équipements, armes + animations, KfmAnim, Transitions, KfmChainKey, KfmFile, Anims, Warnings, KfmKeyPair (+39 more)
+Nodes (46): KfmAnim, Transitions, KfmChainKey, KfmFile, Anims, Warnings, KfmKeyPair, KfmTransition (+38 more)
 
-### Community 936 - "Plan — Autels Eden Crystal / Eden Gem (lottery natif)"
-Cohesion: 0.40
-Nodes (4): Plan — Autels Eden Crystal / Eden Gem (lottery natif), Preuves natives (zone/decompiled.c), Tables DB (réelles, peuplées), Vérification
+### Community 936 - "WorldClientTell"
+Cohesion: 0.25
+Nodes (8): WorldClientTell, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 937 - "Points d'édition"
-Cohesion: 0.40
-Nodes (4): Phase 4 (d) — Handshake de version + manifest gamedata (Godot-only), Points d'édition, Vérifs — fait 2026-10-27, Wire (NCIDs Godot-only, hors plage native <2000)
+### Community 937 - "ZoneClientSpellHitToLife"
+Cohesion: 0.25
+Nodes (8): ZoneClientSpellHitToLife, Amount, Caster, Flags, Name, Opcode, SpellId, Target
 
 ### Community 938 - "ZoneClientLotteryEnd"
 Cohesion: 0.22
@@ -4954,29 +5162,33 @@ Nodes (9): ZoneClientLotteryEnd, Field1, Field2, Field3, Field4, Field5, Field6,
 Cohesion: 0.20
 Nodes (10): CNE_ZMis_MissionServerMobDieReport, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+2 more)
 
-### Community 940 - "Audit vague 3 — maps, items, monstres (résultats)"
-Cohesion: 0.40
-Nodes (4): Audit vague 3 — maps, items, monstres (résultats), Items — icônes à 99,7 % ✅, Maps — 139/139 chargées ✅, Reste connu (bénin, documenté)
+### Community 940 - "ZoneClientPVPRankLookEquip"
+Cohesion: 0.25
+Nodes (7): ZoneClientPVPRankLookEquip, CharId, ItemUids, Name, Opcode, PlayerName, U1
 
 ### Community 941 - "CNC_ZMis_ZoneServerGreedyIslandJoin"
 Cohesion: 0.25
 Nodes (8): CNC_ZMis_ZoneServerGreedyIslandJoin, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 942 - "BankDueDates"
-Cohesion: 0.40
-Nodes (5): BankDueDates, D1, D2, D3, D4
+### Community 942 - "ZoneEnterWorks"
+Cohesion: 0.25
+Nodes (8): ZoneEnterWorks, BuildingId, Field4, Field5, Name, NpcUid, Opcode, WorkType
+
+### Community 943 - "ZonePlayerWork"
+Cohesion: 0.25
+Nodes (8): ZonePlayerWork, BoostBag, BoostSlot, CatalystBag, CatalystSlot, Name, Opcode, WorkId
 
 ### Community 944 - "Ponytail Help"
 Cohesion: 0.22
 Nodes (8): Band (Claude Code), Configure Default Mode, Deactivate, Levels, More, Ponytail Help, Skills, Update
 
 ### Community 946 - "ÉTAT DU SYSTÈME DE STATS — sources, ordre, provenance (2026-10-30, maj phase C + A4.5)"
-Cohesion: 0.17
-Nodes (11): 10. Checklist avant d'ajouter une source, 1. Architecture (5 couches serveur + 1 client), 2. Formule d'application, 5. Inventaire des sources demandées, 6. Buffs / statuts (système complet — réutiliser), 7. Vitesse de déplacement — les deux mécanismes, 8. Portal stone, 9. Client — réception (+3 more)
+Cohesion: 0.07
+Nodes (26): 10. Checklist avant d'ajouter une source, 1. Architecture (5 couches serveur + 1 client), 2. Formule d'application, 3. Ordre réel des stages (Program.cs, ordre d'enregistrement), 4. Équipement, gemmes, fortify, costumes, 5. Inventaire des sources demandées, 6. Buffs / statuts (système complet — réutiliser), 7. Vitesse de déplacement — les deux mécanismes (+18 more)
 
-### Community 947 - "ServerMoveSpeed.Multiplier"
+### Community 947 - "ZoneElfMix"
 Cohesion: 0.25
-Nodes (3): ServerMoveSpeed, ServerMoveSpeedTests, ServerMoveSpeedTests
+Nodes (7): ZoneElfMix, LocConsumed, LocMain, MaterialBag, MaterialSlot, Name, Opcode
 
 ### Community 948 - "ZoneClientBagDueDate"
 Cohesion: 0.40
@@ -4986,9 +5198,9 @@ Nodes (5): ZoneClientBagDueDate, Field1, Field2, Name, Opcode
 Cohesion: 0.18
 Nodes (11): ZoneClientItemUse, Accepted, CharId, ContainerIndex, ContainerType, ItemId, Name, Opcode (+3 more)
 
-### Community 950 - "ZoneClientEnterExchageItemService"
-Cohesion: 0.40
-Nodes (3): ZoneClientEnterExchageItemService, Name, Opcode
+### Community 950 - "ZoneEnchantRemove"
+Cohesion: 0.25
+Nodes (8): ZoneEnchantRemove, Act, EffectId, Field4, Field5, Handle, Name, Opcode
 
 ### Community 951 - "ZoneSwitchItemLocationOk"
 Cohesion: 0.18
@@ -5030,21 +5242,21 @@ Nodes (7): 1. La Boucle d'Ingénierie Inverse, 2. Outils de Reverse Disponibles,
 Cohesion: 0.25
 Nodes (7): 1. Tableau de Bord d'Avancement, 2. Découvertes Clés & Corrélation Binaire ↔ Base de Données, 3. Architecture Réécrite & Fichiers Clés, 4. Prochaine Étape : Microservice `Eden.World`, A. Structure des Mondes (`lapis::SWorldServerStates` & table `worlds`), B. Cycle de Connexion Intégral Reversé, Rapport d'Avancement — Réécriture du Serveur Eden en C# (.NET 8)
 
-### Community 961 - "ZoneClientBattlefieldMemberInfo"
-Cohesion: 0.22
-Nodes (9): ZoneClientBattlefieldMemberInfo, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
+### Community 961 - "ZoneModelModify"
+Cohesion: 0.25
+Nodes (8): ZoneModelModify, Field2, Field3, Field4, Field5, Handle, Name, Opcode
 
-### Community 962 - "ZoneClientCanJoinTeam"
-Cohesion: 0.22
-Nodes (9): ZoneClientCanJoinTeam, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
+### Community 962 - "ZoneUpdateZoneMonster"
+Cohesion: 0.25
+Nodes (8): ZoneUpdateZoneMonster, Field2, Field3, Field4, Field5, Handle, Name, Opcode
 
 ### Community 963 - "Preuves natives"
 Cohesion: 0.25
 Nodes (7): CNE_CZ_ZoneServerFamilyTownEnter (176) — zone @0x8259d30, CrossZoneData (exec+0xf0/+0xf4/+0xf8 → char+0xa98/+0xa9c/+0xaa0), Hors scope, Lot — FamilyTownEnter (176) : entrée/sortie du hall de famille, Preuves natives, Sortie par portail, TransportCharacterToNode (@0x8176530)
 
 ### Community 964 - "Rapport complet — Reverse Engineering du serveur Eden (`server_us`)"
-Cohesion: 0.20
-Nodes (9): 12.1 Ce que ça change, 12.2 Outils adaptés au client, 12.3 Ordre conseillé (client + serveur ensemble), 12. Reverse du client de jeu (phase ultérieure), 1. Résumé exécutif, 3. Architecture fonctionnelle du serveur, Conclusion & prochaine action immédiate, Rapport complet — Reverse Engineering du serveur Eden (`server_us`) (+1 more)
+Cohesion: 0.03
+Nodes (59): 10.1 Les agents IA intégrés (le socle), 10.2 Connexion LLM local dans l'IDE, 10.3 Extensions d'analyse / reverse (VS Code & Cursor), 10.4 Astuces productivité IA locale dans Cursor, 10.5 Organisation de travail dans l'IDE, 10. IDE & extensions VS Code / Cursor pour le reverse, 12.1 Ce que ça change, 12.2 Outils adaptés au client (+51 more)
 
 ### Community 965 - "Plan — sous-système salles personnelles (PlayerRoom / housing)"
 Cohesion: 0.25
@@ -5059,8 +5271,8 @@ Cohesion: 0.25
 Nodes (7): NCID 130/131 — conteneur bâtiments (TODO), NCID 161 — FamilyStatue (décodé, reporté), NCID 180 — FamilyBuildingRepair (FAIT), NCID 225 — FamilyBattleAskInfo (TODO), Plan — Hall de famille : opérations bâtiments (180/161/130/131/225), Vérifs, État au commit a06f38d
 
 ### Community 968 - "Plan — NCID 163 NodeGroupReset + NCID 220 RecruitInstance (LFG instance)"
-Cohesion: 0.25
-Nodes (7): 2. Modifications, 3. Tests, 4. Vérif, Core, Plan — NCID 163 NodeGroupReset + NCID 220 RecruitInstance (LFG instance), Skips documentés, Zone
+Cohesion: 0.18
+Nodes (10): 1. Modèle natif décodé, 2. Modifications, 3. Tests, 4. Vérif, Core, NCID 163 `CNE_CZ_ZoneServerNodeGroupReset` — payload vide, NCID 220 `CNE_CZ_ZoneServerRecruitInstance`, Plan — NCID 163 NodeGroupReset + NCID 220 RecruitInstance (LFG instance) (+2 more)
 
 ### Community 969 - "ZoneClientChangeSpell"
 Cohesion: 0.22
@@ -5070,9 +5282,9 @@ Nodes (9): ZoneClientChangeSpell, Field1, Field2, Field3, Field4, Field5, Field6
 Cohesion: 0.25
 Nodes (8): FastDressRow, ContainerIndex, FromIndex, FromLoc, Id, ItemId, Page, TarLoc
 
-### Community 971 - "ZoneClientEnterRepairShop"
-Cohesion: 0.40
-Nodes (3): ZoneClientEnterRepairShop, Name, Opcode
+### Community 971 - "ZonePlayerLifeSkill"
+Cohesion: 0.25
+Nodes (7): ZonePlayerLifeSkill, Dues, Exps, Field, Name, Opcode, RecipeIds
 
 ### Community 972 - "CNC_DBA_ClientLotteryCount"
 Cohesion: 0.25
@@ -5094,9 +5306,9 @@ Nodes (8): CNC_ZMis_ZoneServerMailReceive, Field1, Field2, Field3, Field4, Field
 Cohesion: 0.25
 Nodes (8): CNC_ZMis_ZoneServerMessageRead, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 977 - "ZoneClientLotteryEnd"
-Cohesion: 0.22
-Nodes (9): ZoneClientLotteryEnd, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
+### Community 977 - "ZoneItemMallUseItem"
+Cohesion: 0.25
+Nodes (8): ZoneItemMallUseItem, ContainerIndex, Name, Opcode, Params, Sel, Slot, UiItemId
 
 ### Community 978 - "Tâches"
 Cohesion: 0.25
@@ -5106,9 +5318,9 @@ Nodes (8): 1. Inventaire vide visuellement, 2. Achat NPC shop inopérant, 3. Cla
 Cohesion: 0.25
 Nodes (8): CNC_ZMis_ZoneServerUpdateNPCSymbols, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 980 - "Lot — Expansion de stockage (NCID 373/374)"
-Cohesion: 0.50
-Nodes (3): Lot — Expansion de stockage (NCID 373/374), Preuve native, Tests
+### Community 980 - "CeguiImageryComponent"
+Cohesion: 0.25
+Nodes (8): CeguiImageryComponent, ColourProperty, ColourRectProperty, Colours, HorzFormat, Image, ImageProperty, VertFormat
 
 ### Community 981 - "CNE_ZMis_MissionServerCheckFamilyInvite"
 Cohesion: 0.25
@@ -5122,9 +5334,9 @@ Nodes (9): ZoneClientStrengthenItemResult, Field1, Field2, Field3, Field4, Field
 Cohesion: 0.22
 Nodes (9): ZoneClientSummonPet, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 984 - "CNE_ZMis_ZoneServerAchievementUpdate"
-Cohesion: 0.18
-Nodes (11): CNE_ZMis_ZoneServerAchievementUpdate, Field1, Field2, Field3, Field4, Field5, Field6, Field7 (+3 more)
+### Community 984 - "ZoneTradeConfirm"
+Cohesion: 0.29
+Nodes (3): ZoneTradeConfirm, Name, Opcode
 
 ### Community 985 - "ZoneClientOpenInstanceDialog"
 Cohesion: 0.40
@@ -5138,9 +5350,9 @@ Nodes (7): UiBuildReport, Errors, IgnoredProps, LayoutsFailed, LayoutsOk, Prefix
 Cohesion: 0.29
 Nodes (4): export_npcs(), icon_file_exists(), mob_face_icon(), npc_model_index()
 
-### Community 988 - "ZoneClientPayEventOK"
-Cohesion: 0.40
-Nodes (3): ZoneClientPayEventOK, Name, Opcode
+### Community 988 - "PlayerCoins"
+Cohesion: 0.29
+Nodes (5): PlayerCoins, AlpacaCoin, LifelongGold, LifelongPoint, WarCoin
 
 ### Community 989 - "DailyAwardDef"
 Cohesion: 0.29
@@ -5150,17 +5362,17 @@ Nodes (6): DailyAwardDef, Amount, Day, ItemId, RequiredSeconds, DailyAwardTable
 Cohesion: 0.40
 Nodes (5): ZoneClientRecruitInstanceResult, Field1, Field2, Name, Opcode
 
-### Community 991 - "ClassText"
-Cohesion: 0.20
-Nodes (9): ClassText, DetailedDescription, Id, MinCharacterLevel, Name, RequirementText, ShortDescription, Trait (+1 more)
+### Community 991 - "ZoneSpellCastToLocation"
+Cohesion: 0.29
+Nodes (7): ZoneSpellCastToLocation, Name, Opcode, SpellId, Target, X, Z
 
-### Community 992 - "ZoneClientResetCoord"
-Cohesion: 0.40
-Nodes (5): ZoneClientResetCoord, Field1, Field2, Name, Opcode
+### Community 992 - "ZoneClientLoadCubeItems"
+Cohesion: 0.29
+Nodes (6): ZoneClientLoadCubeItems, Name, Opcode, ProdBags, ProdQtys, ProdSlots
 
-### Community 993 - "ZoneClientSellOut"
-Cohesion: 0.40
-Nodes (3): ZoneClientSellOut, Name, Opcode
+### Community 993 - "ZoneMoveChar"
+Cohesion: 0.29
+Nodes (5): ZoneMoveChar, Name, Opcode, X, Y
 
 ### Community 994 - "EnchantEntry"
 Cohesion: 0.29
@@ -5174,17 +5386,17 @@ Nodes (9): CNE_ZMis_MissionServerColosseumClose, Field1, Field2, Field3, Field4,
 Cohesion: 0.22
 Nodes (9): CNE_ZMis_MissionServerGetTeamInviteeID, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 997 - "EventArea"
-Cohesion: 0.20
-Nodes (10): EventArea, Description, Facing, Id, Radius, Shape, Type, X (+2 more)
+### Community 997 - "WorldItemMallBuyResult"
+Cohesion: 0.29
+Nodes (6): WorldItemMallBuyResult, Bonus, Name, Opcode, Pvalues, Result
 
 ### Community 998 - "CNE_ZM_MonsterServerRemoveRebornMonster"
 Cohesion: 0.29
 Nodes (7): CNE_ZM_MonsterServerRemoveRebornMonster, Field1, Field2, Field3, Field4, Name, Opcode
 
 ### Community 999 - "EdenConnection"
-Cohesion: 0.06
-Nodes (20): EdenConnection, ClientVersion, Frames, IsConnected, IsLegacy, ManifestDir, ManifestHashOverride, SessionKey (+12 more)
+Cohesion: 0.11
+Nodes (12): EdenConnection, ClientVersion, Frames, IsConnected, IsLegacy, ManifestDir, ManifestHashOverride, SessionKey (+4 more)
 
 ### Community 1000 - "ZoneClientTeamCheckNotify"
 Cohesion: 0.40
@@ -5202,6 +5414,10 @@ Nodes (5): ZoneClientUpdateRoomItem, Field1, Field2, Name, Opcode
 Cohesion: 0.40
 Nodes (3): ZoneClientUseItemTimeBreak, Name, Opcode
 
+### Community 1004 - "ZoneClientUpdateEvaluateInfo"
+Cohesion: 0.29
+Nodes (7): ZoneClientUpdateEvaluateInfo, Field1, Field2, Field3, Field4, Name, Opcode
+
 ### Community 1005 - "ReceiveBuffer"
 Cohesion: 0.33
 Nodes (3): ReceiveBuffer, MaxFrameSize, Pending
@@ -5218,20 +5434,20 @@ Nodes (6): ZoneClientBattleMemberPosition, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.50
 Nodes (4): LoginClientHello, Name, Opcode, Value
 
-### Community 1009 - "Shot"
-Cohesion: 0.50
-Nodes (4): Shot, Create, Select, Wide
+### Community 1009 - "TempleBackdrop"
+Cohesion: 0.06
+Nodes (24): Défauts connus (2026-11-02, signalés par le propriétaire, non résolus sauf mention), Faits établis (mesurés le 2026-11-02), Objectif et critères de fin, Ordre et parallélisme, Outils de repérage (obligatoires à chaque phase), Phase C — Textures DDS natives, Phase D — Modèles fixes (décors, maps, maisons, objets au sol), Phase E — Personnages, monstres, PNJ, montures, familiers, équipements, armes + animations (+16 more)
 
-### Community 1010 - "ZoneClientAskIdentifyGold"
+### Community 1010 - "Inventaire des Symboles lapis:: par Catégorie"
 Cohesion: 0.29
-Nodes (7): ZoneClientAskIdentifyGold, Field1, Field2, Field3, Field4, Name, Opcode
+Nodes (6): 5. Système de Combat et Effects, Buff on Attack (CEC_OnAttackBuff*), Character Effects, Effect Commands (CEC_*), Formula, Inventaire des Symboles lapis:: par Catégorie
 
 ### Community 1011 - "🔑 Clés Apprentissage"
 Cohesion: 0.50
 Nodes (4): 1. Encoding Critique, 2. Structure Awakened Classes, 3. Format Pipe-Separated, 🔑 Clés Apprentissage
 
 ### Community 1012 - "ZoneDivideItem"
-Cohesion: 0.22
+Cohesion: 0.20
 Nodes (9): ZoneDivideItem, Count, DstBag, DstSlot, Kind, Name, Opcode, SrcBag (+1 more)
 
 ### Community 1013 - "ZoneClientMessageRead"
@@ -5242,13 +5458,13 @@ Nodes (6): ZoneClientMessageRead, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.50
 Nodes (4): 🏁 Conclusion, 📈 Impact:, ⏳ Pending:, ✅ Succès:
 
-### Community 1015 - "PlayerHandlers.Register"
-Cohesion: 0.05
-Nodes (19): Serveur, 🆕 Session 18 Oct (soir) — batch gameplay : inventaire, shop, class skills, exp, regen, HP, Mise à jour documentaire (après les fixes), Plan d'action temporaire — inventaire, shop, class skills, drops, exp, regen, HP, Résultats (18/10 — implémenté, Zone redéployée), ClassRules, ClassUnlockRules, ClassSkillTable (+11 more)
+### Community 1015 - "ZoneServices"
+Cohesion: 0.01
+Nodes (174): Commandes admin dans le chat (test / debug), Debug camera montures, Donner les montures de test, Pourquoi « ca ne marchait pas » (causes corrigees / a connaitre), Utilisation, Équipement / inventaire : codé, bugs connus, Refactor taille (règle <1000 lignes/fichier), 🆕 Session 18 Oct (soir) — batch gameplay : inventaire, shop, class skills, exp, regen, HP (+166 more)
 
-### Community 1016 - "Protocol/ZoneMissionMessages.cs"
+### Community 1016 - "WorldClientCrossZone"
 Cohesion: 0.29
-Nodes (6): MissionListOps, MissionSheetOps, ZoneGiveUpMission, MissionId, Name, Opcode
+Nodes (7): WorldClientCrossZone, Field1, Field2, Field3, Field4, Name, Opcode
 
 ### Community 1017 - "Matrice de captures — Godot vs ref-shots"
 Cohesion: 0.29
@@ -5258,41 +5474,49 @@ Nodes (6): Fenêtres (panels), HUD permanent, Matrice de captures — Godot vs r
 Cohesion: 0.50
 Nodes (4): COURT TERME (Jour 4-5), IMMÉDIAT (Aujourd'hui - Fin de phase 1.1.A), MOYEN TERME (Jour 6), 🎯 Recommandations Prochaines Étapes
 
-### Community 1019 - "Plan — OpenFortuneBag (sacs instantanés [49001,50001)∪[51001,53001)) + compteurs fortune"
-Cohesion: 0.50
-Nodes (3): Approximations restantes (à noter), Plan — OpenFortuneBag (sacs instantanés [49001,50001)∪[51001,53001)) + compteurs fortune, Preuves natives nouvelles (ce lot)
+### Community 1019 - "PlayerCoins"
+Cohesion: 0.29
+Nodes (5): PlayerCoins, AlpacaCoin, LifelongGold, LifelongPoint, WarCoin
+
+### Community 1020 - "ZoneClientSpellCastOK"
+Cohesion: 0.29
+Nodes (7): ZoneClientSpellCastOK, CastTimeDs, Name, Ok, Opcode, SpellId, Target
 
 ### Community 1022 - "ZoneUpdateZoneMonster"
 Cohesion: 0.25
 Nodes (8): ZoneUpdateZoneMonster, Field2, Field3, Field4, Field5, Handle, Name, Opcode
 
 ### Community 1023 - "AudioCatalog"
-Cohesion: 0.25
+Cohesion: 0.29
 Nodes (3): AudioCatalog, MotionSound, Ui
 
-### Community 1024 - "10. IDE & extensions VS Code / Cursor pour le reverse"
-Cohesion: 0.33
-Nodes (6): 10.1 Les agents IA intégrés (le socle), 10.2 Connexion LLM local dans l'IDE, 10.3 Extensions d'analyse / reverse (VS Code & Cursor), 10.4 Astuces productivité IA locale dans Cursor, 10.5 Organisation de travail dans l'IDE, 10. IDE & extensions VS Code / Cursor pour le reverse
+### Community 1024 - "ZoneClientTreasurePickupOK"
+Cohesion: 0.29
+Nodes (7): ZoneClientTreasurePickupOK, CharId, Count, Field4, ItemId, Name, Opcode
 
 ### Community 1026 - "ZoneClientTerritoryFamilyScore"
 Cohesion: 0.25
 Nodes (8): ZoneClientTerritoryFamilyScore, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 1029 - "TexCodec"
-Cohesion: 0.29
-Nodes (7): TexCodec, Astc, Bptc, Etc2, Raw, S3tc, Webp
+### Community 1029 - "EpkFormat"
+Cohesion: 0.11
+Nodes (16): BlobCodec, Raw, Tombstone, Zstd, EpkFormat, PackFlags, Encrypted, IndexZstd (+8 more)
 
 ### Community 1030 - "11. Conteneurisation Docker"
 Cohesion: 0.33
 Nodes (6): 11.1 Constat sur l'existant, 11.2 Deux stratégies, 11.3 Exemple de `docker-compose.yml` cible (serveur C#), 11.4 Dockerfile type (.NET 8, multi-stage), 11.5 Points d'attention Docker, 11. Conteneurisation Docker
 
-### Community 1031 - "14. Annexes — inventaires extraits du binaire"
-Cohesion: 0.33
-Nodes (6): 14.1 Fichiers source du projet (reconstitués depuis les binaires), 14.2 Classes `lapis` — récapitulatif par domaine (WorldServer, extrait), 14.3 Messages réseau `CNE_*` — structure type, 14.4 Bases de données (extrait de `database.out`), 14.5 Fichiers de données clés (`server_us/Data/db`), 14. Annexes — inventaires extraits du binaire
+### Community 1031 - "ZoneDropItem"
+Cohesion: 0.29
+Nodes (6): ZoneDropItem, ContainerIndex, ContainerType, Name, Opcode, Slot
 
-### Community 1032 - "7. IA locale (100 % hors cloud) pour le reverse"
-Cohesion: 0.33
-Nodes (6): 7.1 Le socle : Ollama, 7.2 Quel modèle selon votre GPU (VRAM), 7.3 Interface de chat : Open WebUI, 7.4 Alternative « sans GPU » (CPU seulement), 7.5 Assistants de code locaux (dans l'IDE), 7. IA locale (100 % hors cloud) pour le reverse
+### Community 1032 - "ZoneSpellCastToLocation"
+Cohesion: 0.29
+Nodes (7): ZoneSpellCastToLocation, Name, Opcode, SpellId, Target, X, Z
+
+### Community 1033 - "ZoneClientLookEquip"
+Cohesion: 0.29
+Nodes (7): ZoneClientLookEquip, CharId, ItemUids, Name, Opcode, U1, U2
 
 ### Community 1035 - "CNE_MW_MissionServerTextExCmdRemoteZone"
 Cohesion: 0.33
@@ -5301,6 +5525,14 @@ Nodes (6): CNE_MW_MissionServerTextExCmdRemoteZone, Field1, Field2, Field3, Name
 ### Community 1036 - "ZoneClientChanceLuckyBagResult"
 Cohesion: 0.25
 Nodes (8): ZoneClientChanceLuckyBagResult, Field1, Field2, Field3, Field4, Field5, Name, Opcode
+
+### Community 1037 - "ZoneClientReceiveShortcutOfPage"
+Cohesion: 0.29
+Nodes (7): ZoneClientReceiveShortcutOfPage, Extras, Mask, Name, Opcode, Page, Values
+
+### Community 1038 - "ZoneStrengthenCasting"
+Cohesion: 0.29
+Nodes (6): ZoneStrengthenCasting, DurationUnits, Field3, Name, Opcode, WorkType
 
 ### Community 1039 - "volumes"
 Cohesion: 0.29
@@ -5350,9 +5582,13 @@ Nodes (8): ZoneClientTerritoryKilledInfo, Field1, Field2, Field3, Field4, Field5
 Cohesion: 0.25
 Nodes (8): ZoneClientUseSkillPointOK, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 1052 - "ZoneServerExecuteMagicBox"
-Cohesion: 0.20
-Nodes (10): ZoneServerExecuteMagicBox, MainBag, MainSlot, MallBag, MallSlot, Name, Opcode, Sacrifices (+2 more)
+### Community 1051 - "ZoneElfEvent"
+Cohesion: 0.29
+Nodes (7): ZoneElfEvent, ElfId, Event, Name, Opcode, Param, Tail
+
+### Community 1052 - "ZoneElfReturn"
+Cohesion: 0.29
+Nodes (7): ZoneElfReturn, Loc, Name, Opcode, SealBag, SealSlot, ToEgg
 
 ### Community 1053 - "Guide de Reconstruction et Déploiement : Eden Eternal Server Suite (.NET 8)"
 Cohesion: 0.29
@@ -5365,6 +5601,10 @@ Nodes (17): Colonnes S_Item verrouillées (comptage Deserialize, 78 cols), Conte
 ### Community 1055 - "Lot — mot d'état 302, icônes fantômes équipement, lottery weekClaim, find_item"
 Cohesion: 0.29
 Nodes (6): Lot — mot d'état 302, icônes fantômes équipement, lottery weekClaim, find_item, Modifications, Preuves natives, Régression corrigée (crash équipement), Symptômes / preuves live, À vérifier côté client
+
+### Community 1056 - "ZoneElfUpdateAttr"
+Cohesion: 0.29
+Nodes (7): ZoneElfUpdateAttr, AttrType, Loc, Name, Opcode, Text, Value
 
 ### Community 1057 - "Lot 6 — Refonte Web Portal (prompt5 chantier 1)"
 Cohesion: 0.29
@@ -5381,6 +5621,10 @@ Nodes (10): LotteryRewardRow, Bulletin, CantGoNext, ItemAmount, ItemId, ItemInde
 ### Community 1060 - "GradeRule"
 Cohesion: 0.29
 Nodes (6): GradeRule, Buys, Cost, Name, Opens, Range
+
+### Community 1061 - "ZoneSendPetCmd"
+Cohesion: 0.29
+Nodes (7): ZoneSendPetCmd, Field3, Field4, Instruction, Name, Opcode, Target
 
 ### Community 1062 - "LotteryEffectKind"
 Cohesion: 0.29
@@ -5407,16 +5651,20 @@ Cohesion: 0.29
 Nodes (7): CNC_ZMis_ZoneServerMailDeleteResult, Field1, Field2, Field3, Field4, Name, Opcode
 
 ### Community 1068 - "ZoneUseSkillPoint"
-Cohesion: 0.22
-Nodes (8): ZoneUseSkillPoint, Name, Opcode, SpellId, ZoneUseSkillPointMax, Name, Opcode, SpellId
+Cohesion: 0.40
+Nodes (4): ZoneUseSkillPoint, Name, Opcode, SpellId
 
 ### Community 1069 - "CNC_CZ_ClientStrengthenItemResult"
 Cohesion: 0.22
 Nodes (9): CNC_CZ_ClientStrengthenItemResult, Field1, Field2, Field3, Field4, Field5, Field6, Name (+1 more)
 
-### Community 1070 - "Net/ManifestHash.cs"
-Cohesion: 0.47
-Nodes (3): ManifestHash, Result, Hex
+### Community 1070 - "ZoneUpdateElfSpell"
+Cohesion: 0.29
+Nodes (6): ZoneUpdateElfSpell, Battle, Integrate, Loc, Name, Opcode
+
+### Community 1071 - "ZoneEnchantStart"
+Cohesion: 0.29
+Nodes (7): ZoneEnchantStart, EffectId, Field4, Flag, Handle, Name, Opcode
 
 ### Community 1072 - "CNE_ZMis_MissionServerNodeCreate"
 Cohesion: 0.29
@@ -5438,8 +5686,12 @@ Nodes (6): ZoneClientHateReport, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.25
 Nodes (8): ZoneClientTerritoryKilledInfo, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
+### Community 1077 - "ZoneClientGoto"
+Cohesion: 0.29
+Nodes (7): ZoneClientGoto, Flag, Handle, Name, Opcode, X, Y
+
 ### Community 1078 - "WorkProduct"
-Cohesion: 0.12
+Cohesion: 0.13
 Nodes (10): WorkProduct, Amount, Combo, Curse, ExtraCombos, IsEmpty, ItemId, SocketAmount (+2 more)
 
 ### Community 1079 - "ZoneClientAltarState"
@@ -5463,8 +5715,8 @@ Cohesion: 0.29
 Nodes (7): LfgSummaryRow, class_id, id, level, name, node_id, race_id
 
 ### Community 1084 - "ZoneClientDisplayChar"
-Cohesion: 0.06
-Nodes (33): ZoneClientDie, Flags, Killer, Name, Opcode, Victim, ZoneClientDisplayChar, Appearance (+25 more)
+Cohesion: 0.22
+Nodes (9): ZoneClientDisplayChar, Appearance, CharId, CharName, ClassId, Level, Name, Opcode (+1 more)
 
 ### Community 1085 - "ZoneClientAskRepairOneItemGold"
 Cohesion: 0.29
@@ -5478,29 +5730,33 @@ Nodes (7): ZoneClientBattlefieldJoinResult, Field1, Field2, Field3, Field4, Name
 Cohesion: 0.29
 Nodes (7): ZoneClientDuelBegin, Field1, Field2, Field3, Field4, Name, Opcode
 
-### Community 1088 - "Node3D"
+### Community 1088 - "Func"
 Cohesion: 0.03
-Nodes (34): 3. Joueur : couleurs aberrantes — CORRIGÉ (VISUALLY_VALIDATED sur 1 perso), Audit des textures (aucun modèle sans texture), Correction du résolveur (NifMaterial.cs), Limites, Méthode, Résultats (2026-11-02, après correction du résolveur), Écarts restants : tous des absences authentiques, Phases de chargement (+26 more)
+Nodes (33): Arguments, Lancer, Mesure de teinte, Panneau, Visionneuse de skins (`tools/skinview.sh`), Audit des textures (aucun modèle sans texture), Correction du résolveur (NifMaterial.cs), Limites (+25 more)
 
 ### Community 1089 - "ZoneClientDuelResult"
 Cohesion: 0.29
 Nodes (7): ZoneClientDuelResult, Field1, Field2, Field3, Field4, Name, Opcode
 
-### Community 1090 - "ZoneClientFamilyContainerDeleteItem"
+### Community 1090 - "ZoneDisplayMonster"
 Cohesion: 0.29
-Nodes (7): ZoneClientFamilyContainerDeleteItem, Field1, Field2, Field3, Field4, Name, Opcode
+Nodes (7): ZoneDisplayMonster, EnchantIds, MobHandle, Name, Opcode, OwnerGeneration, OwnerHandle
 
 ### Community 1091 - "ZoneClientGetSpell"
 Cohesion: 0.29
 Nodes (7): ZoneClientGetSpell, Field1, Field2, Field3, Field4, Name, Opcode
 
 ### Community 1092 - "ZoneUpdateDailyAwards"
-Cohesion: 0.05
-Nodes (38): ZoneAchievementUpdate, Entries, Ids, Kind, Name, Opcode, Total, ZoneAddAppellation (+30 more)
+Cohesion: 0.22
+Nodes (9): ZoneUpdateDailyAwards, AwardDays, AwardRecords, DayIndex, Flag, Kind, Name, OnlineSeconds (+1 more)
 
 ### Community 1093 - "ZoneClientItemRent"
 Cohesion: 0.29
 Nodes (7): ZoneClientItemRent, Field1, Field2, Field3, Field4, Name, Opcode
+
+### Community 1094 - "ZoneClientNewPlayerGuide"
+Cohesion: 0.29
+Nodes (5): ZoneClientNewPlayerGuide, F1, F2, Name, Opcode
 
 ### Community 1095 - "ZoneClientPlayerEvent"
 Cohesion: 0.29
@@ -5518,29 +5774,61 @@ Nodes (7): IGmCharRuntime, Facing, Gold, NodeId, PosX, PosZ, VisitedFamilyInstan
 Cohesion: 0.29
 Nodes (7): ZoneClientPlaySound, Field1, Field2, Field3, Field4, Name, Opcode
 
-### Community 1100 - "ZoneGiveUpMission"
+### Community 1099 - "ZoneCommandFailReturn"
 Cohesion: 0.29
-Nodes (6): MissionListOps, MissionSheetOps, ZoneGiveUpMission, MissionId, Name, Opcode
+Nodes (5): ZoneCommandFailReturn, Code, Name, Opcode, Param
 
-### Community 1106 - "ZoneClientSloganUpdate"
-Cohesion: 0.33
-Nodes (6): ZoneClientSloganUpdate, Field1, Field2, Field3, Name, Opcode
+### Community 1100 - "ZoneEnterNodePlayerCard"
+Cohesion: 0.29
+Nodes (6): ZoneEnterNodePlayerCard, Fields, Name, Opcode, Tail, Text
+
+### Community 1101 - "ZoneUpdateBFData"
+Cohesion: 0.29
+Nodes (6): ZoneUpdateBFData, Flag, Kind, Name, Opcode, Value
+
+### Community 1102 - "ZoneUpdateCollection"
+Cohesion: 0.29
+Nodes (6): ZoneUpdateCollection, BookId, CardIds, Name, Opcode, U1
+
+### Community 1103 - "ZoneUpdateNodeTimes"
+Cohesion: 0.29
+Nodes (5): ZoneUpdateNodeTimes, Name, Node, Opcode, Times
+
+### Community 1104 - "ZoneUpdateSystemVar"
+Cohesion: 0.29
+Nodes (6): ZoneUpdateSystemVar, Index, Name, Opcode, V1, V2
+
+### Community 1105 - "ZoneServerDropItem"
+Cohesion: 0.29
+Nodes (6): ZoneServerDropItem, ContainerIndex, ContainerType, Name, Opcode, Slot
+
+### Community 1106 - "ZonePlayerAction"
+Cohesion: 0.29
+Nodes (7): ZonePlayerAction, Action, Name, Opcode, Param1, Param2, Param3
 
 ### Community 1107 - "CNC_ZMis_ZoneServerDropItem"
 Cohesion: 0.29
 Nodes (7): CNC_ZMis_ZoneServerDropItem, Field1, Field2, Field3, Field4, Name, Opcode
 
-### Community 1109 - "CNC_CZ_ClientMailList"
-Cohesion: 0.11
-Nodes (15): CNC_CZ_ClientMailList, Entries, Name, Opcode, TrailingFlag, TrailingShorts, MemberEntry, CharId (+7 more)
+### Community 1109 - "MemberEntry"
+Cohesion: 0.25
+Nodes (8): MemberEntry, CharId, CharName, ClassId, Level, U1, U2, U3
 
 ### Community 1110 - "NetMessage"
 Cohesion: 0.33
 Nodes (3): NetMessage, Name, Opcode
 
-### Community 1113 - "8. Outils de décompilation pilotables par IA (Ghidra & co)"
-Cohesion: 0.40
-Nodes (5): 8.1 GhidraMCP (le standard), 8.2 REA (le projet de votre repo) — surcouche multi-moteurs, 8.3 Chaîne complète « IA locale → Ghidra », 8.4 Bonnes pratiques avec l'IA sur ces binaires, 8. Outils de décompilation pilotables par IA (Ghidra & co)
+### Community 1111 - "ZoneClientAltarState"
+Cohesion: 0.29
+Nodes (7): ZoneClientAltarState, Field1, Field2, Field3, Field4, Name, Opcode
+
+### Community 1112 - "ZoneClientBattlefieldUpdateScore"
+Cohesion: 0.29
+Nodes (7): ZoneClientBattlefieldUpdateScore, Field1, Field2, Field3, Field4, Name, Opcode
+
+### Community 1113 - "ZoneFamilyStoragePutNotify"
+Cohesion: 0.29
+Nodes (6): ZoneFamilyStoragePutNotify, Item, Loc, Name, Opcode, StorageIndex
 
 ### Community 1114 - "ThemePalette"
 Cohesion: 0.43
@@ -5558,25 +5846,45 @@ Nodes (5): Lots, MASTER-PLAN — eden-godot, Objectifs du banc d'essai, Plan sou
 Cohesion: 0.29
 Nodes (7): CNE_ZM_MonsterServerRegenerationReport, Field1, Field2, Field3, Field4, Name, Opcode
 
+### Community 1118 - "ZoneDie"
+Cohesion: 0.29
+Nodes (6): ZoneDie, Flag, Handle, Name, Opcode, Other
+
 ### Community 1119 - "ZoneClientElfReturnEffect"
 Cohesion: 0.40
 Nodes (5): ZoneClientElfReturnEffect, Field1, Field2, Name, Opcode
 
-### Community 1120 - "InvStack"
-Cohesion: 0.40
-Nodes (5): InvStack, Bag, Dur, Id, Loc
+### Community 1120 - "ZoneModifyAttr"
+Cohesion: 0.29
+Nodes (7): ZoneModifyAttr, AttrId, Handle, Name, Opcode, Value, Value64
+
+### Community 1121 - "ProfileView.cs"
+Cohesion: 0.33
+Nodes (6): StatCell, StatTone, Atk, Def, Normal, Up
 
 ### Community 1122 - "CNC_ZMis_ZoneServerTextExCmd"
 Cohesion: 0.40
 Nodes (5): CNC_ZMis_ZoneServerTextExCmd, Field1, Field2, Name, Opcode
 
-### Community 1126 - "UiStyleKind"
+### Community 1124 - "ZoneTradeRemoveItem"
 Cohesion: 0.33
-Nodes (6): UiStyleKind, Colour, Composite, NinePatch, None, Texture
+Nodes (4): ZoneTradeRemoveItem, Index, Name, Opcode
 
-### Community 1128 - "Temp-plan — 18 Oct : analyses Reforged, architecture, modding client, outils d'édition"
-Cohesion: 0.40
-Nodes (4): 1. Client Reforged — connexion ch01 + bypass launcher + compat ✅, 3. Modding clients — faisabilité ✅, 4. Outils d'édition de contenu ✅, Temp-plan — 18 Oct : analyses Reforged, architecture, modding client, outils d'édition
+### Community 1125 - "WorldList"
+Cohesion: 0.33
+Nodes (6): Entry, WorldList, LastWorldId, Name, Opcode, Worlds
+
+### Community 1126 - "ZoneEnterBattlefieldAnswer"
+Cohesion: 0.33
+Nodes (5): ZoneEnterBattlefieldAnswer, Field1, Field2, Name, Opcode
+
+### Community 1127 - "GmCommandService"
+Cohesion: 0.12
+Nodes (13): 14.1 Fichiers source du projet (reconstitués depuis les binaires), 14.2 Classes `lapis` — récapitulatif par domaine (WorldServer, extrait), 14.3 Messages réseau `CNE_*` — structure type, 14.4 Bases de données (extrait de `database.out`), 14.5 Fichiers de données clés (`server_us/Data/db`), 14. Annexes — inventaires extraits du binaire, 4.1 Transport, 4.2 Sérialisation — `BinStream` (+5 more)
+
+### Community 1128 - "WorldItemMallReceiveResult"
+Cohesion: 0.33
+Nodes (5): WorldItemMallReceiveResult, Name, Opcode, ReceiptId, Result
 
 ### Community 1129 - "ZoneClientElfDecompose"
 Cohesion: 0.33
@@ -5610,13 +5918,25 @@ Nodes (5): 20 - Système de Donjons, Données — S_Battlefield.ini (`V.4,59,`),
 Cohesion: 0.33
 Nodes (5): Côté client — Reforged : `Limitless.dll` (V2), Côté serveur, Hook client — Exp Ultime + Limitless Pass (NCIDs 2032/2033), Limitations connues (à vérifier en jeu), À vérifier en jeu
 
+### Community 1137 - "ZoneMarryOpRequest"
+Cohesion: 0.33
+Nodes (5): ZoneMarryOpRequest, Field2, Name, Op, Opcode
+
 ### Community 1138 - "Utilité de QuickBMS"
 Cohesion: 0.33
 Nodes (5): Ce que c'est, Note : comparaison client/serveur, Quand l'utiliser, Utilité de QuickBMS, État actuel
 
+### Community 1139 - "ZoneClientDuelRequestResult"
+Cohesion: 0.33
+Nodes (6): ZoneClientDuelRequestResult, Field1, Field2, Field3, Name, Opcode
+
 ### Community 1140 - "CNE_ZMis_MissionServerFindCharacter"
 Cohesion: 0.40
 Nodes (5): CNE_ZMis_MissionServerFindCharacter, Field1, Field2, Name, Opcode
+
+### Community 1141 - "ZoneClientUpdateLifelongPoint"
+Cohesion: 0.33
+Nodes (6): ZoneClientUpdateLifelongPoint, Field1, Field2, Field3, Name, Opcode
 
 ### Community 1142 - "ZoneClientUpdateLifelongPoint"
 Cohesion: 0.33
@@ -5626,6 +5946,10 @@ Nodes (6): ZoneClientUpdateLifelongPoint, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.33
 Nodes (6): Phase 1.1.A - Parsing et Chargement des Données, Phase 1.1.B - Système de Changement de Classe, Phase 1.1.C - Classes Éveillées (Awakened), Phase 1.1.D - Système de Class Points et Talents, Phase 1.1.E - Buffs Raciaux Passifs, 📋 À Faire (Priorité Haute)
 
+### Community 1144 - "ZoneTradeModifyGold"
+Cohesion: 0.33
+Nodes (5): ZoneTradeModifyGold, Gold, GoldMirror, Name, Opcode
+
 ### Community 1145 - "Plan de lot — station combine (service 10, CCombineOp op 0x27)"
 Cohesion: 0.33
 Nodes (5): Contexte, Hors scope, Plan de lot — station combine (service 10, CCombineOp op 0x27), Preuves natives (zone/decompiled.c), Éditions
@@ -5633,6 +5957,10 @@ Nodes (5): Contexte, Hors scope, Plan de lot — station combine (service 10, CC
 ### Community 1146 - "Correctif prioritaire — slots équipement, faux DOT et profils"
 Cohesion: 0.33
 Nodes (5): Correctif prioritaire — slots équipement, faux DOT et profils, Modifications permises, Statut, Symptômes / preuves, Tests / validation requise
+
+### Community 1147 - "ZoneVendorClose"
+Cohesion: 0.33
+Nodes (5): ZoneVendorClose, Ignored, Mode, Name, Opcode
 
 ### Community 1148 - "Plan — reboot combat freeze + pets + chase + EXP chat (2026-10-21)"
 Cohesion: 0.33
@@ -5670,29 +5998,61 @@ Nodes (5): Constat d'investigation, Décision, Phase 1 — Préchauffage boot de
 Cohesion: 0.33
 Nodes (5): Changements, Hors périmètre, Plan — 2.4.1/2.4.2 MultiStroke : args + sources indépendantes, Preuve live (29/10), Preuves (zone/decompiled.c + données + tooltips)
 
+### Community 1157 - "1. Système de Classes"
+Cohesion: 0.33
+Nodes (6): 1. Système de Classes, Classes principales, Effects, Factory et Management, Network, Spells de Classe
+
+### Community 1158 - "2. Système d'Inventaire"
+Cohesion: 0.33
+Nodes (6): 2. Système d'Inventaire, Containers, Item Management, Item Operations, Network, Operation Handlers
+
 ### Community 1159 - "ZoneClientModifyItemStrengthen"
 Cohesion: 0.25
 Nodes (8): ZoneClientModifyItemStrengthen, Field1, Field2, Field3, Field4, Field5, Name, Opcode
+
+### Community 1160 - "3. Système d'Enchantement (250+ fonctions)"
+Cohesion: 0.33
+Nodes (6): 3. Système d'Enchantement (250+ fonctions), Buildings, Character Enchants, Enchant Effects (CEC_Enchant*), Enchant for Team, Enchant Manager
 
 ### Community 1161 - "Preuves déjà établies"
 Cohesion: 0.25
 Nodes (8): 52 ClientUpdateFriendMember — 13 champs, pas 12 (CRITIQUE), find_item, Invocations (CEC_SummonPet @0x855c280), Modèle amis natif (mission TC_AddFriend @0x82386f0), Monnaies, Preuves déjà établies, Recherche communauté, Skills de classe — persistance
 
-### Community 1162 - "ZoneClientMobChangeAI"
-Cohesion: 0.40
-Nodes (5): ZoneClientMobChangeAI, Field1, Field2, Name, Opcode
+### Community 1162 - "Plan — Argon2id + rehash-at-login (Phase 4 / T2)"
+Cohesion: 0.33
+Nodes (5): Comptes jamais reconnectés, Design, Plan — Argon2id + rehash-at-login (Phase 4 / T2), Points d'édition, État constaté
 
 ### Community 1163 - "CNC_ZMis_ZoneServerSearchInfo"
 Cohesion: 0.33
 Nodes (6): CNC_ZMis_ZoneServerSearchInfo, Field1, Field2, Field3, Name, Opcode
 
+### Community 1164 - "2.3.3 — Commandes résultat manquantes (batch 1)"
+Cohesion: 0.33
+Nodes (5): 2.3.3 — Commandes résultat manquantes (batch 1), Batch 2 (même journée), Limites connues, Preuves natives, Vérif live
+
 ### Community 1165 - "CNC_ZMis_ZoneServerTerritoryJoin"
 Cohesion: 0.33
 Nodes (6): CNC_ZMis_ZoneServerTerritoryJoin, Field1, Field2, Field3, Name, Opcode
 
+### Community 1166 - "Plan — géométrie native des sorts de zone (formes 1/2/5/6) côté serveur"
+Cohesion: 0.33
+Nodes (5): Champs résolus dans cette session, Limites documentées, Objectif, Plan — géométrie native des sorts de zone (formes 1/2/5/6) côté serveur, Points d'édition
+
 ### Community 1167 - "ZoneClientSelectFamilyEmblem"
 Cohesion: 0.40
 Nodes (3): ZoneClientSelectFamilyEmblem, Name, Opcode
+
+### Community 1168 - "GuildRank"
+Cohesion: 0.33
+Nodes (6): GuildRank, Leader, Member, Officer, Recruit, Veteran
+
+### Community 1169 - "LoginWorldSelect"
+Cohesion: 0.33
+Nodes (6): LoginWorldSelect, Account, ExtraHash, Name, Opcode, WorldId
+
+### Community 1170 - "WorldCharPassword"
+Cohesion: 0.33
+Nodes (6): WorldCharPassword, CharId, Name, Op, Opcode, Password
 
 ### Community 1171 - "ZoneClientBattlefieldJoinResult"
 Cohesion: 0.29
@@ -5702,9 +6062,13 @@ Nodes (7): ZoneClientBattlefieldJoinResult, Field1, Field2, Field3, Field4, Name
 Cohesion: 0.29
 Nodes (7): ZoneClientPlaySound, Field1, Field2, Field3, Field4, Name, Opcode
 
-### Community 1173 - "ZoneClientR25UpdateFamily"
-Cohesion: 0.40
-Nodes (5): ZoneClientR25UpdateFamily, Field1, Field2, Name, Opcode
+### Community 1173 - "WorldCreateCharacterName"
+Cohesion: 0.33
+Nodes (6): WorldCreateCharacterName, Field2, Field3, Name, Opcode, Value
+
+### Community 1174 - "WorldItemMallReceivableQuery"
+Cohesion: 0.33
+Nodes (6): WorldItemMallReceivableQuery, Field1, Field2, Field3, Name, Opcode
 
 ### Community 1175 - "CNE_ZMis_MissionServerTextExCmdRemoteWorld"
 Cohesion: 0.33
@@ -5713,6 +6077,10 @@ Nodes (6): CNE_ZMis_MissionServerTextExCmdRemoteWorld, Field1, Field2, Field3, N
 ### Community 1176 - "ZoneClientBackItem"
 Cohesion: 0.33
 Nodes (6): ZoneClientBackItem, Field1, Field2, Field3, Name, Opcode
+
+### Community 1178 - "ZoneChangeAppellation"
+Cohesion: 0.33
+Nodes (6): ZoneChangeAppellation, CharId, Name, Opcode, Seq, TitleId
 
 ### Community 1179 - "ZoneClientElfDecompose"
 Cohesion: 0.33
@@ -5726,6 +6094,10 @@ Nodes (6): ZoneClientEnterSpellShop, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.25
 Nodes (8): CNC_DBA_ClientChannelMsg, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
+### Community 1182 - "ZoneAuctionBuyList"
+Cohesion: 0.33
+Nodes (5): ZoneAuctionBuyList, Category, Entries, Name, Opcode
+
 ### Community 1183 - "ZoneClientLifeSkillUpdate"
 Cohesion: 0.33
 Nodes (6): ZoneClientLifeSkillUpdate, Field1, Field2, Field3, Name, Opcode
@@ -5734,13 +6106,17 @@ Nodes (6): ZoneClientLifeSkillUpdate, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.25
 Nodes (8): CNC_ZM_ZoneServerMessageToCharacter, Field1, Field2, Field3, Field4, Field5, Name, Opcode
 
-### Community 1185 - "ZoneClientPlayMonsterAction"
+### Community 1185 - "ZoneAuctionSellQuery"
 Cohesion: 0.33
-Nodes (5): ZoneClientPlayMonsterAction, Field1, Field2, Name, Opcode
+Nodes (5): ZoneAuctionSellQuery, Field1, Field2, Name, Opcode
 
 ### Community 1186 - "CNC_ZMis_ZoneServerLoverUpdate"
 Cohesion: 0.25
 Nodes (8): CNC_ZMis_ZoneServerLoverUpdate, Field1, Field2, Field3, Field4, Field5, Name, Opcode
+
+### Community 1187 - "ZoneClientCommandFailReturn"
+Cohesion: 0.33
+Nodes (5): ZoneClientCommandFailReturn, FailedOpcode, Name, Opcode, Param
 
 ### Community 1188 - "CNC_CZ_ClientUpdateCoolDown"
 Cohesion: 0.20
@@ -5750,37 +6126,61 @@ Nodes (9): CNC_CZ_ClientUpdateCoolDown, Entries, Name, Opcode, CoolDownEntry, Au
 Cohesion: 0.33
 Nodes (6): ZoneClientTerritoryPlayerInfo, Field1, Field2, Field3, Name, Opcode
 
+### Community 1190 - "ZoneClientSpellBreak"
+Cohesion: 0.33
+Nodes (6): ZoneClientSpellBreak, Caster, Name, Opcode, Reason, SpellId
+
 ### Community 1191 - "ZoneClientUpdateSpellAttr"
 Cohesion: 0.33
 Nodes (6): ZoneClientUpdateSpellAttr, Field1, Field2, Field3, Name, Opcode
 
-### Community 1192 - "Protocol/ZoneDestinyMessages.cs"
-Cohesion: 0.06
-Nodes (30): ZoneDestinyDice, Name, Op, Opcode, P2, P3, ZoneDestinyDiceFailed, Name (+22 more)
+### Community 1192 - "ZoneQueryDestinyRoad"
+Cohesion: 0.40
+Nodes (3): ZoneQueryDestinyRoad, Name, Opcode
 
-### Community 1194 - "protocol/ZoneCombatMessages.cs"
-Cohesion: 0.07
-Nodes (27): SpellHitConst, ZoneClientReviveInfo, Area, Name, Opcode, ZoneSpellBreak, Name, Opcode (+19 more)
+### Community 1194 - "ZoneSpellCastToLife"
+Cohesion: 0.33
+Nodes (5): ZoneSpellCastToLife, Name, Opcode, SpellId, TargetId
 
-### Community 1197 - "13. Risques, légal et limites"
-Cohesion: 0.50
-Nodes (4): 13.1 Légal / éthique (important), 13.2 Risques techniques, 13.3 Limites de l'IA, 13. Risques, légal et limites
+### Community 1195 - "ZoneMessageWrite"
+Cohesion: 0.33
+Nodes (5): ZoneMessageWrite, Name, Opcode, Text, Title
 
-### Community 1200 - "4. Le protocole réseau et le chiffrement"
-Cohesion: 0.50
-Nodes (4): 4.1 Transport, 4.2 Sérialisation — `BinStream`, 4.3 Conséquence pour un portage C#, 4. Le protocole réseau et le chiffrement
+### Community 1197 - "ZoneElfReturnOk"
+Cohesion: 0.33
+Nodes (5): ZoneElfReturnOk, Flag, Loc, Name, Opcode
+
+### Community 1199 - "ZoneElfWork"
+Cohesion: 0.33
+Nodes (5): ZoneElfWork, Loc, Mode, Name, Opcode
+
+### Community 1200 - "ZoneUpdateMixElf"
+Cohesion: 0.33
+Nodes (5): ZoneUpdateMixElf, CharId, MixTemplateId, Name, Opcode
 
 ### Community 1201 - "CNC_ZMis_ZoneServerAuctionCancelOK"
 Cohesion: 0.33
 Nodes (6): CNC_ZMis_ZoneServerAuctionCancelOK, Field1, Field2, Field3, Name, Opcode
 
+### Community 1202 - "ZoneNodeExit"
+Cohesion: 0.33
+Nodes (5): ZoneNodeExit, Field1, Field2, Name, Opcode
+
 ### Community 1203 - "CNE_ZMis_MissionServerBattlefieldJoin"
 Cohesion: 0.33
 Nodes (6): CNE_ZMis_MissionServerBattlefieldJoin, Field1, Field2, Field3, Name, Opcode
 
-### Community 1204 - "ProfileView.Compute"
-Cohesion: 0.28
-Nodes (3): PlayerStats, ProfileView, ProfileViewTests
+### Community 1204 - "ZoneEnterNodePlayerRoom"
+Cohesion: 0.33
+Nodes (5): ZoneEnterNodePlayerRoom, Ints, Name, Opcode, Text
+
+### Community 1205 - "ZoneEnterStarWayData"
+Cohesion: 0.33
+Nodes (5): ZoneEnterStarWayData, Fields, Name, Opcode, Text
+
+### Community 1206 - "ZoneClientEquipTrainItemChanged"
+Cohesion: 0.33
+Nodes (6): ZoneClientEquipTrainItemChanged, ContainerType, Index, Key, Name, Opcode
 
 ### Community 1209 - "ADR-0001 — Moteur Godot 4.8-beta2 .NET épinglé"
 Cohesion: 0.40
@@ -5802,6 +6202,26 @@ Nodes (4): Export and deployment, Godot, Preflight, Test and implement
 Cohesion: 0.40
 Nodes (4): Divers, Perf / structure (lot G — détails dans `docs/PERF.md`), Protocole / gameplay (lot F), TODO/FIXME recensés — point pour le parent (lot G, qualité light)
 
+### Community 1216 - "ZoneClientUpdateRecommendActivities"
+Cohesion: 0.33
+Nodes (6): ZoneClientUpdateRecommendActivities, Field1, Field2, Field3, Name, Opcode
+
+### Community 1217 - "WorldItemMallBuyResult"
+Cohesion: 0.33
+Nodes (6): WorldItemMallBuyResult, Bonus, Name, Opcode, Pvalues, Result
+
+### Community 1218 - "ZoneLoverInvite"
+Cohesion: 0.33
+Nodes (6): ZoneLoverInvite, CharId, Field3, Name, Opcode, PeerName
+
+### Community 1219 - "ZoneLoverInviteRequest"
+Cohesion: 0.33
+Nodes (6): ZoneLoverInviteRequest, CharId, Field3, Name, Opcode, PeerName
+
+### Community 1220 - "ZoneLoverUpdate"
+Cohesion: 0.33
+Nodes (6): ZoneLoverUpdate, Name, Opcode, Text, Type, Value
+
 ### Community 1221 - "ZoneModelModify"
 Cohesion: 0.25
 Nodes (8): ZoneModelModify, Field2, Field3, Field4, Field5, Handle, Name, Opcode
@@ -5810,33 +6230,69 @@ Nodes (8): ZoneModelModify, Field2, Field3, Field4, Field5, Handle, Name, Opcode
 Cohesion: 0.33
 Nodes (6): ZoneClientTeamRadarAttention, Field1, Field2, Field3, Name, Opcode
 
+### Community 1223 - "ZoneMarryOpRequest"
+Cohesion: 0.33
+Nodes (5): ZoneMarryOpRequest, Field2, Name, Op, Opcode
+
+### Community 1224 - "ZoneMailQuery"
+Cohesion: 0.33
+Nodes (5): ZoneMailQuery, AcceptOnlyFriend, Name, Opcode, Page
+
 ### Community 1225 - "Eden Client Reborn — plan et faits établis"
 Cohesion: 0.40
 Nodes (4): Eden Client Reborn — plan et faits établis, Faits vérifiés (24 oct. 2026), Phases, Règles
 
-### Community 1227 - "6. Tutoriel complet : reverse d'un serveur comme celui-là"
-Cohesion: 0.29
-Nodes (7): 6.1 Prérequis, 6.2 Étape 1 — Reconnaissance « sans exécuter » (triage statique), 6.3 Étape 2 — Organisation de la connaissance, 6.4 Étape 3 — Analyse dynamique (exécuter le vieux serveur), 6.5 Étape 4 — Reconstruction du protocole, 6.6 Étape 5 — Vérifier en ré-implémentant, 6. Tutoriel complet : reverse d'un serveur comme celui-là
+### Community 1226 - "ZoneMissionListOp"
+Cohesion: 0.33
+Nodes (6): ZoneMissionListOp, Field1, Field2, Field3, Name, Opcode
 
-### Community 1232 - "ZoneClientBagDueDate"
+### Community 1227 - "ZoneNewPlayerGuide"
+Cohesion: 0.33
+Nodes (5): ZoneNewPlayerGuide, Field1, Field2, Name, Opcode
+
+### Community 1228 - "ZoneClientBackItem"
+Cohesion: 0.33
+Nodes (6): ZoneClientBackItem, Field1, Field2, Field3, Name, Opcode
+
+### Community 1229 - "ZoneClientDuelRequestResult"
+Cohesion: 0.33
+Nodes (6): ZoneClientDuelRequestResult, Field1, Field2, Field3, Name, Opcode
+
+### Community 1230 - "ZoneFamilyStorageDelete"
+Cohesion: 0.33
+Nodes (5): ZoneFamilyStorageDelete, Loc, Name, Opcode, StorageIndex
+
+### Community 1231 - "ZoneStorageExpandResult"
+Cohesion: 0.33
+Nodes (5): ZoneStorageExpandResult, Name, Ok, Opcode, Result
+
+### Community 1232 - "ZoneClientTradeModifyGold"
+Cohesion: 0.33
+Nodes (5): ZoneClientTradeModifyGold, Gold, GoldMirror, Name, Opcode
+
+### Community 1233 - "ZoneClientTradeModifyGoldFail"
+Cohesion: 0.33
+Nodes (5): ZoneClientTradeModifyGoldFail, Field1, Field2, Name, Opcode
+
+### Community 1234 - "ZoneClientTradeStart"
+Cohesion: 0.33
+Nodes (5): ZoneClientTradeStart, Name, Opcode, PartnerCharId, PartnerName
+
+### Community 1235 - "ZoneTradeModifyGold"
+Cohesion: 0.33
+Nodes (5): ZoneTradeModifyGold, Gold, GoldMirror, Name, Opcode
+
+### Community 1237 - "Analyse `re/` — flux de chargement natif (Bloc J)"
 Cohesion: 0.40
-Nodes (5): ZoneClientBagDueDate, Field1, Field2, Name, Opcode
+Nodes (4): Analyse `re/` — flux de chargement natif (Bloc J), « Autres choses mal refaites » (items Bloc J), Ce que fait le client natif, Verdict
 
-### Community 1233 - "CNC_CZ_ClientLevelUp"
-Cohesion: 0.25
-Nodes (8): CNC_CZ_ClientLevelUp, Field1, Field2, Field3, Field4, Field5, Name, Opcode
-
-### Community 1234 - "ZoneClientColosseumLeaveJoinResult"
+### Community 1238 - "WorldTicket"
 Cohesion: 0.40
-Nodes (5): ZoneClientColosseumLeaveJoinResult, Field1, Field2, Name, Opcode
+Nodes (4): WorldTicket, Name, Opcode, Ticket
 
-### Community 1236 - "CNC_CZ_ClientUpdateZoneMonster"
-Cohesion: 0.25
-Nodes (8): CNC_CZ_ClientUpdateZoneMonster, Field1, Field2, Field3, Field4, Field5, Name, Opcode
-
-### Community 1237 - "ZoneClientDuelRequest"
+### Community 1239 - "WorldCancelCreateCharacter"
 Cohesion: 0.40
-Nodes (5): ZoneClientDuelRequest, Field1, Field2, Name, Opcode
+Nodes (3): WorldCancelCreateCharacter, Name, Opcode
 
 ### Community 1240 - "edenpack.csproj"
 Cohesion: 0.40
@@ -5874,9 +6330,21 @@ Nodes (5): ZoneClientElfReturnEffect, Field1, Field2, Name, Opcode
 Cohesion: 0.40
 Nodes (5): ZoneClientElfStoneUse, Field1, Field2, Name, Opcode
 
+### Community 1249 - "WorldCancelCreateCharacterResp"
+Cohesion: 0.40
+Nodes (3): WorldCancelCreateCharacterResp, Name, Opcode
+
 ### Community 1250 - "CNC_CZ_ClientDisplayDialogView"
 Cohesion: 0.18
 Nodes (11): CNC_CZ_ClientDisplayDialogView, Entries, Field1, Field6, Field7, Name, Opcode, DialogEntry (+3 more)
+
+### Community 1251 - "WorldQueryFriendInfo"
+Cohesion: 0.40
+Nodes (3): WorldQueryFriendInfo, Name, Opcode
+
+### Community 1252 - "WorldSelectCharacter"
+Cohesion: 0.40
+Nodes (5): WorldSelectCharacter, Flag, MachineId, Name, Opcode
 
 ### Community 1253 - "Lot : TradeRequest natif (distance + invite) — 2026-10-20"
 Cohesion: 0.40
@@ -5902,17 +6370,25 @@ Nodes (4): Retests live lot 2 — retours joueur Reforged, Retours joueur (const
 Cohesion: 0.40
 Nodes (4): G — Debug live serveur (`server/src/**`), Journal, Lot 20 — prompt10k : proc stats éternelles (2e) + devises inutilisables, SNAPSHOT (lot 20 en cours)
 
-### Community 1259 - "ZoneClientEnterRepairShop"
+### Community 1259 - "WorldSelectZone"
 Cohesion: 0.40
-Nodes (3): ZoneClientEnterRepairShop, Name, Opcode
+Nodes (5): WorldSelectZone, Flag, Name, Opcode, Zone
 
-### Community 1261 - "ZoneClientTerritoryEnd"
+### Community 1260 - "WorldServerHello"
 Cohesion: 0.40
-Nodes (3): ZoneClientTerritoryEnd, Name, Opcode
+Nodes (3): WorldServerHello, Name, Opcode
 
-### Community 1262 - "ZoneClientUIControlNotify"
+### Community 1261 - "WorldVerifyNameResult"
 Cohesion: 0.40
-Nodes (5): ZoneClientUIControlNotify, Field1, Field2, Name, Opcode
+Nodes (5): WorldVerifyNameResult, Code, Flag, Name, Opcode
+
+### Community 1262 - "ZoneAuctionBuyOk"
+Cohesion: 0.40
+Nodes (3): ZoneAuctionBuyOk, Name, Opcode
+
+### Community 1263 - "ZoneUseSkillPointMax"
+Cohesion: 0.40
+Nodes (4): ZoneUseSkillPointMax, Name, Opcode, SpellId
 
 ### Community 1264 - "TeamMember"
 Cohesion: 0.25
@@ -5942,9 +6418,9 @@ Nodes (4): Boundaries, Honesty boundary, Ponytail Gain, Scoreboard
 Cohesion: 0.40
 Nodes (4): 1. Understand first, 2. Look for, 3. Check before you report, 4. Output
 
-### Community 1272 - "ZoneClientCoRideInvite"
-Cohesion: 0.29
-Nodes (7): ZoneClientCoRideInvite, Field1, Field2, Field3, Field4, Name, Opcode
+### Community 1272 - "ZoneBattlefieldLeave"
+Cohesion: 0.40
+Nodes (3): ZoneBattlefieldLeave, Name, Opcode
 
 ### Community 1273 - "Ponytail"
 Cohesion: 0.40
@@ -5962,9 +6438,17 @@ Nodes (5): ZoneClientOpenPaySystem, Field1, Field2, Name, Opcode
 Cohesion: 0.29
 Nodes (7): ZoneClientUpdateInteraction, Field1, Field2, Field3, Field4, Name, Opcode
 
+### Community 1277 - "ZoneDuelRequest"
+Cohesion: 0.40
+Nodes (4): ZoneDuelRequest, Name, Opcode, TargetId
+
 ### Community 1278 - "ProcHitEvent"
 Cohesion: 0.40
 Nodes (5): ProcHitEvent, Attack, BeKill, Hurt, Kill
+
+### Community 1279 - "ZoneDuelRequestAnswer"
+Cohesion: 0.40
+Nodes (5): ZoneDuelRequestAnswer, Accept, Name, Opcode, RequesterId
 
 ### Community 1280 - "FamilyPushKind"
 Cohesion: 0.40
@@ -5977,6 +6461,10 @@ Nodes (3): decode_varint(), dissect_frame(), get_pdu_len()
 ### Community 1282 - "ZoneClientResetCoord"
 Cohesion: 0.40
 Nodes (5): ZoneClientResetCoord, Field1, Field2, Name, Opcode
+
+### Community 1283 - "ZoneMessageDelete"
+Cohesion: 0.40
+Nodes (4): ZoneMessageDelete, Name, Opcode, Value
 
 ### Community 1284 - "Contrat de tâche agent"
 Cohesion: 0.50
@@ -5998,9 +6486,9 @@ Nodes (7): CNC_ZMis_ZoneServerFamilyStorageLog, Field1, Field2, Field3, Field4, 
 Cohesion: 0.29
 Nodes (7): CNC_ZMis_ZoneServerMessageWriteResult, Field1, Field2, Field3, Field4, Name, Opcode
 
-### Community 1289 - "protocol/ZoneAuctionMessages.cs"
-Cohesion: 0.06
-Nodes (29): ZoneAuctionBuyOk, Name, Opcode, ZoneAuctionBuyQuery, Category, Filter, MaxPrice, MinPrice (+21 more)
+### Community 1289 - "ZoneAuctionBuyQuery"
+Cohesion: 0.20
+Nodes (10): ZoneAuctionBuyQuery, Category, Filter, MaxPrice, MinPrice, Name, Opcode, Page (+2 more)
 
 ### Community 1290 - "HeadlessBot.csproj"
 Cohesion: 0.50
@@ -6009,6 +6497,10 @@ Nodes (3): net10.0, System.Text.Encoding.CodePages (8.0.0), Microsoft.NET.Sdk
 ### Community 1291 - "NetSmoke.csproj"
 Cohesion: 0.50
 Nodes (3): net10.0, System.Text.Encoding.CodePages (8.0.0), Microsoft.NET.Sdk
+
+### Community 1292 - "ZoneClientTextOutputIndex"
+Cohesion: 0.40
+Nodes (5): ZoneClientTextOutputIndex, Index, Name, Opcode, Text
 
 ### Community 1293 - "📋 Fichiers de Données"
 Cohesion: 0.50
@@ -6021,6 +6513,18 @@ Nodes (4): Code Production, Documentation, 📊 Métriques Attendues, Tests
 ### Community 1295 - "📊 Règles de Validation"
 Cohesion: 0.50
 Nodes (4): Création de Personnage, Nom de Personnage, 📊 Règles de Validation, Suppression
+
+### Community 1296 - "ZoneLoverMessage"
+Cohesion: 0.40
+Nodes (4): ZoneLoverMessage, Name, Opcode, Value
+
+### Community 1297 - "ZoneClientEnterExchageItemService"
+Cohesion: 0.40
+Nodes (3): ZoneClientEnterExchageItemService, Name, Opcode
+
+### Community 1298 - "ZoneClientEnterFamilyInstanceCreation"
+Cohesion: 0.40
+Nodes (5): ZoneClientEnterFamilyInstanceCreation, Field1, Field2, Name, Opcode
 
 ### Community 1299 - "ZoneClientTicketInvalid"
 Cohesion: 0.40
@@ -6046,13 +6550,21 @@ Nodes (3): Implémentation, Lot 8 prompt8 — notes d'exécution G5-G7 (spawn/mo
 Cohesion: 0.50
 Nodes (4): RewardBox, Chosen, Count, ItemId
 
+### Community 1305 - "ZoneClientEnterGladiatorTeamCreation"
+Cohesion: 0.40
+Nodes (5): ZoneClientEnterGladiatorTeamCreation, Field1, Field2, Name, Opcode
+
+### Community 1309 - "ZoneClientMobChangeAI"
+Cohesion: 0.40
+Nodes (5): ZoneClientMobChangeAI, Field1, Field2, Name, Opcode
+
 ### Community 1310 - "protocol/ZoneMailMessages.cs"
 Cohesion: 0.05
-Nodes (40): ZoneMailDelete, Ids, MailId, Name, Opcode, ZoneMailGetGold, MailId, Name (+32 more)
+Nodes (36): DriveProbe, MailEntry, HasAttachment, IsUnread, ZoneMailDelete, Ids, MailId, Name (+28 more)
 
-### Community 1311 - "protocol/ZoneTradeMessages.cs"
-Cohesion: 0.04
-Nodes (41): ZoneTradeAddItem, Bag, Count, Name, Opcode, Slot, TradeSlot, ZoneTradeCancel (+33 more)
+### Community 1311 - "ZoneTradeAddItem"
+Cohesion: 0.25
+Nodes (7): ZoneTradeAddItem, Bag, Count, Name, Opcode, Slot, TradeSlot
 
 ### Community 1312 - "🏗️ Architecture Technique"
 Cohesion: 0.67
@@ -6070,45 +6582,149 @@ Nodes (3): 🗄️ Schema Base de Données, Table: character_appearance (NOUVEAU
 Cohesion: 0.67
 Nodes (3): 🧑 [`humain/`](humain/) — pour le lead dev, Index de la documentation, 🤖 Racine `docs/` — mémoire de travail de l'agent
 
+### Community 1318 - "ZoneClientOpenHotel"
+Cohesion: 0.40
+Nodes (5): ZoneClientOpenHotel, Field1, Field2, Name, Opcode
+
+### Community 1319 - "ZoneClientPlayerEmotion"
+Cohesion: 0.40
+Nodes (5): ZoneClientPlayerEmotion, Field1, Field2, Name, Opcode
+
 ### Community 1328 - "ExploitRankRow"
 Cohesion: 0.40
 Nodes (5): ExploitRankRow, family_name, level, name, total_exploit
 
+### Community 1368 - "ZoneClientR25UpdateFamily"
+Cohesion: 0.40
+Nodes (5): ZoneClientR25UpdateFamily, Field1, Field2, Name, Opcode
+
 ### Community 1369 - "ItemEntity"
 Cohesion: 0.01
-Nodes (269): Équipement / inventaire : codé, bugs connus, B4 — Strafe monture : REVERT du NOP + fix racine côté serveur (2026-10-25), Refactor taille (règle <1000 lignes/fichier), Implémentation (zone-side équivalent), Lot — Rachat boutique (buyback) natif, Preuves natives (désasm zone+mission), Symptômes, Vérification (+261 more)
+Nodes (125): Phase 3 — codecs générés (12 vagues), Implémentation (zone-side équivalent), Lot — Rachat boutique (buyback) natif, Preuves natives (désasm zone+mission), Symptômes, Vérification, État — FAIT (2026-10-20), Implémentation (+117 more)
 
-### Community 1375 - "ZoneClientElfStoneUse"
+### Community 1370 - "ZoneClientTeamCheckNotify"
 Cohesion: 0.40
-Nodes (5): ZoneClientElfStoneUse, Field1, Field2, Name, Opcode
+Nodes (5): ZoneClientTeamCheckNotify, Field1, Field2, Name, Opcode
 
-### Community 1376 - "Protocol/ZoneVendingMessages.cs"
-Cohesion: 0.07
-Nodes (29): ZoneClientVendorClose, CharId, Mode, Name, Opcode, ZoneClientVendorCloseView, Name, Opcode (+21 more)
+### Community 1371 - "ZoneClientUpdateRoomItem"
+Cohesion: 0.40
+Nodes (5): ZoneClientUpdateRoomItem, Field1, Field2, Name, Opcode
+
+### Community 1372 - "ZoneClientUseItemTimeBreak"
+Cohesion: 0.40
+Nodes (3): ZoneClientUseItemTimeBreak, Name, Opcode
+
+### Community 1373 - "WorldFamilyQuit"
+Cohesion: 0.40
+Nodes (3): WorldFamilyQuit, Name, Opcode
+
+### Community 1374 - "WorldFriendInvitationAnswer"
+Cohesion: 0.40
+Nodes (5): WorldFriendInvitationAnswer, Accept, InviterId, Name, Opcode
+
+### Community 1375 - "WorldRemoveFriend"
+Cohesion: 0.40
+Nodes (4): WorldRemoveFriend, CharId, Name, Opcode
+
+### Community 1376 - "ZoneClientVendorStatus"
+Cohesion: 0.29
+Nodes (6): ZoneClientVendorStatus, Action, Detail, IsSuccess, Name, Opcode
+
+### Community 1378 - "ZoneStorageExpandResult"
+Cohesion: 0.40
+Nodes (5): ZoneStorageExpandResult, Name, Ok, Opcode, Result
+
+### Community 1379 - "ZoneTradeRequest"
+Cohesion: 0.40
+Nodes (4): ZoneTradeRequest, Name, Opcode, TargetCharId
+
+### Community 1380 - "ZoneVendorCloseView"
+Cohesion: 0.40
+Nodes (4): ZoneVendorCloseView, Name, Opcode, SellerId
+
+### Community 1381 - "CreateCharacterResult"
+Cohesion: 0.40
+Nodes (4): CreateCharacterResult, CharacterId, ErrorMessage, Success
 
 ### Community 1382 - "ZoneClientRideSpell"
 Cohesion: 0.40
 Nodes (5): ZoneClientRideSpell, Latest, Name, Opcode, SpellIds
 
-### Community 1385 - "LoverBridge.BindSession"
-Cohesion: 0.04
-Nodes (34): Entry, LeftTime, LoveId, Name1, Name2, Status, ZoneLoverBreakRequest, Name (+26 more)
+### Community 1384 - "ZoneWhoIs"
+Cohesion: 0.40
+Nodes (5): ZoneWhoIs, CharId, Flag, Name, Opcode
+
+### Community 1385 - "ZoneLoverInviteRequest"
+Cohesion: 0.33
+Nodes (6): ZoneLoverInviteRequest, CharId, Field3, Name, Opcode, PeerName
+
+### Community 1386 - "LoginClientHello"
+Cohesion: 0.40
+Nodes (4): LoginClientHello, Name, Opcode, Value
 
 ### Community 1387 - "ZoneClientUpdateBattleCrusadeInfo"
 Cohesion: 0.40
 Nodes (3): ZoneClientUpdateBattleCrusadeInfo, Name, Opcode
 
+### Community 1388 - "WorldCancelCreateCharacter"
+Cohesion: 0.40
+Nodes (3): WorldCancelCreateCharacter, Name, Opcode
+
+### Community 1389 - "WorldCancelCreateCharacterResp"
+Cohesion: 0.40
+Nodes (3): WorldCancelCreateCharacterResp, Name, Opcode
+
+### Community 1390 - "WorldCharPasswordResult"
+Cohesion: 0.40
+Nodes (4): WorldCharPasswordResult, Name, Opcode, Value
+
 ### Community 1391 - "DailyAwardDef"
 Cohesion: 0.29
 Nodes (6): DailyAwardDef, Amount, Day, ItemId, RequiredSeconds, DailyAwardTable
 
-### Community 1398 - "CNC_CZ_ClientEnterNodeShortcut"
-Cohesion: 0.29
-Nodes (7): CNC_CZ_ClientEnterNodeShortcut, Bars, Name, Opcode, ShortcutBar, Extras, Slots
+### Community 1392 - "WorldClientHello"
+Cohesion: 0.40
+Nodes (4): WorldClientHello, Name, Opcode, Value
+
+### Community 1393 - "WorldItemMallPointInfoQuery"
+Cohesion: 0.40
+Nodes (3): WorldItemMallPointInfoQuery, Name, Opcode
+
+### Community 1394 - "WorldLoginTicket"
+Cohesion: 0.40
+Nodes (5): WorldLoginTicket, MachineId, Name, Opcode, Ticket
+
+### Community 1395 - "WorldQueryFriendInfo"
+Cohesion: 0.40
+Nodes (3): WorldQueryFriendInfo, Name, Opcode
+
+### Community 1396 - "WorldRemoveCharacter"
+Cohesion: 0.40
+Nodes (5): WorldRemoveCharacter, CharId, CharName, Name, Opcode
+
+### Community 1397 - "WorldSelectCharacter"
+Cohesion: 0.40
+Nodes (5): WorldSelectCharacter, Flag, MachineId, Name, Opcode
+
+### Community 1398 - "WorldSelectZone"
+Cohesion: 0.40
+Nodes (5): WorldSelectZone, Flag, Name, Opcode, Zone
+
+### Community 1399 - "WorldServerHello"
+Cohesion: 0.40
+Nodes (3): WorldServerHello, Name, Opcode
 
 ### Community 1400 - "BinReader.ReadBytes"
-Cohesion: 0.03
-Nodes (50): ItemRecord, NativeItemLayout, ElfContainer, EquipView, Inventory, UpdateEquip, NativeItemRecord, ZoneClientQueryPlayerCard (+42 more)
+Cohesion: 0.02
+Nodes (89): ItemRecord, NativeItemLayout, ElfContainer, EquipView, Inventory, UpdateEquip, NativeItemRecord, ZoneClientQueryPlayerCard (+81 more)
+
+### Community 1402 - "WorldClientSelectCharEnableBtn"
+Cohesion: 0.40
+Nodes (3): WorldClientSelectCharEnableBtn, Name, Opcode
+
+### Community 1403 - "ZoneAddAppellation"
+Cohesion: 0.40
+Nodes (4): ZoneAddAppellation, Name, Opcode, TitleId
 
 ### Community 1404 - "ZoneClientCoRideInvite"
 Cohesion: 0.29
@@ -6118,9 +6734,21 @@ Nodes (7): ZoneClientCoRideInvite, Field1, Field2, Field3, Field4, Name, Opcode
 Cohesion: 0.29
 Nodes (7): ZoneClientDuelBegin, Field1, Field2, Field3, Field4, Name, Opcode
 
+### Community 1406 - "ZoneUpdateAppellation"
+Cohesion: 0.40
+Nodes (4): ZoneUpdateAppellation, Name, Opcode, TitleId
+
 ### Community 1407 - "InlayService.ValidateWitchcraft"
 Cohesion: 0.25
 Nodes (7): Données clés, Implémentation — FAIT, Lot — enchant witchcraft (kind 56/79) + GM cleanup inventaire, Preuves natives, Symptômes live (trace 19:33-19:37), À vérifier client, WitchcraftValidationTests
+
+### Community 1408 - "ZoneAuctionSellResult"
+Cohesion: 0.40
+Nodes (4): ZoneAuctionSellResult, Name, Opcode, Result
+
+### Community 1409 - "ZoneClientReviveInfo"
+Cohesion: 0.40
+Nodes (4): ZoneClientReviveInfo, Area, Name, Opcode
 
 ### Community 1410 - "ZoneClientElfCastEnchant"
 Cohesion: 0.33
@@ -6142,13 +6770,21 @@ Nodes (3): Boundaries, Output, Scan
 Cohesion: 0.33
 Nodes (6): ZoneClientUpdateAttrNewHp, Field1, Field2, Field3, Name, Opcode
 
-### Community 1415 - "ZoneClientUseItemTime"
-Cohesion: 0.33
-Nodes (6): ZoneClientUseItemTime, Field1, Field2, Field3, Name, Opcode
+### Community 1415 - "ZoneSpellBreak"
+Cohesion: 0.40
+Nodes (3): ZoneSpellBreak, Name, Opcode
 
-### Community 1418 - "Plan — freeze combat/migration : bit fantôme sel=1 du NCID 302"
-Cohesion: 0.33
-Nodes (5): 2026-11-05 — désync sac0/sac1 : byte d'index de conteneur (FIX RACINE), Fixes, Plan — freeze combat/migration : bit fantôme sel=1 du NCID 302, Preuves natives, Symptômes live
+### Community 1416 - "ZoneTreasurePickup"
+Cohesion: 0.40
+Nodes (4): ZoneTreasurePickup, Name, Opcode, TreasureId
+
+### Community 1417 - "ZonePlayerWorkResultEnd"
+Cohesion: 0.40
+Nodes (4): ZonePlayerWorkResultEnd, Name, Opcode, WorkNum
+
+### Community 1418 - "CNC_CZ_ClientEnterNodeInventory"
+Cohesion: 0.15
+Nodes (12): 2026-11-05 — désync sac0/sac1 : byte d'index de conteneur (FIX RACINE), Fixes, Plan — freeze combat/migration : bit fantôme sel=1 du NCID 302, Preuves natives, Symptômes live, CNC_CZ_ClientEnterNodeInventory, BagType, Entries (+4 more)
 
 ### Community 1419 - "CNC_ZMis_ZoneServerBattlefieldChangeCharNum"
 Cohesion: 0.33
@@ -6178,17 +6814,57 @@ Nodes (6): CNE_ZMis_MissionServerGiveUpMission, Field1, Field2, Field3, Name, Op
 Cohesion: 0.33
 Nodes (6): CNE_ZMis_MissionServerTextExCmdRemoteZone, Field1, Field2, Field3, Name, Opcode
 
-### Community 1436 - "Protocol/ZoneDialogMessages.cs"
-Cohesion: 0.04
-Nodes (43): ZoneBattlefieldJoin, Field1, Field2, Field3, Name, Opcode, ZoneBattlefieldLeave, Name (+35 more)
+### Community 1426 - "ZonePlayerWorkResultOK"
+Cohesion: 0.40
+Nodes (4): ZonePlayerWorkResultOK, Name, Opcode, WorkNum
 
-### Community 1437 - "ZoneClientElfCastEnchant"
+### Community 1427 - "ZoneDestinyDiceFailed"
+Cohesion: 0.40
+Nodes (4): ZoneDestinyDiceFailed, Name, Op, Opcode
+
+### Community 1428 - "ZoneMessageExit"
+Cohesion: 0.40
+Nodes (3): ZoneMessageExit, Name, Opcode
+
+### Community 1429 - "ZoneMessageListQuery"
+Cohesion: 0.40
+Nodes (4): ZoneMessageListQuery, Name, Opcode, Value
+
+### Community 1430 - "ZoneElfAdd"
+Cohesion: 0.40
+Nodes (4): ZoneElfAdd, Elf, Name, Opcode
+
+### Community 1431 - "ZonePetModeChange"
+Cohesion: 0.40
+Nodes (4): ZonePetModeChange, Mode, Name, Opcode
+
+### Community 1432 - "ZonePetUpgradeCancel"
+Cohesion: 0.40
+Nodes (3): ZonePetUpgradeCancel, Name, Opcode
+
+### Community 1433 - "ZoneEnchantCancel"
+Cohesion: 0.40
+Nodes (4): ZoneEnchantCancel, EffectId, Name, Opcode
+
+### Community 1434 - "ZoneEnchantPauseRequest"
+Cohesion: 0.40
+Nodes (4): ZoneEnchantPauseRequest, EffectId, Name, Opcode
+
+### Community 1435 - "ZoneEnchantStartRequest"
+Cohesion: 0.40
+Nodes (4): ZoneEnchantStartRequest, EffectId, Name, Opcode
+
+### Community 1436 - "ZoneBattlefieldJoin"
+Cohesion: 0.29
+Nodes (6): ZoneBattlefieldJoin, Field1, Field2, Field3, Name, Opcode
+
+### Community 1437 - "ZoneEnchantUpdateRequest"
+Cohesion: 0.40
+Nodes (4): ZoneEnchantUpdateRequest, Name, Opcode, TargetHandle
+
+### Community 1438 - "MailTakenItemRow"
 Cohesion: 0.33
-Nodes (6): ZoneClientElfCastEnchant, Field1, Field2, Field3, Name, Opcode
-
-### Community 1438 - "Crusade (siège guild-vs-guild) — design d'implémentation"
-Cohesion: 0.10
-Nodes (17): Crusade (siège guild-vs-guild) — design d'implémentation, Différence vs battlefield, Natif — crusade = CBattleCrusadeFactory + CCrusadeEventCmds, Note — S_Crusade.ini est descriptif, Plan V1, Pont siège — réutilise le système CEventCmd zone existant, Preuve native — StartBattleCrusade zone = STUB VIDE, Références (+9 more)
+Nodes (6): MailTakenItemRow, Bind, CurMaxDurability, Durability, ItemId, Strengthen
 
 ### Community 1439 - "ZoneClientEnterSpellShop"
 Cohesion: 0.33
@@ -6206,49 +6882,65 @@ Nodes (6): ZoneClientTerritoryPlayerInfo, Field1, Field2, Field3, Name, Opcode
 Cohesion: 0.33
 Nodes (6): ZoneClientUpdateSpellAttr, Field1, Field2, Field3, Name, Opcode
 
-### Community 1443 - "ZoneClientUseItemTime"
-Cohesion: 0.33
-Nodes (6): ZoneClientUseItemTime, Field1, Field2, Field3, Name, Opcode
+### Community 1443 - "ZoneLeaveNode"
+Cohesion: 0.40
+Nodes (4): ZoneLeaveNode, Name, Opcode, Value
 
 ### Community 1444 - "native-selftest.sh"
 Cohesion: 0.80
 Nodes (4): expect_fail(), fail(), lst(), native-selftest.sh script
 
+### Community 1445 - "ZoneLifeEradicate"
+Cohesion: 0.40
+Nodes (4): ZoneLifeEradicate, Handle, Name, Opcode
+
 ### Community 1446 - "ZoneClientCanLogout"
 Cohesion: 0.40
 Nodes (3): ZoneClientCanLogout, Name, Opcode
 
-### Community 1447 - "ZoneClientLotteryUpdatePlus"
+### Community 1447 - "ZoneTextCommand"
 Cohesion: 0.40
-Nodes (5): ZoneClientLotteryUpdatePlus, Field1, Field2, Name, Opcode
+Nodes (4): ZoneTextCommand, Name, Opcode, Text
 
 ### Community 1448 - "ZoneClientOpenAreaDialog"
 Cohesion: 0.40
 Nodes (5): ZoneClientOpenAreaDialog, Field1, Field2, Name, Opcode
 
-### Community 1450 - "ZoneClientPayEvent"
+### Community 1449 - "ZoneUpdateEquipment"
 Cohesion: 0.40
-Nodes (5): ZoneClientPayEvent, Field1, Field2, Name, Opcode
+Nodes (4): ZoneUpdateEquipment, Name, Opcode, UpdateFlags
+
+### Community 1450 - "WorldItemMallAnythingQuery"
+Cohesion: 0.40
+Nodes (3): WorldItemMallAnythingQuery, Name, Opcode
 
 ### Community 1451 - "ZoneClientResetDailyMission"
 Cohesion: 0.40
 Nodes (3): ZoneClientResetDailyMission, Name, Opcode
 
-### Community 1453 - "ZoneClientTurnChar"
+### Community 1452 - "ZoneLoverBreak"
 Cohesion: 0.40
-Nodes (5): ZoneClientTurnChar, Field1, Field2, Name, Opcode
+Nodes (4): ZoneLoverBreak, Name, Opcode, Value
+
+### Community 1453 - "ZoneLoverMessage"
+Cohesion: 0.40
+Nodes (4): ZoneLoverMessage, Name, Opcode, Value
 
 ### Community 1454 - "ZoneClientUIControlNotify"
 Cohesion: 0.40
 Nodes (5): ZoneClientUIControlNotify, Field1, Field2, Name, Opcode
 
-### Community 1455 - "ZoneClientUpdateFloorInfo"
+### Community 1455 - "ZoneMailGetGold"
 Cohesion: 0.40
-Nodes (5): ZoneClientUpdateFloorInfo, Field1, Field2, Name, Opcode
+Nodes (4): ZoneMailGetGold, MailId, Name, Opcode
 
-### Community 1457 - "Décodage natif (preuves)"
-Cohesion: 0.20
-Nodes (9): 189 `CNE_CZ_ZoneServerTerritoryQuery` — wire VIDE (aucun champ), 190 `CNE_CZ_ZoneServerTerritoryJoin` — wire `[i32 territory_id][s16 type]`, 515 `CNC_CZ_ClientTerritoryQuery` — Serialize zone @0x82043d0, 561 `CNC_CZ_ClientFamilyBattleInfo` — Serialize zone @0x81e8580, Cycle guerre natif (désasm zone — sortants), Cycle implémenté (P14.3), Données, Décodage natif (preuves) (+1 more)
+### Community 1456 - "ZoneMailGetGoldResult"
+Cohesion: 0.40
+Nodes (4): ZoneMailGetGoldResult, Name, Opcode, Result
+
+### Community 1457 - "ZoneMailGetItemResult"
+Cohesion: 0.40
+Nodes (4): ZoneMailGetItemResult, Name, Opcode, Result
 
 ### Community 1458 - "WeekRow"
 Cohesion: 0.40
@@ -6278,17 +6970,65 @@ Nodes (3): CNC_ZMis_ZoneServerReportID, Name, Opcode
 Cohesion: 0.40
 Nodes (5): CNC_ZMis_ZoneServerResetNodeTimes, Field1, Field2, Name, Opcode
 
+### Community 1465 - "ZoneMailOpenBox"
+Cohesion: 0.40
+Nodes (4): ZoneMailOpenBox, Name, Op, Opcode
+
+### Community 1466 - "ZoneMailReadResult"
+Cohesion: 0.40
+Nodes (4): ZoneMailReadResult, Name, Opcode, Result
+
+### Community 1467 - "ZoneMailReturn"
+Cohesion: 0.40
+Nodes (4): ZoneMailReturn, MailId, Name, Opcode
+
+### Community 1468 - "ZoneMailSendResult"
+Cohesion: 0.40
+Nodes (4): ZoneMailSendResult, Name, Opcode, Result
+
+### Community 1469 - "ZoneDailyAwardOp"
+Cohesion: 0.40
+Nodes (5): ZoneDailyAwardOp, Field1, Field2, Name, Opcode
+
+### Community 1470 - "ZoneMigrationDone"
+Cohesion: 0.40
+Nodes (3): ZoneMigrationDone, Name, Opcode
+
+### Community 1471 - "ZoneQueryRecommendActivities"
+Cohesion: 0.40
+Nodes (5): ZoneQueryRecommendActivities, Field1, Field2, Name, Opcode
+
+### Community 1472 - "ZoneReplyDialog"
+Cohesion: 0.40
+Nodes (4): ZoneReplyDialog, DialogId, Name, Opcode
+
+### Community 1473 - "ZoneSearchOpt"
+Cohesion: 0.40
+Nodes (5): ZoneSearchOpt, Field1, Field2, Name, Opcode
+
+### Community 1474 - "ZoneTalkToNpc"
+Cohesion: 0.40
+Nodes (4): ZoneTalkToNpc, Name, NpcId, Opcode
+
+### Community 1478 - "ZoneUpdateBotData"
+Cohesion: 0.40
+Nodes (5): ZoneUpdateBotData, Field1, Field2, Name, Opcode
+
+### Community 1479 - "ZoneClientCanLogout"
+Cohesion: 0.40
+Nodes (3): ZoneClientCanLogout, Name, Opcode
+
 ### Community 1480 - "ZoneClientOpenAreaDialog"
 Cohesion: 0.40
 Nodes (5): ZoneClientOpenAreaDialog, Field1, Field2, Name, Opcode
 
-### Community 1481 - "ZoneClientOpenHotel"
+### Community 1481 - "ZoneClientColosseumLeaveJoinResult"
 Cohesion: 0.40
-Nodes (5): ZoneClientOpenHotel, Field1, Field2, Name, Opcode
+Nodes (5): ZoneClientColosseumLeaveJoinResult, Field1, Field2, Name, Opcode
 
-### Community 1482 - "ZoneClientOpenMagicBoxDialog"
+### Community 1482 - "ZoneClientDestShutdown"
 Cohesion: 0.40
-Nodes (3): ZoneClientOpenMagicBoxDialog, Name, Opcode
+Nodes (3): ZoneClientDestShutdown, Name, Opcode
 
 ### Community 1483 - "ZoneClientPayEvent"
 Cohesion: 0.40
@@ -6298,53 +7038,153 @@ Nodes (5): ZoneClientPayEvent, Field1, Field2, Name, Opcode
 Cohesion: 0.40
 Nodes (5): ZoneClientPlayerEmotion, Field1, Field2, Name, Opcode
 
-### Community 1487 - "BlobCodec"
-Cohesion: 0.50
-Nodes (4): BlobCodec, Raw, Tombstone, Zstd
+### Community 1485 - "ZoneClientDuelRequest"
+Cohesion: 0.40
+Nodes (5): ZoneClientDuelRequest, Field1, Field2, Name, Opcode
 
-### Community 1489 - "PackFlags"
-Cohesion: 0.50
-Nodes (4): PackFlags, Encrypted, IndexZstd, Signed
+### Community 1487 - "ZoneClientOpenMissionShop"
+Cohesion: 0.40
+Nodes (5): ZoneClientOpenMissionShop, Field1, Field2, Name, Opcode
+
+### Community 1489 - "ZoneClientOpenPaySystem"
+Cohesion: 0.40
+Nodes (5): ZoneClientOpenPaySystem, Field1, Field2, Name, Opcode
 
 ### Community 1490 - "ProcEffectReport"
 Cohesion: 0.50
 Nodes (3): ProcEffectReport, Name, Opcode
 
-### Community 1492 - "Side"
-Cohesion: 0.67
-Nodes (3): Side, Blue, Red
+### Community 1491 - "ZoneClientTicketInvalid"
+Cohesion: 0.40
+Nodes (3): ZoneClientTicketInvalid, Name, Opcode
+
+### Community 1492 - "ZoneClientUpdateFloorInfo"
+Cohesion: 0.40
+Nodes (5): ZoneClientUpdateFloorInfo, Field1, Field2, Name, Opcode
+
+### Community 1493 - "ZoneEnterFamilyStorage"
+Cohesion: 0.40
+Nodes (4): ZoneEnterFamilyStorage, Name, NpcUid, Opcode
+
+### Community 1494 - "ZoneFamilyStorageQueryLog"
+Cohesion: 0.40
+Nodes (3): ZoneFamilyStorageQueryLog, Name, Opcode
+
+### Community 1496 - "ZoneClientTradeConfirm"
+Cohesion: 0.40
+Nodes (3): ZoneClientTradeConfirm, Name, Opcode
+
+### Community 1497 - "ZoneClientTradeRemoveItem"
+Cohesion: 0.40
+Nodes (4): ZoneClientTradeRemoveItem, Index, Name, Opcode
+
+### Community 1498 - "ZoneTradeConfirm"
+Cohesion: 0.40
+Nodes (3): ZoneTradeConfirm, Name, Opcode
+
+### Community 1499 - "ZoneTradeRequest"
+Cohesion: 0.40
+Nodes (4): ZoneTradeRequest, Name, Opcode, TargetCharId
+
+### Community 1500 - "ZoneClientVendorCloseView"
+Cohesion: 0.40
+Nodes (4): ZoneClientVendorCloseView, Name, Opcode, SellerId
+
+### Community 1501 - "ZoneClientVendorContainer"
+Cohesion: 0.40
+Nodes (5): ZoneClientVendorContainer, Count, Name, Opcode, TargetId
+
+### Community 1502 - "ZoneAttrLevelRefresh"
+Cohesion: 0.40
+Nodes (4): ZoneAttrLevelRefresh, Fields, Name, Opcode
 
 ### Community 1504 - "Ui/CeguiBuilder.cs"
 Cohesion: 0.08
 Nodes (24): UiPart, Bottom, BottomLeft, BottomRight, Center, Left, Right, Top (+16 more)
 
+### Community 1505 - "LoginFail"
+Cohesion: 0.50
+Nodes (4): LoginFail, Code, Name, Opcode
+
+### Community 1506 - "CharacterDataChunk"
+Cohesion: 0.50
+Nodes (4): CharacterDataChunk, Blob, Name, Opcode
+
+### Community 1507 - "WorldCharPasswordResult"
+Cohesion: 0.50
+Nodes (4): WorldCharPasswordResult, Name, Opcode, Value
+
+### Community 1508 - "WorldCheckCharPasswordResult"
+Cohesion: 0.50
+Nodes (4): WorldCheckCharPasswordResult, Name, Opcode, Value
+
+### Community 1509 - "WorldClientHello"
+Cohesion: 0.50
+Nodes (4): WorldClientHello, Name, Opcode, Value
+
+### Community 1510 - "LoginServerHello"
+Cohesion: 0.50
+Nodes (4): LoginServerHello, Name, Opcode, Value
+
+### Community 1511 - "WorldCheckCharPassword"
+Cohesion: 0.50
+Nodes (4): WorldCheckCharPassword, CharId, Name, Opcode
+
+### Community 1512 - "WorldCreateNameCheck"
+Cohesion: 0.50
+Nodes (4): WorldCreateNameCheck, Name, Opcode, Value
+
+### Community 1513 - "WorldQueryFamilyInfo"
+Cohesion: 0.50
+Nodes (4): WorldQueryFamilyInfo, Name, Opcode, Value
+
 ### Community 1514 - "Lot 7 — Autonomie du dépôt, HUD Limitless in-game, bugs live, refonte Web + Studio"
 Cohesion: 0.11
 Nodes (17): B1 — Bannière Limitless : doit être dans le jeu, pas une fenêtre Win32, B2 — Animation de monture gauche/droite (strafe) toujours décalée, B3 — Commandes admin : `gain_gold` etc. ne marchent pas, auditer TOUTES, B4 — Mana : valeur fixe pendant un sort de buff, B5 — Statuts non retirés (fin du timer / annulation), Clôture lot 7 (2026-10-24), Journal, Journal — agent B3/B4/B5 (2026-10-24, suite) (+9 more)
+
+### Community 1515 - "ItemMallEntry"
+Cohesion: 0.50
+Nodes (4): ItemMallEntry, EffectivePrice, Group, MoneyUnit
+
+### Community 1516 - "ZoneGetStorageData"
+Cohesion: 0.50
+Nodes (4): ZoneGetStorageData, Name, Opcode, Value
+
+### Community 1517 - "ZoneUseTicket"
+Cohesion: 0.50
+Nodes (4): ZoneUseTicket, Name, Opcode, Ticket
+
+### Community 1518 - "ZoneClientSetRoomResult"
+Cohesion: 0.50
+Nodes (4): ZoneClientSetRoomResult, Name, Opcode, Value
+
+### Community 1519 - "ZoneClientUpdateLifelongGold"
+Cohesion: 0.50
+Nodes (4): ZoneClientUpdateLifelongGold, Name, Opcode, Value
 
 ### Community 1523 - "LotteryInfo"
 Cohesion: 0.67
 Nodes (3): LotteryInfo, Buys, Opens
 
 ## Knowledge Gaps
-- **21414 isolated node(s):** `net10.0`, `ZstdSharp.Port (0.8.8)`, `Godot.NET.Sdk/4.8.0-beta.2`, `IsHeadless`, `AssetsRoot` (+21409 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 24965 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **146 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **21415 isolated node(s):** `net10.0`, `ZstdSharp.Port (0.8.8)`, `Godot.NET.Sdk/4.8.0-beta.2`, `IsHeadless`, `AssetsRoot` (+21410 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 24973 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **122 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `NetMessage` connect `NetMessage` to `BinWriter`, `protocol/WorldMessages.cs`, `MiscPackets.BindZone`, `Fact`, `protocol/ZoneClientToServerMessages.cs`, `HudExtensions.BindEntryData`, `MiscPackets.BindZone`, `Protocol/ZoneShopMessages.cs`, `ZoneLotGTests`, `EdenSession`, `EdenSession`, `FamilyStorageState`, `protocol/ZoneStorageMessages.cs`, `Protocol/ZoneSocialMessages.cs`, `InventoryWindow`, `ZonePlayerDestinyRoad`, `AuctionState`, `TradeWindow.BindSession`, `Protocol/ZoneTradeMessages.cs`, `protocol/ZoneElfMessages.cs`, `QuestWindow`, `ZoneClientHello`, `Protocol/WorldMessages.cs`, `Vector2`, `NeobankWindow`, `Protocol/ZoneMessages.cs`, `ZonePutItem`, `PlayerController`, `ZoneLoop`, `PartyHud.BindSession`, `Action`, `SocialWindow.BindWorldHandlers`, `PlayerVitals`, `GameScene`, `Protocol/ZoneHudMessages.cs`, `ZoneAchievementUpdate`, `ZoneClientSearchTeamInfo`, `Protocol/ZoneMailMessages.cs`, `ZoneLoverInfo`, `ZoneTeamAllMembersInfo`, `SkillCast.BindSession`, `Protocol/ZoneItemMallMessages.cs`, `MissionBridge`, `CharacterListChunk`, `HudRoot`, `ZoneChangeEquip`, `ZoneSeeChar`, `NetMessage.ToPayload`, `Protocol/ZoneStorageMessages.cs`, `MailWindow`, `SkillCast`, `Protocol/ZoneEnchantMessages.cs`, `Label`, `ZoneClientModifyItemInfo`, `ZoneClientModifyItemInfo`, `ZoneClientTerritoryQuery`, `ZoneClientBuyBackList`, `ZoneClientBuyBackList`, `UiTextEn.Translate`, `ZoneUpdateAttr`, `protocol/ZoneDialogMessages.cs`, `ZoneDisplayDialogView`, `AuctionWindow`, `system_collections_generic`, `ZoneClientLookElfPetEquip`, `ZoneClientLookElfPetEquip`, `ZoneSeeChar`, `ZoneUpdateEquipmentView`, `LoginAccount`, `ZoneEnchantAdd`, `Texture2D`, `ZoneClientRoomData`, `ZoneClientTextOutputItem`, `ZoneClientPetLotteryResult`, `ZoneVendorSellItem`, `ZoneClientRoomData`, `ZoneClientTextOutputItem`, `DailyRewardWindow`, `ZoneClientEvaluateInfo`, `ZoneClientFamilyTownQuery`, `ZoneClientEvaluateInfo`, `ZoneClientFamilyTownQuery`, `Protocol/LoginMessages.cs`, `ZoneClientRollTreasure`, `ZoneClientRollTreasure`, `ZoneSwitchItemLocation`, `ZoneAdvStatsInfo`, `ZoneClientColosseumQuery`, `Entry`, `ZoneClientQueryPlayerCard`, `ZoneClientPutItemIntoContainer`, `HudExtensions.BindSession`, `ZoneClientPutItemIntoContainer`, `VendingWindow`, `protocol/ZoneDestinyMessages.cs`, `ZoneClientEnterNodeElfContainer`, `ZoneClientPutItemIntoStorage`, `ZoneClientRankInfo`, `ZoneClientEnterNodeElfContainer`, `ZoneClientPutItemIntoStorage`, `ZoneClientRankInfo`, `WorldFamilyOp`, `ZoneMissionStates`, `ZoneUpdateCoolDown`, `ZoneSeeMob`, `TicketBody`, `ZoneSeeChar`, `ZoneSeeMob`, `ZoneClientBattlefieldResult`, `GameScene.RegisterZoneDispatch`, `ZoneClientBattlefieldResult`, `ZonePlayerClassList`, `ArchiveWindow`, `ItemMallWindow`, `MinimapPanel`, `Protocol/ZoneEntryDataMessages.cs`, `CharModelSpec.BodyStem`, `ZoneDivideItem`, `ZoneClientDisplayCharSimple`, `ZoneClientPetLotteryResult`, `ZoneVague2Tests.EnchantRequests_ClientToServer_Serialize`, `ZoneClientFamilyInstanceData`, `ZoneClientTradeAddItem`, `ZoneClientUpdateLottery`, `ZoneClientDisplayCharSimple`, `ZoneClientTradeModifyGold`, `ZoneClientLotteryResult`, `ZoneClientTerritoryQuery`, `WorldClientFamilyAchievementUpdate`, `ZoneAttrRefresh`, `ZoneClientLotteryResult`, `HudExtensions.BindEntryData`, `ZoneClientFamilyContainerData`, `ZoneClientColosseumTeamInfo`, `ZoneClientFamilyTownMemberQuery`, `ZoneClientSpellFlyToLocation`, `ZoneClientColosseumTeamInfo`, `ZoneSwitchItemLocation`, `ZoneClientFamilyBattleInfo`, `ZoneClientVersusInstanceInfo`, `ZoneMailSend`, `ZoneClientBattleRoyaleInfo`, `ZoneClientLevelUp`, `ZoneClientFamilyBattleInfo`, `ZoneClientVersusInstanceInfo`, `WorldClientFamilyAchievementUpdate`, `ZoneClientUpdateRoom`, `ZoneClientIdentifyItem`, `ZoneServerExecuteMagicBox`, `ZoneClientUpdateRoom`, `ZoneServerSaveCollection`, `ZoneTeamInvite`, `BinReader.ReadUShort`, `ZoneClientColosseumQuery`, `ZoneClientPlayEffect`, `ZoneClientSearchInfo`, `ZoneClientUpdateFastDressData`, `ZoneClientFamilyInstanceData`, `protocol/ZoneEntityMessages.cs`, `ZoneServerSaveCollection`, `ZoneClientFamilyTownMemberQuery`, `ZoneUpdateElfMixElf`, `PartyHud`, `ZoneClientGreedyIslandInfo`, `ZoneClientMessageList`, `ZoneClientDisplayChar`, `ZoneClientResetSpell`, `ZoneSwitchItemLocationOk`, `MallView`, `ZoneTeamInviteAnswer`, `ZoneClientSpellBlastToLocation`, `ZoneClientArrangeItemOK`, `ZoneSeeTreasure`, `ZoneClientBattleRoyaleInfo`, `ZoneClientFamilyContainerPutItem`, `ZoneClientMagicBoxResult`, `ZoneClientEffectReport`, `ZoneClientPetLotteryEnd`, `ZoneServerGoLottery`, `ZoneClientUpdateLottery`, `ZonePlayerClassList`, `ZoneClientFamilyContainerPutItem`, `ZoneClientMagicBoxResult`, `ZoneServerFamilyContainerPutItem`, `Protocol/ZoneCombatMessages.cs`, `ZoneServerRecordFastDressInfo`, `ZoneClientTerritoryInfo`, `WorldClientMutuallyHelpUpdate`, `Protocol/ZoneElfMessages.cs`, `ZoneClientSpellBlastOK`, `ZoneEnterNodeNodeData`, `ZoneClientFamilyContainerData`, `ZoneClientEnterStrengthen`, `ZoneClientSpellFlyToLocation`, `ZoneAuctionSell`, `ZoneClientChanceLuckyBagResult`, `ZoneClientPlayEffect`, `ZoneClientSearchInfo`, `ZoneVendorBuy`, `ZoneEnterMissionList`, `ZoneClientIdentifyItem`, `ZoneClientBattlefieldList`, `WorldUpdateFamilyMember`, `ZoneClientUpdateFastDressData`, `ZonePlayerAction`, `ZoneModifyAttr`, `ZoneClientResetSpell`, `Protocol/WorldMiscMessages.cs`, `ZoneClientBattlefieldMemberInfo`, `ZoneClientElfWorkResult`, `ZoneClientMessageList`, `ZoneClientChangeSpell`, `ZoneClientElfGoToWork`, `ZoneClientStrengthenItemResult`, `ZoneClientSummonPet`, `ZoneClientDuelResult`, `ZoneClientGladiatorTeamInfo`, `ZoneClientItemUse`, `ZoneClientElfWorkResult`, `ZoneClientSay`, `ZoneClientBattleMemberPosition`, `ZonePlayerDestinyRoad`, `ZoneClientEnterStrengthen`, `ZoneClientLifeFloat`, `ZoneClientModifyItemStrengthen`, `protocol/WorldMiscMessages.cs`, `ZoneClientPlayerAction`, `WorldClientMutuallyHelpUpdate`, `ZoneClientMessageRead`, `ZoneClientOpenBattleCrusadeDialog`, `ZoneClientSetSpellStone`, `ZoneClientGoto`, `ZoneClientTradeStart`, `ZoneClientUseSkillPointOK`, `Protocol/ZoneAuctionMessages.cs`, `ZoneDisplayMonster`, `ZoneClientBattlefieldList`, `ZoneClientEquipTrainItemChanged`, `EntityRegistry`, `ZonePlayerWorkResult`, `ZoneClientLifeSkillUpdate`, `ZoneClientGreedyIslandInfo`, `LoginWorldReply`, `ZoneSetMissionTrace`, `ZoneClientDestShutdown`, `ZoneClientOpenInstanceDialog`, `ZoneDisplayDialogView`, `ZoneClientOpenMagicBoxDialog`, `ZoneClientOpenMissionShop`, `ZoneClientPayEventOK`, `ZoneClientRecruitInstanceResult`, `ZoneItemUse`, `ZoneClientSafeQuitCancel`, `ZoneClientUpdateBattleCrusadeInfo`, `ZoneClientFamilyContainerDeleteItem`, `ZoneClientArrangeItemOK`, `ZoneClientItemRent`, `ZoneClientPlayerEvent`, `ZoneClientEffectReport`, `ZoneClientUpdateEvaluateInfo`, `ZoneClientUpdateInteraction`, `ZoneClientPetLotteryEnd`, `ZoneClientTerritoryInfo`, `ZoneBaseAttrRefresh`, `ZoneClientLotteryEnd`, `ZoneClientBagDueDate`, `ZoneClientItemUse`, `ZoneClientEnterExchageItemService`, `ZoneSwitchItemLocationOk`, `ZoneClientBattlefieldMemberInfo`, `ZoneClientCanJoinTeam`, `ZoneClientChangeSpell`, `ZoneClientEnterRepairShop`, `ZoneClientLotteryUpdatePlus`, `ZoneClientElfGoToWork`, `ZoneClientLotteryEnd`, `ZoneClientStrengthenItemResult`, `ZoneClientSummonPet`, `ZoneClientOpenInstanceDialog`, `ZoneClientPayEventOK`, `ZoneClientRecruitInstanceResult`, `ZoneClientResetCoord`, `ZoneClientSellOut`, `EdenConnection`, `ZoneClientTeamCheckNotify`, `ZoneClientTurnChar`, `ZoneClientUpdateRoomItem`, `ZoneClientUseItemTimeBreak`, `ZoneClientBattleMemberPosition`, `LoginClientHello`, `ZoneClientAskIdentifyGold`, `ZoneDivideItem`, `ZoneClientMessageRead`, `Protocol/ZoneMissionMessages.cs`, `ZoneUpdateZoneMonster`, `ZoneClientTerritoryFamilyScore`, `ZoneClientChanceLuckyBagResult`, `ZoneClientOpenBattleCrusadeDialog`, `ZoneClientTerritoryFamilyScore`, `ZoneClientTerritoryKilledInfo`, `ZoneClientUseSkillPointOK`, `ZoneServerExecuteMagicBox`, `ZoneClientPlayerAction`, `ZoneUseSkillPoint`, `ZoneClientHateReport`, `ZoneClientTerritoryKilledInfo`, `ZoneClientAltarState`, `ZoneClientAskIdentifyGold`, `ZoneClientAskRepairOneItemGold`, `ZoneClientDisplayChar`, `ZoneClientAskRepairOneItemGold`, `ZoneClientBattlefieldJoinResult`, `ZoneClientDuelBegin`, `ZoneClientDuelResult`, `ZoneClientFamilyContainerDeleteItem`, `ZoneClientGetSpell`, `ZoneUpdateDailyAwards`, `ZoneClientItemRent`, `ZoneClientPlayerEvent`, `ZoneClientPlaySound`, `ZoneGiveUpMission`, `ZoneClientSloganUpdate`, `ZoneClientElfReturnEffect`, `ZoneClientElfDecompose`, `ZoneClientUpdateLifelongPoint`, `ZoneClientModifyItemStrengthen`, `ZoneClientMobChangeAI`, `ZoneClientSelectFamilyEmblem`, `ZoneClientBattlefieldJoinResult`, `ZoneClientPlaySound`, `ZoneClientR25UpdateFamily`, `ZoneClientBackItem`, `ZoneClientElfDecompose`, `ZoneClientEnterSpellShop`, `ZoneClientLifeSkillUpdate`, `ZoneClientPlayMonsterAction`, `ZoneClientTerritoryPlayerInfo`, `ZoneClientUpdateSpellAttr`, `Protocol/ZoneDestinyMessages.cs`, `protocol/ZoneCombatMessages.cs`, `ZoneModelModify`, `ZoneClientTeamRadarAttention`, `ZoneClientBagDueDate`, `ZoneClientColosseumLeaveJoinResult`, `ZoneClientDuelRequest`, `ZoneClientElfReturnEffect`, `ZoneClientElfStoneUse`, `ZoneClientEnterRepairShop`, `ZoneClientTerritoryEnd`, `ZoneClientUIControlNotify`, `ZoneClientOpenExploitRank`, `ZoneClientBattlefieldUpdateScore`, `ZoneClientPlayMonsterAction`, `ZoneClientCoRideInvite`, `ZoneClientGladiatorTeamInfo`, `ZoneClientOpenPaySystem`, `ZoneClientUpdateInteraction`, `ZoneClientResetCoord`, `protocol/ZoneAuctionMessages.cs`, `ZoneClientTicketInvalid`, `protocol/ZoneMailMessages.cs`, `protocol/ZoneTradeMessages.cs`, `ZoneClientElfStoneUse`, `Protocol/ZoneVendingMessages.cs`, `ZoneClientRideSpell`, `LoverBridge.BindSession`, `ZoneClientUpdateBattleCrusadeInfo`, `BinReader.ReadBytes`, `ZoneClientCoRideInvite`, `ZoneClientDuelBegin`, `ZoneClientElfCastEnchant`, `ZoneClientUpdateAttrNewHp`, `ZoneClientUseItemTime`, `Protocol/ZoneDialogMessages.cs`, `ZoneClientElfCastEnchant`, `ZoneClientEnterSpellShop`, `ZoneClientSetSpellStone`, `ZoneClientTerritoryPlayerInfo`, `ZoneClientUpdateSpellAttr`, `ZoneClientUseItemTime`, `ZoneClientCanLogout`, `ZoneClientLotteryUpdatePlus`, `ZoneClientOpenAreaDialog`, `ZoneClientPayEvent`, `ZoneClientResetDailyMission`, `ZoneClientTurnChar`, `ZoneClientUIControlNotify`, `ZoneClientUpdateFloorInfo`, `ZoneClientOpenAreaDialog`, `ZoneClientOpenHotel`, `ZoneClientOpenMagicBoxDialog`, `ZoneClientPayEvent`, `ZoneClientPlayerEmotion`?**
-  _High betweenness centrality (0.210) - this node is a cross-community bridge._
+- **Why does `NetMessage` connect `NetMessage` to `BinWriter`, `GoldenMessageTests.WorldCharPassword_WireLayout`, `Protocol/ZoneMiscMessages.cs`, `Task`, `Fact`, `NetMessage`, `protocol/ZoneClientToServerMessages.cs`, `HudExtensions.BindEntryData`, `protocol/ZoneMiscMessages.cs`, `Protocol/ZoneShopMessages.cs`, `ZoneLotGTests`, `EdenSession`, `EdenSession`, `FamilyStorageState`, `ZoneFamilyStoragePut`, `Protocol/ZoneSocialMessages.cs`, `InventoryWindow`, `ZonePlayerDestinyRoad`, `TopLeftVitals.Find`, `BinWriter.WriteUShort`, `AuctionState`, `TradeWindow.BindSession`, `protocol/ZoneElfMessages.cs`, `QuestWindow`, `ZoneEmptyRequest`, `WorldFamilyInfo`, `WorldCreateCharacterData`, `Vector2`, `Texture2D`, `NeobankWindow`, `ZoneEnterNodeNodeData`, `ZonePutItem`, `PlayerController`, `ZoneLoop`, `PartyHud.BindSession`, `WorldClientUpdateFortuneBagContentList`, `SocialWindow.BindWorldHandlers`, `PlayerVitals`, `ElfBridge.OnAction`, `GameScene`, `Protocol/ZoneHudMessages.cs`, `ZoneAchievementUpdate`, `ZoneLotGTests`, `ZoneClientSearchTeamInfo`, `ZoneMailSend`, `ZoneLoverInfo`, `ZoneTeamAllMembersInfo`, `SkillCast.BindSession`, `WorldItemMallBuyRequest`, `MissionBridge`, `ClientConfig`, `HudRoot`, `ZoneSeeTreasure`, `NetMessage.ToPayload`, `ItemMallState`, `ScenePlan02ClientTests`, `ZoneFamilyStorageGet`, `ZoneLotS6S8Tests`, `SkillCast`, `ZoneEnchantAdd`, `ZoneClientModifyItemInfo`, `ZoneClientModifyItemInfo`, `ZoneClientTerritoryQuery`, `ZoneClientBuyBackList`, `ZoneClientBuyBackList`, `UiTextEn.Translate`, `ZoneUpdateAttr`, `ZoneBattlefieldJoin`, `ZoneDisplayDialogView`, `AuctionWindow`, `ZoneClientLookElfPetEquip`, `ItemMallState`, `ZoneClientLookElfPetEquip`, `ZoneSeeChar`, `ZoneUpdateEquipmentView`, `SpellFx`, `LoginServerHello`, `ZoneEnchantAdd`, `ZoneClientRoomData`, `ZoneClientTextOutputItem`, `ZoneClientPetLotteryResult`, `ZoneVendorSellItem`, `ZoneClientRoomData`, `ZoneClientTextOutputItem`, `DailyRewardWindow`, `ZoneClientEvaluateInfo`, `ZoneClientFamilyTownQuery`, `ZoneClientEvaluateInfo`, `ZoneClientFamilyTownQuery`, `LoginAccount`, `ZoneClientRollTreasure`, `ZoneClientRollTreasure`, `ZonePlayerWorkResult`, `ZoneAdvStatsInfo`, `ZoneClientSpellBlastToLife`, `ZoneClientColosseumQuery`, `Entry`, `ZoneClientPutItemIntoContainer`, `HudExtensions.BindSession`, `ZoneClientPutItemIntoContainer`, `DragHelper.EnsureTitleBar`, `protocol/ZoneDestinyMessages.cs`, `ZoneClientEnterNodeElfContainer`, `ZoneClientPutItemIntoStorage`, `ZoneClientRankInfo`, `ZoneClientEnterNodeElfContainer`, `ZoneClientPutItemIntoStorage`, `ZoneClientRankInfo`, `BinWriter.ToArray`, `ZoneMissionStates`, `ZoneUpdateCoolDown`, `ZoneSeeMob`, `ZoneSeeChar`, `ZoneSeeMob`, `ZoneClientBattlefieldResult`, `GameScene.RegisterZoneDispatch`, `ZoneClientBattlefieldResult`, `ArchiveWindow`, `ItemMallWindow`, `MinimapPanel`, `List`, `WorldCreateCharacterData`, `ZoneDivideItem`, `ZoneClientDisplayCharSimple`, `ZoneClientPetLotteryResult`, `ZoneVague2Tests.EnchantRequests_ClientToServer_Serialize`, `ZoneClientFamilyInstanceData`, `ZoneClientTradeAddItem`, `ZoneClientTradeAddItem`, `ZoneClientUpdateLottery`, `ZoneClientDisplayCharSimple`, `ZoneClientTradeModifyGold`, `ZoneUpdateEquipmentView`, `ZoneClientLotteryResult`, `ZoneClientTerritoryQuery`, `WorldClientFamilyAchievementUpdate`, `ZoneAttrRefresh`, `ZoneClientLotteryResult`, `HudExtensions.BindEntryData`, `ZoneClientFamilyContainerData`, `ZoneClientColosseumTeamInfo`, `ZoneClientFamilyTownMemberQuery`, `ZoneClientSpellFlyToLocation`, `ZoneClientColosseumTeamInfo`, `ZoneSwitchItemLocation`, `ZoneClientFamilyBattleInfo`, `ZoneClientVersusInstanceInfo`, `ZoneMovePrediction`, `ZoneMailSend`, `ZoneClientBattleRoyaleInfo`, `ZoneClientLevelUp`, `ZoneClientFamilyBattleInfo`, `ZoneClientVersusInstanceInfo`, `WorldClientFamilyAchievementUpdate`, `ZoneClientUpdateRoom`, `ZoneMovePrediction`, `ZoneClientIdentifyItem`, `ZoneClientUpdateRoom`, `ZoneTeamInvite`, `ZoneUpdateEquipmentView`, `ZoneClientColosseumQuery`, `ZoneClientPlayEffect`, `ZoneClientSearchInfo`, `ZoneClientUpdateFastDressData`, `ZoneClientFamilyInstanceData`, `WorldClientUpdateFortuneBagContentList`, `ZonePutItem`, `ZoneClientFamilyTownMemberQuery`, `ZoneUpdateElfMixElf`, `PartyHud`, `ZoneTradeCancel`, `ZoneClientGreedyIslandInfo`, `ZoneClientMessageList`, `ZoneClientDisplayChar`, `ZoneClientResetSpell`, `ZoneSwitchItemLocationOk`, `WorldClientLookingForMemberResult`, `WorldItemMallBuyRequest`, `ZoneTeamInviteAnswer`, `ZoneClientSpellBlastToLocation`, `ZoneClientArrangeItemOK`, `ZoneSeeTreasure`, `ZoneClientBattleRoyaleInfo`, `ZoneClientFamilyContainerPutItem`, `ZoneClientMagicBoxResult`, `ZoneClientEffectReport`, `ZoneClientPetLotteryEnd`, `ZoneClientUpdateLottery`, `WorldClientLookingForMemberResult`, `ZoneClientFamilyContainerPutItem`, `ZoneClientMagicBoxResult`, `ZoneModifyItemSlot`, `ZoneClientSpellBlastToLife`, `ZoneClientTerritoryInfo`, `WorldClientMutuallyHelpUpdate`, `ZoneElfAction`, `ZoneClientSpellBlastOK`, `ZoneEnterNodeNodeData`, `ZoneClientFamilyContainerData`, `ZoneClientEnterStrengthen`, `WorldClientQueryExploitRank`, `ZoneClientSpellFlyToLocation`, `ZoneRecommendActivities`, `ZoneAuctionSell`, `ZoneClientChanceLuckyBagResult`, `ZoneClientPlayEffect`, `ZoneClientSearchInfo`, `ZoneVendorBuy`, `ZoneEnterMissionList`, `ZoneClientIdentifyItem`, `ZoneClientBattlefieldList`, `WorldUpdateFamilyMember`, `ZoneClientUpdateFastDressData`, `ZoneModifyAttr`, `ZoneClientMeleeAttack`, `ZoneClientResetSpell`, `WorldClientQueryExploitRank`, `ZoneServerFamilyContainerPutItem`, `MiscPackets.BindZone`, `ZoneClientBattlefieldMemberInfo`, `ZoneClientElfWorkResult`, `ZoneClientMessageList`, `ZoneClientChangeSpell`, `ZoneClientElfGoToWork`, `ZoneClientStrengthenItemResult`, `ZoneClientSummonPet`, `ZoneClientSpellCast`, `ZoneElfUpdateSkill`, `ZoneAttrRefresh`, `ZoneClientDuelResult`, `ZoneClientGladiatorTeamInfo`, `ZoneLimitlessState`, `ZoneClientCanJoinTeam`, `ZoneClientItemUse`, `ZoneClientElfWorkResult`, `ZoneClientBattleMemberPosition`, `ZonePlayerDestinyRoad`, `ZoneClientEnterStrengthen`, `ZoneClientLifeFloat`, `ZoneClientModifyItemStrengthen`, `MiscPackets.BindZone`, `ZoneClientPlayerAction`, `WorldClientMutuallyHelpUpdate`, `ZoneClientMessageRead`, `ZoneClientOpenBattleCrusadeDialog`, `ZoneClientSetSpellStone`, `ZoneClientGoto`, `ZoneClientTradeStart`, `ZoneClientUseSkillPointOK`, `ZoneAuctionBuyQuery`, `ZoneDisplayMonster`, `ZoneClientBattlefieldList`, `WorldClientTell`, `EntityRegistry`, `ZonePlayerWorkUpdate`, `ZoneEnterWorks`, `ZonePlayerWork`, `ZoneItemMallUseItem`, `ZoneClientLifeFloat`, `ZoneFamilyStorageGet`, `ZoneClientGreedyIslandInfo`, `LoginWorldReply`, `ZoneSetMissionTrace`, `ZoneDisplayDialogView`, `ZoneClientOpenMagicBoxDialog`, `ZoneClientOpenMissionShop`, `ZoneClientPayEventOK`, `ZoneClientRecruitInstanceResult`, `ZoneItemUse`, `ZoneClientSafeQuitCancel`, `ZoneClientFamilyContainerDeleteItem`, `ZoneClientArrangeItemOK`, `ZoneClientItemRent`, `ZoneClientPlayerEvent`, `ZoneClientEffectReport`, `ZoneClientUpdateEvaluateInfo`, `ZoneClientUpdateInteraction`, `ZoneClientPetLotteryEnd`, `ZoneClientTerritoryInfo`, `ZoneBaseAttrRefresh`, `WorldClientTell`, `ZoneClientSpellHitToLife`, `ZoneClientLotteryEnd`, `ZoneClientPVPRankLookEquip`, `ZoneEnterWorks`, `ZonePlayerWork`, `ZoneElfMix`, `ZoneClientBagDueDate`, `ZoneClientItemUse`, `ZoneEnchantRemove`, `ZoneSwitchItemLocationOk`, `ZoneModelModify`, `ZoneUpdateZoneMonster`, `ZoneClientChangeSpell`, `ZonePlayerLifeSkill`, `ZoneClientLotteryUpdatePlus`, `ZoneClientElfGoToWork`, `ZoneItemMallUseItem`, `ZoneClientStrengthenItemResult`, `ZoneClientSummonPet`, `ZoneTradeConfirm`, `ZoneClientOpenInstanceDialog`, `ZoneClientRecruitInstanceResult`, `ZoneSpellCastToLocation`, `ZoneClientLoadCubeItems`, `ZoneMoveChar`, `WorldItemMallBuyResult`, `ZoneClientTeamCheckNotify`, `ZoneClientTurnChar`, `ZoneClientUpdateRoomItem`, `ZoneClientUseItemTimeBreak`, `ZoneClientUpdateEvaluateInfo`, `ZoneClientBattleMemberPosition`, `LoginClientHello`, `ZoneDivideItem`, `ZoneClientMessageRead`, `WorldClientCrossZone`, `ZoneClientSpellCastOK`, `ZoneUpdateZoneMonster`, `ZoneClientTreasurePickupOK`, `ZoneClientTerritoryFamilyScore`, `ZoneDropItem`, `ZoneSpellCastToLocation`, `ZoneClientLookEquip`, `ZoneClientChanceLuckyBagResult`, `ZoneClientReceiveShortcutOfPage`, `ZoneStrengthenCasting`, `ZoneClientOpenBattleCrusadeDialog`, `ZoneClientTerritoryFamilyScore`, `ZoneClientTerritoryKilledInfo`, `ZoneClientUseSkillPointOK`, `ZoneElfEvent`, `ZoneElfReturn`, `ZoneElfUpdateAttr`, `ZoneSendPetCmd`, `ZoneClientPlayerAction`, `ZoneUseSkillPoint`, `ZoneUpdateElfSpell`, `ZoneEnchantStart`, `ZoneClientHateReport`, `ZoneClientTerritoryKilledInfo`, `ZoneClientGoto`, `ZoneClientAltarState`, `ZoneClientAskIdentifyGold`, `ZoneClientAskRepairOneItemGold`, `ZoneClientDisplayChar`, `ZoneClientAskRepairOneItemGold`, `ZoneClientBattlefieldJoinResult`, `ZoneClientDuelBegin`, `ZoneClientDuelResult`, `ZoneDisplayMonster`, `ZoneClientGetSpell`, `ZoneUpdateDailyAwards`, `ZoneClientItemRent`, `ZoneClientNewPlayerGuide`, `ZoneClientPlayerEvent`, `ZoneClientPlaySound`, `ZoneCommandFailReturn`, `ZoneEnterNodePlayerCard`, `ZoneUpdateBFData`, `ZoneUpdateCollection`, `ZoneUpdateNodeTimes`, `ZoneUpdateSystemVar`, `ZoneServerDropItem`, `ZonePlayerAction`, `ZoneClientAltarState`, `ZoneClientBattlefieldUpdateScore`, `ZoneFamilyStoragePutNotify`, `ZoneDie`, `ZoneClientElfReturnEffect`, `ZoneModifyAttr`, `ZoneTradeRemoveItem`, `WorldList`, `ZoneEnterBattlefieldAnswer`, `WorldItemMallReceiveResult`, `ZoneClientElfDecompose`, `ZoneMarryOpRequest`, `ZoneClientDuelRequestResult`, `ZoneClientUpdateLifelongPoint`, `ZoneClientUpdateLifelongPoint`, `ZoneTradeModifyGold`, `ZoneVendorClose`, `ZoneClientModifyItemStrengthen`, `ZoneClientSelectFamilyEmblem`, `LoginWorldSelect`, `WorldCharPassword`, `ZoneClientBattlefieldJoinResult`, `ZoneClientPlaySound`, `WorldCreateCharacterName`, `WorldItemMallReceivableQuery`, `ZoneClientBackItem`, `ZoneChangeAppellation`, `ZoneClientElfDecompose`, `ZoneClientEnterSpellShop`, `ZoneAuctionBuyList`, `ZoneClientLifeSkillUpdate`, `ZoneAuctionSellQuery`, `ZoneClientCommandFailReturn`, `ZoneClientTerritoryPlayerInfo`, `ZoneClientSpellBreak`, `ZoneClientUpdateSpellAttr`, `ZoneQueryDestinyRoad`, `ZoneSpellCastToLife`, `ZoneMessageWrite`, `ZoneElfReturnOk`, `ZoneElfWork`, `ZoneUpdateMixElf`, `ZoneNodeExit`, `ZoneEnterNodePlayerRoom`, `ZoneEnterStarWayData`, `ZoneClientEquipTrainItemChanged`, `ZoneClientUpdateRecommendActivities`, `WorldItemMallBuyResult`, `ZoneLoverInvite`, `ZoneLoverInviteRequest`, `ZoneLoverUpdate`, `ZoneModelModify`, `ZoneClientTeamRadarAttention`, `ZoneMarryOpRequest`, `ZoneMailQuery`, `ZoneMissionListOp`, `ZoneNewPlayerGuide`, `ZoneClientBackItem`, `ZoneClientDuelRequestResult`, `ZoneFamilyStorageDelete`, `ZoneStorageExpandResult`, `ZoneClientTradeModifyGold`, `ZoneClientTradeModifyGoldFail`, `ZoneClientTradeStart`, `ZoneTradeModifyGold`, `WorldTicket`, `WorldCancelCreateCharacter`, `ZoneClientElfReturnEffect`, `ZoneClientElfStoneUse`, `WorldCancelCreateCharacterResp`, `WorldQueryFriendInfo`, `WorldSelectCharacter`, `WorldSelectZone`, `WorldServerHello`, `WorldVerifyNameResult`, `ZoneAuctionBuyOk`, `ZoneUseSkillPointMax`, `ZoneClientOpenExploitRank`, `ZoneClientBattlefieldUpdateScore`, `ZoneClientPlayMonsterAction`, `ZoneBattlefieldLeave`, `ZoneClientGladiatorTeamInfo`, `ZoneClientOpenPaySystem`, `ZoneClientUpdateInteraction`, `ZoneDuelRequest`, `ZoneDuelRequestAnswer`, `ZoneClientResetCoord`, `ZoneMessageDelete`, `ZoneAuctionBuyQuery`, `ZoneClientTextOutputIndex`, `ZoneLoverMessage`, `ZoneClientEnterExchageItemService`, `ZoneClientEnterFamilyInstanceCreation`, `ZoneClientTicketInvalid`, `ZoneClientEnterGladiatorTeamCreation`, `ZoneClientMobChangeAI`, `protocol/ZoneMailMessages.cs`, `ZoneTradeAddItem`, `ZoneClientOpenHotel`, `ZoneClientPlayerEmotion`, `ZoneClientR25UpdateFamily`, `ZoneClientTeamCheckNotify`, `ZoneClientUpdateRoomItem`, `ZoneClientUseItemTimeBreak`, `WorldFamilyQuit`, `WorldFriendInvitationAnswer`, `WorldRemoveFriend`, `ZoneClientVendorStatus`, `ZoneStorageExpandResult`, `ZoneTradeRequest`, `ZoneVendorCloseView`, `ZoneClientRideSpell`, `ZoneWhoIs`, `ZoneLoverInviteRequest`, `LoginClientHello`, `ZoneClientUpdateBattleCrusadeInfo`, `WorldCancelCreateCharacter`, `WorldCancelCreateCharacterResp`, `WorldCharPasswordResult`, `WorldClientHello`, `WorldItemMallPointInfoQuery`, `WorldLoginTicket`, `WorldQueryFriendInfo`, `WorldRemoveCharacter`, `WorldSelectCharacter`, `WorldSelectZone`, `WorldServerHello`, `BinReader.ReadBytes`, `WorldClientSelectCharEnableBtn`, `ZoneAddAppellation`, `ZoneClientCoRideInvite`, `ZoneClientDuelBegin`, `ZoneUpdateAppellation`, `ZoneAuctionSellResult`, `ZoneClientReviveInfo`, `ZoneClientElfCastEnchant`, `ZoneClientUpdateAttrNewHp`, `ZoneSpellBreak`, `ZoneTreasurePickup`, `ZonePlayerWorkResultEnd`, `ZonePlayerWorkResultOK`, `ZoneDestinyDiceFailed`, `ZoneMessageExit`, `ZoneMessageListQuery`, `ZoneElfAdd`, `ZonePetModeChange`, `ZonePetUpgradeCancel`, `ZoneEnchantCancel`, `ZoneEnchantPauseRequest`, `ZoneEnchantStartRequest`, `ZoneBattlefieldJoin`, `ZoneEnchantUpdateRequest`, `ZoneClientEnterSpellShop`, `ZoneClientSetSpellStone`, `ZoneClientTerritoryPlayerInfo`, `ZoneClientUpdateSpellAttr`, `ZoneLeaveNode`, `ZoneLifeEradicate`, `ZoneClientCanLogout`, `ZoneTextCommand`, `ZoneClientOpenAreaDialog`, `ZoneUpdateEquipment`, `WorldItemMallAnythingQuery`, `ZoneClientResetDailyMission`, `ZoneLoverBreak`, `ZoneLoverMessage`, `ZoneClientUIControlNotify`, `ZoneMailGetGold`, `ZoneMailGetGoldResult`, `ZoneMailGetItemResult`, `ZoneMailOpenBox`, `ZoneMailReadResult`, `ZoneMailReturn`, `ZoneMailSendResult`, `ZoneDailyAwardOp`, `ZoneMigrationDone`, `ZoneQueryRecommendActivities`, `ZoneReplyDialog`, `ZoneSearchOpt`, `ZoneTalkToNpc`, `ZoneUpdateBotData`, `ZoneClientCanLogout`, `ZoneClientOpenAreaDialog`, `ZoneClientColosseumLeaveJoinResult`, `ZoneClientDestShutdown`, `ZoneClientPayEvent`, `ZoneClientPlayerEmotion`, `ZoneClientDuelRequest`, `ZoneClientOpenMissionShop`, `ZoneClientOpenPaySystem`, `ZoneClientTicketInvalid`, `ZoneClientUpdateFloorInfo`, `ZoneEnterFamilyStorage`, `ZoneFamilyStorageQueryLog`, `ZoneClientTradeConfirm`, `ZoneClientTradeRemoveItem`, `ZoneTradeConfirm`, `ZoneTradeRequest`, `ZoneClientVendorCloseView`, `ZoneClientVendorContainer`, `ZoneAttrLevelRefresh`, `LoginFail`, `CharacterDataChunk`, `WorldCharPasswordResult`, `WorldCheckCharPasswordResult`, `WorldClientHello`, `LoginServerHello`, `WorldCheckCharPassword`, `WorldCreateNameCheck`, `WorldQueryFamilyInfo`, `ZoneGetStorageData`, `ZoneUseTicket`, `ZoneClientSetRoomResult`, `ZoneClientUpdateLifelongGold`?**
+  _High betweenness centrality (0.223) - this node is a cross-community bridge._
 - **Are the 175 inferred relationships involving `BinWriter` (e.g. with `GuildWindow.MockIfAsked()` and `NetMessage.ToPayload()`) actually correct?**
   _`BinWriter` has 175 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `net10.0`, `ZstdSharp.Port (0.8.8)`, `Godot.NET.Sdk/4.8.0-beta.2` to the rest of the system?**
-  _21414 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _21415 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `BinWriter` be split into smaller, more focused modules?**
-  _Cohesion score 0.005879531879643989 - nodes in this community are weakly interconnected._
-- **Why does `NetCommand` connect `NetCommand` to `ZoneEntryFlow`, `ShopHandlers.Register`, `ZoneMessages.g.cs`, `CNC_CW_ClientUpdateFamilyMember`, `CNE_MW_MissionServerTextExCmdRemoteZone`, `ZoneServer (871 NCIDs)`, `MissionServer (205 NCIDs)`, `Equipe / social — 31/53 traites`, `CNC_CZ_ClientAttrLevelRefresh`, `Inventaire / equipement — 46/58 traites`, `Commerce / echanges — 28/42 traites`, `Instances / PvP / events — 18/40 traites`, `MiscHandlers.Register`, `CNC_CZ_ClientChangeSpell`, `CNE_ZMis_ZoneServerAuctionBuyList`, `CNE_ZMis_ZoneServerSearchRoomResult`, `CNC_ZMis_ZoneServerSearchRoomResult`, `CNC_CZ_ClientColosseumQuery`, `CNC_CZ_ClientColosseumTeamInfo`, `CNE_CZ_ZoneServerItemUse`, `NativeElfCodec`, `Feature-matrix protocole — generee par `tools/gen_feature_matrix.py``, `CNE_ZMis_MissionServerBattlefieldList`, `CNC_ZMis_ZoneServerTransportGMCharacterToCharacter`, `CNC_ZMis_ZoneServerMailDeleteResult`, `CNC_CZ_ClientStrengthenItemResult`, `CNC_ZMis_ZoneServerWeddingsInfo`, `Perso / progression — 22/31 traites`, `CNE_ZMis_MissionServerNodeCreate`, `CNE_ZMis_MissionServerSendTargetLocation`, `CNC_ZMis_ZoneServerListDialogue`, `CNE_ZMis_MissionServerUpdatePKList`, `CNE_ZMis_MissionServerUpdatePlayerCard`, `SocialRepository`, `HousingHandlers.Register`, `OutBinStream.WriteFloat`, `Account`, `LoginServer (35 NCIDs)`, `CNE_ZM_MonsterServerMonsterDieReport`, `CharacterSummary`, `CNC_CZ_ClientEnterNodePlayerCard`, `Deplacement / monde — 14/17 traites`, `CNC_CL_ClientGetWorldServers`, `CNC_ZMis_ZoneServerFamilyTownMemberQuery`, `CNC_ZMis_ZoneServerMailSendResult`, `CNE_ZW_ZoneServerUpdateFortuneBag`, `CNC_MW_WorldServerItemMallMailCheckOK`, `CNC_CZ_ClientElfAdd`, `CNC_CZ_ClientLoverInfo`, `ZoneLoop`, `CNC_ZMis_ZoneServerDropItem`, `CNE_ZMis_ZoneServerStartColosseum`, `CNC_CZ_ClientMailList`, `OutBinStream.ToArray`, `CNC_CW_ClientGetWorldServers`, `CNC_CZ_ClientPlayerDestinyRoad`, `CNE_ZM_MonsterServerRegenerationReport`, `CNC_CZ_ClientPetLotteryEnd`, `CNC_ZMis_ZoneServerTransitionCommands`, `CNC_ZMis_ZoneServerTextExCmd`, `CNC_ZMis_MissionServerArrangeItem`, `CNC_ZM_ZoneServerSetRebornMonsterResult`, `CNC_ZMis_ZoneServerMessageList`, `CNC_ZM_MonsterServerModifyRebornMonster`, `CNC_CZ_ClientFamilyContainerData`, `CNE_DBA_ClientMissionState`, `Combat / sorts — 15/17 traites`, `CNE_ZMis_MissionServerFindCharacter`, `CNC_CZ_ClientEnterNodeElfContainer`, `CNC_CG_ClientGetMissionState`, `CNC_ZMis_ZoneServerGMToolGetInfo`, `CNE_ZM_MonsterServerModifyRebornMonster`, `CNC_ZMis_ZoneServerSearchInfo`, `CNC_CZ_ClientSpellFlyToLocation`, `CNC_ZMis_ZoneServerTerritoryJoin`, `CNC_CZ_ClientQueryPlayerCard`, `CNC_CZ_ClientSpellBlastToLocation`, `Audit qualité du code C# — 2026-10-20`, `CNE_ZMis_MissionServerTextExCmdRemoteWorld`, `CNE_ZMis_ZoneServerAuctionSellList`, `CNC_DBA_ClientChannelMsg`, `CNC_ZM_ZoneServerMessageToCharacter`, `CNC_CZ_ClientPlayerClassList`, `CNC_ZMis_ZoneServerLoverUpdate`, `CNC_ZMis_ZoneServerBattlefieldList`, `CNC_ZMis_ZoneServerMailRead`, `CNC_ZMis_ZoneServerTerritoryInfo`, `CNE_ZM_MonsterServerSetRebornMonster`, `CNE_ZMis_MissionServerMailSend`, `CNC_CZ_ClientMailRead`, `CNC_CZ_ClientTerritoryQuery`, `CNC_ZMis_ZoneServerPutItem`, `CNC_CZ_ClientUpdateCoolDown`, `CNC_ZMis_MissionServerCrossZone`, `CNE_ZMis_ZoneServerRankInfo`, `CNC_ZMis_ZoneServerAuctionCancelOK`, `CNE_ZMis_MissionServerBattlefieldJoin`, `CNE_DBA_ClientAllLover`, `CNC_ZMis_ZoneServerBuyBackGetItem`, `CNC_CZ_ClientVersusInstanceInfo`, `CNC_CZ_ClientChangeEquip`, `CNC_CZ_ClientSeeMob`, `CNC_DBA_ClientFastDress`, `CNC_ZM_ZoneServerRebornMonster`, `CNC_ZMis_ZoneServerReplyDialogue`, `CNC_ZMis_ZoneServerUpdateMissionState`, `CNE_ZMis_MissionServerItemMallMailSend`, `CNC_CZ_ClientEnterNodePlayerData`, `CNE_ZMis_ZoneServerBuyBackGetItem`, `CNE_ZMis_ZoneServerPutItem`, `CNE_ZMis_ZoneServerMailRead`, `CNC_CZ_ClientFamilyTownQuery`, `LiveMob`, `CNC_CZ_ClientLevelUp`, `CNC_CZ_ClientTeamInviteNotice`, `CNC_CZ_ClientUpdateZoneMonster`, `CNC_CZ_ClientModifyItemInfo`, `CNC_CZ_ClientFamilyStorageData`, `CNC_CZ_ClientVendorUpdateView`, `CNC_CZ_ClientDisplayDialogView`, `CNC_CZ_ClientBuyBackList`, `CNE_ZMis_MissionServerCrossZone`, `CNE_ZMis_MissionServerItemMallMailCheck`, `CNE_ZMis_MissionServerOnDialogueSelected`, `CNC_CZ_ClientEnterNodeElfInfo`, `CNC_CZ_ClientUpdateLottery`, `CNC_CZ_ClientPlayEffect`, `FortuneBagDef`, `CNC_CZ_ClientFamilyStoragePutItem`, `CNC_CZ_ClientUpdateElfMixElf`, `CNC_CG_ClientCharacter`, `CNE_ZMis_ZoneServerMailList`, `CNC_CZ_ClientLotteryResult`, `CNC_DBA_ClientAllFamily`, `CNC_CW_ClientQueryFamilyInfo`, `CNC_CZ_ClientLookElfPetEquip`, `CNC_CZ_ClientFamilyBattleInfo`, `CNC_ZMis_ZoneServerFamilyStorageLog`, `CNC_ZMis_ZoneServerMessageWriteResult`, `ZoneDamageMessage`, `CNC_DBA_ClientChangeFamily`, `CNC_ZMis_ZoneServerAuctionSellResult`, `CNC_ZMis_ZoneServerFamilyBattleInfo`, `CNC_ZMis_ZoneServerGMToolGetMission`, `CNC_ZMis_ZoneServerGreedyIslandInfo`, `CNC_ZMis_ZoneServerTextOutput`, `CNE_ZMis_MissionServerSendSystemMail`, `CNC_CG_ClientGetContainerItem`, `CNE_ZMis_ZoneServerGMToolGetInfo`, `CNE_DBA_ClientFastDress`, `CNC_CG_ClientDataTest`, `CNC_CZ_ClientAttrRefresh`, `CNC_CZ_ClientElfWorkResult`, `CNC_CZ_ClientTextOutputItem`, `CNC_CZ_ClientEnterNodePlayerRoom`, `CNC_CZ_ClientRoomData`, `CNC_ZMis_ZoneServerAuctionBuyList`, `CNC_CZ_ClientEvaluateInfo`, `CNC_ZMis_ZoneServerAuctionSellList`, `CNC_ZMis_MissionServerMailSend`, `CNC_DBA_ClientNewFamily`, `CNC_ZMis_ZoneServerStartBattlefield`, `CNC_ZMis_ZoneServerMailList`, `CNE_ZMis_MissionServerArrangeItem`, `CNE_ZMis_MissionServerBattleRoyaleClose`, `CNC_CZ_ClientRollTreasure`, `CNC_CW_ClientUpdateFriendMember`, `ProtocolAndSerializationTests.GatewayMessages_ShouldSerializeAndDeserializeCorrectly`, `ItemEntity`, `CNE_ZMis_ZoneServerBuyBackList`, `CNC_CZ_ClientHeroTrait`, `CNE_CZ_ZoneServerStrengthenItem`, `CNC_CZ_ClientDisplayChar`, `CNC_ZMis_ZoneServerStartVersusInstance`, `CNE_ZMis_MissionServerListDialogue`, `RESUME SESSION — lot5 + prompt5 (reprise contexte)`, `CNC_CZ_ClientPutItemIntoContainer`, `CNC_ZMis_ZoneServerRankInfo`, `CNC_CZ_ClientMessageList`, `CNC_CZ_ClientEnterNodeEquipAndSpell`, `CNC_CZ_ClientPutItemIntoInventory`, `CNC_CZ_ClientPutItemIntoStorage`, `CNC_CZ_ClientEnterNodeShortcut`, `CNC_CZ_ClientRankInfo`, `CNC_CZ_ClientPetLotteryResult`, `CNC_CZ_ClientSearchTeamInfoV2`, `CNC_CZ_ClientSeeChar`, `CNC_ZMis_ZoneServerAchievementUpdate`, `CNC_ZMis_ZoneServerBattlefieldEraseMember`, `CNC_ZMis_ZoneServerBattlefieldJoinResult`, `CNC_ZMis_ZoneServerCrossZoneResult`, `CNC_ZMis_ZoneServerFamilyStorageUpdate`, `CNC_ZMis_ZoneServerReturnTeamInviteeID`, `CNC_ZMis_ZoneServerBattlefieldChangeCharNum`, `CNC_ZMis_ZoneServerColosseumLeaveJoinResult`, `CNC_ZMis_ZoneServerMailGetItemOK`, `CNC_ZMis_ZoneServerTextOutputIndex`, `CNE_ZM_MonsterServerStartCharRegenerate`, `CNE_ZMis_MissionServerAddFamilyMessage`, `CNE_ZMis_MissionServerChannelMsg`, `CNE_ZMis_MissionServerCrossZoneRequest`, `CNC_ZMis_ZoneServerBuyBackList`, `CNE_ZMis_MissionServerGiveUpMission`, `CNE_ZMis_MissionServerPlayerCCDataSave`, `CNE_ZMis_MissionServerTextExCmdRemoteZone`, `CNC_CZ_ClientBattlefieldList`, `CNC_CZ_ClientDuelResult`, `CNC_CZ_ClientBattlefieldResult`, `CNE_DBA_ClientAllFamily`, `CNC_ZMis_MissionServerUpdatePlayerCard`, `CNC_ZMis_ZoneServerStartColosseum`, `CNC_CZ_ClientMissionStates`, `CNE_ZMis_MissionServerMobDieReport`, `CNE_CW_ServerLookingForGroup`, `CNC_ZMis_ZoneServerGreedyIslandJoin`, `CNC_CZ_ClientSeeTreasure`, `CNC_CZ_ClientTeamNewMemberInfo`, `CNC_ZMis_ZoneServerBuybackInitAllocate`, `CNC_ZMis_ZoneServerColosseumJoinResult`, `CNC_ZMis_ZoneServerEnterBattlefield`, `CNC_ZMis_ZoneServerReportID`, `CNC_ZMis_ZoneServerBattleCrusadeInfo`, `CNC_ZMis_ZoneServerColosseumModeUpdate`, `CNC_ZMis_ZoneServerResetNodeTimes`, `CNC_ZMis_ZoneServerTerritoryQuery`, `CNC_CZ_ClientBaseAttrRefresh`, `CNC_CZ_ClientFamilyInstanceData`, `CNC_CZ_ClientTeamCheckNotify`, `Méthodologie Opérationnelle — IA -> Reverse -> Recoder le Serveur`, `CNC_CZ_ClientUpdateEquipment`, `CNC_ZMis_ZoneServerQueryPlayerCard`, `CNC_DBA_ClientLotteryCount`, `CNC_ZMis_ZoneServerMailReceive`, `CNC_ZMis_ZoneServerMessageRead`, `ProcEffectReport`, `CNC_ZMis_ZoneServerUpdateNPCSymbols`, `CNC_ZMis_ZoneServerFamilyContainerUpdate`, `CNC_ZMis_ZoneServerUpdateRoom`, `CNE_ZMis_MissionServerCheckFamilyInvite`, `CNE_ZMis_ZoneServerAchievementUpdate`, `ChatMessage`, `CNE_ZMis_MissionServerColosseumClose`, `CNE_ZMis_MissionServerGetTeamInviteeID`, `CNE_ZM_MonsterServerRemoveRebornMonster`, `CNC_DBA_ClientFamilyAllMember`, `CNC_ZMis_ZoneServerColosseumQuery`, `CNC_CZ_ClientDisplayCharSimple`, `PlayerHandlers.Register`?**
-  _High betweenness centrality (0.181) - this node is a cross-community bridge._
+  _Cohesion score 0.0059214698808798686 - nodes in this community are weakly interconnected._
+- **Why does `NetCommand` connect `NetCommand` to `ZoneEntryFlow`, `ShopHandlers.Register`, `ZoneMessages.g.cs`, `CNC_CW_ClientUpdateFamilyMember`, `CNE_MW_MissionServerTextExCmdRemoteZone`, `CNC_CZ_ClientFamilyContainerPutItem`, `ZoneServer (871 NCIDs)`, `MissionServer (205 NCIDs)`, `Equipe / social — 31/53 traites`, `CNC_CZ_ClientAttrLevelRefresh`, `Inventaire / equipement — 46/58 traites`, `Commerce / echanges — 28/42 traites`, `Instances / PvP / events — 18/40 traites`, `MiscHandlers.Register`, `CNC_CZ_ClientChangeSpell`, `CNC_CZ_ClientMagicBoxResult`, `CNE_ZMis_ZoneServerSearchRoomResult`, `CNC_ZMis_ZoneServerSearchRoomResult`, `CNC_CZ_ClientColosseumQuery`, `CNC_CZ_ClientColosseumTeamInfo`, `CNE_CZ_ZoneServerItemUse`, `Feature-matrix protocole — generee par `tools/gen_feature_matrix.py``, `CNE_ZMis_MissionServerBattlefieldList`, `CNC_ZMis_ZoneServerTransportGMCharacterToCharacter`, `CNC_ZMis_ZoneServerMailDeleteResult`, `CNC_CZ_ClientSpellBlastOK`, `CNC_ZMis_ZoneServerWeddingsInfo`, `CNC_CZ_ClientStrengthenItemResult`, `CNE_ZMis_MissionServerNodeCreate`, `CNE_ZMis_MissionServerSendTargetLocation`, `CNC_ZMis_ZoneServerListDialogue`, `CNE_ZMis_MissionServerUpdatePKList`, `CNE_ZMis_MissionServerUpdatePlayerCard`, `Perso / progression — 22/31 traites`, `SocialRepository`, `HousingHandlers.Register`, `LoginServer (35 NCIDs)`, `CNE_ZM_MonsterServerMonsterDieReport`, `CharacterSummary`, `CNC_CZ_ClientEnterNodePlayerCard`, `Deplacement / monde — 14/17 traites`, `CNC_CL_ClientHello`, `CNC_ZMis_ZoneServerFamilyTownMemberQuery`, `CNC_ZMis_ZoneServerMailSendResult`, `CNE_ZW_ZoneServerUpdateFortuneBag`, `CNC_MW_WorldServerItemMallMailCheckOK`, `CNC_CZ_ClientElfAdd`, `CNC_CZ_ClientLoverInfo`, `ZoneLoop`, `CNC_CZ_ClientSwitchItemLocationOK`, `CNC_ZMis_ZoneServerDropItem`, `CNC_ZMis_MissionServerOnDialogueSelected`, `CNE_ZMis_ZoneServerStartColosseum`, `OutBinStream.ToArray`, `CNE_ZM_MonsterServerRegenerationReport`, `CNC_ZMis_ZoneServerTransitionCommands`, `CNC_ZMis_ZoneServerTextExCmd`, `CNC_ZM_ZoneServerSetRebornMonsterResult`, `CNC_ZMis_ZoneServerMessageList`, `CNC_CZ_ClientIdentifyItem`, `CNC_CZ_ClientFamilyContainerData`, `CNC_CZ_ClientTeamRecruitMsg`, `CNE_DBA_ClientMissionState`, `CNC_ZMis_MissionServerSendSystemMail`, `CNE_ZMis_MissionServerFindCharacter`, `CNC_CZ_ClientEnterNodeElfContainer`, `CNC_CG_ClientGetMissionState`, `CNC_ZMis_ZoneServerGMToolGetInfo`, `CNE_ZM_MonsterServerModifyRebornMonster`, `CNC_ZMis_ZoneServerSearchInfo`, `CNC_ZMis_ZoneServerTerritoryJoin`, `CNC_CZ_ClientQueryPlayerCard`, `CNC_CZ_ClientSpellBlastToLocation`, `Audit qualité du code C# — 2026-10-20`, `CNE_ZMis_MissionServerTextExCmdRemoteWorld`, `CNC_CZ_ClientTeamCheckNotify`, `CNC_DBA_ClientChannelMsg`, `CNC_ZM_ZoneServerMessageToCharacter`, `CNC_CZ_ClientPlayerClassList`, `CNC_ZMis_ZoneServerLoverUpdate`, `CNC_CL_ServerLoginAccount`, `CNC_ZMis_ZoneServerBattlefieldList`, `CNC_ZMis_ZoneServerMailRead`, `CNC_ZMis_ZoneServerTerritoryInfo`, `CNE_ZM_MonsterServerSetRebornMonster`, `CNE_ZMis_MissionServerMailSend`, `CNC_CZ_ClientTerritoryQuery`, `CNC_CZ_ClientMailRead`, `CNC_ZMis_ZoneServerPutItem`, `CNC_CZ_ClientUpdateCoolDown`, `OutBinStream.WriteLong`, `CNE_ZMis_ZoneServerRankInfo`, `CNC_ZMis_ZoneServerAuctionCancelOK`, `CNE_ZMis_MissionServerBattlefieldJoin`, `CNE_DBA_ClientAllLover`, `CNC_ZMis_ZoneServerBuyBackGetItem`, `CNC_CZ_ClientVersusInstanceInfo`, `CNC_CZ_ClientChangeEquip`, `CNC_CZ_ClientSeeMob`, `CNC_DBA_ClientFastDress`, `CNC_ZM_ZoneServerRebornMonster`, `CNC_ZMis_ZoneServerReplyDialogue`, `CNC_ZMis_ZoneServerUpdateMissionState`, `CNE_ZMis_MissionServerItemMallMailSend`, `CNC_CZ_ClientEnterNodePlayerData`, `CNE_ZMis_ZoneServerBuyBackGetItem`, `CNE_ZMis_ZoneServerPutItem`, `CNE_ZMis_ZoneServerMailRead`, `CNC_CZ_ClientFamilyTownQuery`, `LiveMob`, `CNC_CZ_ClientModifyItemInfo`, `CNC_CZ_ClientFamilyStorageData`, `CNC_CZ_ClientVendorUpdateView`, `CNC_CZ_ClientDisplayDialogView`, `CNC_CZ_ClientBuyBackList`, `CNE_ZMis_MissionServerCrossZone`, `CNE_ZMis_MissionServerItemMallMailCheck`, `CNE_ZMis_MissionServerOnDialogueSelected`, `CNC_CZ_ClientEnterNodeElfInfo`, `CNC_CZ_ClientUpdateLottery`, `CNC_CZ_ClientPlayEffect`, `FortuneBagDef`, `CNC_CZ_ClientFamilyStoragePutItem`, `CNC_ZMis_MissionServerMobDieReport`, `CNC_CZ_ClientBattleRoyaleInfo`, `CNC_CL_ClientGetWorldServers`, `CNC_CZ_ClientLotteryResult`, `CNC_CZ_ClientTradeAddItem`, `CNC_DBA_ClientAllFamily`, `CNC_CW_ClientQueryFamilyInfo`, `CNC_ZMis_MissionServerChannelMsg`, `CNC_CZ_ClientLookElfPetEquip`, `CNC_ZMis_ZoneServerFamilyStorageLog`, `CNC_ZMis_ZoneServerMessageWriteResult`, `ZoneDamageMessage`, `CNC_DBA_ClientChangeFamily`, `CNC_ZMis_ZoneServerAuctionSellResult`, `CNC_ZMis_ZoneServerFamilyBattleInfo`, `CNC_ZMis_ZoneServerGMToolGetMission`, `CNC_ZMis_ZoneServerGreedyIslandInfo`, `CNC_ZMis_ZoneServerTextOutput`, `CNE_ZMis_MissionServerSendSystemMail`, `CNC_CG_ClientGetContainerItem`, `CNE_ZMis_ZoneServerGMToolGetInfo`, `CNE_ZMis_ZoneServerQueryPlayerCard`, `CNE_DBA_ClientFastDress`, `CNC_CG_ClientDataTest`, `CNC_CZ_ClientAttrRefresh`, `CNC_CZ_ClientTextOutputItem`, `CNC_CZ_ClientEnterNodePlayerRoom`, `CNC_CZ_ClientRoomData`, `CNC_ZMis_ZoneServerAuctionBuyList`, `CNC_CZ_ClientEvaluateInfo`, `CNC_ZMis_ZoneServerAuctionSellList`, `CNE_ZMis_ZoneServerFamilyContainerUpdate`, `CNC_ZMis_MissionServerMailSend`, `CNC_DBA_ClientNewFamily`, `CNC_ZMis_ZoneServerStartBattlefield`, `CNC_ZMis_ZoneServerMailList`, `CNE_ZMis_MissionServerArrangeItem`, `CNE_ZMis_MissionServerBattleRoyaleClose`, `CNC_CZ_ClientRollTreasure`, `CNC_CZ_ClientPVPRankLookEquip`, `CNC_CW_ClientUpdateFriendMember`, `ProtocolAndSerializationTests.GatewayMessages_ShouldSerializeAndDeserializeCorrectly`, `ItemEntity`, `CNC_CZ_ClientHeroTrait`, `CNE_CZ_ZoneServerStrengthenItem`, `CNC_CZ_ClientDisplayChar`, `CNC_ZMis_ZoneServerStartVersusInstance`, `CNC_CZ_ClientUpdateRoom`, `CNE_ZMis_MissionServerListDialogue`, `RESUME SESSION — lot5 + prompt5 (reprise contexte)`, `CNC_CZ_ClientPutItemIntoContainer`, `CNC_ZMis_ZoneServerRankInfo`, `CNC_CZ_ClientEnterNodeEquipAndSpell`, `CNC_CZ_ClientPutItemIntoInventory`, `CNC_CZ_ClientPutItemIntoStorage`, `CNC_CZ_ClientRankInfo`, `CNC_CZ_ClientSeeChar`, `CNC_CZ_ClientPetLotteryResult`, `CNC_ZMis_ZoneServerAchievementUpdate`, `CNC_ZMis_ZoneServerBattlefieldEraseMember`, `CNC_ZMis_ZoneServerBattlefieldJoinResult`, `CNC_ZMis_ZoneServerCrossZoneResult`, `CNC_ZMis_ZoneServerFamilyStorageUpdate`, `CNC_ZMis_ZoneServerReturnTeamInviteeID`, `CNC_ZMis_ZoneServerBattlefieldChangeCharNum`, `CNC_ZMis_ZoneServerColosseumLeaveJoinResult`, `CNC_ZMis_ZoneServerMailGetItemOK`, `CNC_ZMis_ZoneServerTextOutputIndex`, `CNE_ZM_MonsterServerStartCharRegenerate`, `CNE_ZMis_MissionServerAddFamilyMessage`, `CNE_ZMis_MissionServerChannelMsg`, `CNE_ZMis_MissionServerCrossZoneRequest`, `CNC_ZMis_ZoneServerBuyBackList`, `CNE_ZMis_MissionServerGiveUpMission`, `CNE_ZMis_MissionServerPlayerCCDataSave`, `CNE_ZMis_MissionServerTextExCmdRemoteZone`, `CNC_CZ_ClientBattlefieldList`, `CNC_CZ_ClientLifeFloat`, `DuelTests.Emit`, `CNC_CZ_ClientBattlefieldResult`, `CNC_ZMis_MissionServerItemMallMailSend`, `CNC_ZMis_MissionServerUpdatePlayerCard`, `CNC_ZMis_ZoneServerStartColosseum`, `CNC_CZ_ClientMissionStates`, `CNE_ZMis_MissionServerMobDieReport`, `CNE_CW_ServerLookingForGroup`, `CNC_ZMis_ZoneServerGreedyIslandJoin`, `CNC_CZ_ClientSeeTreasure`, `CNC_CZ_ClientTeamNewMemberInfo`, `CNE_ZM_ZoneServerSetRebornMonsterResult`, `CNC_ZMis_ZoneServerBuybackInitAllocate`, `CNC_ZMis_ZoneServerColosseumJoinResult`, `CNC_ZMis_ZoneServerEnterBattlefield`, `CNC_ZMis_ZoneServerReportID`, `CNC_ZMis_ZoneServerBattleCrusadeInfo`, `CNC_ZMis_ZoneServerColosseumModeUpdate`, `CNC_ZMis_ZoneServerResetNodeTimes`, `CNC_ZMis_ZoneServerTerritoryQuery`, `CNC_CZ_ClientBaseAttrRefresh`, `CNE_CW_ServerIllPluginInfo`, `CNC_CZ_ClientFamilyInstanceData`, `Méthodologie Opérationnelle — IA -> Reverse -> Recoder le Serveur`, `CNC_CZ_ClientUpdateEquipment`, `CNC_ZMis_ZoneServerQueryPlayerCard`, `CNC_DBA_ClientLotteryCount`, `CNC_ZMis_ZoneServerMailReceive`, `CNC_ZMis_ZoneServerMessageRead`, `CNC_CZ_ClientSpellBlastToLife`, `ProcEffectReport`, `CNC_ZMis_ZoneServerUpdateNPCSymbols`, `CNC_ZMis_ZoneServerFamilyContainerUpdate`, `CNC_ZMis_ZoneServerUpdateRoom`, `CNE_ZMis_MissionServerCheckFamilyInvite`, `ChatMessage`, `CNC_CZ_ClientEnterNodeInventory`, `CNE_ZMis_MissionServerColosseumClose`, `CNE_ZMis_MissionServerGetTeamInviteeID`, `CNE_ZM_MonsterServerRemoveRebornMonster`, `CNC_DBA_ClientFamilyAllMember`, `CNC_ZMis_ZoneServerColosseumQuery`, `CNC_CZ_ClientDisplayCharSimple`, `ZoneServices`?**
+  _High betweenness centrality (0.159) - this node is a cross-community bridge._
 - **Are the 132 inferred relationships involving `BinReader` (e.g. with `GuildWindow.MockIfAsked()` and `VersionProtocol.ParseReply()`) actually correct?**
   _`BinReader` has 132 INFERRED edges - model-reasoned connections that need verification._
 - **Should `BinReader` be split into smaller, more focused modules?**
-  _Cohesion score 0.0066718995290423865 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0076073819027595805 - nodes in this community are weakly interconnected._

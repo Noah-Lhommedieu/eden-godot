@@ -47,8 +47,25 @@ Générateurs (`CSpellFactory::InitSpellTable` @0x08154a10) : 0 ToLife, 1 ToLoca
   de largeur R et demi-longueur L centrées sur le **lanceur** (pas le point visé : le point ne sert
   qu'à l'orientation). `+0xb0`/initialisation de `+0x68`/`+0x88..0x94` : champ SSpellData non résolu
   (**hypothesis** : portée de vol / bras max).
-- `+0x40 = (float)(u16 col28 × _DAT_0887b5b0)`. La constante n'est pas lisible dans l'export ; ses autres
-  usages (`x·c + c'`, `d ≤ r + c`) pointent vers 0,5 : **hypothèse**.
+- `+0x40 = (float)(u16 col28 × _DAT_0887b5b0)`. **Vérifié en .rodata** (binaire
+  `server_us/ZoneServer/ZoneServer` @0x0887b5b0) : c'est un **double** — valeur **0,5**.
+- Champs restants résolus le 2026-11-03 (constantes lues en .rodata/.data du binaire, rodata
+  vaddr 0x087af0c0) : `DAT_08894104` = **-0,5f** (centre du rect d'onde = milieu du segment couvert) ;
+  `_DAT_087b2754` = **1,0f** (une onde par tick) ; `DAT_088774d0` = **0,1f** ; `DAT_08896ac8` = **π/2**
+  (rotation des bras) ; `DefaultFlySpeed` = 40, `MovingHitUpdateTime` = 1
+  → `MovingHitUpdateFlySpeed` = **4,0**.
+- Direction : `SSpellData+0xb0` = `flySpeed(+0xa8) × clamp(+0xac/+0xa8, 0,1, 10)` (`SSpellData::Init`
+  @0x084eecf0) = longueur d'onde ; `+0x68` = `distance / +0xb0` (ticks restants) initialisé par
+  `NotifyBlastToSelf` @0x084f6070 — la distance est `L + trunc(mod/2)` **plafonnée par
+  `CheckLineOfMoveUntilBlock`** (obstacles, pas 0,4).
+- Croix : `+0x9c` = même formule `(L + trunc(mod/2)) / +0xa0` ; `+0xa0` = `MovingHitUpdateFlySpeed` ;
+  `+0x88..0x94` = distance lanceur→pointe de chaque bras après `CheckLineOfMoveUntilBlock`
+  (NotifyBlastToSelf @0x084f40c0) ; `+0x58..0x84` = pointes 3D des 4 bras (axe tourné 0/90/180/270°).
+- Gate spécifique cercle (`HitTest` @0x084f9300) : l'énumération est **sautée quand +0x1a == -91**
+  (spec « toute entité ») — zéro victime d'AoE malgré la spec permissive.
+- Rayon cercle natif exact : `R(+0x48) + trunc(mod/2)` où `trunc(mod/2)` est écrit
+  `(mod + ((mod>>15)&1)) >> 1` — équivalent à `mod/2` entier ; le cercle PBAoE
+  (`CSpellToNowhere::HitTest` @0x084fab70) utilise au contraire le mod **entier** + R.
 
 ## 2. Bugs client corrigés
 
@@ -69,13 +86,15 @@ Voir le rapport de session (captures `artifacts/` et journaux) ; commandes :
 
 ## 4. Non fait / à vérifier
 
-- Géométrie serveur des formes 2/5/6 : approximation circulaire conservée (`SpellSplashAsync`,
-  `ApplyAreaSpellAsync`, `ZoneEntryFlow.Combat.Spells.Resolution.cs`). Spécification exacte
-  désormais décodée en §1 : secteur = cône (sommet lanceur, longueur L, demi-angle asin(min(R,L)/L)) ;
-  direction = bande largeur 2R sur l'axe (onde balayée native, l'union statique est une bonne
-  approximation) ; croix = deux bandes perpendiculaires largeur R, demi-longueur L, **centrées sur le
-  lanceur**. Champs restants à résoudre avant portage : `+0xb0` (longueur de l'onde), `+0x68` (distance
-  restante), `+0x88..0x94` (plafonds de bras) — initialisés hors HitTest (Create/Init du spell).
+- ~~Géométrie serveur des formes 2/5/6~~ : **PORTÉE — verified (2026-11-03)**.
+  `Eden.Zone/Combat/SpellAreaGeometry.cs` + dispatch dans `SpellSplashAsync`/
+  `ApplyAreaSpellAsync` : cercle exact (R + trunc(mod/2), gate spec -91), secteur = cône
+  (sommet lanceur, L = col28×0,5 vérifié, demi-angle asin(min(R,L)/L), sans mod), direction =
+  bande 2R du lanceur (longueur L + trunc(mod/2)), croix = 4 bras largeur R, demi-longueur
+  L + trunc(mod/2) **centrés sur le lanceur**. Tous les champs §1 résolus (rodata).
+  Tests : `Eden.Tests/SpellAreaGeometryTests.cs` — 19 cas verts. Limites documentées :
+  plafonds d'obstacles (`CheckLineOfMoveUntilBlock`) non portés ; onde temporelle remplacée
+  par l'union statique ; paquet visuel `ClientSpellFlyToLocation` (546) non émis aux témoins.
 - Pose exacte pendant l'incantation : le natif ne la fait pas apparaître dans les données (le client natif
   n'a pas de symboles). Choix actuel : stance de locomotion + glyphe de cast + barre ; **hypothèse**.
 - Rotation du glyphe de **visée** selon l'axe pour les formes directionnelles : non faite (le glyph

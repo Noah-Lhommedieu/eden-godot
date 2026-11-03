@@ -269,14 +269,21 @@ public partial class ChannelSelectScreen : Control
         };
         if (_worldList.ItemCount > 0)
         {
-            // Préfère le dernier monde utilisé (LastWorldId natif).
-            var pick = 0;
+            // Préfère le dernier monde utilisé (LastWorldId natif) ;
+            // repli = premier item non désactivé (pas forcément 0).
+            var pick = -1;
             for (var i = 0; i < _worldList.ItemCount; i++)
                 if ((short)(int)_worldList.GetItemMetadata(i) ==
                     worlds.LastWorldId && !_worldList.IsItemDisabled(i))
                     pick = i;
-            _worldList.Select(pick);
-            _channelList.Select(pick);
+            if (pick < 0)
+                for (var i = 0; i < _worldList.ItemCount; i++)
+                    if (!_worldList.IsItemDisabled(i)) { pick = i; break; }
+            if (pick >= 0)
+            {
+                _worldList.Select(pick);
+                _channelList.Select(pick);
+            }
         }
 
         _error = new Label { Visible = false };
@@ -295,7 +302,9 @@ public partial class ChannelSelectScreen : Control
     {
         if (_worldList != null && _worldList.ItemCount > 0 &&
             _worldList.GetSelectedItems().Length == 0)
-            _worldList.Select(0);
+            for (var i = 0; i < _worldList.ItemCount; i++)
+                if (!_worldList.IsItemDisabled(i))
+                { _worldList.Select(i); break; }
         OnConfirm();
     }
 

@@ -96,9 +96,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SpellFx.cs": {
-    "mtime": 1793735738.8588054,
-    "seen": 1793736253.0475328,
-    "ast_hash": "06961a6646761673ffb2e320f540c5d4",
+    "mtime": 1793736856.867063,
+    "seen": 1793737617.2571685,
+    "ast_hash": "272f9940d1db492757d97fc524f4ca23",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/TreasurePickup.cs": {
@@ -10698,9 +10698,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NiParticleRuntime.cs": {
-    "mtime": 1793729144.5559676,
-    "seen": 1793730799.7810411,
-    "ast_hash": "af80921e7a4c0a9b3fb2a699a7fa6b59",
+    "mtime": 1793736925.559564,
+    "seen": 1793737617.2574854,
+    "ast_hash": "5bcc6f3577e911f2198c5b1ad5b60c4f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NifMaterial.cs": {
@@ -10746,9 +10746,9 @@
     "semantic_hash": ""
   },
   "src/Eden.Core/Fx/NifParticleMapper.cs": {
-    "mtime": 1793584024.4732141,
-    "seen": 1793586197.6979592,
-    "ast_hash": "4b25d8b7b74e1940e0c9535fcd931d66",
+    "mtime": 1793736848.348146,
+    "seen": 1793737617.2591736,
+    "ast_hash": "ffe74af8f6eaf80fcc817d31ab7ad64a",
     "semantic_hash": ""
   },
   "src/Eden.Core/Fx/ParticleRenderData.cs": {
@@ -10812,9 +10812,9 @@
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/NifParticleMapperTests.cs": {
-    "mtime": 1793584945.2484572,
-    "seen": 1793586197.6981182,
-    "ast_hash": "21e570fa3a25d4ce1c7ffdd8bce147d1",
+    "mtime": 1793737388.968119,
+    "seen": 1793737617.2593272,
+    "ast_hash": "83659e186fa4fc4108d494109982e6c3",
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/ParticleSimTests.cs": {

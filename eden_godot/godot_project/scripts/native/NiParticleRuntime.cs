@@ -1,6 +1,7 @@
 using EdenClient.Fx;
 using EdenClient.World;
 using Godot;
+using Matrix4x4 = System.Numerics.Matrix4x4;
 using Vector3 = System.Numerics.Vector3;
 
 namespace EdenClient.Native;
@@ -20,14 +21,35 @@ internal sealed class NiParticleRuntime : IFxDriver
     readonly bool _world, _sort;
     Transform3D _frame, _frameInv;
     bool _frameSet;
+    // Émetteur mesh skinné : re-posé par frame depuis les Skeleton3D
+    // (r014/r253 — sinon les particules restent en pose de bind).
+    readonly EmitterSkin? _skin;
+    readonly SkinBind[]? _bind;
+    readonly Matrix4x4[]?[]? _bw;
+
+    /// <summary>Skeleton3D + indices d'os résolus pour un sous-mesh skinné.</summary>
+    sealed class SkinBind
+    {
+        public Skeleton3D Sk = null!;
+        /// <summary>Index d'os dans <see cref="Sk"/>, parallèle à Part.BoneSkin (−1 = non trouvé).</summary>
+        public int[] Bones = Array.Empty<int>();
+        /// <summary>BindWorld NIF par os : repli quand Bones[k] < 0 (sommet gardé en bind).</summary>
+        public Matrix4x4[] Fallback = Array.Empty<Matrix4x4>();
+    }
+
+    /// <summary>EDEN_FX_SKIN=0 : émetteurs cuits en bind (comportement avant fix, preuve A/B).</summary>
+    static readonly bool s_skinOn =
+        System.Environment.GetEnvironmentVariable("EDEN_FX_SKIN") != "0";
 
     public int Count => _sim.Count;
     public ParticleSim Sim => _sim;
 
     NiParticleRuntime(NativeFxHost host, NifParticleSystem ps, NifParticleMapper.Result map,
-        Node3D node, MultiMeshInstance3D mmi, MultiMesh mm, bool sort)
+        Node3D node, MultiMeshInstance3D mmi, MultiMesh mm, bool sort,
+        EmitterSkin? skin, SkinBind[]? bind, Matrix4x4[]?[]? bw)
     {
         _host = host; _ps = ps; _node = node; _mmi = mmi; _mm = mm; _sort = sort;
+        _skin = skin; _bind = bind; _bw = bw;
         _world = !map.Def.LocalSpace;
         _sim = new ParticleSim(map.Def, host.Options.Seed + (uint)ps.Block * 7919u);
         _buf = new float[Math.Max(1, map.Def.MaxCount) * 16];
@@ -82,7 +104,75 @@ internal sealed class NiParticleRuntime : IFxDriver
             TopLevel = !map.Def.LocalSpace,
         };
         node.AddChild(mmi);
-        return new NiParticleRuntime(host, ps, map, node, mmi, mm, NativeFx.BlendMode(al) == 2);
+        var (skin, bind, bw) = BindSkin(host, ps, map);
+        return new NiParticleRuntime(host, ps, map, node, mmi, mm, NativeFx.BlendMode(al) == 2,
+            skin, bind, bw);
+    }
+
+    /// <summary>Résout les sous-meshes d'émetteur skinnés vers le Skeleton3D de l'arbre.
+    /// La Skin du MeshInstance3D caché énumère les os dans l'ordre de Part.BoneBlocks
+    /// (binds posés par NifScene) — exact même sous des noms NIF dupliqués ; repli :
+    /// os par nom dans les Skeleton3D de la racine.</summary>
+    static (EmitterSkin? Skin, SkinBind[]? Bind, Matrix4x4[]?[]? Bw) BindSkin(
+        NativeFxHost host, NifParticleSystem ps, NifParticleMapper.Result map)
+    {
+        if (!s_skinOn || map.Skin is not { } es || es.Parts.Count == 0 ||
+            map.Def.Emitter.MeshPoints == null)
+            return (null, null, null);
+        var bind = new SkinBind[es.Parts.Count];
+        var bw = new Matrix4x4[es.Parts.Count][];
+        var invPs = Matrix4x4.Invert(ps.BindWorld, out var ips) ? ips : Matrix4x4.Identity;
+        var verts = 0;
+        for (var i = 0; i < es.Parts.Count; i++)
+        {
+            var b = ResolveSkin(host, es.Parts[i], invPs);
+            if (b == null) { host.Report.Note("mesh-emitter-skin-unresolved"); continue; }
+            bind[i] = b;
+            bw[i] = new Matrix4x4[b.Bones.Length];
+            verts += es.Parts[i].LocalVerts.Length;
+        }
+        if (verts == 0) return (null, null, null);
+        if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "1")
+            GD.Print($"[psdiag] émetteur skinné : {verts} sommets, {bind.Count(x => x != null)}/{bind.Length} sous-meshes");
+        return (es, bind, bw);
+    }
+
+    static SkinBind? ResolveSkin(NativeFxHost host, EmitterSkin.Part p, Matrix4x4 invPs)
+    {
+        Skeleton3D? sk = null;
+        int[]? bones = null;
+        if (host.NodeOf(p.MeshBlock) is MeshInstance3D mi && mi.Skin is { } res &&
+            ((sk = mi.GetParent() as Skeleton3D) != null ||
+             (sk = mi.GetNodeOrNull(mi.Skeleton) as Skeleton3D) != null))
+        {
+            bones = new int[p.BoneBlocks.Length];
+            var nb = res.GetBindCount();
+            for (var k = 0; k < bones.Length; k++)
+                bones[k] = k < nb ? sk!.FindBone(res.GetBindName(k)) : -1;
+        }
+        if (bones == null || bones.All(b => b < 0))
+        {
+            bones = new int[p.BoneBlocks.Length];
+            foreach (var s in host.Root.FindChildren("*", "Skeleton3D", true, false).Cast<Skeleton3D>())
+            {
+                var any = false;
+                for (var k = 0; k < p.BoneBlocks.Length; k++)
+                {
+                    var nm = host.Nif.AvByBlock.TryGetValue(p.BoneBlocks[k], out var av) ? av.Name : "";
+                    bones[k] = nm.Length > 0 ? s.FindBone(nm) : -1;
+                    any |= bones[k] >= 0;
+                }
+                if (any) { sk = s; break; }
+            }
+        }
+        if (sk == null || bones.All(b => b < 0)) return null;
+        // Os non résolu : bw = BindWorld × inv(ps.BindWorld) — le sommet
+        // garde exactement la pose de bind cuite au mapping (chemin historique).
+        var fb = new Matrix4x4[p.BoneBlocks.Length];
+        for (var k = 0; k < fb.Length; k++)
+            fb[k] = (host.Nif.AvByBlock.TryGetValue(p.BoneBlocks[k], out var av)
+                ? av.BindWorld : Matrix4x4.Identity) * invPs;
+        return new SkinBind { Sk = sk, Bones = bones, Fallback = fb };
     }
 
     static void Diag(NifParticleSystem ps, NifTexturingProperty? tex, NifAlphaProperty? al, MatState st)
@@ -131,8 +221,37 @@ internal sealed class NiParticleRuntime : IFxDriver
             var nodeG = _node.IsInsideTree() ? _node.GlobalTransform : _node.Transform;
             _sim.EmitterTransform = NativeFx.ToMatrix(_frameInv * nodeG);
         }
+        Reskin();
         _sim.Step(dt);
         FillBuffers();
+    }
+
+    /// <summary>Re-pose les sous-meshes d'émetteur skinnés dans l'espace du
+    /// nœud psys : v = lv × BoneSkin × monde(os) × inv(monde psys) — les
+    /// naissances suivent la pose animée (flammes aux pattes/queue r014/r253).
+    /// bw[k] = Rm(monde psys⁻¹ × monde os) ; en ligne : BoneSkin × bw.</summary>
+    void Reskin()
+    {
+        if (_skin == null || _bind == null || _bw == null) return;
+        var e = _sim.Def.Emitter;
+        if (e.MeshPoints is not { } pts) return;
+        var nodeG = _node.IsInsideTree() ? _node.GlobalTransform : _node.Transform;
+        var inv = NativeFx.ToMatrix(nodeG.AffineInverse());
+        for (var i = 0; i < _bind.Length; i++)
+        {
+            var b = _bind[i];
+            if (b == null) { _bw[i] = null; continue; }
+            var bw = _bw[i]!;
+            var sg = b.Sk.IsInsideTree() ? b.Sk.GlobalTransform : b.Sk.Transform;
+            for (var k = 0; k < b.Bones.Length; k++)
+            {
+                var bi = b.Bones[k];
+                bw[k] = bi >= 0
+                    ? NativeFx.ToMatrix(sg * b.Sk.GetBoneGlobalPose(bi)) * inv
+                    : b.Fallback[k];
+            }
+        }
+        _skin.Reskin(_bw, pts, e.MeshNormals);
     }
 
     void FillBuffers()

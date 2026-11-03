@@ -2,13 +2,15 @@
 
 Version testée : Godot 4.8.beta2.mono, client `eden_godot`, corpus
 `corpus/fr-full` uniquement. Date : 2026-11-03 (build + NetTests 828 /
-Eden.Core.Tests 960 / Eden.Tests 1471 verts le 2026-11-03 soir, captures
-r014-fix2). Graphe + tests NetTests/Eden.Core à jour au moment de la
+Eden.Core.Tests 966 / Eden.Tests 1471 verts le 2026-11-03 nuit, captures
+skinfix-off/on). Graphe + tests Eden.Core à jour au moment de la
 rédaction.
 Revue visuelle du 2026-11-04 (sweep 58/58 OK, captures cam90+cam270,
 correction VfsReadGuardTests) reportée dans le tableau ci-dessous.
 Session 2026-11-03 soir : fix boucle caméra ride-debug (`_faceBase`),
 diagnostic émetteurs skinnés bind-posés (r014/r253), alpha M609 vérifié.
+Session 2026-11-03 nuit : **fix émetteurs skinnés livré** (`EmitterSkin`
++ `NiParticleRuntime.Reskin`, A/B `EDEN_FX_SKIN`), captures skinfix-off/on.
 Anomalies tranchées le 2026-11-03 : halos r014 (émissif non texturé →
 fix shader `NativeFx`), badge épée type ≠ 0 (type 1 = montures à
 sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
@@ -31,6 +33,7 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
 | Badge épée « monture de combat » sur l'icône d'item : `AttackIcon` de `uidata/imagesets/main.imageset` (177,288,18×18), affiché si `UseEnchantId` → 2134 **type ≠ 0** (`MountCombatRules.IsCombatRide`) — couvre les montures à sorts type 1 (10 enchants, toutes avec 2140) comme les type 2 | verified (natif + tests) | `InventoryWindow.ItemCell` ; natif : `CEC_Ride::SetState` (zone @0x0854f330) stocke var3 en char+0x824 relu `≠0` par `ISpell::CastTest` @0x084f08c3 (0 → dismount à l'engage) ; client `FUN_00778660` teste l'octet ride `≠0` ; serveur `RideType != 0` — capture HUD à faire |
 | FX monture : les halos visibles (queues dorées r253, flammes r014, lueur rouge r260, néons r262) viennent des **matériaux émissifs + particules du NIF**, `NativeFxHost` compté = 0 sur les 58 montures du sweep. **R260–262 ne sont PAS des nuages noirs** (hypothèse corrigée) : r260 = scorpion rouge, r261/r262 = voitures | verified (captures) | `artifacts/ride-lab/fx/` ; anomalie ci-dessous |
 | Sweep complet hors archive | verified (2026-11-04) | `artifacts/mount-sweep-lab2/results.tsv` : 90 lignes TSV = **58 rideKeys uniques**, 58 OK / **0 FAIL**, `notex=0` partout ; seule note `noMove` sur r711 (natif) — les 29 faux FAIL `notex` passent tous |
+| Particules émetteurs mesh **skinnés** re-posées par frame (`EmitterSkin` pur + `NiParticleRuntime.Reskin`, pose `Skeleton3D`/`AnimationPlayer`) — émetteurs rigides inchangés | verified (tests + **captures A/B 2026-11-03**) | Eden.Core.Tests +5 (966 verts, coût 3,5–24 µs/psys) ; `artifacts/ride-lab/skinfix-{off,on}/` r014+r253 `STAND:1,W:1,A:1` |
 | VfsReadGuardTests | verified (2026-11-04) | `RideLab` (StreamReader/DirectoryInfo) et `RideProbe` (DirectoryInfo) n'utilisent plus les API plafonnées — fichiers de contrôle `/tmp`/TSV, pas de donnée corpus ; test 2/2 vert |
 
 ## Points non prouvés / limites
@@ -83,29 +86,47 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
   `2152`/`7003`/`2034` hors stats (chaîne runtime / tag formule).
   `verified` pour 3024/2055 (sémantique native tracée), `not done`
   pour le port du heal-à-la-pose.
-- **Particules monture « mal placées » (r014, r253) — cause racine
-  tranchée (2026-11-03)** : l'émetteur `NiPSysMeshEmitter` prélève des
-  meshes **skinnés**, mais `NifParticleMapper.BuildEmitter`
-  (`src/Eden.Core/Fx/NifParticleMapper.cs:164-176`) cuit une fois les
-  `sh.Vertices` = **pose de bind** ; `ParticleSim`/`NiParticleRuntime`
-  ne re-skinnent jamais (EmitterTransform = un seul repère, celui du
-  nœud psys). Mesure CPU `KfPose` (skin 4 poids, `r014.kf`/`r253.kf`) :
-  r014 `Editable Mesh` #114 (os L/R Foot+Hand+Tail04) écart bind→posé
-  **moy. 0,47 m / max 2,21 m en stand01**, 0,94–1,93 m en move01/02 ;
-  r253 pattes #384/#505/#491/#498 **moy. 0,24–1,06 m**, queues #360
-  0,95–2,12 m, corps #331 0,67–2,23 m → en marche/strafe les flammes
-  et lueurs restent collées aux positions bind (~0,5–1 m à côté des
-  membres animés, jusqu'à ~2,2 m aux pointes de queue).
-  **Pas un bug d'attache** : le psys suit bien son parent NIF
-  (`PArrayNN-Emitter`, sous `@` #211 r253 / Scene Root r014 — nœud
-  gizmo statique, normal) ; `L17` n'est parent d'aucun psys — c'est
-  l'os de **selle cavalier** (déjà animé via KF, cf. ligne 19). Le fix
-  = émetteur skinné par frame (`KfPose`-équivalent ou os dominant pour
-  les meshes mono-os, ex. pattes r253) — porte sur `Eden.Core` +
-  `NiParticleRuntime`, hors périmètre d'édition de cette tâche.
-  Statut : `verified` (structure + mesures ; captures
-  `artifacts/ride-lab/m2/` : flammes r014 sur corps en stand car
-  idle≈bind, détachement non visible à l'arrêt).
+- ~~**Particules monture « mal placées » (r014, r253)**~~ **CORRIGÉ
+  (2026-11-03)** : l'émetteur `NiPSysMeshEmitter` prélève des meshes
+  **skinnés** que `NifParticleMapper.BuildEmitter` cuisait une fois en
+  pose de bind. Mesures d'écart bind→posé (CPU `KfPose`, 4 poids) :
+  r014 mesh #114 moy. 0,47 m / max 2,21 m en `stand01` ; r253 pattes
+  0,24–1,06 m, queue 0,95–2,12 m, corps 0,67–2,23 m. **Pas un bug
+  d'attache** (psys sous gizmo statique `PArrayNN-Emitter`, `L17` =
+  selle). **Fix livré** :
+  - `NifParticleMapper` émet `Result.Skin` (`EmitterSkin`) pour tout
+    shape d'émetteur `sh.Skin != null` : verts/normales locaux skin,
+    top-4 joints/poids, `BoneSkin` (espace skin→os, NiSkinData),
+    `BaseVertex` dans `MeshPoints`. Émetteurs rigides : `Skin = null`,
+    chemin historique inchangé.
+  - `EmitterSkin.Reskin(bw, pts, nrms)` (pur C#) re-pose par frame :
+    `v = lv × BoneSkin × bw` en row-vector, identique à `KfPose.Skin` ;
+    `bw[k]` = transform monde de l'os exprimé dans l'espace du nœud
+    psys. Entrée `null` → le sous-mesh garde la pose de bind cuite.
+  - `NiParticleRuntime` : `BindSkin`/`ResolveSkin` mappe `Part.MeshBlock`
+    → `MeshInstance3D` caché → son `Skin`/`Skeleton3D` (ordre des binds
+    = `BoneBlocks`, exact sous noms NIF dupliqués), repli os-par-nom ;
+    `Reskin()` par frame avant `Sim.Step` calcule
+    `bw[k] = Rm(monde os × inv monde psys)` via `GetBoneGlobalPose` —
+    pose lue du vrai `Skeleton3D` animé par `AnimationPlayer`, thread
+    principal. Os non résolu : `bw = BindWorld × inv(ps.BindWorld)` =
+    repli exact de la pose de bind.
+  - A/B : `EDEN_FX_SKIN=0` = comportement avant fix ;
+    `EDEN_FX_DIAG=1` = diag `[psdiag] émetteur skinné : N sommets`.
+  - **Preuves** : tests Eden.Core (+5, 966 verts) — blend 2 os, sous-mesh
+    null → bind, bind-pose NIF r014+r253 retombe sur les sommets cuits
+    (écart max ≤ 9 mm, résidu NiSkinData global transform),
+    naissances `ParticleSim` suivent un mesh posé à +100 Y, coût
+    3,5–24 µs/psys (r253, 81–409 verts, min-of-batches — ~73 µs total
+    par monture) ≪ budget 500 µs. Captures A/B `tools/ride-lab.sh`
+    `STAND:1,W:1,A:1` : `artifacts/ride-lab/skinfix-{off,on}/` —
+    r014 (14010) W/A : le nuage de flamme détaché au sol disparaît,
+    les flammes suivent queue relevée + pattes ; r253 (25310) : écart
+    visible en W/A (sous-pattes/poitrine), `stand01` ≈ bind donc subtil.
+  - Statut : `VISUALLY_VALIDATED` + `PERFORMANCE_VALIDATED` (bench
+    intégré au test). Limite : non vérifié sur montures à skin non
+    résolu au runtime (repli bind prouvé par test, pas en capture) ;
+    parité oracle client natif reste `hypothesis`.
 - **Alpha « Germe Fétide » (mob 58160 → `M609`) — déjà correct, aucun
   patch requis (2026-11-03)** : chaîne `t_monster` 58160 → `c_monster`
   M609010 → `monsterlist` `m609.kfm`/M60901.dds. L'unique shape

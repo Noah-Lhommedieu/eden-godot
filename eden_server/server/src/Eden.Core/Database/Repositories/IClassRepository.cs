@@ -7,6 +7,9 @@ public interface IClassRepository
     Task<IReadOnlyList<ClassProgressEntity>> GetClassesByCharacterIdAsync(int characterId);
     Task<ClassProgressEntity?> GetClassProgressAsync(int characterId, int classId);
     Task<int> AddClassAsync(int characterId, int classId);
+    /// <summary>Migration KB-04 : éveillées historiques lv1/aa1 → 80/80
+    /// (idempotent). Retourne le nombre de lignes corrigées.</summary>
+    Task<int> PromoteAwakenedAsync();
     Task<bool> ChangeClassAsync(int characterId, int newClassId);
     Task AddClassExpAsync(int characterId, int classId, long expGain);
     /// <summary>+N aa_point sur le pool de la classe COURANTE

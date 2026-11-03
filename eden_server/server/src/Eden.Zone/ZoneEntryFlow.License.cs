@@ -79,7 +79,7 @@ public sealed partial class ZoneEntryFlow
                 await session.SendAsync(new CNC_CZ_ClientTextOutputIndex
                 {
                     Field1 = (short)LicenseService.ErrorOverCapacity,
-                    Field2 = LicenseService.CapacityFor(st.Level).ToString(),
+                    Field2 = LicenseService.DisplayedCapacityFor(st.Level).ToString(),
                 }, token);
             }
             // Les enchants des slots ont changé → stats à jour
@@ -108,7 +108,7 @@ public sealed partial class ZoneEntryFlow
             await session.SendAsync(new CNC_CZ_ClientTextOutputIndex
             {
                 Field1 = (short)LicenseService.ErrorOverCapacity,
-                Field2 = LicenseService.CapacityFor(st.Level).ToString(),
+                Field2 = LicenseService.DisplayedCapacityFor(st.Level).ToString(),
             }, token);
         }
     }

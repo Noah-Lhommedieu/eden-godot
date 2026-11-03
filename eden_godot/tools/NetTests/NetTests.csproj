@@ -19,6 +19,7 @@
     <Compile Include="..\..\godot_project\scripts\combat\MotionTable.cs" />
     <Compile Include="..\..\godot_project\scripts\combat\CombatFx.cs" />
     <Compile Include="..\..\godot_project\scripts\combat\CastLock.cs" />
+    <Compile Include="..\..\godot_project\scripts\combat\SpellZone.cs" />
     <Compile Include="..\..\godot_project\scripts\scene\SceneBubbleLogic.cs" />
     <Compile Include="..\..\godot_project\scripts\scene\MonsterActionAnim.cs" />
     <Compile Include="..\..\godot_project\scripts\scene\CinemaTimeline.cs" />

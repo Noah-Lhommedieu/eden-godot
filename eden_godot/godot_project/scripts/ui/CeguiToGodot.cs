@@ -206,6 +206,7 @@ public sealed class UiTextureCache
             {
                 Atlas = atlas,
                 Region = new Rect2(rr.X, rr.Y, rr.W, rr.H),
+                FilterClip = true,   // pas de liseré des régions voisines de l'atlas
             };
         }
         _regions[key] = at;

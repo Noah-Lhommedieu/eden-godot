@@ -156,10 +156,14 @@ public class LicenseTests
     [Fact]
     public void LicenseService_Capacity_UsesCharLevel()
     {
-        // `lv/10 + 2` (= nombre du texte 0x325), plafonné aux 7 slots.
-        Assert.Equal(2, LicenseService.CapacityFor(9));
-        Assert.Equal(3, LicenseService.CapacityFor(10));
+        // KB-18 : règle native `lv/10 + 1` (SetCurrentClassLicense
+        // @0x082714f0 : refus si lv/10+1 <= occupés), plafonnée à 7 ;
+        // le `lv/10 + 2` du texte 0x325 n'est que l'affichage.
+        Assert.Equal(1, LicenseService.CapacityFor(9));
+        Assert.Equal(2, LicenseService.CapacityFor(10));
         Assert.Equal(7, LicenseService.CapacityFor(70));
+        Assert.Equal(2, LicenseService.DisplayedCapacityFor(9));
+        Assert.Equal(3, LicenseService.DisplayedCapacityFor(10));
     }
 
     [Fact]
@@ -210,10 +214,10 @@ public class LicenseTests
         await repo.AddLicenseAsync(1, unchecked((short)33274), 0);
         await svc.LoadAsync(1);
 
-        // Niveau 9 → capacité 2 : la 3e sélection est rejetée (0x325)
+        // Niveau 19 → capacité 2 : la 3e sélection est rejetée (0x325)
         // MAIS la boucle continue (natif : erreur par sélection).
         var (err, changed) = await svc.SetCurrentClassLicenseAsync(1,
-            9, new[] { (unchecked((short)33272), (byte)1),
+            19, new[] { (unchecked((short)33272), (byte)1),
                        (unchecked((short)33273), (byte)2),
                        (unchecked((short)33274), (byte)3) });
         Assert.Equal(LicenseService.ErrorOverCapacity, err);

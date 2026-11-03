@@ -59,8 +59,7 @@ public static class ProfileStatEmitter
     {
         var lvl = s.GameData.Levels
             .FirstOrDefault(l => l.Level == Math.Max(level, 1));
-        var cdef = s.GameData.Classes.FirstOrDefault(c =>
-            c.Id == raceId * 100 + classId || c.Id == classId);
+        var cdef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(s.GameData.Classes, raceId, classId);
         if (lvl == null) return (10, 10, 10, 10, 10, 300, 150);
         var pct = cdef?.StatPercents ?? new int[9];
         int Pct(int i) => i < pct.Length && pct[i] > 0 ? pct[i] : 100;
@@ -93,8 +92,7 @@ public static class ProfileStatEmitter
     {
         var lvl = s.GameData.Levels
             .FirstOrDefault(l => l.Level == Math.Max(level, 1));
-        var cdef = s.GameData.Classes.FirstOrDefault(c =>
-            c.Id == raceId * 100 + classId || c.Id == classId);
+        var cdef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(s.GameData.Classes, raceId, classId);
         if (lvl == null) return (400, 200);
         var pct = cdef?.StatPercents ?? new int[9];
         int Pct(int i) => i < pct.Length && pct[i] > 0 ? pct[i] : 100;
@@ -159,8 +157,7 @@ public static class ProfileStatEmitter
     {
         var lvlRow = s.GameData.Levels
             .FirstOrDefault(l => l.Level == Math.Max(charLevel, 1));
-        var cls = s.GameData.Classes.FirstOrDefault(c =>
-            c.Id == raceId * 100 + classId || c.Id == classId);
+        var cls = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(s.GameData.Classes, raceId, classId);
         ItemParser.ItemDef? mainDef = null, offDef = null,
             longDef = null;
         static bool IsWeaponKind(int k) =>
@@ -226,8 +223,7 @@ public static class ProfileStatEmitter
     {
         var (bStr, bInt, bAgi, bWis, bLck, hpBase, mpBase) =
             ComputeBaseStats(s, raceId, classId, charLevel);
-        var cdef = s.GameData.Classes.FirstOrDefault(c =>
-            c.Id == raceId * 100 + classId || c.Id == classId);
+        var cdef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(s.GameData.Classes, raceId, classId);
         var pct = cdef?.StatPercents ?? new int[9];
         int Pct(int i) => i < pct.Length && pct[i] > 0 ? pct[i] : 100;
 

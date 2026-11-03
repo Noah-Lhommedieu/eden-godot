@@ -146,6 +146,7 @@ public partial class CharCreateScreen : Control
 
         _race.ItemSelected += _ => RefreshModel();
         _gender.ItemSelected += _ => RefreshModel();
+        _class.ItemSelected += _ => RefreshModel();   // tenue de la classe
         // QA : --create-race=<1-5> --create-gender=<0|1> présélectionne
         // la combinaison (vérifie les corps non par défaut, ex. la
         // fille humaine ou le halfkin, sans cliquer).
@@ -170,6 +171,18 @@ public partial class CharCreateScreen : Control
                      int.TryParse(a["--create-skin=".Length..],
                          out var si))
                 _skin = si;
+            else if (a.StartsWith("--create-hair=") &&
+                     int.TryParse(a["--create-hair=".Length..], out var hi))
+                _hair = hi;
+            else if (a.StartsWith("--create-face=") &&
+                     int.TryParse(a["--create-face=".Length..], out var fi))
+                _face = fi;
+            else if (a.StartsWith("--create-haircolor=") &&
+                     int.TryParse(a["--create-haircolor=".Length..], out var hci))
+                _hairColor = hci;
+            else if (a.StartsWith("--create-eyes=") &&
+                     int.TryParse(a["--create-eyes=".Length..], out var ei))
+                _eyes = ei;
         }
         RefreshModel();
     }
@@ -351,6 +364,8 @@ public partial class CharCreateScreen : Control
             TempleBackdrop.Shot.Create, RaceId);
         var gen = ++_buildGen;
         var app = Blob();
+        // KB-10 : tenue de base de la classe choisie (plus « 202 »).
+        var classNow = StartClasses[_class?.Selected ?? 0];
         // Corps en tâche de fond (meshes/GLB détachés OK worker) ;
         // l'animator C# est rattaché sur le thread principal dans
         // AttachAvatar (EntityAnimator/AnimationPlayer interdits
@@ -368,7 +383,7 @@ public partial class CharCreateScreen : Control
                     return;
                 }
                 body.RotationDegrees = new Vector3(-90f, 180f, 0f);
-                _ = CharDressing.Apply(body, app, null, null);
+                _ = CharDressing.Apply(body, app, null, null, classNow, 0);
                 Callable.From(() =>
                     AttachAvatarAnimated(gen, body, app))
                         .CallDeferred();

@@ -192,6 +192,28 @@ public class NifExtCorpusTests
             $"{l.Count} {what} :\n" + string.Join("\n", l.Take(15)));
     }
 
+    /// <summary>Sprites de particules embarqués (NiPixelData / NiPersistentSrcTextureRendererData) :
+    /// sans eux le système était rendu en quad plein (carrés).</summary>
+    [Theory]
+    [InlineData("s81111.nif")]
+    [InlineData("s113411.nif")]
+    public void EmbeddedParticleTexturesAreDecoded(string file)
+    {
+        var root = FindFrFull();
+        if (root == null) return;                       // skip
+        var n = NifFile.Parse(File.ReadAllBytes(Path.Combine(root, "effect", "model", file)));
+        var emb = n.SourceTextures.Values.Where(t => !t.External).ToList();
+        Assert.NotEmpty(emb);
+        foreach (var t in emb)
+        {
+            Assert.NotNull(t.Pixels);
+            var (w, h, off) = t.Pixels!.Mips[0];
+            Assert.True(w > 0 && h > 0 && off >= 0);
+            Assert.True(t.Pixels.Data.Length >= off + w * h * Math.Max(1, t.Pixels.BytesPerPixel) ||
+                        t.Pixels.Format is 4 or 5 or 6);
+        }
+    }
+
     [Fact]
     public void KnownEffectDecodesParticlesAndControllers()
     {

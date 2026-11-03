@@ -1,0 +1,302 @@
+using System.Globalization;
+using System.Text;
+using EdenClient.Game;
+using EdenClient.Hud;
+using Godot;
+
+namespace EdenClient.Debugging;
+
+/// <summary>Banc monture + cavalier sur fond neutre (scène
+/// <c>ride_lab.tscn</c>), même assemblage que le jeu
+/// (<c>CharVisual.BuildRideVisual</c>, <c>RideFit</c>, <c>RideSeat</c> sur
+/// L17, <c>EntityAnimator</c> cavalier piloté par celui de la monture) ;
+/// les touches sont simulées comme <c>PlayerController</c> : record
+/// natif → <c>DirectionalLocomotion.AnimFor/FaceOffset</c>.
+/// <code>godot --path . res://scenes/ride_lab.tscn -- --rides=14010,41010
+///   --script=STAND:1,W:1,A:1,D:1,S:1,J:1.2,ATK:1,CAST:1,CAST3:1
+///   --shots=/tmp/lab --cam=120 [--rider=B] [--sweep=/tmp/sweep.tsv]</code>
+/// Un fichier <c>--rides-file=docs/reports/FIX-F-montures-hors-archive.tsv</c>
+/// (colonne <c>rideKey</c>) remplace <c>--rides</c>. Avec <c>--sweep</c> :
+/// une ligne TSV par monture (mesh, textures, anims, FX, cavalier) et une
+/// capture « marche » ; sans, deux captures par pas.</summary>
+public partial class RideLab : Node3D
+{
+    private readonly List<int> _keys = new();
+    private (string Name, float Secs)[] _steps = Array.Empty<(string, float)>();
+    private string _dir = "/tmp/ride-lab";
+    private string? _sweep;
+    private float _camYaw = 120f, _camPitch = 10f, _camDist = 7f, _camH = 1.5f;
+    private string _rider = "B";
+    private int _ki = -1, _si;
+    private float _t;
+    private int _shots;
+    private float _wait;
+    private Node3D? _holder, _body, _mount;
+    private EntityAnimator? _ma, _ra;
+    private Camera3D? _cam;
+    private readonly StringBuilder _tsv = new();
+    private readonly List<string> _notes = new();
+    private readonly HashSet<string> _seenAnims = new();
+    private readonly List<string> _stepLog = new();
+
+    public override void _Ready()
+    {
+        string spec = "STAND:1,W:1.2,A:1.2,D:1.2,S:1.2,J:1.2";
+        foreach (var a in OS.GetCmdlineArgs().Concat(OS.GetCmdlineUserArgs()))
+        {
+            if (a.StartsWith("--rides="))
+                foreach (var k in a[8..].Split(',', StringSplitOptions.RemoveEmptyEntries))
+                    _keys.Add(int.Parse(k));
+            else if (a.StartsWith("--rides-file=")) LoadKeys(a[13..]);
+            else if (a.StartsWith("--script=")) spec = a[9..];
+            else if (a.StartsWith("--shots=")) _dir = a[8..];
+            else if (a.StartsWith("--sweep=")) _sweep = a[8..];
+            else if (a.StartsWith("--rider=")) _rider = a[8..];
+            else if (a.StartsWith("--cam="))
+            {
+                var p = a[6..].Split(',');
+                _camYaw = F(p, 0, _camYaw); _camPitch = F(p, 1, _camPitch);
+                _camDist = F(p, 2, _camDist); _camH = F(p, 3, _camH);
+            }
+        }
+        _steps = spec.Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(p =>
+            {
+                var kv = p.Split(':');
+                return (kv[0].ToUpperInvariant(), kv.Length > 1 ? F(kv, 1, 1f) : 1f);
+            }).ToArray();
+        System.IO.Directory.CreateDirectory(_dir);
+        if (_keys.Count == 0) _keys.Add(14010);
+
+        AddChild(new WorldEnvironment
+        {
+            Environment = new Godot.Environment
+            {
+                BackgroundMode = Godot.Environment.BGMode.Color,
+                BackgroundColor = new Color(0.32f, 0.36f, 0.42f),
+                AmbientLightSource = Godot.Environment.AmbientSource.Color,
+                AmbientLightColor = new Color(0.9f, 0.9f, 0.9f),
+                AmbientLightEnergy = 0.7f,
+            },
+        });
+        AddChild(new DirectionalLight3D
+            { RotationDegrees = new Vector3(-50f, -30f, 0f), LightEnergy = 1.1f });
+        var ground = new MeshInstance3D
+        {
+            Mesh = new PlaneMesh
+            {
+                Size = new Vector2(60f, 60f),
+                Material = new StandardMaterial3D
+                    { AlbedoColor = new Color(0.45f, 0.47f, 0.42f) },
+            },
+        };
+        AddChild(ground);
+        _cam = new Camera3D { Current = true, Far = 200f };
+        AddChild(_cam);
+        if (_sweep != null)
+            _tsv.AppendLine("key\tstem\tmesh\tnotex\tbones\tanim\thasL17\tfx\tstand01\tmove01\tmove02\tmove03\tmove04\tjump\tattack\tmagic01\tmagic03\trider\tstatus\tnotes");
+    }
+
+    private static float F(string[] t, int i, float d) => i < t.Length &&
+        float.TryParse(t[i], NumberStyles.Float, CultureInfo.InvariantCulture, out var f) ? f : d;
+
+    private void LoadKeys(string path)
+    {
+        var lines = System.IO.File.ReadAllLines(path);
+        var col = Array.IndexOf(lines[0].Split('\t'), "rideKey");
+        var seen = new HashSet<int>();
+        foreach (var l in lines.Skip(1))
+            if (int.TryParse(l.Split('\t')[col], out var k) && seen.Add(k)) _keys.Add(k);
+    }
+
+    private void Clear()
+    {
+        _holder?.QueueFree();
+        _holder = _body = _mount = null; _ma = _ra = null;
+    }
+
+    private bool Build(int key)
+    {
+        Clear();
+        _notes.Clear(); _seenAnims.Clear();
+        var bodyCode = char.ToLowerInvariant(_rider[0]) switch
+        {
+            'b' => 1, 'm' => 2, 'f' => 4, 'k' => 6, 'l' => 8, 'c' => 9, _ => 0,
+        };
+        _body = CharVisual.BuildBody(Protocol.AppearanceCodec.Encode(
+            new Protocol.AppearanceCodec.Appearance(BodyCode: bodyCode, HairStyle: 5,
+                FaceStyle: 0, HairColor: 0, SkinColor: 0, EyesColor: 0, EyesColor2: 0)));
+        _mount = CharVisual.BuildRideVisual(key);
+        if (_body == null || _mount == null) return false;
+        // Holder = nœud « Model » du joueur (cap −Z).
+        _holder = new Node3D { Name = "Model" };
+        AddChild(_holder);
+        _body.RotationDegrees = new Vector3(-90f, 180f, 0f);
+        _holder.AddChild(_body);
+        var mountNode = new Node3D { Name = "_mount" };
+        mountNode.AddChild(_mount);
+        _holder.AddChild(mountNode);
+        var fit = RideFit.Apply(key, mountNode, _mount);
+        _body.Position = new Vector3(0f, fit.Lift, fit.BackZ);
+        var onL17 = RideFit.Follow(mountNode, _mount, _body);
+        _ma = CharVisual.MountAnimator(_mount);
+        _ra = _body.FindChildren("*", "", true, false).OfType<EntityAnimator>().FirstOrDefault();
+        if (_ra != null) _ra.RideMount = _ma;
+        if (!onL17) _notes.Add("noL17");
+        _ma?.PlayLoop("stand01");
+        FrameCamera();
+        return true;
+    }
+
+    private void FrameCamera()
+    {
+        if (_mount == null || _cam == null) return;
+        var top = World.RemoteEntity.VisualTopHeight(_mount);
+        var h = Mathf.Max(top, 1.5f);
+        // --cam dist = facteur de la hauteur visuelle (défaut 7 → ×1,1).
+        var d = Mathf.Max(h * _camDist / 6f, 3f);
+        GD.Print($"[ride-lab] cadrage top={top:0.00} dist={d:0.0}");
+        var yaw = Mathf.DegToRad(_camYaw);
+        // Cap du modèle = −Z ; yaw 90 = vue de côté, 180 = de face.
+        var dir = new Vector3(Mathf.Sin(yaw), 0f, Mathf.Cos(yaw));
+        var pitch = Mathf.DegToRad(_camPitch);
+        _cam.Position = dir * d * Mathf.Cos(pitch) + new Vector3(0f, h * 0.5f + d * Mathf.Sin(pitch), 0f);
+        _cam.LookAt(new Vector3(0f, h * 0.5f, 0f), Vector3.Up);
+    }
+
+    private void Enter(string name)
+    {
+        // Mime PlayerController._PhysicsProcess pour un enregistrement natif.
+        int rec = name switch
+        {
+            "W" => DirectionalLocomotion.Fwd,
+            "A" => DirectionalLocomotion.Left,
+            "D" => DirectionalLocomotion.Right,
+            "S" => DirectionalLocomotion.Back,
+            "WA" => DirectionalLocomotion.FwdLeft,
+            "WD" => DirectionalLocomotion.FwdRight,
+            "SA" => DirectionalLocomotion.BackLeft,
+            "SD" => DirectionalLocomotion.BackRight,
+            _ => -1,
+        };
+        if (_ra == null || _ma == null || _holder == null) return;
+        _ra.InputMoving = false; _ra.Airborne = false;
+        _holder.Rotation = Vector3.Zero;
+        _ma.MoveSpeedScale = _ra.MoveSpeedScale = 1f;
+        if (rec >= 0)
+        {
+            var anim = DirectionalLocomotion.AnimFor(rec, true);
+            _ma.MoveAnim = anim; _ra.MoveAnim = anim;
+            _holder.Rotation = new Vector3(0f, DirectionalLocomotion.FaceOffset(rec, true), 0f);
+            _ra.InputMoving = true;
+        }
+        else switch (name)
+        {
+            case "J": _ra.InputMoving = true; _ra.Airborne = true; break;
+            case "ATK": _ra.PlayOnce("attack01"); break;
+            case "ATK2": _ra.PlayOnce("attack02"); break;
+            case "CAST": _ra.PlayOnce("magic01"); break;
+            case "CAST2": _ra.PlayOnce("magic02"); break;
+            case "CAST3": _ra.PlayOnce("magic03"); break;
+            case "SHOOT": _ra.PlayOnce("shoot01"); break;
+        }
+    }
+
+    public override void _Process(double delta)
+    {
+        if (_wait > 0f) { _wait -= (float)delta; return; }
+        if (_ki < 0 || _si >= _steps.Length)
+        {
+            if (_ki >= 0) Finish();
+            _ki++;
+            if (_ki >= _keys.Count) { End(); return; }
+            _si = 0; _t = 0f; _shots = 0;
+            if (!Build(_keys[_ki]))
+            {
+                GD.Print($"[ride-lab] {_keys[_ki]} : BUILD ÉCHEC (mesh ou monture absente)");
+                if (_sweep != null)
+                    _tsv.AppendLine($"{_keys[_ki]}\t\t0\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tFAIL\tbuild");
+                _si = _steps.Length;
+                return;
+            }
+            _wait = 0.8f;                       // chargement/FX
+            _stepStarted = false;
+            return;
+        }
+        if (!_stepStarted) { Enter(_steps[_si].Name); _stepStarted = true; _t = 0f; }
+        _t += (float)delta;
+        var st = _steps[_si];
+        if (_sweep != null)
+        {
+            if (_t > st.Secs * 0.8f && _shots == 0)
+            {
+                Log(st.Name);
+                if (st.Name == "W") Shoot("walk");
+                _shots = 1;
+            }
+        }
+        else
+        {
+            if (_shots == 0 && _t > st.Secs * 0.5f) { Shoot("a"); Log(st.Name); }
+            else if (_shots == 1 && _t > st.Secs * 0.9f) Shoot("b");
+        }
+        if (_t < st.Secs) return;
+        _si++; _shots = 0; _stepStarted = false;
+    }
+
+    private bool _stepStarted;
+
+    private void Log(string step)
+    {
+        var line = $"[ride-lab] key={_keys[_ki]} step={step} rider={_ra?.Current} mount={_ma?.Current} " +
+                   $"yaw={Mathf.RadToDeg(_holder?.Rotation.Y ?? 0):0}";
+        _stepLog.Add(line);
+        GD.Print(line);
+        if (_ma?.Current is { Length: > 0 } c) _seenAnims.Add(c);
+    }
+
+    private void Shoot(string tag)
+    {
+        _shots++;
+        RenderingServer.ForceDraw();
+        var name = _sweep != null ? $"{_dir}/{_keys[_ki]}.png"
+            : $"{_dir}/{_keys[_ki]}-{_si:D2}-{_steps[_si].Name}-{tag}.png";
+        GetViewport().GetTexture().GetImage().SavePng(name);
+    }
+
+    private void Finish()
+    {
+        if (_sweep == null || _mount == null) return;
+        var key = _keys[_ki];
+        var meshes = _mount.FindChildren("*", "MeshInstance3D", true, false).Cast<MeshInstance3D>().ToList();
+        var mesh = meshes.Count(m => m.Mesh != null && m.Mesh.GetSurfaceCount() > 0);
+        var notex = 0;
+        foreach (var m in meshes)
+            for (var s = 0; s < (m.Mesh?.GetSurfaceCount() ?? 0); s++)
+                if ((m.GetSurfaceOverrideMaterial(s) ?? m.GetActiveMaterial(s)) is StandardMaterial3D sm &&
+                    sm.AlbedoTexture == null && sm.AlbedoColor.A > 0.05f && sm.Transparency == BaseMaterial3D.TransparencyEnum.Disabled)
+                    notex++;
+        var bones = _mount.FindChildren("*", "Skeleton3D", true, false).Cast<Skeleton3D>().Sum(s => s.GetBoneCount());
+        string Y(string a) => _ma != null && _ma.Has(a) ? "1" : "0";
+        var fx = _mount.FindChildren("*", "NativeFxHost", true, false).Count;
+        var l17 = _mount.FindChild("L17", true, false) != null ? "1" : "0";
+        var ok = mesh > 0 && _ma != null && _ma.Has("stand01") && _ma.Has("move01");
+        var riderOk = _ra != null && _ra.Has("ride01") && _ra.Has("ride04");
+        var jump = _ma != null && (_ma.Has("jump01") || _ma.Has("jump02")) ? "1" : "0";
+        var atk = _ma != null && (_ma.Has("attack01") || _ma.Has("attack02")) ? "1" : "0";
+        var status = ok && riderOk && notex == 0 ? "OK" : "FAIL";
+        var seen = string.Join("|", _seenAnims);
+        _tsv.AppendLine($"{key}\t{RideList.Stem($"r{key:D6}")}\t{mesh}\t{notex}\t{bones}\t{(_ma != null ? 1 : 0)}\t{l17}\t{fx}\t{Y("stand01")}\t{Y("move01")}\t{Y("move02")}\t{Y("move03")}\t{Y("move04")}\t{jump}\t{atk}\t{Y("magic01")}\t{Y("magic03")}\t{(riderOk ? 1 : 0)}\t{status}\t{string.Join(",", _notes)};played={seen}");
+    }
+
+    private void End()
+    {
+        if (_sweep != null)
+        {
+            System.IO.File.WriteAllText(_sweep, _tsv.ToString());
+            GD.Print($"[ride-lab] sweep -> {_sweep}");
+        }
+        GD.Print("[ride-lab] fin");
+        GetTree().Quit();
+    }
+}

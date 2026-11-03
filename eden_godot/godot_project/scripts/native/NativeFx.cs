@@ -100,6 +100,58 @@ public static class NativeFx
         return a.Test ? 1 : 0;
     }
 
+    static readonly Dictionary<NifPixelData, Texture2D?> s_pix = new();
+
+    /// <summary>Texture embarquée (NiPixelData) → ImageTexture RGBA8 avec mips (null si format inconnu).</summary>
+    public static Texture2D? PixelTexture(NifPixelData px)
+    {
+        lock (s_pix)
+        {
+            if (s_pix.TryGetValue(px, out var c)) return c;
+            Image? img = null;
+            if (px.Mips.Length > 0)
+            {
+                var (w, h, off) = px.Mips[0];
+                var d = px.Data;
+                if (w > 0 && h > 0 && off >= 0)
+                {
+                    int bpp = Math.Max(1, px.BytesPerPixel);
+                    switch (px.Format)
+                    {
+                        case 0 or 1 when off + w * h * bpp <= d.Length && bpp >= 3:
+                        {
+                            var rgba = new byte[w * h * 4];
+                            for (int i = 0; i < w * h; i++)
+                            {
+                                rgba[i * 4 + 3] = 255;
+                                for (int k = 0; k < bpp && k < 4; k++)
+                                {
+                                    int ch = px.Channels[k];
+                                    if (ch is >= 0 and < 4) rgba[i * 4 + ch] = d[off + i * bpp + k];
+                                }
+                            }
+                            img = Image.CreateFromData(w, h, false, Image.Format.Rgba8, rgba);
+                            break;
+                        }
+                        case 4 or 5 or 6:
+                        {
+                            var f = px.Format == 4 ? Image.Format.Dxt1 : px.Format == 5 ? Image.Format.Dxt3 : Image.Format.Dxt5;
+                            int need = ((w + 3) / 4) * ((h + 3) / 4) * (px.Format == 4 ? 8 : 16);
+                            if (off + need > d.Length) break;
+                            img = Image.CreateFromData(w, h, false, f, d.AsSpan(off, need).ToArray());
+                            img.Decompress();
+                            img.Convert(Image.Format.Rgba8);
+                            break;
+                        }
+                    }
+                }
+            }
+            Texture2D? tex = null;
+            if (img != null) { img.GenerateMipmaps(); tex = ImageTexture.CreateFromImage(img); }
+            return s_pix[px] = tex;
+        }
+    }
+
     public static Shader GetShader(int blend, bool twoSided, bool depthTest, bool depthWrite)
     {
         string key = $"{blend}{twoSided}{depthTest}{depthWrite}";
@@ -162,6 +214,7 @@ void fragment() {{
         {
             if (b.HasTransform) { st.Tu = b.Translation.X; st.Tv = b.Translation.Y; st.Su = b.Scale.X; st.Sv = b.Scale.Y; st.Rot = b.Rotation; st.Center = b.Center; }
             if (b.File != null) st.SetTextureFile(b.File, o);
+            else if (b.Source?.Pixels is { } px) st.Texture = PixelTexture(px);
         }
         else sm.SetShaderParameter("use_tex", false);
         st.Dirty = true; st.Apply();

@@ -29,8 +29,7 @@ public sealed partial class ZoneEntryFlow
         var idx = payload[0];                         // u8 : slot choisi
 
         // --- Gates natifs ---
-        var classDef = _services.GameData.Classes.FirstOrDefault(c =>
-            c.Id == st.RaceId * 100 + st.ClassId || c.Id == st.ClassId);
+        var classDef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, st.RaceId, st.ClassId);
         var defs = classDef?.LevelProgression;        // = SClassCloset
         if (defs == null || idx >= defs.Count) return;
         var req = defs[idx].Level;

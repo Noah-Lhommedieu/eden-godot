@@ -24,4 +24,20 @@ public static class MoveAnimSpeed
         var s = bonusPct / (mounted ? RefMountedPct : RefFootPct);
         return s < 1f ? 1f : s > MaxScale ? MaxScale : s;
     }
+
+    /// <summary>Vitesse à pied de base (u/s) à 0 % de bonus — celle du
+    /// contrôleur local (<c>PlayerController.MoveSpeed</c> × mul serveur).
+    /// </summary>
+    public const float FootBaseSpeed = 6f;
+
+    /// <summary>Multiplicateur serveur équivalent d'une vitesse observée
+    /// sur un joueur distant (même repère que
+    /// <see cref="ServerMoveSpeed.Multiplier"/>).</summary>
+    public static float MulFromObserved(float unitsPerSec) =>
+        unitsPerSec / FootBaseSpeed;
+
+    /// <summary>Moyenne mobile exponentielle ; le premier échantillon
+    /// (<paramref name="prev"/> ≤ 0) est pris tel quel.</summary>
+    public static float Smooth(float prev, float sample, float alpha = 0.4f) =>
+        prev <= 0f ? sample : prev + (sample - prev) * alpha;
 }

@@ -272,4 +272,26 @@ public static class CharModelSpec
         if (map.TryGetValue(e.Male, out r) && r.Mesh.StartsWith('#')) return r;
         return null;
     }
+
+    /// <summary>KB-17 : coiffe de la tenue de classe. Chaque palier
+    /// c_class porte 2 codes : l'un = tenue corps (<see
+    /// cref="ClassOutfitRow"/>), l'autre = série H (tête, mesh externe
+    /// « G1101 » + skin « G1101H04 », groupe 2) — jamais retenu par la
+    /// branche « # » de <c>ClassOutfitRow</c>. Retourne la ligne
+    /// 4pequip non-« # » (hors « NULL ») ou null. Le casque porté garde
+    /// la priorité (voir <c>CharVisual.ApplyEquipment</c>).</summary>
+    public static EquipMesh? ClassHeadRow(string bodyLetter, int classId,
+        int style)
+    {
+        var list = ClassCloset(classId);
+        if (list.Count == 0) return null;
+        var e = list[Math.Clamp(style, 0, list.Count - 1)];
+        var map = LoadEquipMap(bodyLetter);
+        foreach (var code in new[] { e.Male, e.Female })
+            if (map.TryGetValue(code, out var r) && !r.Mesh.StartsWith('#') &&
+                !string.Equals(r.Mesh, "NULL",
+                    StringComparison.OrdinalIgnoreCase))
+                return r;
+        return null;
+    }
 }

@@ -32,22 +32,26 @@ public static class CharDressing
     /// tenue de débutant). <paramref name="lookup"/> : itemId →
     /// (Code, ModelCode) c_item — peut être null si
     /// <paramref name="worn"/> est vide. Retourne le nombre de
-    /// meshes rendus visibles.</summary>
+    /// meshes rendus visibles. <paramref name="classId"/>/<paramref
+    /// name="style"/> (KB-10) : classe du perso — sans armure portée la
+    /// tenue de base est celle de SA classe, plus le repli « 202 »
+    /// (Guerrier) pour tout le monde.</summary>
     public static int Apply(Node3D body, byte[]? appearance,
         IReadOnlyDictionary<int, int>? worn = null,
-        Func<int, (string Code, string ModelCode)?>? lookup = null)
+        Func<int, (string Code, string ModelCode)?>? lookup = null,
+        int classId = 0, int style = 0)
     {
         var letter = CharModelSpec.BodyStem(appearance);
         var hair = appearance is { Length: >= 29 }
             ? Protocol.AppearanceCodec.Decode(appearance).HairStyle
             : 0;
         var shown = CharVisual.ApplyLook(body, letter, hair,
-            CharVisual.OutfitSuffixes(letter, worn, lookup));
+            CharVisual.OutfitSuffixes(letter, worn, lookup, classId, style));
         // ApplyLook montre des tenues cachées au teintage de
         // BuildBody (filtre Visible de TintMeshes) — les re-teinter
         // avec les specs 4pequip du porté (cache idempotent).
         CharVisual.RetintVisible(body,
-            CharVisual.OutfitRows(letter, worn, lookup));
+            CharVisual.OutfitRows(letter, worn, lookup, classId, style));
         return shown;
     }
 }

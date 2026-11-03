@@ -689,8 +689,7 @@ public partial class BuffBar : Control
         if (eid <= 0) return;
         var def = Data.Tables.EnchantTable.Get(eid);
         // Toute monture se retire au clic droit (même « can't abandon »).
-        if (Data.Tables.EnchantTable.RideKeyOf(eid) == 0 &&
-            def is { IsBuff: false } or { NoAbandon: true }) return;
+        if (!Data.Tables.EnchantTable.CanCancelByRightClick(def)) return;
         var send = CancelSender?.Invoke((short)eid);
         if (send != null)
             _ = send.ContinueWith(t => GD.PrintErr(

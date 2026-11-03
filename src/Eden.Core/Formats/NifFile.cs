@@ -482,8 +482,7 @@ public sealed class NifFile
     /// physique, pixels embarqués, partitions de skin) : sautés par la
     /// taille déclarée, nom consigné dans <see cref="SkippedBlockTypes"/>.</summary>
     private static bool IsSkippedByDesign(string t) => t is
-        "NiSkinPartition" or "NiPixelData" or
-        "NiPersistentSrcTextureRendererData" or
+        "NiSkinPartition" or
         "NiPhysXScene" or "NiPhysXSceneDesc";
 
     private void NoteUntyped(string t)
@@ -520,6 +519,10 @@ public sealed class NifFile
                 return true;
             case "NiPSysData":
                 b.Obj = PSysData(b, c);
+                return true;
+            case "NiPixelData":
+            case "NiPersistentSrcTextureRendererData":
+                b.Obj = PixelData(c, ver, b.Type != "NiPixelData");
                 return true;
             case "NiSkinInstance":
                 b.Data = c.I32();
@@ -1459,6 +1462,36 @@ public sealed class NifFile
         return t;
     }
 
+    /// <summary>NiPixelData (texture embarquée, nif ≥ 10.4.0.2 &lt; 20.3.0.4 : NiPixelFormat avec
+    /// 4 canaux de 10 octets). Les sprites de particules de plusieurs effets (s81111, s82211…) n'ont
+    /// pas de .dds externe : sans ces pixels ils étaient rendus en carrés pleins.</summary>
+    private static NifPixelData PixelData(Cur c, uint ver, bool persistent)
+    {
+        var d = new NifPixelData { Format = (int)c.U32() };
+        d.BitsPerPixel = c.U8();
+        c.U32(); c.U32(); c.U8();          // renderer hint, extra data, flags
+        c.U32();                           // tiling
+        if (ver >= 0x14030004) c.U8();     // sRGB
+        d.Channels = new int[4];
+        for (var i = 0; i < 4; i++)
+        {
+            d.Channels[i] = (int)c.U32();  // type (0 R, 1 G, 2 B, 3 A, 4 compressed…)
+            c.U32(); c.U8(); c.U8();       // convention, bits, signed
+        }
+        c.I32();                           // palette ref
+        var nm = (int)c.U32();
+        d.BytesPerPixel = (int)c.U32();
+        if (nm < 0 || nm > 32) throw new InvalidDataException("NiPixelData: mips");
+        d.Mips = new (int W, int H, int Offset)[nm];
+        for (var i = 0; i < nm; i++) d.Mips[i] = ((int)c.U32(), (int)c.U32(), (int)c.U32());
+        var np = (int)c.U32();
+        if (persistent && ver >= 0x14020006) c.U32();   // pad num pixels
+        var faces = ver >= 0x0A040002 ? (int)c.U32() : 1;
+        if (persistent) c.U32();                        // platform id
+        d.Data = c.Take(checked(np * Math.Max(1, faces))).ToArray();
+        return d;
+    }
+
     private string[]? Strings;
 
     private static string Idx(uint i, string[] strings) =>
@@ -1573,6 +1606,10 @@ public sealed class NifFile
         foreach (var rb in RootBlocks)
             if (AvByBlock.TryGetValue(rb, out var rav))
                 RootObjects.Add(rav);
+
+        foreach (var st in SourceTextures.Values)
+            if (!st.External && st.PixelDataBlock >= 0 && st.PixelDataBlock < blocks.Length)
+                st.Pixels = blocks[st.PixelDataBlock].Obj as NifPixelData;
 
         // --- liens des références --------------------------------------
         foreach (var b in blocks)
@@ -2159,6 +2196,17 @@ public sealed class NifSourceTexture : NifNet
     public string FileName = "";
     public int PixelDataBlock = -1;
     public uint PixelLayout, UseMipmaps, AlphaFormat;
+    /// <summary>Pixels embarqués (texture interne), null si externe ou illisible.</summary>
+    public NifPixelData? Pixels;
+}
+
+/// <summary>NiPixelData : 0 RGB24, 1 RGBA32, 4/5/6 DXT1/3/5 ; niveaux de mip dans <see cref="Mips"/>.</summary>
+public sealed class NifPixelData
+{
+    public int Format, BitsPerPixel, BytesPerPixel;
+    public int[] Channels = new int[4];
+    public (int W, int H, int Offset)[] Mips = Array.Empty<(int, int, int)>();
+    public byte[] Data = Array.Empty<byte>();
 }
 
 // ----------------------------------------------------------------------

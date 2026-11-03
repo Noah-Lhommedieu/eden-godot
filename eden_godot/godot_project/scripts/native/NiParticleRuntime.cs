@@ -60,6 +60,7 @@ internal sealed class NiParticleRuntime : IFxDriver
         var zb = ps.Properties.OfType<NifZBufferProperty>().FirstOrDefault();
         var (mat, st) = NativeFx.MakeMaterial(nm, tex, al, zb, true, host.Options, true);
         host.AllMats.Add(st);
+        if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "1") { Diag(ps, tex, al, st); GD.Print("[psdiag] warn " + string.Join(" | ", host.Nif.Warnings.Where(w => w.Contains("ixel") || w.Contains("21")))); }
         foreach (var p in ps.Properties) host.RegisterMat(p.Block, st);
 
         var quad = new QuadMesh { Size = new Godot.Vector2(2, 2), Material = mat };
@@ -77,6 +78,24 @@ internal sealed class NiParticleRuntime : IFxDriver
         };
         node.AddChild(mmi);
         return new NiParticleRuntime(host, ps, map, node, mmi, mm, NativeFx.BlendMode(al) == 2);
+    }
+
+    static void Diag(NifParticleSystem ps, NifTexturingProperty? tex, NifAlphaProperty? al, MatState st)
+    {
+        string a = "notex";
+        if (st.Texture != null)
+        {
+            var img = st.Texture.GetImage();
+            if (img != null)
+            {
+                if (img.IsCompressed()) img.Decompress();
+                img.Convert(Image.Format.Rgba8);
+                var d = img.GetData(); int amin = 255, amax = 0, bright = 0, n = d.Length / 4;
+                for (int i = 0; i < n; i++) { amin = Math.Min(amin, d[i * 4 + 3]); amax = Math.Max(amax, d[i * 4 + 3]); }
+                a = $"{img.GetWidth()}x{img.GetHeight()} a={amin}..{amax} mips={img.HasMipmaps()}";
+            }
+        }
+        GD.Print($"[psdiag] {ps.Name} blend={NativeFx.BlendMode(al)} alpha={(al == null ? "none" : $"b{al.Blend} t{al.Test} src{al.SrcBlend} dst{al.DstBlend}")} tex={tex?.Base?.File} {a} texprop={(tex == null ? "null" : tex.Base == null ? "nobase" : $"src={tex.Base.SourceBlock} ext={tex.Base.Source?.External} px={tex.Base.Source?.Pixels != null} pdb={tex.Base.Source?.PixelDataBlock} fmt={tex.Base.Source?.Pixels?.Format}")} props={string.Join(",", ps.Properties.Select(q => q.Type))}");
     }
 
     public void Reset() { _sim.Reset(); _frameSet = false; }

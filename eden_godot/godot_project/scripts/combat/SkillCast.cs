@@ -70,7 +70,22 @@ public partial class SkillCast : Node
     private double _testTimer;
     private int _testStep;
     private EntityRegistry? _registry;
-    private string? _castAnim;   // gestuelle du cast en cours (timed)
+    private string? _castAnim;   // (hérité) — plus de rejeu : l'incantation tient la pose, le blast joue le clip
+    private ulong _rawAnimDeadline;   // repli gestuelle brute si aucun blast n'arrive (sorts instantanés)
+    private int _rawAnimSpell;
+    private GroundTargeter? _targeter;   // visée au sol (sorts Ground)
+    // --zshot-times=0.5,2,4 --zshot-dir=<dossier> : captures du viewport à t+N s après la demande de cast
+    // (preuve visuelle du cercle / de la pose d'incantation / de l'impact).
+    private readonly List<double> _shotTimes = new();
+    private string _shotDir = "";
+    private ulong _shotT0;
+    private int _shotNext;
+    private string _shotPrefix = "cast_";
+    // --ground-demo=<spellId> : après l'entrée en jeu, ouvre la visée au sol (centre écran), capture, puis valide.
+    private int _groundDemo;
+    private ulong _groundDemoAt;   // 0 = pas armé ; tick de départ
+    private bool _groundDemoConfirmed;
+    private bool _autoGround;            // --ground-auto : pas de visée, point devant/sous la cible (tests)
     // Chien de garde du verrou de cast : le serveur peut ne jamais
     // répondre (cible morte avant l'impact, TP en plein cast, paquet
     // perdu) ; sans échéance CastingSpell restait posé et plus aucun
@@ -105,6 +120,8 @@ public partial class SkillCast : Node
     public override void _Ready()
     {
         Instance = this;
+        if (KillLoopProbe.Requested(out _, out _))
+            AddChild(new KillLoopProbe { Name = "KillLoopProbe" });
         foreach (var a in OS.GetCmdlineArgs()
                      .Concat(OS.GetCmdlineUserArgs()))
             if (a == "--combat-test")
@@ -126,6 +143,17 @@ public partial class SkillCast : Node
                 _castNear = true;
             else if (a == "--cast-nowhere")
                 _castNowhere = true;
+            else if (a == "--ground-auto")
+                _autoGround = true;
+            else if (a.StartsWith("--ground-demo=") &&
+                     int.TryParse(a[14..], out var gd))
+                _groundDemo = gd;
+            else if (a.StartsWith("--zshot-times="))
+                foreach (var t in a[14..].Split(','))
+                { if (double.TryParse(t, System.Globalization.NumberStyles.Float,
+                      System.Globalization.CultureInfo.InvariantCulture, out var d)) _shotTimes.Add(d); }
+            else if (a.StartsWith("--zshot-dir="))
+                _shotDir = a[12..];
             else if (a.StartsWith("--cast-break=") &&
                      int.TryParse(a.Split('=', 2)[1], out var cb))
                 _castBreakMs = cb;
@@ -148,6 +176,10 @@ public partial class SkillCast : Node
                     _chaseSpell = 0;
                     _chaseTarget = 0;
                 };
+            // Visée au sol des sorts de zone « à choix » (cercle de préparation).
+            _targeter = new GroundTargeter { Name = "GroundTargeter" };
+            AddChild(_targeter);
+            _targeter.Bind(this, _player);
         }
         if (_combatTest) CombatTest(delta);
         if (_lockPhase != 0) LockTest(delta);
@@ -166,12 +198,42 @@ public partial class SkillCast : Node
                 Break();
             }
         }
-        // Cast temporisé : rejouer la gestuelle tant que le cast
-        // n'est pas résolu (la fin du one-shot rend la main à la
-        // locomotion — la relance est immédiate, fondu 0,12 s).
-        if (_castAnim != null && CastingSpell != 0 &&
-            _player?.Animator is { } an && !an.OneShotPlaying)
-            an.PlayOnce(_castAnim);
+        if (_groundDemo != 0 && _targeter != null && _player != null && PlayerSkills.Spells.Count > 0)
+        {
+            if (_groundDemoAt == 0)
+                _groundDemoAt = Time.GetTicksMsec();
+            else if (!_targeter.Active && !_groundDemoConfirmed && Time.GetTicksMsec() - _groundDemoAt > 6000)
+            {
+                _targeter.UseScreenCenter = true;
+                _targeter.Begin(_groundDemo);
+                _shotPrefix = "pick_";
+                _shotT0 = Time.GetTicksMsec();
+                _groundDemoAt = Time.GetTicksMsec();
+            }
+            else if (_targeter.Active && Time.GetTicksMsec() - _groundDemoAt > 4500)
+            {
+                _groundDemoConfirmed = true;
+                _targeter.Confirm();      // clic gauche simulé au centre du cercle
+                _shotPrefix = "post_";
+                _shotT0 = Time.GetTicksMsec();
+                _shotNext = 0;
+            }
+        }
+        if (_shotT0 != 0 && _shotNext < _shotTimes.Count &&
+            (Time.GetTicksMsec() - _shotT0) / 1000.0 >= _shotTimes[_shotNext])
+        {
+            var path = System.IO.Path.Combine(_shotDir.Length > 0 ? _shotDir : "/tmp",
+                $"{_shotPrefix}{_shotNext}_{_shotTimes[_shotNext]:0.0#}s.png");
+            GetViewport().GetTexture().GetImage().SavePng(path);
+            GD.Print($"[shot] {path}");
+            _shotNext++;
+        }
+        // Repli : sort instantané dont aucun blast (288/297) n'est venu → gestuelle brute (col3).
+        if (_rawAnimDeadline != 0 && Time.GetTicksMsec() >= _rawAnimDeadline)
+        {
+            _rawAnimDeadline = 0;
+            if (_rawAnimSpell != 0) PlayCastAnim(0, _rawAnimSpell);
+        }
         while (_pending.TryDequeue(out var act))
         {
             try { act(); }
@@ -211,23 +273,22 @@ public partial class SkillCast : Node
             SpellCatalog.TargetType(spellId) is >= 2 and <= 5 &&
             (_registry?.SelfCharId ?? 0u) != 0)
             target = _registry!.SelfCharId;
-        // Sort de ZONE : au sol sur la cible (shape 1), ou centré sur le lanceur (shape 3,
-        // NCID 17 sans cible) même quand un ennemi est ciblé — le natif n'envoie pas un
-        // cast ciblé dans ces cas.
-        var shape = SpellCatalog.Shape(spellId);
-        if (shape == 3 && SpellCatalog.RadiusUnits(spellId) > 0 && target != 0 &&
-            SpellCatalog.TargetType(spellId) == 1)
-            target = 0;
-        if (shape == 1 && target != 0 && _registry != null &&
-            _registry.Entities.TryGetValue(target, out var gt) && GodotObject.IsInstanceValid(gt))
+        // Forme du sort (SSpellData+0x18) : voir SpellZone — Self (3) part toujours en
+        // NCID 17 centré sur le lanceur même avec un ennemi ciblé ; Ground/Direction/Cross/Sector
+        // sans cible partent en NCID 16 devant le lanceur (le natif refuse le NCID 17).
+        var shape = (CastShape)SpellCatalog.Shape(spellId);
+        if (shape is CastShape.Self or CastShape.Nearby) target = 0;
+        // Sort de zone « à choix » (ref-shot « cercle preparation… ») : cercle au curseur, clic = lancer.
+        // Rappuyer sur le même sort annule. Les pilotes de test (--combat-test, --ground-auto) lancent direct.
+        if (shape == CastShape.Ground && !_combatTest && !_autoGround && _targeter != null)
         {
-            var (gx, gz) = WorldConv.ToEdenGround(gt.GlobalPosition);
-            CastAt(spellId, gx, gz);
+            if (_targeter.Active && _targeter.Spell == spellId) _targeter.Cancel();
+            else _targeter.Begin(spellId);
             return;
         }
         if (target != 0 && BeyondReach(spellId, target, out var reach))
         {
-            // Hors de portée : poursuite puis envoi du 9 à l'arrivée —
+            // Hors de portée : poursuite puis envoi à l'arrivée —
             // CastingSpell n'est PAS posé (aucun paquet émis).
             _chaseSpell = spellId;
             _chaseTarget = target;
@@ -257,24 +318,41 @@ public partial class SkillCast : Node
         return new Vector2(to.X, to.Z).Length() > reach;
     }
 
-    /// <summary>Envoi effectif du cast (9 ciblé / 17 sans cible) —
-    /// partagé par <see cref="Cast"/> et l'arrivée de la poursuite.</summary>
+    /// <summary>Envoi effectif du cast (9 ciblé / 16 au sol / 17 sans cible) selon
+    /// <see cref="SpellZone.Plan"/> — partagé par <see cref="Cast"/> et l'arrivée de la poursuite.</summary>
     private void SendCast(int spellId, uint target)
     {
-        if (target != 0)
+        var shape = (CastShape)SpellCatalog.Shape(spellId);
+        var (cx, cy) = _player != null
+            ? WorldConv.ToEdenGround(_player.GlobalPosition) : (0f, 0f);
+        float tx = 0, ty = 0;
+        if (target != 0 && _registry != null &&
+            _registry.Entities.TryGetValue(target, out var te) &&
+            GodotObject.IsInstanceValid(te))
+            (tx, ty) = WorldConv.ToEdenGround(te.GlobalPosition);
+        if (_shotTimes.Count > 0 && _shotT0 == 0) _shotT0 = Time.GetTicksMsec();
+        var plan = SpellZone.Plan(shape, target != 0, tx, ty, cx, cy, PlayerFacingEden(),
+            SpellZone.Reach(SpellCatalog.RangeUnits(spellId)));
+        switch (plan.Route)
         {
-            Send(new ZoneSpellCastToLife
-            {
-                SpellId = (ushort)spellId, TargetId = target,
-            });
-        }
-        else
-        {
-            Send(new ZoneSpellCastToNowhere
-            {
-                SpellId = (ushort)spellId,
-                Direction = PlayerFacingEden(),
-            });
+            case CastRoute.ToLife:
+                Send(new ZoneSpellCastToLife
+                { SpellId = (ushort)spellId, TargetId = target });
+                break;
+            case CastRoute.ToLocation:
+                Send(new ZoneSpellCastToLocation
+                { SpellId = (ushort)spellId, Target = 0, X = plan.X, Z = plan.Y });
+                // Natif : le lanceur se tourne vers le point visé avant la gestuelle.
+                if (_player != null)
+                    _player.FaceTowards(new Vector3(plan.X,
+                        _player.GlobalPosition.Y, -plan.Y), 1f);
+                target = 0;
+                break;
+            default:
+                Send(new ZoneSpellCastToNowhere
+                { SpellId = (ushort)spellId, Direction = PlayerFacingEden() });
+                target = 0;
+                break;
         }
         // Sort offensif sur un mob : l'auto-attaque reprend dès la fin du cast
         // (natif : le combat continue au corps à corps après un sort).
@@ -353,14 +431,17 @@ public partial class SkillCast : Node
         SendCast(spellId, handle);
     }
 
-    /// <summary>Sort de zone au point sol Eden (x,z) — NCID 16.</summary>
+    /// <summary>Sort de zone au point sol Eden (x,y) — NCID 16 (le champ Z du message porte le y Eden).</summary>
     public void CastAt(int spellId, float x, float z)
     {
         if (spellId <= 0 || IsCasting || PlayerVitals.IsDead) return;
+        if (_shotTimes.Count > 0 && _shotT0 == 0) _shotT0 = Time.GetTicksMsec();
         Send(new ZoneSpellCastToLocation
         {
             SpellId = (ushort)spellId, Target = 0, X = x, Z = z,
         });
+        if (_player != null)
+            _player.FaceTowards(new Vector3(x, _player.GlobalPosition.Y, -z), 1f);
         CastingSpell = spellId;
         CastingTarget = 0;
         _lock.Requested(Time.GetTicksMsec());
@@ -412,6 +493,18 @@ public partial class SkillCast : Node
             m.Deserialize(r);
             _pending.Enqueue(() => OnCastOk(m));
         });
+        s.OnZone(288, r =>
+        {
+            var m = new ZoneClientSpellBlastOK();
+            m.Deserialize(r);
+            _pending.Enqueue(() => PlayCastAnim(m.BlastId, (ushort)m.SpellId));
+        });
+        s.OnZone(297, r =>
+        {
+            var m = new ZoneClientSpellBlastToLocation();
+            m.Deserialize(r);
+            _pending.Enqueue(() => PlayCastAnim(m.BlastId, (ushort)m.SpellId));
+        });
         s.OnZone(287, r =>
         {
             var m = new ZoneClientSpellBreak();
@@ -451,7 +544,7 @@ public partial class SkillCast : Node
             var flags = (ushort)(m.Rest[0] | (m.Rest[1] << 8));
             _pending.Enqueue(() => OnSelfFlag(m.Field1, flags));
         });
-        GD.Print("[skill] binds 279/287/281/410/313/302 posés");
+        GD.Print("[skill] binds 279/288/297/287/281/410/313/302 posés");
     }
 
     /// <summary>279 — accusé de cast : ok → barre de cast
@@ -485,28 +578,29 @@ public partial class SkillCast : Node
                     SpellCatalog.Name((ushort)m.SpellId));
             if (_castBreakMs > 0 && m.CastTimeDs > 0)
                 _breakAt = Time.GetTicksMsec() + (ulong)_castBreakMs;
-            // Anim d'action du sort (C_Spell col3 = KF → motion.ini
-            // via le stem KFM du corps) — le natif entre en état
-            // d'action sur le flag 302 0x2000 ; pour self, 279 est le
-            // déclencheur équivalent.
-            var stem = CharModelSpec.BodyStem(
-                SessionCarry.Character?.Appearance);
-            var anim = MotionTable.Shared.Lookup(stem,
-                SpellCatalog.ActionKf((ushort)m.SpellId));
-            if (anim != null)
-            {
-                _player?.Animator?.PlayOnce(anim);
-                // Cast temporisé : la gestuelle est tenue (rejouée)
-                // jusqu'à la résolution — le GLB ne boucle pas les
-                // one-shots (281/287/410 effacent _castAnim).
-                _castAnim = m.CastTimeDs > 0 ? anim : null;
-                GD.Print($"[verify] cast anim : {anim} " +
-                    $"(kf={SpellCatalog.ActionKf((ushort)m.SpellId)}" +
-                    $", stem={stem})");
-            }
-            else _castAnim = null;
+            // Gestuelle : natif = clip du kfId RÉSOLU porté par le blast (288 ciblé/sans cible, 297 au sol,
+            // GetBlastID @0x080e03f0), joué AU BLAST. Pendant une incantation temporisée le perso tient la
+            // pose (stance + glyphe de cast + barre), comme le ref-shot TimedCastSkill — plus de rejeu
+            // du swing. Filet : sort instantané sans blast sous 400 ms → clip brut col3.
+            _castAnim = null;
+            _rawAnimSpell = m.CastTimeDs == 0 ? (ushort)m.SpellId : 0;
+            _rawAnimDeadline = m.CastTimeDs == 0 ? Time.GetTicksMsec() + 400 : 0;
         }
         CastStateChanged?.Invoke();
+    }
+
+    /// <summary>Joue la gestuelle de blast du lanceur local : kfId résolu du serveur (repli col3).</summary>
+    private void PlayCastAnim(int blastId, int spellId)
+    {
+        _rawAnimDeadline = 0;
+        _rawAnimSpell = 0;
+        var stem = CharModelSpec.BodyStem(SessionCarry.Character?.Appearance);
+        var raw = SpellCatalog.ActionKf(spellId);
+        var kf = blastId > 0 ? blastId : raw;
+        var anim = MotionTable.Shared.Lookup(stem, kf) ?? MotionTable.Shared.Lookup(stem, raw);
+        if (anim == null) return;
+        _player?.Animator?.PlayOnce(anim);
+        GD.Print($"[verify] cast anim : {anim} (blastKf={blastId}, colKf={raw}, stem={stem})");
     }
 
     private void OnSelfFlag(int handle, ushort flags)
@@ -1193,14 +1287,7 @@ public static class SpellCatalog
                     if (rg > 0) range[id] = rg;
                     var p1 = IniTable.GetInt(row, 20);
                     var sub = IniTable.GetInt(row, 30);
-                    shape[id] = p1 switch   // LoadAllSpellData @0x08380130 (voir SpellDef.Param1)
-                    {
-                        0 => sub == 3 ? 5 : 3,
-                        >= 1 and <= 3 => 3,
-                        4 => sub == 2 ? 6 : sub == 3 ? 5 : sub == 1 ? 2 : 0,
-                        5 => sub == 2 ? 6 : sub == 3 ? 5 : sub == 1 ? 2 : 1,
-                        _ => 0,
-                    };
+                    shape[id] = (int)SpellZone.ShapeOf(p1, sub);   // LoadAllSpellData @0x08380130
                     var rd = IniTable.GetInt(row, 29);
                     if (rd > 0) radius[id] = rd;
                 }

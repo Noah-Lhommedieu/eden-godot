@@ -145,6 +145,13 @@ public sealed class StatContribution
     /// <summary>Soins reçus +% — accum natif `HealPlus` mode 3
     /// (cmd 2038 arg1).</summary>
     public double HealTakenPercent { get; private set; }
+    /// <summary>Soins prodigués +flat — accum natif `HealPlus` mode 4
+    /// (CEC_HealPlus::Execute @0x08535480 : `+0x144`, cmd 2047 arg0,
+    /// KB-05) : s'ajoute après le `Heal(caster)`.</summary>
+    public double HealGivenFlat { get; private set; }
+    /// <summary>Soins reçus +flat — `HealPlus` mode 5 (`+0x14c`, cmd 2047
+    /// arg1) : s'ajoute après le `BeHeal(target)`.</summary>
+    public double HealTakenFlat { get; private set; }
     /// <summary>Coût MP flat — accum natif `CostMPPlus` mode 0
     /// (cmd 2015 arg0 ; valeurs négatives = réduction).</summary>
     public double MpCostFlat { get; private set; }
@@ -198,6 +205,8 @@ public sealed class StatContribution
         DodgeRatePercent += o.DodgeRatePercent;
         HealGivenPercent += o.HealGivenPercent;
         HealTakenPercent += o.HealTakenPercent;
+        HealGivenFlat += o.HealGivenFlat;
+        HealTakenFlat += o.HealTakenFlat;
         MpCostFlat += o.MpCostFlat;
         HateRatePercent += o.HateRatePercent;
         for (var i = 0; i < 9; i++) ResistAdds[i] += o.ResistAdds[i];
@@ -228,7 +237,8 @@ public sealed class StatContribution
         double castSpeedPct = 0, double hitRatePct = 0,
         double dodgeRatePct = 0,
         double healGivenPct = 0, double healTakenPct = 0,
-        double mpCost = 0, double hateRatePct = 0)
+        double mpCost = 0, double hateRatePct = 0,
+        double healGivenFlat = 0, double healTakenFlat = 0)
     {
         DefenceAdd += defence;
         DefenceRatePercent += defencePct;
@@ -253,6 +263,8 @@ public sealed class StatContribution
         DodgeRatePercent += dodgeRatePct;
         HealGivenPercent += healGivenPct;
         HealTakenPercent += healTakenPct;
+        HealGivenFlat += healGivenFlat;
+        HealTakenFlat += healTakenFlat;
         MpCostFlat += mpCost;
         HateRatePercent += hateRatePct;
         return this;

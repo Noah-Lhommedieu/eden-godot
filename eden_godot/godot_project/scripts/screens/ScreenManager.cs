@@ -60,6 +60,10 @@ public partial class ScreenManager : Control
         // (client.cfg peut être packagé) ; no-op sans *.epk ni si
         // EDEN_VFS=0.
         Vfs.EdenVfs.Mount();
+        // Résolveur des tables T_*/C_* posé AU BOOT : PreGameWarmup (login)
+        // atteint CharColorTable avant CharSelectScreen/GameScene.
+        EdenClient.Data.TextResolver.ResolveFile ??= rel =>
+            AssetCatalog.ResolveRawAsset(rel) ?? DataPaths.ResolveFile(rel);
         Config = ClientConfig.Load();
         // L'écran de boot s'affiche immédiatement ; le contexte UI
         // (scheme + looknfeel + imagesets, ~1 s de parsing XML) est

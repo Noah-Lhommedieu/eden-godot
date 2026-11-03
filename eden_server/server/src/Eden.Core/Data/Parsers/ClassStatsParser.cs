@@ -97,6 +97,21 @@ public class ClassStatsParser
         /// classe 17 → 50583-88) : les inclure ici les octroierait
         /// à tort.</summary>
         public int[] ClassSpellIds { get; set; } = Array.Empty<int>(); // cols 30-48 (+shift)
+        /// <summary>Sous-ensemble de <see cref="ClassSpellIds"/> issu du
+        /// vecteur natif +0x5c (cols 34-48) — spell_level 80 à l'octroi
+        /// d'une classe éveillée.</summary>
+        /// <summary>S_Class col8 (certsBase-14) — masque des classes
+        /// prérequises, bit(classe-1) (ex. Chevalier 1 = Guerrier,
+        /// Paladin 72 = Chevalier|Prêtre). `CClassData+0x20`, KB-03.</summary>
+        public ulong RequiredClassMask { get; set; }
+        /// <summary>S_Class col9 (certsBase-13) — niveau requis de CHAQUE
+        /// classe du masque (`+0x24`).</summary>
+        public int RequiredClassLevel { get; set; }
+        /// <summary>S_Class col10 (certsBase-12) — niveau personnage
+        /// requis (`+0x25`). 0 = pas d'octroi automatique (classes de
+        /// quête : éveillées, Sage, Dragon, Messie, Juge).</summary>
+        public int RequiredCharLevel { get; set; }
+        public int[] ClassSpellIdsHigh { get; set; } = Array.Empty<int>();
         /// <summary>Talents AA — `CClassData+0x68` = vector[6]
         /// (cols 49+shift..54+shift, 52581-86 pour guerrier).</summary>
         public int[] TalentIds { get; set; } = new int[6];
@@ -166,6 +181,13 @@ public class ClassStatsParser
             // la position brute row[12] n'est PAS fiable (descriptions
             // contenant '|' décalent la ligne) : ancrage certsBase-10.
             def.Archetype = IniTable.GetInt(row, certsBase - 10);
+            // Prérequis de déblocage (AddClassFromLimit @0x080fd440) —
+            // alignement vérifié sur les classes 6/7/11/12/13/14/15/16.
+            ulong.TryParse(IniTable.GetStr(row, certsBase - 14),
+                out var reqMask);
+            def.RequiredClassMask = reqMask;
+            def.RequiredClassLevel = IniTable.GetInt(row, certsBase - 13);
+            def.RequiredCharLevel = IniTable.GetInt(row, certsBase - 12);
 
             for (var i = 0; i < 9; i++)
                 def.StatPercents[i] =
@@ -183,6 +205,17 @@ public class ClassStatsParser
                 if (v > 0) spells.Add(v);
             }
             def.ClassSpellIds = spells.ToArray();
+            // Vecteur natif +0x5c (15 cellules, après les 4 du +0x50) :
+            // appris à spell_level 80 sur une classe éveillée
+            // (AddClass @0x080fd070, KB-04/D6).
+            var high = new List<int>();
+            for (var i = spellBase + 4;
+                 i <= spellBase + 18 && i < row.Length; i++)
+            {
+                var v = IniTable.GetInt(row, i);
+                if (v > 0) high.Add(v);
+            }
+            def.ClassSpellIdsHigh = high.ToArray();
 
             for (var i = 0; i < 6; i++)
                 def.TalentIds[i] =

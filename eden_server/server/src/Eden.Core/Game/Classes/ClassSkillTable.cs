@@ -44,16 +44,20 @@ public static class ClassSkillTable
     /// </summary>
     public static IReadOnlyList<int> GrantableSpells(int classId,
         int classLevel, IReadOnlyList<SpellParser.SpellDef> spells,
-        ClassStatsParser.ClassDefinition? classDef)
+        ClassStatsParser.ClassDefinition? classDef, int raceId = 0)
     {
         // bit natif : LoadAllCommonSpell indexe par bit(classId-1).
         var bit = classId is >= 1 and <= 63 ? 1UL << (classId - 1) : 0UL;
         var byId = new Dictionary<int, SpellParser.SpellDef>();
         foreach (var s in spells) byId[s.Id] = s;
 
+        // KB-07 : avec une race connue, une variante raciale d'une autre
+        // race n'est jamais candidate — sinon le dédoublonnage par code
+        // (Min) retient la variante Humaine pour tout le monde.
         bool Eligible(int id) =>
             byId.TryGetValue(id, out var s) &&
-            s.RequiredLevel >= 1 && s.RequiredLevel <= classLevel;
+            s.RequiredLevel >= 1 && s.RequiredLevel <= classLevel &&
+            RaceAllows(s.RaceFlag, raceId);
 
         var candidates = new List<int>();
         var seen = new HashSet<int>();
@@ -85,6 +89,33 @@ public static class ClassSkillTable
             .ToList();
     }
 
+    /// <summary>KB-07 : le flag race d'un sort (<c>S_Spell</c> col 14)
+    /// laisse-t-il passer la race <paramref name="raceId"/> (1-based) ?
+    /// Sans restriction (flag ≤ 0) ou race inconnue (≤ 0) : oui.</summary>
+    public static bool RaceAllows(int raceFlag, int raceId) =>
+        raceFlag <= 0 || raceId <= 0 ||
+        (raceFlag & (3 << (2 * (raceId - 1)))) != 0;
+
+    /// <summary>KB-06 : ligne <c>S_Class</c> du personnage = bande de sa
+    /// race, <c>(raceId-1)*100 + classId</c> (formule native
+    /// <c>(nibble&gt;&gt;1)×100+classId</c>) ; repli sur la ligne
+    /// <paramref name="classId"/> (race inconnue/0, table sans bande).
+    /// L'ancien test <c>RaceId*100+cls || Id==cls</c> ne matchait jamais
+    /// la bande et retombait toujours sur la ligne Humaine.</summary>
+    public static ClassStatsParser.ClassDefinition? ClassFor(
+        IEnumerable<ClassStatsParser.ClassDefinition> classes,
+        int raceId, int classId)
+    {
+        var row = (Math.Max(raceId, 1) - 1) * 100 + classId;
+        ClassStatsParser.ClassDefinition? fallback = null;
+        foreach (var c in classes)
+        {
+            if (c.Id == row) return c;
+            if (c.Id == classId) fallback = c;
+        }
+        return fallback;
+    }
+
     /// <summary>
     /// Spellmasters "généraux" d'une classe (skills de couleur —
     /// jaune mêlée, orange distance, vert support, bleu magie,
@@ -114,6 +145,8 @@ public static class ClassSkillTable
             // sort d'une autre race n'est jamais octroyé.
             if (raceId > 0 && IsRacialSpell(s.Id, out var spellRace)
                 && spellRace != raceId - 1) continue;
+            // KB-07 : flag race générique (crafts/supports J5xx-J6xx).
+            if (!RaceAllows(s.RaceFlag, raceId)) continue;
             // Général = bit de la classe présent + d'autres classes
             // couvertes (mask multi-bit), niveau perso suffisant.
             if ((s.ClassMask & bit) == 0 || s.ClassMask == bit) continue;

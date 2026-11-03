@@ -342,33 +342,12 @@ public sealed partial class ZoneEntryFlow
                 // HandleChangeClassAsync sans le switch courant).
                 {
                     var cls = Arg(ai);
-                    var rows = await _services.Classes
-                        .GetClassesByCharacterIdAsync((int)st.CharId);
-                    if (cls > 0 && rows.All(r => r.ClassId != cls))
-                    {
-                        await _services.Classes.AddClassAsync(
-                            (int)st.CharId, cls);
-                        var cdef = _services.GameData.Classes
-                            .FirstOrDefault(x =>
-                                x.Id == st.RaceId * 100 + cls ||
-                                x.Id == cls);
-                        var known = (await _services.Classes
-                            .GetPlayerSpellsAsync((int)st.CharId))
-                            .Select(x => unchecked((ushort)x.Spell))
-                            .ToHashSet();
-                        foreach (var sm in Eden.Core.Game.Classes
-                            .ClassSkillTable.GrantableSpells(cls, 1,
-                                _services.GameData.Spells, cdef))
-                            if (known.Add(unchecked((ushort)sm)))
-                                await _services.Classes.LearnSpellAsync(
-                                    (int)st.CharId,
-                                    unchecked((short)sm));
-                _services.SpellLevelsDirty?.Invoke((int)st.CharId);
-                        await HandleQueryClassListAsync(session, st,
-                            CancellationToken.None);
+                    // KB-04 : octroi complet (éveillée lv80, certs,
+                    // sorts +0x5c à 80, RefreshJPAward, 489).
+                    if (await GrantNewClassAsync(session, st, cls,
+                            CancellationToken.None))
                         EdenLog.Write($"[Zone-M] add-class " +
                             $"char={st.CharId} class={cls}");
-                    }
                 }
                 break;
             case "eden-announce": // MC Announce → message système zone

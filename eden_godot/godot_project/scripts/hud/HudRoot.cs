@@ -330,6 +330,15 @@ public partial class HudRoot : CanvasLayer
         // --ride-test : monte la monture 20051 (captures cavalier).
         if (args.Contains("--ride-test"))
             AddChild(new RideProbe(this));
+        // --ride-script=W:1.4,A:1.4,… : banc de locomotion monture
+        // (touches injectées + 2 captures par pas, voir RideScript).
+        foreach (var a in args)
+            if (a.StartsWith("--ride-script="))
+            {
+                var rd = args.FirstOrDefault(x => x.StartsWith("--ride-shots="));
+                AddChild(new RideScript(a[14..], rd != null ? rd[13..]
+                    : "artifacts/ride-script"));
+            }
         // --loot-test : menu portrait + dialogue loot natif (U1).
         if (args.Contains("--loot-test") && Vitals != null)
             AddChild(new TopLeftVitals.LootProbe(Vitals));

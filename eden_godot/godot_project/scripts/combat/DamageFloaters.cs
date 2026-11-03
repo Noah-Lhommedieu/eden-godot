@@ -361,6 +361,7 @@ public partial class DamageFloaters : Node3D
                 Spawn(handle, text, kind, crit, 0f, heal);
             return;
         }
+        using var _pt = EdenClient.Perf.PerfTrace.Scope($"floater:{text}");
         if (System.Environment.GetEnvironmentVariable("EDEN_FORCE_CRIT")
             == "1" && kind is Kind.Damage or Kind.Taken)
         {

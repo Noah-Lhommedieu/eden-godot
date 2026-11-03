@@ -197,6 +197,12 @@ public static class SpellParser
         /// aléatoire du groupe. Données : seul le groupe test 999 est
         /// peuplé (8 sorts 58668-58698).</summary>
         public int ElfGroup { get; set; }                    // col 34
+        /// <summary>Flag race (col 14 → `SSpellData+0x2c`, KB-07) :
+        /// -1/0 = sans restriction ; sinon 2 bits par race (Humain 3,
+        /// Zumi 4, Anuran 16, Ursun 64, Halfkin 768 ; 855 = toutes) —
+        /// `LoadAllCommonSpell` @0x83732b0. Vu sur 4 236 sorts à -1 et
+        /// 249 raciaux (S_Spell V.8).</summary>
+        public int RaceFlag { get; set; }                    // col 14
         public string[] Raw { get; set; } = System.Array.Empty<string>();
     }
 
@@ -263,6 +269,7 @@ public static class SpellParser
                 // c34→+0xe0 = groupe de sort elf (map
                 // ElfPetSpellGroupMap native).
                 ElfGroup = IniTable.GetInt(row, 34),
+                RaceFlag = IniTable.GetInt(row, 14),
                 Raw = row,
             });
         }

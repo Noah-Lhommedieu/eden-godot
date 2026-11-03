@@ -91,14 +91,34 @@ public sealed class ClassRepository : IClassRepository
         // INSERT idempotent : la ligne peut déjà exister (le handler
         // ChangeClass ré-insère les classes de base jamais jouées).
         // aa_point=1 : valeur observée nativement sur les classes non
-        // actives à la création.
+        // actives à la création. KB-04 : une classe ÉVEILLÉE démarre à
+        // level=80 / aa_point=80 (AddClass @0x080fd070 : classId != base).
         const string sql = @"
             INSERT INTO player_classlist (player_id, class, level, exp, point, aa_point)
-            VALUES (@CharacterId, @ClassId, 1, 0, 0, 1)
+            VALUES (@CharacterId, @ClassId, @Level, 0, 0, @Aa)
             ON CONFLICT (player_id, class) DO NOTHING";
 
+        var awakened = ClassRules.IsAwakened(classId);
+        var start = awakened ? ClassRules.AwakenedStartLevel : 1;
         return await connection.ExecuteAsync(sql,
-            new { CharacterId = characterId, ClassId = classId });
+            new
+            {
+                CharacterId = characterId, ClassId = classId,
+                Level = start, Aa = start,
+            });
+    }
+
+    /// <summary>Migration KB-04 : remet à 80/80 les classes éveillées
+    /// insérées à lv1/aa1 avant le correctif (jamais jouées : exp=0,
+    /// point=0). Idempotent. Retourne le nombre de lignes corrigées.</summary>
+    public async Task<int> PromoteAwakenedAsync()
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        return await connection.ExecuteAsync(@"
+            UPDATE player_classlist SET level = 80, aa_point = 80
+            WHERE level = 1 AND exp = 0 AND point = 0 AND aa_point = 1
+              AND (class % 100 BETWEEN 21 AND 58 OR class % 100 IN (60, 61))");
     }
     
     public async Task<bool> ChangeClassAsync(int characterId, int newClassId)

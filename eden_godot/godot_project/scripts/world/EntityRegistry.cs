@@ -38,6 +38,9 @@ public partial class RemoteEntity : Node3D
     /// stem monstre (m025) ou lettre corps perso (g/b…) ; sert à la
     /// résolution kfId→anim de <see cref="Combat.MotionTable"/>.</summary>
     public string ModelStem = "";
+    /// <summary>ClassId du 263 (KB-10) — tenue de base de SA classe quand
+    /// aucune armure 4pequip n'est portée ; 0 = inconnu.</summary>
+    public int ClassId;
     /// <summary>Dernière cible frappée par cette entité (272 —
     /// « cible de la cible » du TargetFrame) ; 0 = inconnue.</summary>
     public uint LastAtkTarget;
@@ -54,6 +57,17 @@ public partial class RemoteEntity : Node3D
     /// trame d'arrêt) : passé ~0,45 s sans repush l'input « moving »
     /// de l'animator est périmé.</summary>
     public double LastMoveAt;
+    /// <summary>Vitesse observée (u/s, lissée) d'un joueur distant :
+    /// distance entre deux 326 consécutifs / délai d'arrivée. Le client
+    /// ne reçoit pas la vitesse courante (le 265/263 porte celle du
+    /// spawn, périmée dès qu'on monte ou qu'un buff change) — elle sert
+    /// uniquement à régler la vitesse de lecture des anims de marche
+    /// (<see cref="MoveAnimSpeed"/>).</summary>
+    public float ObsSpeed;
+    /// <summary>Dernière position (monde X/Z) et date du 326 précédent
+    /// pour <see cref="ObsSpeed"/> ; date 0 = chaîne rompue (arrêt).</summary>
+    public Vector2 ObsPrev;
+    public double ObsPrevAt;
     /// <summary>Vrai quand l'entité a reçu sa séquence de mort
     /// (272 fatal / 305 ClientDie / HP 0) — le despawn 269 obtient
     /// alors un délai grâce pour laisser l'anim death se jouer.</summary>
@@ -180,7 +194,7 @@ public partial class RemoteEntity : Node3D
                     ? id : 0,
                 id => Hud.InventoryWindow.LookupDef(id)?.Kind ?? -1);
         CharVisual.ApplyEquipment(visual, ModelStem, shown,
-            LookupEquipItem);
+            LookupEquipItem, ClassId, 0);
     }
 
     /// <summary>itemId → (Code, ModelCode) — même résolution c_item
@@ -270,6 +284,8 @@ public partial class RemoteEntity : Node3D
     public void Die()
     {
         if (Dying) return;
+        using var _pt = EdenClient.Perf.PerfTrace.Scope("Die()");
+        EdenClient.Perf.PerfTrace.Event("Die");
         Dying = true;
         // Cadavre non sélectionnable (A1.1-e) : plus de raycast pick.
         GetNodeOrNull<Area3D>("PickArea")?.SetDeferred(
@@ -1121,6 +1137,7 @@ public partial class EntityRegistry : Node3D
             e.Interp.Buffer.Push(Now, gx, gy, gz, yaw);
         }
         e.LastMoveAt = Now;
+        if (e.Kind == 0) ObserveSpeed(e, moving, gx, gz);
         if (e.Animator != null)
         {
             e.Animator.InputMoving = moving;
@@ -1136,6 +1153,31 @@ public partial class EntityRegistry : Node3D
                     ma.MoveAnim = anim;
             }
         }
+    }
+
+    /// <summary>Met à jour <see cref="RemoteEntity.ObsSpeed"/> depuis ce
+    /// 326 et règle la vitesse de lecture des anims de marche du joueur
+    /// distant (cavalier + monture) comme pour le joueur local : bonus =
+    /// (vitesse / vitesse à pied de base − 1) × 100.</summary>
+    private void ObserveSpeed(RemoteEntity e, bool moving, float gx, float gz)
+    {
+        if (!moving) { e.ObsPrevAt = 0; return; }
+        if (e.ObsPrevAt > 0)
+        {
+            var dt = Now - e.ObsPrevAt;
+            var d = new Vector2(gx, gz).DistanceTo(e.ObsPrev);
+            if (dt is > 0.02 and < 0.8 && d > 0.02f)
+                e.ObsSpeed = MoveAnimSpeed.Smooth(e.ObsSpeed, (float)(d / dt));
+        }
+        e.ObsPrev = new Vector2(gx, gz);
+        e.ObsPrevAt = Now;
+        if (e.ObsSpeed <= 0f || e.Animator == null) return;
+        var ma = e.Animator.RideMount is { } m &&
+                 GodotObject.IsInstanceValid(m) ? m : null;
+        var scale = MoveAnimSpeed.Scale(MoveAnimSpeed.BonusPct(
+            MoveAnimSpeed.MulFromObserved(e.ObsSpeed)), ma != null);
+        e.Animator.MoveSpeedScale = scale;
+        if (ma != null) ma.MoveSpeedScale = scale;
     }
 
     /// <summary>267 ClientGoto — ordre « aller à » d'une entité
@@ -1189,6 +1231,7 @@ public partial class EntityRegistry : Node3D
     /// <summary>329 SeeTreasure — trésor au sol (itemId pour label).</summary>
     public void HandleSeeTreasure(ZoneSeeTreasure t)
     {
+        using var _pt = EdenClient.Perf.PerfTrace.Scope($"seeTreasure#{t.ItemId}");
         var e = GetOrCreate(t.Handle, t.ItemId, 0);
         var (gx, gy, gz) = GroundPos(t.X, t.Y, 0f);
         e.Position = new Vector3(gx, gy, gz);
@@ -1389,6 +1432,7 @@ public partial class EntityRegistry : Node3D
             e.SetVisual(body, isPlayer: true);
             e.ModelStem = CharModelSpec.BodyStem(m.Appearance);
         }
+        e.ClassId = m.ClassId;
         var label = $"Lv{m.Level} {m.CharName}";
         e.DisplayName = label;
         e.LabelProminent = true;
@@ -1773,6 +1817,7 @@ public partial class EntityRegistry : Node3D
     /// le 305 ; la grâce ne couvre que la fin d'anim éventuelle).</summary>
     private void Remove(uint handle)
     {
+        using var _pt = EdenClient.Perf.PerfTrace.Scope("registry.Remove");
         if (!_entities.Remove(handle, out var e)) return;
         if (e.Dying && e.Animator?.OneShotPlaying == true &&
             GodotObject.IsInstanceValid(e))

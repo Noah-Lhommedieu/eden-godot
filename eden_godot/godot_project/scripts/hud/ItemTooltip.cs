@@ -601,6 +601,7 @@ public static partial class ItemTooltip
                 {
                     Atlas = sheet,
                     Region = new Rect2(x, 50, 12, 12),
+                    FilterClip = true,
                 },
                 CustomMinimumSize = new Vector2(12, 12),
                 SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,

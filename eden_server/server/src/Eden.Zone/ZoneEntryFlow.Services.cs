@@ -328,14 +328,13 @@ public sealed partial class ZoneEntryFlow
         // mask mono-classe, filtrés req <= classLevel. Sans ça, passer
         // en Thief/Hunter/Cleric/Mage ne donnait AUCUN sort de classe
         // (le 286 ne rejouait que les spellmasters déjà connus).
-        var classDef = _services.GameData.Classes.FirstOrDefault(c =>
-            c.Id == st.RaceId * 100 + newClass || c.Id == newClass);
+        var classDef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, st.RaceId, newClass);
         var known = (await _services.Classes
                 .GetPlayerSpellsAsync((int)st.CharId))
             .Select(s => unchecked((ushort)s.Spell)).ToHashSet();
         foreach (var sm in Eden.Core.Game.Classes.ClassSkillTable
                 .GrantableSpells(newClass, newLevel,
-                    _services.GameData.Spells, classDef))
+                    _services.GameData.Spells, classDef, st.RaceId))
             if (known.Add(unchecked((ushort)sm)))
                 await _services.Classes.LearnSpellAsync(
                     (int)st.CharId, unchecked((short)sm));
@@ -627,11 +626,10 @@ public sealed partial class ZoneEntryFlow
         // ce que le client attend pour la classe courante — même liste
         // que l'octroi ChangeClass. Les sorts d'autres classes restent
         // en DB mais ne sont pas poussés.
-        var classDef = _services.GameData.Classes.FirstOrDefault(c =>
-            c.Id == st.RaceId * 100 + st.ClassId || c.Id == st.ClassId);
+        var classDef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, st.RaceId, st.ClassId);
         var grantable = Eden.Core.Game.Classes.ClassSkillTable
             .GrantableSpells(st.ClassId, Math.Max(st.ClassLevel, 1),
-                _services.GameData.Spells, classDef)
+                _services.GameData.Spells, classDef, st.RaceId)
             .Select(id => unchecked((short)id)).ToHashSet();
         // Skills généraux/raciaux de la classe active (mask multi-bit
         // contenant son bit, niveau perso suffisant, race compatible).

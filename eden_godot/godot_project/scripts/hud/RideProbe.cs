@@ -42,6 +42,102 @@ public sealed partial class RideProbe : Node
     }
 }
 
+/// <summary>Banc <c>--ride-script=W:1.4,A:1.4,D:1.4,S:1.4,J:1.2,STAND:1</c>
+/// (avec <c>--ride-key=K</c> ou une monture live) : maintient les touches
+/// du pas (lettres WASD combinées, <c>J</c> = saut, <c>STAND</c> = rien)
+/// et sauve, pour chaque pas, deux captures du viewport
+/// (<c>--ride-shots=DIR</c>, défaut <c>artifacts/ride-script</c>) + une
+/// ligne <c>[ride-script]</c> (anim cavalier/monture, record, cap, vitesse
+/// de lecture). Quitte à la fin. Pas de xdotool sous Wayland : les touches
+/// sont injectées dans l'InputMap comme <c>WalkProbe</c>.</summary>
+public sealed partial class RideScript : Node
+{
+    private readonly (string Keys, float Secs)[] _steps;
+    private readonly string _dir;
+    private int _i = -1;
+    private float _t;
+    private int _shots;
+    private float _warm;
+    private string _held = "";
+
+    public RideScript(string spec, string dir)
+    {
+        Name = "__ride_script__";
+        _dir = dir;
+        _steps = spec.Split(',', System.StringSplitOptions.RemoveEmptyEntries)
+            .Select(p =>
+            {
+                var kv = p.Split(':');
+                return (kv[0].ToUpperInvariant(),
+                    kv.Length > 1 && float.TryParse(kv[1],
+                        System.Globalization.NumberStyles.Float,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var f) ? f : 1.4f);
+            }).ToArray();
+        System.IO.Directory.CreateDirectory(dir);
+    }
+
+    private static Key KeyOf(char c) => c switch
+    {
+        'W' => Key.W, 'A' => Key.A, 'S' => Key.S, 'D' => Key.D,
+        'J' => Key.Space, _ => Key.None,
+    };
+
+    private void Hold(string keys, bool on)
+    {
+        foreach (var c in keys)
+            if (KeyOf(c) is var k && k != Key.None)
+                Input.ParseInputEvent(new InputEventKey
+                    { PhysicalKeycode = k, Pressed = on });
+    }
+
+    public override void _Process(double delta)
+    {
+        var pc = GetTree().Root.FindChildren("*", "CharacterBody3D", true, false)
+            .OfType<EdenClient.Player.PlayerController>().FirstOrDefault();
+        if (pc == null || pc.MountAnimator == null) { _warm = 0f; return; }
+        if ((_warm += (float)delta) < 2.5f) return;   // monture posée + HUD
+        if (_i < 0) { _i = 0; _t = 0f; Begin(); return; }
+        _t += (float)delta;
+        var st = _steps[_i];
+        var hold = st.Keys == "STAND" ? "" : st.Keys;
+        // Captures à 55 % et 90 % du pas.
+        if (_shots == 0 && _t > st.Secs * 0.55f) Shoot(pc, 'a');
+        else if (_shots == 1 && _t > st.Secs * 0.9f) Shoot(pc, 'b');
+        if (_t < st.Secs) return;
+        Hold(hold, false);
+        _i++; _t = 0f; _shots = 0;
+        if (_i >= _steps.Length)
+        {
+            GD.Print("[ride-script] fin");
+            GetTree().Quit();
+            return;
+        }
+        Begin();
+    }
+
+    private void Begin()
+    {
+        var st = _steps[_i];
+        _held = st.Keys == "STAND" ? "" : st.Keys;
+        Hold(_held, true);
+        GD.Print($"[ride-script] pas {_i} {st.Keys} {st.Secs:0.0}s");
+    }
+
+    private void Shoot(EdenClient.Player.PlayerController pc, char tag)
+    {
+        _shots++;
+        var name = $"{_dir}/{_i:D2}-{_steps[_i].Keys}-{tag}.png";
+        GetViewport().GetTexture().GetImage().SavePng(name);
+        var sc = pc.MountAnimator!.Player?.SpeedScale ?? 0f;
+        GD.Print($"[ride-script] {tag} pas={_i} {_steps[_i].Keys} " +
+            $"rec={pc.MoveRecord} rider={pc.Animator?.Current} " +
+            $"mount={pc.MountAnimator.Current} " +
+            $"modelYaw={Mathf.RadToDeg(pc.ModelYaw):0} speedScale={sc:0.##} " +
+            $"vy={pc.Velocity.Length():0.0} -> {name}");
+    }
+}
+
 /// <summary>Debug placement monture : <c>RIDE_KEY=14010</c> (env) ou
 /// <c>--ride-key=14010</c> force <c>SetRideModel</c> sur ce rideKey sans
 /// serveur de ride ; ensuite le fichier <c>/tmp/ride_key.txt</c>

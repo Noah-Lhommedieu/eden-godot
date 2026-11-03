@@ -367,9 +367,7 @@ public sealed partial class ZoneEntryFlow
                     CancellationToken.None);
             // Sorts du nouveau palier de classe (données
             // ClassSkillTable — aucune liste en dur).
-            var cdef2 = _services.GameData.Classes.FirstOrDefault(c =>
-                c.Id == st.RaceId * 100 + st.ClassId
-                    || c.Id == st.ClassId);
+            var cdef2 = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, st.RaceId, st.ClassId);
             var known = (await _services.Classes
                     .GetPlayerSpellsAsync((int)st.CharId))
                 .Select(x => unchecked((ushort)x.Spell)).ToHashSet();
@@ -377,7 +375,7 @@ public sealed partial class ZoneEntryFlow
             var freshSpells = new HashSet<ushort>();
             foreach (var sm in Eden.Core.Game.Classes.ClassSkillTable
                     .GrantableSpells(st.ClassId, lv,
-                        _services.GameData.Spells, cdef2))
+                        _services.GameData.Spells, cdef2, st.RaceId))
                 if (known.Add(unchecked((ushort)sm)))
                 {
                     await _services.Classes.LearnSpellAsync(
@@ -431,8 +429,13 @@ public sealed partial class ZoneEntryFlow
         // activer un enchant de bonus (classLv×0.2) — le 296 émis
         // recalcule la contribution cumulée de toutes les classes.
         if (leveled)
+        {
             await ProfileStatEmitter.SendForCharacterAsync(session,
                 _services, (int)st.CharId, CancellationToken.None);
+            // AddClassFromLimit natif (GainClassPoint) — KB-03.
+            await UnlockClassesFromLimitAsync(session, st,
+                CancellationToken.None);
+        }
     }
 
     /// <summary>Exp du kill — équivalent CCharacter::GainExp
@@ -742,9 +745,7 @@ public sealed partial class ZoneEntryFlow
         if (gearExp <= 0) return;
         // Archétype de la classe active — CClassData+0x28 natif
         // (gate kind%3 sur les locs d'armure 1-5).
-        var cls = _services.GameData.Classes.FirstOrDefault(c =>
-            c.Id == st.RaceId * 100 + st.ClassId ||
-            c.Id == st.ClassId);
+        var cls = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, st.RaceId, st.ClassId);
         var o = await _services.EquipTrain.GainEquipExpAsync(
             (int)st.CharId, st.Level, cls?.Archetype ?? 0, gearExp);
         if (!o.Changed || o.Item == null) return;
@@ -855,6 +856,9 @@ public sealed partial class ZoneEntryFlow
         // spellmasters multi-masque des classes possédées (natif :
         // GetCommonSpell gaté par char+0x470 = niveau perso).
         await GrantGeneralSpellsOnLevelAsync(session, st,
+            CancellationToken.None);
+        // AddClassFromLimit natif (GainExp) — KB-03.
+        await UnlockClassesFromLimitAsync(session, st,
             CancellationToken.None);
         return gained;
     }

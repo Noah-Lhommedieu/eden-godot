@@ -310,12 +310,10 @@ public sealed partial class ZoneEntryFlow
         {
             var classLevel = Math.Max(bundle.ClassRow?.ClassLevel
                 ?? sc.ClassLevel, 1);
-            var classDef = _services.GameData.Classes.FirstOrDefault(c =>
-                c.Id == sc.RaceId * 100 + sc.ClassId
-                    || c.Id == sc.ClassId);
+            var classDef = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, sc.RaceId, sc.ClassId);
             foreach (var sm in ClassSkillTable.GrantableSpells(
                          sc.ClassId, classLevel,
-                         _services.GameData.Spells, classDef))
+                         _services.GameData.Spells, classDef, sc.RaceId))
                 if (known.Add(unchecked((ushort)sm)))
                     learn.Add(unchecked((short)sm));
             foreach (var cls in pf.Classes)

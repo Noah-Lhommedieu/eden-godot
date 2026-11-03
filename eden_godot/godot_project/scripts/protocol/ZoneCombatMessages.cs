@@ -382,6 +382,16 @@ public sealed class ZoneClientSpellBlastToLife : NetMessage
     public int Field11 { get; set; }
     /// <summary>i32 — champ natif.</summary>
     public int Field12 { get; set; }
+    // Layout natif réel (Serialize @0x081e8870, serveur CNC_CZ_ClientSpellBlastToLife) :
+    // [u32 serial][s16 spell][i32 hLanceur][f32 src×3][i32 hCible][f32 dst×3][i32 blastIdx][i32 0].
+    // Les noms historiques ci-dessus (VictimHandle/BlastId/Field8..11) sont conservés pour la
+    // sérialisation ; ces alias donnent la sémantique vraie (le « VictimHandle » est le LANCEUR).
+    /// <summary>Handle du lanceur (champ 3).</summary>
+    public int Caster => VictimHandle;
+    /// <summary>Handle de la cible touchée (champ 7, stocké dans <see cref="BlastId"/>).</summary>
+    public int TargetHandle => BlastId;
+    /// <summary>kfId de blast RÉSOLU (champ 11).</summary>
+    public int BlastIdx => Field11;
     public override void Serialize(BinWriter s)
     {
         s.WriteUInt(Serial);

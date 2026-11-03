@@ -90,8 +90,9 @@ public sealed class EnchantService
     /// M-ATK/pt). Appliquer S_ tout en affichant c_ rendait les
     /// talents « sans stats » : la ligne Reforged <b>remplace</b> la
     /// ligne serveur de même id, et les ids nouveaux (1094)
-    /// s'ajoutent. Schéma identique (mêmes 61 colonnes) — vérifié
-    /// octet à octet. `c_itemmallenchant.ini` est traité de même.
+    /// s'ajoutent. Schéma FR `|V.2|60|` = S_ `|V.3|61|` SANS la colonne
+    /// elf-pet (index 6) : `EnchantParser.NormalizeRow` la réinsère
+    /// (KB-01) pour que les index S_ restent valides. `c_itemmallenchant.ini` est traité de même.
     /// Désactivation : EDEN_REFORGED_DB=off.
     /// Retourne la liste remplacée (même instance mutée + ids
     /// ajoutés).</summary>

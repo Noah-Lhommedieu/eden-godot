@@ -70,6 +70,20 @@ public static class EnchantParser
         public string[] Raw { get; set; } = System.Array.Empty<string>();
     }
 
+    /// <summary>Réinsère la cellule vide d'index 6 sur une ligne FR
+    /// (61 cellules, ou 56 si <paramref name="headerCols"/> = 60). Les
+    /// lignes S_ (62/57) et l'anomalie 46131 (55) sont inchangées.</summary>
+    public static string[] NormalizeRow(string[] row0, int headerCols)
+    {
+        var fr = row0.Length == 61 || (headerCols == 60 && row0.Length == 56);
+        if (!fr) return row0;
+        var row = new string[row0.Length + 1];
+        Array.Copy(row0, 0, row, 0, 6);
+        row[6] = string.Empty;
+        Array.Copy(row0, 6, row, 7, row0.Length - 6);
+        return row;
+    }
+
     public static List<EnchantDef> Parse(string filePath)
     {
         var table = IniTable.ParseFile(filePath, EdenEncoding.Big5);
@@ -77,17 +91,12 @@ public static class EnchantParser
 
         foreach (var row0 in table.Rows)
         {
-            var row = row0;
-            // c_enchant EDENFR = |V.2|60| : le schéma S_ |V.3|61|
-            // moins la colonne « groupe elf-pet » en index 6 — on la
-            // réinsère vide pour que tous les index ≥6 s'alignent.
-            if (row.Length == 60)
-            {
-                row = new string[61];
-                Array.Copy(row0, 0, row, 0, 6);
-                row[6] = string.Empty;
-                Array.Copy(row0, 6, row, 7, 54);
-            }
+            // KB-01 : c_enchant EDENFR = |V.2|60| (60 cols + « | » terminal
+            // = 61 cellules, ou 56 si la fin est tronquée) : le schéma S_
+            // |V.3|61| (62/57 cellules) a en plus la colonne « groupe
+            // elf-pet » en index 6 — on la réinsère vide pour aligner tous
+            // les index ≥6. Ancien garde « Length == 60 » : jamais vrai.
+            var row = NormalizeRow(row0, table.ColumnCount);
             if (row.Length < 10 || !int.TryParse(row[0], out var id)) continue;
 
             var e = new EnchantDef

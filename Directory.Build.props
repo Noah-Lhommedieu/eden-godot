@@ -1,0 +1,7 @@
+<Project>
+  <!-- Le serveur de compilation Roslyn hérite du fd de flock (tools/*.sh,
+       /tmp/eden-build.lock) et garde le verrou après le build. -->
+  <PropertyGroup>
+    <UseSharedCompilation>false</UseSharedCompilation>
+  </PropertyGroup>
+</Project>

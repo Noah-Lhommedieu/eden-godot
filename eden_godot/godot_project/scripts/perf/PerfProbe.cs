@@ -31,6 +31,8 @@ public partial class PerfProbe : Node
     /// utilisateur).</summary>
     public static bool Enabled => _enabled ??= HasArg("--perf");
 
+    private static double HitchMs => PerfTrace.HitchThresholdMs;
+
     private double _quitAfter;
     private string? _outPath;
     private bool _noStats;
@@ -53,6 +55,8 @@ public partial class PerfProbe : Node
     public override void _Ready()
     {
         _t0 = Time.GetTicksMsec() / 1000.0;
+        PerfTrace.MainViewport = GetViewport().GetViewportRid();
+        RenderingServer.ViewportSetMeasureRenderTime(PerfTrace.MainViewport, true);
         foreach (var a in Args())
         {
             if (a.StartsWith("--perf-seconds=") &&
@@ -63,6 +67,10 @@ public partial class PerfProbe : Node
                 _outPath = a[11..];
             else if (a == "--perf-nostats")
                 _noStats = true;
+            else if (a.StartsWith("--hitch-ms=") &&
+                double.TryParse(a[11..], NumberStyles.Float,
+                    CultureInfo.InvariantCulture, out var hm))
+                PerfTrace.HitchThresholdMs = hm;
         }
         if (_outPath != null)
         {
@@ -79,6 +87,7 @@ public partial class PerfProbe : Node
     {
         _frames++;
         _n++;
+        if (delta > HitchMs / 1000.0) PerfTrace.ReportHitch(delta);
         _sumDt += delta;
         if (delta < _minDt) _minDt = delta;
         if (delta > _maxDt) _maxDt = delta;
@@ -310,5 +319,69 @@ public static class PerfTrace
         if (!Enabled) return;
         GD.Print($"[perf] {label} : t=" +
             $"{(Time.GetTicksMsec() - _boot) / 1000.0:F2}s");
+    }
+
+    // ------------------------------------------------------------------
+    // Diagnostic de pics (« freeze après un kill ») : journal d'évènements
+    // horodatés + sections chronométrées, corrélés à chaque image longue.
+    // ------------------------------------------------------------------
+
+    private static readonly object _evLock = new();
+    private static readonly Queue<(ulong T, string What)> _events = new();
+
+    /// <summary>Note un évènement (mort, spawn de loot…) dans le journal ; les pics le relisent.</summary>
+    public static void Event(string what)
+    {
+        if (!Enabled) return;
+        lock (_evLock)
+        {
+            _events.Enqueue((Time.GetTicksMsec(), what));
+            while (_events.Count > 64) _events.Dequeue();
+        }
+    }
+
+    /// <summary>Évènements consignés depuis <paramref name="t0Ms"/> (ticks ms) — pour les bancs de mesure.</summary>
+    public static string EventsSince(ulong t0Ms)
+    {
+        lock (_evLock)
+            return string.Join(" | ", _events.Where(e => e.T >= t0Ms)
+                .Select(e => $"+{e.T - t0Ms}ms {e.What}"));
+    }
+
+    /// <summary>Section chronométrée : consigne « label N ms » si ≥ 1 ms. À utiliser avec <c>using</c>.</summary>
+    public readonly struct Span : IDisposable
+    {
+        private readonly string? _label;
+        private readonly long _t0;
+        internal Span(string label) { _label = label; _t0 = System.Diagnostics.Stopwatch.GetTimestamp(); }
+        public void Dispose()
+        {
+            if (_label == null) return;
+            var ms = System.Diagnostics.Stopwatch.GetElapsedTime(_t0).TotalMilliseconds;
+            if (ms >= 1.0) Event($"{_label} {ms:F1}ms");
+        }
+    }
+
+    /// <summary>Ouvre une <see cref="Span"/> (no-op hors <c>--perf</c>).</summary>
+    public static Span Scope(string label) => Enabled ? new Span(label) : default;
+
+    /// <summary>Image longue : seuil en ms (arg <c>--hitch-ms=</c>, défaut 40).</summary>
+    internal static double HitchThresholdMs = 40;
+    internal static Rid MainViewport;
+
+    /// <summary>Consigne une image longue avec les évènements des 400 ms précédentes.</summary>
+    internal static void ReportHitch(double delta)
+    {
+        var now = Time.GetTicksMsec();
+        string ev;
+        lock (_evLock)
+            ev = string.Join(" | ", _events.Where(e => now - e.T < 400)
+                .Select(e => $"-{now - e.T}ms {e.What}"));
+        var tproc = Performance.GetMonitor(Performance.Monitor.TimeProcess) * 1000.0;
+        var rcpu = MainViewport.IsValid
+            ? RenderingServer.ViewportGetMeasuredRenderTimeCpu(MainViewport) : 0.0;
+        var rgpu = MainViewport.IsValid
+            ? RenderingServer.ViewportGetMeasuredRenderTimeGpu(MainViewport) : 0.0;
+        GD.Print($"[hitch] dt={delta * 1000:F0}ms proc={tproc:F1}ms render_cpu={rcpu:F1}ms render_gpu={rgpu:F1}ms events: {(ev.Length == 0 ? "-" : ev)}");
     }
 }

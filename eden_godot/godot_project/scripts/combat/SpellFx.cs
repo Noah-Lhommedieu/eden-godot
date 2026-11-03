@@ -189,10 +189,65 @@ public partial class SpellFx : Node
         {
             var m = new ZoneClientSpellBlastToLife();
             m.Deserialize(r);
-            _pending.Enqueue(() => Impact((ushort)m.SpellId,
-                (uint)m.VictimHandle, false));
+            // Layout réel : champ 3 = LANCEUR, champ 7 = CIBLE, champ 11 = kfId de blast résolu.
+            _pending.Enqueue(() =>
+            {
+                RemoteBlastAnim((uint)m.Caster, m.BlastIdx, (ushort)m.SpellId);
+                Impact((ushort)m.SpellId, (uint)m.TargetHandle, false);
+            });
         });
-        GD.Print("[spellfx] binds 278/279/281/288/289 posés");
+        s.OnZone(297, r =>
+        {
+            var m = new ZoneClientSpellBlastToLocation();
+            m.Deserialize(r);
+            _pending.Enqueue(() => OnGroundBlast(m));
+        });
+        GD.Print("[spellfx] binds 278/279/281/288/289/297 posés");
+    }
+
+    /// <summary>297 SpellBlastToLocation : effet d'impact posé AU SOL au point visé (centre du cercle),
+    /// orienté selon l'axe lanceur → point (formes directionnelles). Hauteur = relief sous le point.</summary>
+    private void OnGroundBlast(ZoneClientSpellBlastToLocation m)
+    {
+        var id = (ushort)m.SpellId;
+        // Hauteur : sol « marchable » du joueur (même source que ses pas), repli registre puis Y joueur.
+        var hp = _player?.GroundHeight?.Invoke(m.DstX, -m.DstY);
+        var hr = _registry?.GroundHeight?.Invoke(m.DstX, -m.DstY);
+        var h = hp ?? hr ?? _player?.GlobalPosition.Y ?? 0f;
+        var (ax, ay) = SpellZone.AxisTo(m.SrcX, m.SrcY, m.DstX, m.DstY, 0f);
+        var anchor = new Node3D { Name = $"GroundFx_{id}" };
+        AddChild(anchor);
+        anchor.GlobalPosition = new Vector3(m.DstX, h, -m.DstY);
+        anchor.Rotation = new Vector3(0f, MathF.Atan2(-ax, ay), 0f);   // même formule qu'EdenDir.ToYaw
+        GD.Print($"[spellfx] zone #{id} centre=({m.DstX:0.#},{m.DstY:0.#}) h={h:0.#} " +
+                 $"(marchable={hp?.ToString("0.#") ?? "-"} registre={hr?.ToString("0.#") ?? "-"} joueurY={_player?.GlobalPosition.Y:0.#}) " +
+                 $"axe=({ax:0.##},{ay:0.##}) rayon={SpellZone.AreaRadius(SpellCatalog.RadiusUnits(id)):0.#}");
+        Spawn(SpellFxTable.HitFx(id), anchor, 0f);
+        // Lanceur distant : le 297 ne porte pas son handle — l'entité joueur la plus proche de la
+        // source (≤ 1,5 u) joue la gestuelle de blast.
+        if (_registry != null)
+        {
+            RemoteEntity? best = null; var bestD = 2.25f;
+            foreach (var e in _registry.Entities.Values)
+            {
+                if (e.Kind != 0 || e.ModelStem.Length != 1 || !IsInstanceValid(e)) continue;   // joueurs (corps 1 lettre) — les trésors sont aussi kind 0
+                var d = new Vector2(e.GlobalPosition.X - m.SrcX, e.GlobalPosition.Z + m.SrcY).LengthSquared();
+                if (d < bestD) { bestD = d; best = e; }
+            }
+            if (best != null) RemoteBlastAnim(best.Handle, m.BlastId, id);
+        }
+        GetTree().CreateTimer(6f).Timeout += () =>
+        { if (IsInstanceValid(anchor)) anchor.QueueFree(); };
+    }
+
+    /// <summary>Gestuelle de blast d'un lanceur distant : kfId résolu du paquet (repli : col3 du sort).</summary>
+    private void RemoteBlastAnim(uint caster, int blastIdx, int spellId)
+    {
+        if (_registry == null || !_registry.Entities.TryGetValue(caster, out var e)) return;
+        var kf = blastIdx > 0 ? blastIdx : SpellCatalog.ActionKf(spellId);
+        var anim = MotionTable.Shared.Lookup(e.ModelStem, kf)
+            ?? MotionTable.Shared.Lookup(e.ModelStem, SpellCatalog.ActionKf(spellId));
+        if (anim != null) e.PlayOnce(anim);
     }
 
     private void OnSelfCast(ZoneClientSpellCastOK m)
@@ -208,10 +263,15 @@ public partial class SpellFx : Node
         var caster = (uint)m.Caster;
         if (_registry == null ||
             !_registry.Entities.TryGetValue(caster, out var e)) return;
-        // Anim d'action du sort sur le lanceur distant.
-        var anim = MotionTable.Shared.Lookup(e.ModelStem,
-            SpellCatalog.ActionKf(id));
-        if (anim != null) e.PlayOnce(anim);
+        // Anim d'action du lanceur distant : sort instantané → tout de suite ; sort TEMPORISÉ → la
+        // gestuelle part au blast (289/297, kfId résolu), pas au début de l'incantation (le serveur
+        // décale la résolution de swing = temps 'hit' à partir du blast).
+        if (SpellCatalog.CastDs(id) == 0)
+        {
+            var anim = MotionTable.Shared.Lookup(e.ModelStem,
+                SpellCatalog.ActionKf(id));
+            if (anim != null) e.PlayOnce(anim);
+        }
         Spawn(SpellFxTable.CastFx(id), e,
             SpellCatalog.CastDs(id) / 10f);
     }
@@ -449,6 +509,7 @@ public partial class SpellFx : Node
     private void Spawn(SpellFxTable.Fx? fxDef, Node3D host, float hold)
     {
         if (fxDef is not { } def || !IsInstanceValid(host)) return;
+        using var _pt = EdenClient.Perf.PerfTrace.Scope($"fx:{def.Model}");
         // Settings : « 3D Effect » (coupe tous les modèles d'effets) et
         // « Max FX » (plafond d'effets simultanés ; les siens passent
         // toujours).

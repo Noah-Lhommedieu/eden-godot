@@ -52,20 +52,50 @@ public static class ClassSkillTree
         }
     }
 
+    /// <summary>Oublie les tables chargées (tests).</summary>
+    public static void Reset()
+    {
+        lock (_lock) { _spells = null; _classes = null; _talents = null; }
+    }
+
+    /// <summary>Journal injecté par le HUD (<c>GD.Print</c>) — ce fichier
+    /// est aussi compilé hors moteur par NetTests.</summary>
+    public static Action<string>? Log { get; set; }
+
     /// <summary>Charge à la demande via <paramref name="resolve"/>
-    /// (nom relatif → chemin) ; no-op si déjà chargé.</summary>
+    /// (nom relatif → chemin) ; no-op si tout est déjà chargé. KB-15 : une
+    /// table non résolue n'est PAS mise en cache (l'ancien dict vide
+    /// définitif donnait des grilles vides pour toute la session) — elle
+    /// reste nulle, un log le dit, et la prochaine ouverture réessaie.</summary>
     public static void EnsureLoaded(Func<string, string?> resolve)
     {
         lock (_lock)
         {
             if (_spells != null && _classes != null && _talents != null)
                 return;
-            var sp = resolve("data/db/c_spell.ini");
-            var cl = resolve("data/db/c_class.ini");
-            var ta = resolve("data/db/c_talent.ini");
-            _spells = sp != null ? LoadSpells(sp) : new();
-            _classes = cl != null ? ClassTable.Load(cl) : new();
-            _talents = ta != null ? TalentTable.Load(ta) : new();
+            if (_spells == null)
+            {
+                var sp = resolve("data/db/c_spell.ini");
+                if (sp != null) _spells = LoadSpells(sp);
+            }
+            if (_classes == null)
+            {
+                var cl = resolve("data/db/c_class.ini");
+                if (cl != null) _classes = ClassTable.Load(cl);
+            }
+            if (_talents == null)
+            {
+                var ta = resolve("data/db/c_talent.ini");
+                if (ta != null) _talents = TalentTable.Load(ta);
+            }
+            if (_spells == null || _classes == null || _talents == null)
+                Log?.Invoke("[skill] ClassSkillTree : table non résolue " +
+                    $"(c_spell={_spells != null}, c_class={_classes != null}, " +
+                    $"c_talent={_talents != null}) — réessai à la prochaine " +
+                    "ouverture");
+            else
+                Log?.Invoke($"[skill] ClassSkillTree : {_spells.Count} sorts, " +
+                    $"{_classes.Count} classes, {_talents.Count} lignes talents");
         }
     }
 
@@ -130,8 +160,7 @@ public static class ClassSkillTree
         {
             var bit = 1UL << (local - 1);
             foreach (var s in _spells.Values.OrderBy(x => x.Id))
-                if (s.Mask == bit && s.Family != 7 && s.Pay == 9 &&
-                    seen.Add(s.Id))
+                if (s.Mask == bit && s.Family != 7 && seen.Add(s.Id))
                     res.Add(s);
         }
         return res;

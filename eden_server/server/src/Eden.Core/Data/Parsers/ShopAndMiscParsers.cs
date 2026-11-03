@@ -212,9 +212,13 @@ public static class ShopAndMiscParsers
 
     public sealed class ClassRankBuffDef
     {
-        /// <summary>Id de ligne = classId (clé de QueryClassRankBuff
-        /// native, qui reçoit le byte classId de player_classlist).</summary>
+        /// <summary>Champ 0 = simple index de ligne, ignoré par le natif
+        /// (<c>Skip(1)</c>) — ce n'est PAS le classId (KB-02 : lignes
+        /// 20+ décalées : ligne 20 → classe 21, ligne 42 → classe 59).
+        /// Ne jamais s'en servir comme clé de lookup.</summary>
         public int Id { get; set; }
+        /// <summary>Champ 1 = classId : la vraie clé (QueryClassRankBuff
+        /// native, byte classId de player_classlist).</summary>
         public int ClassId { get; set; }
         /// <summary>Palier (index 1..20) → enchant permanent.
         /// La clé de la map native `map&lt;u8,SRankBuffData&gt;` est
@@ -230,6 +234,16 @@ public static class ShopAndMiscParsers
     /// de 6 champs ; seul le 6ᵉ (id enchant) est consommé serveur,
     /// les 5 autres sont des métadonnées d'affichage client
     /// (C_ClassRankBuff.ini — exigence de palier).</summary>
+    /// <summary>Ligne rankbuff d'une classe — par champ 1 (<c>ClassId</c>),
+    /// jamais par l'index de ligne. Un id à préfixe racial (≥100) est
+    /// ramené à son rang local.</summary>
+    public static ClassRankBuffDef? FindClassRankBuff(
+        IEnumerable<ClassRankBuffDef> defs, int classId)
+    {
+        var local = classId % 100;
+        return defs.FirstOrDefault(d => d.ClassId == local);
+    }
+
     public static List<ClassRankBuffDef> ParseClassRankBuffs(string filePath)
     {
         var table = IniTable.ParseFile(filePath, EdenEncoding.Big5);

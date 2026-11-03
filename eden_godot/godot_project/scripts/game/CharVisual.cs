@@ -392,7 +392,7 @@ public static class CharVisual
             if (n.Length > 2 && n[0] == 'S' && char.IsLetter(n[1]))
             {
                 tint = skin;
-                floor = -2f;
+                floor = -SkinGain;
             }
             // Corps nu « #<L>000 » : même masque rouge de peau que les
             // S* — sans teinte il sortait en rouge vif sous les tenues.
@@ -400,7 +400,7 @@ public static class CharVisual
                      n.EndsWith("000"))
             {
                 tint = skin;
-                floor = -2f;
+                floor = -SkinGain;
             }
             else if (n.Length >= 4 && n[0] == '#' && n[2] == '1' &&
                      char.IsDigit(n[3]))
@@ -840,10 +840,15 @@ public static class CharVisual
         return new Godot.Color(c.R, c.G, c.B);
     }
 
+    /// <summary>Gain « modulate ×2 » Gamebryo sur le masque peau (corps) et sur le terme
+    /// kr·peau du visage ; réglables (--skin-gain / --face-gain du SkinViewer) pour la mesure.</summary>
+    public static float SkinGain = 2f;
+    public static float FaceSkinGain = 1f;
+
     private static Texture2D FaceComposite(Texture2D ov, Texture2D mk,
         Godot.Color skin, Godot.Color eye1, Godot.Color eye2)
     {
-        var key = skin.ToRgba32() ^ (eye1.ToRgba32() * 31u) ^ (eye2.ToRgba32() * 131u);
+        var key = skin.ToRgba32() ^ (eye1.ToRgba32() * 31u) ^ (eye2.ToRgba32() * 131u) ^ ((uint)(FaceSkinGain * 4096f) * 2654435761u);
         lock (_tintLock)
             if (_tintCache.TryGetValue((mk, key), out var cached)) return cached;
         var mi = mk.GetImage(); var oi = ov.GetImage();
@@ -861,9 +866,9 @@ public static class CharVisual
             // Σ Bᵢ·cᵢ + A.rgb·A.α (même modèle que les armures, erreur 0,009 mesurée).
             float kr = m[i] / 255f, kg = m[i + 1] / 255f, kb = m[i + 2] / 255f;
             var a = o[i + 3] / 255f;
-            var r = kr * skin.R + kg * eye1.R + kb * eye2.R + o[i] / 255f * a;
-            var g = kr * skin.G + kg * eye1.G + kb * eye2.G + o[i + 1] / 255f * a;
-            var b = kr * skin.B + kg * eye1.B + kb * eye2.B + o[i + 2] / 255f * a;
+            var r = kr * skin.R * FaceSkinGain + kg * eye1.R + kb * eye2.R + o[i] / 255f * a;
+            var g = kr * skin.G * FaceSkinGain + kg * eye1.G + kb * eye2.G + o[i + 1] / 255f * a;
+            var b = kr * skin.B * FaceSkinGain + kg * eye1.B + kb * eye2.B + o[i + 2] / 255f * a;
             m[i] = (byte)Math.Clamp((int)(r * 255f), 0, 255);
             m[i + 1] = (byte)Math.Clamp((int)(g * 255f), 0, 255);
             m[i + 2] = (byte)Math.Clamp((int)(b * 255f), 0, 255);
@@ -1158,6 +1163,11 @@ public static class CharVisual
         {
             outfits.Add(cr.Mesh[2..]);
             rows[cr.Mesh[2..]] = cr;
+            // KB-17 : coiffe de la tenue de classe — sauf casque porté.
+            if (!attach.Any(a => a.Bone == "Bip01 Head") &&
+                CharModelSpec.ClassHeadRow(letter, classId, style) is { } hr)
+                attach.Add((AttachmentBone(hr.Group),
+                    $"char/model/{hr.Mesh}", hr));
         }
         ApplyOutfitVisibility(body, letter, outfits);
         foreach (var (bone, rel, row) in attach)

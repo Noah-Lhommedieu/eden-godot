@@ -382,9 +382,7 @@ public sealed partial class ZoneEntryFlow
     {
         var lvlRow = _services.GameData.Levels
             .FirstOrDefault(l => l.Level == st.Level);
-        var cls = _services.GameData.Classes
-            .FirstOrDefault(c => c.Id == st.RaceId * 100 + st.ClassId
-                || c.Id == st.ClassId);
+        var cls = Eden.Core.Game.Classes.ClassSkillTable.ClassFor(_services.GameData.Classes, st.RaceId, st.ClassId);
         // Bonus de vitesse actif — monture (RideStates → enchant →
         // SpeedPct S_RideStep) = le kinddata+0xa0 natif.
         float moveBonus = 0;

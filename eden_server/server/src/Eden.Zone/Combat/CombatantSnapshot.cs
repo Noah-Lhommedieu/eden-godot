@@ -265,6 +265,11 @@ public sealed class CombatantSnapshot
     /// <summary>Soins reçus +% — accum natif `HealPlus` mode 3
     /// (cmd 2038 arg1) : multiplie les soins reçus.</summary>
     public double BonusHealTakenPct { get; set; }
+    /// <summary>Soins prodigués +flat — `HealPlus` mode 4 (cmd 2047 arg0,
+    /// KB-05).</summary>
+    public double BonusHealGivenFlat { get; set; }
+    /// <summary>Soins reçus +flat — `HealPlus` mode 5 (cmd 2047 arg1).</summary>
+    public double BonusHealTakenFlat { get; set; }
     /// <summary>Coût MP flat — accum natif `CostMPPlus` mode 0
     /// (cmd 2015 arg0 ; négatif = réduction).</summary>
     public double BonusMpCostFlat { get; set; }
@@ -485,6 +490,8 @@ public sealed class CombatantSnapshot
         BonusDodgeRatePercent = contrib.DodgeRatePercent;
         BonusHealGivenPct = contrib.HealGivenPercent;
         BonusHealTakenPct = contrib.HealTakenPercent;
+        BonusHealGivenFlat = contrib.HealGivenFlat;
+        BonusHealTakenFlat = contrib.HealTakenFlat;
         BonusMpCostFlat = contrib.MpCostFlat;
         BonusHateRatePct = contrib.HateRatePercent;
         for (var i = 0; i < 9; i++)

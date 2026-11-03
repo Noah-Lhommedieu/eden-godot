@@ -1082,7 +1082,8 @@ public static class NativeCombatFormulas
             baseHeal = baseHeal * (100f
                 + StatTerm(atk.WisTotal, atk.WisPct) * p.WisToHeal
                     / (atk.Level * 0.4f + 1f)
-                + atk.BonusHealGivenPct) * 0.01f + atk.EquipHeal;
+                + atk.BonusHealGivenPct) * 0.01f + atk.EquipHeal
+                + atk.BonusHealGivenFlat;
         // Variance centrée natif : rand%(var×10000)×0.0001 → 2r − var
         // → multiplicateur ∈ ]1−var/100, 1+var/100[ (0 si var=0).
         var varPct = spell.DamageVariance;
@@ -1105,7 +1106,7 @@ public static class NativeCombatFormulas
                 + StatTerm(def.WisTotal, def.WisPct) * p.WisToBeHealed
                     / (def.Level * 0.4f + 1f)
                 + def.BonusHealTakenPct) * 0.01f)
-                + def.EquipBeHealed);
+                + def.EquipBeHealed + (int)def.BonusHealTakenFlat);
         return new SpellHealResult(heal, crit);
     }
 

@@ -250,7 +250,12 @@ public static class PlayerProfileState
     {
         lock (_lock)
         {
-            if (m.Type == 0)
+            // 471 : type 0 = classe courante, 2 = autre classe (deltas) ;
+            // type 1 = reset talents — le serveur réémet la map restante
+            // (autres classes conservées) en SNAPSHOT (KB-16 :
+            // ResetAdvancedAbilitiesAsync) → on remplace, on ne fusionne pas.
+            if (m.Type == 1) Talents.Clear();
+            if (m.Type is 0 or 1 or 2)
                 foreach (var (id, pt) in m.Entries) Talents[id] = pt;
         }
     }

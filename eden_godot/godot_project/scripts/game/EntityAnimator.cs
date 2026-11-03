@@ -112,16 +112,33 @@ public partial class EntityAnimator : Node
         _ => "ride01",
     };
 
+    /// <summary>Monture de combat (flag +0xa8 natif, enchant 2134 type 2) :
+    /// déduit de ses séquences — une monture ordinaire n'a ni attack,
+    /// ni shoot, ni magic dans son .kfm (motion.ini : seules les r2xx /
+    /// r701 / r711 en ont). Mis en cache : <see cref="Has"/> décode.</summary>
+    public bool IsCombatMount =>
+        _combatMount ??= Has("attack01") || Has("attack02") ||
+                         Has("shoot01") || Has("magic01");
+    private bool? _combatMount;
+
     /// <summary>Cavalier : transpose une anim à pied vers sa variante
-    /// montée (attackNN→rattackNN, magicNN→rmagicNN, battleNN→
-    /// rbattleNN, jump→ride08) quand elle existe.</summary>
+    /// montée (attackNN→rattackNN, magicNN→rmagicNN, shootNN→rshootNN,
+    /// jump→ride08). Natif : monture ordinaire → toute action de combat
+    /// donne <c>ride01</c> (pose assise tenue, aucun geste) ; monture de
+    /// combat → seuls les ids routés (<see cref="MountCombatRules.RoutedAction"/>)
+    /// jouent la variante montée, le reste retombe aussi sur ride01.
+    /// Retourne "" quand l'action doit être ignorée (le cavalier garde la
+    /// pose ride de la monture : jamais d'anim à pied sur une selle).
+    /// </summary>
     private string Resolve(string name)
     {
-        if (ValidMount() == null || _player == null) return name;
+        if (ValidMount() is not { } m || _player == null) return name;
         if (name is "jump01" or "jump02") return "ride08";
-        foreach (var pre in new[] { "attack", "magic", "battle", "shoot" })
-            if (name.StartsWith(pre) && Has("r" + name))
-                return "r" + name;
+        if (IsCombatAction(name))
+            return m.IsCombatMount && MountCombatRules.RoutedAction(name) &&
+                   Has("r" + name) ? "r" + name : "";
+        if (name.StartsWith("battle") && Has("r" + name))
+            return "r" + name;
         return name;
     }
     /// <summary>Anim tenue/rejouée en vol stationnaire (« jump01 » —
@@ -263,7 +280,8 @@ public partial class EntityAnimator : Node
     public void PlayOnce(string name)
     {
         if (ValidMount() is { } m && (name is "jump01" or "jump02" ||
-                                      IsCombatAction(name)))
+                                      IsCombatAction(name) &&
+                                      MountCombatRules.RoutedAction(name)))
             m.PlayOnce(name);
         name = Resolve(name);
         if (_player == null || !Has(name)) return;

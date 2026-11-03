@@ -326,9 +326,11 @@ public sealed partial class ZoneEntryFlow
                 if (args.Length >= 1 && int.TryParse(args[0], out var ac)
                     && ac is > 0 and < 100)
                 {
-                    await _services.Classes.AddClassAsync(
-                        (int)st.CharId, ac);
-                    await SendAdminTextAsync(session, $"class {ac} ok",
+                    // KB-04 : même octroi complet que eden-add-class.
+                    var added = await GrantNewClassAsync(session, st, ac,
+                        token);
+                    await SendAdminTextAsync(session,
+                        added ? $"class {ac} ok" : $"class {ac} déjà possédée",
                         token);
                 }
                 break;

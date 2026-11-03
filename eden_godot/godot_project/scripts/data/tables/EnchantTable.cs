@@ -50,9 +50,12 @@ public static class EnchantTable
     /// <summary>Clé de monture (ridelist) portée par un enchant : scan
     /// des cellules, commande 2134 suivie de la rideKey — même règle que
     /// <c>EnchantService.GetRideInfo</c> côté serveur. 0 si aucune.</summary>
-    public static int RideKeyOf(int enchantId)
+    public static int RideKeyOf(int enchantId) =>
+        RideKeyOfRaw(Get(enchantId)?.Raw);
+
+    /// <summary><see cref="RideKeyOf"/> sur les cellules brutes d'une ligne.</summary>
+    public static int RideKeyOfRaw(string[]? raw)
     {
-        var raw = Get(enchantId)?.Raw;
         if (raw == null) return 0;
         for (var i = 0; i + 1 < raw.Length; i++)
             if (int.TryParse(raw[i], out var code) && code == 2134 &&
@@ -60,33 +63,80 @@ public static class EnchantTable
         return 0;
     }
 
+    /// <summary>Clic droit sur l'icône de la barre de buffs : retire le
+    /// buff. Toute monture se retire (même « can't abandon »), sinon seuls
+    /// les buffs positifs sans drapeau NoAbandon ; définition inconnue =
+    /// retirable (le serveur tranche).</summary>
+    public static bool CanCancelByRightClick(EnchantDef? def) =>
+        RideKeyOfRaw(def?.Raw) > 0 ||
+        !(def is { IsBuff: false } or { NoAbandon: true });
+
+    /// <summary>Bonus de vitesse NATIF (commande 2051, en %) d'un enchant
+    /// de monture ; 0 si l'enchant n'est pas une monture ou sans 2051.
+    /// </summary>
+    public static int RideNativeSpeedPct(int enchantId)
+    {
+        var raw = Get(enchantId)?.Raw;
+        if (raw == null || RideKeyOf(enchantId) == 0) return 0;
+        for (var i = 0; i + 1 < raw.Length; i++)
+            if (int.TryParse(raw[i], out var code) && code == 2051 &&
+                int.TryParse(raw[i + 1], out var pct)) return pct;
+        return 0;
+    }
+
+    /// <summary>Texte d'enchant avec le palier de vitesse effectif pour
+    /// une monture (35/55/70/90 %, <see cref="EdenClient.Game.MountCombatRules"/>) ;
+    /// autres enchants : inchangé.</summary>
+    private static string? WithRideTier(int enchantId, string? text)
+    {
+        if (text == null) return null;
+        var pct = RideNativeSpeedPct(enchantId);
+        return pct > 0 ? EdenClient.Game.MountCombatRules.TierText(text, pct) : text;
+    }
+
+    /// <summary>KB-01 : c_enchant EDENFR (<c>|V.2|60|</c>) n'a pas la
+    /// colonne « groupe elf-pet » (index 6) du schéma S_Enchant
+    /// <c>|V.3|61|</c>. Les lignes FR font 61 cellules (60 + « | »
+    /// terminal vide, ou 56 si la fin est tronquée) : on réinsère une
+    /// cellule vide en 6 pour tout lire à l'index S_ (cmds 9+7k, flags
+    /// 7/8, description 56, stack 59). Les lignes déjà au schéma S_
+    /// (62/57 cellules) et la ligne anomalie 46131 (55) restent telles
+    /// quelles.</summary>
+    public static string[] NormalizeRow(string[] row, int headerCols)
+    {
+        var fr = row.Length == 61 || (headerCols == 60 && row.Length == 56);
+        if (!fr) return row;
+        var r = new string[row.Length + 1];
+        Array.Copy(row, 0, r, 0, 6);
+        r[6] = string.Empty;
+        Array.Copy(row, 6, r, 7, row.Length - 6);
+        return r;
+    }
+
     /// <summary>Charge c_enchant.ini → id → définition.</summary>
     public static Dictionary<int, EnchantDef> Load(string path)
     {
         var table = IniTable.ParseFile(path, EdenEncoding.Big5);
         var dict = new Dictionary<int, EnchantDef>(table.Rows.Count);
-        foreach (var row in table.Rows)
+        foreach (var row0 in table.Rows)
         {
+            var row = NormalizeRow(row0, table.ColumnCount);
             if (row.Length < 9 || !int.TryParse(row[0], out var id))
                 continue;
-            // c_enchant EDENFR = V.2 (60 colonnes) : S_Enchant V.3 (61)
-            // sans la colonne groupe elf-pet en index 6 — les champs
-            // suivants sont donc décalés de −1.
-            var s = row.Length == 60 ? -1 : 0;
-            var flag1 = IniTable.GetInt(row, 7 + s);
-            var flag2 = IniTable.GetInt(row, 8 + s);
-            var maxStack = IniTable.GetInt(row, 59 + s);
+            var flag1 = IniTable.GetInt(row, 7);
+            var flag2 = IniTable.GetInt(row, 8);
+            var maxStack = IniTable.GetInt(row, 59);
             dict[id] = new EnchantDef
             {
                 Id = id,
                 Code = IniTable.GetStr(row, 1),
                 Name = IniTable.GetStr(row, 5),
-                PetGroup = s == 0 ? IniTable.GetInt(row, 6) : 0,
+                PetGroup = IniTable.GetInt(row, 6),
                 IsBuff = (flag1 & 1) != 0,
                 NoAbandon = (flag2 & 0x10) != 0,
                 NoReapply = (flag2 & 0x100) != 0,
                 MaxStack = Math.Max(1, maxStack),
-                Description = IniTable.GetStr(row, 56 + s),
+                Description = IniTable.GetStr(row, 56),
                 Raw = row,
             };
         }
@@ -135,7 +185,7 @@ public static class EnchantTable
             return null;
         var d = TextResolver.Clean(t.Field(2));
         if (d.Length == 0) d = TextResolver.Clean(t.Field(3));
-        return d.Length > 0 ? d : null;
+        return d.Length > 0 ? WithRideTier(enchantId, d) : null;
     }
 
     /// <summary>Texte d'un buff ACTIF (T_Enchant champ 3, ex. « MAG +8214 ») ;
@@ -147,7 +197,7 @@ public static class EnchantTable
         if (EnsureText().TryGetValue(enchantId, out var t))
         {
             var d = TextResolver.Clean(t.Field(3));
-            if (d.Length > 0) return d;
+            if (d.Length > 0) return WithRideTier(enchantId, d);
         }
         return DescriptionOf(enchantId);
     }

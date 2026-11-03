@@ -584,7 +584,8 @@ public partial class CharSelectScreen : Control
                     {
                         body.RotationDegrees = new Vector3(-90f, 180f, 0f);
                         if (app is { Length: >= 32 })
-                            _ = CharDressing.Apply(body, app, worn, ItemLookup);
+                            _ = CharDressing.Apply(body, app, worn, ItemLookup,
+                                c.ClassId, 0);
                     }
                 }
                 catch (Exception e)
@@ -718,6 +719,14 @@ public partial class CharSelectScreen : Control
                         ? Data.Tables.ItemTable.Load(path)
                         : new Dictionary<int,
                             Data.Tables.ItemTable.ItemDef>();
+                    // KB-23 : costumes/montures boutique (ids 40xxx) sont
+                    // seulement dans c_itemmall.ini (cf. InventoryWindow).
+                    var mall = path != null
+                        ? AssetCatalog.ResolveRawAsset("data/db/c_itemmall.ini")
+                        : null;
+                    if (mall != null)
+                        foreach (var (mid, mdef) in Data.Tables.ItemTable.Load(mall))
+                            _items.TryAdd(mid, mdef);
                     EdenClient.Perf.PerfTrace.Report(
                         "  c_item.ini (5 Mo)", t);
                 }

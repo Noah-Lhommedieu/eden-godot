@@ -60,13 +60,33 @@ public static class EnchantTable
         return 0;
     }
 
+    /// <summary>KB-01 : c_enchant EDENFR (<c>|V.2|60|</c>) n'a pas la
+    /// colonne « groupe elf-pet » (index 6) du schéma S_Enchant
+    /// <c>|V.3|61|</c>. Les lignes FR font 61 cellules (60 + « | »
+    /// terminal vide, ou 56 si la fin est tronquée) : on réinsère une
+    /// cellule vide en 6 pour tout lire à l'index S_ (cmds 9+7k, flags
+    /// 7/8, description 56, stack 59). Les lignes déjà au schéma S_
+    /// (62/57 cellules) et la ligne anomalie 46131 (55) restent telles
+    /// quelles.</summary>
+    public static string[] NormalizeRow(string[] row, int headerCols)
+    {
+        var fr = row.Length == 61 || (headerCols == 60 && row.Length == 56);
+        if (!fr) return row;
+        var r = new string[row.Length + 1];
+        Array.Copy(row, 0, r, 0, 6);
+        r[6] = string.Empty;
+        Array.Copy(row, 6, r, 7, row.Length - 6);
+        return r;
+    }
+
     /// <summary>Charge c_enchant.ini → id → définition.</summary>
     public static Dictionary<int, EnchantDef> Load(string path)
     {
         var table = IniTable.ParseFile(path);
         var dict = new Dictionary<int, EnchantDef>(table.Rows.Count);
-        foreach (var row in table.Rows)
+        foreach (var row0 in table.Rows)
         {
+            var row = NormalizeRow(row0, table.ColumnCount);
             if (row.Length < 9 || !int.TryParse(row[0], out var id))
                 continue;
             var flag1 = IniTable.GetInt(row, 7);

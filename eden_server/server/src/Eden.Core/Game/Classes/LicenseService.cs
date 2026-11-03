@@ -35,10 +35,16 @@ public sealed class LicenseService
     /// `SetOtherClassLicense` : même borne avant d'écrire lic_N).
     /// </summary>
     public static int CapacityFor(int characterLevel)
-        => Math.Min(7, characterLevel / 10 + 2);
+        => Math.Min(7, characterLevel / 10 + 1);
+
+    /// <summary>Argument affiché dans le message 0x325 — le natif passe
+    /// <c>lv/10 + 2</c> (texte seulement ; la règle reste
+    /// <see cref="CapacityFor"/>, KB-18).</summary>
+    public static int DisplayedCapacityFor(int characterLevel)
+        => characterLevel / 10 + 2;
 
     /// <summary>Erreur native de dépassement de capacité —
-    /// `ClientCommandFailReturn(0x325, …, lv/10+2)`.</summary>
+    /// `ClientCommandFailReturn(0x325, …, lv/10+2)` (affichage seul).</summary>
     public const int ErrorOverCapacity = 0x325;
 
     /// <summary>État runtime par personnage — les 4 vecteurs natifs.</summary>
@@ -540,6 +546,13 @@ public sealed class LicenseService
                     c.AddSecondary(healGivenPct: V(0),
                         healTakenPct: V(1));
                     break;
+                case 2047: // HealPlus modes 4/5 (CEC_HealPlus::Execute
+                    // @0x08535480) : arg0 → soins prodigués FLAT
+                    // (+0x144), arg1 → soins reçus FLAT (+0x14c) —
+                    // même dispatch d'args que 2038 (KB-05).
+                    c.AddSecondary(healGivenFlat: V(0),
+                        healTakenFlat: V(1));
+                    break;
                 case 2044: // AttrCriticalDamage / AttrMagicCriticalDamage
                     // — dispatch natif arg0→« AttrCriticalDamage »,
                     // arg1→« AttrMagicCriticalDamage » (désasm
@@ -582,7 +595,6 @@ public sealed class LicenseService
                     c.AddSecondary(mpCost: V(0)); break;
                 case 2122: // AttrHateRate — % d'aggro générée.
                     c.AddSecondary(hateRatePct: V(0)); break;
-                // 2047 HealPlus (soin reçu — dupliqué de 2038),
                 // 2059/2069 cast-time déjà couverts, 2092
                 // ResistDamage, 2155 AttrType (tag de condition —
                 // pas un modificateur), 2152 OnBuffEndBuff (chaîne

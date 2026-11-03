@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://skinviewer001"]
+
+[ext_resource type="Script" path="res://scripts/debug/SkinViewer.cs" id="1_sv"]
+
+[node name="SkinViewer" type="Node3D"]
+script = ExtResource("1_sv")

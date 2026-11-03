@@ -399,6 +399,19 @@ services.StatPipeline.AddStage("licenses",
     (charId, _, _) => Task.FromResult(
         services.Licenses.ProvideStats(charId)));
 
+// Migration KB-04 (idempotente) : éveillées historiques lv1/aa1 → 80/80.
+try
+{
+    var promoted = await services.Classes.PromoteAwakenedAsync();
+    if (promoted > 0)
+        Eden.Core.Logging.EdenLog.Write(
+            $"[Zone] migration KB-04 : {promoted} classe(s) éveillée(s) → lv80/aa80");
+}
+catch (Exception ex)
+{
+    Eden.Core.Logging.EdenLog.Write($"[Zone] migration KB-04 ignorée : {ex.Message}");
+}
+
 // Étape « classrank » — Class Ability Bonus natif (RefreshJPAward
 // @0x8417c10) : pour CHAQUE classe du personnage (player_classlist),
 // rang = floor(min(classLv, S_Parameter 578=100) × 0.2) ; le rang
@@ -420,7 +433,9 @@ services.StatPipeline.AddStage("classrank", async (charId, ct, fetch) =>
     {
         var rank = (int)(Math.Min(row.ClassLevel, cap) * 0.2f);
         if (rank == 0) continue;
-        var tier = defs.FirstOrDefault(d => d.Id == row.ClassId)
+        // KB-02 : clé = champ 1 (ClassId), pas l'index de ligne (Id).
+        var tier = Eden.Core.Data.Parsers.ShopAndMiscParsers
+            .FindClassRankBuff(defs, row.ClassId)
             ?.Tiers.FirstOrDefault(t => t.Rank == rank);
         if (tier is { EnchantId: > 0 } t)
             Eden.Core.Game.Classes.LicenseService.ApplyEnchantCommands(

@@ -1451,7 +1451,7 @@ public partial class ClassWindow : Control
         if (_certCount != null)
             _certCount.Text = UiTextEn.Translate("Certificates: %s1")
                 .Replace("%s1", Math.Min(7,
-                    World.MobDanger.PlayerLevel / 10 + 2).ToString());
+                    World.MobDanger.PlayerLevel / 10 + 1).ToString());
         if (_licCerts != null)
         {
             foreach (var c in _licCerts.GetChildren()) c.QueueFree();
@@ -1938,8 +1938,8 @@ public partial class ClassWindow : Control
             if (ev is InputEventMouseButton { Pressed: true,
                     ButtonIndex: MouseButton.Left })
             {
-                // Les classes non débloquées ne se sélectionnent pas.
-                if (!unlocked) return;
+                // Classe non débloquée : aperçu lecture seule (talents,
+                // sorts, éveil) — voir IsPreview.
                 SelectClass(cid);
             }
         };
@@ -1949,7 +1949,8 @@ public partial class ClassWindow : Control
     private void RefreshHeader()
     {
         if (_headName != null)
-            _headName.Text = TextResolver.ClassName(_selected) ?? "";
+            _headName.Text = (TextResolver.ClassName(_selected) ?? "") +
+                (IsPreview ? $" ({PreviewTag})" : "");
         var e = Classes
             .FirstOrDefault(c => c.ClassId == _selected);
         if (_activate != null)
@@ -1959,6 +1960,20 @@ public partial class ClassWindow : Control
     }
 
     private readonly List<Tween> _headTweens = new();
+
+    /// <summary>Classe affichée non possédée : aperçu en lecture seule.</summary>
+    private bool IsPreview
+    {
+        get
+        {
+            var id = _selected > 0 ? _selected : CurrentClass;
+            return id > 0 && !Classes.Any(c =>
+                c.ClassId == id && c.ClassLevel > 0);
+        }
+    }
+
+    private static string PreviewTag =>
+        UiTextEn.Translate("Preview") is var t && t != "Preview" ? t : "Aperçu";
 
     /// <summary>En-tête : 3 grandes icônes — classe de base de la
     /// branche affichée + ses 2 classes éveil. Verrouillée = silhouette
@@ -2034,14 +2049,16 @@ public partial class ClassWindow : Control
                 HudRoot.Pin(rb, 1, 1, 1, 1, -14, -18, -2, -2);
                 cell.AddChild(rb);
             }
-            if (owned)
-                ic.GuiInput += ev =>
-                {
-                    if (ev is InputEventMouseButton
-                        { Pressed: true, ButtonIndex: MouseButton.Left } &&
-                        cid != _selected)
-                        SelectClass(cid);
-                };
+            // Éveil visible par classe : une éveillée (ou la base) non
+            // possédée se prévisualise en lecture seule (sorts, talents,
+            // fiche) — aucune montée ni « Activer » (voir IsPreview).
+            ic.GuiInput += ev =>
+            {
+                if (ev is InputEventMouseButton
+                    { Pressed: true, ButtonIndex: MouseButton.Left } &&
+                    cid != _selected)
+                    SelectClass(cid);
+            };
         }
     }
 
@@ -2096,10 +2113,21 @@ public partial class ClassWindow : Control
     private void RefreshSkills()
     {
         if (_regGrid == null || _classGrid == null) return;
-        foreach (var c in _regGrid.GetChildren()) c.QueueFree();
-        foreach (var c in _classGrid.GetChildren()) c.QueueFree();
+        try { RefreshSkillsCore(); }
+        catch (Exception ex)
+        {
+            // KB-15 : jamais de grille vide muette (modèle RefreshLicense).
+            GD.PrintErr($"[skill] RefreshSkills : {ex}");
+        }
+    }
+
+    private void RefreshSkillsCore()
+    {
+        foreach (var c in _regGrid!.GetChildren()) c.QueueFree();
+        foreach (var c in _classGrid!.GetChildren()) c.QueueFree();
         var sel = _selected > 0 ? _selected : CurrentClass;
         if (sel <= 0) return;
+        ClassSkillTree.Log ??= m => GD.Print(m);
         ClassSkillTree.EnsureLoaded(AssetCatalog.ResolveRawAsset);
         var known = PlayerSkills.Spells.ToDictionary(k => (int)k.SpellMaster,
             k => (int)k.Level);

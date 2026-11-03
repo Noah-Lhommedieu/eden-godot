@@ -105,4 +105,47 @@ public class ClassSkillTreeTests
             Assert.True(ClassSkillTree.Talents(c)?
                 .Any(b => b.Any(s => s != null)) ?? false, $"classe {c}");
     }
+
+    /// <summary>KB-14 : le filtre Pay==9 de la branche mono-masque
+    /// perdait 4 sorts de classe (pay=0 dans c_spell).</summary>
+    [Fact]
+    public void ClassSkills_KeepMonoMaskSpells_WithPayZero()
+    {
+        if (!Init()) return;
+        Assert.Contains(ClassSkillTree.ClassSkills(18), s => s.Id == 50455);
+        var messiah = ClassSkillTree.ClassSkills(20);
+        Assert.Contains(messiah, s => s.Id == 50685);
+        Assert.Contains(messiah, s => s.Id == 50686);
+        Assert.Contains(ClassSkillTree.ClassSkills(38), s => s.Id == 59459);
+    }
+
+    /// <summary>KB-15 : un resolve nul n'est pas mis en cache et est
+    /// journalisé ; la réouverture suivante recharge.</summary>
+    [Fact]
+    public void EnsureLoaded_NullResolve_IsNotCached_AndLogs()
+    {
+        if (!Init()) return;
+        string? Real(string rel)
+        {
+            for (var d = new DirectoryInfo(AppContext.BaseDirectory); d != null; d = d.Parent)
+            {
+                var f = Path.Combine(d.FullName, "raw_assets", rel);
+                if (File.Exists(f)) return f;
+            }
+            return null;
+        }
+        var logs = new List<string>();
+        ClassSkillTree.Log = logs.Add;
+        try
+        {
+            ClassSkillTree.Reset();
+            ClassSkillTree.EnsureLoaded(_ => null);
+            Assert.Contains(logs, l => l.Contains("non résolue"));
+            Assert.Empty(ClassSkillTree.ClassSkills(1));
+            ClassSkillTree.EnsureLoaded(Real);          // réessai
+            Assert.NotEmpty(ClassSkillTree.ClassSkills(1));
+            Assert.Contains(logs, l => l.Contains("sorts,"));
+        }
+        finally { ClassSkillTree.Log = null; Init(); }
+    }
 }

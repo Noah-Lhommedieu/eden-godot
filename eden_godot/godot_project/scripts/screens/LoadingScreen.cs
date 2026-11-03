@@ -249,11 +249,17 @@ public partial class LoadingScreen : Control
             // 2 câlin (alpaga + humain + cœur), 3-4 humain qui marche.
             _mascotFrames = new AtlasTexture[5];
             for (var i = 0; i < 5; i++)
+            {
+                // Cases de 70,4 px : bornes entières + FilterClip, sinon le filtre bilinéaire
+                // laisse voir un liseré de la case voisine (bordure d'animation).
+                int x0 = (int)Math.Round(i * 70.4f), x1 = (int)Math.Round((i + 1) * 70.4f);
                 _mascotFrames[i] = new AtlasTexture
                 {
                     Atlas = animTex,
-                    Region = new Rect2(i * 70.4f, 0, 70.4f, 60),
+                    Region = new Rect2(x0, 0, x1 - x0, 60),
+                    FilterClip = true,
                 };
+            }
             _human = new TextureRect
             {
                 Texture = _mascotFrames[3],

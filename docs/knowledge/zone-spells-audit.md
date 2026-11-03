@@ -166,3 +166,98 @@ Divergences serveur constatées (rapportées — serveur en lecture seule) :
   proc/enchant AoE déclenché côté serveur pendant le combat (pas un cast explicite) ;
   il arrive en 281 directs, sans paquet blast (288/289/297) — le visuel de zone
   d'un proc n'est donc jamais diffusé (côté serveur).
+
+## 7. Corrections serveur (2026-11-03, sortie §6)
+
+Statut : **TESTED** (headless — paquets et géométrie prouvés par tests
+unitaires ; rendu client non re-validé live). Fichiers :
+`Eden.Zone/Combat/SpellAreaGeometry.cs`,
+`ZoneEntryFlow.Combat.Spells.Resolution.cs`,
+`tests/Eden.Tests/SpellAreaGeometryTests.cs`.
+Build `flock /tmp/eden-build.lock tools/build.sh` vert ; `tools/test.sh`
+vert (836 NetTests + 966 Core + 1550 Eden.Tests, 0 échec ; 23 tests
+`SpellAreaGeometry`).
+
+### 7.1 Géométrie du secteur (P0)
+
+Preuve native complète : `CSpellToSector::HitTest` @0x084fb410 →
+`CGridCoordMap::SectorSearch` @0x084fba60. Le modèle réel est
+l'**intersection d'un disque de rayon L centré sur la POINTE**
+(`tip = lanceur + L·axe`, param_1/param_2 de l'appel — pré-filtre
+`dist(entité, tip) < rayon_entité + L`) **et d'un cône de sommet le
+lanceur** (`|atan2(v−lanceur) − θ_axe| ≤ atan2(R', √(L²−R'²))` =
+asin(R'/L), R' = min(R,L) ; + tolérance d'élévation `atan2(|dz|, d)`
+non modélisée — pas de z victime). `ContainsSector` réécrit en
+conséquence (wrap d'angle identique, `atan2f(0,0)=0` pour la victime
+au sommet). Conséquences natives :
+
+- portée avant jusqu'à **~2L** sur l'axe (le hit « 16u devant » de
+  50663, L=10, était donc fidèle — pas un bug) ;
+- tout point **derrière** le lanceur est rejeté deux fois (distance
+  à la pointe > L et angle 180°) — le « ~10u derrière » du live ne
+  venait pas du cône mais du **repli `!axisOk` → disque R** quand la
+  cible se tenait au pas du lanceur (axe nul) : supprimé, le natif
+  garde `atan2f(0,0)=0` → axe (1,0) (`SpellSplashAsync` +
+  `ApplyAreaSpellAsync`).
+
+Tests ajoutés : `Sector_BehindCasterAlwaysMisses_50663` (16u derrière
+MISS, 10u derrière MISS, côté pur ~10u MISS hors disque-pointe,
+(5,8) HIT, 16u devant HIT natif), `Sector_TipDiscAndApexCone`,
+`Sector_ApexVictimFollowsAtan2OfZero`.
+
+### 7.2 Positions des paquets (P1)
+
+- **288** `ExecuteSpellHitAsync` (NCID 9) : shapes 2/5/6 →
+  `VictimHandle=0`, pos = **pointe de la forme** (secteur
+  `lanceur+axe·L` @0x084fb170 ; direction `lanceur+axe·(L+trunc(mod/2))`
+  @0x084f6070 ; croix : pointe du bras 0 @0x084f40c0). Shape 0 inchangé
+  (victime + sa position, @0x084f7820).
+- **288** `ApplyAreaSpellAsync` (NCID 16) : désormais émis au lanceur
+  pour toute forme (natif `NotifyBlastToSelf`), victime=0, pos =
+  pointe/point visé (cercle : point brut @0x084f8c70).
+- **297** : `dst` = **pointe** pour les formes directionnelles (avant :
+  point visé brut — divergence §6 corrigée) ; `src` = lanceur ; la
+  croix remplit `VecA`/`VecB` = x/y des bras 1-3 (codec complet).
+  Le point visé brut est conservé pour le cercle au sol (shape 1).
+
+### 7.3 Routage (P2)
+
+- **297 aux témoins** pour les formes à position — remplace le 289
+  dans `ExecuteSpellHitAsync` (natif `CSpellTo{Sector,Direction,
+  Cross,Location}::NotifyBlastToOthers` → ClientSpellBlastToLocation ;
+  289 = `CSpellToLife` seulement @0x084f7e40). 289 conservé pour
+  shape 0.
+- **297 au lanceur** : gardé pour le cercle (son 288 victime=0 est un
+  no-op `Impact` client → sans lui le visuel au sol disparaît) ;
+  retiré pour 2/5/6 (le 288 directionnel suffit — un 297 self
+  doublait l'effet).
+- **546** `ClientSpellFlyToLocation` : natif `CSpellToDirection::
+  NotifyFlyLocaltion` @0x084f6590 (position courante de l'onde,
+  4 vecteurs 1-float). Codec existant côté client ET serveur, mais
+  **aucun handler client** → non émis ; l'onde est déjà résolue en
+  union instantanée (documenté §1).
+- **Double 281** : `ApplyNowhereResultAsync` émettait 281 puis
+  `KillMobAsync(spellId)` → `KillMobBroadcastAsync` ré-émettait un
+  281 `flags=Hit` identique pour les victimes tuées (correspond aux
+  paires `59280 …01000000 ×2` du fil). Corrigé :
+  `FinishMobDeathAsync` comme tous les autres chemins de mort par
+  sort.
+- **59280** : blast ajouté (288+297 au lanceur, 297 aux témoins,
+  `dst`=lanceur — cercle auto-centré) ; rayon désormais lu depuis la
+  donnée (`AreaRadius` = col30×0,5 = 10u + trunc(mod/2)) au lieu du
+  5u codé en dur.
+
+### 7.4 Limites connues
+
+- Victimes modélisées en points : `rayon_entité` du pré-filtre natif
+  non ajouté (le natif touche à `dist(tip) < r_entité + L` — écart
+  ≤ ~1-2u en limite avant) ; tolérance d'élévation `atan2(|dz|,d)`
+  absente (z victime non modélisé) ; clamp mur
+  `CheckLineOfMoveUntilBlock` absent (pas de mur live).
+- Le 288 généré ne peut pas porter les vecteurs croix (counts sans
+  floats) → bras 1-3 émis dans le 297 seul ; le client n'en a pas
+  besoin pour son rendu (X/Y = bras 0).
+- `CSpellToNowhere` 288 : victime=self conservée (natif 0) pour le
+  visuel d'impact du client Godot — déviation assumée.
+- Preuve headless seule : ordre/contenu des paquets et géométrie
+  couverts par tests ; la validation visuelle live reste à refaire.

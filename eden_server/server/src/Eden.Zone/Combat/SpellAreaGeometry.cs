@@ -9,10 +9,15 @@ namespace Eden.Zone.Combat;
 /// <item><b>1 cercle</b> — <c>CSpellToLocation::HitTest</c> @0x084f9300 :
 /// centre = le point visé, rayon = <c>R(+0x48) + trunc(AttrSpellRadius/2)</c>,
 /// énumération seulement si la spec +0x1a != -91 et rayon > 0.</item>
-/// <item><b>6 secteur</b> — <c>CSpellToSector::HitTest</c> @0x084fb410 :
-/// cône de sommet le lanceur, axe = lanceur→point, longueur
-/// <c>L = SSpellData+0x40</c>, demi-angle <c>atan2(R', √(L²−R'²))</c> avec
-/// <c>R' = min(R, L)</c>. Aucun mod rayon.</item>
+/// <item><b>6 secteur</b> — <c>CSpellToSector::HitTest</c> @0x084fb410 +
+/// <c>CGridCoordMap::SectorSearch</c> @0x084fba60 : intersection du
+/// <b>disque de rayon L centré sur la POINTE</b>
+/// (<c>lanceur + L·axe</c>, pré-filtre natif param_1/param_2) et du
+/// <b>cône de sommet le lanceur</b>, axe = lanceur→point, demi-angle
+/// <c>atan2(R', √(L²−R'²))</c> = asin(R'/L) avec <c>R' = min(R, L)</c>
+/// (+ tolérance d'élévation <c>atan2(|dz|, d)</c> — sans z victime ici).
+/// La portée avant peut donc atteindre ~2L sur l'axe ; l'arrière du
+/// lanceur est toujours rejeté (distance ET angle). Aucun mod rayon.</item>
 /// <item><b>2 direction</b> — <c>CSpellToDirection::HitTest</c> @0x084f6ad0 +
 /// <c>NotifyBlastToSelf</c> @0x084f6070 : onde de rectangles
 /// <c>len(+0xb0) × 2R</c> qui avance du lanceur vers le point ; l'union
@@ -87,29 +92,70 @@ public static class SpellAreaGeometry
         return dx * dx + dy * dy <= radius * radius;
     }
 
-    /// <summary>Forme 6 — secteur : cône de sommet le lanceur
-    /// (<c>ox,oy</c>), d'axe unitaire <c>(ax,ay)</c>, de longueur
-    /// <paramref name="length"/> et de demi-angle
-    /// <c>asin(min(R,L)/L)</c> (<c>SectorSearch</c> natif :
-    /// <c>atan2(R', √(L²−R'²))</c>). Un point est touché si sa distance
-    /// au sommet ≤ L et si son angle à l'axe ≤ le demi-angle — testé par
-    /// produit scalaire <c>cos(demiAngle)</c>.</summary>
+    /// <summary>Forme 6 — secteur : intersection du <b>disque de rayon
+    /// <paramref name="length"/> centré sur la POINTE</b>
+    /// (<c>(ox,oy) + L·(ax,ay)</c>) et du <b>cône de sommet
+    /// <c>(ox,oy)</c></b> d'axe <c>(ax,ay)</c>, de demi-angle
+    /// <c>asin(min(R,L)/L)</c>. Fidèle à
+    /// <c>CGridCoordMap::SectorSearch</c> @0x084fba60 : le pré-filtre
+    /// collecte les entités dont <c>dist(pointe) &lt; rayon_entité + L</c>
+    /// (ici les victimes sont des points → <c>≤ L</c>), puis l'angle
+    /// <c>|atan2(victime−sommet) − θ_axe|</c> (wrap natif sur (−π,π])
+    /// doit être ≤ <c>atan2(R', √(L²−R'²))</c> + <c>atan2(|dz|,d)</c>
+    /// — pas de z victime modélisé → tolérance nulle. Conséquences
+    /// natives : portée avant jusqu'à ~2L sur l'axe ; tout point
+    /// derrière le lanceur est rejeté. Une victime au sommet même
+    /// <c>(d=0)</c> suit <c>atan2f(0,0)=0</c> → angle = |θ_axe|.</summary>
     public static bool ContainsSector(float ox, float oy, float ax,
         float ay, float length, float radius, float x, float y)
     {
         if (length <= 0f) return false;
-        var dx = x - ox; var dy = y - oy;
-        var d2 = dx * dx + dy * dy;
-        if (d2 > length * length) return false;
-        if (d2 <= 0f) return true;            // le sommet lui-même
+        // Disque de rayon L centré sur la pointe (param_1/param_2 de
+        // l'appel SectorSearch dans HitTest @0x084fb410).
+        var tx = ox + ax * length; var ty = oy + ay * length;
+        var tdx = x - tx; var tdy = y - ty;
+        if (tdx * tdx + tdy * tdy > length * length) return false;
+        // Demi-angle natif : atan2(R', √(L²−R'²)) = asin(R'/L).
         var r = MathF.Min(radius, length);    // R' = min(R, L)
-        // demi-angle θ : sin θ = R'/L → cos θ = √(1 − (R'/L)²)
-        var sinT = r / length;
-        var cosT = MathF.Sqrt(MathF.Max(0f, 1f - sinT * sinT));
-        // cos(angle au sommet) = (dx·ax + dy·ay) / dist — signe requis :
-        // un point derrière le lanceur a cos négatif < cosT.
-        var d = MathF.Sqrt(d2);
-        return (dx * ax + dy * ay) / d >= cosT;
+        var half = MathF.Atan2(r,
+            MathF.Sqrt(length * length - r * r));
+        // Angle au sommet : atan2(victime−sommet) − θ_axe, wrap natif
+        // (>π → −2π ; ≤−π → +2π) puis valeur absolue (& 0x7fffffff).
+        var va = MathF.Atan2(y - oy, x - ox) - MathF.Atan2(ay, ax);
+        if (va > MathF.PI) va -= 2f * MathF.PI;
+        else if (va <= -MathF.PI) va += 2f * MathF.PI;
+        return MathF.Abs(va) <= half;
+    }
+
+    /// <summary>Pointe de forme (tip) pour les paquets blast — natif :
+    /// secteur <c>NotifyBlastToSelf</c> @0x084fb170 et direction
+    /// @0x084f6070 écrivent <c>lanceur + axe·longueurEffective</c> dans
+    /// le 288/297 ; la croix écrit la pointe du bras 0 (même formule,
+    /// longueur <c>L + trunc(mod/2)</c> ; le secteur ne prend PAS le
+    /// mod — <paramref name="length"/> reçoit la valeur effective).
+    /// Le clamp obstacle natif <c>CheckLineOfMoveUntilBlock</c> n'est
+    /// pas modélisé (pas de mur dans le monde live).</summary>
+    public static (float X, float Y) FormTip(float ox, float oy,
+        float ax, float ay, float length) =>
+        (ox + ax * length, oy + ay * length);
+
+    /// <summary>Pointes des 4 bras d'une croix — natif
+    /// <c>CSpellToCross::NotifyBlastToSelf</c> @0x084f40c0 : axe tourné
+    /// de k·<c>π/2</c> (<c>DAT_08896ac8</c>), longueur effective
+    /// <paramref name="length"/> (= <c>L + trunc(mod/2)</c>), sommet le
+    /// lanceur. [0] = bras 0 = la « dst » des paquets ; [1..3] vont
+    /// dans les vecteurs n×f32/m×f32 du 297 (x puis y).</summary>
+    public static (float X, float Y)[] CrossArmTips(float ox, float oy,
+        float ax, float ay, float length)
+    {
+        // Rotation (x·cos − y·sin, x·sin + y·cos) de 0/90/180/270°.
+        return
+        [
+            (ox + ax * length, oy + ay * length),          // 0°
+            (ox - ay * length, oy + ax * length),          // +90°
+            (ox - ax * length, oy - ay * length),          // 180°
+            (ox + ay * length, oy - ax * length),          // 270°
+        ];
     }
 
     /// <summary>Forme 2 — direction : union de l'onde balayée = bande de

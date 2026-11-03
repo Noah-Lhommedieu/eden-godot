@@ -283,13 +283,43 @@ public sealed partial class ZoneEntryFlow
         _blastSerial = (_blastSerial + 11) & 0x7fffffff;
         var serial = (uint)_blastSerial;
         var blastId = BlastWireId(st, def);
+        // Position/victime du 288 par forme (NotifyBlastToSelf natifs) :
+        // shape 0 (CSpellToLife) → victime + sa position ; shapes 2/5/6
+        // → victime = 0, pos = POINTE de la forme (secteur @0x084fb170 :
+        // lanceur + axe·L ; direction @0x084f6070 : lanceur + axe·
+        // (L+trunc(mod/2)) balayée ; croix @0x084f40c0 : pointe du bras
+        // 0, les bras 1-3 partiraient dans les vecteurs n/m×f32 — le
+        // codec 288 généré n'en transporte pas, ils vont dans le 297).
+        var shape = def is null ? 0 : DerivedShape(def);
+        var blastVictim = (int)mob.Handle;
+        float blastX = mob.X, blastY = mob.Y, blastZ = mob.Z;
+        (float X, float Y)[]? crossTips = null;
+        if (shape is 2 or 5 or 6)
+        {
+            var modHalf = SpellAreaGeometry.RadiusModHalf(
+                GetSpellAttrModify(st, 1, spellId));
+            // Secteur : longueur +0x40 BRUTE (aucun mod lu par le
+            // HitTest/Notify) ; direction et croix : + trunc(mod/2).
+            var effLen = SpellAreaGeometry.AreaLength(def!) +
+                (shape == 6 ? 0f : modHalf);
+            if (!SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
+                    mob.X, mob.Y, out var bax, out var bay))
+            { bax = 1f; bay = 0f; }   // atan2f(0,0)=0 → axe +x natif
+            var tip = shape == 5
+                ? (crossTips = SpellAreaGeometry.CrossArmTips(st.PosX,
+                    st.PosZ, bax, bay, effLen))[0]
+                : SpellAreaGeometry.FormTip(st.PosX, st.PosZ,
+                    bax, bay, effLen);
+            blastVictim = 0;
+            blastX = tip.X; blastY = tip.Y; blastZ = 0f;
+        }
         await session.SendAsync(new CNC_CZ_ClientSpellBlastOK
         {
             Serial = serial,
-            VictimHandle = (int)mob.Handle,
+            VictimHandle = blastVictim,
             SpellId = unchecked((short)spellId),
             Power = power,
-            X = mob.X, Y = mob.Y, Z = mob.Z,
+            X = blastX, Y = blastY, Z = blastZ,
             BlastId = blastId,
         }, token);
 
@@ -305,18 +335,44 @@ public sealed partial class ZoneEntryFlow
         // du cast → anim coupée dès son départ (bug live).
         // Corps (Serialize @0x081e8870) : [u32 serial][s16 spell]
         // [i32 hLanceur (this+0x18)][f32 srcXYZ][i32 hCible (this+0x1c)]
-        // [f32 dstXYZ][i32 blastIdx][i32 0].
-        var blastToLife = new CNC_CZ_ClientSpellBlastToLife
+        // [f32 dstXYZ][i32 blastIdx][i32 0]. Réservé aux sorts shape 0 :
+        // pour les formes à position (2/5/6) le natif passe par
+        // NotifyBlastToOthers → **297** ClientSpellBlastToLocation
+        // (src=lanceur, dst=pointe de forme, vecteurs = bras 1-3 de la
+        // croix — @0x084fb660/0x084f62f0/0x084f3c40).
+        if (shape is 2 or 5 or 6)
         {
-            Field1 = serial,
-            Field2 = unchecked((short)spellId),
-            Field3 = (int)st.CharId,      // handle lanceur (this+0x18)
-            Field4 = st.PosX, Field5 = st.PosZ, Field6 = 0f,
-            Field7 = (int)mob.Handle,     // handle cible (this+0x1c)
-            Field8 = mob.X, Field9 = mob.Y, Field10 = mob.Z,
-            Field11 = blastId, Field12 = 0,
-        };
-        await BroadcastToNodePeersAsync(session, st, blastToLife);
+            var blastToLoc = new CNC_CZ_ClientSpellBlastToLocation
+            {
+                Serial = serial,
+                SpellId = unchecked((short)spellId),
+                Power = power,
+                SrcX = st.PosX, SrcY = st.PosZ, SrcZ = 0f,
+                DstX = blastX, DstY = blastY, DstZ = 0f,
+                BlastId = blastId,
+            };
+            if (crossTips != null)
+                for (var i = 1; i < crossTips.Length; i++)
+                {
+                    blastToLoc.VecA.Add(crossTips[i].X);
+                    blastToLoc.VecB.Add(crossTips[i].Y);
+                }
+            await BroadcastToNodePeersAsync(session, st, blastToLoc);
+        }
+        else
+        {
+            var blastToLife = new CNC_CZ_ClientSpellBlastToLife
+            {
+                Field1 = serial,
+                Field2 = unchecked((short)spellId),
+                Field3 = (int)st.CharId,      // handle lanceur (this+0x18)
+                Field4 = st.PosX, Field5 = st.PosZ, Field6 = 0f,
+                Field7 = (int)mob.Handle,     // handle cible (this+0x1c)
+                Field8 = mob.X, Field9 = mob.Y, Field10 = mob.Z,
+                Field11 = blastId, Field12 = 0,
+            };
+            await BroadcastToNodePeersAsync(session, st, blastToLife);
+        }
 
         if (first)
             StartMobCombatLoop(session, st, mob);
@@ -529,20 +585,17 @@ public sealed partial class ZoneEntryFlow
         // secteur n'applique aucun mod (HitTest lit +0x40/+0x48 bruts).
         var areaLen = SpellAreaGeometry.AreaLength(def);
         // Axe natif : (point − lanceur) normalisé ; le point est la
-        // position de la cible en CastToLife (@0x081545a0).
-        var axisOk = SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
-            cx, cz, out var ax, out var ay);
-        // HitTest natif par forme. Axe invalide (lanceur == point) :
-        // l'axe natif reste le vecteur nul — l'onde/croix/cône ne
-        // s'étendent nulle part et la zone dégénère en disque de rayon
-        // R sur le lanceur (along=0 pour tous, seul le critère
-        // perpendiculaire ≤ R survit).
-        bool SplashHitTest(ZoneLiveWorld.LiveMob mob, int shape, bool axis) =>
+        // position de la cible en CastToLife (@0x081545a0). Axe
+        // dégénéré (cible au pas du lanceur) : atan2f(0,0)=0 → le natif
+        // garde un axe (1,0), la forme pointe +x — pas de repli disque
+        // (c'est ce repli qui touchait derrière et sur les côtés à ~R).
+        if (!SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
+                cx, cz, out var ax, out var ay))
+        { ax = 1f; ay = 0f; }
+        // HitTest natif par forme via <see cref="SpellAreaGeometry"/>.
+        bool SplashHitTest(ZoneLiveWorld.LiveMob mob, int shape) =>
             shape switch
             {
-                _ when !axis && shape is 2 or 5 or 6 =>
-                    SpellAreaGeometry.ContainsCircle(st.PosX, st.PosZ,
-                        baseR, mob.X, mob.Y),
                 2 => SpellAreaGeometry.ContainsDirection(st.PosX, st.PosZ,
                     ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
                 5 => SpellAreaGeometry.ContainsCross(st.PosX, st.PosZ,
@@ -559,7 +612,7 @@ public sealed partial class ZoneEntryFlow
             // Pet elf (IsA==0x50b) — IsMyEnemy false natif, immunisé ;
             // cible primaire déjà résolue par le chemin mono-cible.
             if (!mob.Alive || mob.IsElfPet || mob == primary) continue;
-            if (!SplashHitTest(mob, shape, axisOk)) continue;
+            if (!SplashHitTest(mob, shape)) continue;
 
             var sres = NativeCombatFormulas.ResolveSpell(
                 PlayerSnapshot(st), MobSnapshot(mob), def,
@@ -1016,20 +1069,82 @@ public sealed partial class ZoneEntryFlow
                 Field3 = 0,                     // i32 : 0 = cast non ciblé
                 Field4 = 1,
             }, token);
-        // 297 SpellBlastToLocation — Serialize natif @0x081fe6e0 :
-        // [u32 serial][s16 spell][i32 power][f32 src xyz]
-        // [f32 dst xyz][i32 blastId][u16 n][n×f32][u16 m][m×f32].
+
+        // Forme/axe/pointe calculés AVANT l'émission : les paquets
+        // portent la pointe de la forme, pas le point visé brut.
+        var shape = DerivedShape(def);
+        var modHalf = SpellAreaGeometry.RadiusModHalf(
+            GetSpellAttrModify(st, 1, spellId));
+        var baseR = SpellAreaGeometry.AreaRadius(def);
+        var areaLen = SpellAreaGeometry.AreaLength(def);
+        var radius = baseR + modHalf;
+        // Axe natif lanceur→point (CastToLocation @0x08154210). Axe
+        // dégénéré (point == lanceur) : atan2f(0,0)=0 → le natif garde
+        // un axe (1,0) et la forme pointe +x — pas de repli en disque.
+        if (!SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
+                x, z, out var ax, out var ay))
+        { ax = 1f; ay = 0f; }
+        // Longueur effective : secteur = +0x40 brut ; direction/croix
+        // = +0x40 + trunc(AttrSpellRadius/2) (NotifyBlastToSelf natifs).
+        var effLen = areaLen + (shape == 6 ? 0f : modHalf);
+        (float X, float Y)[]? crossTips = null;
+        float tipX = x, tipY = z;
+        if (shape is 2 or 5 or 6)
+        {
+            var tip = shape == 5
+                ? (crossTips = SpellAreaGeometry.CrossArmTips(st.PosX,
+                    st.PosZ, ax, ay, effLen))[0]
+                : SpellAreaGeometry.FormTip(st.PosX, st.PosZ,
+                    ax, ay, effLen);
+            tipX = tip.X; tipY = tip.Y;
+        }
+
+        // Paquets blast natifs (ISpell::OnBlast @0x084f0be0 →
+        // NotifyBlastToSelf + NotifyBlastToOthers) :
+        //  - 288 ClientSpellBlastOK au LANCEUR, victime=0, pos = pointe
+        //    de la forme (point visé pour le cercle — @0x084f8c70).
+        //  - 297 ClientSpellBlastToLocation aux TÉMOINS, src=lanceur,
+        //    dst=pointe, vecteurs = bras 1-3 pour la croix
+        //    (@0x084fb660/0x084f62f0/0x084f3c40/0x084f90a0).
+        // Le client Godot rend le 288 directionnel (DirectionalBlast
+        // ancré joueur) mais IGNORE un 288 de cercle (victime 0 →
+        // Impact no-op) : le 297 au lanceur est donc conservé pour la
+        // forme 1 seule — sinon son effet au sol disparaîtrait.
         _blastSerial = (_blastSerial + 11) & 0x7fffffff;
+        var serial = (uint)_blastSerial;
+        var blastId = BlastWireId(st, def);
+        await session.SendAsync(new CNC_CZ_ClientSpellBlastOK
+        {
+            Serial = serial,
+            VictimHandle = 0,
+            SpellId = unchecked((short)spellId),
+            Power = def.Power,
+            X = tipX, Y = tipY, Z = 0f,
+            BlastId = blastId,
+        }, token);
+        // 297 — Serialize natif @0x081fe6e0 : [u32 serial][s16 spell]
+        // [i32 power][f32 src xyz][f32 dst xyz][i32 blastId]
+        // [u16 n][n×f32][u16 m][m×f32].
         var blast = new CNC_CZ_ClientSpellBlastToLocation
         {
-            Serial = (uint)_blastSerial,
+            Serial = serial,
             SpellId = unchecked((short)spellId),
             Power = def.Power,
             SrcX = st.PosX, SrcY = st.PosZ, SrcZ = 0f,
-            DstX = x, DstY = z, DstZ = 0f,
-            BlastId = BlastWireId(st, def),
+            DstX = tipX, DstY = tipY, DstZ = 0f,
+            BlastId = blastId,
         };
-        await session.SendAsync(blast, token);
+        if (crossTips != null)
+            for (var i = 1; i < crossTips.Length; i++)
+            {
+                blast.VecA.Add(crossTips[i].X);
+                blast.VecB.Add(crossTips[i].Y);
+            }
+        // Le lanceur reçoit le 297 seulement pour le cercle (le 288
+        // suffit aux formes directionnelles — un 297 self y doublerait
+        // l'effet).
+        if (shape is not (2 or 5 or 6))
+            await session.SendAsync(blast, token);
         // Broadcast CanSee — les témoins voient l'explosion au sol.
         var (blastOp, blastPayload) = PreparePacket(blast);
         foreach (var s in _services.Sessions.All)
@@ -1048,14 +1163,6 @@ public sealed partial class ZoneEntryFlow
         // pour spec -91 ; direction/croix/secteur : géométrie exacte
         // des HitTest @0x084f6ad0/@0x084f5020/@0x084fb410 sur l'axe
         // lanceur→point (CastToLocation @0x08154210).
-        var shape = DerivedShape(def);
-        var modHalf = SpellAreaGeometry.RadiusModHalf(
-            GetSpellAttrModify(st, 1, spellId));
-        var baseR = SpellAreaGeometry.AreaRadius(def);
-        var areaLen = SpellAreaGeometry.AreaLength(def);
-        var radius = baseR + modHalf;
-        var axisOk = SpellAreaGeometry.TryNormalizeAxis(st.PosX, st.PosZ,
-            x, z, out var ax, out var ay);
         var spLvl = await PlayerSpellLevelAsync(st, spellId);
         var spec = SpellTargetSpecOf(def);
         if (!SpellSpecHostile(spec))
@@ -1076,15 +1183,10 @@ public sealed partial class ZoneEntryFlow
         var enumerate = shape != 1 || SpellAreaGeometry.AreaEnumerationEnabled(spec);
         bool AreaHitTest(ZoneLiveWorld.LiveMob mob) => shape switch
         {
-            _ when !axisOk && shape is 2 or 5 or 6 =>
-                // Axe nul natif : la zone dégénère en disque R sur le
-                // lanceur (l'onde/croix/cône ne s'étendent nulle part).
-                SpellAreaGeometry.ContainsCircle(st.PosX, st.PosZ,
-                    baseR, mob.X, mob.Y),
             2 => SpellAreaGeometry.ContainsDirection(st.PosX, st.PosZ,
-                ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
+                ax, ay, effLen, baseR, mob.X, mob.Y),
             5 => SpellAreaGeometry.ContainsCross(st.PosX, st.PosZ,
-                ax, ay, areaLen + modHalf, baseR, mob.X, mob.Y),
+                ax, ay, effLen, baseR, mob.X, mob.Y),
             6 => SpellAreaGeometry.ContainsSector(st.PosX, st.PosZ,
                 ax, ay, areaLen, baseR, mob.X, mob.Y),
             _ => SpellAreaGeometry.ContainsCircle(x, z, radius,
@@ -1388,8 +1490,9 @@ public sealed partial class ZoneEntryFlow
     /// tort tout sort portant ce bit — ex. le sort cléric 51000 → TP
     /// sur la cible puis freeze, bug live).
     ///   ResultSpellId (col 39) = sort d'impact en zone à l'arrivée
-    ///   (59280 'Demolishing Thundera') — dégâts 281/280 aux mobs à
-    ///   moins de 5u du point d'arrivée et stun serveur 4 s
+    ///   (59280 'Demolishing Thundera') — blast 288/297 + dégâts
+    ///   281/280 aux mobs dans le rayon natif du sort résultat
+    ///   (AreaRadius + trunc(mod/2) — 59280 → 10u) et stun serveur 4 s
     ///   (StunnedUntil — supprime la riposte sans paquet spéculatif).
     /// </summary>
     private async Task NowhereCastReleaseAsync(NetSession session,
@@ -1739,6 +1842,42 @@ public sealed partial class ZoneEntryFlow
         CancellationToken token)
     {
         var rdef = _services.Spells.GetDefinition(dashDef.ResultSpellId);
+        // Blast de la zone résultat (ex. 59280, cercle auto-centré —
+        // shape 1 : Param1=5/sub=0) : le natif diffuse le blast comme
+        // tout cast de zone — 288 au lanceur (pos = point de la zone)
+        // et 297 aux témoins (src=dst=lanceur). Sans eux les 281
+        // arrivaient sans visuel d'explosion (audit §6).
+        _blastSerial = (_blastSerial + 11) & 0x7fffffff;
+        var serial = (uint)_blastSerial;
+        var blastId = rdef is null ? 0 : BlastWireId(st, rdef);
+        var rSpellId = unchecked((short)dashDef.ResultSpellId);
+        var rPower = rdef?.Power ?? 0;
+        await session.SendAsync(new CNC_CZ_ClientSpellBlastOK
+        {
+            Serial = serial, VictimHandle = 0, SpellId = rSpellId,
+            Power = rPower,
+            X = st.PosX, Y = st.PosZ, Z = 0f,
+            BlastId = blastId,
+        }, token);
+        var blast = new CNC_CZ_ClientSpellBlastToLocation
+        {
+            Serial = serial, SpellId = rSpellId, Power = rPower,
+            SrcX = st.PosX, SrcY = st.PosZ, SrcZ = 0f,
+            DstX = st.PosX, DstY = st.PosZ, DstZ = 0f,
+            BlastId = blastId,
+        };
+        // 297 au lanceur aussi : son 288 victime=0 est un no-op client
+        // (comme le cercle au sol d'ApplyAreaSpellAsync).
+        await session.SendAsync(blast, token);
+        await BroadcastToNodePeersAsync(session, st, blast);
+        // Rayon natif de la zone résultat : AreaRadius(+0x48) +
+        // trunc(mod/2) — 59280 col30=20 → R=10 (le 5u codé en dur était
+        // infidèle). Sans def → repli 5u historique.
+        var radius = rdef is null ? 5f
+            : SpellAreaGeometry.AreaRadius(rdef) +
+                SpellAreaGeometry.RadiusModHalf(
+                    GetSpellAttrModify(st, 1, dashDef.ResultSpellId));
+        var r2 = radius * radius;
         // Dégâts par mob — pipeline natif `HitMagicSkill` (chaque cible
         // a ses propres rolls hit/crit/variance/résist, comme le natif
         // qui résout l'impact par entité touchée par le blast).
@@ -1748,7 +1887,7 @@ public sealed partial class ZoneEntryFlow
         {
             if (!mob.Alive || mob.IsElfPet) continue;
             var dx = mob.X - st.PosX; var dz = mob.Y - st.PosZ;
-            if (dx * dx + dz * dz > 25f) continue;   // 5u de rayon
+            if (dx * dx + dz * dz > r2) continue;
             var first = !mob.InCombat ||
                 mob.TargetCharId != (int)st.CharId;
             BeginMobCombat(st, mob);
@@ -1779,8 +1918,16 @@ public sealed partial class ZoneEntryFlow
                     ProcHitEvent.Attack, dmg, token,
                     NativeCombatFormulas.SpellHitFlagsOf(sres));
             if (mob.Hp <= 0)
-                await KillMobAsync(session, st, mob, token,
-                    dashDef.ResultSpellId, dmg);
+            {
+                // FinishMobDeathAsync (PAS KillMobAsync) : le 281 est
+                // déjà émis ci-dessus — KillMobAsync ré-émettrait un
+                // 281 identique via KillMobBroadcastAsync (double-hit
+                // du fil, audit §6).
+                mob.MarkDead();
+                mob.DeadAt = DateTime.UtcNow;
+                await FinishMobDeathAsync(session, st, mob, true,
+                    CancellationToken.None);
+            }
             else if (first)
                 StartMobCombatLoop(session, st, mob);
         }

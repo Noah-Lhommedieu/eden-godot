@@ -4716,9 +4716,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Spells.Resolution.cs": {
-    "mtime": 1793728084.4202123,
-    "seen": 1793728275.1113713,
-    "ast_hash": "c8485d217d59da7dff0978d777327461",
+    "mtime": 1793738317.075566,
+    "seen": 1793738409.699192,
+    "ast_hash": "c27f97e31dec87fafc47e2d7596cefd5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Spells.cs": {
@@ -11616,15 +11616,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Combat/SpellAreaGeometry.cs": {
-    "mtime": 1793727942.867391,
-    "seen": 1793728275.1113079,
-    "ast_hash": "b8e6cc77a2335caaf979181f6db0b804",
+    "mtime": 1793738048.467873,
+    "seen": 1793738409.6991007,
+    "ast_hash": "75b6cb75c2dba2aec6f9bd824ea055c8",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/SpellAreaGeometryTests.cs": {
-    "mtime": 1793728047.334689,
-    "seen": 1793728275.111675,
-    "ast_hash": "4847087a55559ff9fb3e51ad2c018b79",
+    "mtime": 1793738123.4514902,
+    "seen": 1793738409.699625,
+    "ast_hash": "2d40c211cf3ffa41d24b5da5741ff774",
     "semantic_hash": ""
   },
   "eden_server/docs/temp-plans/2026-11-03-zone-spell-geometry.md": {
@@ -11643,6 +11643,12 @@
     "mtime": 1793734505.803568,
     "seen": 1793734718.944141,
     "ast_hash": "dfca2512b6ba3eea253087d5e0fde939",
+    "semantic_hash": ""
+  },
+  "eden_server/docs/temp-plans/2026-11-03-zone-spell-geometry-packets.md": {
+    "mtime": 1793738002.299294,
+    "seen": 1793738409.7007575,
+    "ast_hash": "720fe0d722c2df74060949cf55ce2363",
     "semantic_hash": ""
   }
 }

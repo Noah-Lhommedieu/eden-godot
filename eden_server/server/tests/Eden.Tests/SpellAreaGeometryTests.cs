@@ -76,25 +76,68 @@ public class SpellAreaGeometryTests
     }
 
     // ---------- Forme 6 : secteur ----------
+    // Modèle natif (SectorSearch @0x084fba60) : disque de rayon L centré
+    // sur la POINTE (lanceur + L·axe) ∩ cône de sommet le lanceur.
 
     [Fact]
-    public void Sector_ConeApexAtCaster()
+    public void Sector_TipDiscAndApexCone()
     {
-        // cône +x : sommet (0,0), axe (1,0), L=10, R=5 → demi-angle 30°.
+        // cône +x : sommet (0,0), axe (1,0), L=10, R=5 → demi-angle 30°,
+        // disque centré en (10,0).
         Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 8, 0));
-        // sur l'arc à L
+        // sur la pointe
         Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 10, 0));
-        // au-delà de L
-        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 11, 0));
-        // derrière le lanceur
+        // au-delà de L devant : le disque-pointe natif l'autorise —
+        // (15,0) est à 5 de la pointe et d'angle 0 → TOUCHÉ natif.
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 15, 0));
+        // (16,0) : à 6 de la pointe < 10, angle 0 → TOUCHÉ natif.
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 16, 0));
+        // (20.5,0) : hors disque-pointe (>10 de la pointe) → MISS.
+        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 20.5f, 0));
+        // derrière le lanceur : distance ET angle rejettent.
         Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, -1, 0));
+    }
+
+    [Fact]
+    public void Sector_BehindCasterAlwaysMisses_50663()
+    {
+        // Cas live 50663 : L=R=10 → demi-angle 90°, pointe à (10,0).
+        // Une victime ~16u derrière le lanceur doit MISS (double rejet).
+        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 10,
+            -16, 0));
+        // ~10u juste derrière : angle 180° > 90° ET hors disque-pointe.
+        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 10,
+            -10, 0));
+        // ~10u sur le côté pur du lanceur : hors disque-pointe
+        // (dist((0,10),(10,0)) ≈ 14,1 > 10) → MISS.
+        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 10,
+            0, 10));
+        // Côté avant (5,8) : à ~9,4 de la pointe, angle 58° ≤ 90° → HIT.
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 10,
+            5, 8));
+        // 16u devant sur l'axe : à 6 de la pointe, angle 0 → HIT natif.
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 10,
+            16, 0));
+    }
+
+    [Fact]
+    public void Sector_ApexVictimFollowsAtan2OfZero()
+    {
+        // Victime exactement au sommet : atan2f(0,0)=0 natif → angle =
+        // |θ_axe|. Axe +x (θ=0) → touchée même dans un cône étroit.
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 5, 0, 0));
+        // Axe +y (θ=90°) dans un cône de 30° → ratée (comportement natif).
+        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 0, 1, 10, 5, 0, 0));
+        // …mais touchée si le demi-angle atteint 90° (50663, R'=L).
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 0, 1, 10, 10, 0, 0));
     }
 
     [Fact]
     public void Sector_HalfAngleIsAsinOfROverL()
     {
         // L=10, R=5 → demi-angle asin(0.5)=30°. Point à 29° (≈8.75, 5.04)
-        // dedans ; à 31° (≈8.57,5.15) dehors.
+        // dedans ; à 31° (≈8.57,5.15) dehors (les deux sont dans le
+        // disque-pointe : seul l'angle tranche).
         var d = 10f;
         var rad29 = 29 * Math.PI / 180;
         var rad31 = 31 * Math.PI / 180;
@@ -108,16 +151,46 @@ public class SpellAreaGeometryTests
     public void Sector_RadiusCappedAtLength()
     {
         // R > L → R' = L → demi-angle 90° (asin(1)).
-        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 20, 0, 9));
+        // (5,8) : à ~9,4 de la pointe, angle 58° → dedans.
+        Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 20, 5, 8));
+        // (-1,9) : angle ~96° > 90° ET hors disque-pointe → dehors.
         Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 20, -1, 9));
+        // (0,9) : angle 90° limite MAIS hors disque-pointe (~14,1) → dehors.
+        Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 1, 0, 10, 20, 0, 9));
     }
 
     [Fact]
     public void Sector_AxisRotated()
     {
-        // cône vers -y : sommet (0,0), axe (0,-1), L=10, R=5.
+        // cône vers -y : sommet (0,0), axe (0,-1), L=10, R=5, pointe (0,-10).
         Assert.True(SpellAreaGeometry.ContainsSector(0, 0, 0, -1, 10, 5, 0, -9));
         Assert.False(SpellAreaGeometry.ContainsSector(0, 0, 0, -1, 10, 5, 0, 9));
+    }
+
+    // ---------- Pointes de forme (paquets blast) ----------
+
+    [Fact]
+    public void FormTip_IsCasterPlusAxisLen()
+    {
+        // Natif : lanceur + axe·longueurEffective (NotifyBlastToSelf).
+        Assert.Equal((12f, 0f),
+            SpellAreaGeometry.FormTip(2, 0, 1, 0, 10));
+        var (tx, ty) = SpellAreaGeometry.FormTip(0, 0,
+            MathF.Sqrt(0.5f), MathF.Sqrt(0.5f), 10);
+        Assert.Equal(10 * MathF.Sqrt(0.5f), tx, 4);
+        Assert.Equal(10 * MathF.Sqrt(0.5f), ty, 4);
+    }
+
+    [Fact]
+    public void CrossArmTips_AreAxisRotatedByQuarters()
+    {
+        // Natif @0x084f40c0 : bras = axe tourné de 0/90/180/270°,
+        // longueur effective, sommet le lanceur.
+        var tips = SpellAreaGeometry.CrossArmTips(1, 2, 1, 0, 10);
+        Assert.Equal((11f, 2f), tips[0]);    // bras 0 → dst du paquet
+        Assert.Equal((1f, 12f), tips[1]);    // +90°
+        Assert.Equal((-9f, 2f), tips[2]);    // 180°
+        Assert.Equal((1f, -8f), tips[3]);    // 270°
     }
 
     // ---------- Forme 2 : direction ----------

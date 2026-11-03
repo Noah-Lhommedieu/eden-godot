@@ -341,6 +341,33 @@ public partial class CharSelectScreen : Control
             AssetCatalog.ResolveRawAsset(rel) ??
             DataPaths.ResolveFile(rel);
         var chars = Mgr.Session?.Characters ?? new();
+        // QA : --mock-chars=N complète la liste (copie, la session
+        // n'est pas touchée) par des persos synthétiques pour banc de
+        // cadrage — le compte réel n'a souvent qu'un perso, ce qui ne
+        // couvre ni le débordement colonne d'actions ni le multi-slot.
+        foreach (var a in OS.GetCmdlineArgs()
+                     .Concat(OS.GetCmdlineUserArgs()))
+            if (a.StartsWith("--mock-chars=", StringComparison.Ordinal) &&
+                int.TryParse(a["--mock-chars=".Length..], out var want) &&
+                want > chars.Count)
+            {
+                var real = chars.Count;
+                chars = chars.Concat(Enumerable.Range(0, want - real)
+                    .Select(k =>
+                    {
+                        var i = real + k;
+                        var src = real > 0 ? chars[k % real] : null;
+                        return new CharacterSummary(-(i + 1),
+                            $"Mock {i + 1}",
+                            (short)(1 + i % 20), (short)(20 + i * 9),
+                            1, src?.RaceId ?? 1, 1,
+                            src?.Appearance, src?.PreviewWorn);
+                    }))
+                    .ToList();
+                GD.Print($"[charsel] mock-chars : {real} réels → " +
+                    $"{chars.Count} affichés");
+                break;
+            }
         // Mémorise les apparences : prochain login = corps préchauffés.
         PreGameWarmup.SaveHint(Mgr.Config.Account,
             chars.Select(c => c.Appearance));
@@ -390,7 +417,24 @@ public partial class CharSelectScreen : Control
         var aspect = Mathf.Max(1.2f, vp.X / Mathf.Max(1f, vp.Y));
         var halfW = (n * Spacing + 3.2f) * 0.5f;
         var tan = Mathf.Tan(Mathf.DegToRad(cam.Fov * 0.5f)) * aspect;
-        var dist = Mathf.Clamp(halfW / tan, 9.5f, 40f);
+        // La colonne d'actions couvre x écran ≥ ~0,835 (y 0,50-0,97) :
+        // à partir de ~6 persos le dernier avatar ET sa plaque
+        // débordaient dessus (« avatar manquant »). Le centre du
+        // dernier perso doit rester sous SafeRight écran — sinon on
+        // recule la caméra (rangée plus serrée, tous visibles).
+        // EDEN_CHARSEL_SAFE=1.0 restaure l'ancien comportement (avant/
+        // après QA sans rebuild).
+        var safeRight =
+            float.TryParse(System.Environment.GetEnvironmentVariable(
+                    "EDEN_CHARSEL_SAFE"),
+                System.Globalization.CultureInfo.InvariantCulture,
+                out var sr) ? sr : 0.78f;
+        var centerOff = (n - 1) * 0.5f * Spacing;
+        var safeNdc = safeRight * 2f - 1f;
+        var dist = Mathf.Clamp(
+            Mathf.Max(halfW / tan,
+                centerOff / Mathf.Max(0.01f, safeNdc * tan)),
+            9.5f, 40f);
         var dir = (cam.Position - focus).Normalized();
         cam.Position = focus + dir * dist + new Vector3(0f, 0.6f, 0f);
         cam.LookAt(focus + new Vector3(0f, 0.2f, 0f), Vector3.Up);

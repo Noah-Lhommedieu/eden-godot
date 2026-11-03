@@ -368,6 +368,25 @@ public sealed partial class ZoneEntryFlow
             EdenLog.Write($"[Territory] send-data char={st.CharId} : " +
                 ex.Message);
         }
+        // AddClassFromLimit natif à PostInit (KB-03) — premier
+        // MigrationDone seulement (≈ construction du CCharacter :
+        // login ou entrée dans cette zone, jamais un portail interne).
+        // Octroie les classes de base non possédées (reqCharLv=1 :
+        // {1,2,3,4,5,19}) et toute classe avancée dont les prérequis
+        // sont remplis — 489 + sorts + certs + JPAward par
+        // GrantNewClassAsync.
+        if (entry != null)
+        {
+            try
+            {
+                await UnlockClassesFromLimitAsync(session, st, token);
+            }
+            catch (Exception ex)
+            {
+                EdenLog.Write($"[Zone-Entry] AddClassFromLimit " +
+                    $"char={st.CharId} : {ex.Message}");
+            }
+        }
         // Le bundle d'entrée est un snapshot one-shot : ce
         // MigrationDone a joué ses émissions différées (Emitted —
         // les re-migrations portail ne les rejouent plus) et ses

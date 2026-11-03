@@ -270,21 +270,49 @@ public partial class RideLab : Node3D
         var key = _keys[_ki];
         var meshes = _mount.FindChildren("*", "MeshInstance3D", true, false).Cast<MeshInstance3D>().ToList();
         var mesh = meshes.Count(m => m.Mesh != null && m.Mesh.GetSurfaceCount() > 0);
+        // notex = surfaces qui référencent une texture (meta « nif_tex »
+        // de NifMaterials.For, recopiée par ToonMaterializer) dont le
+        // fichier n'a pas résolu — VRAI trou de données. Les meshes
+        // cachés du NIF (helpers « Bone », « Editable Poly »,
+        // flag NiAVObject::Hidden → Visible=false) et les surfaces
+        // nativement non texturées (couleur diffuse/vertex, ex. glow
+        // r015) ne sont PAS des trous : ignorés ici, comptés en untx.
         var notex = 0;
+        var untx = 0;
         foreach (var m in meshes)
             for (var s = 0; s < (m.Mesh?.GetSurfaceCount() ?? 0); s++)
-                if ((m.GetSurfaceOverrideMaterial(s) ?? m.GetActiveMaterial(s)) is StandardMaterial3D sm &&
-                    sm.AlbedoTexture == null && sm.AlbedoColor.A > 0.05f && sm.Transparency == BaseMaterial3D.TransparencyEnum.Disabled)
-                    notex++;
+            {
+                var mat = m.GetSurfaceOverrideMaterial(s) ?? m.GetActiveMaterial(s);
+                if (mat == null) continue;
+                var hasTex = mat switch
+                {
+                    StandardMaterial3D sm => sm.AlbedoTexture != null,
+                    ShaderMaterial shm => shm
+                        .GetShaderParameter("albedo_tex").Obj
+                        is Texture2D,
+                    _ => true,
+                };
+                if (mat.HasMeta("nif_tex"))
+                {
+                    if (!hasTex) notex++;
+                }
+                else if (!hasTex && m.IsVisibleInTree())
+                    untx++;
+            }
         var bones = _mount.FindChildren("*", "Skeleton3D", true, false).Cast<Skeleton3D>().Sum(s => s.GetBoneCount());
         string Y(string a) => _ma != null && _ma.Has(a) ? "1" : "0";
         var fx = _mount.FindChildren("*", "NativeFxHost", true, false).Count;
         var l17 = _mount.FindChild("L17", true, false) != null ? "1" : "0";
-        var ok = mesh > 0 && _ma != null && _ma.Has("stand01") && _ma.Has("move01");
+        // stand01 est l'idle minimale ; move01-04/jump/attack sont des
+        // données par monture (ex. r711 « Tour à Canon » n'a aucune
+        // anim de marche — monture-canon natif, pas un bug).
+        var ok = mesh > 0 && _ma != null && _ma.Has("stand01");
         var riderOk = _ra != null && _ra.Has("ride01") && _ra.Has("ride04");
         var jump = _ma != null && (_ma.Has("jump01") || _ma.Has("jump02")) ? "1" : "0";
         var atk = _ma != null && (_ma.Has("attack01") || _ma.Has("attack02")) ? "1" : "0";
         var status = ok && riderOk && notex == 0 ? "OK" : "FAIL";
+        if (untx > 0) _notes.Add($"untextured={untx}");
+        if (_ma != null && !_ma.Has("move01")) _notes.Add("noMove");
         var seen = string.Join("|", _seenAnims);
         _tsv.AppendLine($"{key}\t{RideList.Stem($"r{key:D6}")}\t{mesh}\t{notex}\t{bones}\t{(_ma != null ? 1 : 0)}\t{l17}\t{fx}\t{Y("stand01")}\t{Y("move01")}\t{Y("move02")}\t{Y("move03")}\t{Y("move04")}\t{jump}\t{atk}\t{Y("magic01")}\t{Y("magic03")}\t{(riderOk ? 1 : 0)}\t{status}\t{string.Join(",", _notes)};played={seen}");
     }

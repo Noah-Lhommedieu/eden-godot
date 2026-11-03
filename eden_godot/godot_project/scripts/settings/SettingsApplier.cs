@@ -408,6 +408,11 @@ public partial class SettingsApplier : Node
         if (_themeWait <= 0) return;
         _themeWait--;
         var hud = FindHud();
+        if (_themeWait % 300 == 0)
+            GD.Print($"[theme-boot] wait={_themeWait} " +
+                $"hud={(hud == null ? "null" : "ok")} " +
+                $"tex={(hud?.Tex == null ? "null" : "ok")} " +
+                $"scene={_scene?.Name}");
         if (hud == null || Ui.UiThemeBoot.MustWait(true, hud.Tex != null))
             return;
         _themeWait = 0;

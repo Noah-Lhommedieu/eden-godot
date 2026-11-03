@@ -99,6 +99,26 @@ public static class CharColorTable
     private static readonly Dictionary<int, Rgb> _empty = new();
     private static readonly object _lock = new();
 
+    /// <summary>Résolution du fichier table, robuste à la course du
+    /// boot : <see cref="TextResolver.ResolveFile"/> n'est posé que
+    /// par CharSelectScreen/GameScene — PreGameWarmup (worker) peut
+    /// atteindre TintFor avant. Repli : le nom minuscule réel de
+    /// fr-full, puis la résolution insensible à la casse d'AssetCatalog
+    /// (Godot seul — DataPaths/EdenVfs purs filesystem, sûrs en worker).
+    /// </summary>
+    private static string? ResolveTablePath()
+    {
+        var resolve = TextResolver.ResolveFile ??
+            Tables.StoreTable.ResolveDefault;
+        var path = resolve("data/db/C_CharColor.ini")
+            ?? resolve("data/db/c_charcolor.ini");
+#if GODOT
+        path ??= AssetCatalog.ResolveRawAsset("data/db/C_CharColor.ini")
+            ?? DataPaths.ResolveFile("data/db/C_CharColor.ini");
+#endif
+        return path;
+    }
+
     private static void EnsureLoaded()
     {
         if (_byId != null) return;
@@ -106,9 +126,7 @@ public static class CharColorTable
         {
             if (_byId != null) return;
             var map = new Dictionary<int, Rgb>();
-            if ((TextResolver.ResolveFile ??
-                 Tables.StoreTable.ResolveDefault)(
-                    "data/db/C_CharColor.ini") is { } path)
+            if (ResolveTablePath() is { } path)
             {
                 var table = IniTable.ParseFile(path,
                     System.Text.Encoding.UTF8);

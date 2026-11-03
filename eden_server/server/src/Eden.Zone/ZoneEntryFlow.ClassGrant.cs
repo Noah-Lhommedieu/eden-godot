@@ -38,6 +38,10 @@ public sealed partial class ZoneEntryFlow
             .GetClassesByCharacterIdAsync((int)st.CharId);
         if (cls <= 0 || rows.Any(r => r.ClassId == cls)) return false;
         await _services.Classes.AddClassAsync((int)st.CharId, cls);
+        // Le bundle d'entrée est périmé (classlist mutée) : sans ce
+        // drapeau le 489 ci-dessous repartirait du prefetch ClassRows
+        // — sans la classe qui vient d'être insérée.
+        st.EntryDirty = true;
         var cdef = ClassSkillTable.ClassFor(
             _services.GameData.Classes, st.RaceId, cls);
         var awakened = ClassRules.IsAwakened(cls);

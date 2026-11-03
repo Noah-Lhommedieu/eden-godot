@@ -141,6 +141,7 @@ public partial class HudExtensions : Node
     {
         if (_session == null && SessionCarry.Session is { } s)
             BindSession(s);
+        using var _ptd = EdenClient.Perf.PerfTrace.Scope("hudext.drain"); // TEMP-DIAG
         while (_pending.TryDequeue(out var act))
         {
             try { act(); }

@@ -147,14 +147,77 @@ public static class NativeFx
                 }
             }
             Texture2D? tex = null;
-            if (img != null) { img.GenerateMipmaps(); tex = ImageTexture.CreateFromImage(img); }
+            if (img != null) { img = MipmapsPremult(img); tex = ImageTexture.CreateFromImage(img); }
             return s_pix[px] = tex;
         }
     }
 
-    public static Shader GetShader(int blend, bool twoSided, bool depthTest, bool depthWrite)
+    /// <summary>Mips en alpha prémultiplié puis division par alpha : le filtre box de
+    /// <see cref="Image.GenerateMipmaps"/> mélange le RGB des texels transparents (souvent noir)
+    /// aux bords → liseré sombre autour des sprites alpha-blendés. En prémultipliant d'abord
+    /// puis en divisant, chaque niveau garde la couleur du voisinage opaque.</summary>
+    static Image MipmapsPremult(Image img)
     {
-        string key = $"{blend}{twoSided}{depthTest}{depthWrite}";
+        if (img.GetFormat() != Image.Format.Rgba8) { img.GenerateMipmaps(); return img; }
+        int w = img.GetWidth(), h = img.GetHeight();
+        if (w <= 1 && h <= 1) return img;
+        var levels = new List<byte[]> { img.GetData() };
+        Premult(levels[0]);
+        int cw = w, ch = h;
+        var cur = levels[0];
+        while (cw > 1 || ch > 1)
+        {
+            int nw = Math.Max(1, cw >> 1), nh = Math.Max(1, ch >> 1);
+            var nx = new byte[nw * nh * 4];
+            for (int y = 0; y < nh; y++)
+                for (int x = 0; x < nw; x++)
+                {
+                    int r = 0, g = 0, b = 0, a = 0, cnt = 0;
+                    for (int dy = 0; dy < 2 && y * 2 + dy < ch; dy++)
+                        for (int dx = 0; dx < 2 && x * 2 + dx < cw; dx++)
+                        {
+                            int o = ((y * 2 + dy) * cw + x * 2 + dx) * 4;
+                            r += cur[o]; g += cur[o + 1]; b += cur[o + 2]; a += cur[o + 3]; cnt++;
+                        }
+                    int oo = (y * nw + x) * 4;
+                    nx[oo] = (byte)(r / cnt); nx[oo + 1] = (byte)(g / cnt);
+                    nx[oo + 2] = (byte)(b / cnt); nx[oo + 3] = (byte)(a / cnt);
+                }
+            levels.Add(nx); cur = nx; cw = nw; ch = nh;
+        }
+        int total = 0;
+        foreach (var l in levels) { Unpremult(l); total += l.Length; }
+        var all = new byte[total];
+        int pos = 0;
+        foreach (var l in levels) { Array.Copy(l, 0, all, pos, l.Length); pos += l.Length; }
+        return Image.CreateFromData(w, h, true, Image.Format.Rgba8, all);
+    }
+
+    static void Premult(byte[] d)
+    {
+        for (int i = 0; i + 3 < d.Length; i += 4)
+        {
+            int a = d[i + 3];
+            if (a >= 255) continue;
+            d[i] = (byte)(d[i] * a / 255); d[i + 1] = (byte)(d[i + 1] * a / 255); d[i + 2] = (byte)(d[i + 2] * a / 255);
+        }
+    }
+
+    static void Unpremult(byte[] d)
+    {
+        for (int i = 0; i + 3 < d.Length; i += 4)
+        {
+            int a = d[i + 3];
+            if (a is 0 or >= 255) continue;
+            d[i] = (byte)Math.Min(255, d[i] * 255 / a);
+            d[i + 1] = (byte)Math.Min(255, d[i + 1] * 255 / a);
+            d[i + 2] = (byte)Math.Min(255, d[i + 2] * 255 / a);
+        }
+    }
+
+    public static Shader GetShader(int blend, bool twoSided, bool depthTest, bool depthWrite, bool repeat = true)
+    {
+        string key = $"{blend}{twoSided}{depthTest}{depthWrite}{repeat}";
         lock (s_shaders)
         {
             if (s_shaders.TryGetValue(key, out var s)) return s;
@@ -171,7 +234,7 @@ public static class NativeFx
             };
             var code = $@"shader_type spatial;
 render_mode {rm};
-uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable;
+uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, {(repeat ? "repeat_enable" : "repeat_disable")};
 uniform vec4 albedo = vec4(1.0);
 uniform vec3 emissive = vec3(0.0);
 uniform vec3 uv_offset = vec3(0.0);
@@ -200,9 +263,15 @@ void fragment() {{
         bool twoSided, NativeFxOptions o, bool particle)
     {
         int blend = BlendMode(alpha);
+        // ClampMode NIF : 0 = CLAMP_S_CLAMP_T → repeat désactivé (sinon les UV qui dépassent ou
+        // le filtre en bord de quad rabattent les texels du bord opposé — liseré visible).
+        // 1/2 (mixte) et 3 (WRAP) gardent la répétition pour les défilements UV.
+        // EDEN_FX_CLAMP=0 : forcer l'ancien comportement (repeat partout) — preuve A/B.
+        bool repeat = System.Environment.GetEnvironmentVariable("EDEN_FX_CLAMP") == "0"
+                      || tex?.Base == null || tex.Base.ClampMode != 0;
         var sm = new ShaderMaterial
         {
-            Shader = GetShader(blend, twoSided, zb?.Test ?? true, particle ? false : (zb?.Write ?? true)),
+            Shader = GetShader(blend, twoSided, zb?.Test ?? true, particle ? false : (zb?.Write ?? true), repeat),
         };
         var st = new MatState(sm, o.InvertV);
         if (nm != null)
@@ -215,6 +284,7 @@ void fragment() {{
             if (b.HasTransform) { st.Tu = b.Translation.X; st.Tv = b.Translation.Y; st.Su = b.Scale.X; st.Sv = b.Scale.Y; st.Rot = b.Rotation; st.Center = b.Center; }
             if (b.File != null) st.SetTextureFile(b.File, o);
             else if (b.Source?.Pixels is { } px) st.Texture = PixelTexture(px);
+            if (st.Texture == null) sm.SetShaderParameter("use_tex", false);   // fichier absent / pixels illisibles
         }
         else sm.SetShaderParameter("use_tex", false);
         st.Dirty = true; st.Apply();

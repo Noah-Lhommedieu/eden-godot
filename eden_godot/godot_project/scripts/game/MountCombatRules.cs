@@ -20,6 +20,30 @@ public static class MountCombatRules
         return name.StartsWith("shoot");
     }
 
+    /// <summary>Type de la commande enchant 2134 (rideKey) d'une ligne
+    /// brute c_enchant : cellules après 2134 = rideKey, flag, sièges,
+    /// <b>type</b> — 2 = monture de combat (le ride survit à l'engage ;
+    /// enchant-tables.md §1.3, ex. <c>2134|253020||1|2</c>). 0 = monture
+    /// ordinaire ou pas de 2134.</summary>
+    public static int RideTypeOf(string[]? raw)
+    {
+        if (raw == null) return 0;
+        for (var i = 0; i + 1 < raw.Length; i++)
+            if (int.TryParse(raw[i], out var code) && code == 2134)
+            {
+                var j = i + 4;                    // var3 = type
+                return j < raw.Length &&
+                       int.TryParse(raw[j], out var t) ? t : 0;
+            }
+        return 0;
+    }
+
+    /// <summary>Vrai si l'enchant porte une monture de combat
+    /// (2134 type 2) — badge « épée » natif sur l'icône d'item.</summary>
+    public static bool IsCombatRide(int enchantId) =>
+        enchantId > 0 && RideTypeOf(
+            Data.Tables.EnchantTable.Get(enchantId)?.Raw) == 2;
+
     /// <summary>Vitesse par couleur (spec propriétaire, custom serveur) :
     /// blanc 35 %, vert 55 %, bleu 70 %, or 90 %. MÊME règle que
     /// <c>Eden.Zone.RideSpeedRules.TierPct</c> (le serveur est la source ;

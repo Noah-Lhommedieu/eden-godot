@@ -36,6 +36,17 @@ public class UiBootTextTests
         Assert.Equal("Obtenu : Petite potion rouge x 3", r);
     }
 
+    /// <summary>Le mapping de production « 獲得/得到 » → « Obtenu : »
+    /// utilisé par <c>HudRoot.FrForCjk</c> (pas seulement le mécanisme
+    /// générique de remplacement).</summary>
+    [Theory]
+    [InlineData("獲得", "Obtenu :")]
+    [InlineData("得到", "Obtenu :")]
+    [InlineData("小紅藥水", null)]
+    [InlineData("Hello", null)]
+    public void Chat_ObtenuSysWordMapped(string run, string? want) =>
+        Assert.Equal(want, ChatLocalizer.SysWordFr(run));
+
     [Fact]
     public void Chat_UnknownCjkAndAsciiUntouched()
     {

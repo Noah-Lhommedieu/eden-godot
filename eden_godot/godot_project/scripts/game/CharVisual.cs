@@ -841,9 +841,12 @@ public static class CharVisual
     }
 
     /// <summary>Gain « modulate ×2 » Gamebryo sur le masque peau (corps) et sur le terme
-    /// kr·peau du visage ; réglables (--skin-gain / --face-gain du SkinViewer) pour la mesure.</summary>
+    /// kr·peau du visage ; réglables (--skin-gain / --face-gain du SkinViewer) pour la mesure.
+    /// FaceSkinGain = 1,35 — calibré sur la ref-shot chevalier (visage 234,188,130,
+    /// G/R 0,81) : le masque visage (kr moyen ~0,71, p90 0,81 vs corps 0,58/0,84)
+    /// sature dès ~1,52 (kr·0,81·gain ≥ 1) ; 1,35 donne (234,189,142) mesuré.</summary>
     public static float SkinGain = 2f;
-    public static float FaceSkinGain = 1f;
+    public static float FaceSkinGain = 1.35f;
 
     private static Texture2D FaceComposite(Texture2D ov, Texture2D mk,
         Godot.Color skin, Godot.Color eye1, Godot.Color eye2)

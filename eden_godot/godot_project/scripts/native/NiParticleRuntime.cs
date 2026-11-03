@@ -90,12 +90,14 @@ internal sealed class NiParticleRuntime : IFxDriver
             {
                 if (img.IsCompressed()) img.Decompress();
                 img.Convert(Image.Format.Rgba8);
-                var d = img.GetData(); int amin = 255, amax = 0, bright = 0, n = d.Length / 4;
+                var d = img.GetData(); int amin = 255, amax = 0, n = d.Length / 4;
                 for (int i = 0; i < n; i++) { amin = Math.Min(amin, d[i * 4 + 3]); amax = Math.Max(amax, d[i * 4 + 3]); }
                 a = $"{img.GetWidth()}x{img.GetHeight()} a={amin}..{amax} mips={img.HasMipmaps()}";
             }
         }
-        GD.Print($"[psdiag] {ps.Name} blend={NativeFx.BlendMode(al)} alpha={(al == null ? "none" : $"b{al.Blend} t{al.Test} src{al.SrcBlend} dst{al.DstBlend}")} tex={tex?.Base?.File} {a} texprop={(tex == null ? "null" : tex.Base == null ? "nobase" : $"src={tex.Base.SourceBlock} ext={tex.Base.Source?.External} px={tex.Base.Source?.Pixels != null} pdb={tex.Base.Source?.PixelDataBlock} fmt={tex.Base.Source?.Pixels?.Format}")} props={string.Join(",", ps.Properties.Select(q => q.Type))}");
+        else if (tex?.Base?.File != null) a = "file-unresolved";
+        else if (tex?.Base != null) a = "src-unresolved";
+        GD.Print($"[psdiag] {ps.Name} blend={NativeFx.BlendMode(al)} alpha={(al == null ? "none" : $"b{al.Blend} t{al.Test} src{al.SrcBlend} dst{al.DstBlend}")} clamp={tex?.Base?.ClampMode.ToString() ?? "-"} tex={tex?.Base?.File} {a} texprop={(tex == null ? "null" : tex.Base == null ? "nobase" : $"src={tex.Base.SourceBlock} ext={tex.Base.Source?.External} px={tex.Base.Source?.Pixels != null} pdb={tex.Base.Source?.PixelDataBlock} fmt={tex.Base.Source?.Pixels?.Format}")} props={string.Join(",", ps.Properties.Select(q => q.Type))}");
     }
 
     public void Reset() { _sim.Reset(); _frameSet = false; }

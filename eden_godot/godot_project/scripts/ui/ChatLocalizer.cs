@@ -15,6 +15,12 @@ public static class ChatLocalizer
     public static bool HasCjk(string? text) =>
         !string.IsNullOrEmpty(text) && Cjk.IsMatch(text);
 
+    /// <summary>Mot-système fréquent : « 獲得 »/« 得到 » (obtenir)
+    /// → « Obtenu : ». Le serveur l'émet tel quel en tête des
+    /// messages de loot (268/327).</summary>
+    public static string? SysWordFr(string run) =>
+        run is "獲得" or "得到" ? "Obtenu :" : null;
+
     /// <param name="text">texte reçu</param>
     /// <param name="frByCjk">suite CJK → texte FR, null si inconnue</param>
     public static string Localize(string text, Func<string, string?> frByCjk)

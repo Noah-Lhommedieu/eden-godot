@@ -823,7 +823,7 @@ public partial class HudRoot : CanvasLayer
 
     private static string? FrForCjk(string run)
     {
-        if (run == "獲得" || run == "得到") return "Obtenu :";
+        if (ChatLocalizer.SysWordFr(run) is { } sys) return sys;
         var tr = UiTextEn.Translate(run);
         if (tr != run) return tr;
         if (_itemByCjk == null)

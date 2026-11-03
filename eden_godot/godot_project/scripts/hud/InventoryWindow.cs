@@ -649,7 +649,8 @@ public partial class InventoryWindow : Control
     /// porté par la cellule pour drag/drop/double-clic).</summary>
     private void RefreshCells()
     {
-        SlotsChanged?.Invoke();
+        using var _pt0 = EdenClient.Perf.PerfTrace.Scope("inv.cells"); // TEMP-DIAG
+        { using var _ = EdenClient.Perf.PerfTrace.Scope("inv.slotschanged"); SlotsChanged?.Invoke(); } // TEMP-DIAG
         EnsureItemTable();
         RefreshBagSlots();
         // Vue unifiée « Extension » : sac de base puis chaque sac équipé
@@ -740,6 +741,7 @@ public partial class InventoryWindow : Control
         UpdateHeld();
         if (_session == null && SessionCarry.Session is { } s)
             BindSession(s);
+        using var _ptd = EdenClient.Perf.PerfTrace.Scope("inv.drain"); // TEMP-DIAG
         while (_pending.TryDequeue(out var act))
         {
             try { act(); }
@@ -1402,6 +1404,10 @@ public partial class InventoryWindow : Control
             var cell = new ItemCell(i, empty)
             {
                 CustomMinimumSize = new Vector2(CellSize, CellSize),
+                // Logo épée natif des montures de combat (coin bas-gauche
+                // de l'icône d'item ; atlas uidata/imagesets/main.png).
+                RideBadge = hud.Tex?.GetRegion(
+                    new CeguiImageRef("main", "AttackIcon")),
             };
             cell.Clicked += OnCellClicked;
             cell.RightClicked += OnCellRightClicked;
@@ -1431,7 +1437,12 @@ public partial class InventoryWindow : Control
 
         private readonly TextureRect _icon;
         private readonly Label _qty;
+        private TextureRect? _rideBadge;
         private InventorySlot? _item;
+
+        /// <summary>Texture du logo épée (monture de combat), injectée
+        /// par <see cref="EnsureCells"/> — null = badge désactivé.</summary>
+        public Texture2D? RideBadge { get; set; }
 
         public ItemCell(int index, StyleBox? emptySlot)
         {
@@ -1499,6 +1510,30 @@ public partial class InventoryWindow : Control
             _icon.Texture = tex;
             _qty.Text = it is { Amount: > 1 }
                 ? it.Amount.ToString() : "";
+            // Badge épée natif : items « monture de combat » (enchant
+            /// d'usage 2134 type 2, ref MountCombatRules.IsCombatRide).
+            var combat = def != null &&
+                Game.MountCombatRules.IsCombatRide(def.UseEnchantId);
+            if (combat && RideBadge != null)
+            {
+                _rideBadge ??= new TextureRect
+                {
+                    Texture = RideBadge,
+                    ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                    StretchMode = TextureRect.StretchModeEnum.KeepAspect,
+                    MouseFilter = MouseFilterEnum.Ignore,
+                };
+                if (_rideBadge.GetParent() == null) AddChild(_rideBadge);
+                _rideBadge.SetAnchorsAndOffsetsPreset(
+                    LayoutPreset.BottomLeft);
+                var bs = CellSize * 0.42f;
+                _rideBadge.CustomMinimumSize = new Vector2(bs, bs);
+                _rideBadge.OffsetLeft = 1; _rideBadge.OffsetTop = -bs - 1;
+                _rideBadge.OffsetRight = 1 + bs; _rideBadge.OffsetBottom = -1;
+                _rideBadge.Visible = true;
+            }
+            else if (_rideBadge != null)
+                _rideBadge.Visible = false;
             ItemTooltip.Bind(this, () => _item);
         }
 

@@ -60,6 +60,30 @@ renvoient aux numéros des audits sources ; `F#` = entrée du
 | KB-23 | **`ItemLookup` du sélecteur charge `c_item` sans `c_itemmall`** | MINEUR (cosmétique — à corriger avec KB-10) | `scripts/screens/CharSelectScreen.cs:706-734` (table `_items` propre, c_item seul) | Les ids 40xxx boutique ne résolvent pas au sélecteur (costumes invisibles même quand `PreviewWorn` les connaîtrait) | Fusionner `c_itemmall` comme `InventoryWindow.cs:562-574` (`_items.TryAdd`) | Perso avec costume boutique équipé au sélecteur → id résolu | equip-visuals-audit.md maillon 1/H10 |
 | KB-24 | **`DemoRemoteEquip` : ids de preuve obsolètes** | MINEUR (harnais démo) | `scripts/game/PlayerController.cs:1581-1623` | `608` absent de `c_item` EDENFR + `K20105` orphelin → l'armure du factice ne résout rien ; le log `[demo] remote tenue=#B230` n'arrive plus | Remplacer par des ids présents dans fr-full | Run `--solo` avec factice → log `[demo] remote tenue=…` montre une tenue résolue | equip-visuals-audit.md maillon 8 |
 
+## Statuts des correctifs (2026-11-03, lot classe/enchant)
+
+Preuves : `tools/build.sh` vert ; `dotnet test Eden.Tests` 1452/1452
+(dont `ClassBugfixTests` 9/9) ; `dotnet test NetTests` 816/816+3 skip
+(dont `ClassSkillTreeTests`/`TalentResetTests`/`ClassOutfitRowTests`).
+Visuel : captures `artifacts/shots/*class*` relues. Live : non rejoué.
+
+| id | statut | preuve / note |
+|---|---|---|
+| KB-01 | **TESTED** | `EnchantParser.NormalizeRow` (serveur) + copies client `scripts/data/tables/EnchantTable.cs` et `src/Eden.Core/Data/tables/EnchantTable.cs` ; tests `NormalizeRow_*` et `FrEnchants_DecodeRealCommandIds` (18k+ defs, cmds 2084/2047 de 45747 réelles) |
+| KB-02 | **TESTED** | `FindClassRankBuff` (clé = champ 1) à `Program.cs` stage « classrank » ; test `ClassRankBuff_LookupIsByClassIdNotRowIndex` (Juge 59 → 40911). **Même défaut côté client** : `scripts/data/tables/ClassRankBuffTable.cs` (+ copie `src/Eden.Core/Data/tables/`) indexe par `row[0]` — 29/48 lignes FR ont f0≠f1 → tooltip « Class Ability Bonus » et « CE List » faux pour les classes ≥21 (hors périmètre de ce lot, fichier à corriger pareil : clé = `row[1]`). G24 reste ouvert : bonus serveur sans affichage FR pour 12 éveillées |
+| KB-03 | **TESTED** | `ClassUnlockRules.Unlockable` + `UnlockClassesFromLimitAsync` appelés à `GrantClassPointAsync`, `GrantKillExpAsync` et au 1er MigrationDone (`entry != null` ≈ PostInit) ; colonnes `RequiredClassMask/Level/CharLevel` parsées — alignement **revérifié sur les 61 lignes locales** de `S_Class.ini` décodé (bases 1-5,19 = reqCharLv 1 ; 6-16 = prérequis ; 17,18,20-61 = 0/quête) ; test `ClassPrereqColumns_ParsedAndUnlockRule` |
+| KB-04 | **TESTED** | `ClassRepository.AddClassAsync` lv80/aa80 éveillées ; `GrantNewClassAsync` (certs `lv/10`, sorts +0x5c à `spell_level=80` via `SetSpellLevelAsync`, RefreshJPAward, 489) partagé par `eden-add-class` et GM ; migration `PromoteAwakenedAsync` au boot + `Database/024-awakened-lv80.sql` ; tests `ClassRules_*` et `AddClassAsync_Awakened*` (DB, skip si absente) |
+| KB-05 | **TESTED** | `StatContribution.HealGivenFlat/HealTakenFlat` + case 2047 modes 4/5 + consommation `NativeCombatFormulas` Heal/BeHeal + `CombatantSnapshot` ; test `Cmd2047_HealPlusFlat_FeedsHealChannels` |
+| KB-06 | **TESTED** | `ClassSkillTable.ClassFor(raceId, classId)` = `(raceId-1)*100+classId` appliqué aux 11 sites (Services, EntryPipeline.Load, Combat.Rewards ×2, Combat, Closet, Mission.Commands→`GrantNewClassAsync`, ProfileStatEmitter ×4) ; test `ClassFor_UsesRaceBand_NotHumanRow`. Sorts déjà appris faux restent en base (nettoyage à décider) |
+| KB-07 | **TESTED** | `SpellParser.RaceFlag` col 14 **confirmée** (50202→3, 50240→4 ; 4 236 sorts à -1, 249 raciaux) ; `RaceAllows` filtre `GrantableSpells`/`GrantableGeneralSpells` ; test `RacialSpells_FilteredByRaceFlag` (Zumi : 50240 sans 50202). Sorts raciaux étrangers déjà appris restent en base |
+| KB-14 | **TESTED** | Filtre `Pay==9` retiré ; test `ClassSkills_KeepMonoMaskSpells_WithPayZero` (50455/50685/50686/59459) |
+| KB-15 | **TESTED** | `EnsureLoaded` ne cache plus un resolve nul + log ; garde try/catch dans `RefreshSkills` ; test `EnsureLoaded_NullResolve_IsNotCached_AndLogs` |
+| KB-16 | **TESTED** | `PlayerProfileState.Apply` : `type==1` → `Talents.Clear()` puis snapshot ; sémantique émetteur vérifiée (`ResetAdvancedAbilitiesAsync` réémet la map restante — snapshot, pas delta) ; test `Type1_ReplacesTalents_Type0And2Merge` |
+| KB-17 | hors lot | `ClassHeadRow` + test `ClassHeadRow_ResolvesExternalHeadMesh` posés ; l'attache « Bip01 Head »/priorité casque relève de l'agent skins (CharVisual/CharModelSpec) |
+| KB-18 | **TESTED** | `LicenseService.CapacityFor` = `lv/10+1` (règle) vs `DisplayedCapacityFor` = `lv/10+2` (texte 0x325 seul) ; compteur client `ClassWindow` aligné ; test `LicenseService_Capacity_UsesCharLevel` |
+| KB-19 | **IMPLEMENTED** | 489 = classes possédées seulement ; 168 refuse une classe non possédée (retrait `AccessibleClassIds`) ; pas de test dédié (couvert par le chemin KB-03 qui octroie les bases à l'entrée) — **à vérifier live** |
+| KB-08,09,20-24 | hors lot | autres lots/agents (achievements, missions, collection, mask, sélecteur, démo) |
+
 ## Recouvrements et dépendances
 
 - **Bug C (rankbuff §4.C) = D2 (skills-serveur §D2)** : même ligne, même

@@ -8,6 +8,12 @@ uniquement : synthétise, ne refait pas les audits. 2026-11-03.
 Périmètre : HANDOFF #3 (skins de classes / Class Ability Bonus) et #11
 (panneau skills) — `docs/reports/HANDOFF-2026-11-02.md`.
 
+> **Exécution 2026-11-03** : F1-F6, F9-F11 livrés et testés (statuts
+> détaillés dans `known-bugs.md` § « Statuts des correctifs » — KB-01
+> à KB-07, KB-14 à KB-16, KB-18 ; KB-19 corrigé au passage, à vérifier
+> live). F7, F8, F12 = visuel skins (autre lot ; `ClassHeadRow` +
+> `ClassOutfitRow` posés, attache « Bip01 Head » à terminer).
+
 ## Sources
 
 | Source | Objet |

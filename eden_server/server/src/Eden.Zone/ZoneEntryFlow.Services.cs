@@ -147,12 +147,12 @@ public sealed partial class ZoneEntryFlow
         EdenLog.Write($"[Zone-Entry] EnterShop store={storeId}");
     }
 
-    /// <summary>Classes proposables au changement — capture native
-    /// 489 (17:22:16) : le serveur émet TOUTES les classes accessibles,
-    /// pas seulement celles possédées. Pour un perso de niveau ≥1 la
-    /// liste = {1,2,3,4,5,19} (classes de base lvl 1 + Luminary) ;
-    /// les classes possédées hors de cet ensemble s'ajoutent.</summary>
-    private static readonly int[] AccessibleClassIds = { 1, 2, 3, 4, 5, 19 };
+    // KB-19/D7 : le 489 natif ne véhicule QUE le vecteur
+    // `SCharacterClass` possédé (les 6 lignes de la capture « toutes
+    // accessibles » = les lignes insérées à la création — toutes
+    // possédées). Les classes de base {1,2,3,4,5,19} arrivent
+    // d'elles-mêmes par AddClassFromLimit (reqCharLv=1 — KB-03) ; une
+    // ligne possédée hors de cet ensemble s'ajoute de la même façon.
 
     /// <summary>QueryClassList (166) → 489 PlayerClassList —
     /// format natif capturé (zsniff 17:22:16.260, 162B). Ligne 26B
@@ -180,8 +180,9 @@ public sealed partial class ZoneEntryFlow
             : await _services.Classes
                 .GetClassesByCharacterIdAsync((int)st.CharId);
         var byId = rows.ToDictionary(r => r.ClassId, r => r);
-        var ids = AccessibleClassIds.Union(rows.Select(r => r.ClassId))
-            .OrderBy(i => i).ToList();
+        // KB-19 : seules les classes POSSÉDÉES (ligne player_classlist)
+        // sont émises — pas de ligne « lv0 » pour une base absente.
+        var ids = rows.Select(r => r.ClassId).OrderBy(i => i).ToList();
 
         // Wire natif vérifié (Serialize CNC_CZ_ClientPlayerClassList
         // @0x813f2e0 + SCharacterClass::Serialize @0x83dxxxx + capture
@@ -277,9 +278,10 @@ public sealed partial class ZoneEntryFlow
 
     /// <summary>ChangeClass (168) — wire natif `[u8 classId]`
     /// (désasm Deserialize : un seul octet, pas [u8][u16]).
-    /// Valide : la classe doit être possédée ou accessible (base),
-    /// puis persistance + 510 ChangeClassShortcut (barres par classe)
-    /// + rafraîchissement de la liste 489.</summary>
+    /// Valide : la classe doit être POSSÉDÉE (ligne player_classlist —
+    /// KB-19, le natif refuse les autres), puis persistance + 510
+    /// ChangeClassShortcut (barres par classe) + rafraîchissement de la
+    /// liste 489.</summary>
     private async Task HandleChangeClassAsync(NetSession session,
         EntryState st, byte[] payload, CancellationToken token)
     {
@@ -288,23 +290,18 @@ public sealed partial class ZoneEntryFlow
         if (newClass == st.ClassId) return;
         var rows = await _services.Classes
             .GetClassesByCharacterIdAsync((int)st.CharId);
+        // KB-19 : le switch n'accepte que les classes POSSÉDÉES — les
+        // bases non encore octroyées le sont par AddClassFromLimit
+        // (KB-03) ; le natif refuse tout le reste (pas d'AddClass ici).
         var owned = rows.Any(c => c.ClassId == newClass);
-        if (!owned && !AccessibleClassIds.Contains(newClass))
+        if (!owned)
         {
             EdenLog.Write(
                 $"[Zone-Entry] ChangeClass refusé char={st.CharId} " +
-                $"class={newClass} (inaccessible)");
+                $"class={newClass} (non possédée)");
             return;
         }
         var old = st.ClassId;
-        if (!owned)
-        {
-            // Classe de base jamais jouée : débloquée au niveau 1.
-            await _services.Classes.AddClassAsync((int)st.CharId,
-                newClass);
-            rows = await _services.Classes
-                .GetClassesByCharacterIdAsync((int)st.CharId);
-        }
         var newRow = rows.FirstOrDefault(r => r.ClassId == newClass);
         var newLevel = Math.Max(newRow?.ClassLevel ?? 1, 1);
         var newClassExp = newRow?.ClassExp ?? 0;

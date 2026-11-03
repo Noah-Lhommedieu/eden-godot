@@ -20,3 +20,4 @@ knowledge/graphify-out/graph.json
 *.log
 *.pem
 .env
+__pycache__/

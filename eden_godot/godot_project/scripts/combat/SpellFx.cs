@@ -182,8 +182,19 @@ public partial class SpellFx : Node
         {
             var m = new ZoneClientSpellBlastOK();
             m.Deserialize(r);
-            _pending.Enqueue(() => Impact((ushort)m.SpellId,
-                (uint)m.VictimHandle, false));
+            _pending.Enqueue(() =>
+            {
+                // Le 288 n'arrive qu'au lanceur. Formes directionnelles
+                // (secteur/croix/direction) : le visuel de blast émane
+                // DU LANCEUR vers la pointe (X,Y) — sommet du cône /
+                // centre de la croix / origine de l'onde natifs — pas
+                // posé sur la victime.
+                var id = (ushort)m.SpellId;
+                if (Directional(id))
+                    DirectionalBlast(id, PlayerEden(), (m.X, m.Y));
+                else
+                    Impact(id, (uint)m.VictimHandle, false);
+            });
         });
         s.OnZone(289, r =>
         {
@@ -193,7 +204,12 @@ public partial class SpellFx : Node
             _pending.Enqueue(() =>
             {
                 RemoteBlastAnim((uint)m.Caster, m.BlastIdx, (ushort)m.SpellId);
-                Impact((ushort)m.SpellId, (uint)m.TargetHandle, false);
+                var id = (ushort)m.SpellId;
+                if (Directional(id))
+                    DirectionalBlast(id, (m.X, m.Y),
+                        (m.Field8, m.Field9));
+                else
+                    Impact(id, (uint)m.TargetHandle, false);
             });
         });
         s.OnZone(297, r =>
@@ -205,37 +221,97 @@ public partial class SpellFx : Node
         GD.Print("[spellfx] binds 278/279/281/288/289/297 posés");
     }
 
-    /// <summary>297 SpellBlastToLocation : effet d'impact posé AU SOL au point visé (centre du cercle),
-    /// orienté selon l'axe lanceur → point (formes directionnelles). Hauteur = relief sous le point.</summary>
+    /// <summary>297 SpellBlastToLocation : effet de blast posé au point
+    /// d'ancrage, orienté sur l'axe lanceur → point.
+    /// Cercle au sol : ancrage = point visé (centre). Formes
+    /// directionnelles (secteur/croix/direction) : ancrage = POSITION DU
+    /// LANCEUR — le sommet du cône, le centre de la croix et l'origine de
+    /// l'onde sont au lanceur dans la géométrie native
+    /// (HitTest @0x84fb410/@0x84f5020/@0x84f6ad0) — le point ne sert
+    /// qu'à l'orientation.</summary>
     private void OnGroundBlast(ZoneClientSpellBlastToLocation m)
     {
         var id = (ushort)m.SpellId;
+        var dir = Directional(id);
+        // Ancrage : lanceur (src) pour les formes directionnelles, point
+        // visé (dst) pour le cercle au sol.
+        var px = dir ? m.SrcX : m.DstX;
+        var py = dir ? m.SrcY : m.DstY;
         // Hauteur : sol « marchable » du joueur (même source que ses pas), repli registre puis Y joueur.
-        var hp = _player?.GroundHeight?.Invoke(m.DstX, -m.DstY);
-        var hr = _registry?.GroundHeight?.Invoke(m.DstX, -m.DstY);
+        var hp = _player?.GroundHeight?.Invoke(px, -py);
+        var hr = _registry?.GroundHeight?.Invoke(px, -py);
         var h = hp ?? hr ?? _player?.GlobalPosition.Y ?? 0f;
         var (ax, ay) = SpellZone.AxisTo(m.SrcX, m.SrcY, m.DstX, m.DstY, 0f);
         var anchor = new Node3D { Name = $"GroundFx_{id}" };
         AddChild(anchor);
-        anchor.GlobalPosition = new Vector3(m.DstX, h, -m.DstY);
+        anchor.GlobalPosition = new Vector3(px, h, -py);
         anchor.Rotation = new Vector3(0f, MathF.Atan2(-ax, ay), 0f);   // même formule qu'EdenDir.ToYaw
-        GD.Print($"[spellfx] zone #{id} centre=({m.DstX:0.#},{m.DstY:0.#}) h={h:0.#} " +
+        GD.Print($"[spellfx] zone #{id} forme={(CastShape)SpellCatalog.Shape(id)} " +
+                 $"src=({m.SrcX:0.#},{m.SrcY:0.#}) dst=({m.DstX:0.#},{m.DstY:0.#}) " +
+                 $"ancre=({px:0.#},{py:0.#}) h={h:0.#} " +
                  $"(marchable={hp?.ToString("0.#") ?? "-"} registre={hr?.ToString("0.#") ?? "-"} joueurY={_player?.GlobalPosition.Y:0.#}) " +
                  $"axe=({ax:0.##},{ay:0.##}) rayon={SpellZone.AreaRadius(SpellCatalog.RadiusUnits(id)):0.#}");
         Spawn(SpellFxTable.HitFx(id), anchor, 0f);
-        // Lanceur distant : le 297 ne porte pas son handle — l'entité joueur la plus proche de la
-        // source (≤ 1,5 u) joue la gestuelle de blast.
-        if (_registry != null)
+        // Lanceur distant : le 297 ne porte pas son handle. Si la source
+        // est le joueur local (≤ 1,5 u), sa gestuelle vient déjà du 288/
+        // 297 via SkillCast.PlayCastAnim — sinon un voisin au même point
+        // rejouerait SON anim à sa place. L'entité la plus proche de la
+        // source (joueur OU mob) joue alors la gestuelle de blast.
+        var selfD = _player != null
+            ? new Vector2(_player.GlobalPosition.X - m.SrcX,
+                _player.GlobalPosition.Z + m.SrcY).LengthSquared() : 99f;
+        if (_registry != null && selfD > 2.25f)
         {
             RemoteEntity? best = null; var bestD = 2.25f;
             foreach (var e in _registry.Entities.Values)
             {
-                if (e.Kind != 0 || e.ModelStem.Length != 1 || !IsInstanceValid(e)) continue;   // joueurs (corps 1 lettre) — les trésors sont aussi kind 0
+                // Joueurs (kind 0, corps 1 lettre) ou mobs (kind 12) avec
+                // un modèle — les trésors (kind 0, stem long) exclus.
+                var ok = e.Kind == 0 && e.ModelStem.Length == 1 ||
+                         e.Kind == 12 && e.ModelStem.Length > 0;
+                if (!ok || !IsInstanceValid(e)) continue;
                 var d = new Vector2(e.GlobalPosition.X - m.SrcX, e.GlobalPosition.Z + m.SrcY).LengthSquared();
                 if (d < bestD) { bestD = d; best = e; }
             }
             if (best != null) RemoteBlastAnim(best.Handle, m.BlastId, id);
         }
+        GetTree().CreateTimer(6f).Timeout += () =>
+        { if (IsInstanceValid(anchor)) anchor.QueueFree(); };
+    }
+
+    /// <summary>Vrai pour les formes ancrées au lanceur (sommet du
+    /// secteur, centre de la croix, origine de l'onde) — le point ne
+    /// sert qu'à l'orientation.</summary>
+    private static bool Directional(int spellId) =>
+        (CastShape)SpellCatalog.Shape(spellId) is CastShape.Direction
+            or CastShape.Cross or CastShape.Sector;
+
+    /// <summary>Position Eden (x,y sol) du lanceur local.</summary>
+    private (float X, float Y) PlayerEden() => _player != null
+        ? WorldConv.ToEdenGround(_player.GlobalPosition) : (0f, 0f);
+
+    /// <summary>Effet de blast directionnel ancré à la position du
+    /// lanceur (srcX,srcY Eden), orienté vers la pointe (dstX,dstY) —
+    /// formes 2/5/6 (secteur/croix/direction) : cône/croix/onde
+    /// émanent du lanceur. Utilisé par le 288 (lanceur self — src =
+    /// position du joueur, dst = champ position du paquet) et le 289
+    /// (témoin — src/dst du paquet).</summary>
+    private void DirectionalBlast(int spellId, (float X, float Y) src,
+        (float X, float Y) dst)
+    {
+        var hp = _player?.GroundHeight?.Invoke(src.X, -src.Y);
+        var hr = _registry?.GroundHeight?.Invoke(src.X, -src.Y);
+        var h = hp ?? hr ?? _player?.GlobalPosition.Y ?? 0f;
+        var (ax, ay) = SpellZone.AxisTo(src.X, src.Y, dst.X, dst.Y, 0f);
+        var anchor = new Node3D { Name = $"DirFx_{spellId}" };
+        AddChild(anchor);
+        anchor.GlobalPosition = new Vector3(src.X, h, -src.Y);
+        anchor.Rotation = new Vector3(0f, MathF.Atan2(-ax, ay), 0f);
+        GD.Print($"[verify] blast dir #{spellId} " +
+                 $"forme={(CastShape)SpellCatalog.Shape(spellId)} " +
+                 $"src=({src.X:0.#},{src.Y:0.#}) dst=({dst.X:0.#},{dst.Y:0.#}) " +
+                 $"axe=({ax:0.##},{ay:0.##}) h={h:0.#}");
+        Spawn(SpellFxTable.HitFx(spellId), anchor, 0f);
         GetTree().CreateTimer(6f).Timeout += () =>
         { if (IsInstanceValid(anchor)) anchor.QueueFree(); };
     }

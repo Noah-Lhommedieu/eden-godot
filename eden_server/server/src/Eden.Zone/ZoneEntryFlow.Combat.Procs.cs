@@ -1,3 +1,4 @@
+using Eden.Core.Game.Classes;
 using Eden.Core.Game.Services;
 using Eden.Core.Logging;
 using Eden.Core.Networking;
@@ -106,6 +107,43 @@ public sealed partial class ZoneEntryFlow
         foreach (var s in st.Statuses.Values.OrderBy(s => s.AddedAt))
             if (seen.Add(s.EffectId))
                 yield return (s.EffectId, Math.Max(1, s.StackCount));
+    }
+
+    /// <summary>Prédicat « enchant à proc » — déclencheur S_Enchant
+    /// col40/41 (<see cref="EnchantService.GetProc"/>) ou MultiStroke
+    /// passif en blocs non déclenchés
+    /// (<see cref="EnchantService.GetAttackCommands"/>). Partagé par le
+    /// scan équipement de <c>ResolveWeaponAsync</c> et le merge
+    /// licences de <see cref="RebuildProcEnchantIds"/> — même critère
+    /// que <c>MergeLicenseProcEnchants</c> (ZoneEntryFlow.License.cs) :
+    /// les certificats sont appliqués par le même EffectToLife natif
+    /// que les useEnchant d'équipement.</summary>
+    internal static bool IsProcEnchant(EnchantService enchants,
+        int enchantId)
+        => enchants.GetProc(enchantId) != null
+            || enchants.GetAttackCommands(enchantId).Count > 0;
+
+    /// <summary>Source de vérité de <see cref="EntryState.ProcEnchantIds"/> —
+    /// reconstruit la liste à CHAQUE <c>ResolveWeaponAsync</c> :
+    /// enchants à proc de l'équipement (useEnchant col23, déjà filtrés
+    /// par l'appelant) puis enchants des licences actives à proc
+    /// (slots + combos via <see cref="LicenseService.ActiveEnchantIds"/>).
+    /// Sans ce merge à la reconstruction, un re-resolve déclenché hors
+    /// flux licence (changement d'équipement → InvalidateWeaponAnim,
+    /// bascule de classe, carte CC, entrée) perdait les procs de
+    /// certificats jusqu'à la prochaine opération 181/182/183 — limite
+    /// corrigée, cf. docs/knowledge/certificate-stats.md. La liste est
+    /// dédupliquée (FindEnchant natif) ; null quand rien à proccer.</summary>
+    internal static void RebuildProcEnchantIds(EntryState st,
+        IEnumerable<int> equipProcIds, LicenseService licenses,
+        EnchantService enchants)
+    {
+        var merged = equipProcIds.Distinct().ToList();
+        if (st.CharId != 0)
+            foreach (var id in licenses.ActiveEnchantIds((int)st.CharId))
+                if (IsProcEnchant(enchants, id) && !merged.Contains(id))
+                    merged.Add(id);
+        st.ProcEnchantIds = merged.Count > 0 ? merged : null;
     }
 
     /// <summary>Exécute une commande du sous-effet déclenché —

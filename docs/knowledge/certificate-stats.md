@@ -1,8 +1,8 @@
 # Certificats de classe — chaîne stats auditée (EDENFR)
 
 > Statut : **verified** (données `corpus/fr-full`, désasm `server_us/
-> ZoneServer/ZoneServer` ELF32, tests `Eden.Tests.LicenseTests` 83/83
-> verts, suite complète 1542/1542 — 2026-11-03).
+> ZoneServer/ZoneServer` ELF32, tests `Eden.Tests.LicenseTests` 87/87
+> verts, suite complète 1546/1546 — 2026-11-03).
 > Impact visuel client : *hypothesis* — l'émission serveur des stats est
 > prouvée, le rendu panneau reste à confirmer en jeu.
 
@@ -111,13 +111,24 @@ comptait en passif → MP/ATQ/heal octroyés en permanence).
    accumulateurs natifs par catégorie d'arme +0x414..+0x434).
 5. **Procs de licences jamais évalués** — `ProcSources` (combat)
    n'énumérait que l'équipement + statuts. `ZoneEntryFlow.License.cs`
-   fusionne désormais les enchants de licences à proc/MultiStroke
-   dans `st.ProcEnchantIds` après 181/182/183 et la bascule de classe.
-   **Limite connue** : `ResolveWeaponAsync` reconstruit la liste
-   depuis l'équipement seul ; un re-resolve ultérieur par un autre
-   flux (changement d'équipement) perd les ids licence jusqu'à la
-   prochaine opération licence — fusion complète exigerait d'éditer
-   le chemin combat (hors périmètre autorisé).
+   fusionne les enchants de licences à proc/MultiStroke dans
+   `st.ProcEnchantIds` après 181/182/183 et la bascule de classe.
+   **Limite corrigée (2026-11-03)** : `ResolveWeaponAsync`
+   reconstruisait la liste depuis l'équipement seul — un re-resolve
+   ultérieur (changement d'équipement → `InvalidateWeaponAnim`,
+   bascule de classe, carte CC 242, entrée) perdait les ids licence
+   jusqu'à la prochaine op licence. La source de vérité est désormais
+   `RebuildProcEnchantIds` (`ZoneEntryFlow.Combat.Procs.cs`), appelée
+   à CHAQUE `ResolveWeaponAsync` : équipement ∪ licences actives à
+   proc, dédupliqué — tous les flux de rebuild (`WeaponResolved=false`
+   → combat/spell/AdvStats, burst de classe, CC save, prefetch
+   d'entrée) refusionnent les certificats. Tests :
+   `LicenseTests.RebuildProcEnchantIds_*` (survie au changement
+   d'équipement, dépose, dedup, exclusion des passifs purs).
+   Reste : `MergeLicenseProcEnchants` (License.cs) garde les merges
+   sans-rebuild des ops 181/182/183 — mêmes ids, dédup rendant les
+   appels post-resolve idempotents ; le panneau AdvStats étiquette
+   les ids licence comme origine « équipement » (cosmétique).
 
 ## Non couvert (fidélité — à connaître)
 

@@ -3,6 +3,7 @@ using Eden.Core.Database.Repositories;
 using Eden.Core.Game.Classes;
 using Eden.Core.Game.Services;
 using Eden.Core.Game.Stats;
+using Eden.Zone;
 using Xunit;
 
 namespace Eden.Tests;
@@ -530,5 +531,121 @@ public class LicenseTests
         await svc.GrantLicenseAsync(1, unchecked((short)33272));
         await svc.GrantLicenseAsync(1, unchecked((short)33272));
         Assert.Single(repo.Rows, r => r.ItemId == unchecked((short)33272));
+    }
+
+    /// <summary>Le prédicat partagé de la liste de procs classe les
+    /// enchants de certificats comme le useEnchant d'équipement :
+    /// déclenché col40/41 → vrai, MultiStroke passif → vrai, passif
+    /// stats pur → faux (il ne doit jamais entrer dans
+    /// ProcEnchantIds).</summary>
+    [Fact]
+    public void IsProcEnchant_ClassifiesLicenseEnchants()
+    {
+        var enchants = new EnchantService(GameData.Enchants);
+        // 52529 `2055` slots=1 evt2 — proc stun déclenché (GetProc).
+        Assert.True(ZoneEntryFlow.IsProcEnchant(enchants, 52529));
+        // 52516 `2031|1|50`+`2032|1|50` — MultiStroke passif non
+        // déclenché (GetAttackCommands).
+        Assert.True(ZoneEntryFlow.IsProcEnchant(enchants, 52516));
+        // 52515 `2088||4` — « ESQ +4 % » passif pur.
+        Assert.False(ZoneEntryFlow.IsProcEnchant(enchants, 52515));
+    }
+
+    /// <summary>Preuve du bug corrigé : la reconstruction de
+    /// <see cref="ZoneEntryFlow.EntryState.ProcEnchantIds"/> par
+    /// <see cref="ZoneEntryFlow.RebuildProcEnchantIds"/> (appelée à
+    /// chaque <c>ResolveWeaponAsync</c>) refusionne les enchants à
+    /// proc des licences posées — un changement d'équipement
+    /// (Invalidation → re-resolve) ne les perd plus, alors qu'avant
+    /// la liste reconstruite depuis l'équipement seul les tuait
+    /// jusqu'à la prochaine opération licence 181/182/183.</summary>
+    [Fact]
+    public async Task RebuildProcEnchantIds_LicenseProcsSurviveEquipChange()
+    {
+        const int charId = 200000004;
+        var repo = new MemLicenseRepo();
+        // 33295 → enchant 52529 (proc stun `2055` evt2, GetProc).
+        await repo.AddLicenseAsync(charId, unchecked((short)33295), 1);
+        // 33282 → enchant 52516 (MultiStroke passif, GetAttackCommands).
+        await repo.AddLicenseAsync(charId, unchecked((short)33282), 2);
+        // 33281 → enchant 52515 (passif pur — exclu de la liste).
+        await repo.AddLicenseAsync(charId, unchecked((short)33281), 3);
+        var svc = CreateService(repo, GameData);
+        await svc.LoadAsync(charId);
+        var enchants = new EnchantService(GameData.Enchants);
+        var st = new ZoneEntryFlow.EntryState { CharId = charId };
+
+        // Resolve initial : équipement porteur d'un proc (41710) +
+        // les deux licences à proc fusionnées dans l'ordre des slots.
+        ZoneEntryFlow.RebuildProcEnchantIds(st, new[] { 41710 },
+            svc, enchants);
+        Assert.Equal(new[] { 41710, 52529, 52516 },
+            st.ProcEnchantIds!);
+
+        // « Changement d'équipement » → WeaponResolved=false →
+        // ResolveWeaponAsync reconstruit : l'id équipement remplacé
+        // disparaît, les procs de certificats survivent.
+        ZoneEntryFlow.RebuildProcEnchantIds(st, new[] { 56110 },
+            svc, enchants);
+        Assert.Equal(new[] { 56110, 52529, 52516 },
+            st.ProcEnchantIds!);
+
+        // Rebuild désarmé — il ne reste que les licences.
+        ZoneEntryFlow.RebuildProcEnchantIds(st,
+            Enumerable.Empty<int>(), svc, enchants);
+        Assert.Equal(new[] { 52529, 52516 }, st.ProcEnchantIds!);
+        Assert.DoesNotContain(52515, st.ProcEnchantIds!);
+    }
+
+    /// <summary>La dépose d'un certificat (182 → loc 0) retire son
+    /// enchant de la reconstruction suivante — l'id ne survit pas
+    /// indéfiniment dans la liste.</summary>
+    [Fact]
+    public async Task RebuildProcEnchantIds_UnslottedLicenseProcDropped()
+    {
+        const int charId = 200000004;
+        var repo = new MemLicenseRepo();
+        await repo.AddLicenseAsync(charId, unchecked((short)33295), 1);
+        var svc = CreateService(repo, GameData);
+        await svc.LoadAsync(charId);
+        var enchants = new EnchantService(GameData.Enchants);
+        var st = new ZoneEntryFlow.EntryState { CharId = charId };
+
+        ZoneEntryFlow.RebuildProcEnchantIds(st,
+            Enumerable.Empty<int>(), svc, enchants);
+        Assert.Equal(new[] { 52529 }, st.ProcEnchantIds!);
+
+        // Dépose du certificat → l'enchant sort du merge au rebuild.
+        await svc.SetCurrentClassLicenseAsync(charId, 30,
+            new[] { (unchecked((short)33295), (byte)0) });
+        ZoneEntryFlow.RebuildProcEnchantIds(st,
+            Enumerable.Empty<int>(), svc, enchants);
+        Assert.Null(st.ProcEnchantIds);
+    }
+
+    /// <summary>Dedup par effect_id (miroir du <c>seen</c> de
+    /// ProcSources et du FindEnchant natif) : le même enchant porté
+    /// par l'équipement ET par deux licences n'apparaît qu'une fois.</summary>
+    [Fact]
+    public async Task RebuildProcEnchantIds_SameEnchantTwice_MergedOnce()
+    {
+        const int charId = 1;
+        var repo = new MemLicenseRepo();
+        await repo.AddLicenseAsync(charId, 10, 1);
+        await repo.AddLicenseAsync(charId, 11, 2);
+        var defs = new Dictionary<int, ItemParser.ItemDef>
+        {
+            [10] = new() { Id = 10, UseEnchantId = 52529 },
+            [11] = new() { Id = 11, UseEnchantId = 52529 },
+        };
+        var svc = new LicenseService(repo, defs, GameData.EquipSetPool!,
+            new EnchantService(GameData.Enchants),
+            GameData.EnchantDescriptions);
+        await svc.LoadAsync(charId);
+        var enchants = new EnchantService(GameData.Enchants);
+        var st = new ZoneEntryFlow.EntryState { CharId = charId };
+        ZoneEntryFlow.RebuildProcEnchantIds(st, new[] { 52529, 52529 },
+            svc, enchants);
+        Assert.Equal(new[] { 52529 }, st.ProcEnchantIds!);
     }
 }

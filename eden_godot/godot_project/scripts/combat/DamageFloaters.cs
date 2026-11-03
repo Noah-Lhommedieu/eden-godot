@@ -385,6 +385,9 @@ public partial class DamageFloaters : Node3D
                 pos = _player.GlobalPosition + new Vector3(0f, 2.2f, 0f);
         }
         if (pos == null) return;
+        GD.Print($"[verify] floater victime=0x{handle:x8} " +
+                 $"pos=({pos.Value.X:0.#},{pos.Value.Y:0.#}," +
+                 $"{pos.Value.Z:0.#}) «{text}» {kind}");
 
         var node = new Node3D { Name = $"dmg_{handle:x8}" };
         Sprite3D? burst = null;

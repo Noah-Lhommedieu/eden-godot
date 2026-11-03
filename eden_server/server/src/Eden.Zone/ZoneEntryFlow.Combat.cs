@@ -178,10 +178,7 @@ public sealed partial class ZoneEntryFlow
                 // (RefreshEQEffect → EffectToLife flag 0x1000) qui
                 // vote dans OnAttackEnchant/OnBeAttackEnchant/…
                 if (def.UseEnchantId > 0 &&
-                    (_services.Enchants.GetProc(def.UseEnchantId)
-                        != null ||
-                     _services.Enchants.GetAttackCommands(
-                        def.UseEnchantId).Count > 0))
+                    IsProcEnchant(_services.Enchants, def.UseEnchantId))
                     procs.Add(def.UseEnchantId);
                 eq = eq.Add(new EquipmentStats(
                     def.BonusHp, def.BonusMp,
@@ -230,7 +227,13 @@ public sealed partial class ZoneEntryFlow
                 offKind);
             st.AttackRange = mainKind != 0
                 ? mainRange * 1.5f + 3f : 7.5f;
-            st.ProcEnchantIds = procs.Count > 0 ? procs : null;
+            // Source unique de la liste de procs : équipement ∪ licences
+            // actives à proc — le merge certificats doit être refait à
+            // CHAQUE rebuild (équipement, classe, carte CC, entrée) ou
+            // les procs de certificats meurent jusqu'à la prochaine op
+            // licence (limite corrigée — certificate-stats.md §5).
+            RebuildProcEnchantIds(st, procs, _services.Licenses,
+                _services.Enchants);
             st.Combat = BuildPlayerSnapshot(st, eq, mainDef, offDef);
             st.Combat.BonusDodgePercent = _services.Licenses
                 .ProvideStats((int)st.CharId).DodgePercent;
@@ -256,7 +259,8 @@ public sealed partial class ZoneEntryFlow
             EdenLog.Write($"[Zone] weapon resolve char={st.CharId} " +
                 $"eq=[{string.Join(',', equipped.Select(e =>
                     $"{e.Loc}:{e.ItemId}"))}] " +
-                $"procs=[{string.Join(',', procs)}] " +
+                $"procs=[{string.Join(',', st.ProcEnchantIds ??
+                    Enumerable.Empty<int>())}] " +
                 $"weapon={st.WeaponItemId}/k{st.WeaponKind}");
             return;
         }

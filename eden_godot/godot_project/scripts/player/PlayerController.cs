@@ -1148,8 +1148,11 @@ public partial class PlayerController : CharacterBody3D
             // Cap hors FaceOffset : le clavier garde _yaw comme cap de
             // base (natif : A/D monté ne changent pas le cap, le ±90°
             // est la pose de déplacement) ; le clic-déplacement tourne
-            // le cap réel.
-            _faceBase = _keyMove ? _yaw : targetYaw;
+            // le cap réel. Sous caméra debug, _yaw = _faceBase + _dbgYaw
+            // est une valeur DÉRIVÉE : le relire ici referait la boucle
+            // (faceBase += _dbgYaw à chaque frame) → cap gelé.
+            if (!_keyMove) _faceBase = targetYaw;
+            else if (!_dbgYawOn) _faceBase = _yaw;
         }
 
         // Approche NPC : à portée → TalkToNpc (NCID 10) une fois.

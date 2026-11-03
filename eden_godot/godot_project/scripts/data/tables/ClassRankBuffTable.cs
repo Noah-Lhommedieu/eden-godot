@@ -36,8 +36,10 @@ public static class ClassRankBuffTable
                     foreach (var row in IniTable.ParseFile(path,
                                  EdenEncoding.Big5).Rows)
                     {
+                        // row[0] = index de ligne, row[1] = ClassId
+                        // réel (divergent à partir de la 20e ligne).
                         if (row.Length < 8 ||
-                            !int.TryParse(row[0], out var id)) continue;
+                            !int.TryParse(row[1], out var id)) continue;
                         var tiers = new List<int[]>();
                         for (var i = 2; i + 5 < row.Length; i += 6)
                         {

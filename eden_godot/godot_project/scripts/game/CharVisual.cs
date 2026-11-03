@@ -275,6 +275,9 @@ public static class CharVisual
         var style = (faceStyle + 1).ToString("D2");
         var ov = AssetCatalog.GetTexture($"char/texture/{up}FACES{style}A.dds");
         var mk = AssetCatalog.GetTexture($"char/texture/{up}FACES{style}B.dds");
+        if (VisDbg)
+            GD.Print($"[visdbg] face {up}FACES{style} ov={(ov == null ? "null" : "ok")} " +
+                $"mk={(mk == null ? "null" : "ok")} mainThread={IsMainThread()}");
         Texture2D? tex;
         if (ov != null && mk != null)
             tex = FaceComposite(ov, mk,
@@ -855,7 +858,14 @@ public static class CharVisual
         lock (_tintLock)
             if (_tintCache.TryGetValue((mk, key), out var cached)) return cached;
         var mi = mk.GetImage(); var oi = ov.GetImage();
-        if (mi == null || oi == null) return mk;
+        if (mi == null || oi == null)
+        {
+            if (VisDbg)
+                GD.PrintErr($"[visdbg] FaceComposite bail GetImage " +
+                    $"mi={(mi == null ? "null" : "ok")} oi={(oi == null ? "null" : "ok")} " +
+                    $"mainThread={IsMainThread()}");
+            return mk;
+        }
         mi = (Image)mi.Duplicate(); oi = (Image)oi.Duplicate();
         if (mi.IsCompressed()) mi.Decompress();
         if (oi.IsCompressed()) oi.Decompress();
@@ -880,10 +890,29 @@ public static class CharVisual
         var outImg = Image.CreateFromData(mi.GetWidth(), mi.GetHeight(), false, Image.Format.Rgba8, m);
         if (outImg.GetWidth() >= 64) outImg.GenerateMipmaps();
         var tex = ImageTexture.CreateFromImage(outImg);
-        if (tex == null) return mk;
+        if (tex == null)
+        {
+            if (VisDbg)
+                GD.PrintErr($"[visdbg] FaceComposite bail CreateFromImage " +
+                    $"mainThread={IsMainThread()}");
+            return mk;
+        }
+        if (VisDbg)
+            GD.Print($"[visdbg] FaceComposite ok skin={skin} " +
+                $"eye1={eye1} eye2={eye2} mainThread={IsMainThread()}");
         RegisterTint(mk, key, tex);
         return tex;
     }
+
+    /// <summary>Diagnostic visuel temporaire (EDEN_VISDBG=1) :
+    /// trace les branches visage sur worker vs main.</summary>
+    private static bool VisDbg =>
+        System.Environment.GetEnvironmentVariable("EDEN_VISDBG") == "1";
+
+    private static bool IsMainThread() =>
+        System.Environment.CurrentManagedThreadId == _mainThreadId;
+    private static readonly int _mainThreadId =
+        System.Environment.CurrentManagedThreadId;
 
     private static Texture2D FaceOverSkin(Texture2D src, Godot.Color skin)
     {

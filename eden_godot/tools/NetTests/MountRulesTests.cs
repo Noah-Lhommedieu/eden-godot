@@ -71,6 +71,47 @@ public class MountRulesTests
         Assert.Equal(253020, EnchantTable.RideKeyOfRaw(defs[11354].Raw));
     }
 
+    /// <summary>Chaîne de donnée réelle 11354 « Kitsune de combat »
+    /// (corpus FR, après NormalizeRow KB-01) : 2134 type 2 → badge
+    /// épée + survie à l'engage (même règle que
+    /// <see cref="MountCombatRules.IsCombatRide"/>) ; 2051|90 → palier
+    /// or 90 affiché ; blocs stats que le stage « ride » du
+    /// StatPipeline applique ensuite (EnchantService.GetUseCommands +
+    /// LicenseService.ApplyEnchantCommands — 2002 = AttrMaxHPRate,
+    /// 2083 = AttrPhysicoDamageRate/DefenceRate, cf. EnchantCommands).
+    /// </summary>
+    [Fact]
+    public void CombatMount_11354_DataChain_RideTypeAndStats()
+    {
+        var raw = Defs()[11354].Raw;
+        Assert.Equal(2, MountCombatRules.RideTypeOf(raw));
+        var i2051 = Array.IndexOf(raw, "2051");
+        Assert.True(i2051 > 0 && raw[i2051 + 1] == "90",
+            "2051|90 attendu (vitesse native → palier or 90)");
+        var i2002 = Array.IndexOf(raw, "2002");
+        Assert.True(i2002 > 0 && raw[i2002 + 1] == "7",
+            "2002|7 attendu (PV max +7 %)");
+        var i2083 = Array.IndexOf(raw, "2083");
+        Assert.True(i2083 > 0 && raw[i2083 + 1] == "2" &&
+            raw[i2083 + 2] == "1",
+            "2083|2|1 attendu (ATQ +2 %, DÉF +1 %)");
+    }
+
+    /// <summary>Aucun enchant de monture FR ne porte de bonus PM
+    /// direct (2013/1014 absents) : la montée de PM vient de 2085
+    /// (toutes stats +N % → Sag). Invariant à maintenir si la donnée
+    /// évolue.</summary>
+    [Fact]
+    public void RealRides_NoDirectMpBonus()
+    {
+        var rides = Defs().Values
+            .Where(d => EnchantTable.RideKeyOfRaw(d.Raw) > 0);
+        // Blocs de commande en cols 9+7k (schéma S_ après NormalizeRow).
+        Assert.DoesNotContain(rides, d => Enumerable.Range(0, 4)
+            .Select(k => 9 + k * 7).Where(i => i < d.Raw.Length)
+            .Any(i => d.Raw[i] is "2013" or "1014"));
+    }
+
     // ---- paliers de vitesse (infobulles) ---------------------------------
 
     [Theory]

@@ -1,7 +1,7 @@
 # Graph Report - eden-godot  (2026-11-03)
 
 ## Corpus Check
-- 1886 files · ~2,965,252 words
+- 1886 files · ~2,965,604 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 396 file(s) not represented in the graph (top: .uid 317, .import 25, .tscn 19)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5f8be379`
+- Built from commit: `9b6592ff`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

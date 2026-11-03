@@ -286,6 +286,9 @@ public sealed class GameDataService
         Load("S_ItemMallEnchant.ini", p =>
             Enchants.AddRange(EnchantParser.Parse(p)
                 .Where(e => Enchants.All(x => x.Id != e.Id))));
+        if (Directory.Exists(DataDir))
+            MergeFrMounts(ReforgedDataLocator.FindDbDir(DataDir,
+                AppContext.BaseDirectory));
         Load("S_EquipSet.ini", p =>
         {
             EquipSets = EquipSetParser.Parse(p);
@@ -725,6 +728,63 @@ public sealed class GameDataService
         var path = Path.Combine(DataDir, fileName);
         if (File.Exists(path)) loader(path);
         else MissingFiles.Add(fileName);
+    }
+
+    /// <summary>Montures EDENFR absentes de l'oracle US : ajoute depuis
+    /// le db client (<c>EDEN_REFORGED_DB</c> = corpus/fr-full) les items
+    /// (c_item.ini) et enchants (c_enchant.ini, c_itemmallenchant.ini)
+    /// dont l'id manque (ou dont la def US est un placeholder sans enchant
+    /// de monture) — sans quoi 53 montures « Hors archive »
+    /// (Kitsune de l'Aube 1290, Renard blanc 48813…) n'existent pas côté
+    /// serveur et ne peuvent pas se monter. Les ids déjà présents ne sont
+    /// jamais remplacés. Sans db client : no-op.</summary>
+    internal void MergeFrMounts(string? frDbDir)
+    {
+        if (frDbDir == null) return;
+        string? Find(string name) => Directory.EnumerateFiles(frDbDir)
+            .FirstOrDefault(f => string.Equals(Path.GetFileName(f), name,
+                StringComparison.OrdinalIgnoreCase));
+        var haveE = Enchants.Select(e => e.Id).ToHashSet();
+        foreach (var name in new[] { "c_enchant.ini",
+                     "c_itemmallenchant.ini" })
+        {
+            var f = Find(name);
+            if (f == null) continue;
+            foreach (var e in EnchantParser.Parse(f))
+            {
+                if (haveE.Add(e.Id)) { Enchants.Add(e); continue; }
+                // Id réutilisé par l'oracle US pour un autre effet
+                // (ex. 58996 Tank de Combat) : le ride EDENFR l'emporte.
+                var cur = Enchants.First(x => x.Id == e.Id);
+                if (e.Raw.Contains("2134") && !cur.Raw.Contains("2134"))
+                    Enchants[Enchants.IndexOf(cur)] = e;
+            }
+        }
+        var rideEnchants = Enchants
+            .Where(e => e.Raw.Contains("2134")).Select(e => e.Id)
+            .ToHashSet();
+        var byId = Items.ToDictionary(i => i.Id);
+        foreach (var itemFile in new[] { "c_item.ini", "c_itemmall.ini" })
+        {
+            var itemFr = Find(itemFile);
+            if (itemFr == null) continue;
+            foreach (var fr in ItemParser.Parse(itemFr))
+            {
+                if (!byId.TryGetValue(fr.Id, out var cur))
+                {
+                    Items.Add(fr);
+                    byId[fr.Id] = fr;
+                }
+                // Placeholder US (ex. 48813 « 測試用編號 », sans enchant) :
+                // la def EDENFR d'une monture remplace celle de l'oracle.
+                else if (cur.UseEnchantId != fr.UseEnchantId &&
+                         rideEnchants.Contains(fr.UseEnchantId))
+                {
+                    Items[Items.IndexOf(cur)] = fr;
+                    byId[fr.Id] = fr;
+                }
+            }
+        }
     }
 
     /// <summary>Fusionne les defs <c>S_ItemExtra.ini</c> — prioritaires :

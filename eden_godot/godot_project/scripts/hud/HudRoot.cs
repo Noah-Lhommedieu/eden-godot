@@ -142,7 +142,10 @@ public partial class HudRoot : CanvasLayer
     {
         if (_sharedCtx == null || GetChildCount() > 0) return;
         _tex = new UiTextureCache(_sharedCtx.Imagesets);
-        _tex.SetTheme(UiTextureCache.SavedTheme());
+        // Thème sauvegardé posé AVANT la construction des fenêtres :
+        // atlas + palette chromée (EeSkin) cohérents dès le 1er frame.
+        EeSkin.ApplyThemePalette(
+            _tex.SetTheme(UiTextureCache.SavedTheme()) ? _tex : null);
 
         Vitals = new TopLeftVitals { Name = "Vitals" };
         Vitals.Build(this);
@@ -802,7 +805,41 @@ public partial class HudRoot : CanvasLayer
 
     /// <summary>Message de chat entrant (268/327/266/316).</summary>
     public void AddChat(int channel, string sender, string text) =>
-        Chat?.AddMessage(channel, sender, text);
+        Chat?.AddMessage(channel, sender,
+            ChatLocalizer.Localize(text, FrForCjk));
+
+    // Nom d'objet Big5 du serveur (c_item col7) → nom FR (t_item).
+    // Index construit au premier message CJK seulement (c_item = 5 Mo).
+    private static Dictionary<string, int>? _itemByCjk;
+
+    private static string? FrForCjk(string run)
+    {
+        if (run == "獲得" || run == "得到") return "Obtenu :";
+        var tr = UiTextEn.Translate(run);
+        if (tr != run) return tr;
+        if (_itemByCjk == null)
+        {
+            var map = new Dictionary<string, int>();
+            foreach (var f in new[] { "data/db/c_item.ini",
+                         "data/db/c_itemmall.ini" })
+            {
+                var path = AssetCatalog.ResolveRawAsset(f);
+                if (path == null) continue;
+                try
+                {
+                    foreach (var (id, def) in Data.Tables.ItemTable.Load(path))
+                        if (def.Name.Length > 0) map.TryAdd(def.Name, id);
+                }
+                catch (Exception e)
+                {
+                    GD.PrintErr($"[chat] {f} : {e.Message}");
+                }
+            }
+            _itemByCjk = map;
+        }
+        return _itemByCjk.TryGetValue(run, out var itemId)
+            ? TextResolver.ItemName(itemId) : null;
+    }
 
     /// <summary>Texte système rouge centré (474 ScreenMessage).</summary>
     public void ShowScreenMessage(string text) =>

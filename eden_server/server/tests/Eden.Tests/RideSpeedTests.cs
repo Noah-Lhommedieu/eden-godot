@@ -90,4 +90,33 @@ public class RideSpeedTests
             / NativeCombatFormulas.Movement(buffed);
         Assert.Equal(1.75f, ratio, 3);
     }
+
+    [Theory]
+    [InlineData(15, 35)] [InlineData(20, 35)]
+    [InlineData(35, 55)] [InlineData(40, 55)]
+    [InlineData(50, 70)] [InlineData(60, 70)]
+    [InlineData(75, 90)] [InlineData(90, 90)]
+    [InlineData(0, 0)] [InlineData(-75, -75)]
+    public void TierPct_ByColor(int native, int expected)
+        => Assert.Equal(expected, RideSpeedRules.TierPct(native));
+
+    [Fact]
+    public void CombatMount_11354_HpAtkDefBonusesApplied()
+    {
+        // c_enchant 11354 : « vitesse +90 %, HP +7 %, ATK +2 %, DEF +1 % ».
+        var cmds = new EnchantService.UseCommand[]
+        {
+            new(2134, new double[] { 253020, 0, 1, 2 }),
+            new(2051, new double[] { 90 }),
+            new(2002, new double[] { 7 }),
+            new(2083, new double[] { 2, 1 }),
+        };
+        var c = new StatContribution();
+        LicenseService.ApplyEnchantCommands(c,
+            RideSpeedRules.PipelineCommands(cmds));
+        Assert.Equal(7, c.Pct(Eden.Core.Game.Stats.StatIndex.Hp));
+        Assert.Equal(2, c.PhysAttackRatePercent);
+        Assert.Equal(1, c.DefenceRatePercent);
+        Assert.Equal(0, c.MoveSpeedPercent);   // vitesse comptée ailleurs
+    }
 }

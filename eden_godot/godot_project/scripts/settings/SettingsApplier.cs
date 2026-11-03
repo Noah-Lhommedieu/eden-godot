@@ -40,6 +40,12 @@ public partial class SettingsApplier : Node
     private Node? _scene;
     private int _applyIn;
     private int _qaTab = -1;
+    /// <summary>Frames restantes pour poser le thème dès que le HUD et
+    /// son atlas existent (le HUD se monte après le chargement des
+    /// settings : sans attente le thème sauvegardé n'était appliqué
+    /// qu'au premier changement de réglage).</summary>
+    private int _themeWait;
+    private const int ThemeWaitFrames = 1800;
 
     public override void _Ready()
     {
@@ -188,11 +194,13 @@ public partial class SettingsApplier : Node
             _drvReg = null;
             _drvPlayer = null;
             _applyIn = 5;           // laisse la scène se monter
+            _themeWait = ThemeWaitFrames;
             _hud = null;
             _hudReadyHooked = false;
             _menuHooked = false;
         }
         TickRender(delta);
+        TickThemeBoot();
         if (_applyIn > 0 && --_applyIn == 0)
         {
             ApplyGraphics();
@@ -392,8 +400,29 @@ public partial class SettingsApplier : Node
             _ => Colors.White,
         };
 
+    /// <summary>Attend le HUD (nœud + atlas) puis pose le thème
+    /// sauvegardé et branche HudReady : déterministe quel que soit
+    /// l'ordre d'init autoload / scène.</summary>
+    private void TickThemeBoot()
+    {
+        if (_themeWait <= 0) return;
+        _themeWait--;
+        var hud = FindHud();
+        if (hud == null || Ui.UiThemeBoot.MustWait(true, hud.Tex != null))
+            return;
+        _themeWait = 0;
+        ApplyTheme(hud, S.Theme);
+        HookHud(hud);
+    }
+
     private static void ApplyTheme(Hud.HudRoot hud, string theme)
     {
+        // Atlas pas encore construit : ne rien faire (l'ancien repli
+        // « teinte du thème » colorait tout le HUD en violet pour
+        // Purple avant que l'atlas thémé n'existe). TickThemeBoot /
+        // HudReady réessaient.
+        if (hud.Tex == null) return;
+        theme = Ui.UiThemeBoot.Normalize(theme);
         // Swap réel des atlas thémés (bordures/headers recolorés) ;
         // la teinte Modulate reste le repli quand aucun dossier de
         // thème n'est copié.

@@ -13,7 +13,7 @@ le serveur C# recodé. Il est issu du portage Godot 4.7 (`../portage/`, référe
 2. Godot 4.8-beta2 : performance, stabilité, facilité de mise à jour du moteur ;
 3. nouvelles méthodes de travail : contrat de tâche, preuves, ADR, skills.
 
-Pas de git pour l'instant : c'est une décision du propriétaire. Toute
+Git local actif depuis 2026-11-03 (remote GitHub à renseigner) ; gros dossiers exclus par .gitignore.
 modification se fait donc avec prudence, en petits pas réversibles.
 
 ## Avant toute tâche (dans cet ordre)

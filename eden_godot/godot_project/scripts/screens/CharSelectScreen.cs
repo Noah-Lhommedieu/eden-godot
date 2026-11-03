@@ -573,7 +573,24 @@ public partial class CharSelectScreen : Control
                 var c = chars[i];
                 var app = c.Appearance;
                 var worn = c.PreviewWorn;
-                var body = CharBodyCache.GetOrBuild(app);
+                Node3D? body = null;
+                // Une exception (GLB corrompu, habillage…) tuait toute
+                // la tâche : les persos suivants n'avaient plus
+                // d'avatar et AvatarReady restait faux.
+                try
+                {
+                    body = CharBodyCache.GetOrBuild(app);
+                    if (body != null)
+                    {
+                        body.RotationDegrees = new Vector3(-90f, 180f, 0f);
+                        if (app is { Length: >= 32 })
+                            _ = CharDressing.Apply(body, app, worn, ItemLookup);
+                    }
+                }
+                catch (Exception e)
+                {
+                    GD.PrintErr($"[charsel] avatar {i} ({c.Name}) : {e}");
+                }
                 if (body == null)
                 {
                     GD.PrintErr("[charsel] avatar : GetOrBuild null " +
@@ -582,9 +599,6 @@ public partial class CharSelectScreen : Control
                         .CallDeferred();
                     continue;
                 }
-                body.RotationDegrees = new Vector3(-90f, 180f, 0f);
-                if (app is { Length: >= 32 })
-                    _ = CharDressing.Apply(body, app, worn, ItemLookup);
                 var idx = i;
                 Callable.From(() =>
                 {

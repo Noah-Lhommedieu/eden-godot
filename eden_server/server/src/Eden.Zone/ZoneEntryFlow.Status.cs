@@ -667,7 +667,11 @@ public sealed partial class ZoneEntryFlow
             return;
         }
         // Gardes CancelPlayerEnchant : pas un buff / non abandonnable.
-        if (!_services.Enchants.CanCancelByClient(eid))
+        // Spec propriétaire : toute monture se retire au clic droit,
+        // y compris les montures de combat « can't abandon » (col8
+        // 0x10) — le statut de ride est exempté des gardes.
+        if (_services.Enchants.GetRideInfo(eid) == null &&
+            !_services.Enchants.CanCancelByClient(eid))
             return;
         // CheckRideSpellBuff natif : l'enchant porte une commande de
         // ride (2134 Ride / 2140 RideSpell) → annulable uniquement

@@ -1122,6 +1122,10 @@ public partial class PlayerController : CharacterBody3D
         }
         if (Animator != null) Animator.MoveAnim = moveAnim;
         if (MountAnimator != null) MountAnimator.MoveAnim = moveAnim;
+        var animScale = EdenClient.Game.MoveAnimSpeed.Scale(
+            EdenClient.Game.MoveAnimSpeed.BonusPct(MoveSpeedMul), mounted);
+        if (Animator != null) Animator.MoveSpeedScale = animScale;
+        if (MountAnimator != null) MountAnimator.MoveSpeedScale = animScale;
         if (moveDir != Vector2.Zero && _model != null && !_rDrag)
         {
             var targetYaw = _keyMove

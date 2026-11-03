@@ -390,8 +390,8 @@ public sealed partial class ZoneEntryFlow
         float moveBonus = 0;
         if (_services.RideStates.TryGetValue((int)st.CharId,
                 out var rs))
-            moveBonus = _services.Enchants
-                .GetRideInfo(rs.EnchantId)?.SpeedPct ?? 0;
+            moveBonus = RideSpeedRules.EffectivePct(_services.Enchants
+                .GetRideInfo(rs.EnchantId));
         return CombatantSnapshot.FromPlayer(st.Level, lvlRow,
             cls?.StatPercents, eq, mainDef, offDef,
             st.TwoWeaponUnlocked, st.ClassId, moveBonus);

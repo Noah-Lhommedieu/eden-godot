@@ -75,7 +75,7 @@ public static class CharColorTable
     public static Rgb GetById(int id, int fallbackId = 0)
     {
         EnsureLoaded();
-        var map = _byId!;
+        var map = _byId ?? _empty;
         if (map.TryGetValue(id, out var c)) return c;
         if (fallbackId > 0 && map.TryGetValue(fallbackId, out var fb))
             return fb;
@@ -96,6 +96,7 @@ public static class CharColorTable
 #endif
 
     private static Dictionary<int, Rgb>? _byId;
+    private static readonly Dictionary<int, Rgb> _empty = new();
     private static readonly object _lock = new();
 
     private static void EnsureLoaded()
@@ -121,7 +122,8 @@ public static class CharColorTable
                         IniTable.GetInt(row, 4) / 255f);
                 }
             }
-            _byId = map;
+            // Table vide = fichier pas encore résoluble : ne pas figer, réessayer.
+            if (map.Count > 0) _byId = map;
         }
     }
 }

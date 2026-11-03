@@ -80,6 +80,12 @@ public partial class EntityAnimator : Node
     /// vitesse (<see cref="RiderAnimFor"/>).</summary>
     public EntityAnimator? RideMount { get; set; }
 
+    /// <summary>Vitesse de lecture des anims de déplacement
+    /// (<see cref="EdenClient.Game.MoveAnimSpeed"/>) ; 1 = normale.
+    /// Appliquée seulement pendant la locomotion, jamais aux one-shots
+    /// (attaque, cast) ni à l'idle.</summary>
+    public float MoveSpeedScale { get; set; } = 1f;
+
     private EntityAnimator? ValidMount() =>
         RideMount != null && GodotObject.IsInstanceValid(RideMount)
             ? RideMount : null;
@@ -564,6 +570,11 @@ public partial class EntityAnimator : Node
             _stillTime = 0f;
             _hasLast = true;
         }
+
+        var wantScale = AutoLocomotion && !OneShotPlaying &&
+            (_locoMoving || InputMoving) ? MoveSpeedScale : 1f;
+        if (!Mathf.IsEqualApprox(_player.SpeedScale, wantScale))
+            _player.SpeedScale = wantScale;
 
         if (OneShotPlaying && !_player.IsPlaying())
         {

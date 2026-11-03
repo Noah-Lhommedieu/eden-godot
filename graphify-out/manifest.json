@@ -222,9 +222,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/CharColorTable.cs": {
-    "mtime": 1792914646.6882584,
-    "seen": 1793580342.7691448,
-    "ast_hash": "49ce5bad1ebfc3fde2f73d1bec1e72aa",
+    "mtime": 1793680567.6445336,
+    "seen": 1793687251.0097594,
+    "ast_hash": "920506a896998116d13469a9f85cd92b",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/ClassRankBuffTable.cs": {
@@ -390,9 +390,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/debug/VisTest.cs": {
-    "mtime": 1793674131.1388679,
-    "seen": 1793675247.6987858,
-    "ast_hash": "8db3cb1326f8ff3bdb4a95f6dabff402",
+    "mtime": 1793680572.9172025,
+    "seen": 1793687251.009793,
+    "ast_hash": "8ab5d10ee21cb7a73b2ad8a1184d75f1",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CharBodyCache.cs": {
@@ -408,9 +408,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CharVisual.cs": {
-    "mtime": 1793676993.2644076,
-    "seen": 1793679234.0241141,
-    "ast_hash": "e821f24214944e1300445447b6891fc0",
+    "mtime": 1793680557.2491717,
+    "seen": 1793687251.0097976,
+    "ast_hash": "6154ca8bbec690290329caf730f25708",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CostumeVisual.cs": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/EntityAnimator.cs": {
-    "mtime": 1793643718.8082573,
-    "seen": 1793646851.098594,
-    "ast_hash": "839537be6750056a58d3b4158fcfcef5",
+    "mtime": 1793680057.1019053,
+    "seen": 1793680266.7284164,
+    "ast_hash": "1c3248e7ad237da7b328e01b0978460f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/PetClientRules.cs": {
@@ -510,9 +510,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/BuffBar.cs": {
-    "mtime": 1793660609.6181548,
-    "seen": 1793662868.0371714,
-    "ast_hash": "99623de2c22b6e125b296103e74272e1",
+    "mtime": 1793680155.8971066,
+    "seen": 1793680266.7284334,
+    "ast_hash": "83d4ad724898710fae53ec13b485c9f6",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/BuffBridge.cs": {
@@ -714,9 +714,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudRoot.cs": {
-    "mtime": 1793472714.5388105,
-    "seen": 1793580342.7692215,
-    "ast_hash": "b4c28b2369d25810426613aeefb4c353",
+    "mtime": 1793680282.838446,
+    "seen": 1793687251.0098517,
+    "ast_hash": "a6ee65f4784b6b74087a40e1698ce9d0",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudWindows.cs": {
@@ -1104,9 +1104,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/player/PlayerController.cs": {
-    "mtime": 1793646744.2779288,
-    "seen": 1793646851.0987167,
-    "ast_hash": "43ba3a722212aec03843eda5ddd95773",
+    "mtime": 1793680057.1024082,
+    "seen": 1793680266.7285392,
+    "ast_hash": "7636bcfa3994c13e3c273309b506b5f0",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/AppearanceCodec.cs": {
@@ -1458,9 +1458,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/CharSelectScreen.cs": {
-    "mtime": 1793397838.5474389,
-    "seen": 1793580342.7693224,
-    "ast_hash": "4f8678c94f03d0b27f8e5273b972c2ff",
+    "mtime": 1793680984.000248,
+    "seen": 1793687251.009999,
+    "ast_hash": "1a4629db1ce8cf44c2115133761f5815",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/CharacterPreview.cs": {
@@ -1494,8 +1494,8 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/ScreenManager.cs": {
-    "mtime": 1793648016.7177894,
-    "seen": 1793649484.3110929,
+    "mtime": 1793682882.2158046,
+    "seen": 1793687251.010005,
     "ast_hash": "1977217e4f4db999acf5eea1e3e331b0",
     "semantic_hash": ""
   },
@@ -1548,9 +1548,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsApplier.cs": {
-    "mtime": 1793667856.339154,
-    "seen": 1793671992.9371336,
-    "ast_hash": "3fa3440b857967c5b44a8e4d6727f624",
+    "mtime": 1793680267.523292,
+    "seen": 1793687251.010013,
+    "ast_hash": "bbc17073a7cc2a6c3ae907a6431d4378",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsWindow.Prefs.cs": {
@@ -1596,9 +1596,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/CeguiToGodot.cs": {
-    "mtime": 1793595749.8108566,
-    "seen": 1793611066.734065,
-    "ast_hash": "5988cfcb6c84da1f93b47d259c0442a3",
+    "mtime": 1793680264.5268583,
+    "seen": 1793680266.7286146,
+    "ast_hash": "6d0961f9bc9b3ac8dac9ce965acd1dc6",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/GridResizeMath.cs": {
@@ -3408,9 +3408,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/GameDataService.cs": {
-    "mtime": 1793479461.369307,
-    "seen": 1793580342.7695878,
-    "ast_hash": "2f5e956c223a72cf3f5408db3c4a2bb5",
+    "mtime": 1793687120.8455794,
+    "seen": 1793687251.010317,
+    "ast_hash": "bdde8a97df4620826444591181b1a6b8",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/GmCommandService.cs": {
@@ -4548,9 +4548,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ProfileStatEmitter.cs": {
-    "mtime": 1793479461.3410609,
-    "seen": 1793580342.7697449,
-    "ast_hash": "241bec037c19125182e7461205627ac2",
+    "mtime": 1793680108.6834216,
+    "seen": 1793680266.7290955,
+    "ast_hash": "5880a27815826fa54f5428518dbe9665",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Program.cs": {
@@ -4566,9 +4566,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/RideSpeedRules.cs": {
-    "mtime": 1793479461.3516095,
-    "seen": 1793580342.7697473,
-    "ast_hash": "ffbf3e2e3dddca0dcdb901885fd37e74",
+    "mtime": 1793680108.682734,
+    "seen": 1793680266.7290983,
+    "ast_hash": "8b0db06a84632ff5c111a0c1831e8bd4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/RollTreasureService.cs": {
@@ -4734,9 +4734,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.cs": {
-    "mtime": 1793479461.339035,
-    "seen": 1793580342.7697694,
-    "ast_hash": "98d1d6a93de592ff771ef9cdf04bac2a",
+    "mtime": 1793680108.683177,
+    "seen": 1793680266.7291243,
+    "ast_hash": "38fe60fc0fc79a7a1193c557a7a40aa3",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.CombineStation.cs": {
@@ -5082,9 +5082,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Status.cs": {
-    "mtime": 1793479461.3408532,
-    "seen": 1793580342.769816,
-    "ast_hash": "0ae58e023ce12ecb2a35742782e82dd1",
+    "mtime": 1793680155.8969178,
+    "seen": 1793680266.7291768,
+    "ast_hash": "77b25c596f635fb3cecb4dd43806aac1",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Strengthen.cs": {
@@ -6456,9 +6456,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/RideSpeedTests.cs": {
-    "mtime": 1793479461.3784237,
-    "seen": 1793580342.770061,
-    "ast_hash": "40a8914b1a057d95f70dc8ffbef2c2ed",
+    "mtime": 1793680878.9799194,
+    "seen": 1793687251.0107772,
+    "ast_hash": "cfc0afa01175b4aa776198f54cb56a8b",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/RollTreasureServiceTests.cs": {
@@ -8568,9 +8568,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793679165.2566009,
-    "seen": 1793679234.0254855,
-    "ast_hash": "545f5c08c11d3917ab3436726b8e3e99",
+    "mtime": 1793679917.0274413,
+    "seen": 1793680266.7297971,
+    "ast_hash": "1c41fa42a83cc3aa9c7720fb5dfb38cf",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -8580,9 +8580,9 @@
     "semantic_hash": ""
   },
   "docs/INDEX.md": {
-    "mtime": 1793679164.5650291,
-    "seen": 1793679234.0254877,
-    "ast_hash": "b5e408aca7d0adba0d3127f53ebbeb30",
+    "mtime": 1793680205.386564,
+    "seen": 1793680266.7297993,
+    "ast_hash": "7a52c06e8033d8b6bae41837a9d87af1",
     "semantic_hash": ""
   },
   "docs/architecture/ARCHITECTURE.md": {
@@ -11409,6 +11409,78 @@
     "mtime": 1793679147.734726,
     "seen": 1793679234.0255122,
     "ast_hash": "30be47dc3cddcba37d79c7d50639e029",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/game/MoveAnimSpeed.cs": {
+    "mtime": 1793680050.5924656,
+    "seen": 1793680266.7284188,
+    "ast_hash": "d6d450e5c3d37f04be2e3b370607de7c",
+    "semantic_hash": ""
+  },
+  "src/Eden.Core/Game/MoveAnimSpeed.cs": {
+    "mtime": 1793680050.5825055,
+    "seen": 1793680266.7295485,
+    "ast_hash": "d6d450e5c3d37f04be2e3b370607de7c",
+    "semantic_hash": ""
+  },
+  "tests/Eden.Core.Tests/MoveAnimSpeedTests.cs": {
+    "mtime": 1793680050.5937078,
+    "seen": 1793680266.7296786,
+    "ast_hash": "2167ca8708c2be4250ac9b3ba3cf681a",
+    "semantic_hash": ""
+  },
+  "tools/corpus-inventory/inventory.py": {
+    "mtime": 1793680024.3372483,
+    "seen": 1793680266.729736,
+    "ast_hash": "4e0571f725e937c2a6b7f32e730db625",
+    "semantic_hash": ""
+  },
+  "tools/corpus-inventory/render_docs.py": {
+    "mtime": 1793680205.2644694,
+    "seen": 1793680266.7297375,
+    "ast_hash": "438b982d7334f296bbbfdaa92d222444",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/ui/ChatLocalizer.cs": {
+    "mtime": 1793680273.6895192,
+    "seen": 1793687251.0100222,
+    "ast_hash": "e14a397441f49ea45ccac9b628f90d26",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/ui/UiThemeBoot.cs": {
+    "mtime": 1793680264.5053506,
+    "seen": 1793687251.0100257,
+    "ast_hash": "bc52c6255cc76c63ab50e3947e7e730b",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/UiBootTextTests.cs": {
+    "mtime": 1793680914.3425984,
+    "seen": 1793687251.0100946,
+    "ast_hash": "682c662268e6a6ffaefdb73140b8a9bf",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/FrMountsMergeTests.cs": {
+    "mtime": 1793685186.9385772,
+    "seen": 1793687251.0107374,
+    "ast_hash": "778de3cbe148a9cc9b8ae362c2f7af05",
+    "semantic_hash": ""
+  },
+  "tools/corpus-inventory/class_outfits.py": {
+    "mtime": 1793687170.300225,
+    "seen": 1793687251.0111248,
+    "ast_hash": "f4cd3fbf2f085f3353c5e698851f878f",
+    "semantic_hash": ""
+  },
+  "tools/corpus-inventory/convert_dds.py": {
+    "mtime": 1793686183.844288,
+    "seen": 1793687251.0111258,
+    "ast_hash": "95f006536ee3ffc051803ad4ceec5a89",
+    "semantic_hash": ""
+  },
+  "tools/corpus-inventory/make_sheets.py": {
+    "mtime": 1793686200.5929508,
+    "seen": 1793687251.011128,
+    "ast_hash": "74211aa7aa62d56443dbd561d2356e96",
     "semantic_hash": ""
   }
 }

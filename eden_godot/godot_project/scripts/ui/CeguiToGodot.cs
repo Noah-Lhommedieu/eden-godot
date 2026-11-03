@@ -25,7 +25,9 @@ public sealed class UiTextureCache
     /// <summary>Thème persisté dans client_settings.cfg
     /// (<see cref="Settings.ClientSettings.Theme"/>).</summary>
     public static string SavedTheme() =>
-        Settings.ClientSettings.Load().Theme;
+        UiThemeBoot.Normalize(
+            Settings.SettingsApplier.Instance?.S.Theme ??
+            Settings.ClientSettings.Load().Theme);
 
     /// <summary>Thème actif ("" = atlas de base). Les variantes vivent
     /// dans <c>ui_textures/imagesets/&lt;Theme&gt;/</c> et

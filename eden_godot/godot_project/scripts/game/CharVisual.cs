@@ -392,7 +392,7 @@ public static class CharVisual
             if (n.Length > 2 && n[0] == 'S' && char.IsLetter(n[1]))
             {
                 tint = skin;
-                floor = -1.15f;
+                floor = -2f;
             }
             // Corps nu « #<L>000 » : même masque rouge de peau que les
             // S* — sans teinte il sortait en rouge vif sous les tenues.
@@ -400,7 +400,7 @@ public static class CharVisual
                      n.EndsWith("000"))
             {
                 tint = skin;
-                floor = -1.15f;
+                floor = -2f;
             }
             else if (n.Length >= 4 && n[0] == '#' && n[2] == '1' &&
                      char.IsDigit(n[3]))

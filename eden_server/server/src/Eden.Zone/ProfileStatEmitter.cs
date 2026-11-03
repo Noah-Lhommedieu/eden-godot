@@ -123,8 +123,8 @@ public static class ProfileStatEmitter
         // S_RideStep SpeedPct), miroir du kinddata+0xa0 natif.
         float moveBonus = 0;
         if (s.RideStates.TryGetValue(charId, out var rideState))
-            moveBonus = s.Enchants
-                .GetRideInfo(rideState.EnchantId)?.SpeedPct ?? 0;
+            moveBonus = RideSpeedRules.EffectivePct(s.Enchants
+                .GetRideInfo(rideState.EnchantId));
         var combat = BuildCombatSnapshot(s, raceId, classId, charLevel,
             eq, equipped, moveBonus);
         return await SendAsync(session, s, raceId, classId, charLevel,
@@ -199,8 +199,8 @@ public static class ProfileStatEmitter
             s.EquipTrain.ItemTrainAdds);
         float moveBonus = 0;
         if (s.RideStates.TryGetValue(charId, out var rideState))
-            moveBonus = s.Enchants
-                .GetRideInfo(rideState.EnchantId)?.SpeedPct ?? 0;
+            moveBonus = RideSpeedRules.EffectivePct(s.Enchants
+                .GetRideInfo(rideState.EnchantId));
         var combat = BuildCombatSnapshot(s, raceId, classId, charLevel,
             eq, equipped, moveBonus);
         return await SendAsync(session, s, raceId, classId, charLevel,

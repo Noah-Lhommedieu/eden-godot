@@ -52,6 +52,8 @@ public partial class VisTest : Node3D
 
     public override void _Ready()
     {
+        EdenClient.Data.TextResolver.ResolveFile ??= rel =>
+            AssetCatalog.ResolveRawAsset(rel) ?? DataPaths.ResolveFile(rel);
         var mapCode = "S009";
         float? px = null, py = null, pz = null;
         foreach (var a in OS.GetCmdlineArgs()

@@ -137,4 +137,5 @@ Vérifié le 2026-11-03 : les 15 fichiers existent ; les constats de code citent
 | `protocol-map.md` / `protocol-partials.md` | Carte opcodes + 57 manques natifs émis côté zone |
 | `native-constants.md` / `-2` / `-3` | Formules codées en dur (stats, XP, heal, dégâts) |
 | `live-vs-test-visual-parity.md` | Écart rendu live (`run.sh --char`) vs bancs de test (2026-11-03) |
+| `zone-spells-audit.md` | Sorts de zone : formes natives 0-6 décodées, routage NCID, 6 fixes client (Z1-Z6), géométrie serveur restante |
 | `backlog-2026-11-03.md` | Backlog demandé par le propriétaire (FX, montures, skins, sorts de zone…) |

@@ -513,10 +513,12 @@ public sealed partial class ZoneEntryFlow
             equips, token);
         // Enchant FastDressID natif si absent — EffectToLife(char,
         // char, 46690, 0x32, 0x20, false, 0, 1, 0, 0) à la fin
-        // d'ApplyFastDress : le param 0x32 = rest_time 50 s.
+        // d'ApplyFastDress : le param 0x32 = rest_time 50 ticks
+        // (dixièmes) = 5 s.
         if (!st.Statuses.ContainsKey(FastDressEnchantId))
             await AddPlayerEnchantAsync(session, st,
-                (int)st.CharId, FastDressEnchantId, 0x32, 1, token);
+                (int)st.CharId, FastDressEnchantId,
+                EnchantRestSeconds(0x32), 1, token);
         // RefreshEQsAttr natif (280 à soi) — les 276 par loc ont été
         // émis dans ExecuteFastDressPlanAsync (Equip/UnEquipForSwitch).
         await InventoryHandlers.EmitSelfEquipRefreshAsync(_services,

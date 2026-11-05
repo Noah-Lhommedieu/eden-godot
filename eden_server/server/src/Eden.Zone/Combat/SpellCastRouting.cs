@@ -135,6 +135,33 @@ public static class SpellCastRouting
         _ => false,
     };
 
+    /// <summary>Sorts à forme directionnelle (2 direction / 5 croix / 6
+    /// secteur) dont la DESCRIPTION FR (T_Spell) place l'effet autour/devant
+    /// le lanceur : « autour du lanceur / de lui / de l'invocateur », « devant
+    /// le lanceur », « Jeteur de sort téléporté », « N m alentour » sans mention
+    /// de cible. Seuls ceux-là se lancent sans cible (NCID 16 sans handle) ; les
+    /// autres exigent une cible (NCID 9). Règle propriétaire
+    /// (docs/knowledge/definitions.md § Règles de lancer), dérivée côté client par
+    /// <c>SpellCastRule.CasterCentered</c> — le test NetTests
+    /// <c>CasterCenteredIds_MatchServerList</c> garde les deux listes alignées
+    /// sur les données fr-full.</summary>
+    public static readonly IReadOnlySet<int> CasterCenteredSpellIds =
+        new HashSet<int>
+        {
+            50385, 50398, 51331, 51538, 58236, 58473, 58478, 58481,
+            58484, 58485, 59143,
+        };
+
+    /// <summary>Un cast SANS cible (NCID 16) est-il admis pour ce sort ?
+    /// Cercle au sol (forme 1) : oui — le point visé fait office de cible
+    /// (visée au curseur ; ou cercle « autour de l'invocateur » centré
+    /// lanceur). Direction/croix/secteur : seulement si la description
+    /// les centre sur le lanceur. Autres formes : jamais par le 16.</summary>
+    public static bool AcceptsLocationWithoutTarget(int shape, int spellId) =>
+        shape == ShapeGround ||
+        (shape is ShapeDirection or ShapeCross or ShapeSector &&
+         CasterCenteredSpellIds.Contains(spellId));
+
     /// <summary>Vrai si la forme exige une entité ciblée — la forme 0
     /// (<c>CSpellToLife</c>) est la SEULE sans canal de repli : elle ne
     /// passe ni par 16 ni par 17 ni par 59. Un client qui n'a pas de

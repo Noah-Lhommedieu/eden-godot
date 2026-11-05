@@ -12,6 +12,63 @@ public static class HudPrefs
     public static event Action? Changed;
     /// <summary>PV du joueur local (alimenté par HudRoot) — lu par la barre au-dessus de sa tête.</summary>
     public static long SelfHp, SelfMaxHp;
+    /// <summary>PM du joueur local (alimenté par TopLeftVitals) — seul MP
+    /// connu côté client (le serveur ne diffuse pas celui des autres).</summary>
+    public static long SelfMp, SelfMaxMp;
+    /// <summary>Levée quand SelfMp/SelfMaxMp changent (cadre de cible = soi).</summary>
+    public static event Action? SelfMpChanged;
+    public static void SetSelfMp(long mp, long maxMp)
+    {
+        if (mp == SelfMp && maxMp == SelfMaxMp) return;
+        SelfMp = mp; SelfMaxMp = maxMp;
+        SelfMpChanged?.Invoke();
+    }
+
+    /// <summary>Quelles valeurs numériques afficher : rien / PV / PM / PV+PM.</summary>
+    public enum ValuesMode { None = 0, Hp = 1, Mp = 2, Both = 3 }
+
+    private static ValuesMode GetMode(string k, ValuesMode d) =>
+        (ValuesMode)Math.Clamp((int)GetF(k, (int)d), 0, 3);
+
+    /// <summary>Valeurs PV/PM dans le cadre de cible du HUD
+    /// (<c>pref.vals.target</c>, défaut PV).</summary>
+    public static ValuesMode TargetValues
+    {
+        get => GetMode("pref.vals.target", ValuesMode.Hp);
+        set => Set("pref.vals.target", ((int)value).ToString());
+    }
+    /// <summary>Valeurs PV/PM au-dessus des entités
+    /// (<c>pref.vals.overhead</c>, défaut rien).</summary>
+    public static ValuesMode OverheadValues
+    {
+        get => GetMode("pref.vals.overhead", ValuesMode.None);
+        set => Set("pref.vals.overhead", ((int)value).ToString());
+    }
+
+    /// <summary>« actuel/max » (true, défaut) ou « actuel seul » (false)
+    /// pour les valeurs PV/PM (<c>pref.vals.max</c>) — cadre de cible et
+    /// valeurs au-dessus des entités.</summary>
+    public static bool ValuesShowMax
+    {
+        get => GetB("pref.vals.max", true);
+        set => Set("pref.vals.max", value ? "1" : "0");
+    }
+
+    /// <summary>Afficher le libellé « PV »/« PM » devant les valeurs
+    /// (<c>pref.vals.labels</c>, défaut true).</summary>
+    public static bool ValuesLabels
+    {
+        get => GetB("pref.vals.labels", true);
+        set => Set("pref.vals.labels", value ? "1" : "0");
+    }
+
+    /// <summary>Formate une valeur vitale selon les prefs :
+    /// « PV 123/456 », « PV 123 », « 123/456 » ou « 123 ».</summary>
+    public static string FormatValue(string label, long cur, long max)
+    {
+        var s = ValuesShowMax ? $"{cur}/{max}" : $"{cur}";
+        return ValuesLabels ? $"{label} {s}" : s;
+    }
 
     private static string Get(string k, string d) =>
         ClientUiStore.Current.Options.TryGetValue(k, out var v) ? v : d;
@@ -90,6 +147,30 @@ public static class HudPrefs
     public static bool JellyEffect { get => GetB("pref.jelly", false); set => Set("pref.jelly", value ? "1" : "0"); }
     /// <summary>La caméra se recale derrière le perso quand il avance.</summary>
     public static bool CameraFollow { get => GetB("pref.cam.follow", false); set => Set("pref.cam.follow", value ? "1" : "0"); }
+
+    // ---- Cases « ShowKuso* » du profil natif (EquipmentWnd_new2) ----
+    // Le natif les persiste dans le fichier d'options client
+    // (FUN_0069e290 client_game : ShowKusoHelmetb=%d — byte 0xe1/0xe2)
+    // et rafraîchit l'avatar en local, SANS paquet réseau : la
+    // visibilité des pièces d'équipement est une préférence
+    // d'affichage, jamais l'état porté.
+    /// <summary>Lit une case ShowKuso&lt;suffix&gt; (défaut visible).</summary>
+    public static bool KusoVisible(string suffix) =>
+        GetB($"pref.kuso.{suffix}", true);
+    /// <summary>Écrit une case ShowKuso&lt;suffix&gt;.</summary>
+    public static void SetKusoVisible(string suffix, bool visible) =>
+        Set($"pref.kuso.{suffix}", visible ? "1" : "0");
+    /// <summary>Le loc d'équipement doit-il être rendu ? (tête=1 →
+    /// ShowKusoHelmet, dos=6 → ShowKusoCloak — les autres locs n'ont
+    /// pas de case dédiée côté visuel actuel).</summary>
+    public static bool AttachVisibleForLoc(int loc) => loc switch
+    {
+        1 => KusoVisible("helmet"),
+        6 => KusoVisible("cloak"),
+        _ => true,
+    };
+    /// <summary>Case « ShowKusoClothes » : meshes armure « #… ».</summary>
+    public static bool KusoClothesVisible => KusoVisible("clothes");
     /// <summary>Clic gauche sur le sol = déplacement (point&amp;click).</summary>
     public static bool LeftClickRoute { get => GetB("pref.click.route", true); set => Set("pref.click.route", value ? "1" : "0"); }
     /// <summary>Multiplicateur de sensibilité souris de la caméra (0.25..2.5).</summary>
@@ -130,7 +211,8 @@ public static class HudPrefs
                      "pref.show.title", "pref.show.guild", "pref.title.self", "pref.guild.others", "pref.show.vitals",
                      "pref.selfcast", "pref.crit.shock", "pref.vibration",
                      "pref.jelly", "pref.cam.follow", "pref.click.route",
-                     "pref.mouse.speed" })
+                     "pref.mouse.speed", "pref.vals.target",
+                     "pref.vals.overhead" })
             ClientUiStore.Current.Options.Remove(k);
         ClientConfig.ShowIdsEnabled = ClientConfig.Load().ShowIds;
         ClientUiStore.Save();

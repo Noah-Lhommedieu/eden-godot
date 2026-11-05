@@ -23,6 +23,7 @@ internal static class NiControllerRuntime
     public static void Build(NativeFxHost h)
     {
         var nif = h.Nif; var rep = h.Report;
+        if (Diag) DiagShapes(nif);
         NifControllerSequence? seq = null;
         if (nif.Sequences.Count > 0)
             seq = (h.Options.Sequence != null
@@ -39,6 +40,7 @@ internal static class NiControllerRuntime
                 var cb = seq.Blocks.FirstOrDefault(b => b.ControllerBlock == c.Block);
                 if (cb?.Interpolator != null) { ip = cb.Interpolator; tm = CtlTiming.Of(seq); }
             }
+            if (Diag) DiagCtl(c, ip, tm);
             try { BuildOne(h, c, ip, tm); }
             catch (Exception e) { rep.Note($"driver-error:{c.Type}:{e.GetType().Name}"); }
         }
@@ -47,6 +49,55 @@ internal static class NiControllerRuntime
             foreach (var n in nif.Nodes)
                 if (n.Type == "NiBillboardNode" && h.NodeOf(n.Block) is { } node)
                 { h.Add(new BillboardDriver(h, node, n)); rep.Count("billboard"); }
+    }
+
+    /// <summary>EDEN_FX_DIAG=3 : dump des contrôleurs non-PSys (clés
+    /// alpha/UV/couleur/visibilité + piste transform) — diagnostique un
+    /// effet invisible (alpha clampée à 0, échelle ~0…).</summary>
+    static readonly bool Diag =
+        System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "3";
+
+    /// <summary>Bornes Z monde de chaque shape + translation bind de
+    /// son nœud — un effet « inversé » (funnel sous l'ancre) s'y lit.</summary>
+    static void DiagShapes(NifFile nif)
+    {
+        foreach (var sh in nif.Shapes)
+        {
+            if (sh.Vertices.Length == 0) continue;
+            float zmin = float.MaxValue, zmax = float.MinValue;
+            foreach (var v in sh.Vertices)
+            { if (v.Z < zmin) zmin = v.Z; if (v.Z > zmax) zmax = v.Z; }
+            var av = sh.Node != null ? nif.AvByBlock.GetValueOrDefault(sh.Node.Block) : null;
+            var tr = av != null ? av.BindLocal.Translation : Vector3.Zero;
+            GD.Print($"[fxdiag] shape b{sh.BlockIndex} «{sh.Name}» " +
+                $"node=b{sh.Node?.Block ?? -1} «{sh.Node?.Name}» " +
+                $"bindT=({tr.X:0.#},{tr.Y:0.#},{tr.Z:0.#}) " +
+                $"z=[{zmin:0.#},{zmax:0.#}] verts={sh.Vertices.Length} " +
+                $"tex={sh.TextureFile ?? "-"} hidden={sh.Node?.Hidden}");
+        }
+    }
+
+    static void DiagCtl(NifController c, NifInterpolator? ip, CtlTiming tm)
+    {
+        var sb = new System.Text.StringBuilder(
+            $"[fxdiag] ctl {c.Type} tgt={c.TargetBlock}({c.TargetName}) " +
+            $"t=[{tm.Start:0.##},{tm.Stop:0.##}] cyc={tm.Cycle} " +
+            $"ip={ip?.Type ?? "null"}");
+        var fc = NifCurves.FloatOf(ip);
+        if (fc != null)
+            sb.Append($" fkeys={fc.Times.Length} " +
+                $"t0={fc.Times.FirstOrDefault():0.##}..{fc.Times.LastOrDefault():0.##} " +
+                $"v0={fc.V.FirstOrDefault():0.##}..{fc.V.LastOrDefault():0.##} " +
+                $"min={(fc.V.Length > 0 ? fc.V.Min() : 0f):0.##} " +
+                $"max={(fc.V.Length > 0 ? fc.V.Max() : 0f):0.##}");
+        var tr = NifCurves.Track(ip, c.TargetName);
+        if (tr?.Scl is { } sc && sc.V.Length > 0)
+            sb.Append($" scl=[{string.Join(',', sc.Times.Zip(sc.V,
+                (tt, v) => $"{tt:0.##}:{v:0.##}").Take(6))}]");
+        if (tr?.Pos is { } ps && ps.V.Length > 0)
+            sb.Append($" pos=[{string.Join(',', ps.Times.Zip(ps.V,
+                (tt, v) => $"{tt:0.##}:({v.X:0.#},{v.Y:0.#},{v.Z:0.#})").Take(4))}]");
+        GD.Print(sb.ToString());
     }
 
     static void BuildOne(NativeFxHost h, NifController c, NifInterpolator? ip, CtlTiming tm)

@@ -414,6 +414,11 @@ public static class NativeInventoryParser
     {
         var items = new List<InventorySlot>();
         LastFailure = null;
+        // Le 312 est un snapshot complet : les capacités du perso
+        // précédent ne doivent pas survivre (sacs 1-4 absents du corps
+        // = capacité 0 — sinon l'UI affiche des cases « libres » que le
+        // serveur refuse → « sac plein » + drop au sol fantôme).
+        lock (Capacities) Capacities.Clear();
         var r = new BinReader(body);
         if (r.Remaining < 1) return items;
         var nBags = r.ReadByte();

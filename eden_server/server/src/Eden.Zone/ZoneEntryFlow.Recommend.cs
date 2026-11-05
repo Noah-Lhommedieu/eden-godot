@@ -191,9 +191,10 @@ public sealed partial class ZoneEntryFlow
             }
         }
         if (def.EnchantId != 0 && def.EnchantDuration != 0)
-            // EffectToLife(char, char, enchant, durée×10, lv1) natif.
+            // EffectToLife(char, char, enchant, durée×10 ticks, lv1)
+            // natif — la table est déjà en secondes, notre API aussi.
             await AddPlayerEnchantAsync(session, st, (int)st.CharId,
-                (short)def.EnchantId, def.EnchantDuration * 10, 1, token);
+                (short)def.EnchantId, def.EnchantDuration, 1, token);
         if (def.ExpMultiplier != 0)
         {
             // base = CLevelData+0x58 du niveau du perso (col 21 S_Level

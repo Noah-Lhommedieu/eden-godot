@@ -31,7 +31,25 @@ public static class SceneParser
         /// remplacée post-parse par <see cref="Scene.FloorZ"/> (sol
         /// intérieur sinon invisible sous la map).</summary>
         public float Z { get; set; }
+        /// <summary>Col8 — lue %d par le natif : ce n'est PAS un
+        /// facing mais la clef d'événement à la mort (+0x28 du
+        /// CRebornMonsterInfo zone → CRebornMonster+0x34, évaluée par
+        /// OneDie → ExecuteCommand). Conservée float pour les
+        /// structures épinglées ; sans effet visible (symétriques).</summary>
         public float Facing { get; init; }
+        /// <summary>Clef d'événement à la mort (col8, int natif) —
+        /// cristaux de place forte : S005 bleu=3 / rouge=4 (swap
+        /// cristal via Event_RebornMonster).</summary>
+        public int DeathEventId { get; init; }
+        /// <summary>Clef d'événement à la naissance (col9, lignes
+        /// ≥19 champs → +0x2c zone → CRebornMonster+0x38, ScriptEntry
+        /// '\b' au Born) — timers d'invasion : S005 118→1, 119→2.</summary>
+        public int BornEventId { get; init; }
+        /// <summary>Durée de vie du reborn en secondes (col11, lignes
+        /// ≥20 champs → +0x34 zone) — le groupe meurt de vieillesse à
+        /// born+TTL et sa clef col8 s'évalue : 119 vit 420 s → event 2
+        /// (« 7分後關閉 »), 117 vit 1200 s → event 4 (retour bleu).</summary>
+        public int LifetimeSeconds { get; init; }
         public string ModelCode { get; init; } = string.Empty;
         public string Name { get; init; } = string.Empty;
         /// <summary>Drapeau d'annonce — short +0x48 du CRebornMonster
@@ -589,7 +607,9 @@ public static class SceneParser
                 case "reborn_monsters":
                     // Format natif (GetAllRebornMonsterInfo @0x083688a0) :
                     // col0 id, col1 monsterId, col2 patrol, col3 count,
-                    // col4 respawn, col5-7 xyz, col8 facing ; le flag
+                    // col4 respawn, col5-7 xyz, col8 = clef d'event à la
+                    // mort (int, PAS facing), col9 = clef d'event à la
+                    // naissance (n≥19), col11 = délai (n≥20) ; le flag
                     // « né au boot » (reborn+0x38) = col10 si <19 champs,
                     // col11 si 19, col12 si ≥20 ; col13 = modèle,
                     // col14 = nom d'affichage, col18 = table de drop.
@@ -609,6 +629,11 @@ public static class SceneParser
                             Y = ParseFloat(fields[6]),
                             Z = ParseFloat(fields[7]),
                             Facing = ParseFloat(fields[8]),
+                            DeathEventId = ParseInt(fields[8]),
+                            BornEventId = fields.Length >= 19
+                                ? ParseInt(fields[9]) : 0,
+                            LifetimeSeconds = fields.Length >= 20
+                                ? ParseInt(fields[11]) : 0,
                             InitiallyActive =
                                 fields.Length > bornIdx &&
                                 ParseInt(fields[bornIdx]) != 0,

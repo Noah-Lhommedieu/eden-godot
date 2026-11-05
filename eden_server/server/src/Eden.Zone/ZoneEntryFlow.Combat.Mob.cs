@@ -109,6 +109,23 @@ public sealed partial class ZoneEntryFlow
         SendFlagAsync(session, mob.Handle, 0x0000, SEL_PHASE, 0,
             mob.NextAction(), token);
 
+    /// <summary>Destination de ruée annoncée aux clients (267/326
+    /// d'engagement) : le point du cercle d'arrêt mêlée (6 u — la
+    /// borne <c>d2 &gt; 36</c> de l'approche) sur le segment
+    /// joueur→mob, ou la position du mob s'il y est déjà. La capture
+    /// native y met la position du joueur, mais notre client marche
+    /// l'entité jusqu'à dst — engagé à portée, le mob rendu entrait
+    /// dans le modèle du perso.</summary>
+    private static (float X, float Y) MeleeChaseDst(EntryState st,
+        float mobX, float mobY)
+    {
+        var dx = mobX - st.PosX; var dy = mobY - st.PosZ;
+        var d = Math.Sqrt(dx * dx + dy * dy);
+        if (d <= 6.0) return (mobX, mobY);
+        return ((float)(st.PosX + dx / d * 6.0),
+                (float)(st.PosZ + dy / d * 6.0));
+    }
+
     /// <summary>MeleeAttack [i32 handle][u8 type] — réponse capture native
     /// (zsniff 17:22:58 → 17:23:17, client→serveur `0500 <mob> 00`) :
     ///   par requête : `272 [char][mob][dmg][type][attackKfId]` immédiat ;
@@ -322,15 +339,23 @@ public sealed partial class ZoneEntryFlow
             // (plus d'anims, plus d'interactions).
             await SendFlagAsync(session, st.CharId, 0x0000,
                 SEL_COMBAT, 1, st.NextAction(), token);
+            // Destination de la ruée annoncée au client : le cercle
+            // d'arrêt mêlée (6 u — borne de l'approche `d2 > 36`), ou
+            // la position du mob s'il y est déjà. Le natif y met la
+            // position du joueur (capture), mais notre client marche
+            // le mob jusqu'à dst : engagé à portée, aucun 326 de
+            // poursuite ne venait recorriger et le rendu entrait dans
+            // le modèle du perso (distance rendue 0 u).
+            var (gx, gy) = MeleeChaseDst(st, mob.X, mob.Y);
             await session.SendAsync(new CNC_CZ_ClientGoto
             {
-                Field1 = (int)mob.Handle, Field2 = st.PosX,
-                Field3 = st.PosZ, Field4 = 0x6a,
+                Field1 = (int)mob.Handle, Field2 = gx,
+                Field3 = gy, Field4 = 0x6a,
             }, token);
             // 326 MovePrediction — lance la marche visible du mob vers
             // le joueur (capture : le 326 suit immédiatement le 267).
             await SendMovePredictionAsync(session, mob.Handle,
-                mob.X, mob.Y, st.PosX, st.PosZ, token);
+                mob.X, mob.Y, gx, gy, token);
             await session.SendAsync(new CNC_CZ_ClientGetSelectLifeTarget
             {
                 Field1 = (int)mob.Handle, Field2 = 0, Field3 = 0,
@@ -443,6 +468,64 @@ public sealed partial class ZoneEntryFlow
                 await FinishMobCombatAsync(done);
         }
     }
+    /// <summary>Sort du tick : modèle natif (Normal skills S_Monster
+    /// 44-46 + Countdown skills S_Ai, <see cref="MobSkillRules"/>) quand le
+    /// mob en porte, sinon ancien tirage 35 % sur S_Monster 40-49.</summary>
+    /// <summary>Portée de cast d'un sort de mob — modèle natif
+    /// <c>CAI::CheckUseSpell</c> (zone @0x084d91c0) : cast refusé →
+    /// poursuite quand <c>dist &gt; portée(+0x40) + rayonCaster +
+    /// rayonCible + 0,5</c> (la constante rodata
+    /// <c>DAT_08894104</c> est <b>-0,5f</b> — elle s'ajoute à la
+    /// borne, pas à la distance). <c>SSpellData+0x40</c> = S_Spell
+    /// col28 × <c>_DAT_0887b5b0</c> (double 0,5 —
+    /// <c>LoadAllSpellData</c> @0x08380130) =
+    /// <see cref="Combat.SpellAreaGeometry.AreaLength"/>.
+    /// rayonCaster = BoundInfo col7 via <see cref="MonsterParser.
+    /// MonsterDef.BoundRadius"/> (défaut natif 1,0) ; rayonCible =
+    /// joueur ≈ 1,2 u (<c>CCharacter::GetSize</c>). La borne native ne
+    /// dépend PAS de la forme du sort — CheckUseSpell compare la
+    /// distance cible à +0x40 quelle que soit la classe CSpell
+    /// (les sorts autocentrés ont col28 petit/nul → borne ≈ contact,
+    /// ce qui reproduit aussi l'effet attendu « zone autour du
+    /// lanceur »). <paramref name="margin"/> : 0,5 natif CheckUseSpell ;
+    /// 2,5 (<see cref="Combat.SpellCastRouting.OuterRangeBonus"/>) pour
+    /// le gate CastTest du contre-sort (CSpellToLife::CastTest
+    /// @0x084f04d0).</summary>
+    internal static float MobSpellCastRange(
+        MonsterParser.MonsterDef? mdef, SpellParser.SpellDef? sdef,
+        float margin = 0.5f) =>
+        (sdef == null ? 0f : Combat.SpellAreaGeometry.AreaLength(sdef))
+        + (mdef?.BoundRadius ?? 1f) + 1.2f + margin;
+
+    /// <summary>Vrai si le mob peut lancer <paramref name="sdef"/> sur
+    /// sa cible à la distance² <paramref name="d2"/> — borne
+    /// <see cref="MobSpellCastRange"/>. RÈGLE PROPRIÉTAIRE (pas de
+    /// flag natif trouvé) : exige en amont qu'un premier coup de mêlée
+    /// ait touché (<see cref="ZoneLiveWorld.LiveMob.HasLandedMelee"/>)
+    /// — voir le gate du tick.</summary>
+    internal static bool MobSpellInCastRange(
+        MonsterParser.MonsterDef? mdef, SpellParser.SpellDef? sdef,
+        double d2, float margin = 0.5f)
+    {
+        var r = MobSpellCastRange(mdef, sdef, margin);
+        return d2 <= r * r;
+    }
+
+    private MobSkillRules.Pick? PickMobSpell(
+        ZoneLiveWorld.LiveMob mob, MonsterParser.MonsterDef mdef)
+    {
+        var profile = _services.MonsterAi.GetProfile(mdef.AiId);
+        if (MobSkillRules.UsesNativeSkills(mdef, profile))
+        {
+            var hpPct = mob.MaxHp > 0 ? mob.Hp * 100f / mob.MaxHp : 100f;
+            return MobSkillRules.Choose(mdef, profile, hpPct,
+                DateTime.UtcNow, mob.CountdownLastCast, Random.Shared);
+        }
+        if (mdef.SpellIds.Count > 0 && Random.Shared.Next(100) < 35)
+            return new MobSkillRules.Pick(mdef.SpellIds[
+                Random.Shared.Next(mdef.SpellIds.Count)], false, 0);
+        return null;
+    }
     /// <summary>Corps de l'ancien while(100ms) — un tick de
     /// chase/riposte. Retourne false quand le combat doit sortir de la
     /// boucle (deaggro, cible morte, session morte).</summary>
@@ -485,27 +568,37 @@ public sealed partial class ZoneEntryFlow
             // --- Sorts du mob (S_Monster cols 40-49 → SpellIds
             // résolus contre S_Spell au chargement) — le natif
             // alterne auto-attaque et sorts selon son FSM
-            // (CAIFSMCombat). ~35 % par tick d'attaque ; un sort à
-            // distance peut être lancé sans approcher.
+            // (CAIFSMCombat::Update @0x084db480 : CheckUseSpell en
+            // premier, puis attaque/poursuite). Deux conditions avant
+            // le pick :
+            //  · PREMIER HIT — règle propriétaire : le mob ne lance
+            //    rien tant qu'une attaque de base n'a pas touché
+            //    (HasLandedMelee). Pas de flag équivalent dans le
+            //    décompilé, mais le natif n'arme le pick
+            //    (DetermineAttackMode) qu'en fin de pipeline Attack()
+            //    @0x084daf40 — dans l'état combat, le sort vient
+            //    après le swing ;
+            //  · PORTÉE — CheckUseSpell @0x084d91c0 : hors de la
+            //    borne (portée col28 ×0,5 + rayons + 0,5) pas de cast,
+            //    le mob poursuit/attaque — la chute vers l'approche
+            //    ci-dessous reproduit cette branche.
             var canRiposte = DateTime.UtcNow >= mob.NextRiposteAt &&
                 !mob.AttackLocked;
             // NB : `_services.Monsters` (enrichi ResolveRefs), pas
             // `Live.MonsterDefs` — les defs brutes du parser ont
             // `SpellIds` vide, les mobs ne castaient jamais.
-            if (canRiposte &&
+            if (canRiposte && mob.HasLandedMelee &&
                 _services.Monsters.GetDefinition(mob.MobId) is { } mdef &&
-                mdef.SpellIds.Count > 0 &&
-                Random.Shared.Next(100) < 35)
+                PickMobSpell(mob, mdef) is { } pick)
             {
-                var spellId = mdef.SpellIds[
-                    Random.Shared.Next(mdef.SpellIds.Count)];
+                var spellId = pick.SpellId;
                 var sdef = _services.Spells.GetDefinition(spellId);
-                var sRange = sdef is { Range: > 0 }
-                    ? sdef.Range * 1.5f + 4f : 25f;
-                if (d2 <= sRange * sRange)
+                if (MobSpellInCastRange(mdef, sdef, d2))
                 {
                     mob.NextRiposteAt = DateTime.UtcNow +
                         TimeSpan.FromMilliseconds(atkMs);
+                    if (pick.Countdown)
+                        mob.CountdownLastCast[pick.Slot] = DateTime.UtcNow;
                     await MobCastSpellAsync(session, st, mob, sdef,
                         generation, CancellationToken.None);
                     return mob.IsCombatLoopCurrent(generation,
@@ -532,16 +625,38 @@ public sealed partial class ZoneEntryFlow
                 // mob ne rattrapait jamais un joueur en course.
                 var d = Math.Sqrt(d2);
                 var step = Math.Min(0.72f, (float)d);
-                mob.X -= (float)(dx / d) * step;
-                mob.Y -= (float)(dy / d) * step;
+                var nx = mob.X - (float)(dx / d) * step;
+                var ny = mob.Y - (float)(dy / d) * step;
+                // Mur invisible : même grille NodeMap que le joueur
+                // (natif CheckLineOfMove/IsFakeBlock) — un boss qui
+                // poursuit ne traverse pas les murs ; il reste aggro
+                // sans bouger.
+                var chaseMap = MapCodeOfNode(mob.NodeId);
+                if (chaseMap != null &&
+                    _services.Scenes.IsNodeBlocked(chaseMap, nx, ny))
+                    return mob.IsCombatLoopCurrent(generation,
+                        (int)st.CharId);
+                mob.X = nx;
+                mob.Y = ny;
                 st.EntityPos[mob.Handle] = (mob.X, mob.Y);
                 // 326 MovePrediction broadcast au node — le flux de
                 // marche natif BroadCastToCanSee : position courante
                 // + destination = le client joue l'anim de course
                 // du mob pour TOUS les témoins (avant : la cible
                 // seule le voyait bouger, les autres un mob figé).
+                // dst = la position au PROCHAIN step (0,72 u ≈ un
+                // tick), bornée au cercle d'arrêt mêlée (~6 u) :
+                // un dst ancré sur la position joueur devenait
+                // intérieur au perso dès que celui-ci avançait —
+                // le mob rendu marchait DANS le modèle du perso
+                // (distance rendue 0 u pendant les coups).
+                var reach = 6.0;
+                var ahead = Math.Min(0.72,
+                    Math.Max(0, d - step - reach));
+                var dstX = mob.X - (float)(dx / d * ahead);
+                var dstY = mob.Y - (float)(dy / d * ahead);
                 await BroadcastMobMoveAsync(st, mob.Handle,
-                    mob.X, mob.Y, st.PosX, st.PosZ,
+                    mob.X, mob.Y, dstX, dstY,
                     CancellationToken.None);
                 return mob.IsCombatLoopCurrent(generation,
                     (int)st.CharId);
@@ -579,6 +694,14 @@ public sealed partial class ZoneEntryFlow
                 return false;
             var dmg = mres.Damage;
             var mobType = mres.Flags;
+            // PREMIER HIT — la règle « pas de sort avant un coup
+            // mêlée qui touche » est armée ici : tout outcome sauf
+            // Miss compte (block/parry = l'attaque a porté ; seul le
+            // miss = le swing a raté). Un coup sur joueur invincible
+            // compte aussi — l'attaque a connecté, c'est le cast qui
+            // attendait ce contact, pas les dégâts.
+            if (mres.Outcome != PhysicalOutcome.Miss)
+                mob.HasLandedMelee = true;
             // Invincibilité de migration/réapparition (char+0x3c
             // bit7 natif) : le mob ne peut ni toucher ni
             // engager — le coup est annulé côté serveur.
@@ -925,9 +1048,11 @@ public sealed partial class ZoneEntryFlow
             dmg, NativeCombatFormulas.SpellHitFlagsOf(sres), token);
 
         // Debuff du sort (S_Spell c39 ResultSpellId, chance c40,
-        // durée c41 Value) — gate EffectToLife natif : `dur != -1`
-        // (-9 = durée propre de l'effet → enchant posé sans icône
-        // 299) ; un miss n'applique rien. Caster = handle du mob.
+        // durée c41 Value EN DIXIÈMES de seconde — EnchantRestSeconds
+        // fait la conversion native GetRestTime()/10) — gate
+        // EffectToLife natif : `dur != -1` (-9 = durée propre de
+        // l'effet → enchant posé sans icône 299) ; un miss n'applique
+        // rien. Caster = handle du mob.
         if (sdef is { ResultSpellId: > 0 } && sdef.Value != -1 &&
             sres.Outcome != PhysicalOutcome.Miss && st.PlayerHp > 0 &&
             (sdef.ResultSpellChance <= 0 ||
@@ -935,7 +1060,8 @@ public sealed partial class ZoneEntryFlow
         {
             await AddPlayerEnchantAsync(session, st,
                 unchecked((int)mob.Handle), sdef.ResultSpellId,
-                sdef.Value, 1, token, hidden: sdef.Value == -9);
+                EnchantRestSeconds(sdef.Value), 1, token,
+                hidden: sdef.Value == -9);
         }
 
         // Procs de l'attaquant (registre enchant du mob — events 1/2,

@@ -143,6 +143,11 @@ public sealed partial class ZoneEntryFlow
             }
             else if (!inSight && gone && st.Sent.TryRemove(e.Handle, out _))
             {
+                // EntityPos aussi : sinon la map grossit d'une entrée
+                // par mob/npc vu dans la session (le mob-mort et la
+                // purge orphelins la vident déjà — la sortie de vue
+                // vivante l'oubliait).
+                st.EntityPos.TryRemove(e.Handle, out _);
                 st.HandleToEntity.TryRemove(e.Handle, out _);
                 await session.SendAsync(new CNC_CZ_ClientLifeEradicate
                 { Value = (int)e.Handle }, token);
@@ -224,6 +229,9 @@ public sealed partial class ZoneEntryFlow
             }
             else if (!inSight && gone && st.Sent.TryRemove(h, out _))
             {
+                // EntityPos conservé : c'est l'ancre de position de
+                // l'entité rejouée — la boucle Replayed la relit pour
+                // ré-annoncer le corps au retour en vue.
                 st.HandleToEntity.TryRemove(h, out _);
                 await session.SendPacketAsync(269,
                     BitConverter.GetBytes(h), token);

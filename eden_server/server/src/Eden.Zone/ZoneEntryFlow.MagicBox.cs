@@ -31,6 +31,7 @@ using Eden.Core.Game.MagicBox;
 using Eden.Core.Networking.Messages.Generated;
 using Eden.Core.Networking.Session;
 using Eden.Zone.Codecs;
+using Eden.Zone.Handlers;
 using Eden.Core.Logging;
 
 namespace Eden.Zone;
@@ -360,6 +361,10 @@ public sealed partial class ZoneEntryFlow
                                 .IsSocketCapable(mainDef) ? 1 : 0)),
                         ct);
             }
+            // Combos magicbox_enchant1-3 d'une pièce portée → stage
+            // « magicbox » du StatPipeline : Profil à jour sans relog.
+            await InventoryHandlers.EmitSelfEquipRefreshAsync(_services,
+                session, (int)st.CharId, ct);
             // 613 ClientMagicBoxResult natif.
             await session.SendPacketAsync(613,
                 MagicBoxPackets.BuildMagicBoxResult((short)p.Type,

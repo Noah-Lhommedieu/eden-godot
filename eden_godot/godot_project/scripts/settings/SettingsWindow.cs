@@ -46,12 +46,20 @@ public partial class SettingsWindow : Panel
     private CheckBox? _ckFxDeath, _ckFxWater, _ckFx3D, _ckFxPhoto,
         _ckFxGlare;
 
-    private const int WinW = 440, WinH = 600;
+    private const int WinW = 540, WinH = 640;
+
+    /// <summary>Libellé FR (voir <see cref="SettingsText"/>).</summary>
+    private static string T(string s) => SettingsText.T(s);
 
     /// <summary>Le HUD (chrome natif) était-il présent à la
     /// construction ? Sert à reconstruire la fenêtre quand on passe
     /// de l'écran login au jeu (cadre natif disponible).</summary>
     public bool BuiltWithHud { get; private set; }
+
+    /// <summary>HUD vu à la construction — réutilisé par
+    /// <see cref="RefreshChrome"/> au lieu de re-balayer l'arbre à
+    /// chaque affichage (invalidé si le HUD est re-monté).</summary>
+    private Hud.HudRoot? _hud;
 
     public override void _Ready()
     {
@@ -59,21 +67,30 @@ public partial class SettingsWindow : Panel
         Visible = false;
         // Ref ParameterPanel : x 469, y 66 en 1280×720 (élargi : les
         // libellés FR dépassaient les 340 px d'origine).
-        Hud.HudRoot.Pin(this, 0, 0, 0, 0, 420, 50, 420 + WinW, 50 + WinH);
-        var hud = Hud.HudExtensions.FindHud();
+        Hud.HudRoot.Pin(this, 0, 0, 0, 0, 370, 36, 370 + WinW, 36 + WinH);
+        var hud = _hud = Hud.HudExtensions.FindHud();
         BuiltWithHud = hud?.Tex != null;
         // Hors HUD (login) : cadre de repli aux couleurs de la palette
         // (FillClientArea lit le stylebox "panel" pour ses marges).
         AddThemeStyleboxOverride("panel", FallbackFrame());
-        Hud.DragHelper.EnsureTitleBar(this, "Settings");
-        Hud.DragHelper.FillClientArea(this, Hud.EeSkin.WindowBody);
-        Hud.DragHelper.Persist(this, "settings");
-        Theme = Hud.EeSkin.PanelTheme(hud);
+        {
+            using var _pt = Perf.PerfTrace.Scope("sw.titlebar");
+            Hud.DragHelper.EnsureTitleBar(this, "Settings");
+            Hud.DragHelper.FillClientArea(this, Hud.EeSkin.WindowBody);
+            Hud.DragHelper.Persist(this, "settings");
+        }
+        {
+            using var _pt = Perf.PerfTrace.Scope("sw.theme");
+            Theme = Hud.EeSkin.PanelTheme(hud);
+        }
         // Les initialiseurs de widgets émettent toggled/value_changed
         // — sous _sync sinon la construction écrirait des défauts
         // dans S (preset→Custom) et déclencherait ApplyAndSave.
         _sync = true;
-        Build();
+        {
+            using var _pt = Perf.PerfTrace.Scope("sw.build");
+            Build();
+        }
         RefreshAll();   // resync sur les valeurs chargées + _sync=false
         ApplyContrast();
         VisibilityChanged += () => { if (Visible) ApplyContrast(); };
@@ -108,6 +125,7 @@ public partial class SettingsWindow : Panel
     /// chaque changement de thème).</summary>
     public void ApplyContrast()
     {
+        using var _pt = Perf.PerfTrace.Scope("sw.contrast");
         var pal = Hud.EeSkin.Palette;
         var ink = InkOn(pal.Parchment);
         var dark = Lum(pal.Parchment) > 0.5f;
@@ -145,9 +163,10 @@ public partial class SettingsWindow : Panel
     /// construction est périmé).</summary>
     private void RefreshChrome()
     {
-        var hud = Hud.HudExtensions.FindHud();
-        if (hud?.Ctx != null && hud.Tex != null)
-            Hud.DragHelper.ApplyNativeChrome(this, hud.Ctx, hud.Tex);
+        if (_hud == null || !GodotObject.IsInstanceValid(_hud))
+            _hud = Hud.HudExtensions.FindHud();
+        if (_hud?.Ctx != null && _hud.Tex != null)
+            Hud.DragHelper.ApplyNativeChrome(this, _hud.Ctx, _hud.Tex);
     }
 
     /// <summary>Note de bas d'onglet (gris lisible selon thème).</summary>
@@ -155,13 +174,24 @@ public partial class SettingsWindow : Panel
     {
         var l = new Label
         {
-            Text = UiTextEn.Translate(text),
+            Text = T(text),
             AutowrapMode = TextServer.AutowrapMode.WordSmart,
         };
         (warn ? _warns : _muted).Add(l);
         box.AddChild(l);
         return l;
     }
+
+    /// <summary>Titres des onglets (ordre = index du TabContainer).</summary>
+    private static readonly string[] TabTitles =
+        { "Display", "Graphics", "Audio", "Hotkeys", "UI Settings",
+          "Preferences" };
+
+    private Action<VBoxContainer>[] _tabBuilders = null!;
+    private Action[] _tabSyncs = null!;
+    private readonly ScrollContainer?[] _tabSc =
+        new ScrollContainer?[6];
+    private readonly bool[] _builtTabs = new bool[6];
 
     private void Build()
     {
@@ -176,14 +206,25 @@ public partial class SettingsWindow : Panel
         _tabs = new TabContainer { SizeFlagsVertical = Control.SizeFlags.ExpandFill };
         root.AddChild(_tabs);
 
-        // Onglets de la ref : Display (affichage + graphismes) / Audio /
-        // Hotkeys / UI Settings.
-        BuildDisplayTab();
-        BuildGraphicsTab();
-        BuildAudioTab();
-        BuildKeysTab();
-        BuildInterfaceTab();
-        BuildPrefsTab();
+        // Construction paresseuse (mesuré --perf 2026-11-04 : la passe
+        // complète des 6 onglets coûtait ~55 ms de nœuds en une frame à
+        // la 1re ouverture) : chaque onglet ne reçoit qu'une coquille
+        // ScrollContainer+Margin+VBox (3 nœuds, titre visible) ; le
+        // contenu est injecté à la première sélection via TabChanged.
+        _tabBuilders = new Action<VBoxContainer>[]
+        {
+            BuildDisplayTab, BuildGraphicsTab, BuildAudioTab,
+            BuildKeysTab, BuildInterfaceTab, BuildPrefsTab,
+        };
+        _tabSyncs = new Action[]
+        {
+            SyncDisplay, SyncGraphics, SyncAudio,
+            RebuildKeyRows, SyncInterface, SyncPrefs,
+        };
+        for (var i = 0; i < TabTitles.Length; i++)
+            _tabSc[i] = Tab(TabTitles[i]);
+        _tabs.TabChanged += i => EnsureTab((int)i);
+        EnsureTab(_tabs.CurrentTab);
 
         // Ref : « Default | Confirm | Cancel » centrés. Les réglages
         // s'appliquent à chaud ; Confirm enregistre et ferme.
@@ -193,44 +234,82 @@ public partial class SettingsWindow : Panel
         };
         bar.AddThemeConstantOverride("separation", 10);
         root.AddChild(bar);
-        var reset = new Button { Text = UiTextEn.Translate("Default"), CustomMinimumSize = new Vector2(88, 22) };
+        var reset = new Button { Text = T("Default"), CustomMinimumSize = new Vector2(88, 22) };
         reset.Pressed += () =>
         {
             SettingsApplier.Instance?.ResetToDefaults();
             RefreshAll();
         };
         bar.AddChild(reset);
-        var apply = new Button { Text = UiTextEn.Translate("Confirm"), CustomMinimumSize = new Vector2(88, 22) };
+        var apply = new Button { Text = T("Confirm"), CustomMinimumSize = new Vector2(88, 22) };
         apply.Pressed += () =>
         {
             SettingsApplier.Instance?.ApplyAndSave();
             Hud.HudWindows.Close(this);
         };
         bar.AddChild(apply);
-        var close = new Button { Text = UiTextEn.Translate("Cancel"), CustomMinimumSize = new Vector2(88, 22) };
+        var close = new Button { Text = T("Cancel"), CustomMinimumSize = new Vector2(88, 22) };
         close.Pressed += () => Hud.HudWindows.Close(this);
         bar.AddChild(close);
+    }
+
+    /// <summary>Construit le contenu de l'onglet <paramref name="i"/>
+    /// à la première sélection (constructeurs + resync de l'onglet,
+    /// sous _sync pour que les valeurs par défaut des widgets ne
+    /// s'écrivent pas dans S).</summary>
+    private void EnsureTab(int i)
+    {
+        if (i < 0 || i >= _tabBuilders.Length || _builtTabs[i]) return;
+        _builtTabs[i] = true;
+        using var _pt = Perf.PerfTrace.Scope("sw.tab");
+        RunSynced(() =>
+        {
+            _tabBuilders[i](TabBox(_tabSc[i]!));
+            _tabSyncs[i]();
+        });
+        if (i == 5)
+        {
+            // SettingsWindow.PrefsVitals.cs injecte ses cases à la 1re
+            // visibilité de la fenêtre — avant la construction
+            // paresseuse de l'onglet : rejouer ici quand l'onglet
+            // existe vraiment (le flag interne est re-armé car la
+            // tentative précoce n'a rien injecté).
+            _vitalPrefsInjected = false;
+            InjectVitalValuePrefs();
+        }
     }
 
     /// <summary>Sélectionne un onglet (QA --settings-tab).</summary>
     public void SelectTab(int i)
     {
         if (_tabs != null && i >= 0 && i < _tabs.GetTabCount())
+        {
+            EnsureTab(i);
             _tabs.CurrentTab = i;
+        }
     }
 
     /// <summary>Resynchronise tous les widgets sur
     /// <see cref="SettingsApplier.S"/> (ouverture, reset).</summary>
     public void RefreshAll()
     {
+        using var _pt = Perf.PerfTrace.Scope("sw.refresh");
         _sync = true;
         try
         {
+            // L'onglet courant doit exister pour être synchronisé.
+            if (_tabs != null) EnsureTab(_tabs.CurrentTab);
             SyncDisplay();
             SyncGraphics();
-            SyncInterface();
+            {
+                using var _pi = Perf.PerfTrace.Scope("sw.sync_iface");
+                SyncInterface();
+            }
             SyncPrefs();
-            RebuildKeyRows();
+            {
+                using var _pk = Perf.PerfTrace.Scope("sw.keyrows");
+                RebuildKeyRows();
+            }
             SyncAudio();
         }
         finally { _sync = false; }
@@ -252,9 +331,12 @@ public partial class SettingsWindow : Panel
     /// (bug preset→CUSTOM constaté live).</summary>
     private void RunSynced(Action a)
     {
+        // Imbriquable (EnsureTab appelé depuis RefreshAll sous _sync) :
+        // on restaure la valeur précédente au lieu de forcer false.
+        var prev = _sync;
         _sync = true;
         try { a(); }
-        finally { _sync = false; }
+        finally { _sync = prev; }
     }
 
     // ==================================================================
@@ -268,6 +350,7 @@ public partial class SettingsWindow : Panel
             HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
         };
         _tabs!.AddChild(sc);
+        _tabs.SetTabTitle(_tabs.GetTabCount() - 1, T(title));
         var margin = new MarginContainer
         {
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
@@ -295,7 +378,7 @@ public partial class SettingsWindow : Panel
         // aucun contenu ne peut pousser la ligne hors du cadre.
         var l = new Label
         {
-            Text = UiTextEn.Translate(label),
+            Text = T(label),
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
             SizeFlagsStretchRatio = 5,
             CustomMinimumSize = new Vector2(0, 0),
@@ -319,7 +402,7 @@ public partial class SettingsWindow : Panel
         string[] items, int selected, Action<int> onSel)
     {
         var o = new OptionButton();
-        foreach (var it in items) o.AddItem(it);
+        foreach (var it in items) o.AddItem(T(it));
         if (selected >= 0) o.Selected = selected;
         o.ItemSelected += i =>
         {
@@ -334,10 +417,10 @@ public partial class SettingsWindow : Panel
     {
         var c = new CheckBox
         {
-            Text = label, ButtonPressed = value, ClipText = true,
+            Text = T(label), ButtonPressed = value, ClipText = true,
             CustomMinimumSize = new Vector2(0, 20),
             SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
-            TooltipText = label,
+            TooltipText = T(label),
         };
         c.Toggled += v => { if (!_sync) onToggle(v); };
         parent.AddChild(c);
@@ -385,11 +468,11 @@ public partial class SettingsWindow : Panel
     private VBoxContainer? _displayBox;
     private CheckBox? _ckVsync;
 
-    private void BuildDisplayTab()
+    private void BuildDisplayTab(VBoxContainer box)
     {
-        var box = TabBox(Tab("Display"));
         _displayBox = box;
 
+        SubHeader(box, "Screen");
         var resItems = ClientSettings.Resolutions
             .Select(r => $"{r.W}x{r.H}").ToArray();
         _optRes = Opt(box, "Resolution", resItems, -1, i =>
@@ -410,6 +493,7 @@ public partial class SettingsWindow : Panel
         _ckVsync = Check(box, "VSync",
             true, v => { S.VSync = v; Changed(); });
 
+        SubHeader(box, "Performance");
         _optFps = Opt(box, "Max FPS",
             new[] { "30", "60", "120", "Unlimited" }, 3, i =>
             {
@@ -455,10 +539,9 @@ public partial class SettingsWindow : Panel
     // ==================================================================
     // Onglet Graphismes (D1/D5)
 
-    private void BuildGraphicsTab()
+    private void BuildGraphicsTab(VBoxContainer box)
     {
-        // Ref : la qualité graphique est dans l'onglet Display.
-        var box = _displayBox ?? TabBox(Tab("Graphics"));
+        SubHeader(box, "Quality");
 
         _optPreset = Opt(box, "Optimize",
             new[] { "LOW", "MEDIUM", "HIGH", "ULTRA", "CUSTOM" },
@@ -479,68 +562,71 @@ public partial class SettingsWindow : Panel
             Changed();
         }
 
-        _ckShadows = Check(box, UiTextEn.Translate("Shadows"), true,
-            v => Gfx(() => S.Shadows = v));
-        _optShadowSize = Opt(box, "Shadow quality",
-            new[] { "512", "1024", "2048", "4096" }, 1, i =>
-                Gfx(() => S.ShadowMapSize = 512 << i));
-        // Ref « Field » = distance de la scène (Camera3D.Far).
-        (_slViewDist, _lblViewDist) = SliderRow(box,
-            UiTextEn.Translate("Field"), 400, 4000, 50, 2000, "{0:0}",
-            v => Gfx(() => S.ViewDistance = (float)v));
-        (_slCharDraw, _lblCharDraw) = SliderRow(box,
-            UiTextEn.Translate("Char Draw"), 5, 100, 5, 100, "{0:0}",
-            v => Gfx(() => S.CharDraw = (int)v));
-        (_slMaxFx, _lblMaxFx) = SliderRow(box,
-            UiTextEn.Translate("Max FX"), 0, 60, 1, 60, "{0:0}",
-            v => Gfx(() => S.MaxFx = (int)v));
+        _optTexQ = Opt(box, T("Textures"),
+            new[] { T("Low"), "Mid", T("High") }, 2, i =>
+                Gfx(() => S.TextureQuality = i));
+        _optModels = Opt(box, T("Models"),
+            new[] { T("Low"), T("High") },
+            1, i => Gfx(() => S.ModelQuality = i));
         _optAa = Opt(box, "Anti-aliasing",
             new[] { "Off", "FXAA", "MSAA x2", "MSAA x4", "MSAA x8" },
             1, i => Gfx(() => S.Antialiasing = (AntialiasMode)i));
-        _optModels = Opt(box, UiTextEn.Translate("Models"),
-            new[] { UiTextEn.Translate("Low"), UiTextEn.Translate("High") },
-            1, i => Gfx(() => S.ModelQuality = i));
-        _optTexQ = Opt(box, UiTextEn.Translate("Textures"),
-            new[] { UiTextEn.Translate("Low"), "Mid",
-                    UiTextEn.Translate("High") }, 2, i =>
-                Gfx(() => S.TextureQuality = i));
-        _ckBloom = Check(box, UiTextEn.Translate("Glow FX"), false,
-            v => Gfx(() => S.Bloom = v));
-        (_slBgFps, _lblBgFps) = SliderRow(box,
-            UiTextEn.Translate("Background"), 5, 60, 5, 30, "{0:0} fps",
-            v => { S.BackgroundFps = (int)v; Changed(); });
-        _optOutline = Opt(box, UiTextEn.Translate("Outline"),
-            new[] { UiTextEn.Translate("Off"),
-                    UiTextEn.Translate("Character"),
-                    UiTextEn.Translate("All") }, 0, i =>
+        _optOutline = Opt(box, T("Outline"),
+            new[] { T("Off"), T("Character"), T("All") }, 0, i =>
             {
                 S.Outline = (OutlineMode)i;
                 Changed();
             });
+
+        SubHeader(box, "Distance & density");
+        // Ref « Field » = distance de la scène (Camera3D.Far).
+        (_slViewDist, _lblViewDist) = SliderRow(box,
+            T("Field"), 400, 4000, 50, 2000, "{0:0}",
+            v => Gfx(() => S.ViewDistance = (float)v));
+        (_slCharDraw, _lblCharDraw) = SliderRow(box,
+            T("Char Draw"), 5, 100, 5, 100, "{0:0}",
+            v => Gfx(() => S.CharDraw = (int)v));
+        (_slMaxFx, _lblMaxFx) = SliderRow(box,
+            T("Max FX"), 0, 60, 1, 60, "{0:0}",
+            v => Gfx(() => S.MaxFx = (int)v));
+        (_slBgFps, _lblBgFps) = SliderRow(box,
+            T("Background"), 5, 60, 5, 30, "{0:0} fps",
+            v => { S.BackgroundFps = (int)v; Changed(); });
+
+        SubHeader(box, "Lighting");
+        _ckShadows = Check(box, T("Shadows"), true,
+            v => Gfx(() => S.Shadows = v));
+        _optShadowSize = Opt(box, "Shadow quality",
+            new[] { "512", "1024", "2048", "4096" }, 1, i =>
+                Gfx(() => S.ShadowMapSize = 512 << i));
+        _ckBloom = Check(box, T("Glow FX"), false,
+            v => Gfx(() => S.Bloom = v));
         _ckSsao = Check(box, "SSAO", false,
             v => Gfx(() => S.Ssao = v));
         _ckSsil = Check(box, "SSIL", false,
             v => Gfx(() => S.Ssil = v));
+
+        SubHeader(box, "World");
         _ckFog = Check(box, "Fog", true,
             v => Gfx(() => S.Fog = v));
-        _ckGrass = Check(box, UiTextEn.Translate("Groundcover"), true,
+        _ckGrass = Check(box, T("Groundcover"), true,
             v => Gfx(() => S.Grass = v));
         _ckParticles = Check(box, "Particles", true,
             v => Gfx(() => S.Particles = v));
 
         // Special FX (grille 2 colonnes comme la ref).
         var g = PrefGrid(box, "Special FX");
-        _ckFxDeath = Check(g, UiTextEn.Translate("Death"), true,
+        _ckFxDeath = Check(g, T("Death"), true,
             v => { S.FxDeath = v; Changed(); });
-        _ckFxPhoto = Check(g, UiTextEn.Translate("Photo"), false,
+        _ckFxPhoto = Check(g, T("Photo"), false,
             v => { S.FxPhoto = v; Changed(); });
-        _ckDof = Check(g, UiTextEn.Translate("Blur"), false,
+        _ckDof = Check(g, T("Blur"), false,
             v => Gfx(() => S.Dof = v));
-        _ckFxGlare = Check(g, UiTextEn.Translate("Glare"), false,
+        _ckFxGlare = Check(g, T("Glare"), false,
             v => { S.FxGlare = v; Changed(); });
-        _ckFxWater = Check(g, UiTextEn.Translate("Water Wave"), true,
+        _ckFxWater = Check(g, T("Water Wave"), true,
             v => { S.FxWater = v; Changed(); });
-        _ckFx3D = Check(g, UiTextEn.Translate("3D Effect"), true,
+        _ckFx3D = Check(g, T("3D Effect"), true,
             v => { S.Fx3D = v; Changed(); });
         foreach (var c in new[] { _ckFxDeath, _ckFxPhoto, _ckDof,
                      _ckFxGlare, _ckFxWater, _ckFx3D })
@@ -592,11 +678,11 @@ public partial class SettingsWindow : Panel
     private Label? _lblUiScale;
     private OptionButton? _optTheme, _optFont, _optFontSize, _optLang;
 
-    private void BuildInterfaceTab()
+    private void BuildInterfaceTab(VBoxContainer box)
     {
-        var box = TabBox(Tab("UI Settings"));
         Note(box, "Avoid setting font size larger than UI", warn: true);
 
+        SubHeader(box, "Size & style");
         (_slUiScale, _lblUiScale) = SliderRow(box,
             "UI Size", 0.5, 2.0, 0.05, 1.0, "{0:0.00}",
             v => { S.UiScale = (float)v; Changed(); });
@@ -608,6 +694,7 @@ public partial class SettingsWindow : Panel
                 Changed();
             });
 
+        SubHeader(box, "Fonts");
         _optFont = Opt(box, "Game Font",
             FontChoices(), 0, i =>
             {
@@ -625,7 +712,7 @@ public partial class SettingsWindow : Panel
         });
 
         (_slChatFont, _lblChatFont) = SliderRow(box,
-            UiTextEn.Translate("Chat Font Size"), 10, 20, 1,
+            T("Chat Font Size"), 10, 20, 1,
             HudPrefs.ChatFontSize, "{0:0}",
             v => HudPrefs.ChatFontSize = (int)v);
 
@@ -639,8 +726,15 @@ public partial class SettingsWindow : Panel
 
     /// <summary>Choix de police : « Default » (police Godot intégrée,
     /// <c>S.Font = ""</c>) en tête, puis les *.ttf sous
-    /// res://ui_textures + uidata/fonts natif.</summary>
-    private static string[] FontChoices()
+    /// res://ui_textures + uidata/fonts natif. Liste figée (les
+    /// polices ne changent pas en cours de session) — l'ancien rescan
+    /// récursif des dossiers tournait à chaque RefreshAll.</summary>
+    private static string[]? _fontChoices;
+
+    private static string[] FontChoices() =>
+        _fontChoices ??= ScanFontChoices();
+
+    private static string[] ScanFontChoices()
     {
         var set = new SortedSet<string>(StringComparer.OrdinalIgnoreCase)
             { "FONT01" };
@@ -693,9 +787,8 @@ public partial class SettingsWindow : Panel
 
     private GridContainer? _keyGrid;
 
-    private void BuildKeysTab()
+    private void BuildKeysTab(VBoxContainer box)
     {
-        var box = TabBox(Tab("Hotkeys"));
         _keyGrid = new GridContainer
         {
             Columns = 3, SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
@@ -710,9 +803,22 @@ public partial class SettingsWindow : Panel
         RebuildKeyRows();
     }
 
+    /// <summary>Empreinte de <see cref="ClientSettings.Bindings"/> au
+    /// dernier remplissage — la grille (~130 contrôles) n'est
+    /// reconstruite que si les bindings ont réellement changé
+    /// (re-ouverture de la fenêtre : re-sync instantanée).</summary>
+    private string? _keySig;
+
+    private static string KeySig(ClientSettings s) => string.Join(";",
+        s.Bindings.Select(kv =>
+            $"{kv.Key}={string.Join(',', kv.Value)}"));
+
     private void RebuildKeyRows()
     {
         if (_keyGrid == null) return;
+        var sig = KeySig(S);
+        if (sig == _keySig) return;
+        _keySig = sig;
         foreach (var c in _keyGrid.GetChildren())
         {
             _keyGrid.RemoveChild(c);
@@ -723,7 +829,7 @@ public partial class SettingsWindow : Panel
         {
             _keyGrid.AddChild(new Label
             {
-                Text = UiTextEn.Translate(label),
+                Text = T(label),
                 CustomMinimumSize = new Vector2(60, 0),
                 SizeFlagsHorizontal = Control.SizeFlags.ExpandFill,
                 VerticalAlignment = VerticalAlignment.Center,
@@ -742,9 +848,9 @@ public partial class SettingsWindow : Panel
 
             var def = new Button
             {
-                Text = UiTextEn.Translate("Default"),
+                Text = T("Default"),
                 CustomMinimumSize = new Vector2(60, 0),
-                TooltipText = $"{UiTextEn.Translate("Default")}: " +
+                TooltipText = $"{T("Default")}: " +
                     $"{InputBindings.Describe(defs)}",
             };
             var defaults = defs;
@@ -766,7 +872,7 @@ public partial class SettingsWindow : Panel
                 S.GetBinding(_captureAction!));
         _captureAction = action;
         _captureBtn = btn;
-        btn.Text = UiTextEn.Translate("… key ?");
+        btn.Text = T("… key ?");
     }
 
     /// <summary>Capture de remap — appelée par l'autoload en
@@ -846,10 +952,10 @@ public partial class SettingsWindow : Panel
     private HSlider? _slMaster, _slMusic, _slFx;
     private CheckBox? _ckMute;
 
-    private void BuildAudioTab()
+    private void BuildAudioTab(VBoxContainer box)
     {
-        var box = TabBox(Tab("Audio"));
-        _ckMute = Check(box, UiTextEn.Translate("Mute"), false,
+        SubHeader(box, "Volume");
+        _ckMute = Check(box, T("Mute"), false,
             v => { S.Mute = v; Changed(); });
         (_slMaster, _) = SliderRow(box, "Master",
             0, 100, 1, 100, "{0:0}%",

@@ -27,6 +27,12 @@
     <Content Include="Data\known_incomplete.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- Classifieur de status partagé avec le client (code pur, sans Godot) :
+       le test StatusSweepTests vérifie qu'il colle au serveur. -->
+  <ItemGroup>
+    <Compile Include="..\..\..\..\eden_godot\godot_project\scripts\data\tables\StatusKind.cs" Link="Linked\StatusKind.cs" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\src\Eden.Core\Eden.Core.csproj" />
     <ProjectReference Include="..\..\src\Eden.Login\Eden.Login.csproj" />

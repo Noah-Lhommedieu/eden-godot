@@ -855,6 +855,15 @@ public partial class MapLoader : Node3D
         }
         t = EdenClient.Perf.PerfTrace.Mark();
         AssetCatalog.PreloadGlbProtos(npcProtos, maxDegree: 1);
+        // Trésors au sol : les 10 familles coffre G00001-G00010 — un
+        // drop froid coûtait ~13 ms de parse dans HandleSeeTreasure
+        // (pic à chaque premier loot d'une session de grind).
+        var treasureProtos = new List<string>(10);
+        for (var i = 1; i <= 10; i++)
+            if (AssetCatalog.TryGetGlb($"item/model/G{i:00000}",
+                    out var tp))
+                treasureProtos.Add(tp);
+        AssetCatalog.PreloadGlbProtos(treasureProtos, maxDegree: 1);
         foreach (var st in skinTexs)
             AssetCatalog.GetTexture($"monster/texture/{st}");
         EdenClient.Perf.PerfTrace.Report(
@@ -1050,6 +1059,8 @@ public partial class MapLoader : Node3D
         }
         holder.AddChild(body);
         holder.AddChild(BlobShadow.Make(0.7f));
+        // Le blob ne se projette pas sur le modèle (couche 2).
+        BlobShadow.ExemptVisuals(holder);
     }
 
     /// <summary>Skin variante NPC (npclist col9) — délégué à

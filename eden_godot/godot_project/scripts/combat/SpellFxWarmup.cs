@@ -34,14 +34,23 @@ public static class SpellFxWarmup
             try
             {
                 var p = AssetCatalog.ResolveRawAsset($"effect/model/{model}.nif");
-                if (p == null) continue;
-                var nif = AssetCatalog.GetNifCached(p);
-                if (nif == null) continue;
-                foreach (var prop in nif.Properties)
-                    if (prop is NifTexturingProperty t)
-                        foreach (var m in t.AllMaps())
-                            if (m.File is { Length: > 0 } f)
-                                AssetCatalog.GetTexture("effect/texture/" + f);
+                if (p != null)
+                {
+                    var nif = AssetCatalog.GetNifCached(p);
+                    if (nif != null)
+                        foreach (var prop in nif.Properties)
+                            if (prop is NifTexturingProperty t)
+                                foreach (var m in t.AllMaps())
+                                    if (m.File is { Length: > 0 } f)
+                                        AssetCatalog.GetTexture("effect/texture/" + f);
+                }
+                // Chemin GLB : le proto parsé coûte 10-30 ms au
+                // premier spawn (mesuré fx:s12511 32 ms) — le faire
+                // ici, hors thread principal ; les spawns suivants
+                // ne paient qu'un Duplicate().
+                if (AssetCatalog.TryGetGlb($"effect/model/{model}",
+                        out var glb))
+                    AssetCatalog.GetProto(glb);
             }
             catch (Exception e) { GD.PrintErr($"[fxwarm] {model} : {e.Message}"); }
         }

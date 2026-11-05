@@ -28,8 +28,11 @@ public sealed class NativeFxOptions
     public bool OwnMaterials = true;
     /// <summary>Oriente les NiBillboardNode vers la caméra.</summary>
     public bool HandleBillboards = true;
-    /// <summary>Le V des UV est inversé par le chargeur (v' = 1 - v) : inverse le défilement V.</summary>
-    public bool InvertV = true;
+    /// <summary>Inverse le défilement V quand le chargeur a flippé les UV du mesh (v' = 1 - v).
+    /// Faux pour les chemins production : NifScene copie les UV NIF bruts (v=0 en haut, comme
+    /// Gamebryo) ; un -Tv appliqué ici inversait le scroll (flammes r253 pointe→base au lieu de
+    /// base→pointe). Vrai uniquement pour les arbres à UV flippés (DemoTree, bancs).</summary>
+    public bool InvertV;
     /// <summary>Particules déjà en vol au départ (s).</summary>
     public float Prewarm = 0f;
     /// <summary>Séquence NiControllerSequence embarquée à lire (null : la première, s'il y en a).</summary>

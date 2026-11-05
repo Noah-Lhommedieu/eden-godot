@@ -24,7 +24,8 @@ public static class ProfileView
     public static readonly (string Key, int Idx)[] CoreIndex =
         { ("str", 0), ("int", 1), ("agi", 2), ("wis", 3), ("lck", 4) };
 
-    /// <summary>Noms de résistances (id-1) — ordre natif.</summary>
+    /// <summary>Noms de résistances — ordre d'affichage natif (même
+    /// ordre que <c>PlayerStats.Resists</c>).</summary>
     public static readonly string[] ResistKeys =
     {
         "res_slash", "res_strike", "res_pierce", "res_fire",

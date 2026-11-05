@@ -31,8 +31,16 @@ public sealed partial class ZoneEntryFlow
         var npcId = BitConverter.ToInt16(payload, 4);      // s16 : npc cible
         var flag = BitConverter.ToInt16(payload, 6);       // s16 : 1 = portal stone
 
-        // B3 : état « TP libre » = flag GM (Privilege > 0) → gratuit.
-        if (flag == 1 && st.Privilege <= 0)
+        // TP libre natif : le flag==1 est honoré sans consommer de
+        // pierre quand un enchant « portail gratuit » est actif —
+        // scan natif Mission_TC_MissionGoto : effect_id -0x25c3
+        // (55869, état débutant ≤ lvl 80 posé par OnMigrationDone)
+        // ou -0x25c2 (55870, variante item-mall FREE). Le flag GM
+        // (Privilege > 0) reste un bypass dev.
+        var freePortal = st.Privilege > 0 ||
+            st.Statuses.ContainsKey(BeginnerPortalEnchantId) ||
+            st.Statuses.ContainsKey(FreePortalEnchantId);
+        if (flag == 1 && !freePortal)
         {
             // Consomme une Portal Stone (0x9c54 ou 0xa476 — ids natifs
             // de l'Execute). Source : la vue native `inventory`

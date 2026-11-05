@@ -127,10 +127,13 @@ public sealed partial class ZoneEntryFlow
     /// <summary>Résout l'arme équipée du joueur → pool de kfIds d'attaque
     /// + portée. L'équipement (table equipment, loc 10 = slot arme) donne
     /// l'itemId ; S_Item col8 = kind d'arme mappé vers le bucket KFM
-    /// natif ; col48 × 1.5 = portée (CCharFormula::AttackRange) + rayons
-    /// (~1) + tolérance native 1.5 + marge 3 pour ne jamais rejeter un
-    /// coup que le client juge en portée (sa poursuite s'arrête à SA
-    /// portée — un rejet serveur casserait le combat).
+    /// natif ; col48 = portée BRUTE — CCharFormula::AttackRange
+    /// @0x083f6f10 lit <c>CItemData+0x48</c> sans multiplicateur, puis
+    /// CanAttack @0x08417120 ajoute rayon cible + rayon lanceur +
+    /// tolérance DAT_087b2730. +5 ici couvre ces termes et garantit
+    /// qu'aucun coup jugé en portée par le client n'est rejeté (sa
+    /// poursuite s'arrête à SA portée — un rejet serveur casserait
+    /// le combat).
     /// Aucune arme trouvée → pool désarmé (1121/1122/2121) + 7.5u.</summary>
     /// <param name="prefetched">Paires (loc, itemId) déjà chargées —
     /// pipeline d'entrée hors-boucle (Phase 2) : évite la requête
@@ -226,7 +229,7 @@ public sealed partial class ZoneEntryFlow
             st.WeaponKfIds = MotionParser.PlayerAttackKfIds(mainKind,
                 offKind);
             st.AttackRange = mainKind != 0
-                ? mainRange * 1.5f + 3f : 7.5f;
+                ? mainRange + 5f : 7.5f;
             // Source unique de la liste de procs : équipement ∪ licences
             // actives à proc — le merge certificats doit être refait à
             // CHAQUE rebuild (équipement, classe, carte CC, entrée) ou
@@ -772,19 +775,35 @@ public sealed partial class ZoneEntryFlow
 
     /// <summary>Régénération passive HP+MP — tick 5 s. Modèle natif
     /// (scheduler CCharacter, zone/decompiled.c ~0x80fff50) : hors
-    /// combat → RecoverHP+RecoverMP ; flag combat (char+0x3c&amp;4) → MP
-    /// SEUL à ¼ de cadence ; assis → taux 1.0 vs 0.25 debout (×4).
-    /// Base 5 %/tick par pool (gameplay constaté natif). Émet attr 0x11
-    /// self + attr 0 broadcast pour HP, attr 0x12 self pour MP (les
-    /// formats utilisés par le burst de changement de classe —
-    /// capture zsniff 17:22:35.925).</summary>
+    /// <summary>Boucle de régénération HP/MP — modèle natif.
+    /// <c>CCharacter::StartRegeneration</c> zone @0x840a3d0 pose un
+    /// enchant permanent (dur −2) <c>RegenerateEffectID</c> dont
+    /// <c>SEffectData+0x110</c> = 30 dixièmes → tick de
+    /// <b>3 secondes</b> (<c>CEnchant::CalculerNextTime</c>
+    /// @0x85628b0). <c>CPlayerFactory::Regenerate</c> @0x8100100 :
+    /// flag combat (char+0x3c&amp;4) → MP SEUL à taux 0,25 ; assis
+    /// (char+0x3b &lt; 0) → taux 1,0 ; debout → paras S_Parameter
+    /// 26/27 = 0,3 HP / 0,5 MP. Les formules
+    /// <c>CCharFormula::RecoverHP</c> @0x83f5b40 /
+    /// <c>RecoverMP</c> @0x83f59e0 donnent
+    /// <c>((Level + Équip) × (Class% + Buff%)/100 + BuffFlat)
+    ///   × para × (Buff%+100)/100 + BuffFlat + floor) × rate</c>
+    /// avec para 301 = 0,05 / floor 302 = 20 (HP) et para 303 = 0,05 /
+    /// floor 304 = 40 (MP). Les champs « Level » (char+0x368/+0x36c,
+    /// deux slots adjacents) sont interprétés comme niveau personnel
+    /// / niveau de classe — HYPOTHESIS, cf. EDENFR-GAPS (les bonus
+    /// équipement « HP/MP recovery » et %classe ne sont pas encore
+    /// mappés → class% = 100, équip = 0). Émet attr 0x11 self + attr 0
+    /// broadcast pour HP, attr 0x12 self pour MP (formats du burst de
+    /// changement de classe — capture zsniff 17:22:35.925).</summary>
     private Task PlayerRegenLoopAsync(NetSession session, EntryState st,
         CancellationToken token)
     {
         // Point d'entrée : arme le premier pas — chaque tick se
         // reschedule sur la boucle (pas de tâche while+Delay : les
-        // mutations HP/MP vivent sur le fil unique).
-        ScheduleOnLoop(TimeSpan.FromSeconds(5),
+        // mutations HP/MP vivent sur le fil unique). Cadence native
+        // 3 s (SEffectData+0x110 = 30 ds).
+        ScheduleOnLoop(TimeSpan.FromSeconds(3),
             _ => PlayerRegenStepAsync(session, st, token), token);
         return Task.CompletedTask;
     }
@@ -800,17 +819,23 @@ public sealed partial class ZoneEntryFlow
         try
         {
                 if (!st.Migrated) return;
-                // Autosave ~1 min (12 ticks × 5 s) — un kill du process
+                // Autosave ~1 min (20 ticks × 3 s) — un kill du process
                 // ne doit pas perdre niveau/XP/position (constaté live).
-                if (++st.RegenTicks % 12 == 0)
+                if (++st.RegenTicks % 20 == 0)
                     await SaveCharacterAsync(st);
                 if (st.Dead || st.PlayerHp <= 0) goto Reschedule;
 
-                // HP : hors combat seulement (natif : combat = MP seul).
+                // Taux natifs (Regenerate @0x8100100) : combat → MP
+                // seul à 0,25 ; assis → 1,0 ; debout → HP 0,3 / MP 0,5.
+                var sitting = st.Sitting;
+                var hpRate = sitting ? 1.0 : 0.3;
+                var mpRate = sitting ? 1.0 : st.InCombat ? 0.25 : 0.5;
+
+                // RecoverHP @0x83f5b40 : ((level+équip)×class%/100)
+                // ×0,05 + 20, ×taux. Pas de regen HP en combat natif.
                 if (!st.InCombat && st.PlayerHp < st.PlayerMaxHp)
                 {
-                    var hpTick = Math.Max(1, st.PlayerMaxHp / 20); // 5 %
-                    if (st.Sitting) hpTick *= 4;
+                    var hpTick = RegenTick(st.Level, 20, hpRate);
                     st.PlayerHp = Math.Min(st.PlayerMaxHp,
                         st.PlayerHp + hpTick);
                     await SendVitalHpAsync(session, st.CharId, st.PlayerHp, st.PlayerMaxHp,
@@ -819,12 +844,11 @@ public sealed partial class ZoneEntryFlow
                         st.PlayerHp, st.PlayerHp, CancellationToken.None);
                 }
 
-                // MP : toujours — ÷4 en combat (natif : taux 0.25).
+                // RecoverMP @0x83f59e0 : même gabarit, floor para 304
+                // = 40 ; en combat le natif ne regen QUE le MP.
                 if (st.PlayerMp < st.PlayerMaxMp)
                 {
-                    var mpTick = Math.Max(1, st.PlayerMaxMp / 20); // 5 %
-                    if (st.Sitting) mpTick *= 4;
-                    else if (st.InCombat) mpTick = Math.Max(1, mpTick / 4);
+                    var mpTick = RegenTick(st.ClassLevel, 40, mpRate);
                     st.PlayerMp = Math.Min(st.PlayerMaxMp,
                         st.PlayerMp + mpTick);
                     await SendVitalMpAsync(session, st.CharId, st.PlayerMp, st.PlayerMaxMp,
@@ -843,9 +867,20 @@ public sealed partial class ZoneEntryFlow
         // Re-schedule tant que la session vit — l'annulation du token
         // (déconnexion) expire silencieusement l'événement.
         if (st.Migrated)
-            ScheduleOnLoop(TimeSpan.FromSeconds(5),
+            ScheduleOnLoop(TimeSpan.FromSeconds(3),
                 _ => PlayerRegenStepAsync(session, st, token), token);
     }
+
+    /// <summary>Montant d'un tick de régénération — gabarit natif
+    /// <c>CCharFormula::RecoverHP/RecoverMP</c> :
+    /// <c>(statLevel × para + floor) × rate</c> borné à 1. statLevel
+    /// = terme « Level » (niveau perso pour HP / niveau de classe
+    /// pour MP — char+0x368/+0x36c), para = S_Parameter 301/303
+    /// (0,05), floor = 302/304 (20/40), rate = Regenerate (1,0 assis,
+    /// 0,3/0,5 debout, 0,25 combat-MP).</summary>
+    internal static int RegenTick(int statLevel, int floor,
+        double rate) =>
+        Math.Max(1, (int)Math.Round((statLevel * 0.05 + floor) * rate));
 
     private static int _blastSerial;
 

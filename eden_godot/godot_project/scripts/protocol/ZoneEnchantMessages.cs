@@ -481,6 +481,15 @@ public static class EntityBuffs
     /// s'y abonnent pour se repeindre.</summary>
     public static event Action? Changed;
 
+    /// <summary>Un enchant devient actif sur une entité — le visuel
+    /// col3 « BUFF特效 » de c_enchant doit être attaché au modèle
+    /// (flammes du DoT, étoiles du stun, ZZZ du sommeil…).
+    /// (handle, effectId, restSec ; restSec &lt; 0 = permanent).</summary>
+    public static event Action<int, int, int>? VisualAdded;
+    /// <summary>Un enchant n'est plus actif — le visuel est retiré
+    /// (300, purge locale, reset, snapshot sans lui).</summary>
+    public static event Action<int, int>? VisualRemoved;
+
     /// <summary>Copie de la liste d'un handle (jamais null).</summary>
     public static List<BuffInst> Snapshot(int handle)
     {
@@ -493,7 +502,8 @@ public static class EntityBuffs
     public static void ApplyAdd(ZoneEnchantAdd m)
     {
         var list = ListFor(m.Handle);
-        list.RemoveAll(b => b.EffectId == (m.EffectId & 0xffff));
+        if (list.RemoveAll(b => b.EffectId == (m.EffectId & 0xffff)) > 0)
+            VisualRemoved?.Invoke(m.Handle, m.EffectId & 0xffff);
         list.Add(new BuffInst
         {
             EffectId = m.EffectId & 0xffff,
@@ -502,6 +512,7 @@ public static class EntityBuffs
             Level = Math.Max(1, (int)m.Level),
             ReceivedUtc = DateTime.UtcNow,
         });
+        VisualAdded?.Invoke(m.Handle, m.EffectId & 0xffff, m.RestSeconds);
         Changed?.Invoke();
     }
 
@@ -510,25 +521,41 @@ public static class EntityBuffs
     {
         if (_map.TryGetValue(m.Handle, out var l) &&
             l.RemoveAll(b => b.EffectId == (m.EffectId & 0xffff)) > 0)
+        {
+            VisualRemoved?.Invoke(m.Handle, m.EffectId & 0xffff);
             Changed?.Invoke();
+        }
     }
 
     /// <summary>301 : remplace la liste complète d'un handle
-    /// (snapshot cible/SeeChar — liste vide = purge).</summary>
+    /// (snapshot cible/SeeChar — liste vide = purge). Les visuels
+    /// suivent le diff : conservés pour les ids encore présents,
+    /// posés pour les nouveaux, retirés pour les disparus.</summary>
     public static void ApplyUpdate(ZoneEnchantUpdate m)
     {
         var list = ListFor(m.Handle);
-        list.Clear();
+        var keep = new HashSet<int>();
+        foreach (var e in m.Entries) keep.Add(e.EffectId & 0xffff);
+        for (var i = list.Count - 1; i >= 0; i--)
+            if (!keep.Contains(list[i].EffectId))
+            {
+                VisualRemoved?.Invoke(m.Handle, list[i].EffectId);
+                list.RemoveAt(i);
+            }
         foreach (var e in m.Entries)
         {
+            var eid = e.EffectId & 0xffff;
+            var fresh = list.All(b => b.EffectId != eid);
+            list.RemoveAll(b => b.EffectId == eid);
             list.Add(new BuffInst
             {
-                EffectId = e.EffectId & 0xffff,
+                EffectId = eid,
                 CasterId = e.CasterId,
                 RestSeconds = e.RestSeconds,
                 Level = Math.Max(1, (int)e.Level),
                 ReceivedUtc = DateTime.UtcNow,
             });
+            if (fresh) VisualAdded?.Invoke(m.Handle, eid, e.RestSeconds);
         }
         Changed?.Invoke();
     }
@@ -538,16 +565,28 @@ public static class EntityBuffs
     public static void ApplyTeamMember(ZoneTeamMemberEnchant m)
     {
         var list = ListFor(m.MemberCharId);
-        list.Clear();
+        var keep = new HashSet<int>();
+        foreach (var e in m.Entries) keep.Add(e.EffectId & 0xffff);
+        for (var i = list.Count - 1; i >= 0; i--)
+            if (!keep.Contains(list[i].EffectId))
+            {
+                VisualRemoved?.Invoke(m.MemberCharId, list[i].EffectId);
+                list.RemoveAt(i);
+            }
         foreach (var e in m.Entries)
         {
+            var eid = e.EffectId & 0xffff;
+            var fresh = list.All(b => b.EffectId != eid);
+            list.RemoveAll(b => b.EffectId == eid);
             list.Add(new BuffInst
             {
-                EffectId = e.EffectId & 0xffff,
+                EffectId = eid,
                 RestSeconds = e.RestSeconds,
                 Level = Math.Max(1, (int)e.Level),
                 ReceivedUtc = DateTime.UtcNow,
             });
+            if (fresh)
+                VisualAdded?.Invoke(m.MemberCharId, eid, e.RestSeconds);
         }
         Changed?.Invoke();
     }
@@ -556,7 +595,13 @@ public static class EntityBuffs
     /// serveur actuel — posé pour complétude).</summary>
     public static void ApplyReset(ZoneEnchantReset m)
     {
-        if (_map.Remove(m.Handle)) Changed?.Invoke();
+        if (_map.TryGetValue(m.Handle, out var l))
+        {
+            foreach (var b in l)
+                VisualRemoved?.Invoke(m.Handle, b.EffectId);
+            _map.Remove(m.Handle);
+            Changed?.Invoke();
+        }
     }
 
     /// <summary>445/446 : fige/défige le décompte d'un enchant.</summary>
@@ -579,31 +624,41 @@ public static class EntityBuffs
     /// décompte arrivé à 0).</summary>
     private static void Prune(int handle)
     {
-        if (_map.TryGetValue(handle, out var l) &&
-            l.RemoveAll(b => b.Remaining == 0) > 0)
-            Changed?.Invoke();
+        if (!_map.TryGetValue(handle, out var l)) return;
+        for (var i = l.Count - 1; i >= 0; i--)
+            if (l[i].Remaining == 0)
+            {
+                VisualRemoved?.Invoke(handle, l[i].EffectId);
+                l.RemoveAt(i);
+                Changed?.Invoke();
+            }
     }
 
     /// <summary>Purge périodique appelée par BuffBridge — permet au
     /// décompte arrivé à 0 de disparaître même sans snapshot.</summary>
     public static void PruneAll()
     {
-        var any = false;
-        foreach (var l in _map.Values)
-            any |= l.RemoveAll(b => b.Remaining == 0) > 0;
-        if (any) Changed?.Invoke();
+        foreach (var kv in _map) Prune(kv.Key);
     }
 
     /// <summary>Retire toutes les entrées d'un handle (despawn).</summary>
     public static void Clear(int handle)
     {
-        if (_map.Remove(handle)) Changed?.Invoke();
+        if (_map.Remove(handle, out var l))
+        {
+            foreach (var b in l)
+                VisualRemoved?.Invoke(handle, b.EffectId);
+            Changed?.Invoke();
+        }
     }
 
     /// <summary>Vide tout (changement de zone/déconnexion).</summary>
     public static void ClearAll()
     {
         if (_map.Count == 0) return;
+        foreach (var kv in _map)
+            foreach (var b in kv.Value)
+                VisualRemoved?.Invoke(kv.Key, b.EffectId);
         _map.Clear();
         Changed?.Invoke();
     }

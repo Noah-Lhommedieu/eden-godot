@@ -132,6 +132,14 @@ public partial class PlayerController : CharacterBody3D
     // --- état souris ---
     private bool _lDown, _rDown, _mDown;
     private bool _lDrag, _rDrag;
+    /// <summary>Cap de référence du déplacement. = _yaw sauf pendant un
+    /// glisser GAUCHE commencé en déplacement : gelé, la caméra tourne
+    /// seule sans orienter ni dévier le joueur.</summary>
+    private float _moveYaw;
+    private bool _lFreeze;
+    /// <summary>Cap de marche gelé pendant le steer droit en
+    /// déplacement (rattrapage caméra — <see cref="FollowCamera"/>).</summary>
+    private bool IsMoving => _keyMove || _moveTarget.HasValue;
     private Vector2 _pressPos;
     // Grâce UI (s) — survit aux frames où GuiGetHoveredControl() rend
     // null pendant la reconstruction d'un panel (curseur + clics).
@@ -214,6 +222,22 @@ public partial class PlayerController : CharacterBody3D
 
     /// <summary>Fixe la cible point&amp;click (coords Godot au sol).</summary>
     public void SetMoveTarget(Vector3 target) => _moveTarget = target;
+
+    /// <summary>Déplacement forcé par le serveur (267 ClientGoto self —
+    /// charge <c>CEC_DistanceGoto</c>, goto admin, recalage) : snappe la
+    /// position et annule la marche point&amp;click/route en cours pour
+    /// ne pas repartir vers l'ancienne cible.</summary>
+    public void TeleportTo(Vector3 pos)
+    {
+        GlobalPosition = pos;
+        _moveTarget = null;
+        _path.Clear();
+        _pathHead = null;
+        _talkTarget = null;
+        _keyMove = false;
+        _lastPhysPos = pos;
+        _marker?.Hide();
+    }
 
     private readonly Queue<Vector3> _path = new();
     private Vector3? _pathHead;
@@ -347,7 +371,6 @@ public partial class PlayerController : CharacterBody3D
             new Vector2(1.1f, 0.12f))
         {
             FixedFill = new Color(0.85f, 0.15f, 0.2f),
-            Position = new Vector3(0f, 1.92f, 0f),
         };
         AddChild(_npBar);
         _npName = new Label3D
@@ -355,7 +378,6 @@ public partial class PlayerController : CharacterBody3D
             Name = "OwnName",
             Text = _ownName,
             Billboard = BaseMaterial3D.BillboardModeEnum.Enabled,
-            Position = new Vector3(0f, 2.1f, 0f),
             FontSize = 40,
             PixelSize = 0.006f,
             OutlineSize = 10,
@@ -368,13 +390,55 @@ public partial class PlayerController : CharacterBody3D
         {
             if (_npName != null && IsInstanceValid(_npName))
                 _npName.Visible = Hud.HudPrefs.ShowOwnName;
+            RefreshOwnValues();
         };
+        Hud.HudPrefs.SelfMpChanged += RefreshOwnValues;
+        RelayoutOverhead();
+    }
+
+    /// <summary>Valeurs PV/PM au-dessus de soi (pref « valeurs au-dessus
+    /// des entités », PM connus pour soi).</summary>
+    private void RefreshOwnValues()
+    {
+        if (!IsInstanceValid(this)) return;
+        Hud.OverheadLayout.SetValues(this, Hud.OverheadLayout.ValuesText(
+            Hud.HudPrefs.OverheadValues, Hud.HudPrefs.SelfMaxHp > 0,
+            Hud.HudPrefs.SelfHp, Hud.HudPrefs.SelfMaxHp,
+            Hud.HudPrefs.SelfMaxMp > 0, Hud.HudPrefs.SelfMp,
+            Hud.HudPrefs.SelfMaxMp));
+        RelayoutOverhead();
+    }
+
+    private float _stackTop = 2.3f;
+    private float _modelTop = 1.9f;
+    private bool _topDirty = true;
+
+    /// <summary>Repose barre/valeurs/nom/guilde/titre au-dessus du corps
+    /// réel (AABB du modèle, monture comprise). Le sommet est mesuré
+    /// une fois par visuel (SetVisual → _topDirty) : le re-mesurer à
+    /// chaque relayout (chaque update PV/PM, donc chaque tick regen)
+    /// faisait osciller la pile au rythme de l'AABB skinnée animée —
+    /// le pseudo « monte et descend » alors que le perso est immobile.</summary>
+    public void RelayoutOverhead()
+    {
+        if (_model == null) return;
+        if (_topDirty)
+        {
+            _modelTop = Hud.OverheadLayout.ModelTop(_model, _modelTop);
+            _topDirty = false;
+        }
+        _stackTop = Hud.OverheadLayout.Apply(this, _modelTop);
+        // Blob Decal sous le joueur : jamais de projection sur ses
+        // propres meshes (couche 2, monture/équipement compris).
+        World.BlobShadow.ExemptVisuals(this);
+        if (System.Environment.GetEnvironmentVariable("EDEN_OVH_DBG") == "1")
+            GD.Print($"[ovh] top stack={_stackTop:0.00} by {Hud.OverheadLayout.DbgTop}");
     }
 
     /// <summary>Bulle de dialogue 3D (268 ClientSay) au-dessus de soi
     /// (ref-shots/shot_0082 : bulle « bonjour » sur le perso).</summary>
     public void ShowBubble(string text) =>
-        Scene.SpeechBubble3D.Show(this, text, 2.1f + 0.5f);
+        Scene.SpeechBubble3D.Show(this, text, _stackTop + 0.15f);
 
     /// <summary>Ratio HP pour la barre au-dessus de soi.</summary>
     public void SetNameplateHp(long hp, long maxHp)
@@ -473,6 +537,7 @@ public partial class PlayerController : CharacterBody3D
                     $"{tex?.ResourcePath ?? tex?.GetInstanceId().ToString()} " +
                     $"aabb={(mi.Mesh != null ? mi.GetAabb().Size.ToString() : "?")}");
             }
+        _topDirty = true;
     }
 
     // ------------------------------------------------------------------
@@ -531,8 +596,11 @@ public partial class PlayerController : CharacterBody3D
                 {
                     if (!_lDown) break;
                     _lDown = false;
+                    // Clic gauche SANS drag : sélection entité /
+                    // marche-sol (sémantique clic gauche classique) ;
+                    // seul le DRAG est réservé à la caméra.
                     if (!_lDrag && !OverHud()) OnLeftClick(mb.Position);
-                    _lDrag = false;
+                    _lDrag = false; _lFreeze = false;
                     UpdateMouseMode();
                 }
                 break;
@@ -549,7 +617,51 @@ public partial class PlayerController : CharacterBody3D
                     if (!_rDown) break;
                     _rDown = false;
                     if (_rDrag) EndSteer();
-                    else if (!OverHud()) OnRightClick(mb.Position);
+                    else if (!OverHud())
+                    {
+                        if (_corneStep != -1)
+                            GD.Print($"[corne-test] release droit " +
+                                $"@{mb.Position} moving={IsMoving} " +
+                                $"space={GetWorld3D()?.DirectSpaceState != null}");
+                        // --corne-test : la vraie dispatch GUI a eu lieu
+                        // (cet événement prouve qu'aucun contrôle ne
+                        // l'a avalée) — le point est recalculé ICI car
+                        // la caméra a deux états (physics/idle) et le
+                        // point projeté en _Process rate la capsule
+                        // au dispatch. Un Control mangeur bloquerait
+                        // l'arrivée de ce release → repro couverte.
+                        if (_corneAwaitClick != null)
+                        {
+                            var ce = _corneAwaitClick;
+                            _corneAwaitClick = null;
+                            if (GodotObject.IsInstanceValid(ce) &&
+                                ce.IsInsideTree() && _camera != null)
+                            {
+                                var pt = _camera.UnprojectPosition(
+                                    ce.GlobalPosition +
+                                    new Vector3(0f, 1.1f, 0f));
+                                var got = PickEntity(pt);
+                                GD.Print($"[corne-test] release→pick=" +
+                                    $"{got?.Kind}/" +
+                                    $"{got?.EntityId & 0xFFFF} " +
+                                    $"attendu={ce.EntityId & 0xFFFF}");
+                                OnRightClick(pt);
+                                // Les projections de deux NPC proches
+                                // se recouvrent : le pick peut rendre
+                                // le voisin. Le test mesure le flux
+                                // dialogue serveur — on force la cible.
+                                if (_talkTarget != ce)
+                                {
+                                    SelectTarget(ce);
+                                    _talkTarget = ce;
+                                }
+                            }
+                        }
+                        // En déplacement : logique du clic gauche (sélection /
+                        // marche) ; à l'arrêt : clic droit habituel.
+                        else if (IsMoving) OnLeftClick(mb.Position);
+                        else OnRightClick(mb.Position);
+                    }
                     _rDrag = false;
                     UpdateMouseMode();
                 }
@@ -567,18 +679,29 @@ public partial class PlayerController : CharacterBody3D
     {
         // Hygiène : release consommé par le GUI → états coincés.
         if (_lDown && !mm.ButtonMask.HasFlag(MouseButtonMask.Left))
-        { _lDown = false; _lDrag = false; }
+        { _lDown = false; _lDrag = false; _lFreeze = false; }
         if (_rDown && !mm.ButtonMask.HasFlag(MouseButtonMask.Right))
         { _rDown = false; _rDrag = false; }
         // Bascule clic → drag au-delà du seuil.
         if (_lDown && !_lDrag && (mm.Position - _pressPos).Length()
                 >= DragThresholdPx)
+        {
             _lDrag = true;
+            // Drag gauche = caméra seule, TOUJOURS : le cap de marche
+            // est gelé (que le perso bouge déjà ou non — règle
+            // « LMB en déplacement » généralisée à tout LMB).
+            _lFreeze = true;
+            _moveYaw = _yaw;
+        }
         if (_rDown && !_rDrag && (mm.Position - _pressPos).Length()
                 >= DragThresholdPx)
         {
             _rDrag = true;
             _steerYawBefore = ModelYaw;
+            // Steering pur : la marche suit la caméra pendant le
+            // drag droit (le modèle « rattrape » l'axe caméra — pas
+            // de gel du cap, sinon la direction de marche reste
+            // figée et le steer est cassé).
         }
         if (_lDrag || _rDrag || _mDown)
         {
@@ -625,6 +748,18 @@ public partial class PlayerController : CharacterBody3D
         var ent = PickEntity(screenPos);
         if (ent != null)
         {
+            // Trésor au sol (kind 0 + entityId — les joueurs sont
+            // kind 0 avec entityId 0, cf. PickTreasure) : le clic
+            // gauche natif ramasse — approche à portée puis NCID 35
+            // (même flux que le clic droit de TreasurePickup).
+            if (ent.Kind == 0 && ent.EntityId != 0 &&
+                GetTree().Root.FindChild("TreasurePickup", true, false)
+                    is TreasurePickup loot)
+            {
+                Cancelled?.Invoke();
+                loot.BeginPickup(ent);
+                return;
+            }
             // Sélection de la cible côté serveur (124 → 444).
             SelectTarget(ent);
             GD.Print($"[input] select h=0x{ent.Handle:x8} " +
@@ -788,7 +923,10 @@ public partial class PlayerController : CharacterBody3D
     /// marche arrière, pas pendant un drag caméra).</summary>
     private void FollowCamera(Vector2 moveDir, float dt)
     {
-        if (!Hud.HudPrefs.CameraFollow || _lDrag || _rDrag || _mDown)
+        // Actif pendant _rDrag : c'est le « rattrapage » demandé sur
+        // tout mouvement au clic droit (cap gelé → la caméra se
+        // recale derrière le modèle qui va tout droit).
+        if (!Hud.HudPrefs.CameraFollow || _lDrag || _mDown)
             return;
         var dir = moveDir.Normalized();
         var fwd = new Vector2(-Mathf.Sin(_yaw), -Mathf.Cos(_yaw));
@@ -1117,6 +1255,9 @@ public partial class PlayerController : CharacterBody3D
         var mounted = MountAnimator != null;
         MoveRecord = _keyMove ? CurrentMoveRecord() : DirectionalLocomotion.Fwd;
         var moveAnim = DirectionalLocomotion.AnimFor(MoveRecord, mounted);
+        // L'anim de flanc de la monture suit les records natifs 9/10
+        // (A→move02, D→move03 — voir MountAnimFor).
+        var mountAnim = DirectionalLocomotion.MountAnimFor(MoveRecord);
         if (_keyMove && _recHeld < 0.6f && (_recHeld += dt) >= 0.6f)
             GD.Print($"[dirmove] held rec={MoveRecord} " +
                 $"cur={Animator?.Current} mount={MountAnimator?.Current}" +
@@ -1126,12 +1267,13 @@ public partial class PlayerController : CharacterBody3D
             _recHeld = 0f;
             _lastLoggedRecord = MoveRecord;
             GD.Print($"[dirmove] rec={MoveRecord} anim={moveAnim} " +
+                $"mountAnim={mountAnim} " +
                 $"camYaw={Mathf.RadToDeg(_yaw):F0} " +
                 $"modelYaw={Mathf.RadToDeg(ModelYaw):F0} " +
                 $"cur={Animator?.Current}");
         }
         if (Animator != null) Animator.MoveAnim = moveAnim;
-        if (MountAnimator != null) MountAnimator.MoveAnim = moveAnim;
+        if (MountAnimator != null) MountAnimator.MoveAnim = mountAnim;
         var animScale = EdenClient.Game.MoveAnimSpeed.Scale(
             EdenClient.Game.MoveAnimSpeed.BonusPct(MoveSpeedMul), mounted);
         if (Animator != null) Animator.MoveSpeedScale = animScale;
@@ -1139,7 +1281,7 @@ public partial class PlayerController : CharacterBody3D
         if (moveDir != Vector2.Zero && _model != null && !_rDrag)
         {
             var targetYaw = _keyMove
-                ? _yaw + DirectionalLocomotion.FaceOffset(MoveRecord, mounted)
+                ? _moveYaw + DirectionalLocomotion.FaceOffset(MoveRecord, mounted)
                 : Mathf.Atan2(-moveDir.X, -moveDir.Y);
             var cur = _model.Rotation.Y;
             var d = Mathf.Wrap(targetYaw - cur, -Mathf.Pi, Mathf.Pi);
@@ -1152,7 +1294,7 @@ public partial class PlayerController : CharacterBody3D
             // est une valeur DÉRIVÉE : le relire ici referait la boucle
             // (faceBase += _dbgYaw à chaque frame) → cap gelé.
             if (!_keyMove) _faceBase = targetYaw;
-            else if (!_dbgYawOn) _faceBase = _yaw;
+            else if (!_dbgYawOn) _faceBase = _moveYaw;
         }
 
         // Approche NPC : à portée → TalkToNpc (NCID 10) une fois.
@@ -1178,6 +1320,7 @@ public partial class PlayerController : CharacterBody3D
                     {
                         NpcId = (int)npc.Handle,
                     });
+                    _corneTalkSent = true;
                     GD.Print($"[input] TalkToNpc h=0x{npc.Handle:x8}");
                 }
                 else if (_rechase >= RechaseSeconds)
@@ -1282,6 +1425,11 @@ public partial class PlayerController : CharacterBody3D
 
     // --- pilotes de validation smoke -------------------------------
     private double _demoT = -1;
+    /// <summary>--strafe=&lt;left|right&gt;[:sec] : action de déplacement
+    /// maintenue (injection input pour preuves live) ; le suffixe
+    /// optionnel retarde le départ (laisser la monture s'attacher).</summary>
+    private string? _strafeAction;
+    private double _strafeDelay;
     private int _demoStep;
     private double _cursorT;
     private int _cursorStep;
@@ -1289,6 +1437,18 @@ public partial class PlayerController : CharacterBody3D
     private bool _cursorArgChecked;
     private bool _cursorDone;
     private string _cursorUiTarget = "";
+    // --corne-test : repro « dialogue mort après la boutique ».
+    private int _corneStep = -1;
+    private bool _corneArgChecked;
+    private double _corneT;
+    private int _corneNpcA = -1, _corneNpcB = -1;
+    private RemoteEntity? _corneA, _corneB;
+    private bool _corneTalkSent;
+    private bool _corneKeepOpen;
+    private Vector2 _corneSpA, _corneSpB;
+    private int _corneMiss;
+    private int _corneClicks;
+    private RemoteEntity? _corneAwaitClick;
     private const string ShotsDir =
         "/home/ster2lune/Bureau/reverseden/portage/godot-shots";
 
@@ -1463,8 +1623,9 @@ public partial class PlayerController : CharacterBody3D
     };
 
     /// <summary>--input-test : schéma souris voulu. Glisser GAUCHE =
-    /// caméra seule (cap du perso inchangé) ; glisser DROIT = caméra +
-    /// perso orienté sur la caméra ; clic droit simple sur PNJ = talk.
+    /// caméra seule (cap du perso inchangé) ; clic gauche simple =
+    /// sélection/marche ; glisser DROIT = caméra + steer (le modèle
+    /// rattrape l'axe caméra) ; clic droit simple = talk/action.
     /// Passe par les vrais handlers (HandleMouseButton/Motion).</summary>
     private void MouseSchemeTest(Vector2 c)
     {
@@ -1497,6 +1658,38 @@ public partial class PlayerController : CharacterBody3D
                 < 0.001f);
         Check("gauche: relâché sans clic-déplacement (pas de _moveTarget)",
             moveL == null && _moveTarget == null);
+        // 1b) Clic gauche simple À L'ARRÊT sur du sol : marche-sol
+        //     (sémantique clic gauche classique — le drag seul est
+        //     réservé à la caméra).
+        _moveTarget = null;
+        {
+            var gp = c;
+            foreach (var dy in new[] { 0f, 60f, 120f, 180f, 240f })
+                if (TryPickGround(c + new Vector2(0f, dy), out _))
+                { gp = c + new Vector2(0f, dy); break; }
+            if (Hud.HudPrefs.LeftClickRoute && TryPickGround(gp, out _))
+            {
+                HandleMouseButton(TestBtn(MouseButton.Left, true, gp));
+                HandleMouseButton(TestBtn(MouseButton.Left, false, gp));
+                Check("arrêt+clic gauche sol: pose la cible-sol",
+                    _moveTarget != null);
+            }
+            else GD.Print("[input-test] SKIP clic gauche arrêt : " +
+                "pas de sol sous le centre");
+        }
+        // 1c) Glisser gauche À L'ARRÊT : pendant le maintien, le cap
+        //     de marche est gelé (caméra seule — même règle qu'en
+        //     déplacement). On vérifie via _moveYaw qui ne suit plus
+        //     _yaw pendant le drag.
+        var yawBefore = _yaw;
+        HandleMouseButton(TestBtn(MouseButton.Left, true, c));
+        HandleMouseMotion(TestMove(MouseButtonMask.Left,
+            c + new Vector2(90f, 0f), new Vector2(90f, 0f)));
+        Check("arrêt+glisser gauche: cap de marche gelé pendant drag",
+            _lFreeze && Mathf.Abs(Mathf.Wrap(_yaw - yawBefore,
+                -Mathf.Pi, Mathf.Pi)) > 0.1f);
+        HandleMouseButton(TestBtn(MouseButton.Left, false,
+            c + new Vector2(90f, 0f)));
         // 2) Glisser droit.
         c0 = _yaw; m0 = ModelYaw;
         HandleMouseButton(TestBtn(MouseButton.Right, true, c));
@@ -1517,6 +1710,7 @@ public partial class PlayerController : CharacterBody3D
         Check("droit: yaw perso suit la caméra",
             Mathf.Abs(Mathf.Wrap(yawR - camR, -Mathf.Pi, Mathf.Pi))
                 < 0.001f);
+        MovingMouseSchemeTest(c, Check);
         // 3) Clic droit simple sur un PNJ : conversation (approche+talk).
         var npc = Registry?.Entities.Values.FirstOrDefault(e =>
             e.Kind == 8 && GodotObject.IsInstanceValid(e));
@@ -1533,6 +1727,81 @@ public partial class PlayerController : CharacterBody3D
                 _talkTarget == npc && !_rDrag);
         }
         GD.Print($"[input-test] {(ok ? "OK" : "ECHEC")}");
+    }
+
+    /// <summary>--input-test, EN DÉPLACEMENT (touche avant tenue) : glisser
+    /// gauche = caméra seule (cap + direction de marche gelés) ; clic gauche
+    /// simple = sélection/marche ; clic droit simple = même logique.</summary>
+    private void MovingMouseSchemeTest(Vector2 c, Action<string, bool> check)
+    {
+        Input.ActionPress("move_forward");
+        _keyMove = true;
+        var d0 = InputMoveDir();
+        var cam0 = _yaw; var m0 = ModelYaw;
+        HandleMouseButton(TestBtn(MouseButton.Left, true, c));
+        HandleMouseMotion(TestMove(MouseButtonMask.Left,
+            c + new Vector2(60f, 0f), new Vector2(60f, 0f)));
+        HandleMouseMotion(TestMove(MouseButtonMask.Left,
+            c + new Vector2(100f, 0f), new Vector2(40f, 0f)));
+        var camMoved = Mathf.Abs(Mathf.Wrap(_yaw - cam0, -Mathf.Pi, Mathf.Pi));
+        var dFrozen = InputMoveDir();
+        var frozen = _lFreeze;
+        var mYaw = ModelYaw;
+        HandleMouseButton(TestBtn(MouseButton.Left, false,
+            c + new Vector2(100f, 0f)));
+        var dAfter = InputMoveDir();
+        GD.Print($"[input-test] déplacement+glisser gauche: camYaw " +
+            $"{Mathf.RadToDeg(cam0):F1}->{Mathf.RadToDeg(_yaw):F1} dir0={d0} " +
+            $"dirPendant={dFrozen} dirApres={dAfter}");
+        check("déplacement+gauche: glisser gelé", frozen);
+        check("déplacement+gauche: caméra tourne", camMoved > 0.1f);
+        check("déplacement+gauche: direction de marche inchangée",
+            (dFrozen - d0).Length() < 1e-4f);
+        check("déplacement+gauche: cap du perso inchangé",
+            Mathf.Abs(Mathf.Wrap(mYaw - m0, -Mathf.Pi, Mathf.Pi)) < 0.001f);
+        check("déplacement+gauche relâché: la marche suit de nouveau la caméra",
+            (dAfter - d0).Length() > 0.1f);
+        // Clic gauche simple en déplacement : même sémantique qu'à
+        // l'arrêt (sélection / marche-sol).
+        _moveTarget = null;
+        {
+            var gp2 = c;
+            foreach (var dy in new[] { 0f, 60f, 120f, 180f, 240f })
+                if (TryPickGround(c + new Vector2(0f, dy), out _))
+                { gp2 = c + new Vector2(0f, dy); break; }
+            if (Hud.HudPrefs.LeftClickRoute && TryPickGround(gp2, out _))
+            {
+                HandleMouseButton(TestBtn(MouseButton.Left, true, gp2));
+                HandleMouseButton(TestBtn(MouseButton.Left, false, gp2));
+                check("déplacement+clic gauche sol: pose la cible-sol",
+                    _moveTarget != null);
+            }
+            else GD.Print("[input-test] SKIP clic gauche déplacement : " +
+                "pas de sol sous le centre");
+        }
+        // Clic droit simple en déplacement : logique du clic gauche.
+        var routed = false;
+        var gp = c;
+        foreach (var dy in new[] { 0f, 60f, 120f, 180f, 240f })
+            if (TryPickGround(c + new Vector2(0f, dy), out _))
+            { gp = c + new Vector2(0f, dy); break; }
+        if (Hud.HudPrefs.LeftClickRoute && TryPickGround(gp, out _))
+        {
+            HandleMouseButton(TestBtn(MouseButton.Right, true, gp));
+            HandleMouseButton(TestBtn(MouseButton.Right, false, gp));
+            routed = _moveTarget != null;
+            check("déplacement+clic droit simple: pose la cible-sol", routed);
+        }
+        else GD.Print("[input-test] SKIP clic droit en déplacement : pas de sol sous le centre");
+        // Hors déplacement : clic droit sur le sol ne marche toujours pas.
+        Input.ActionRelease("move_forward");
+        _keyMove = false; _moveTarget = null;
+        HandleMouseButton(TestBtn(MouseButton.Right, true, c));
+        HandleMouseButton(TestBtn(MouseButton.Right, false, c));
+        check("arrêt+clic droit sol: inchangé (pas de marche)",
+            _moveTarget == null);
+        _moveTarget = null;
+        _moveYaw = _yaw;
     }
 
     private bool _walkArgChecked;
@@ -1745,6 +2014,371 @@ public partial class PlayerController : CharacterBody3D
         }
     }
 
+    /// <summary>Pilote --corne-test : clic droit réel sur npcA
+    /// (Corne → boutique), fermeture de la boutique comme le joueur
+    /// (ShopState.Close + LeaveShop), puis clic droit réel sur npcB.
+    /// Chaque étape logue le contrôle GUI survolé : si la boutique ou
+    /// un résidu de fenêtre mange le hover, le clic est perdu et
+    /// _talkTarget ne s'arme jamais — le rapport est reproduit.</summary>
+    private void CorneTest(double delta)
+    {
+        _corneT += delta;
+        var vp = GetViewport();
+        if (vp == null || _camera == null || Registry == null) return;
+        var t0 = _corneT;
+        switch (_corneStep)
+        {
+            case 0:
+            {
+                if (t0 % 1.0 < delta) // log d'attente ~1×/s
+                    GD.Print($"[corne-test] attente npc A " +
+                        $"#{_corneNpcA} t={t0:0.#}s " +
+                        $"ents={Registry.Entities.Count}");
+                _corneA = _corneNpcA >= 0
+                    ? Registry.Entities.Values.FirstOrDefault(e =>
+                        e.Kind == 8 &&
+                        (e.EntityId & 0xFFFF) == _corneNpcA &&
+                        GodotObject.IsInstanceValid(e) &&
+                        e.IsInsideTree())
+                    : (t0 > 1.5 ? NearestEntity(8) : null);
+                if (_corneA == null ||
+                    !GodotObject.IsInstanceValid(_corneA) ||
+                    !_corneA.IsInsideTree())
+                {
+                    if (t0 > 30)
+                    {
+                        GD.Print("[corne-test] FAIL : aucun NPC A " +
+                            $"en vue (voulu #{_corneNpcA})");
+                        _corneStep = -1;
+                    }
+                    break;
+                }
+                GD.Print($"[corne-test] A={_corneA.DisplayName} " +
+                    $"id={_corneA.EntityId} h=0x{_corneA.Handle:x8}");
+                AimCameraAt(_corneA);
+                _corneStep = 1; _corneT = 0;
+                break;
+            }
+            case 1 when t0 > 0.6:
+            {
+                if (!GodotObject.IsInstanceValid(_corneA) ||
+                    !_corneA.IsInsideTree())
+                {
+                    _corneStep = 0; _corneT = 0;   // entité recréée
+                    break;
+                }
+                if (!TryClick(_corneA!, vp, out _corneSpA))
+                {
+                    AimCameraAt(_corneA!);
+                    if (++_corneMiss > 40)
+                    {
+                        GD.Print("[corne-test] FAIL : A jamais " +
+                            "pickable à l'écran");
+                        _corneStep = -1;
+                    }
+                    _corneT = 0.2;
+                    break;      // NPC hors cadre : re-vise
+                }
+                _corneMiss = 0;
+                _corneStep = 2; _corneT = 0;
+                break;
+            }
+            case 2 when t0 > 0.4:
+            {
+                // Re-visée immédiate : le NPC idle bouge — le point
+                // confirmé il y a 0,4 s peut déjà rater la capsule.
+                if (!TryClick(_corneA!, vp, out _corneSpA))
+                {
+                    _corneStep = 1; _corneT = 0.5;
+                    break;
+                }
+                var hov = vp.GuiGetHoveredControl();
+                // ParseInputEvent = vraie dispatch GUI : un Control
+                // sous le point AVALE l'événement avant
+                // _UnhandledInput — le seul moyen de reproduire
+                // « fenêtre fantôme qui mange les clics ».
+                _corneAwaitClick = _corneA;
+                Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                    true, _corneSpA));
+                Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                    false, _corneSpA));
+                GD.Print($"[corne-test] clic A @{_corneSpA} → hov=" +
+                    $"{hov?.GetPath().ToString() ?? "null"} " +
+                    $"uiGrace={_uiGrace:0.##} armé={_talkTarget == _corneA}");
+                _corneClicks = 1;
+                _corneStep = 20; _corneT = 0;   // armement au tick
+                break;
+            }
+            case 20 when t0 > 0.5:
+            {
+                // _talkTarget est purgé dès l'envoi du NCID 10 — un
+                // talk déjà parti n'a plus l'armement. On valide donc
+                // « armé ou émis », pas seulement « armé ».
+                if (_corneTalkSent)
+                {
+                    _corneStep = 3; _corneT = 0;
+                    break;
+                }
+                if (_talkTarget == _corneA)
+                {
+                    if (t0 > 25)
+                    {
+                        GD.Print("[corne-test] FAIL : talk A armé " +
+                            "mais jamais émis");
+                        _corneStep = -1;
+                    }
+                    break;      // en route vers A — attendre l'émission
+                }
+                {
+                    var hov = vp.GuiGetHoveredControl();
+                    var repick = PickEntity(_corneSpA);
+                    if (repick == _corneA && _corneClicks < 8)
+                    {
+                        // Le release n'a pas armé le talk : soit le
+                        // GUI a avalé le clic (repro du rapport),
+                        // soit le pick a raté — on réessaie avec la
+                        // même dispatch réelle.
+                        _corneAwaitClick = _corneA;
+                        Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                            true, _corneSpA));
+                        Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                            false, _corneSpA));
+                        _corneClicks++;
+                        GD.Print($"[corne-test] clic A raté " +
+                            $"(re-pick ok) — essai {_corneClicks}/8");
+                        _corneT = 0;
+                        break;
+                    }
+                    GD.Print($"[corne-test] FAIL : clic A mangé — " +
+                        $"hov={hov?.GetPath().ToString() ?? "null"} " +
+                        $"re-pick={repick?.Kind}/" +
+                        $"{repick?.EntityId & 0xFFFF} " +
+                        $"essais={_corneClicks}");
+                    _corneStep = -1;
+                    break;
+                }
+            }
+            case 3 when _corneTalkSent || t0 > 25:
+            {
+                GD.Print($"[corne-test] talk A émis={_corneTalkSent} " +
+                    $"t={t0:0.#}s");
+                if (!_corneTalkSent) { _corneStep = -1; break; }
+                _corneStep = 4; _corneT = 0;
+                break;
+            }
+            case 4 when t0 > 2.5:
+            {
+                GD.Print($"[corne-test] après A : shop=" +
+                    $"{Protocol.ShopState.IsOpen} dlg=" +
+                    $"{DialogueVisible(vp)}");
+                if (Protocol.ShopState.IsOpen && !_corneKeepOpen)
+                {
+                    Protocol.ShopState.Close();
+                    Send(Protocol.ZoneEmptyRequest.LeaveShop);
+                    GD.Print("[corne-test] boutique refermée (63)");
+                }
+                else if (Protocol.ShopState.IsOpen)
+                    GD.Print("[corne-test] boutique laissée ouverte");
+                _corneStep = 5; _corneT = 0;
+                break;
+            }
+            case 5 when t0 > 0.8:
+            {
+                _corneB = _corneNpcB >= 0
+                    ? Registry.Entities.Values.FirstOrDefault(e =>
+                        e.Kind == 8 &&
+                        (e.EntityId & 0xFFFF) == _corneNpcB &&
+                        GodotObject.IsInstanceValid(e) &&
+                        e.IsInsideTree())
+                    : Registry.Entities.Values
+                        .Where(e => e.Kind == 8 && e != _corneA &&
+                            GodotObject.IsInstanceValid(e) &&
+                            e.IsInsideTree())
+                        .OrderBy(e => (e.GlobalPosition - GlobalPosition)
+                            .LengthSquared())
+                        .FirstOrDefault();
+                if (_corneB == null ||
+                    !GodotObject.IsInstanceValid(_corneB) ||
+                    !_corneB.IsInsideTree())
+                {
+                    if (_corneB == null)
+                    {
+                        GD.Print("[corne-test] FAIL : aucun NPC B " +
+                            "en vue");
+                        _corneStep = -1;
+                    }
+                    else _corneT = 0;   // pas encore attaché : re-tente
+                    break;
+                }
+                GD.Print($"[corne-test] B={_corneB.DisplayName} " +
+                    $"id={_corneB.EntityId} h=0x{_corneB.Handle:x8}");
+                AimCameraAt(_corneB);
+                _corneTalkSent = false;   // re-arme pour B (était true de A)
+                _corneStep = 6; _corneT = 0;
+                break;
+            }
+            case 6 when t0 > 0.6:
+            {
+                if (!GodotObject.IsInstanceValid(_corneB) ||
+                    !_corneB.IsInsideTree())
+                {
+                    _corneStep = 5; _corneT = 0;
+                    break;
+                }
+                if (!TryClick(_corneB!, vp, out _corneSpB))
+                {
+                    AimCameraAt(_corneB!);
+                    if (++_corneMiss > 40)
+                    {
+                        GD.Print("[corne-test] FAIL : B jamais " +
+                            "pickable à l'écran");
+                        _corneStep = -1;
+                    }
+                    _corneT = 0.2;
+                    break;
+                }
+                _corneMiss = 0;
+                _corneStep = 7; _corneT = 0;
+                break;
+            }
+            case 7 when t0 > 0.4:
+            {
+                if (!TryClick(_corneB!, vp, out _corneSpB))
+                {
+                    _corneStep = 6; _corneT = 0.5;
+                    break;
+                }
+                var hov = vp.GuiGetHoveredControl();
+                _corneAwaitClick = _corneB;
+                Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                    true, _corneSpB));
+                Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                    false, _corneSpB));
+                GD.Print($"[corne-test] clic B @{_corneSpB} → hov=" +
+                    $"{hov?.GetPath().ToString() ?? "null"} " +
+                    $"uiGrace={_uiGrace:0.##} armé={_talkTarget == _corneB}");
+                _corneClicks = 1;
+                _corneStep = 21; _corneT = 0;
+                break;
+            }
+            case 21 when t0 > 0.5:
+            {
+                if (_corneTalkSent)
+                {
+                    _corneStep = 8; _corneT = 0;
+                    break;
+                }
+                if (_talkTarget == _corneB)
+                {
+                    if (t0 > 25)
+                    {
+                        GD.Print("[corne-test] FAIL : talk B armé " +
+                            "mais jamais émis");
+                        _corneStep = -1;
+                    }
+                    break;
+                }
+                {
+                    var hov = vp.GuiGetHoveredControl();
+                    var repick = PickEntity(_corneSpB);
+                    if (repick == _corneB && _corneClicks < 8)
+                    {
+                        _corneAwaitClick = _corneB;
+                        Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                            true, _corneSpB));
+                        Input.ParseInputEvent(TestBtn(MouseButton.Right,
+                            false, _corneSpB));
+                        _corneClicks++;
+                        GD.Print($"[corne-test] clic B raté " +
+                            $"(re-pick ok) — essai {_corneClicks}/8");
+                        _corneT = 0;
+                        break;
+                    }
+                    GD.Print($"[corne-test] REPRODUIT : clic B mangé " +
+                        $"(talk jamais armé) — hov=" +
+                        $"{hov?.GetPath().ToString() ?? "null"} " +
+                        $"re-pick={repick?.Kind}/" +
+                        $"{repick?.EntityId & 0xFFFF} " +
+                        $"essais={_corneClicks}");
+                    _corneStep = -1;
+                    break;
+                }
+            }
+            case 8 when _corneTalkSent || t0 > 25:
+            {
+                GD.Print($"[corne-test] talk B émis={_corneTalkSent} " +
+                    $"t={t0:0.#}s");
+                if (!_corneTalkSent) { _corneStep = -1; break; }
+                _corneStep = 9; _corneT = 0;
+                break;
+            }
+            case 9 when t0 > 3:
+            {
+                var dlg = DialogueVisible(vp);
+                GD.Print($"[corne-test] après B : shop=" +
+                    $"{Protocol.ShopState.IsOpen} dlg={dlg} — FIN");
+                vp.GetTexture().GetImage()
+                    .SavePng("/tmp/corne_final.png");
+                _corneStep = -1;
+                break;
+            }
+        }
+    }
+
+    /// <summary>La fenêtre de dialogue NPC est-elle affichée ?</summary>
+    private static bool DialogueVisible(Viewport vp) =>
+        vp.GetTree().Root
+            .FindChildren("NpcDialogue", "", true, false)
+            .Cast<Control>()
+            .Any(c => c.IsVisibleInTree());
+
+    /// <summary>Vise la caméra vers l'entité puis place le pointeur
+    /// réel sur son torse projeté. false si hors écran.</summary>
+    private void AimCameraAt(RemoteEntity e)
+    {
+        var to = e.GlobalPosition - GlobalPosition;
+        _yaw = Mathf.Atan2(-to.X, -to.Z);
+        ApplyCamAngles();
+    }
+
+    private bool TryClick(RemoteEntity e, Viewport vp, out Vector2 sp)
+    {
+        sp = default;
+        if (!GodotObject.IsInstanceValid(e) || !e.IsInsideTree())
+            return false;
+        // Cherche la hauteur projetée qui tombe réellement sur la
+        // capsule de pick (un torse +1.1 peut passer au-dessus d'un
+        // petit NPC ou à travers le décor). Passe 1 : près du torse —
+        // au dispatch le raycast est indisponible (espace verrouillé
+        // pendant le flush input) et le pick retombe sur le rayon
+        // écran PickRadiusPx autour du torse +1.1 ; un point hors de
+        // ce rayon échouerait au dispatch alors qu'il touche ici.
+        // Passe 2 : n'importe quel point qui touche la capsule.
+        var torso = _camera!.UnprojectPosition(
+            e.GlobalPosition + new Vector3(0f, 1.1f, 0f));
+        for (var pass = 0; pass < 2; pass++)
+            foreach (var h in new[] { 1.1f, 0.6f, 0.2f, 1.6f })
+            {
+                var world = e.GlobalPosition + new Vector3(0f, h, 0f);
+                var p = _camera.UnprojectPosition(world);
+                if (_camera.IsPositionBehind(world) ||
+                    !vp.GetVisibleRect().HasPoint(p))
+                    continue;
+                if (pass == 0 &&
+                    (p - torso).Length() >= PickRadiusPx * 0.8f)
+                    continue;
+                if (PickEntity(p) == e)
+                {
+                    sp = p;
+                    Input.WarpMouse(sp);
+                    Input.ParseInputEvent(new InputEventMouseMotion
+                    { Position = sp });
+                    return true;
+                }
+            }
+        return false;
+    }
+
     /// <summary>Entité du type demandé dont le torse se projette dans
     /// le viewport (sinon le warp pointer tombe hors écran).</summary>
     private bool ProjectedEntity(byte kind, Viewport vp,
@@ -1824,12 +2458,40 @@ public partial class PlayerController : CharacterBody3D
             _lastBarHp = Hud.HudPrefs.SelfHp;
             _lastBarMax = Hud.HudPrefs.SelfMaxHp;
             _npBar?.SetHp(_lastBarHp, _lastBarMax);
+            RefreshOwnValues();
         }
         // --input-test : pilote les handlers de clic pour la smoke.
         if (_demoT < 0)
             foreach (var a in OS.GetCmdlineArgs()
                          .Concat(OS.GetCmdlineUserArgs()))
                 if (a.StartsWith("--input-test")) { _demoT = 0; break; }
+        // --strafe=<left|right> : maintient une touche de déplacement
+        // latéral — preuve live du mapping anim monture (move02/03 +
+        // pivot ±90°) sans pilote clavier.
+        if (_strafeAction == null)
+            foreach (var a in OS.GetCmdlineArgs()
+                         .Concat(OS.GetCmdlineUserArgs()))
+                if (a.StartsWith("--strafe="))
+                {
+                    var v = a["--strafe=".Length..];
+                    var ci = v.IndexOf(':');
+                    if (ci >= 0 && double.TryParse(v[(ci + 1)..],
+                            out var d))
+                        _strafeDelay = d;
+                    var dir = ci >= 0 ? v[..ci] : v;
+                    _strafeAction = dir == "left" ? "move_left"
+                        : dir == "right" ? "move_right" : "";
+                    GD.Print($"[strafe] action={_strafeAction} " +
+                        $"delay={_strafeDelay:0.#}");
+                    break;
+                }
+        if (_strafeDelay > 0)
+            _strafeDelay -= delta;
+        if (_strafeDelay <= 0 && _strafeAction is { Length: > 0 } sa)
+        {
+            Input.ActionPress(sa);
+            _keyMove = true;
+        }
         if (JumpDiag && !_argsDumped)
         {
             _argsDumped = true;
@@ -1856,6 +2518,39 @@ public partial class PlayerController : CharacterBody3D
                 GD.Print("[cursor-test] actif — attente NetEntities");
         }
         if (_cursorTest && !_cursorDone) CursorTest(delta);
+
+        // --corne-test[=<idA>,<idB>] : rejoue le rapport « après la
+        // boutique de Corne, impossible de parler aux autres NPC ».
+        // Clics droits réels (warp + press/release) comme le joueur.
+        if (!_corneArgChecked)
+        {
+            _corneArgChecked = true;
+            foreach (var a in OS.GetCmdlineArgs()
+                         .Concat(OS.GetCmdlineUserArgs()))
+                if (a.StartsWith("--corne-test"))
+                {
+                    _corneStep = 0;
+                    var v = a["--corne-test".Length..].TrimStart('=');
+                    _corneKeepOpen = v.EndsWith(",open");
+                    var ids = v.Split(',');
+                    if (ids.Length > 0 && int.TryParse(ids[0], out var ia))
+                        _corneNpcA = ia;
+                    if (ids.Length > 1 && int.TryParse(ids[1], out var ib))
+                        _corneNpcB = ib;
+                    // Le SpringArm oscille d'un état à l'autre quand
+                    // son cast touche le relief — le point projeté pour
+                    // un état de caméra rate la capsule dans l'autre
+                    // (le dispatch input voit l'état physics, _Process
+                    // l'état idle). Collision coupée = caméra fixe =
+                    // points valides aux deux phases ; le test vise le
+                    // pipeline clic→GUI, pas la rétraction caméra.
+                    if (_spring != null) _spring.CollisionMask = 0;
+                    GD.Print($"[corne-test] actif npcA={_corneNpcA} " +
+                        $"npcB={_corneNpcB}");
+                    break;
+                }
+        }
+        if (_corneStep >= 0) CorneTest(delta);
 
         // --walk-test[=secs] : maintient W (vrai pipeline input) après
         // le spawn et logue la position chaque 0,5 s — preuve de
@@ -2006,8 +2701,9 @@ public partial class PlayerController : CharacterBody3D
         var v = Input.GetVector("move_left", "move_right",
             "move_forward", "move_back");
         if (v == Vector2.Zero) return v;
-        var sin = Mathf.Sin(_yaw);
-        var cos = Mathf.Cos(_yaw);
+        if (!_lFreeze) _moveYaw = _yaw;
+        var sin = Mathf.Sin(_moveYaw);
+        var cos = Mathf.Cos(_moveYaw);
         var dir = new Vector2(
             v.X * cos + v.Y * sin,
             -v.X * sin + v.Y * cos);

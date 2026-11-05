@@ -131,14 +131,34 @@ public static class EntryHandlers
                     await s.InventoryRepo.UpdateDueDateAsync(i.Id,
                         i.DueDate);
                 }
-                var capacities = await s.InventoryRepo
-                    .GetAllBagCapacitiesAsync(charId);
+                var capacities = new Dictionary<int, int>(
+                    await s.InventoryRepo
+                        .GetAllBagCapacitiesAsync(charId));
                 var equippedBags = await s.InventoryRepo
                     .GetEquippedBagsAsync(charId);
                 foreach (var b in equippedBags)
+                {
                     b.Capacity = s.GameData.Items
                         .FirstOrDefault(d => d.Id == b.ItemId)
                         ?.BagCapacity ?? 0;
+                    // Réconciliation : un sac équipé dont
+                    // inventory_slots n'a jamais été ouvert (migration,
+                    // équipement hors SwitchItemLocation) doit offrir
+                    // ses cases — sinon le serveur refuse des slots que
+                    // le bloc porte-sacs annonce au client (« sac
+                    // plein » + drop au sol fantôme).
+                    if (b.HolderIndex == 0 && b.Loc is >= 1 and <= 4
+                        && b.Capacity > 0 &&
+                        capacities.GetValueOrDefault(b.Loc) < b.Capacity)
+                    {
+                        await s.InventoryRepo.SetBagCapacityAsync(
+                            charId, b.Loc, b.Capacity);
+                        capacities[b.Loc] = b.Capacity;
+                        EdenLog.Write($"[Inventory312] char={charId} " +
+                            $"réconcilié bag_{b.Loc}_slots=" +
+                            $"{b.Capacity} (sac {b.ItemId} équipé)");
+                    }
+                }
                 var body = Eden.Zone.Codecs.NativeItemCodec
                     // Tous les sacs contigus 0..maxBag sont émis — sinon
                     // les items de container_index>0 sont invisibles et

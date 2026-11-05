@@ -36,6 +36,7 @@ public partial class VisTest : Node3D
     private string? _sbProbe;
     private bool _pickTest;
     private bool _appTest;
+    private readonly List<string> _treasures = new();
     private readonly List<RemoteEntity> _spawned = new();
     private int _shotFrames = -1;
     private bool _shotParsed;
@@ -49,6 +50,9 @@ public partial class VisTest : Node3D
     // --loading-test[=frac] : monte l'overlay LoadingScreen à la
     // fraction voulue (preuve P1.4 : mascottes animées, câlin à 1.0).
     private float? _loadingTest;
+    // --blob : ajoute l'ombre blob (Decal, chemin live EntityRegistry)
+    // sous les entités spawnées — diagnostic « toiles noires » M609.
+    private bool _blob;
 
     public override void _Ready()
     {
@@ -60,6 +64,7 @@ public partial class VisTest : Node3D
                      .Concat(OS.GetCmdlineUserArgs()))
         {
             if (a.StartsWith("--map=")) mapCode = a[6..];
+            else if (a == "--blob") _blob = true;
             else if (a == "--auto") _auto = true;
             else if (a.StartsWith("--yaw="))
                 _yaw = float.Parse(a[6..], CI);
@@ -94,6 +99,8 @@ public partial class VisTest : Node3D
             else if (a.StartsWith("--sb=")) _sbProbe = a[5..];
             else if (a == "--pick-test") _pickTest = true;
             else if (a == "--appearance-test") _appTest = true;
+            else if (a.StartsWith("--treasure="))
+                _treasures.AddRange(a[11..].Split(','));
             else if (a == "--hide-objects") _hideObjects = true;
             else if (a == "--hide-terrain") _hideTerrain = true;
             else if (a == "--no-fog") _noFog = true;
@@ -463,9 +470,48 @@ public partial class VisTest : Node3D
             e.SetLabel($"Lv25 {stem.ToUpperInvariant()}");
             e.Position = _pivot + new Vector3(slot * 2.4f - 1.2f, 0f, -1.5f);
             SnapGround(e);
+            if (_blob)
+            {
+                var shadow = World.BlobShadow.Make(0.7f);
+                shadow.Position = new Vector3(0f, 0.6f, 0f);
+                e.AddChild(shadow);
+                // Comportement live : RelayoutOverhead exclut les
+                // meshes de l'entité des projections du blob.
+                World.BlobShadow.ExemptVisuals(e);
+            }
             AddChild(e);
             _spawned.Add(e);
             GD.Print($"[vistest] mob {stem} → {(glb != null ? "glb" : "placeholder")}");
+            slot++;
+        }
+        foreach (var fam in _treasures)
+        {
+            // --treasure=<famille[,famille…]> : reproduit le chemin live
+            // HandleSeeTreasure (entité kind 0 + blob à y=0,6 +
+            // SetTreasureVisual + label) — diagnostic « panneau noir ».
+            var family = int.TryParse(fam, out var fn)
+                ? $"G{Math.Clamp(fn, 1, 10):00000}"
+                : EdenClient.Data.TreasureRules.Family(fam);
+            var e = new RemoteEntity
+            {
+                Handle = 0x88E60000u + (uint)slot,
+                Kind = 0,
+            };
+            e.Interp = new Player.NetworkInterpolator { Name = "Interp" };
+            e.AddChild(e.Interp);
+            var shadow = World.BlobShadow.Make(0.7f);
+            shadow.Position = new Vector3(0f, 0.6f, 0f);
+            e.AddChild(shadow);
+            Node3D? glb = null;
+            if (AssetCatalog.TryGetGlb($"item/model/{family}", out var gp))
+                glb = AssetCatalog.LoadGlbNode(gp);
+            e.SetTreasureVisual(glb, new Color(0.9f, 0.8f, 0.3f), family);
+            e.SetLabel($"treasure#{family}");
+            e.Position = _pivot + new Vector3(slot * 2.4f - 1.2f, 0f, -1.5f);
+            SnapGround(e);
+            AddChild(e);
+            _spawned.Add(e);
+            GD.Print($"[vistest] treasure {family} → {(glb != null ? "nif" : "capsule")}");
             slot++;
         }
         foreach (var letter in _chars)

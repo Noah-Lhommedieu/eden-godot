@@ -932,8 +932,10 @@ public sealed partial class ZoneEntryFlow
                 State = (short)s.State });
 
         // Signal client minimal (B3) : Pms16 mid=0 (jamais une vraie
-        // quête) state=1 = Portal Stone gratuite (Privilege > 0).
-        if (st.Privilege > 0)
+        // quête) state=1 = Portal Stone gratuite — flag GM ou état
+        // natif débutant (enchant 55869 posé pour level ≤ 80, même
+        // condition que SyncBeginnerPortalStateAsync).
+        if (st.Privilege > 0 || st.Level <= BeginnerPortalMaxLevel)
             msg.Pms16.Add(new() { Mid = 0, State = 1 });
 
         // Map 4 — clés d'instance > 0xFFFF {u32:u16} (0x3c52xxxx natif).

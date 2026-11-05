@@ -96,7 +96,11 @@ public static class UiTextEn
                         if (line.Length == 0 || line[0] == '#') continue;
                         var tab = line.IndexOf('\t');
                         if (tab <= 0) continue;
-                        en[line[..tab]] =
+                        // Les clés TSV portent l'espace finale de la
+                        // chaîne source (« Archive points: ») alors que
+                        // Translate cherche Canon(text) — canoniser à
+                        // l'indexation (idempotent si déjà canonique).
+                        en[Canon(line[..tab])] =
                             line[(tab + 1)..].Replace("\\n", "\n");
                     }
             }
@@ -134,7 +138,7 @@ public static class UiTextEn
                             continue;
                         var tab = line.IndexOf('\t');
                         if (tab <= 0) continue;
-                        var key = line[..tab];
+                        var key = Canon(line[..tab]);
                         var en = line[(tab + 1)..].Replace("\\n", "\n");
                         map.TryAdd(key, en);
                     }

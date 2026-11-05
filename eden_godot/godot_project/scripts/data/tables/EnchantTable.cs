@@ -63,6 +63,42 @@ public static class EnchantTable
         return 0;
     }
 
+    /// <summary>Commandes persistantes d'un enchant : 4 blocs « id + 6 vars »
+    /// (cols 9+7k), hors blocs déclenchés (col40 : procs, pas un effet
+    /// continu) ; la commande 160 enveloppe une commande imbriquée. Même
+    /// lecture que <c>EnchantService.GetPassiveCommands</c> côté serveur.
+    /// </summary>
+    public static List<(int Id, double[] Args)> CommandsOf(EnchantDef def)
+    {
+        var raw = def.Raw;
+        var trig = new HashSet<int>();
+        if (raw.Length > 40)
+            foreach (var t in raw[40].Split(';',
+                         StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                if (int.TryParse(t, out var n)) trig.Add(n);
+        var list = new List<(int, double[])>(4);
+        for (var k = 0; k < 4; k++)
+        {
+            var at = 9 + k * 7;
+            if (trig.Contains(k + 1) || at >= raw.Length ||
+                !int.TryParse(raw[at], out var cmd) || cmd <= 0) continue;
+            var args = new double[6];
+            for (var i = 0; i < 6 && at + 1 + i < raw.Length; i++)
+                double.TryParse(raw[at + 1 + i], System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out args[i]);
+            if (cmd == 160 && args[0] > 0) list.Add(((int)args[0], args.Skip(1).ToArray()));
+            else list.Add((cmd, args));
+        }
+        return list;
+    }
+
+    /// <summary>Catégorie d'affichage d'un status (buff / nerf / état / aucun) ;
+    /// enchant inconnu → <see cref="StatusKind.None"/> (rien à afficher).</summary>
+    public static StatusKind KindOf(int enchantId) =>
+        Get(enchantId) is { } d
+            ? StatusKinds.Classify(enchantId, CommandsOf(d), d.IsBuff)
+            : StatusKind.None;
+
     /// <summary>Clic droit sur l'icône de la barre de buffs : retire le
     /// buff. Toute monture se retire (même « can't abandon »), sinon seuls
     /// les buffs positifs sans drapeau NoAbandon ; définition inconnue =
@@ -70,6 +106,19 @@ public static class EnchantTable
     public static bool CanCancelByRightClick(EnchantDef? def) =>
         RideKeyOfRaw(def?.Raw) > 0 ||
         !(def is { IsBuff: false } or { NoAbandon: true });
+
+    /// <summary>Col3 « BUFF特效 » — clé d'effet visuel tenu sur
+    /// l'entité tant que l'enchant est actif (flammes du DoT, étoiles
+    /// du stun, ZZZ du sommeil — résolue via
+    /// <c>SpellFxTable.Resolve</c>). null si la ligne n'en porte pas.</summary>
+    public static string? VisualKeyOf(int enchantId)
+    {
+        var raw = Get(enchantId)?.Raw;
+        if (raw == null || raw.Length <= 3) return null;
+        var k = raw[3].Trim();
+        return k.Length > 1 && k != "0" &&
+            !k.Equals("null", StringComparison.OrdinalIgnoreCase) ? k : null;
+    }
 
     /// <summary>Bonus de vitesse NATIF (commande 2051, en %) d'un enchant
     /// de monture ; 0 si l'enchant n'est pas une monture ou sans 2051.
@@ -104,7 +153,10 @@ public static class EnchantTable
     /// quelles.</summary>
     public static string[] NormalizeRow(string[] row, int headerCols)
     {
-        var fr = row.Length == 61 || (headerCols == 60 && row.Length == 56);
+        // c_itemmallenchant |V.2|60| : 62 cellules, même schéma FR (blocs de
+        // commandes à 8+7k) — sans normalisation 55869 `2047|1` se lisait
+        // en commande 1 (miroir de EnchantParser.NormalizeRow serveur).
+        var fr = row.Length == 61 || (headerCols == 60 && row.Length is 56 or 62);
         if (!fr) return row;
         var r = new string[row.Length + 1];
         Array.Copy(row, 0, r, 0, 6);
@@ -165,15 +217,17 @@ public static class EnchantTable
         EnsureDefs().TryGetValue(enchantId, out var d) ? d : null;
 
     /// <summary>Nom anglais de l'enchant (T_Enchant col1) — repli sur
-    /// le nom Big5 de c_enchant puis « enchant #id ».</summary>
+    /// le nom Big5 de c_enchant puis un libellé générique (jamais d'id).</summary>
     public static string NameOf(int enchantId)
     {
         if (EnsureText().TryGetValue(enchantId, out var t) &&
             t.Name.Length > 0)
             return t.Name;
+        // Jamais d'identifiant à l'écran : repli sur le nom Big5 puis un
+        // libellé générique.
         var d = Get(enchantId);
         return d != null && d.Name.Length > 0
-            ? d.Name : $"enchant #{enchantId}";
+            ? d.Name : TextResolver.Language == "fr" ? "Effet inconnu" : "Unknown effect";
     }
 
     /// <summary>Description complète de l'enchant (T_Enchant col2 —

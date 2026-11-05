@@ -88,11 +88,12 @@ public sealed partial class ZoneEntryFlow
             await RemovePlayerEnchantAsync(session, st, eid, token);
 
         // EffectToLife(46605, 0x32, 0x2000, true, 0, 1) — enchant
-        // AngelChangeStyleID, rest 50 s.
+        // AngelChangeStyleID, rest 0x32 ticks = 5 s.
         if (!st.Statuses.ContainsKey(CustomClass.AngelStyleEnchantId))
             await AddPlayerEnchantAsync(session, st, (int)st.CharId,
                 CustomClass.AngelStyleEnchantId,
-                CustomClass.AngelStyleRestSec, 1, token);
+                EnchantRestSeconds(CustomClass.AngelStyleRestDs),
+                1, token);
 
         // Écriture de la carte + index actif + bit genre.
         var card = st.CustomClassSlots[slot];

@@ -76,6 +76,41 @@ public sealed partial class ZoneEntryFlow
                     $"god mode : {(st.GodMode ? "ON" : "OFF")}", token);
                 break;
 
+            case "trait" or "herotrait":
+                // trait <0-8> — assigne le trait héroïque (create_flag
+                // → enchant stats 52000+n) aux persos créés avant le
+                // sélecteur (bug live : aucun trait assignable).
+                // Persiste directement (le StatPipeline relit la DB
+                // juste après — un write-behind servirait l'ancienne
+                // valeur), repousse le 9058 et rafraîchit stats+vitals.
+                if (args.Length >= 1 && int.TryParse(args[0], out var tr)
+                    && tr is >= 0 and <= 8)
+                {
+                    await _services.Characters.SetCreationFlagAsync(
+                        (int)st.CharId, tr);
+                    st.CreateFlag = tr;
+                    await session.SendAsync(
+                        new Handlers.CNC_CZ_ClientHeroTrait
+                        { Trait = (byte)tr }, token);
+                    var (mhp, mmp) = await ProfileStatEmitter.SendAsync(
+                        session, _services, (int)st.CharId, st.RaceId,
+                        st.ClassId, st.Level, token);
+                    st.PlayerMaxHp = mhp;
+                    st.PlayerMaxMp = mmp;
+                    st.PlayerHp = Math.Min(st.PlayerHp, mhp);
+                    st.PlayerMp = Math.Min(st.PlayerMp, mmp);
+                    await SendVitalHpAsync(session, st.CharId,
+                        st.PlayerHp, st.PlayerMaxHp, token);
+                    await SendVitalMpAsync(session, st.CharId,
+                        st.PlayerMp, st.PlayerMaxMp, token);
+                    await SendAdminTextAsync(session,
+                        $"trait -> {tr}", token);
+                }
+                else
+                    await SendAdminTextAsync(session,
+                        "usage: //trait <0-8>", token);
+                break;
+
             case "tele" or "tp" or "warp":
                 // tele <x> <z> — déplacement dans le node courant,
                 // même payload que le teleport de position MoveSelf.
@@ -221,7 +256,14 @@ public sealed partial class ZoneEntryFlow
                         .MonsterSpawn
                     {
                         MonsterId = mobId, Count = cnt,
-                        X = st.PosX, Y = st.PosZ, Z = 0,
+                        X = st.PosX, Y = st.PosZ,
+                        // Hauteur réelle sous le GM (BornMonster natif
+                        // résout le sol en interne) — Z=0 laissait les
+                        // clones flotter sous les maps surélevées.
+                        Z = _services.Live.GroundHeightAt(
+                            _services.Scenes.GetScene(
+                                $"S{st.NodeId:D3}"),
+                            st.PosX, st.PosZ),
                     };
                     var spawned = _services.Live.SpawnGroup(
                         st.NodeId, st.InstanceGroup, spawn).ToList();
@@ -392,6 +434,15 @@ public sealed partial class ZoneEntryFlow
                         await SendAdminTextAsync(session,
                             $"level -> {st.Level}", token);
                     }
+                    // Cap natif class_lv ≤ char_lv : après une descente,
+                    // les lignes classlist (et le miroir class_lv) ne
+                    // doivent pas rester au-dessus — sinon le HUD
+                    // affiche « perso|classe » incohérent au relog.
+                    if (st.ClassLevel > st.Level)
+                        st.ClassLevel = st.Level;
+                    await _persistence.EnqueueAsync((int)st.CharId,
+                        _ => _services.Classes.ClampClassLevelsAsync(
+                            (int)st.CharId, st.Level));
                 }
                 break;
 
@@ -654,7 +705,8 @@ public sealed partial class ZoneEntryFlow
             "(1-61, //list_class) | change_class <id> — la joue";
         yield return "go <nodeId> — change de carte | tele <x> <z> — " +
             "déplace dans la carte | pos — position";
-        yield return "heal — soin complet | god — invincible on/off";
+        yield return "heal — soin complet | god — invincible on/off " +
+            "| trait <0-8> — trait héroïque";
         yield return "clone_item <itemId> [qty] — donne un item " +
             "| find_item <nom|id> — cherche l'id d'un item";
         yield return "learn_spell <spellId> — apprend un sort " +

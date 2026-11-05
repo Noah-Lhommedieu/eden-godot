@@ -171,7 +171,10 @@ public sealed partial class ZoneEntryFlow
     private CNC_CZ_ClientEnchantUpdate? BuildEnchantUpdate(
         EntryState ost)
     {
-        if (ost.Statuses.Count == 0) return null;
+        // Statuts à icône cachée (rest -9, talents AA…) : jamais vus des
+        // témoins — même filtre que HandleEnchantUpdateAsync (NCID 18) et
+        // que le gate natif du 299 (IsHideIcon).
+        if (!ost.Statuses.Values.Any(s => !s.Hidden)) return null;
         var msg = new CNC_CZ_ClientEnchantUpdate
         {
             Field1 = (int)ost.CharId,
@@ -185,6 +188,8 @@ public sealed partial class ZoneEntryFlow
             B280 = 0,
         };
         foreach (var status in ost.Statuses.Values)
+        {
+            if (status.Hidden) continue;
             msg.Entries.Add(new CNC_CZ_ClientEnchantUpdate.EnchantEntry
             {
                 SpellId = (short)status.EffectId,
@@ -192,6 +197,7 @@ public sealed partial class ZoneEntryFlow
                 RestTime = status.RestSeconds,
                 Stacks = (short)status.Level,
             });
+        }
         return msg;
     }
 }

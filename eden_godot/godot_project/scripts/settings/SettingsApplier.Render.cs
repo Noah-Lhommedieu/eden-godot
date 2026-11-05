@@ -214,19 +214,26 @@ public partial class SettingsApplier
         {
             if (e.Kind != 0 || e.Dying) continue;
             PlayerTitles.Others.TryGetValue((int)e.Handle, out var t);
-            SetTag(e, "__title", HudPrefs.ShowTitle ? TitleText(t.TitleId) : "",
-                2.64f, new Color(1f, 0.85f, 0.4f));
-            SetTag(e, "__guild", "", 2.4f, new Color(0.6f, 1f, 0.6f));
+            SetTag(e, "__title", HudPrefs.ShowTitle ? TitleText(t.TitleId) : "", new Color(1f, 0.85f, 0.4f));
+            SetTag(e, "__guild", "", new Color(0.6f, 1f, 0.6f));
+            // Pile nom/guilde/titre/barre recalée sur le modèle réel
+            // (équipement, monture, échelle) pour les entités proches.
+            if (cam == null ||
+                e.GlobalPosition.DistanceSquaredTo(camPos) < 2500f)
+                e.RelayoutOverhead();
         }
+        foreach (var e in ents)
+            if (e.Kind != 0 && !e.Dying && (cam == null ||
+                e.GlobalPosition.DistanceSquaredTo(camPos) < 2500f))
+                e.RelayoutOverhead();
         if (_drvPlayer != null)
         {
             SetTag(_drvPlayer, "__title",
-                HudPrefs.ShowOwnTitle ? TitleText(PlayerTitles.Active) : "",
-                2.64f, new Color(1f, 0.85f, 0.4f));
+                HudPrefs.ShowOwnTitle ? TitleText(PlayerTitles.Active) : "", new Color(1f, 0.85f, 0.4f));
             SetTag(_drvPlayer, "__guild",
                 HudPrefs.ShowGuild && SocialState.GuildName.Length > 0
-                    ? $"<{SocialState.GuildName}>" : "",
-                2.4f, new Color(0.6f, 1f, 0.6f));
+                    ? $"<{SocialState.GuildName}>" : "", new Color(0.6f, 1f, 0.6f));
+            _drvPlayer.RelayoutOverhead();
         }
     }
 
@@ -236,7 +243,7 @@ public partial class SettingsApplier
     /// <summary>Label3D discret (titre/guilde) sous le nœud
     /// <paramref name="host"/> ; texte vide = masqué.</summary>
     private static void SetTag(Node3D host, string name, string text,
-        float y, Color color)
+        Color color)
     {
         var l = host.GetNodeOrNull<Label3D>(name);
         if (text.Length == 0)
@@ -250,7 +257,6 @@ public partial class SettingsApplier
             {
                 Name = name,
                 Billboard = BaseMaterial3D.BillboardModeEnum.Enabled,
-                Position = new Vector3(0f, y, 0f),
                 FontSize = 32, PixelSize = 0.0065f, OutlineSize = 8,
                 OutlineModulate = new Color(0f, 0f, 0f, 0.85f),
                 Modulate = color,
@@ -297,7 +303,7 @@ void fragment() {
         {
             if (n is not MeshInstance3D mi || mi is HpBar3D ||
                 mi.Mesh == null) continue;
-            mi.MaterialOverlay = on ? OutlineMat : null;
+            OutlineFx.Apply(mi, on, OutlineMat);
         }
         if (on) owner.SetMeta("outlined", true);
         else owner.RemoveMeta("outlined");

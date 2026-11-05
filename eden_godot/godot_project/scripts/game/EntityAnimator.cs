@@ -66,6 +66,15 @@ public partial class EntityAnimator : Node
     /// pendant un déplacement ; au sol la locomotion reprend.</summary>
     public bool JumpPriority { get; set; }
 
+    /// <summary>Anim tenue prioritaire sur la locomotion — gestuelle
+    /// « chant » (magicNN, C_Spell col 2) d'une incantation temporisée,
+    /// posée par <c>SkillCast</c>/<c>SpellFx</c> au 279/278 et relâchée
+    /// au blast ou à la fin du cast. Le natif boucle cette gestuelle
+    /// tant que l'incantation dure ; un one-shot (blast shootNN, dégât)
+    /// garde la main pendant sa lecture puis on revient ici. "" = off.
+    /// Passée par <see cref="Resolve"/> (variante montée rmagicNN).</summary>
+    public string HoldAnim { get; set; } = "";
+
     /// <summary>Anim tenue en vol : jump02 (chute) quand le modèle l'a,
     /// sinon la pose de saut <see cref="AirborneAnim"/>.</summary>
     private string AirHoldAnim() =>
@@ -569,7 +578,10 @@ public partial class EntityAnimator : Node
             }
             // En vol stationnaire (saut local) on tient la pose de
             // saut ; en vol avec déplacement, la marche garde la main.
-            if (ValidMount() is { } mount)
+            // Une incantation en cours (HoldAnim) prime sur tout ça.
+            if (HoldAnim.Length > 0 && Has(HoldAnim))
+                Play(Resolve(HoldAnim), force: false, blend: LocoBlend);
+            else if (ValidMount() is { } mount)
                 Play(RiderAnimFor(mount.Current), force: false,
                     blend: LocoBlend);
             else if (!(JumpPriority && Airborne && _current == "jump02" &&

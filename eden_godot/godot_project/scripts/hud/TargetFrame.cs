@@ -244,6 +244,34 @@ public partial class TargetFrame : Control
         }
     }
 
+    private Vector2[]? _weakHome;      // positions natives (arc complet)
+    private int[]? _weakArc;           // slots triés le long de l'arc
+
+    /// <summary>Resserre les icônes de faiblesse : le layout natif répartit
+    /// les 9 éléments sur un arc autour du portrait (un slot par élément) ;
+    /// avec peu de faiblesses elles restaient espacées. Elles occupent
+    /// maintenant des positions d'arc consécutives, centrées sur l'arc.</summary>
+    private void PackWeakIcons(int weakMask)
+    {
+        if (_weakHome == null)
+        {
+            _weakHome = new Vector2[9];
+            for (var i = 0; i < 9; i++)
+                if (_weak[i] != null) _weakHome[i] = _weak[i]!.Position;
+            // Ordre le long de l'arc = tri par ordonnée native.
+            _weakArc = Enumerable.Range(0, 9)
+                .OrderBy(i => _weakHome[i].Y).ToArray();
+        }
+        var on = BreakPointUi.WeakSlots(weakMask);
+        if (on.Count == 0) return;
+        // Éléments gardés dans leur ordre d'arc d'origine.
+        var ordered = _weakArc!.Where(on.Contains).ToList();
+        var start = (9 - ordered.Count) / 2;
+        for (var k = 0; k < ordered.Count; k++)
+            if (_weak[ordered[k]] is { } w)
+                w.Position = _weakHome[_weakArc![start + k]];
+    }
+
     /// <summary>Met à jour l'affichage Break Point de la cible : étoiles
     /// de rang (type de monstre), icônes de faiblesse (masque) et barre
     /// violette (patience courante/max). Tout est masqué si la cible n'a
@@ -264,6 +292,7 @@ public partial class TargetFrame : Control
         for (var i = 0; i < _weak.Length; i++)
             if (_weak[i] != null)
                 _weak[i]!.Visible = show && BreakPointUi.IsWeak(weakMask, i);
+        PackWeakIcons(show ? weakMask : 0);
         if (_bpBg != null) _bpBg.Visible = show;
         if (!show) return;
         if (_bpBar != null)
@@ -281,11 +310,22 @@ public partial class TargetFrame : Control
             _frame.Texture = tex;
     }
 
+    /// <summary>Id de gabarit c_monster de la cible quand c'est un mob (0
+    /// sinon) — posé par <c>HudNetBridge</c> avec <see cref="SetTarget"/>.</summary>
+    public int TargetTemplateId { get; set; }
+
+    /// <summary>Déclenche le bouton « ? » (QA <c>--hud-open=target-inspect</c>).</summary>
+    public void InvokeInspect() => Inspect();
+
     private void Inspect()
     {
         if (TargetCharId == 0)
         {
-            GD.Print($"[target] inspect mob 0x{TargetHandle:x8} (fiche à venir)");
+            // Mob : fiche à 3 onglets (Stats / Drops / Skills).
+            if (TargetTemplateId > 0 && MobInfoWindow.Instance != null)
+                MobInfoWindow.Instance.Open(TargetTemplateId);
+            else
+                GD.Print($"[target] inspect 0x{TargetHandle:x8} : pas un mob");
             return;
         }
         var s = SessionCarry.Session;
@@ -306,6 +346,7 @@ public partial class TargetFrame : Control
     {
         TargetHandle = handle;
         TargetKind = kind;
+        TargetTemplateId = 0;
         SetBadge(BreakPointUi.TargetBadge(kind, family));
         // « <Titre>\nLvN Nom » / « LvN Nom » / « Nom » (titre non affiché
         // dans le cadre natif — seulement le nom, ref Elite mob).
@@ -367,11 +408,48 @@ public partial class TargetFrame : Control
         var f = hasHp ? Math.Clamp((float)hp / maxHp, 0f, 1f) : 1f;
         if (_hp != null) _hp.Value = f;
         _loss.Set(f);
-        // Ref : pas de chiffres sur la barre d'un monstre.
+        // Valeurs numériques : pref « Cible » (rien / PV / PM / PV+PM).
+        // PM : connus seulement pour soi-même (le 298/444 ne les porte pas).
+        _lastHp = hp; _lastMax = maxHp;
+        var mode = HudPrefs.TargetValues;
+        var showHp = mode is HudPrefs.ValuesMode.Hp or HudPrefs.ValuesMode.Both;
+        var showMp = mode is HudPrefs.ValuesMode.Mp or HudPrefs.ValuesMode.Both;
         if (_hpText != null)
-            _hpText.Text = hasHp && TargetKind != 12
-                ? $"{hp}/{maxHp}" : "";
+            _hpText.Text = hasHp && showHp
+                ? HudPrefs.FormatValue(UiTextEn.Translate("HP"), hp, maxHp)
+                : "";
+        var selfId = (uint)(SessionCarry.Character?.Id ?? 0);
+        if (_mpText != null)
+            _mpText.Text = showMp && TargetHandle != 0 &&
+                TargetHandle == selfId && HudPrefs.SelfMaxMp > 0
+                ? HudPrefs.FormatValue(UiTextEn.Translate("MP"),
+                    HudPrefs.SelfMp, HudPrefs.SelfMaxMp)
+                : "";
+        if (_mp != null)
+            _mp.Value = TargetHandle != 0 && TargetHandle == selfId &&
+                HudPrefs.SelfMaxMp > 0
+                ? Math.Clamp((double)HudPrefs.SelfMp / HudPrefs.SelfMaxMp, 0, 1)
+                : 1;
         UpdateGhosts();
+    }
+
+    private long _lastHp, _lastMax;
+
+    public override void _EnterTree()
+    {
+        HudPrefs.Changed += RefreshValues;
+        HudPrefs.SelfMpChanged += RefreshValues;
+    }
+
+    public override void _ExitTree()
+    {
+        HudPrefs.Changed -= RefreshValues;
+        HudPrefs.SelfMpChanged -= RefreshValues;
+    }
+
+    private void RefreshValues()
+    {
+        if (TargetHandle != 0) SetVitals(_lastHp, _lastMax);
     }
 
     private void UpdateGhosts()

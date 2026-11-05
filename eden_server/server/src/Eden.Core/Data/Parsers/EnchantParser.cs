@@ -71,11 +71,16 @@ public static class EnchantParser
     }
 
     /// <summary>Réinsère la cellule vide d'index 6 sur une ligne FR
-    /// (61 cellules, ou 56 si <paramref name="headerCols"/> = 60). Les
-    /// lignes S_ (62/57) et l'anomalie 46131 (55) sont inchangées.</summary>
+    /// (61 cellules, ou 56/62 si <paramref name="headerCols"/> = 60 —
+    /// c_itemmallenchant |V.2|60| a 62 cellules = schéma FR sans la
+    /// colonne elf-pet + une colonne de fin en plus : les blocs de
+    /// commandes y sont à l'index 8+7k, le schéma S_ les attend 9+7k —
+    /// 55869 portait `2047|1` lu comme cmd 1). Les lignes S_ (62/57,
+    /// header 61) et l'anomalie 46131 (55) sont inchangées.</summary>
     public static string[] NormalizeRow(string[] row0, int headerCols)
     {
-        var fr = row0.Length == 61 || (headerCols == 60 && row0.Length == 56);
+        var fr = row0.Length == 61 ||
+            (headerCols == 60 && row0.Length is 56 or 62);
         if (!fr) return row0;
         var row = new string[row0.Length + 1];
         Array.Copy(row0, 0, row, 0, 6);

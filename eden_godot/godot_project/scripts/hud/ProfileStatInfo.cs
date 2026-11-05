@@ -45,10 +45,12 @@ public static class ProfileStatInfo
         ["res_dark"] = "Dark resistance: +1% damage reduction per point (cap 70%).",
     };
 
-    /// <summary>Résistances indexées par id wire - 1 (1 Slash, 2 Strike,
-    /// 3 Pierce, 4 Fire, 5 Lightning, 6 Ice, 7 Nature, 8 Holy, 9 Dark —
-    /// ordre d'affichage natif ; le wire 296 envoie 8,9,6,4,5,7,1,2,3 mais
-    /// <c>Resists</c> est déjà rangé par id-1).</summary>
+    /// <summary>Clés des résistances dans l'ORDRE D'AFFICHAGE natif
+    /// (Anti icons / Number1-9 : slash, strike, pierce, fire,
+    /// lightning, ice, nature, holy, dark). C'est aussi l'ordre de
+    /// <c>PlayerStats.Resists</c> — réordonné du wire à la réception.
+    /// ⚠️ Ne pas confondre avec l'ordre élément (c_item/AttrResist :
+    /// ice avant lightning — <c>StatSources</c>).</summary>
     private static readonly string[] ResistKeys =
     {
         "res_slash", "res_strike", "res_pierce", "res_fire",
@@ -57,6 +59,27 @@ public static class ProfileStatInfo
 
     public static string ResistKey(int index) =>
         index >= 0 && index < ResistKeys.Length ? ResistKeys[index] : "";
+
+    /// <summary>Position d'affichage (0-8) d'une clé res_* ; -1 si la
+    /// clé n'est pas une résistance.</summary>
+    public static int ResistIndex(string key) =>
+        System.Array.IndexOf(ResistKeys, key);
+
+    /// <summary>Nom natif de la résistance affichée en position i —
+    /// t_textindex 1202-1210 suit l'ordre ÉLÉMENT (ice avant
+    /// lightning) : l'indice display i vise l'élément
+    /// {0,1,2,3,5,4,6,7,8}[i].</summary>
+    public static string ResistTitle(int index)
+    {
+        if (index < 0 || index >= ResistElem.Length) return "";
+        return TextResolver.TextIndex(1202 + ResistElem[index])
+            ?? ResistKey(index);
+    }
+
+    // position d'affichage → index élément natif (0-8, ordre
+    // c_item/textindex) : seuls les slots 4/5 (lightning/ice)
+    // s'échangent.
+    private static readonly int[] ResistElem = { 0, 1, 2, 3, 5, 4, 6, 7, 8 };
 
     /// <summary>Pose le tooltip traduit sur le label (et le rend
     /// survolable).</summary>

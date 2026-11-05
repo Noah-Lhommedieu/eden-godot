@@ -199,6 +199,34 @@ public class ZoneVague2Tests
         EntityBuffs.ClearAll();
     }
 
+    [Fact]
+    public void EntityBuffs_SignedWireId_55869Survives()
+    {
+        // Le champ wire est un s16 signé : 55869 transite en -9667 et
+        // ApplyAdd masque en u16 — régression « id > 32767 perdu ».
+        EntityBuffs.ClearAll();
+        var h = 777002;
+        var w = new BinWriter();
+        new ZoneEnchantAdd
+        {
+            Handle = h,
+            EffectId = unchecked((short)55869),
+            RestSeconds = -2,       // portail débutant : permanent
+            Serial = 1,
+            StackCount = 1,
+            Level = 1,
+        }.Serialize(w);
+        var m = new ZoneEnchantAdd();
+        m.Deserialize(new BinReader(w.ToArray()));
+        Assert.True(m.EffectId < 0);            // le wire est bien signé
+        EntityBuffs.ApplyAdd(m);
+        var snap = EntityBuffs.Snapshot(h);
+        Assert.Single(snap);
+        Assert.Equal(55869, snap[0].EffectId);
+        Assert.Equal(-1, snap[0].Remaining);    // négatif → ∞ affiché
+        EntityBuffs.ClearAll();
+    }
+
     // ============================ destin ===========================
 
     [Fact]

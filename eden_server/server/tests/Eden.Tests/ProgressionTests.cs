@@ -65,6 +65,19 @@ public class ProgressionTests
     }
 
     [Fact]
+    public async Task GrantExp_Level30Repro()
+    {
+        var levels = ProgressionParsers.ParseLevels(DbDir + "/S_Level.ini");
+        var repo = new FakeCharacterRepository();
+        repo.Characters.Add(new Eden.Core.Database.Entities.PlayerCharacterEntity
+        { Id = 1, Level = 30, Experience = 2500 });
+        var svc = new ProgressionService(repo, levels);
+        var thr = svc.ExpForLevel(30);
+        var (newLevel, gained) = await svc.GrantExpAsync(1, 750000, 30, 2500);
+        throw new Exception($"thr={thr} newLevel={newLevel} gained={gained} max={svc.MaxLevel}");
+    }
+
+    [Fact]
     public async Task GrantExp_CapsAtMaxLevel()
     {
         var levels = ProgressionParsers.ParseLevels(DbDir + "/S_Level.ini");

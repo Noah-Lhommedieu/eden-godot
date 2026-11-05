@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhmiosh5golv2"
-path="res://.godot/imported/main.png-41ca8810535f8427f28692b0e27f5251.ctex"
+path="res://.godot/imported/main.png-6711773dd5baa2b1e6c1d5809b7211ca.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui_textures/themes/Red/main.png"
-dest_files=["res://.godot/imported/main.png-41ca8810535f8427f28692b0e27f5251.ctex"]
+source_file="res://gamedata/themes/Red/main.png"
+dest_files=["res://.godot/imported/main.png-6711773dd5baa2b1e6c1d5809b7211ca.ctex"]
 
 [params]
 

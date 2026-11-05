@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://kkix5mngr661"
-path="res://.godot/imported/CNDejaVu2.png-10e96adabd1f039b06f19d314b90c6c0.ctex"
+path="res://.godot/imported/CNDejaVu2.png-0adb111eb79fd4a5ece040c45a4deddc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui_textures/themes/Coffee/CNDejaVu2.png"
-dest_files=["res://.godot/imported/CNDejaVu2.png-10e96adabd1f039b06f19d314b90c6c0.ctex"]
+source_file="res://gamedata/themes/Coffee/CNDejaVu2.png"
+dest_files=["res://.godot/imported/CNDejaVu2.png-0adb111eb79fd4a5ece040c45a4deddc.ctex"]
 
 [params]
 

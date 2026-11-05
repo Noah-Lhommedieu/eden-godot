@@ -69,6 +69,7 @@ public sealed partial class NativeFxHost : Node
             if (NodeOf(sh.BlockIndex) is not MeshInstance3D mi) continue;
             Report.Geoms++;
             if (!Options.OwnMaterials) continue;
+            if (System.Environment.GetEnvironmentVariable("EDEN_FX_NOMAT") == "1") continue;
             // Géométrie additive (plans de flamme/éclair/aile, fond noir) : le rendu toon du modèle la mélange en alpha
             // et laisse le fond noir de la texture en rectangle ; il faut le blend additif NIF même sans contrôleur.
             bool additive = NativeFx.BlendMode(sh.Alpha) == 3;
@@ -76,6 +77,11 @@ public sealed partial class NativeFxHost : Node
                                       || animated.Contains(sh.Alpha?.Block ?? -2))) continue;
             var (mat, st) = NativeFx.MakeMaterial(sh.Material, sh.Texturing, sh.Alpha, sh.ZBuffer, sh.TwoSided,
                 Options, false);
+            if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "3")
+                GD.Print($"[fxdiag] mat b{sh.BlockIndex} «{sh.Name}» blend={NativeFx.BlendMode(sh.Alpha)} " +
+                    $"2s={sh.TwoSided} zbTest={sh.ZBuffer?.Test} zbWrite={sh.ZBuffer?.Write} " +
+                    $"texFile={sh.Texturing?.Base?.File ?? "-"} tex={(st.Texture != null ? "ok" : "NULL")} " +
+                    $"alpha=({sh.Alpha?.Blend},{sh.Alpha?.Test},{sh.Alpha?.Threshold}) mi={mi.Name}");
             mi.MaterialOverride = mat;
             AllMats.Add(st);
             RegisterMat(sh.Material?.Block ?? -1, st);
@@ -103,6 +109,9 @@ public sealed partial class NativeFxHost : Node
     public override void _Process(double delta)
     {
         if (Paused) return;
+        // Root peut être null (host jamais attaché) ou déjà libéré
+        // (QueueFree d'un parent) — IsInstanceValid couvre les deux.
+        if (Root == null || !GodotObject.IsInstanceValid(Root)) return;
         if (Options.PauseWhenHidden && !Root.IsVisibleInTree()) return;
         _cullTimer -= (float)delta;
         if (_cullTimer <= 0)

@@ -52,7 +52,13 @@ public partial class QuestSheetWindow : Control
         AddChild(nat);
         // Position/dimensions natives (3 % / 1,8 %, 358×664) gardées ;
         // tirable comme les autres fenêtres.
-        DragHelper.Persist(nat, "questsheet");
+        // Même rect que la fenêtre de dialogue PNJ (taille identique,
+        // à gauche) — toutes les interfaces de talk hors shop.
+        HudRoot.Pin(nat, NpcDialogueWindow.TalkAnchorX,
+            NpcDialogueWindow.TalkAnchorY, NpcDialogueWindow.TalkAnchorX,
+            NpcDialogueWindow.TalkAnchorY, 0, 0,
+            NpcDialogueWindow.TalkW, NpcDialogueWindow.TalkH);
+        DragHelper.Persist(nat, "questsheet_left");
         head.AddThemeFontSizeOverride("font_size", 13);
         head.AddThemeColorOverride("font_color", Colors.White);
         head.ClipText = true;
@@ -145,7 +151,7 @@ public partial class QuestSheetWindow : Control
         if (_win == null || _info == null || _lore == null) return;
         _op = op; _mid = mid; _npc = npcUid;
         var title = TextResolver.MissionTitle(mid)
-            ?? UiTextEn.Translate($"Quest #{mid}");
+            ?? "Quête";
         var m = MissionTable.Get(mid);
         _head!.Text = "◆ " + title;
         var (stText, stCol) = op switch
@@ -241,7 +247,7 @@ public partial class QuestSheetWindow : Control
 
     private static string NpcLabel(int npc)
     {
-        var name = TextResolver.NpcName(npc) ?? $"NPC #{npc}";
+        var name = TextResolver.NpcName(npc) ?? "PNJ";
         var t = TextResolver.NpcTitle(npc);
         return t != null ? $"<{t}> {name}" : name;
     }
@@ -277,7 +283,7 @@ public partial class QuestSheetWindow : Control
             var box = new Control
             {
                 CustomMinimumSize = new Vector2(36, 36),
-                TooltipText = TextResolver.ItemName(id) ?? $"#{id}",
+                TooltipText = TextResolver.ItemName(id) ?? "",
             };
             var tex = def is { Code.Length: > 0 }
                 ? AssetCatalog.GetTexture($"UI/itemicon/{def.Code}.png")

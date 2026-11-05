@@ -306,10 +306,11 @@ public sealed partial class ZoneEntryFlow
             await GainPrestigeExpAsync(st, repId, amount, token);
 
         // EffectToLife : dur==0 → -1 s flag 0x2000 ; dur==-1 → -2
-        // permanent flag 0x2020 ; sinon dur*10 s flag 0x2000.
+        // permanent flag 0x2020 ; sinon dur s flag 0x2000 (le natif
+        // passait dur*10 ticks — notre API prend des secondes).
         foreach (var (buffId, dur) in cmd.Buffs)
         {
-            var rest = dur == 0 ? -1 : dur == -1 ? -2 : dur * 10;
+            var rest = dur == 0 ? -1 : dur == -1 ? -2 : dur;
             await AddPlayerEnchantAsync(session, st, (int)st.CharId,
                 buffId, rest, 1, token);
         }

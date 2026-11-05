@@ -368,6 +368,7 @@ public static class PerfTrace
     /// <summary>Image longue : seuil en ms (arg <c>--hitch-ms=</c>, défaut 40).</summary>
     internal static double HitchThresholdMs = 40;
     internal static Rid MainViewport;
+    private static int _lastGc;
 
     /// <summary>Consigne une image longue avec les évènements des 400 ms précédentes.</summary>
     internal static void ReportHitch(double delta)
@@ -382,6 +383,9 @@ public static class PerfTrace
             ? RenderingServer.ViewportGetMeasuredRenderTimeCpu(MainViewport) : 0.0;
         var rgpu = MainViewport.IsValid
             ? RenderingServer.ViewportGetMeasuredRenderTimeGpu(MainViewport) : 0.0;
-        GD.Print($"[hitch] dt={delta * 1000:F0}ms proc={tproc:F1}ms render_cpu={rcpu:F1}ms render_gpu={rgpu:F1}ms events: {(ev.Length == 0 ? "-" : ev)}");
+        var gc = GC.CollectionCount(0) + GC.CollectionCount(1) +
+                 GC.CollectionCount(2);
+        GD.Print($"[hitch] dt={delta * 1000:F0}ms proc={tproc:F1}ms render_cpu={rcpu:F1}ms render_gpu={rgpu:F1}ms gc={gc - _lastGc} events: {(ev.Length == 0 ? "-" : ev)}");
+        _lastGc = gc;
     }
 }

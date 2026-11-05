@@ -1,6 +1,7 @@
 using Eden.Core.Networking;
 using Eden.Core.Networking.Messages.Generated;
 using Eden.Core.Networking.Session;
+using Eden.Zone.Handlers;
 using Eden.Core.Logging;
 
 namespace Eden.Zone;
@@ -427,6 +428,12 @@ public sealed partial class ZoneEntryFlow
                 Field1 = 9, Field2 = 1,
             }, token);
 
+            // +N d'une pièce portée → stage « fortify » du StatPipeline :
+            // le Profil doit refléter le nouveau palier sans relog
+            // (RefreshEQsAttr natif).
+            await InventoryHandlers.EmitSelfEquipRefreshAsync(_services,
+                session, (int)st.CharId, token);
+
             // Annonce serveur à partir de +8 (idx texte 0x69d,
             // args "%s,+%d,%s" = nom,+N,item).
             if (target.EnchantLevel > 7)
@@ -452,6 +459,9 @@ public sealed partial class ZoneEntryFlow
             {
                 Field1 = 0, Field2 = p.TargetSlot, Field3 = p.TargetBag,
             }, token);
+            // Pièce portée détruite → ses stats disparaissent du Profil.
+            await InventoryHandlers.EmitSelfEquipRefreshAsync(_services,
+                session, (int)st.CharId, token);
         }
     }
 

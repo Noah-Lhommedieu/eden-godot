@@ -203,6 +203,28 @@ public class ZoneServicesTests
         Assert.Equal(9, st.Resists.Length);
     }
 
+    [Fact]
+    public void AttrRefresh296_Resists_DisplayOrder()
+    {
+        // Le wire porte les résists dans l'ordre des ids natifs
+        // 8,9,6,4,5,7,1,2,3 (AttrResist de NotifyRefreshAttr — ids =
+        // colonnes c_item : 1 slash…4 fire, 5 ICE, 6 LIGHTNING…9 dark).
+        // Valeurs = id×10 → wire {80,90,60,40,50,70,10,20,30} ; le
+        // client range en ordre d'affichage (Anti icons : slash,
+        // strike, pierce, fire, LIGHTNING, ICE, nature, holy, dark).
+        var m = new ZoneAttrRefresh();
+        for (var i = 0; i < 5; i++) m.Fields1to14[i] = 10;
+        var wire = new[] { 80, 90, 60, 40, 50, 70, 10, 20, 30 };
+        for (var i = 0; i < 9; i++) m.Fields1to14[5 + i] = (short)wire[i];
+        var w = new BinWriter();
+        m.Serialize(w);
+        var r = new ZoneAttrRefresh();
+        r.Deserialize(new BinReader(w.ToArray()));
+        PlayerVitals.ApplyAttrRefresh(r);
+        Assert.Equal(new[] { 10, 20, 30, 40, 60, 50, 70, 80, 90 },
+            PlayerVitals.TotalStats!.Resists);
+    }
+
     // ---------- 282/276 équipement ----------
 
     [Fact]

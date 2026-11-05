@@ -23,8 +23,28 @@ public sealed class MonsterService
         _definitions = definitions.ToDictionary(d => d.Id);
     }
 
+    /// <summary>Charge S_Monster + BoundInfo du même dossier — le
+    /// rayon d'entité de chaque def (<see cref="MonsterParser.MonsterDef.
+    /// BoundRadius"/>) est résolu par chiffres de `ModelCode`
+    /// (« mNNNNNN » BoundInfo ↔ « MNNNNNN » S_Monster). Les deux
+    /// casses de nom de fichier existent dans les arbres de données
+    /// (db_decoded natif / corpus FR).</summary>
     public static MonsterService LoadFromDataDir(string decodedDir)
-        => new(MonsterParser.Parse(Path.Combine(decodedDir, "S_Monster.ini")));
+    {
+        var defs = MonsterParser.Parse(
+            Path.Combine(decodedDir, "S_Monster.ini"));
+        var boundFile = File.Exists(
+            Path.Combine(decodedDir, "BoundInfo.ini"))
+                ? Path.Combine(decodedDir, "BoundInfo.ini")
+                : Path.Combine(decodedDir, "boundinfo.ini");
+        var radii = MonsterParser.ParseBoundInfo(boundFile);
+        if (radii.Count > 0)
+            foreach (var d in defs)
+                if (radii.TryGetValue(
+                        MonsterParser.BoundInfoKey(d.ModelCode), out var r))
+                    d.BoundRadius = r;
+        return new(defs);
+    }
 
     /// <summary>
     /// Trie les références brutes (S_Monster cols 40-49) par table réelle :

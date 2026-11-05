@@ -71,6 +71,31 @@ public class DirectionalLocomotionTests
         Assert.Equal("move03", DirectionalLocomotion.AnimFor(5, true));
     }
 
+    [Fact]
+    public void Mount_SideAnims_NativeRecords()
+    {
+        // Spec natif DirectionControl.cpp (records 9/10 de
+        // DAT_00fe49a8, game_.exe init ~l.2470130) : record 9 =
+        // copie de Left + facing −90° D3D et même callback
+        // (vtable+0x38 → action 102 → move02) ; record 10 = Right +
+        // facing +90° → move03. Le remote (AnimForFlag ci-dessous)
+        // joue déjà ce mapping — local et remote doivent rester
+        // identiques, aucun croisement.
+        Assert.Equal("move02", DirectionalLocomotion.MountAnimFor(3));
+        Assert.Equal("move03", DirectionalLocomotion.MountAnimFor(5));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(7));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(6));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(8));
+        Assert.Equal("move04", DirectionalLocomotion.MountAnimFor(1));
+        Assert.Equal("move04", DirectionalLocomotion.MountAnimFor(0));
+        Assert.Equal("move04", DirectionalLocomotion.MountAnimFor(2));
+        var saved = DirectionalLocomotion.MountSideAnims;
+        DirectionalLocomotion.MountSideAnims = false;
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(3));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(5));
+        DirectionalLocomotion.MountSideAnims = saved;
+    }
+
     [Theory]
     [InlineData(7, "move01")]
     [InlineData(3, "move02")]

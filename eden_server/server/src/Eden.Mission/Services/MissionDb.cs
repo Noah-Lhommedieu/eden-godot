@@ -310,15 +310,16 @@ public sealed class MissionDb
         }
     }
 
-    /// <summary>Niveau + genre + classe du perso (conditions
-    /// If_CharLevel / If_Gender / If_Class des dialogues NPC).</summary>
-    public async Task<(int Level, int Gender)> GetLevelGenderAsync(int charUid)
+    /// <summary>Niveau + genre + node du perso (conditions
+    /// If_CharLevel / If_Gender et AutoAcceptByNode — le natif lit le
+    /// node en DB à MigrationDone, pas dans le paquet).</summary>
+    public async Task<(int Level, int Gender, int Node)> GetLevelGenderNodeAsync(int charUid)
     {
         await using var c = Open();
-        var row = await c.QuerySingleOrDefaultAsync<(int level, int gender_id)>(
-            "SELECT level, gender_id FROM player_characters WHERE id = @id",
+        var row = await c.QuerySingleOrDefaultAsync<(int level, int gender_id, int node_id)>(
+            "SELECT level, gender_id, node_id FROM player_characters WHERE id = @id",
             new { id = charUid });
-        return (row.level, row.gender_id);
+        return (row.level, row.gender_id, row.node_id);
     }
 
     /// <summary>Nom du perso (textes de partage de quête « %s »).</summary>

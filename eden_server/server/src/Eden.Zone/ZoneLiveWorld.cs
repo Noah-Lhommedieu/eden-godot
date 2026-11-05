@@ -64,6 +64,9 @@ public sealed class ZoneLiveWorld
         public int CastSerial;
         /// <summary>Sort en cours de wind-up (0 = aucun) — pour le 287 de rupture.</summary>
         public ushort CastingSpellId;
+        /// <summary>Dernier lancer de chaque Countdown skill (3 paliers
+        /// S_Ai) — voir <c>MobSkillRules</c>.</summary>
+        public DateTime[] CountdownLastCast = new DateTime[3];
         /// <summary>Remet la patience au max et efface la rupture
         /// (respawn / leash — <c>CAIFSMReturn::Update</c> @0x084dd1b0).</summary>
         public void ResetPatience()
@@ -116,6 +119,13 @@ public sealed class ZoneLiveWorld
         /// reset/respawn du mob.</summary>
         public readonly HashSet<int> SkillHitCharIds = new();
         public DateTime DeadAt;
+        /// <summary>Séquence de mort déjà émise (305, loot, exp) —
+        /// posée par FinishMobDeathAsync : les coups/procs/sorts qui
+        /// retombent sur le cadavre ne doivent pas rejouer la séquence
+        /// (double 305 + double loot/exp constaté en live quand un proc
+        /// multi-stroke schedulait KillMobAsync juste avant la mort par
+        /// sort du même tick). Remise à zéro au respawn.</summary>
+        public bool DeathEmitted;
         public int RespawnSeconds = 30;
         /// <summary>Famille de monde (world boss / 70-S / mutant).</summary>
         public Eden.Core.Game.WorldBoss.BossKind Kind =>
@@ -134,7 +144,44 @@ public sealed class ZoneLiveWorld
         /// <summary>charIds ayant frappé le mob — destinataires du
         /// courrier de récompense des mutants.</summary>
         public readonly HashSet<int> Attackers = new();
+        /// <summary>Né via Event_RebornMonster (SpawnGroup) — la route
+        /// [mob_patrol_mode] est alors une marche unique vers
+        /// l'objectif (élites d'invasion → cristal 據點), pas une
+        /// boucle : MobWanderStepAsync l'ancre au dernier waypoint.
+        /// Natif : le reborn né par event suit sa route comme tout
+        /// monstre porteur d'un patrolId (CAI::Init roam mode 1).</summary>
+        public bool EventSpawned;
+        /// <summary>Clef d'événement à la mort (reborn_monsters col8 —
+        /// CRebornMonster+0x34, OneDie → ExecuteCommand) : cristaux
+        /// 據點 (S005 bleu=3 / rouge=4 — transition).</summary>
+        public int DeathEventId;
+        /// <summary>Clef d'événement à la naissance (col9 —
+        /// CRebornMonster+0x38, ScriptEntry au Born) : mobs-« timer »
+        /// d'invasion (56038/56039 → events spawn/despawn).</summary>
+        public int BornEventId;
+        /// <summary>Durée de vie du reborn en secondes (col11) — mort
+        /// naturelle à born+TTL, évaluant la clef col8 (56039 :
+        /// 420 s → event 2 ; 60019 : 1200 s → event 4).</summary>
+        public int LifetimeSeconds;
+        /// <summary>Respawn brut de la ligne (col4 — 0 = jamais : le
+        /// cycle est porté par les events, pas par ScheduleRespawn).</summary>
+        public int RowRespawnSeconds;
+        /// <summary>Handle de la structure assiégée par l'élite en bout
+        /// de route (cristal 據點 vivant ≤30 u) — 0 = pas de siège.</summary>
+        public uint SiegeMobHandle;
+        /// <summary>Prochain coup porté au cristal assiégé.</summary>
+        public DateTime NextSiegeAt;
         public int PatrolId;
+        /// <summary>Route de patrouille résolue ([mob_patrol_mode] de
+        /// la scène, roam mode 1 natif) — null si le mob n'a pas de
+        /// chemin tracé (roam mode 0, errance ±rayon du home).</summary>
+        public SceneParser.PatrolRoute? Patrol;
+        /// <summary>Indice du prochain waypoint de <see cref="Patrol"/>
+        /// — séquentiel en boucle (SetNewGoalPatrol natif).</summary>
+        public int PatrolIndex;
+        /// <summary>Résolution PatrolId→route déjà tentée (évite un
+        /// lookup de scène à chaque tick de wander).</summary>
+        public bool PatrolResolved;
         /// <summary>Id de la ligne reborn_monsters (col0) — c'est le
         /// « group » des Event_RebornMonster/MonsterAction/KillMonster
         /// natifs (monster+0x360 = spawn+0x24, désasm zone
@@ -276,6 +323,15 @@ public sealed class ZoneLiveWorld
         /// place sans frapper ; le blast schedulé vérifie la
         /// génération de combat + AttackLocked (stun annule).</summary>
         public DateTime CastingUntil;
+        /// <summary>Le mob a déjà porté une attaque de base sur sa
+        /// cible courante (outcome ≠ miss) — RÈGLE PROPRIÉTAIRE :
+        /// condition de tout lancer de sort (pas de flag équivalent
+        /// trouvé dans le décompilé natif ; le séquencement natif
+        /// n'arme le pick de sort qu'en fin de pipeline `Attack()`
+        /// de <c>CAIFSMCombat</c>, zone @0x084daf40). Remis à zéro à
+        /// chaque nouvel engagement (<see cref="BeginCombat"/>),
+        /// désaggro, mort et respawn.</summary>
+        public bool HasLandedMelee;
 
         /// <summary>Acquiert l'unique boucle de riposte de la cible active.</summary>
         public int? TryStartCombatLoop(int targetCharId)
@@ -336,6 +392,8 @@ public sealed class ZoneLiveWorld
                     AggroX = anchorX;
                     AggroY = anchorY;
                     LastDamageDealtAt = DateTime.UtcNow;
+                    HasLandedMelee = false;   // nouveau combat → un
+                                              // premier hit avant cast
                 }
                 InCombat = true;
                 TargetCharId = targetCharId;
@@ -366,6 +424,7 @@ public sealed class ZoneLiveWorld
                 _combatLoopRunning = false;
                 InCombat = false;
                 TargetCharId = 0;
+                HasLandedMelee = false;
             }
         }
 
@@ -379,6 +438,7 @@ public sealed class ZoneLiveWorld
                 _combatLoopRunning = false;
                 InCombat = false;
                 TargetCharId = 0;
+                HasLandedMelee = false;
             }
         }
 
@@ -388,9 +448,12 @@ public sealed class ZoneLiveWorld
         {
             CancelCombat();
             Alive = true;
+            DeathEmitted = false;
+            DeadAt = default;
             Enchants.Clear();        // le registre ne survit pas au respawn
             CastingUntil = default;  // ni le wind-up d'un sort en vol
             CastSerial++;            // ni le blast d'un cast interrompu
+            CountdownLastCast = new DateTime[3];
             ResetPatience();         // BornMonster : mob+0x78 = max, 0x7c = 0
         }
 
@@ -575,9 +638,13 @@ public sealed class ZoneLiveWorld
                         Level = def?.Level ?? 1,
                         ExpReward = def?.ExpReward ?? 0,
                         RespawnSeconds = m.RespawnSeconds > 0 ? m.RespawnSeconds : 30,
+                        RowRespawnSeconds = m.RespawnSeconds,
                         PatrolId = m.PatrolId,
                         SpawnId = m.AreaId,
                         AnnounceTextId = m.AnnounceTextId,
+                        DeathEventId = m.DeathEventId,
+                        BornEventId = m.BornEventId,
+                        LifetimeSeconds = m.LifetimeSeconds,
                         HomeX = x, HomeY = y,
                         // Premier errand décalé par mob — sinon tout un
                         // spawn bouge en même temps (visuel artificiel).
@@ -699,9 +766,14 @@ public sealed class ZoneLiveWorld
                 ExpReward = def?.ExpReward ?? 0,
                 RespawnSeconds = spawn.RespawnSeconds > 0
                     ? spawn.RespawnSeconds : 30,
+                RowRespawnSeconds = spawn.RespawnSeconds,
+                EventSpawned = true,
                 PatrolId = spawn.PatrolId,
                 SpawnId = spawn.AreaId,
                 AnnounceTextId = spawn.AnnounceTextId,
+                DeathEventId = spawn.DeathEventId,
+                BornEventId = spawn.BornEventId,
+                LifetimeSeconds = spawn.LifetimeSeconds,
                 HomeX = x, HomeY = y,
                 NextWanderAt = DateTime.UtcNow +
                     TimeSpan.FromSeconds(3 + Random.Shared.Next(10)),

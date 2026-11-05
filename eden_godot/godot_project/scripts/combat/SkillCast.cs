@@ -71,7 +71,7 @@ public partial class SkillCast : Node
     private int _testStep;
     private EntityRegistry? _registry;
     private string? _castAnim;   // (hérité) — plus de rejeu : l'incantation tient la pose, le blast joue le clip
-    private CastCircle? _circle;  // cercle magique au sol pendant l'incantation temporisée
+    private (float Pitch, float Dist, float Yaw)? _castCam;   // --cast-cam
     private ulong _rawAnimDeadline;   // repli gestuelle brute si aucun blast n'arrive (sorts instantanés)
     private int _rawAnimSpell;
     private GroundTargeter? _targeter;   // visée au sol (sorts Ground)
@@ -155,6 +155,19 @@ public partial class SkillCast : Node
                       System.Globalization.CultureInfo.InvariantCulture, out var d)) _shotTimes.Add(d); }
             else if (a.StartsWith("--zshot-dir="))
                 _shotDir = a[12..];
+            else if (a.StartsWith("--cast-cam="))
+            {
+                // --cast-cam=hauteurDeg[,dist[,yawDeg]] : caméra de preuve
+                // (règle propriétaire : diagonale en hauteur 45° pour les
+                // casts, du dessus 80-85° pour Cyclone/cercles plats).
+                var p = a[11..].Split(',');
+                var ci = System.Globalization.CultureInfo.InvariantCulture;
+                var fl = System.Globalization.NumberStyles.Float;
+                if (p.Length >= 1 && float.TryParse(p[0], fl, ci, out var cp))
+                    _castCam = (cp,
+                        p.Length > 1 && float.TryParse(p[1], fl, ci, out var cd) ? cd : 7f,
+                        p.Length > 2 && float.TryParse(p[2], fl, ci, out var cy) ? cy : 0f);
+            }
             else if (a.StartsWith("--cast-break=") &&
                      int.TryParse(a.Split('=', 2)[1], out var cb))
                 _castBreakMs = cb;
@@ -171,6 +184,8 @@ public partial class SkillCast : Node
                 .FindChild("Player", true, false) as PlayerController;
             _registry = GetTree().Root
                 .FindChild("NetEntities", true, false) as EntityRegistry;
+            if (_player != null && _castCam is { } cc)
+                _player.DebugCam(cc.Yaw, -cc.Pitch, cc.Dist, 1.0f);   // pitch Godot négatif = caméra AU-DESSUS
             if (_player != null)
                 _player.Cancelled += () =>
                 {
@@ -269,6 +284,24 @@ public partial class SkillCast : Node
     {
         if (spellId <= 0 || IsCasting || PlayerVitals.IsDead ||
             PlayerStateLocks.NoAnySkill) return;
+        // Sort réservé à une autre classe (reste sur la skillbar après un
+        // changement de classe) : même règle que ClassSkillTable.CanCast
+        // serveur — refus local, aucun paquet émis. La classe ACTIVE est
+        // PlayerVitals.ActiveClass (attr 0x2c) ; SessionCarry.Character
+        // garde la classe de création et n'est jamais rafraîchi en jeu.
+        // Un mask multi-bits = skill « général » couleur, lançable par
+        // toute classe possédée (PopCount>1 → autorisé, comme CanCast).
+        var cls = PlayerVitals.ActiveClass > 0 ? PlayerVitals.ActiveClass
+            : SessionCarry.Character?.ClassId ?? 0;
+        var cmask = SpellCatalog.ClassMask(spellId);
+        if (cmask != 0 && cls is >= 1 and <= 63 &&
+            (cmask & (1UL << (cls - 1))) == 0 &&
+            System.Numerics.BitOperations.PopCount(cmask) == 1)
+        {
+            GD.Print($"[skill] cast refusé #{spellId} : sort d'une " +
+                $"autre classe (cls={cls})");
+            return;
+        }
         var target = CurrentTarget;
         // Sort non-hostile sur un ennemi (mob) → self-cast : un
         // adversaire désigné ne reçoit jamais de buff/soin — le
@@ -290,9 +323,24 @@ public partial class SkillCast : Node
         // sans cible partent en NCID 16 devant le lanceur (le natif refuse le NCID 17).
         var shape = (CastShape)SpellCatalog.Shape(spellId);
         if (shape is CastShape.Self or CastShape.Nearby) target = 0;
+        // Règle de cast : forme à zone dont la description dit « autour du
+        // lanceur » → se lance sans cible/visée (centrée lanceur).
+        var casterCentered = SpellCatalog.CasterCentered(spellId);
+        // Pilote de test sans cible (--combat-test / --ground-auto) : le
+        // cercle au sol est visé devant le lanceur (visée explicite du banc).
+        if (shape == CastShape.Ground && target == 0 && !casterCentered &&
+            (_combatTest || _autoGround) && _player != null)
+        {
+            var (px, py) = WorldConv.ToEdenGround(_player.GlobalPosition);
+            var (ax, ay) = SpellZone.Axis(PlayerFacingEden());
+            var d = MathF.Min(SpellZone.Reach(SpellCatalog.RangeUnits(spellId)),
+                SpellZone.GroundFallbackMax);
+            CastAt(spellId, px + ax * d, py + ay * d);
+            return;
+        }
         // Sort de zone « à choix » (ref-shot « cercle preparation… ») : cercle au curseur, clic = lancer.
         // Rappuyer sur le même sort annule. Les pilotes de test (--combat-test, --ground-auto) lancent direct.
-        if (shape == CastShape.Ground && !_combatTest && !_autoGround && _targeter != null)
+        if (shape == CastShape.Ground && !casterCentered && !_combatTest && !_autoGround && _targeter != null)
         {
             if (_targeter.Active && _targeter.Spell == spellId) _targeter.Cancel();
             else _targeter.Begin(spellId);
@@ -314,13 +362,13 @@ public partial class SkillCast : Node
     }
 
     /// <summary>Vrai si la cible est hors de portée du sort :
-    /// portée = C_Spell col28 × 1,5 (même facteur que l'AttackRange
-    /// serveur) ; col28 à 0 → repli portée arme 4 u. Cible absente du
-    /// registre → envoi direct (le serveur tranche).</summary>
+    /// portée = C_Spell col28 × 0,5 (<see cref="SpellZone.Reach"/>,
+    /// SSpellData+0x40 natif ; le ×1,5 historique déclenchait le cast
+    /// 3× trop loin → refus serveur 0x333 « trop éloignée »). Cible
+    /// absente du registre → envoi direct (le serveur tranche).</summary>
     private bool BeyondReach(int spellId, uint handle, out float reach)
     {
-        var r = SpellCatalog.RangeUnits(spellId);
-        reach = r > 0 ? r * 1.5f : 4f;
+        reach = SpellZone.Reach(SpellCatalog.RangeUnits(spellId));
         var p = _player;
         if (p == null || _registry == null ||
             !_registry.Entities.TryGetValue(handle, out var t) ||
@@ -344,19 +392,20 @@ public partial class SkillCast : Node
             (tx, ty) = WorldConv.ToEdenGround(te.GlobalPosition);
         if (_shotTimes.Count > 0 && _shotT0 == 0) _shotT0 = Time.GetTicksMsec();
         var plan = SpellZone.Plan(shape, target != 0, tx, ty, cx, cy, PlayerFacingEden(),
-            SpellZone.Reach(SpellCatalog.RangeUnits(spellId)));
+            SpellZone.Reach(SpellCatalog.RangeUnits(spellId)),
+            SpellCatalog.CasterCentered(spellId));
         if (plan.Route == CastRoute.Refused)
         {
-            // Forme 0 (sort ciblé) sans cible : le client natif n'a
-            // aucun message « dans le vide » pour elle — blocage local
-            // + prompt textindex 2195 « Veuillez sélectionner une
+            // Sort ciblé sans cible (forme 0, ou zone/direction dont la
+            // description ne dit pas « autour du lanceur ») : blocage
+            // local + prompt textindex 2195 « Veuillez sélectionner une
             // cible pour utiliser cette compétence. » ; AUCUN paquet
             // n'est émis (le serveur refuserait de toute façon 410).
             var msg = TextResolver.TextIndex(2195)
                 ?? "Veuillez sélectionner une cible pour utiliser cette compétence.";
             SysMsg(msg);
             GD.Print($"[skill] cast #{spellId} refusé : cible requise " +
-                $"(textindex 2195, forme 0)");
+                $"(textindex 2195, forme {(int)shape})");
             return;
         }
         switch (plan.Route)
@@ -616,9 +665,10 @@ public partial class SkillCast : Node
                     SpellCatalog.Name((ushort)m.SpellId));
                 // Incantation temporisée (natif) : gestuelle « chant »
                 // C_Spell col 2 (301-317 → magicNN) tenue en boucle
-                // jusqu'au blast + cercle magique doré tournant sous
-                // le lanceur — les deux s'arrêtent à la résolution
-                // (blast/break/fin). Le blast joue le clip shootNN.
+                // jusqu'au blast ; le cercle magique natif (col 4/5)
+                // est posé par SpellFx au 279 — les deux s'arrêtent à
+                // la résolution (blast/break/fin). Le blast joue le clip
+                // shootNN.
                 var id = (ushort)m.SpellId;
                 var stem = CharModelSpec.BodyStem(
                     SessionCarry.Character?.Appearance);
@@ -630,8 +680,12 @@ public partial class SkillCast : Node
                     GD.Print($"[verify] cast : chant {chant} " +
                              $"tenu (kf={ck})");
                 }
-                _circle = CastCircle.Begin(_player!,
-                    m.CastTimeDs / 10f + 1.5f);
+                else GD.Print($"[verify] cast : chant absent " +
+                    $"(chantKf={SpellCatalog.ChantKf(id)} " +
+                    $"stem={stem ?? "null"} " +
+                    $"lookup={(chant ?? "null")} " +
+                    $"has={(chant != null && (_player?.Animator?.Has(chant) ?? false))} " +
+                    $"animator={_player?.Animator != null})");
             }
             if (_castBreakMs > 0 && m.CastTimeDs > 0)
                 _breakAt = Time.GetTicksMsec() + (ulong)_castBreakMs;
@@ -651,8 +705,9 @@ public partial class SkillCast : Node
     /// (la locomotion reprend, ou le one-shot du blast s'il joue).</summary>
     private void StopCastVisuals()
     {
-        _circle?.End();
-        _circle = null;
+        // Le cercle d'incantation natif (C_Spell col 4/5, posé par
+        // SpellFx au 279) disparaît avec la gestuelle de chant.
+        SpellFx.Instance?.EndCastFx(_player);
         if (_player?.Animator != null)
             _player.Animator.HoldAnim = "";
     }
@@ -877,12 +932,16 @@ public partial class SkillCast : Node
                 // tombait sur un sort d'une autre classe apprise et le
                 // cast était refusé sans réponse) ; un sort temporisé
                 // est préféré pour rendre la CastBar visible.
-                var cls = SessionCarry.Character?.ClassId ?? 0;
+                var cls = PlayerVitals.ActiveClass > 0
+                    ? PlayerVitals.ActiveClass
+                    : SessionCarry.Character?.ClassId ?? 0;
                 bool Allowed(int id)
                 {
                     var m = SpellCatalog.ClassMask(id);
-                    return m == 0 || (cls is >= 1 and <= 63 &&
-                        (m & (1UL << (cls - 1))) != 0);
+                    return m == 0 ||
+                        System.Numerics.BitOperations.PopCount(m) > 1 ||
+                        (cls is >= 1 and <= 63 &&
+                         (m & (1UL << (cls - 1))) != 0);
                 }
                 // Préférence : sort hostile temporisé (prouve barre
                 // ET 288/281 en un seul cast — ex. Bear's Fury voleur),
@@ -1268,6 +1327,11 @@ public static class SpellCatalog
         return _icons != null &&
                _icons.TryGetValue(spellId, out var code) ? code : "";
     }
+
+    /// <summary>Sort dont la description FR (T_Spell) dit qu'il s'exerce
+    /// autour du lanceur — voir <see cref="SpellCastRule.CasterCentered"/>.</summary>
+    public static bool CasterCentered(int spellId) =>
+        SpellCastRule.CasterCentered(TextResolver.SpellDescription(spellId));
 
     /// <summary>Id motion KF de l'incantation du sort (col 2 de
     /// C_Spell — 301-317 magicNN « chant » tenu en boucle pendant un

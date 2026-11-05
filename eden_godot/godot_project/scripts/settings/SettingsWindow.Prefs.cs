@@ -20,13 +20,14 @@ public partial class SettingsWindow
     private CheckBox Pref(Control parent, string label, Func<bool> get,
         Action<bool> set)
     {
-        var c = Check(parent, UiTextEn.Translate(label), get(), set);
+        var c = Check(parent, T(label), get(), set);
         c.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
         _pkChecks.Add((c, get));
         return c;
     }
 
     private (HSlider, Label)? _pkMouseRow;
+    private OptionButton? _pkTgtVals, _pkOvVals;
 
     private GridContainer PrefGrid(VBoxContainer box, string header, int cols = 2)
     {
@@ -39,14 +40,10 @@ public partial class SettingsWindow
         return g;
     }
 
-    private void BuildPrefsTab()
+    private void BuildPrefsTab(VBoxContainer box)
     {
-        var sc = Tab("Preferences");
-        _tabs!.SetTabTitle(_tabs.GetTabCount() - 1,
-            UiTextEn.Translate("Preferences"));
-        var box = TabBox(sc);
 
-        _pkMouseRow = SliderRow(box, UiTextEn.Translate("Mouse"),
+        _pkMouseRow = SliderRow(box, T("Mouse"),
             0.25, 2.5, 0.05, HudPrefs.MouseSpeed, "{0:0.00}x",
             v => HudPrefs.MouseSpeed = (float)v);
 
@@ -58,7 +55,7 @@ public partial class SettingsWindow
         g = PrefGrid(box, "Other players");
         Pref(g, "Names", () => HudPrefs.ShowNames, v => HudPrefs.ShowNames = v);
         var og = Pref(g, "Guilds", () => HudPrefs.ShowOthersGuild, v => HudPrefs.ShowOthersGuild = v);
-        og.TooltipText = UiTextEn.Translate("Only shown when the server sends the guild of other players.");
+        og.TooltipText = T("Only shown when the server sends the guild of other players.");
         Pref(g, "Titles", () => HudPrefs.ShowTitle, v => HudPrefs.ShowTitle = v);
 
         g = PrefGrid(box, "Display");
@@ -79,6 +76,16 @@ public partial class SettingsWindow
         Pref(g, "Show HP bar above myself", () => HudPrefs.BarSelf, v => HudPrefs.BarSelf = v);
         Pref(g, "Show HP bar above other players", () => HudPrefs.BarOthers, v => HudPrefs.BarOthers = v);
 
+        string[] valItems = { UiTextEn.Translate("None"),
+            UiTextEn.Translate("HP"), UiTextEn.Translate("MP"),
+            UiTextEn.Translate("HP + MP") };
+        _pkTgtVals = Opt(box, UiTextEn.Translate("Target frame values"),
+            valItems, (int)HudPrefs.TargetValues,
+            i => HudPrefs.TargetValues = (HudPrefs.ValuesMode)i);
+        _pkOvVals = Opt(box, UiTextEn.Translate("Values above entities"),
+            valItems, (int)HudPrefs.OverheadValues,
+            i => HudPrefs.OverheadValues = (HudPrefs.ValuesMode)i);
+
         g = PrefGrid(box, "Camera");
         Pref(g, "Invert Camera", () => HudPrefs.InvertCamera, v => HudPrefs.InvertCamera = v);
         Pref(g, "Camera Follow", () => HudPrefs.CameraFollow, v => HudPrefs.CameraFollow = v);
@@ -92,36 +99,43 @@ public partial class SettingsWindow
         SubHeader(box, "HP loss animation");
         Pref(box, "Animate HP loss (orange)", () => HudPrefs.LossAnim, v => HudPrefs.LossAnim = v);
         (_pkDelay, _pkDelayLbl) = SliderRow(box,
-            UiTextEn.Translate("Delay before drop (s)"), 0.1, 3.0, 0.05,
+            T("Delay before drop (s)"), 0.1, 3.0, 0.05,
             HudPrefs.LossDelay, "{0:0.00}", v => HudPrefs.LossDelay = (float)v);
         (_pkDur, _pkDurLbl) = SliderRow(box,
-            UiTextEn.Translate("Drop duration (s)"), 0.05, 2.0, 0.05,
+            T("Drop duration (s)"), 0.05, 2.0, 0.05,
             HudPrefs.LossDuration, "{0:0.00}", v => HudPrefs.LossDuration = (float)v);
 
         var reset = new Button
         {
-            Text = UiTextEn.Translate("Reset preferences"),
+            Text = T("Reset preferences"),
             CustomMinimumSize = new Vector2(0, 22),
         };
         reset.Pressed += () => { HudPrefs.ResetPrefs(); RefreshAll(); };
         box.AddChild(reset);
     }
 
+    /// <summary>En-tête de groupe : titre doré aligné à gauche + filet.
+    /// Utilisé par tous les onglets (extensible : un nouveau groupe =
+    /// un SubHeader puis ses lignes).</summary>
     private void SubHeader(VBoxContainer box, string title)
     {
         var l = new Label
         {
-            Text = "— " + UiTextEn.Translate(title) + " —",
-            HorizontalAlignment = HorizontalAlignment.Center,
+            Text = T(title),
+            HorizontalAlignment = HorizontalAlignment.Left,
         };
+        l.AddThemeFontSizeOverride("font_size", 14);
         _headers.Add(l);
-        box.AddChild(new Control { CustomMinimumSize = new Vector2(0, 6) });
+        box.AddChild(new Control { CustomMinimumSize = new Vector2(0, 8) });
         box.AddChild(l);
+        box.AddChild(new HSeparator());
     }
 
     private void SyncPrefs()
     {
         foreach (var (b, get) in _pkChecks) b.ButtonPressed = get();
+        if (_pkTgtVals != null) _pkTgtVals.Selected = (int)HudPrefs.TargetValues;
+        if (_pkOvVals != null) _pkOvVals.Selected = (int)HudPrefs.OverheadValues;
         if (_pkMouseRow is { } mr) mr.Item1.Value = HudPrefs.MouseSpeed;
         if (_pkDelay != null) _pkDelay.Value = HudPrefs.LossDelay;
         if (_pkDur != null) _pkDur.Value = HudPrefs.LossDuration;

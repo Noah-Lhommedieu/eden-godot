@@ -14,14 +14,18 @@
     <Compile Include="..\..\godot_project\scripts\protocol\**\*.cs" />
     <Compile Include="..\..\godot_project\scripts\session\**\*.cs" />
     <Compile Include="..\..\godot_project\scripts\data\**\*.cs"
-             Exclude="..\..\godot_project\scripts\data\tables\PartnerTable.cs" />
+             Exclude="..\..\godot_project\scripts\data\tables\PartnerTable.cs;..\..\godot_project\scripts\data\DataWarmup.cs" />
     <Compile Include="..\..\godot_project\scripts\game\**\*.cs"
              Exclude="..\..\godot_project\scripts\game\CharVisual.cs;..\..\godot_project\scripts\game\AnimRetarget.cs;..\..\godot_project\scripts\game\EntityAnimator.cs;..\..\godot_project\scripts\game\EdenGltfMipmaps.cs;..\..\godot_project\scripts\game\CharBodyCache.cs" />
     <Compile Include="..\..\godot_project\scripts\input\PickCore.cs" />
     <Compile Include="..\..\godot_project\scripts\combat\CombatMessages.cs" />
     <Compile Include="..\..\godot_project\scripts\combat\MotionTable.cs" />
     <Compile Include="..\..\godot_project\scripts\combat\CombatFx.cs" />
+    <Compile Include="..\..\godot_project\scripts\combat\CastLock.cs" />
+    <Compile Include="..\..\godot_project\scripts\combat\SpellZone.cs" />
+    <Compile Include="..\..\godot_project\scripts\scene\CinemaTimeline.cs" />
     <Compile Include="..\..\godot_project\scripts\ClientConfig.cs" />
+    <Compile Include="..\..\godot_project\scripts\vfs\*.cs" />
     <Compile Include="..\..\godot_project\scripts\settings\ClientSettings.cs" />
     <Compile Include="..\..\godot_project\scripts\settings\InputBindings.cs" />
     <Compile Include="..\..\godot_project\scripts\world\FsmFile.cs" />
@@ -32,5 +36,6 @@
     <Compile Include="..\..\godot_project\scripts\ui\**\*.cs"
              Exclude="..\..\godot_project\scripts\ui\CeguiToGodot.cs" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.8" />
   </ItemGroup>
 </Project>

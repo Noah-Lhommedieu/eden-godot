@@ -9,9 +9,12 @@ namespace EdenClient.Hud;
 
 /// <summary>
 /// Pont réseau → buffs/debuffs (Vague 2) — même pattern de binding
-/// paresseux que <see cref="HudNetBridge"/> : la session zone est
-/// découverte via <see cref="SessionCarry.Session"/> puis les NCIDs
-/// enchant sont abonnés une fois.
+/// précoce que <see cref="ElfBridge"/> : <see cref="EnsureBound"/>
+/// pose les handlers sur la session zone avant que le pont n'existe
+/// (le serveur émet les 299 du burst d'entrée — enchants restaurés,
+/// état « pierre de portail gratuite » — dès OnMigrationDone, pendant
+/// que la CEGUI charge encore ; sans bind précoce ils partaient en
+/// « ncid non géré », cf. docs/knowledge/statuses-flow-audit.md).
 ///
 /// Trames routées (codecs <c>ZoneEnchantMessages.cs</c>, corps
 /// prouvés côté serveur — Status.cs / DisplayChar.cs /
@@ -35,15 +38,25 @@ namespace EdenClient.Hud;
 /// <see cref="BuffBar"/> envoie un <b>85</b> EnchantCancel.
 ///
 /// Threading : parse sur le thread réseau puis file
-/// <see cref="_pending"/> drainée ici sur le thread principal.
+/// <see cref="Ops"/> drainée ici sur le thread principal.
 /// </summary>
 public partial class BuffBridge : Node
 {
     private readonly HudRoot _hud;
+    /// <summary>Ops parsées sur le thread réseau, appliquées sur
+    /// l'instance au prochain _Process — statique pour que les binds
+    /// posés tôt (<see cref="EnsureBound"/>, avant la création du
+    /// pont) ne perdent pas le burst d'entrée (299).</summary>
+    private static readonly ConcurrentQueue<Action<BuffBridge>> Ops =
+        new();
+    /// <summary>Session déjà équipée de nos handlers — évite le double
+    /// abonnement si EnsureBound est appelé tôt puis que _Process
+    /// retombe sur la même session.</summary>
+    private static EdenSession? _boundSession;
     private EdenSession? _session;
-    private readonly ConcurrentQueue<Action> _pending = new();
     private uint _lastTarget;
     private double _pruneTimer;
+    private bool _selfWired;
 
     public BuffBridge(HudRoot hud)
     {
@@ -53,15 +66,30 @@ public partial class BuffBridge : Node
 
     public override void _Process(double delta)
     {
-        if (_session == null && SessionCarry.Session is { } s)
-            BindSession(s);
-        while (_pending.TryDequeue(out var act))
+        if (_boundSession == null && SessionCarry.Session is { } s)
+            EnsureBound(s);     // repli : flux sans GameScene attachée
+        _session ??= _boundSession;
+        while (Ops.TryDequeue(out var act))
         {
-            try { act(); }
+            try { act(this); }
             catch (Exception ex)
             {
                 GD.PrintErr($"[buff] dispatch : {ex}");
             }
+        }
+        // Self = charId du perso choisi (le « handle » joueur du wire —
+        // les buffs self arrivent en 299/301/315 sur cet id) + clic
+        // droit → 85. Câblés dès que la BuffBar existe : le bind
+        // session a pu se faire bien avant son montage.
+        if (!_selfWired && _session != null &&
+            BuffBar.Instance is { } bar)
+        {
+            var ss = _session;
+            bar.SetSelfHandle((int)ss.SelectedCharId);
+            bar.CancelSender = eid => ss.SendZoneAsync(
+                new ZoneEnchantCancel { EffectId = eid },
+                CancellationToken.None);
+            _selfWired = true;
         }
         // Cible changée (444 ou frame cachée) → requête 18 + repaint.
         var t = _hud.Target;
@@ -83,78 +111,73 @@ public partial class BuffBridge : Node
     }
 
     /// <summary>Abonnements NCID — parse réseau puis application en
-    /// file principale (EntityBuffs + repeints ciblés).</summary>
-    private void BindSession(EdenSession s)
+    /// file principale (EntityBuffs + repeints ciblés). Sans instance
+    /// de pont encore montée, les ops s'accumulent dans
+    /// <see cref="Ops"/> et seront appliquées au premier _Process.
+    /// Appelé le plus tôt possible (<b>GameScene</b>, avant
+    /// ZoneEntryAsync) pour ne pas perdre les 299 du burst
+    /// d'entrée.</summary>
+    public static void EnsureBound(EdenSession s)
     {
-        _session = s;
+        if (ReferenceEquals(_boundSession, s)) return;
+        _boundSession = s;
 
-        s.OnZone(299, r =>
-        {
-            var m = new ZoneEnchantAdd();
-            m.Deserialize(r);
-            _pending.Enqueue(() => ApplyAndRepaint(m.Handle,
-                () => EntityBuffs.ApplyAdd(m)));
-        });
-        s.OnZone(300, r =>
-        {
-            var m = new ZoneEnchantRemove();
-            m.Deserialize(r);
-            _pending.Enqueue(() => ApplyAndRepaint(m.Handle,
-                () => EntityBuffs.ApplyRemove(m)));
-        });
-        s.OnZone(301, r =>
-        {
-            var m = new ZoneEnchantUpdate();
-            m.Deserialize(r);
-            _pending.Enqueue(() => ApplyAndRepaint(m.Handle,
-                () => EntityBuffs.ApplyUpdate(m)));
-        });
-        s.OnZone(315, r =>
-        {
-            var m = new ZoneEnchantReset();
-            m.Deserialize(r);
-            _pending.Enqueue(() => ApplyAndRepaint(m.Handle,
-                () => EntityBuffs.ApplyReset(m)));
-        });
-        s.OnZone(372, r =>
-        {
-            var m = new ZoneTeamMemberEnchant();
-            m.Deserialize(r);
-            _pending.Enqueue(() => EntityBuffs.ApplyTeamMember(m));
-        });
-        s.OnZone(445, r =>
-        {
-            var m = new ZoneEnchantPause();
-            m.Deserialize(r);
-            _pending.Enqueue(() => ApplyAndRepaint(m.Handle, () =>
-                EntityBuffs.ApplyPause(m.Handle, m.EffectId, true)));
-        });
-        s.OnZone(446, r =>
-        {
-            var m = new ZoneEnchantStart();
-            m.Deserialize(r);
-            _pending.Enqueue(() => ApplyAndRepaint(m.Handle, () =>
-                EntityBuffs.ApplyPause(m.Handle, m.EffectId, false)));
-        });
+        void Bind<T>(T msg, Action<BuffBridge, T> act)
+            where T : NetMessage, new() =>
+            s.OnZone(msg.Opcode, r =>
+            {
+                var m = new T();
+                try { m.Deserialize(r); }
+                catch (Exception ex)
+                {
+                    Ops.Enqueue(_ => GD.PrintErr(
+                        $"[buff] parse {m.Name} : {ex.Message}"));
+                    return;
+                }
+                Ops.Enqueue(b => act(b, m));
+            });
 
-        // Self = charId du perso choisi (le « handle » joueur du
-        // wire — les buffs self arrivent en 299/301/315 sur cet id).
-        BuffBar.Instance?.SetSelfHandle((int)s.SelectedCharId);
-        // Clic droit BuffBar → 85 EnchantCancel.
-        if (BuffBar.Instance is { } bar)
-            bar.CancelSender = eid => s.SendZoneAsync(
-                new ZoneEnchantCancel { EffectId = eid },
-                CancellationToken.None);
+        Bind(new ZoneEnchantAdd(), (b, m) =>
+        {
+            EntityBuffs.ApplyAdd(m);
+            b.RepaintTarget(m.Handle);
+        });
+        Bind(new ZoneEnchantRemove(), (b, m) =>
+        {
+            EntityBuffs.ApplyRemove(m);
+            b.RepaintTarget(m.Handle);
+        });
+        Bind(new ZoneEnchantUpdate(), (b, m) =>
+        {
+            EntityBuffs.ApplyUpdate(m);
+            b.RepaintTarget(m.Handle);
+        });
+        Bind(new ZoneEnchantReset(), (b, m) =>
+        {
+            EntityBuffs.ApplyReset(m);
+            b.RepaintTarget(m.Handle);
+        });
+        Bind(new ZoneTeamMemberEnchant(), (_, m) =>
+            EntityBuffs.ApplyTeamMember(m));
+        Bind(new ZoneEnchantPause(), (b, m) =>
+        {
+            EntityBuffs.ApplyPause(m.Handle, m.EffectId, true);
+            b.RepaintTarget(m.Handle);
+        });
+        Bind(new ZoneEnchantStart(), (b, m) =>
+        {
+            EntityBuffs.ApplyPause(m.Handle, m.EffectId, false);
+            b.RepaintTarget(m.Handle);
+        });
 
         GD.Print("[buff] binds 299/300/301/315/372/445/446 posés " +
             $"(self={s.SelectedCharId})");
     }
 
-    /// <summary>Applique la mutation puis repeint la target frame si
-    /// le handle concerné est la cible affichée.</summary>
-    private void ApplyAndRepaint(int handle, Action apply)
+    /// <summary>Repeint la target frame si le handle concerné est la
+    /// cible affichée.</summary>
+    private void RepaintTarget(int handle)
     {
-        apply();
         var t = _hud.Target;
         if (t != null && t.TargetHandle == (uint)handle)
             t.SetBuffs(EntityBuffs.Snapshot(handle));

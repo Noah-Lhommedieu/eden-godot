@@ -93,6 +93,20 @@ public static class SpellZone
     /// elle — c'est la règle « pas de cast sans cible ».</summary>
     public static bool RequiresTarget(CastShape s) => s == CastShape.Single;
 
+    /// <summary>Règle propriétaire complète (docs/knowledge/definitions.md) :
+    /// un sort ciblé ne se lance pas sans cible valide, SAUF forme centrée
+    /// lanceur (3/4) ou sort dont la DESCRIPTION dit qu'il s'exerce autour du
+    /// lanceur (<paramref name="casterCentered"/>, voir
+    /// <see cref="SpellCastRule.CasterCentered"/>). Le cercle au sol (1) se
+    /// vise au curseur : sans visée ni cible il est aussi refusé.</summary>
+    public static bool RequiresTarget(CastShape s, bool casterCentered) =>
+        s switch
+        {
+            CastShape.Self or CastShape.Nearby => false,
+            CastShape.Single => true,
+            _ => !casterCentered,
+        };
+
     /// <summary>Vecteur unitaire (x,y sol Eden) du cap Eden <paramref name="dir"/>.</summary>
     public static (float X, float Y) Axis(float dir)
     {
@@ -130,7 +144,7 @@ public static class SpellZone
     /// normalisé côté serveur, la distance n'importe pas).</para>
     /// </summary>
     public static CastPlan Plan(CastShape shape, bool hasTarget, float targetX, float targetY,
-        float casterX, float casterY, float facingDir, float reach)
+        float casterX, float casterY, float facingDir, float reach, bool casterCentered = false)
     {
         switch (shape)
         {
@@ -139,12 +153,20 @@ public static class SpellZone
                 return new CastPlan(CastRoute.ToNowhere, casterX, casterY);
             case CastShape.Ground:
                 if (hasTarget) return new CastPlan(CastRoute.ToLocation, targetX, targetY);
-                return Ahead(casterX, casterY, facingDir, MathF.Min(reach, GroundFallbackMax));
+                // Sans cible ni visée : refusé, sauf cercle décrit « autour du lanceur »
+                // (ex. Rayonnement de Guérison) → centré sur le lanceur.
+                return casterCentered
+                    ? new CastPlan(CastRoute.ToLocation, casterX, casterY)
+                    : new CastPlan(CastRoute.Refused, casterX, casterY);
             case CastShape.Direction:
             case CastShape.Cross:
             case CastShape.Sector:
                 if (hasTarget) return new CastPlan(CastRoute.ToLife, targetX, targetY);
-                return Ahead(casterX, casterY, facingDir, 5f);
+                // Sans cible : seulement si la description dit « autour/devant le lanceur »
+                // (axe = cap du lanceur) ; sinon refusé comme un sort ciblé.
+                return casterCentered
+                    ? Ahead(casterX, casterY, facingDir, 5f)
+                    : new CastPlan(CastRoute.Refused, casterX, casterY);
             default:
                 // Forme 0 (cible unique) : le natif n'a aucun message
                 // « dans le vide » — CastToNowhere refuse la forme 0
@@ -172,4 +194,44 @@ public static class SpellZone
         var (ax, ay) = Axis(dir);
         return new CastPlan(CastRoute.ToLocation, cx + ax * dist, cy + ay * dist);
     }
+}
+
+/// <summary>
+/// Règle « sort ciblé sans cible » pilotée par la DESCRIPTION FR du sort
+/// (T_Spell.ini). Une AoE à forme (cercle 1, direction 2, croix 5, secteur 6)
+/// ne se lance sans cible que si son texte la centre sur le lanceur :
+/// « autour du lanceur / de lui / de l'invocateur », « devant le lanceur »,
+/// « Jeteur de sort téléporté… », ou « N m alentour » sans mention de cible
+/// (« la cible », « zone visée », « sélectionnée »). Les formes 3/4 sont
+/// toujours centrées lanceur ; la forme 0 exige une cible (soutien
+/// non hostile : repli sur soi, voir <c>SkillCast.Cast</c>).
+/// La liste serveur <c>SpellCastRouting.CasterCenteredSpellIds</c> est
+/// dérivée de la MÊME règle (test de concordance NetTests).
+/// </summary>
+public static class SpellCastRule
+{
+    private static readonly System.Text.RegularExpressions.RegexOptions O =
+        System.Text.RegularExpressions.RegexOptions.IgnoreCase |
+        System.Text.RegularExpressions.RegexOptions.CultureInvariant;
+
+    private static readonly System.Text.RegularExpressions.Regex Caster = new(
+        @"(autour (de lui|du lanceur|du jeteur|de l'invocateur|de vous|de soi)|" +
+        @"devant (lui|vous|le lanceur|le jeteur)|(jeteur|lanceur) de sort t[ée]l[ée]port)", O);
+    private static readonly System.Text.RegularExpressions.Regex Target = new(
+        @"cible|zone vis|s[ée]lectionn|choisi", O);
+    private static readonly System.Text.RegularExpressions.Regex Around = new(
+        @"alentour", O);
+
+    /// <summary>La description place-t-elle l'effet autour du lanceur ?</summary>
+    public static bool CasterCentered(string? description)
+    {
+        if (string.IsNullOrWhiteSpace(description)) return false;
+        return Caster.IsMatch(description) ||
+               (Around.IsMatch(description) && !Target.IsMatch(description));
+    }
+
+    /// <summary>Forme et description → le sort se lance-t-il sans cible
+    /// (hors repli « soi » des sorts de soutien) ?</summary>
+    public static bool CastableWithoutTarget(CastShape shape, string? description) =>
+        !SpellZone.RequiresTarget(shape, CasterCentered(description));
 }

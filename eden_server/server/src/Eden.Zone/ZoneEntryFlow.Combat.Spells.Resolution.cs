@@ -724,7 +724,8 @@ public sealed partial class ZoneEntryFlow
         {
             var level = await PlayerSpellLevelAsync(st, spellId);
             await AddMobEnchantAsync(session, st, mob, (int)st.CharId,
-                enchantId, def.Value + GetSpellAttrModify(st, 9, spellId),
+                enchantId, EnchantRestSeconds(
+                def.Value + GetSpellAttrModify(st, 9, spellId)),
                 level, def.Value == -9, token);
         }
     }
@@ -866,6 +867,17 @@ public sealed partial class ZoneEntryFlow
         // sol », puis 410.
         if (!SpellCastRouting.AcceptsToLocation(
                 SpellCastRouting.ShapeOf(def)))
+        {
+            await RefuseCastRouteAsync(session, 16, spellId,
+                SpellCastRouting.TextCantCastToLocation, "", token);
+            return;
+        }
+        // Règle propriétaire « pas de cast ciblé sans cible » : une forme
+        // directionnelle (2/5/6) ne se lance vers un point sans cible que si
+        // sa description la centre sur le lanceur. Sinon elle passe par le 9
+        // avec une cible ; un 16 forgé est refusé (1451 + 410).
+        if (!SpellCastRouting.AcceptsLocationWithoutTarget(
+                SpellCastRouting.ShapeOf(def), (int)spellId))
         {
             await RefuseCastRouteAsync(session, 16, spellId,
                 SpellCastRouting.TextCantCastToLocation, "", token);
@@ -1577,7 +1589,8 @@ public sealed partial class ZoneEntryFlow
                 var lvl = await PlayerSpellLevelAsync(st, spellId);
                 await AddPlayerEnchantAsync(session, st,
                     (int)st.CharId, def.ResultSpellId,
-                    def.Value + GetSpellAttrModify(st, 9, spellId),
+                    EnchantRestSeconds(
+                def.Value + GetSpellAttrModify(st, 9, spellId)),
                     lvl,
                     CancellationToken.None, hidden: def.Value == -9);
             }
@@ -1801,7 +1814,8 @@ public sealed partial class ZoneEntryFlow
                     Random.Shared.Next(100) < def.ResultSpellChance))
                 await AddPlayerEnchantAsync(vsession, v, (int)st.CharId,
                     def.ResultSpellId,
-                    def.Value + GetSpellAttrModify(st, 9, spellId),
+                    EnchantRestSeconds(
+                def.Value + GetSpellAttrModify(st, 9, spellId)),
                     lvl,
                     CancellationToken.None, hidden: def.Value == -9);
         }

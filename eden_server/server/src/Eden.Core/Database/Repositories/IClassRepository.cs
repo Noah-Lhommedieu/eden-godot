@@ -12,6 +12,13 @@ public interface IClassRepository
     Task<int> PromoteAwakenedAsync();
     Task<bool> ChangeClassAsync(int characterId, int newClassId);
     Task AddClassExpAsync(int characterId, int classId, long expGain);
+    /// <summary>Cap natif <c>class_lv ≤ char_lv</c> : rabaisse les
+    /// lignes <c>player_classlist.level</c> et le miroir
+    /// <c>player_characters.class_lv</c> qui dépassent le niveau perso
+    /// (répare les descentes <c>//level</c> — HUD live « 10|11 »).
+    /// L'exp de chaque ligne est préservée. Retourne le nb de lignes
+    /// classlist corrigées.</summary>
+    Task<int> ClampClassLevelsAsync(int characterId, int maxLevel);
     /// <summary>+N aa_point sur le pool de la classe COURANTE
     /// (GainAAPoint natif @0x840c7f0 — player_characters.aa_point,
     /// cap 0x78=120, +1 par niveau de classe). Retourne le nouveau

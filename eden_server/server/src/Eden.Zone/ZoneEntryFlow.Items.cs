@@ -461,14 +461,16 @@ public sealed partial class ZoneEntryFlow
                     // d'entrée, valeur brute courante).
                     await SendAttrAsync(session, (uint)st.CharId, 0x35,
                         0, 0, token);
-                    await session.SendAsync(
-                        new CNC_CZ_ClientEnchantAdd
-                        {
-                            Field1 = charId,            // i32 acteur
-                            Field2 = (short)enchantId,  // s16 enchant
-                            Field3 = 0, Field4 = 0, Field5 = 0,
-                            Field6 = 0, Field7 = 0,
-                        }, token);
+                    // L'effet natif EST un CEnchant (RollBack au retrait
+                    // : flag retombé) — statut de session réel
+                    // (persist:false, icône + annulation 85 + refresh
+                    // 296 via AddPlayerEnchantAsync). L'ancien 299 brut
+                    // à champs nuls créait une icône fantôme non
+                    // annulable — même famille que les fuites de
+                    // status instantanés.
+                    await AddPlayerEnchantAsync(session, st, charId,
+                        enchantId, buffSeconds > 0 ? buffSeconds : -1,
+                        1, token, persist: false);
                     EdenLog.Write($"[Zone] UseTwoWeapon char={charId} " +
                         "-> dual wield débloqué (attr 1000)");
                     break;

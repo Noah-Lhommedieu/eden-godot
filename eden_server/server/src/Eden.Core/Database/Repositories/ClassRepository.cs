@@ -223,6 +223,33 @@ public sealed class ClassRepository : IClassRepository
         }
     }
 
+    /// <inheritdoc/>
+    public async Task<int> ClampClassLevelsAsync(int characterId,
+        int maxLevel)
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        var n = await connection.ExecuteAsync(
+            "UPDATE player_classlist SET level=@Max " +
+            "WHERE player_id=@Id AND level>@Max",
+            new { Max = maxLevel, Id = characterId });
+        try
+        {
+            await connection.ExecuteAsync(
+                "UPDATE player_characters SET class_lv=@Max " +
+                "WHERE id=@Id AND class_lv>@Max",
+                new { Max = maxLevel, Id = characterId });
+        }
+        catch (Exception ex)
+        {
+            // Même tolérance que SetClassProgressAsync : schéma sans
+            // la colonne class_lv ne doit pas casser le clamp.
+            EdenLog.Write(
+                $"[ClassRepo] clamp miroir class_lv ignoré : {ex.Message}");
+        }
+        return n;
+    }
+
     public async Task AddClassExpAsync(int characterId, int classId, long expGain)
     {
         using var connection = _db.CreateConnection();

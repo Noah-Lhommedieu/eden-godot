@@ -117,10 +117,16 @@ Aucune capture ne montre de cadre de quad ni de liseré de feuille.
   `NativeCursor` fait une copie de pixels (`Image.GetRegion`) → immunisé.
   Captures témoins lues : `artifacts/ui-border/zoom-mascot-0.9.png`,
   `zoom-bar-0.3.png`, `loading-after-*.png` — bords propres.
-- Incohérence soupçonnée (non vérifiée) : `DemoTree.Build` inverse le V
-  des UV (`1f - p.Y`) alors que `NifScene` ne le fait pas — l'un des deux
-  chemins afficherait les textures géométriques en miroir vertical ;
-  invisible sur les sprites symétriques, à confirmer sur un asset
-  asymétrique.
+- Incohérence UV tranchée (verified, 2026-11-04, r253) : `DemoTree.Build`
+  inverse le V (`1f - p.Y`), `NifScene` copie les UV NIF bruts. Le flag
+  `NativeFxOptions.InvertV` (compensation `-Tv` dans `MatState.Apply`)
+  était à `true` par défaut — calibré sur DemoTree — alors que les chemins
+  production (NifScene : montures, persos, mobs, SpellFx) ont le V brut.
+  Résultat : scroll V inversé partout (flammes r253 pointe→base au lieu de
+  base→pointe ; vérifié par données : V=0 à la pointe des rubans, `+Tv`
+  déplace le motif vers V=0). Corrigé : `InvertV=false` par défaut, `true`
+  uniquement dans NativeFxDemo. Confirmé visuellement in-game. Reste à
+  confirmer sur un asset asymétrique si les textures statiques des deux
+  chemins diffèrent en miroir vertical.
 - `xform-unresolved:NiPathInterpolator` (S01451, S01151) : B-spline /
   chemin non décodé — note existante, quelques drivers absents.

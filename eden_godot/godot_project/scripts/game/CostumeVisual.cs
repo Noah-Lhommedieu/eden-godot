@@ -26,6 +26,24 @@ public static class CostumeVisual
         _ => 4,
     };
 
+    /// <summary>Rangée du profil natif pour l'archétype c_class d'une
+    /// classe (cellule certsBase−10 — mesuré sur fr-full : 1 = 鎧甲/
+    /// heavy pour 戰士/騎士/聖騎士, 2 = 皮甲/light pour
+    /// 獵人/盜賊/吟遊詩人/工程師/武鬥家/舞者/遊俠, 3 = 布衣/cloth pour
+    /// 魔術師/神官/幻術師/巫醫). La licence de la classe détermine la
+    /// rangée « Current Gear » du EquipmentWnd ; les autres affichent
+    /// leur page d'ensemble sauvegardée. Mapping rangée ↔ conteneur
+    /// identique à <see cref="ContainerForKind"/> (heavy→4, light→3,
+    /// cloth→2). Archétype inconnu (0) → repli Cloth (1re rangée
+    /// native).</summary>
+    public static (string Row, int Container) RowForArchetype(
+        int archetype) => archetype switch
+    {
+        1 => ("Armor", 4),
+        2 => ("Leather", 3),
+        _ => ("Cloth", 2),
+    };
+
     /// <param name="worn">loc → itemId tenu (conteneur 0).</param>
     /// <param name="costumeAt">(conteneur, loc) → itemId costume (0 = vide).</param>
     /// <param name="kindOf">itemId → kind c_item (-1 si inconnu).</param>

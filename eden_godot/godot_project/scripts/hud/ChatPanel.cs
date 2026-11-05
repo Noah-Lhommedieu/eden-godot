@@ -650,15 +650,7 @@ public partial class ChatPanel : Control
 
         /// <summary>Texte réel dans l'EditBox + touche Entrée
         /// injectée — le même chemin que l'utilisateur.</summary>
-        private void Submit(string text)
-        {
-            _c.FocusInput();
-            _c._input!.Text = text;
-            Input.ParseInputEvent(new InputEventKey
-            { Keycode = Key.Enter, Pressed = true });
-            Input.ParseInputEvent(new InputEventKey
-            { Keycode = Key.Enter, Pressed = false });
-        }
+        private void Submit(string text) => CmdProbe.SubmitTo(_c, text);
 
         private string Tail(int n)
         {
@@ -682,6 +674,45 @@ public partial class ChatPanel : Control
             {
                 GD.PrintErr($"[chat-test] shot : {e.Message}");
             }
+        }
+    }
+
+    /// <summary>--cmd-test=&lt;texte&gt; : sonde QA — soumet une ligne
+    /// de chat arbitraire (ex. « //trait 2 ») par le vrai chemin
+    /// EditBox + Entrée → SendChat → NCID 34. Une seule soumission,
+    /// ~4 s après l'affichage du chat.</summary>
+    public sealed partial class CmdProbe : Node
+    {
+        private readonly ChatPanel _c;
+        private readonly string _text;
+        private int _frame;
+
+        public CmdProbe(ChatPanel c, string text)
+        {
+            _c = c; _text = text; Name = "__cmd_probe__";
+        }
+
+        public override void _Process(double delta)
+        {
+            if (Screens.LoadingScreen.Active != null ||
+                _c._input == null || !_c.IsVisibleInTree())
+                return;
+            if (++_frame < 240) return;
+            SubmitTo(_c, _text);
+            GD.Print($"[cmd-test] soumis «{_text}»");
+            SetProcess(false);
+        }
+
+        /// <summary>Texte réel dans l'EditBox + touche Entrée
+        /// injectée — le même chemin que l'utilisateur.</summary>
+        public static void SubmitTo(ChatPanel c, string text)
+        {
+            c.FocusInput();
+            c._input!.Text = text;
+            Input.ParseInputEvent(new InputEventKey
+            { Keycode = Key.Enter, Pressed = true });
+            Input.ParseInputEvent(new InputEventKey
+            { Keycode = Key.Enter, Pressed = false });
         }
     }
 }

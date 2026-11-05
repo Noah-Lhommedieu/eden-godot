@@ -468,7 +468,10 @@ public sealed partial class ZoneEntryFlow
         sc.GenderId = chr.GenderId;
         sc.ClassId = chr.ClassId;
         sc.Level = Math.Max(chr.Level, 1);
-        sc.ClassLevel = Math.Max(chr.ClassLevel, 1);
+        // Cap natif class_lv ≤ char_lv : une descente //level
+        // antérieure laissait le miroir au-dessus → HUD « 10|11 » ;
+        // la ligne DB est réparée dans WriteEntryPhaseAsync.
+        sc.ClassLevel = Math.Clamp(chr.ClassLevel, 1, sc.Level);
         sc.ActiveTitle = chr.Appellation;
         sc.Experience = chr.Experience;
         sc.CreateFlag = chr.CreationFlag;
@@ -497,6 +500,14 @@ public sealed partial class ZoneEntryFlow
         EntryPrefetch pf)
     {
         var cid = (int)sc.CharId;
+        // Réparation du cap class_lv ≤ char_lv (ApplyEntryIdentity a
+        // clampé l'état) : rabaisse les lignes classlist + le miroir
+        // qui dépassent — couvre aussi les classes non actives.
+        if (chr.ClassLevel > sc.Level
+            || pf.Classes.Any(r => r.ClassLevel > sc.Level))
+            await _persistence.EnqueueAsync(cid,
+                _ => _services.Classes.ClampClassLevelsAsync(cid,
+                    sc.Level));
         var allEquip = pf.AllEquip.ToList();
         var equipped0 = allEquip.Where(i => i.BagId == 0).ToList();
         // Node sans scène → repli zone de spawn ; groupe d'instance.

@@ -12,6 +12,14 @@ public static class BlobShadow
 {
     private static ImageTexture? _radial;
 
+    /// <summary>Masque de la couche visuelle 2 réservée aux visuels
+    /// d'entités (corps, monture, équipement, labels) : le blob a un
+    /// volume de 3 m centré sous l'entité — sans exemption il
+    /// « décalque » aussi le modèle lui-même (bloc noir sur la toile
+    /// alpha-test du Germe Fétide, capot sombre des champignoïdes,
+    /// invisibles en banc où le blob n'est pas posé).</summary>
+    public const uint EntityLayerMask = 1u << 1;
+
     /// <summary>Crée le Decal d'ombre douce. <paramref name="radius"/>
     /// = demi-largeur de l'ellipse projetée.</summary>
     public static Decal Make(float radius = 0.8f)
@@ -23,7 +31,23 @@ public static class BlobShadow
             Size = new Vector3(radius * 2f, 3f, radius * 2f),
             Modulate = new Godot.Color(0f, 0f, 0f, 0.55f),
             NormalFade = 0.5f,
+            // Le Decal ne se projette que sur la couche 1+ (monde) —
+            // jamais sur les visuels d'entités (couche 2, cf.
+            // ExemptVisuals).
+            CullMask = 0xFFFFFu & ~EntityLayerMask,
         };
+    }
+
+    /// <summary>Exclut tous les rendus sous <paramref name="root"/>
+    /// des projections de décalques en les passant couche 2
+    /// (idempotent — les couches ne sont pas héritées, chaque
+    /// VisualInstance3D est touché : corps, monture, équipement
+    /// attaché, anneau de cible, labels).</summary>
+    public static void ExemptVisuals(Node root)
+    {
+        foreach (var v in root.FindChildren("*", "GeometryInstance3D",
+                     true, false).Cast<GeometryInstance3D>())
+            if (v.Layers != EntityLayerMask) v.Layers = EntityLayerMask;
     }
 
     /// <summary>Texture radiale 64×64 : disque à bord doux (alpha).</summary>

@@ -22,8 +22,8 @@ public static class ItemTipFormat
     /// « Thunder Gem » = col 68, « Nature Gem » = col 69, « Holy Light
     /// Gem » = col 70, « Dark Gem » = col 71 ; désasm @0x00898d70 :
     /// +0x8c→0x4b2 Slash … +0x9c→0x4ba Dark). ⚠️ Ce n'est PAS l'ordre
-    /// des ids wire de <c>PlayerVitals.Resists</c> (Lightning avant
-    /// Ice).</summary>
+    /// d'affichage du profil (Lightning avant Ice —
+    /// <c>PlayerVitals.ResistWire</c> fait la correspondance).</summary>
     public static readonly string[] ResistNames =
     {
         "Slash Resistance", "Strike Resistance", "Pierce Resistance",

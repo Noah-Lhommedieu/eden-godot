@@ -93,29 +93,54 @@ public class SpellZoneTests
     }
 
     [Fact]
-    public void Plan_GroundWithoutTarget_AheadOfCasterOnFacingAxis_ClampedByReach()
+    public void Plan_GroundWithoutTarget_RefusedUnlessCasterCentered()
     {
-        // face au sud (dir 0) : devant = y décroissant
+        // Règle propriétaire : pas de cast ciblé sans cible. Cercle au sol
+        // sans cible ni visée → refusé (la visée passe par GroundTargeter).
         var p = SpellZone.Plan(CastShape.Ground, false, 0, 0, 100, 200, 0f, 54f);
-        Assert.Equal(CastRoute.ToLocation, p.Route);
-        Assert.Equal(100f, p.X, 3);
-        Assert.Equal(200f - SpellZone.GroundFallbackMax, p.Y, 3);
-        var near = SpellZone.Plan(CastShape.Ground, false, 0, 0, 100, 200, 0f, 4f);
-        Assert.Equal(196f, near.Y, 3);   // portée 4 < 8
+        Assert.Equal(CastRoute.Refused, p.Route);
+        // Description « autour de l'invocateur » (Rayonnement de Guérison) :
+        // centré sur le lanceur, sans cible.
+        var c = SpellZone.Plan(CastShape.Ground, false, 0, 0, 100, 200, 0f, 54f,
+            casterCentered: true);
+        Assert.Equal(CastRoute.ToLocation, c.Route);
+        Assert.Equal((100f, 200f), (c.X, c.Y));
     }
 
     [Theory]
     [InlineData(CastShape.Direction)]
     [InlineData(CastShape.Cross)]
     [InlineData(CastShape.Sector)]
-    public void Plan_Directional_TargetUsesToLife_ElseLocationAlongFacing(CastShape s)
+    public void Plan_Directional_TargetUsesToLife_NoTargetRefusedUnlessCasterCentered(CastShape s)
     {
         Assert.Equal(CastRoute.ToLife, SpellZone.Plan(s, true, 5, 5, 0, 0, 0f, 30f).Route);
-        var p = SpellZone.Plan(s, false, 0, 0, 0, 0, MathF.PI / 2, 30f);
+        Assert.Equal(CastRoute.Refused,
+            SpellZone.Plan(s, false, 0, 0, 0, 0, MathF.PI / 2, 30f).Route);
+        // « autour de lui / devant le lanceur » : NCID 16 le long du cap.
+        var p = SpellZone.Plan(s, false, 0, 0, 0, 0, MathF.PI / 2, 30f, casterCentered: true);
         Assert.Equal(CastRoute.ToLocation, p.Route);
         var (ax, ay) = SpellZone.AxisTo(0, 0, p.X, p.Y, 0f);
         Assert.Equal(-1f, ax, 4); Assert.Equal(0f, ay, 4);    // ouest, comme le cap
     }
+
+    [Theory]
+    // (description FR réelle, abrégée, forme, attendu « se lance sans cible »)
+    [InlineData("ATQ PHY +#29# points et frappe tous les ennemis à 3 m. alentour.", CastShape.Self, true)]       // 50015 Cyclone
+    [InlineData("PV Max +10 % pour tous les membres du groupe dans un rayon 15 mètres.", CastShape.Self, true)]  // 50107 buff de groupe
+    [InlineData("Rend #30# PV à tous les membres du groupe dans un rayon de 8 mètres autour de l'invocateur.", CastShape.Ground, true)] // 50109
+    [InlineData("Inflige des DÉG Feu dans un rayon de 6 m.", CastShape.Ground, false)]                            // 50127 : visée au sol
+    [InlineData("zone en éventail de 5 mètres autour de lui, les assommant", CastShape.Sector, true)]              // 50398 Onde de Choc
+    [InlineData("zone en arc de cercle de 6 m. devant le lanceur.", CastShape.Sector, true)]                       // 58478
+    [InlineData("Jeteur de sort téléporté 30 m en avant dans la direction choisie", CastShape.Direction, true)]    // 50385 Flash Gordon
+    [InlineData("Inflige des DÉG aux cibles dans un éventail de 6 m. Arme requise : #18#", CastShape.Sector, false)] // 58353 Grille Sonique
+    [InlineData("ennemis sur une ligne droite de 6 mètres devant la cible sélectionnée", CastShape.Direction, false)] // 50184 Purgatoire
+    [InlineData("zone en croix de 4,5 m. ainsi que Traversombre", CastShape.Cross, false)]                         // 50469
+    [InlineData("Ennemis téléportés près de la cible. DÉG à 15 m alentour.", CastShape.Ground, false)]             // « cible » prime sur « alentour »
+    [InlineData("Inflige des DÉG de Nature aux cibles sélectionnées dans un rayon de 5 mètres.", CastShape.Single, false)] // 50027 Tornade
+    [InlineData("Inflige +#B9$150# dégâts par seconde à un ennemi", CastShape.Single, false)]                      // 50022 Perforation
+    [InlineData(null, CastShape.Sector, false)]
+    public void CastableWithoutTarget_FollowsShapeAndDescription(string? desc, CastShape shape, bool ok) =>
+        Assert.Equal(ok, SpellCastRule.CastableWithoutTarget(shape, desc));
 
     [Fact]
     public void Plan_Single_TargetToLife_ElseRefused()
@@ -167,5 +192,54 @@ public class SpellZoneTests
         var (x, y, clamped) = SpellZone.ClampToReach(0, 0, 30, 40, 10);   // distance 50 → bornée à 10
         Assert.True(clamped);
         Assert.Equal(6f, x, 4); Assert.Equal(8f, y, 4);
+    }
+
+    private static string? RepoRoot()
+    {
+        for (var d = AppContext.BaseDirectory; d != null; d = Path.GetDirectoryName(d))
+            if (Directory.Exists(Path.Combine(d, "corpus", "fr-full")) &&
+                Directory.Exists(Path.Combine(d, "eden_server"))) return d;
+        return null;
+    }
+
+    /// <summary>La liste serveur des formes directionnelles centrées lanceur
+    /// (SpellCastRouting.CasterCenteredSpellIds) doit être EXACTEMENT ce que la
+    /// règle de description client donne sur les données fr-full (formes 2/5/6).</summary>
+    [Fact]
+    public void CasterCenteredIds_MatchServerList()
+    {
+        var root = RepoRoot();
+        if (root == null) return;   // arbre partiel : rien à comparer
+        var db = Path.Combine(root, "corpus", "fr-full", "data", "db");
+        var latin1 = System.Text.Encoding.Latin1;
+        var text = File.ReadAllText(Path.Combine(db, "t_spell.ini"), latin1).Replace("\r", "");
+        var desc = new Dictionary<int, string>();
+        foreach (System.Text.RegularExpressions.Match m in System.Text.RegularExpressions.Regex.Matches(
+                     text, @"^(\d{5})\|([^|\n]*)\|([^|]*)\|$",
+                     System.Text.RegularExpressions.RegexOptions.Multiline))
+            desc[int.Parse(m.Groups[1].Value)] = System.Text.RegularExpressions.Regex.Replace(m.Groups[3].Value, @"\$\d+\$", "");
+        var expected = new SortedSet<int>();
+        foreach (var line in File.ReadLines(Path.Combine(db, "c_spell.ini"), latin1))
+        {
+            var f = line.Split('|');
+            // Un nom Big5 peut contenir 0x7C : recoller les colonnes en trop (44 attendues).
+            if (f.Length > 44) f = f[..16].Concat(new[] { string.Join("|", f[16..(17 + f.Length - 44)]) })
+                .Concat(f[(17 + f.Length - 44)..]).ToArray();
+            if (f.Length != 44 || !int.TryParse(f[0], out var id)) continue;
+            int.TryParse(f[20], out var p1); int.TryParse(f[30], out var sub);
+            var shape = SpellZone.ShapeOf(p1, sub);
+            if (shape is CastShape.Direction or CastShape.Cross or CastShape.Sector &&
+                desc.TryGetValue(id, out var d) && SpellCastRule.CasterCentered(d))
+                expected.Add(id);
+        }
+        var src = File.ReadAllText(Path.Combine(root, "eden_server", "server", "src", "Eden.Zone",
+            "Combat", "SpellCastRouting.cs"));
+        var block = src[src.IndexOf("CasterCenteredSpellIds =", StringComparison.Ordinal)..];
+        block = block[block.IndexOf('{', block.IndexOf("new HashSet<int>", StringComparison.Ordinal))..];
+        block = block[..block.IndexOf("};", StringComparison.Ordinal)];
+        var actual = new SortedSet<int>(System.Text.RegularExpressions.Regex.Matches(block, @"\d{5}")
+            .Select(m => int.Parse(m.Value)));
+        Assert.Equal(expected, actual);
+        Assert.True(expected.Count >= 5, "règle trop stricte : liste vide ?");
     }
 }

@@ -46,6 +46,7 @@ public partial class SettingsApplier : Node
     /// alors le WorldEnvironment, le soleil, la caméra joueur,
     /// FogCeiling/Grass et les particules.</summary>
     private int _gfxApplyIn;
+    private bool _prewarmScheduled;
     private int _qaTab = -1;
     /// <summary>Secondes restantes pour poser le thème dès que le HUD
     /// et son atlas existent (le HUD se monte après le chargement des
@@ -73,6 +74,16 @@ public partial class SettingsApplier : Node
         {
             if (a == "--settings-open")
                 CallDeferred(nameof(OpenSettings));
+            else if (a.StartsWith("--settings-open-at="))
+                // QA : ouvre la fenêtre à t=<s> s (en jeu, HUD monté)
+                // — « lag à l'ouverture des paramètres » mesuré par
+                // les scopes PerfTrace de OpenSettings/SettingsWindow.
+                foreach (var v in a[19..].Split(','))
+                    if (float.TryParse(v,
+                            System.Globalization.CultureInfo
+                                .InvariantCulture, out var sec))
+                        GetTree().CreateTimer(sec).Timeout +=
+                            OpenSettings;
             else if (a.StartsWith("--settings-tab=") &&
                      int.TryParse(a[15..], out var tab))
                 _qaTab = tab;
@@ -122,8 +133,8 @@ public partial class SettingsApplier : Node
         Section("display", ApplyDisplay);
         Section("audio", ApplyAudio);
         Section("input", () => InputBindings.Apply(S));
-        Section("interface", ApplyInterface);
-        Section("graphics", ApplyGraphics);
+        Section("interface", () => ApplyInterface(force: false));
+        Section("graphics", () => ApplyGraphics(force: false));
         // EDENFR pur (eden-godot) : la base du corpus EST le français,
         // l'anglais est en pause — EDEN_LANG_EN=1 réactive la voie
         // historique (overlay lang/ + repli EN) pour comparaison.
@@ -158,11 +169,23 @@ public partial class SettingsApplier : Node
     /// <summary>Ouvre la fenêtre Paramètres (créée à la demande).</summary>
     public void OpenSettings()
     {
-        EnsureWindow();
+        var t0 = Perf.PerfTrace.Mark();
+        var built = EnsureWindow();
         if (_win == null) return;
-        _win.RefreshAll();
+        // _Ready a déjà fait RefreshAll : ne pas re-synchroniser (et
+        // reconstruire la grille de binds) une seconde fois à la
+        // première ouverture. Re-ouverture : resync, pas de rebuild.
+        if (!built) _win.RefreshAll();
         if (_qaTab >= 0) _win.SelectTab(_qaTab);
         Hud.HudWindows.Open(_win);
+        Perf.PerfTrace.Report("settings.open", t0);
+        // Détaillé : les scopes sw.*/settings.* s'empilent dans le
+        // journal d'évènements — relu juste après l'ouverture pour
+        // attribuer le coût même sans frame longue.
+        if (Perf.PerfTrace.Enabled)
+            Callable.From(() => GD.Print(
+                $"[perf] settings.open events : " +
+                $"{Perf.PerfTrace.EventsSince(t0)}")).CallDeferred();
     }
 
     /// <summary>Bascule ouvert/fermé (action eden_system + boutons).</summary>
@@ -179,20 +202,23 @@ public partial class SettingsApplier : Node
     /// <summary>Point d'entrée statique (toggle).</summary>
     public static void Toggle() => Instance?.ToggleSettings();
 
-    private void EnsureWindow()
+    /// <summary>true quand la fenêtre vient d'être (re)construite.</summary>
+    private bool EnsureWindow()
     {
-        if (_layer == null) return;
+        if (_layer == null) return false;
         // Cadre natif dispo seulement avec le HUD : on reconstruit la
         // fenêtre quand on passe du login au jeu (ou l'inverse).
-        var hasHud = Hud.HudExtensions.FindHud()?.Tex != null;
+        var hasHud = FindHud()?.Tex != null;
         if (_win != null && _win.BuiltWithHud != hasHud)
         {
             _win.QueueFree();
             _win = null;
         }
-        if (_win != null) return;
+        if (_win != null) return false;
+        using var _pt = Perf.PerfTrace.Scope("settings.build");
         _win = new SettingsWindow();
         _layer.AddChild(_win);
+        return true;
     }
 
     // ==================================================================
@@ -216,11 +242,23 @@ public partial class SettingsApplier : Node
         TickThemeBoot(delta);
         if (_applyIn > 0 && --_applyIn == 0)
         {
-            ApplyGraphics();
-            ApplyInterface();
+            ApplyGraphics(force: true);
+            ApplyInterface(force: true);
+        }
+        // Pré-chauffage : la fenêtre Paramètres coûte ~33 ms à
+        // construire — on la crée pendant le calme post-spawn pour
+        // que l'ouverture n'affiche qu'un Toggle (~0 ms). 8 s laisse
+        // le spawn/la map se stabiliser avant de payer la frame.
+        if (_win == null && _hud?.Tex != null && !_prewarmScheduled)
+        {
+            _prewarmScheduled = true;
+            GetTree().CreateTimer(8.0).Timeout += () =>
+            {
+                if (_win == null) EnsureWindow();
+            };
         }
         if (_gfxApplyIn > 0 && --_gfxApplyIn == 0)
-            ApplyGraphics();
+            ApplyGraphics(force: true);
     }
 
     /// <summary>Un nœud dépendant des réglages graphiques entre dans
@@ -233,6 +271,10 @@ public partial class SettingsApplier : Node
     /// mêmes valeurs.</summary>
     private void OnNodeAdded(Node n)
     {
+        // Découverte du HUD par évènement : la scène (~12 k nœuds)
+        // n'est plus balayée à chaque FindHud() — _hud est posé dès
+        // que HudRoot entre dans l'arbre.
+        if (n is Hud.HudRoot h) _hud = h;
         if (n is WorldEnvironment or DirectionalLight3D or Camera3D
                 or GpuParticles3D ||
             n.Name.ToString() is "FogCeiling" or "Grass")
@@ -264,8 +306,32 @@ public partial class SettingsApplier : Node
     // ==================================================================
     // Graphismes (D1/D5) — à chaud sur les nœuds de la scène courante
 
-    private void ApplyGraphics()
+    /// <summary>Signature des réglages lus par ApplyGraphics : une
+    /// requête sans changement (autre onglet modifié, ApplyAndSave
+    /// global) saute le balayage — 6 FindChildren sur ~12 k nœuds.
+    /// <paramref name="force"/> reste requis quand de NOUVEAUX nœuds
+    /// cibles arrivent (changement de scène, map asynchrone — les
+    /// réglages identiques doivent être re-posés sur eux).</summary>
+    private int _gfxSig = -1;
+
+    private int GfxSignature()
     {
+        var h = new HashCode();
+        h.Add(S.Shadows); h.Add(S.ShadowMapSize); h.Add(S.ViewDistance);
+        h.Add(S.Dof); h.Add(S.Ssao); h.Add(S.Ssil); h.Add(S.Fog);
+        h.Add(S.Grass); h.Add(S.Particles); h.Add(S.Antialiasing);
+        h.Add(S.ModelQuality); h.Add(S.TextureQuality); h.Add(S.FxWater);
+        h.Add(S.Bloom); h.Add(S.FxGlare); h.Add(S.FxPhoto);
+        h.Add(S.FxDeath); h.Add(S.CharDraw); h.Add(S.MaxFx);
+        h.Add(S.Outline);
+        return h.ToHashCode();
+    }
+
+    private void ApplyGraphics(bool force = false)
+    {
+        var sig = GfxSignature();
+        if (!force && sig == _gfxSig) return;
+        _gfxSig = sig;
         var root = (Node?)GetTree().CurrentScene ?? GetTree().Root;
         if (root == null) return;
 
@@ -369,7 +435,11 @@ public partial class SettingsApplier : Node
             }
             pa.DofBlurFarEnabled = true;
             pa.DofBlurFarDistance = 120f;
-            pa.DofBlurFarTransition = 60f;
+            // Le flou far rampe sur [distance-transition, distance] :
+            // avec 60 le flou démarrait à 60 u — les overheads monde
+            // (noms, guilde, PV — jusqu'à 96 u) étaient floutés.
+            // 15 → rampe 105-120 u, au-delà de tout label.
+            pa.DofBlurFarTransition = 15f;
         }
         else if (cam.Attributes is CameraAttributesPractical pa2)
         {
@@ -380,23 +450,43 @@ public partial class SettingsApplier : Node
     // ==================================================================
     // Interface (D3) — scale global, thème, police
 
-    private void ApplyInterface()
-    {
-        // Scale UI global : content-scale « canvas_items » du viewport
-        // racine — la taille logique se contracte (les ancres des
-        // fenêtres bord-à-bord restent à l'écran) puis le canvas est
-        // re-scalé ×s ; le 3D n'est pas affecté.
-        var hud = FindHud();
-        GD.Print($"[theme-apply] ApplyInterface hud={(hud == null ? "null" : hud.GetPath().ToString())}");
-        if (hud != null) hud.ApplyUiScale(S.UiScale);
-        else ApplyUiScale(GetViewport().GetWindow(), S.UiScale);
-        if (hud != null) ApplyTheme(hud, S.Theme);
-        HookHud(hud);
+    /// <summary>Signature des réglages interface (scale/thème/police)
+    /// — même logique que <see cref="_gfxSig"/> : un ApplyAndSave qui
+    /// ne touche ni scale ni thème ni police évite SetTheme (swap
+    /// d'atlas) + ApplyThemePalette + reload de la FontFile.</summary>
+    private int _uiSig = -1;
 
-        // Police globale : fallback ThemeDB (les overrides CEGUI
-        // AddThemeFontSizeOverride gardent la priorité — best-effort).
-        ThemeDB.FallbackFontSize = S.FontSize;
-        ApplyFont(S.Font);
+    private int UiSignature()
+    {
+        var h = new HashCode();
+        h.Add(S.UiScale); h.Add(S.Theme); h.Add(S.FontSize);
+        h.Add(S.Font);
+        return h.ToHashCode();
+    }
+
+    private void ApplyInterface(bool force = false)
+    {
+        var hud = FindHud();
+        var sig = UiSignature();
+        if (force || sig != _uiSig)
+        {
+            _uiSig = sig;
+            // Scale UI global : content-scale « canvas_items » du
+            // viewport racine — la taille logique se contracte (les
+            // ancres des fenêtres bord-à-bord restent à l'écran) puis
+            // le canvas est re-scalé ×s ; le 3D n'est pas affecté.
+            GD.Print($"[theme-apply] ApplyInterface hud={(hud == null ? "null" : hud.GetPath().ToString())}");
+            if (hud != null) hud.ApplyUiScale(S.UiScale);
+            else ApplyUiScale(GetViewport().GetWindow(), S.UiScale);
+            if (hud != null) ApplyTheme(hud, S.Theme);
+
+            // Police globale : fallback ThemeDB (les overrides CEGUI
+            // AddThemeFontSizeOverride gardent la priorité —
+            // best-effort).
+            ThemeDB.FallbackFontSize = S.FontSize;
+            ApplyFont(S.Font);
+        }
+        HookHud(hud);
     }
 
     /// <summary>Scale UI sur un Window/viewport : content-scale
@@ -441,6 +531,12 @@ public partial class SettingsApplier : Node
     /// l'ordre d'init autoload / scène.</summary>
     private void TickThemeBoot(double delta)
     {
+        // Tout est branché et le budget thème est écoulé : plus rien à
+        // faire — la vérif HUD (validité du cache) n'est utile qu'en
+        // attente de montage. Le changement de scène réarme via
+        // _Process (_hudReadyHooked/_menuHooked/_themeWait).
+        if (_hudReadyHooked && _menuHooked && _themeWait <= 0f)
+            return;
         var hud = FindHud();
         // S'abonner à HudReady DÈS que le nœud HUD existe — c'est le
         // seul signal fiable « atlas construit » (émis en fin de
@@ -700,6 +796,11 @@ public partial class SettingsApplier : Node
     {
         if (_hud != null && GodotObject.IsInstanceValid(_hud))
             return _hud;
+        // _hud est normalement alimenté par OnNodeAdded (arrivée de
+        // HudRoot). Le balayage reste le filet — ex. HUD monté dans la
+        // frame du changement de scène, avant la remise à zéro de
+        // _Process (vérifié : sans ce repli la fenêtre se reconstruisait
+        // à chaque ouverture, BuiltWithHud=false vs true).
         _hud = Hud.HudExtensions.FindHud();
         return _hud;
     }

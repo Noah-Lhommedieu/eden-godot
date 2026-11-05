@@ -10,6 +10,11 @@ public partial class SlowFree : Node
     static SlowFree? s_inst;
     readonly Queue<Node> _q = new();
 
+    /// <summary>Arriéré de libération (diagnostic --kill-loop :
+    /// croissance persistante = production de nœuds libérés plus
+    /// rapide que la pompe de 10/frame).</summary>
+    public static int Queued => s_inst?._q.Count ?? 0;
+
     public static void Free(Node n)
     {
         if (!GodotObject.IsInstanceValid(n)) return;
@@ -22,7 +27,8 @@ public partial class SlowFree : Node
         }
         if (n is Node3D n3) n3.Visible = false;
         n.GetParent()?.RemoveChild(n);
-        void Walk(Node x) { foreach (var c in x.GetChildren()) Walk(c); s_inst._q.Enqueue(x); }
+        var q = s_inst._q;
+        void Walk(Node x) { foreach (var c in x.GetChildren()) Walk(c); q.Enqueue(x); }
         Walk(n);
     }
 

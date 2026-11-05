@@ -227,4 +227,22 @@ public static class ItemTable
         }
         return dict;
     }
+    private static readonly object _cacheLock = new();
+    private static Dictionary<int, ItemDef>? _cache;
+
+    /// <summary>Définition c_item d'un item (table chargée une fois, partagée) ;
+    /// null si absente ou si c_item.ini n'est pas résolu.</summary>
+    public static ItemDef? Lookup(int itemId)
+    {
+        if (_cache == null)
+            lock (_cacheLock)
+            {
+                if (_cache == null)
+                {
+                    var p = TextResolver.ResolveFile?.Invoke("data/db/c_item.ini");
+                    _cache = p != null ? Load(p) : new();
+                }
+            }
+        return _cache.TryGetValue(itemId, out var d) ? d : null;
+    }
 }

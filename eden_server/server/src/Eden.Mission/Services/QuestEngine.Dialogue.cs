@@ -36,12 +36,45 @@ public sealed partial class QuestEngine
     public sealed record DialogAction(int Kind, int NpcUid, int Arg1, int Arg2);
 
     private readonly Dictionary<int, CharContext> _chars = new();
+    /// <summary>NPC → nodes où il est placé (sections [npc] des
+    /// scènes) — gate nodale de l'auto-accept.</summary>
+    private readonly Dictionary<int, HashSet<int>> _npcNodes = new();
 
     public QuestEngine(GameDataService data, MissionDb db, string dataDir)
     {
         _data = data;
         _db = db;
         LoadMissionTitles(dataDir);
+        LoadNpcNodeMap(dataDir);
+    }
+
+    /// <summary>Construit <see cref="_npcNodes"/> depuis les scènes
+    /// (<c>Sxxx.ini → node xxx</c>). Ordre EDENFR : <c>SCENE_DIR</c>,
+    /// sinon le corpus fr-full (<c>EDEN_REFORGED_DB</c>/../scene), sinon
+    /// <c>dataDir/../scene</c> dé-lié.</summary>
+    private void LoadNpcNodeMap(string dataDir)
+    {
+        var realDataDir = Directory.ResolveLinkTarget(dataDir, true)?.FullName
+                          ?? dataDir;
+        var frDb = ReforgedDataLocator.FindDbDir(realDataDir);
+        var sceneDir = Eden.Core.EdenConfig.SceneDir
+                       ?? (frDb != null
+                           ? Path.Combine(frDb, "..", "scene") : null)
+                       ?? Path.Combine(realDataDir, "..", "scene");
+        if (!Directory.Exists(sceneDir)) return;
+        foreach (var file in Directory.GetFiles(sceneDir, "*.ini"))
+        {
+            if (!int.TryParse(
+                    Path.GetFileNameWithoutExtension(file)[1..],
+                    out var node)) continue;
+            foreach (var n in SceneParser.Parse(file).Npcs)
+            {
+                if (!_npcNodes.TryGetValue(n.NpcId, out var set))
+                    _npcNodes[n.NpcId] = set = new HashSet<int>();
+                set.Add(node);
+            }
+        }
+        EdenLog.Write($"[Mission] carte npc→node : {_npcNodes.Count} PNJ");
     }
     /// <summary>Une option #:Talk du NPC — conditions `If_*`,
     /// actions exécutées à la sélection (`ReviveArea`, `InventoryItem`,
@@ -410,9 +443,14 @@ public sealed partial class QuestEngine
         // jamais au simple clic droit). Puis 58 TransitionCommands
         // `shop <verb> <npcUid> <mid>` (flux prouvé : la mission pilote
         // l'UI quête via commandes zone). mission-finish n'arrive
-        // qu'après le claim client (capture 17:23:20-22).
+        // qu'après le claim client (capture 17:23:20-22). Status 2
+        // inclus : les quêtes talk-only sont marquées « remplies » à
+        // l'acceptation (HasBlockingObjective exclut NPCTalk) mais le
+        // contrôle strict AllPmsDone du rendu exige le PMS 50000+off
+        // — sans ce crédit le finish est refusé en boucle.
         var mid = act.Arg1;
-        if (c.Active.TryGetValue(mid, out var aq) && aq.Status == 1 &&
+        if (c.Active.TryGetValue(mid, out var aq) &&
+            aq.Status is 1 or 2 &&
             _data.Missions.FirstOrDefault(m => m.Id == mid) is { } qm)
             await CreditNpcObjectivesAsync(s, c, aq, qm, charUid,
                 nodeId, act.NpcUid);

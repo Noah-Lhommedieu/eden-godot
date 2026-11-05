@@ -73,3 +73,51 @@ Limites :
   (`g00004.nif`, FX de mort — hors scope, côté `scripts/native`/fx) ;
 - `TradeWindow` reste abonné à `Changed` sans garde de visibilité
   (hors périmètre de la tâche ; coalescing le borne à 1×/frame).
+
+## Lag kill mobs — 2e vague (drains réseau, GLB froids, callbacks fantômes) — 2026-11-04 — statut **verified**
+
+Après le fix loot-274 ci-dessus, il restait des pics. Scénario :
+`tools/run.sh -- --login=test123:test123 --channel --char --hitch --perf
+"--kill-loop=20863,20864,20865"` (S005, serveur C# live).
+
+Causes mesurées et correctifs :
+
+1. **Drains réseau non bornés.** `GameScene._Process` vidait toute la
+   file `_pending` en une frame (dispatch maître : SeeMob, inventaire,
+   trésors, HUD) — pic `proc=1204 ms` à l'entrée de zone (263 entités ×
+   ~4 ms de création). Idem `_deferredDuringMigration` (drain inline en
+   fin de migration) et `EntityRegistry._netPending` (burst kill :
+   `reg.net 37,7 ms`). → budgets 8 ms (`_pending` + reliquat migration,
+   priorité au reliquat pour préserver l'ordre 298→326) et 6 ms
+   (`reg.net`) ; scope `gs.pending` ajouté pour l'attribution.
+2. **GLB mobs à froid.** Chaque nouveau stem payait 18-37 ms de parse
+   dans `SetVisual` en pleine frame (`reg.visual`). → warm asynchrone
+   (`s_mobWarm` : proto GLB + texture skin + .kf via `PreloadAnimFiles`,
+   thread-safe) lancé dès le 298 ; `DrainPendingVisuals` repousse les
+   stems froids (filet 1,5 s). `MapLoader` précharge les 10 familles
+   G00001-10 en plus des NPC.
+3. **256 callbacks fantômes.** `e.Interp.SetProcess(false)` était posé
+   **avant** l'entrée dans l'arbre et ne tenait pas : `proc-dump`
+   comptait `NetworkInterpolator×256` en process (~256 callbacks
+   natifs→C#/frame en plus du tick mutualisé). → appel déplacé après
+   `AddChild(e)` ; proc-dump suivant : `NetworkInterpolator` absent.
+
+Mesures (même machine, même scénario kill-loop) :
+
+| | pire image par kill | entrée de zone |
+|---|---|---|
+| Avant | 11-41 ms (15 kills) | `proc=1204 ms` en une frame |
+| Après | 8-26 ms (17 kills), p50 fenêtre ~6 ms | pic ~140 ms étalé, plus de seconde entière figée |
+
+Restes mesurés (hors fenêtre kill — pistes pour plus tard) :
+
+- actions unitaires du burst login ~40-100 ms (1re construction
+  inventaire 47 items / 214 sorts / fenêtres) — un budget de drain ne
+  peut pas couper une action, il faut étaler la construction elle-même ;
+- `CooldownOverlay×450` en process (pull `Source?.Invoke`/frame sur
+  toutes les cellules) ;
+- `reg.tick` ~11 ms occasionnel (probable GC, non corrélé au nombre
+  d'entités) ;
+- trésors au sol : TTL serveur 300 s (270 proprio + 30 public) → en
+  grind sans ramassage, draws/labels/nœuds croissent en continu
+  (mesuré +580 draws / +230 Label3D / +2800 nœuds sur 4 min).

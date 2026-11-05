@@ -33,10 +33,33 @@ namespace EdenClient.Combat;
 /// </summary>
 public partial class AutoAttack : Node
 {
-    /// <summary>Portée de swing côté client (u) — le serveur tranche
-    /// la portée réelle de l'arme ; on s'arrête assez près pour que le
-    /// coup passe (désarmé natif ~7.5 u, mêlée ~2-3 u + marges).</summary>
+    /// <summary>Portée de swing de repli (u) — utilisée sans arme ou
+    /// sans donnée de portée (désarmé natif ~7.5 u, mêlée ~2-3 u +
+    /// marges). La portée réelle vient de <see cref="ReachNow"/>.</summary>
     [Export] public float AttackReach { get; set; } = 3.0f;
+
+    /// <summary>Portée d'arrêt réelle : S_Item col48 de l'arme portée
+    /// (loc 7 prioritaire, loc 10 arme longue), brute — le
+    /// <c>CCharFormula::AttackRange</c> natif (@0x083f6f10) lit
+    /// <c>CItemData+0x48</c> SANS multiplicateur ; CanAttack
+    /// (@0x08417120) ajoute rayons + tolérance. Arc/fusil : le perso
+    /// s'arrête à distance de tir au lieu de courir au contact.
+    /// Désarmé/kind non-arme → repli <see cref="AttackReach"/>.</summary>
+    private float ReachNow()
+    {
+        var worn = Protocol.PlayerEquipment.Worn;
+        var itemId = worn.TryGetValue(7, out var m) ? m
+            : worn.TryGetValue(10, out var l) ? l : 0;
+        var def = itemId != 0
+            ? Data.Tables.ItemTable.Lookup(itemId) : null;
+        // Kinds arme S_Item : 0x11-0x21 + awakened 0x3d-0x42 (miroir
+        // serveur IsWeaponKind) — le bouclier loc 8 n'est pas une arme.
+        // +1 : le client vise légèrement hors de la portée native —
+        // le serveur garde une marge supplémentaire de son côté.
+        return def is { AttackRange: > 0 } && IsWeaponKind(def.Kind)
+            ? Math.Max(2f, def.AttackRange + 1f)
+            : AttackReach;
+    }
     /// <summary>Cadence de réémission du NCID 5 (s).</summary>
     [Export] public float SwingInterval { get; set; } = 1.2f;
     /// <summary>Re-ciblage de la poursuite (s) — le mob bouge.</summary>
@@ -127,7 +150,7 @@ public partial class AutoAttack : Node
             ? target.GlobalPosition - p.GlobalPosition : Vector3.Zero;
         var dist = p != null
             ? new Vector2(to.X, to.Z).Length() : float.MaxValue;
-        if (PostCastRules.Decide(true, dist, AttackReach)
+        if (PostCastRules.Decide(true, dist, ReachNow())
                 == PostCastAttack.Resume)
         {
             Engage(target);
@@ -145,7 +168,7 @@ public partial class AutoAttack : Node
         }
         _holdAfterCast = true;
         GD.Print($"[combat] post-cast : 0x{target.Handle:x8} hors " +
-            $"portée ({dist:0.#} u > {AttackReach:0.#}) — armée, " +
+            $"portée ({dist:0.#} u > {ReachNow():0.#}) — armée, " +
             "pas de poursuite");
     }
 
@@ -199,7 +222,7 @@ public partial class AutoAttack : Node
         if (_wasCasting && !casting)
         {
             if (!_holdAfterCast && !_explicitInCast &&
-                PostCastRules.Decide(true, dist, AttackReach)
+                PostCastRules.Decide(true, dist, ReachNow())
                     == PostCastAttack.Hold)
                 _holdAfterCast = true;
             _explicitInCast = false;
@@ -215,7 +238,7 @@ public partial class AutoAttack : Node
         _farTimer += delta;
         _rechaseTimer += delta;
 
-        if (dist > AttackReach)
+        if (dist > ReachNow())
         {
             // Retenue post-cast : armée mais jamais de poursuite ni de
             // NCID 5 tant que la cible est hors de portée.
@@ -255,7 +278,7 @@ public partial class AutoAttack : Node
             {
                 TargetId = (int)t.Handle, AttackSlot = 0,
             });
-            var played = p.Animator?.PlayOnceAny("attack01", "attack02");
+            var played = p.Animator?.PlayOnceAny(AttackAnimNames());
             var t1 = Time.GetTicksMsec();
             // Sonde latence : envoi → début d'anim (le décodage KF
             // paresseux se paie ici, sur le thread principal).
@@ -264,6 +287,81 @@ public partial class AutoAttack : Node
     }
 
     // ------------------------------------------------------------------
+    // Motions d'attaque par arme — miroir client des pools kfId natifs
+    // (MotionParser.WeaponAttackKfIds : CCharKfm::Integration
+    // @0x80e09e0). L'arc joue « attack12 » (bow1), le fusil
+    // « attack13 »… au lieu du swing 1H générique.
+
+    /// <summary>Kind S_Item → noms d'anim d'attaque (attack01-27).</summary>
+    private static readonly Dictionary<int, string[]> KindAnims = new()
+    {
+        [0x11] = new[] { "attack01", "attack02" },
+        [0x12] = new[] { "attack01", "attack02" },
+        [0x13] = new[] { "attack01", "attack02" },
+        [0x3d] = new[] { "attack01", "attack02" },
+        [0x18] = new[] { "attack03", "attack04" },
+        [0x1a] = new[] { "attack03", "attack04" },
+        [0x19] = new[] { "attack05", "attack06" },
+        [0x3e] = new[] { "attack05", "attack06" },
+        [0x14] = new[] { "attack08", "attack09" },
+        [0x15] = new[] { "attack08", "attack09" },
+        [0x41] = new[] { "attack08", "attack09" },
+        [0x16] = new[] { "attack10", "attack11" },
+        [0x1b] = new[] { "attack10", "attack11" },
+        [0x1c] = new[] { "attack12" },
+        [0x3f] = new[] { "attack12" },
+        [0x1d] = new[] { "attack13" },
+        [0x40] = new[] { "attack13" },
+        [0x1f] = new[] { "attack14" },
+        [0x42] = new[] { "attack14" },
+        [0x20] = new[] { "attack15" },
+        [0x21] = new[] { "attack16" },
+        [0x17] = new[] { "attack25", "attack26" },
+        [0x1e] = new[] { "attack27" },
+    };
+
+    /// <summary>Pools double-port natifs C[main×3+off] : classes
+    /// 0 = lame (0x11-0x13/0x3d), 1 = hache (0x18/0x1a), 2 = autre.</summary>
+    private static readonly string[][] DualAnims =
+    {
+        new[] { "attack17", "attack18" },  // lame×lame
+        new[] { "attack23", "attack24" },  // lame×hache
+        new[] { "attack23", "attack24" },  // lame×autre
+        new[] { "attack23", "attack24" },  // hache×lame
+        new[] { "attack19", "attack20" },  // hache×hache
+        new[] { "attack23", "attack24" },  // hache×autre
+        new[] { "attack23", "attack24" },  // autre×lame
+        new[] { "attack23", "attack24" },  // autre×hache
+        new[] { "attack21", "attack22" },  // autre×autre
+    };
+
+    private static bool IsWeaponKind(int k) =>
+        k is >= 0x11 and <= 0x21 or >= 0x3d and <= 0x42;
+
+    private static int DualClass(int k) =>
+        k is >= 0x11 and <= 0x13 or 0x3d ? 0
+        : k is 0x18 or 0x1a ? 1 : 2;
+
+    /// <summary>Noms d'anim du swing courant d'après l'équipement
+    /// porté (même résolution loc 7 → 10 que <see cref="ReachNow"/>,
+    /// loc 8 compte le double-port). Repli = poings désarmés.</summary>
+    private static string[] AttackAnimNames()
+    {
+        var worn = Protocol.PlayerEquipment.Worn;
+        var mainId = worn.TryGetValue(7, out var m) ? m
+            : worn.TryGetValue(10, out var l) ? l : 0;
+        var main = mainId != 0
+            ? Data.Tables.ItemTable.Lookup(mainId) : null;
+        if (main == null || !IsWeaponKind(main.Kind))
+            return new[] { "attack05", "attack06" };
+        if (worn.TryGetValue(8, out var o) &&
+            Data.Tables.ItemTable.Lookup(o) is { } off &&
+            IsWeaponKind(off.Kind))
+            return DualAnims[DualClass(main.Kind) * 3 +
+                             DualClass(off.Kind)];
+        return KindAnims.TryGetValue(main.Kind, out var anims)
+            ? anims : new[] { "attack01", "attack02" };
+    }
 
     /// <summary>Envoie sur la session portée par
     /// <see cref="SessionCarry"/> (fire-and-forget tracé).</summary>

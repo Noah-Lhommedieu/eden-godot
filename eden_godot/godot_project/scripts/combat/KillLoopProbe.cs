@@ -22,10 +22,13 @@ public partial class KillLoopProbe : Node
     private int _target = 3;
     private int _mobId = 20678;
     private int[] _mobIds = { 20678 };     // rotation : --kill-loop=12,56928;60565;60566
+    private int _pack = 1;                 // --kill-pack=K : K mobs clonés par itération, tués en vraie mêlée
     private int _iter;
     private double _t;              // temps depuis le début de l'itération courante
     private int _state;             // 0 attente entrée, 1 clone envoyé, 2 engagé, 3 mort vue → fenêtre, 4 repos
     private RemoteEntity? _mob;
+    private RemoteEntity? _engaged;
+    private readonly List<RemoteEntity> _packAlive = new();
     private EntityRegistry? _registry;
     private PlayerController? _player;
     private bool _searched;
@@ -56,9 +59,14 @@ public partial class KillLoopProbe : Node
     {
         Requested(out _target, out _mobId);
         foreach (var a in OS.GetCmdlineArgs().Concat(OS.GetCmdlineUserArgs()))
+        {
             if (a.StartsWith("--kill-loop=") && a.Contains(','))
                 _mobIds = a[12..].Split(',')[1].Split(';')
                     .Select(x => int.TryParse(x, out var v) ? v : 0).Where(v => v > 0).ToArray();
+            else if (a.StartsWith("--kill-pack=") &&
+                     int.TryParse(a[12..], out var pk) && pk > 0)
+                _pack = pk;
+        }
         if (_mobIds.Length == 0) _mobIds = new[] { _mobId };
     }
 
@@ -88,6 +96,7 @@ public partial class KillLoopProbe : Node
             {
                 _perKill.Add((_iter, _curMax));
                 GD.Print($"[killloop] kill #{_iter} : pire image dans les {WindowSec:0.#} s = {_curMax:F0} ms ; " +
+                         $"{Snapshot()} ; " +
                          $"évènements : {EdenClient.Perf.PerfTrace.EventsSince(_winT0)}");
                 _curMax = 0;
                 _state = 4; _t = 0;
@@ -100,29 +109,59 @@ public partial class KillLoopProbe : Node
         {
             case 0:
                 if (_iter >= _target) { Finish(); return; }
-                _mobId = _mobIds[_iter % _mobIds.Length];
-                SendText($"//clone_monster {_mobId}");
+                // Pack : K mobs clonés d'un coup, tués en vraie mêlée —
+                // les morts se succèdent en ~2-4 s (rafale réelle).
+                // PAS de « //kill » : un vrai kill passe par les dégâts
+                // réels (loot, exp, attrs, floaters complets).
+                _packAlive.Clear();
+                _engaged = null;
+                for (var k = 0; k < _pack; k++)
+                    SendText($"//clone_monster {_mobIds[(_iter * _pack + k) % _mobIds.Length]}");
                 PerfEvent("clone");
                 _state = 1; _t = 0;
                 break;
             case 1 when _t > 2.0:
-                _mob = _registry!.Entities.Values
-                    .Where(e => e.Kind == 12 && e.EntityId == _mobId && !e.Dying)
-                    .OrderBy(e => (e.GlobalPosition - _player!.GlobalPosition).LengthSquared())
-                    .FirstOrDefault();
-                if (_mob == null) { if (_t > 8) { _state = 0; } break; }
+                // Tous les mobs du pack, vivants, par distance.
+                var spawn = _registry!.Entities.Values
+                    .Where(e => e.Kind == 12 && _mobIds.Contains(e.EntityId) &&
+                                !e.Dying && !_packAlive.Contains(e))
+                    .OrderBy(e => (e.GlobalPosition - _player!.GlobalPosition)
+                        .LengthSquared())
+                    .Take(_pack - _packAlive.Count).ToList();
+                _packAlive.AddRange(spawn);
+                _mob = _packAlive.FirstOrDefault(e =>
+                    IsInstanceValid(e) && !e.Dying);
+                if (_mob == null)
+                {
+                    if (_t > 10) { _iter++; _state = 0; _t = 0; }
+                    break;
+                }
                 _player!.AutoAttacker?.Engage(_mob);
                 _state = 2; _t = 0;
                 break;
             case 2:
-                if (_mob == null || !IsInstanceValid(_mob) || _mob.Dying)
+                // Fenêtre ouverte dès la 1re mort (couvre toute la
+                // rafale jusqu'à 2 s après la dernière).
+                if (_packAlive.Any(e => !IsInstanceValid(e) || e.Dying) &&
+                    _windowLeft <= 0)
+                {
+                    PerfEvent("KILL");
+                    _windowLeft = WindowSec; _curMax = 0;
+                    _winT0 = Time.GetTicksMsec();
+                }
+                _packAlive.RemoveAll(e => !IsInstanceValid(e) || e.Dying);
+                _mob = _packAlive.FirstOrDefault();
+                if (_mob == null)
                 {
                     _iter++;
-                    PerfEvent("KILL");
-                    _windowLeft = WindowSec; _curMax = 0; _winT0 = Time.GetTicksMsec();
                     _state = 3; _t = 0;
                 }
-                else if (_t > 8) { SendText($"//kill {_mobId}"); _t = 0; }   // filet
+                else if (_mob != _engaged || _t > 1.0)
+                {
+                    _player!.AutoAttacker?.Engage(_mob);
+                    _engaged = _mob;
+                    _t = 0;
+                }
                 break;
             case 4 when _t > 4.0:
                 _state = 0; _t = 0;
@@ -131,6 +170,23 @@ public partial class KillLoopProbe : Node
     }
 
     private static void PerfEvent(string what) => EdenClient.Perf.PerfTrace.Event(what);
+
+    /// <summary>Instantané des accumulations suspectes après un kill :
+    /// nœuds arbre, hôtes d'effets, arriérés de libération étalée,
+    /// cadavres en grâce, entités. Une croissance monotone kill après
+    /// kill trahit une fuite (corps/FX non libérés).</summary>
+    private string Snapshot()
+    {
+        int fx = 0;
+        foreach (var n in GetTree().Root
+                     .FindChildren("*", "NativeFxHost", true, false))
+            fx++;
+        return $"nodes={Performance.GetMonitor(Performance.Monitor.ObjectNodeCount):F0} " +
+               $"ents={_registry?.Entities.Count ?? -1} " +
+               $"corpses={_registry?.DebugCorpseCount ?? -1} " +
+               $"slowq={(_registry?.DebugSlowFreeQueued ?? -1) + World.SlowFree.Queued} " +
+               $"fxhosts={fx}";
+    }
 
     private void SendText(string text)
     {

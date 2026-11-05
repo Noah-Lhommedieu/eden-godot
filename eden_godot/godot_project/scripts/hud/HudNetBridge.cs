@@ -367,6 +367,7 @@ public partial class HudNetBridge : Node
             }
             t.SetTarget((uint)handle, e.DisplayName, e.Kind,
                 e.Hp, e.MaxHp, e.Family);
+            if (e.Kind == 12 && !e.IsElfPet) t.TargetTemplateId = e.EntityId & 0xFFFF;
             // Break Point : étoiles / faiblesses / barre violette.
             if (e.Kind == 12 && !e.IsElfPet)
                 t.SetBreak(e.MonsterType, e.WeakMask, e.Patience,

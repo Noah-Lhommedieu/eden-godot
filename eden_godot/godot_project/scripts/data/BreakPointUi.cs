@@ -116,11 +116,21 @@ public static class BreakPointUi
     public static string BarText(int cur, int max) =>
         $"{Math.Max(0, cur)}/{Math.Max(0, max)}";
 
-    /// <summary>Infobulle d'une icône de faiblesse (traduite FR/EN).</summary>
-    public static string WeakTip(int slot) =>
-        slot is >= 0 and < 9
-            ? UiTextEn.Translate($"Weak to {ElementNames[slot]}")
-            : "";
+    /// <summary>Infobulle d'une icône de faiblesse : l'élément seul
+    /// (« Feu »), sans « Faiblesse : » (définitions.md). Dérivé de la
+    /// traduction existante « Weak to X » pour garder les termes FR du
+    /// catalogue (Entaille, Frappe, Percée, Feu, Glace, Foudre, Nature,
+    /// Lumière, Ténèbres).</summary>
+    public static string WeakTip(int slot)
+    {
+        if (slot is < 0 or >= 9) return "";
+        var t = UiTextEn.Translate($"Weak to {ElementNames[slot]}");
+        var i = t.IndexOf(':');
+        return i >= 0 ? t[(i + 1)..].Trim() : UiTextEn.Translate(ElementNames[slot]);
+    }
+
+    /// <summary>Nom d'élément FR seul (même source que <see cref="WeakTip"/>).</summary>
+    public static string ElementLabel(int slot) => WeakTip(slot);
 
     /// <summary>Découpe un label registre de mob en (titre, niveau, nom) :
     /// « &lt;Titre&gt;\nLvN Nom », « LvN Nom » ou « Nom ».</summary>

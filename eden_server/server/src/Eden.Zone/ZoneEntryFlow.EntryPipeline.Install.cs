@@ -258,6 +258,16 @@ public sealed partial class ZoneEntryFlow
     {
         foreach (var r in entry.RestoreEnchants)
         {
+            // Idem RestorePlayerEnchantsAsync : une ligne héritée d'un
+            // enchant reclassé instantané (aucun CEnchant natif) serait
+            // routée vers ExecuteInstantEnchantAsync à chaque
+            // migration (dispels fantômes) — purge directe.
+            if (IsInstantOnlyEnchant(r.EffectId))
+            {
+                await _services.PlayerEnchants.DeleteEnchantAsync(
+                    (int)st.CharId, r.EffectId);
+                continue;
+            }
             if (!await FilterRideRestoreAsync((int)st.CharId, r.EffectId))
                 continue;
             await AddPlayerEnchantAsync(session, st, r.CasterId,

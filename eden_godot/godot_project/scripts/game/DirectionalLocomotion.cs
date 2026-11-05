@@ -93,4 +93,32 @@ public static class DirectionalLocomotion
     public static string AnimFor(int record, bool mounted) =>
         mounted && !MountSideAnims && record is Left or Right
             ? "move01" : AnimFor(record);
+
+    /// <summary>Anim jouée par la MONTURE pour ce record — seul
+    /// l'EntityAnimator de la monture doit l'utiliser (le cavalier
+    /// dérive sa ride* de l'anim courante de la monture via
+    /// <c>EntityAnimator.RiderAnimFor</c> ; à pied c'est
+    /// <see cref="AnimFor(int)"/> qui s'applique).
+    ///
+    /// SPÉCIFICATION NATIF (records monture de
+    /// <c>DirectionControl.cpp</c>, init @0x…2470067, game_.exe) :
+    /// record 9 (strafe gauche monté, <c>FUN_00781640(_,0,1)</c>) =
+    /// copie du record Left sauf +0x0c facing = −90° D3D (= yaw 90°
+    /// gauche Godot) et callback <c>FUN_00741d70</c> = le MÊME que le
+    /// Left à pied (vtable+0x38 → action 102 → move02) ; record 10 =
+    /// copie du Right avec facing +90° D3D et callback
+    /// <c>FUN_00741db0</c> (vtable+0x3c → action 103 → move03). Le
+    /// natif ne croise PAS : A → move02, D → move03 — le corps pivote
+    /// de 90° vers le côté du strafe (<see cref="FaceOffset"/>) et
+    /// l'anim de flanc est celle du record à pied correspondant. Le
+    /// ressenti « inversé » venait du croisement local alors que le
+    /// chemin remote (flag 326 → <see cref="AnimForFlag"/>) restait
+    /// natif — deux visions différentes du même strafe.
+    /// Sans <see cref="MountSideAnims"/> : move01 (inchangé).</summary>
+    public static string MountAnimFor(int record) => record switch
+    {
+        Left => MountSideAnims ? "move02" : "move01",
+        Right => MountSideAnims ? "move03" : "move01",
+        _ => AnimFor(record),
+    };
 }

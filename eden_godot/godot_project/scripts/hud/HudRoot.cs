@@ -130,11 +130,14 @@ public partial class HudRoot : CanvasLayer
     public AtlasTexture? Region(string set, string image) =>
         _tex?.GetRegion(new CeguiImageRef(set, image));
 
-    private void DemoTarget(string label, byte kind, int family, int type)
+    private void DemoTarget(string label, byte kind, int family, int type,
+        int weakMask = 0, int templateId = 0)
     {
         Target?.SetTarget(0xFFFFA002, label, kind, kind == 8 ? 0 : 900,
             kind == 8 ? 0 : 1200, family);
-        if (kind == 12) Target?.SetBreak(type, 0, 0, 0);
+        if (kind == 12) Target?.SetBreak(type, weakMask, weakMask != 0 ? 60 : 0,
+            weakMask != 0 ? 100 : 0);
+        if (Target != null) Target.TargetTemplateId = templateId;
     }
 
     /// <summary>Instancie tous les panneaux (thread principal).</summary>
@@ -354,6 +357,17 @@ public partial class HudRoot : CanvasLayer
         // --chat-test : préfixe /o → canal Peer + envoi NCID 34 (U5).
         if (args.Contains("--chat-test") && Chat != null)
             AddChild(new ChatPanel.ChatProbe(Chat));
+        // --cmd-test=<texte> : une ligne de chat arbitraire soumise
+        // par le vrai chemin (EditBox + Entrée → NCID 34) — sert à
+        // injecter une commande GM (« //trait 2 », « //level 5 »…).
+        if (Chat != null)
+            foreach (var a in args)
+                if (a.StartsWith("--cmd-test="))
+                {
+                    AddChild(new ChatPanel.CmdProbe(
+                        Chat, a["--cmd-test=".Length..]));
+                    break;
+                }
         // --shortcut-test : drop/activation/pages raccourcis (U6).
         if (args.Contains("--shortcut-test") && Hotbar != null)
             AddChild(new HotbarPanel.ShortcutProbe(Hotbar));
@@ -424,6 +438,15 @@ public partial class HudRoot : CanvasLayer
                 DemoTarget("Lv40 Demo Undead", 12, 3, 1); return;
             case "target-human":
                 DemoTarget("Lv40 Demo Bandit", 12, 1, 1); return;
+            // QA faiblesses resserrées (1 / 2 / 4 éléments) + fiche mob.
+            case "target-weak1":
+                DemoTarget("Lv90 Demo World Boss", 12, 5, 4, 0b001000, 58010); return;
+            case "target-weak2":
+                DemoTarget("Lv90 Demo World Boss", 12, 5, 4, 0b100001, 58010); return;
+            case "target-weak4":
+                DemoTarget("Lv90 Demo World Boss", 12, 5, 4, 0b0110_1001, 58010); return;
+            case "target-inspect":
+                Target?.InvokeInspect(); return;
             case "target-npc":
                 DemoTarget("Tanja", 8, 0, 0); return;
             // Vague 1-C : hors session, peuple des données de démo
@@ -781,12 +804,25 @@ public partial class HudRoot : CanvasLayer
 
     // -------------------- API publique (thread principal) ----------
 
+    private string _selfName = "";
+
     /// <summary>Identité self (310 EnterNodePlayerData / sélection).</summary>
     public void SetSelf(uint charId, string name, int level)
     {
+        _selfName = name;
         World.MobDanger.PlayerLevel = level;
         Vitals?.SetIdentity(name, level);
         Profile?.SetIdentity(name, level);
+        Hotbar?.SetLevels(level, 0);
+    }
+
+    /// <summary>Niveau self seul (284 flag 0) — libellé du portrait,
+    /// fiche et base du ratio de la barre EXP.</summary>
+    public void SetSelfLevel(int level)
+    {
+        World.MobDanger.PlayerLevel = level;
+        Vitals?.SetIdentity(_selfName, level);
+        Profile?.SetIdentity(_selfName, level);
         Hotbar?.SetLevels(level, 0);
     }
 
@@ -813,9 +849,12 @@ public partial class HudRoot : CanvasLayer
         Minimap?.SetSelfPos(x, y, yaw);
 
     /// <summary>Message de chat entrant (268/327/266/316).</summary>
-    public void AddChat(int channel, string sender, string text) =>
+    public void AddChat(int channel, string sender, string text)
+    {
+        using var _pt = Perf.PerfTrace.Scope("chat.add");
         Chat?.AddMessage(channel, sender,
             ChatLocalizer.Localize(text, FrForCjk));
+    }
 
     // Nom d'objet Big5 du serveur (c_item col7) → nom FR (t_item).
     // Index construit au premier message CJK seulement (c_item = 5 Mo).
@@ -865,6 +904,9 @@ public partial class HudRoot : CanvasLayer
     {
         HudPrefs.SelfHp = d.Hp; HudPrefs.SelfMaxHp = d.MaxHp;
         Vitals?.SetVitals(d.Hp, d.MaxHp, d.Mp, d.MaxMp);
+        Vitals?.SetJobLv(d.ClassLevel);
+        Hotbar?.SetLevels(d.Level, d.ClassLevel);
+        Protocol.PlayerVitals.SeedClassExp(d.ClassExp);
         Profile?.SetPlayerData(d);
     }
 

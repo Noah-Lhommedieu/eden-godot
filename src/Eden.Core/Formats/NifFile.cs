@@ -1187,7 +1187,10 @@ public sealed class NifFile
     /// skin→os + sphère + poids (index u16, poids f32).</summary>
     private static void SkinData(Block b, Cur c)
     {
-        NiXf(c);                        // transform global (ignoré)
+        NiXf(c);                        // transform global (vérifié inutile
+                                        // 2026-11-03 : non-identitaire même sur
+                                        // les shapes corrects — les offsets
+                                        // encodent déjà skin→os sur les verts)
         var nb = (int)c.U32();
         var hasW = c.U8() != 0;
         b.BoneSkinXf = new Matrix4x4[nb];

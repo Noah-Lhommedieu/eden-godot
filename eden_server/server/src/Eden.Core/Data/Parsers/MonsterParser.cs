@@ -38,6 +38,15 @@ public static class MonsterParser
     {
         public int Id { get; set; }
         public string ModelCode { get; set; } = string.Empty;  // M312040
+        /// <summary>Rayon de l'entité (BoundInfo col7, clé =
+        /// chiffres de <see cref="ModelCode"/>) — le `GetSize` lu par
+        /// les vfuncs rayon des checks de portée natifs
+        /// (`CAI::CheckUseSpell` @0x084d91c0,
+        /// `CSpellToLife::CastTest` @0x084f04d0). Résolu par
+        /// <see cref="Game.Services.MonsterService.LoadFromDataDir"/> ;
+        /// 1,0 u = valeur plancher native quand le modèle est absent
+        /// de BoundInfo.</summary>
+        public float BoundRadius { get; set; } = 1.0f;
         public string Name { get; set; } = string.Empty;       // Big5
         public int Family { get; set; }
         public int Level { get; set; }
@@ -406,5 +415,51 @@ public static class MonsterParser
         }
 
         return monsters;
+    }
+
+    /// <summary>BoundInfo.ini — rayons de modèle (`GetAllMonsterSize`
+    /// natif @0x0835xxx). Format CSV une ligne :
+    /// `mNNNNNN,nom.nif,f32,f32,f32,f32,f32,RAYON,f32` — le natif garde
+    /// col7 (index 7) comme rayon d'entité (map `this+0x10`, lu par
+    /// `CMonsterTemplate::GetSize` → template+0x28) et col8 dans une
+    /// seconde map. Clé = <c>strtol(mNNNNNN+1)</c> — les chiffres du
+    /// code modèle, identiques à ceux de <see cref="MonsterDef.
+    /// ModelCode"/> (« M312040 » ↔ « m312040 »). Fichier absent →
+    /// table vide.</summary>
+    public static Dictionary<int, float> ParseBoundInfo(string filePath)
+    {
+        var radii = new Dictionary<int, float>();
+        if (!File.Exists(filePath)) return radii;
+        foreach (var line in File.ReadLines(filePath, EdenEncoding.Big5))
+        {
+            if (line.Length == 0 || line[0] == '#') continue;
+            var t = line.Split(',');
+            if (t.Length < 8 || t[0].Length < 2) continue;
+            if (!int.TryParse(t[0].AsSpan(1),
+                    System.Globalization.NumberStyles.Integer,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var key)) continue;
+            if (!float.TryParse(t[7],
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out var r) || r <= 0) continue;
+            radii[key] = r;
+        }
+        return radii;
+    }
+
+    /// <summary>Clé BoundInfo d'un <see cref="MonsterDef.ModelCode"/>
+    /// — les chiffres du code (« M312040 » → 312040), le même
+    /// <c>strtol</c> que le loader natif. Code non numérique → 0
+    /// (jamais présent dans la table).</summary>
+    public static int BoundInfoKey(string modelCode)
+    {
+        var key = 0;
+        foreach (var ch in modelCode)
+        {
+            if (!char.IsDigit(ch)) continue;
+            key = key * 10 + (ch - '0');
+        }
+        return key;
     }
 }

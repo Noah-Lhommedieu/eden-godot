@@ -84,6 +84,11 @@ public partial class GameScene : Node3D
     private int _shotFrames = -1;
     private bool _shotArgParsed;
     private string _shotPath = "/tmp/eden_game.png";
+    /// <summary>--shot=&lt;path&gt;:&lt;sec&gt; : deadline horloge — le
+    /// compteur frames suppose 60 fps mais le jeu tourne souvent
+    /// plus vite (scène légère, pas de vsync forcée) ; le délai
+    /// réel est garanti par l'horloge.</summary>
+    private DateTime _shotDeadline = DateTime.MaxValue;
     /// <summary>Horodatage du HudReady — le shot attend 1,5 s de HUD
     /// prêt pour laisser --hud-open/--hud-dump s'appliquer.</summary>
     private DateTime _hudReadyAt = DateTime.MaxValue;
@@ -114,6 +119,14 @@ public partial class GameScene : Node3D
     /// proche ([reborn_monsters]) pour forcer les 298 avant
     /// --combat-test — mêmes moyens que --service-test.</summary>
     private bool _mobTest;
+    /// <summary>--broken-test : implique --mob-test, puis applique
+    /// <c>SetBroken(true)</c> sur tous les mobs en vue — preuve
+    /// visuelle du masquage KNOCK (B11) sans combat BP réel.</summary>
+    private bool _brokenTest;
+    /// <summary>--broken-restore : avec --broken-test, repasse
+    /// <c>SetBroken(false)</c> après ~4 s — la capture finale montre
+    /// le KNOCK restauré (cycle natif FUN_00771920).</summary>
+    private bool _brokenRestore;
     /// <summary>--storage-test : pilote bout-en-bout banque + coffre
     /// famille — commandes GM (//transport_node 1 → banquier s001,
     /// //tele, //clone_item), TalkToNpc → 357/358, dépôt/retrait
@@ -220,6 +233,10 @@ public partial class GameScene : Node3D
             else if (arg.StartsWith("--quest-test=") &&
                      int.TryParse(arg[13..], out var qn)) _questNpc = qn;
             else if (arg == "--mob-test") _mobTest = true;
+            else if (arg == "--broken-test")
+            { _brokenTest = true; _mobTest = true; }
+            else if (arg == "--broken-restore")
+            { _brokenRestore = true; _brokenTest = true; _mobTest = true; }
             else if (arg == "--storage-test") _storageTest = true;
             else if (arg.StartsWith("--storage-shot="))
                 _storageShot = arg[15..];
@@ -274,6 +291,10 @@ public partial class GameScene : Node3D
             // part en « non géré » sans atteindre le livre.
             Hud.ElfBridge.EnsureBound(carry);
             Hud.MissionBridge.CaptureEarly(carry);
+            // Idem pour les enchants : les 299 d'entrée (enchants
+            // restaurés, état portail débutant) arrivent pendant le
+            // chargement CEGUI — sans bind précoce ils sont jetés.
+            Hud.BuffBridge.EnsureBound(carry);
             var ch = SessionCarry.Character;
             if (ch != null)
             {
@@ -814,6 +835,7 @@ public partial class GameScene : Node3D
         _netStatus = "connexion zone…";
         Hud.ElfBridge.EnsureBound(_session!);
         Hud.MissionBridge.CaptureEarly(_session!);
+        Hud.BuffBridge.EnsureBound(_session!);
         _session!.Log += m =>
             _pending.Enqueue(() => GD.Print($"[live] {m}"));
         _session.Disconnected += reason => _pending.Enqueue(() =>
@@ -885,6 +907,7 @@ public partial class GameScene : Node3D
                         host: null, account: null, password: null,
                         charId: _charId, worldId: _worldId,
                         ct: _liveCts.Token);
+                    _pending.Enqueue(EnsureSelfVisual);
                 }
                 _pending.Enqueue(() => _netStatus =
                     $"en zone char#{_session.SelectedCharId}");
@@ -924,6 +947,33 @@ public partial class GameScene : Node3D
                 });
             }
         });
+    }
+
+    /// <summary>Flux --live (session créée dans la scène, pas par les
+    /// écrans) : <see cref="SessionCarry.Character"/> et
+    /// <see cref="_attached"/> n'étaient pas renseignés à
+    /// <see cref="FinishWorldLoad"/> — le joueur restait une capsule
+    /// sans animator (chant/blast invisibles en test live). Construit
+    /// le corps natif une fois le perso sélectionné connu.</summary>
+    private void EnsureSelfVisual()
+    {
+        if (_player == null || _player.Animator != null) return;
+        SessionCarry.Character ??= _session?.Characters
+            .FirstOrDefault(c => c.Id == _session.SelectedCharId);
+        if (SessionCarry.Character is not { } ch) return;
+        var (lcls, lsty) = CharVisual.LocalClass();
+        var body = CharVisual.BuildBody(ch.Appearance,
+            classId: lcls, style: lsty);
+        if (body == null) return;
+        _attached = true;
+        _player.SetVisual(body);
+        CharVisual.PlayIdle(body);
+        _selfCharId = (uint)ch.Id;
+        _hud?.SetSelf((uint)ch.Id, ch.Name, ch.Level);
+        _hud?.SetRace(ch.RaceId);
+        _player.SetNameplate(ch.Name);
+        GD.Print($"[live] corps self construit «{ch.Name}» " +
+            $"(animator={_player.Animator != null})");
     }
 
     /// <summary>--talk-test : attend les spawns, puis parcourt les
@@ -1853,7 +1903,7 @@ public partial class GameScene : Node3D
                         _registry?.Entities.Values.Count(e => e.Kind == 12) ?? 0));
                     var mobs = await countTcs.Task;
                     GD.Print($"[mob-test] {mobs} mob(s) kind=12 en vue");
-                    if (mobs > 0) return;
+                    if (mobs > 0) { await ApplyBrokenTestAsync(); return; }
                 }
             }
             // Carte urbaine (S001 = Aven : spawn table sans hostiles)
@@ -1924,7 +1974,7 @@ public partial class GameScene : Node3D
                         ?? 0));
                 var mobs = await countTcs.Task;
                 GD.Print($"[mob-test] {mobs} mob(s) kind=12 en vue");
-                if (mobs > 0) return;
+                if (mobs > 0) { await ApplyBrokenTestAsync(); return; }
             }
         }
         catch (Exception ex)
@@ -1935,6 +1985,60 @@ public partial class GameScene : Node3D
         {
             MobTestActive = false;
         }
+    }
+
+    /// <summary>--broken-test : force l'état Broken sur tous les mobs
+    /// en vue (KNOCK/KNOCKNODE doivent se masquer — B11), puis
+    /// temporise pour laisser la capture --shot cadrer l'état.</summary>
+    private async Task ApplyBrokenTestAsync()
+    {
+        if (!_brokenTest) return;
+        var done = new TaskCompletionSource<int>();
+        _pending.Enqueue(() =>
+        {
+            var n = 0;
+            if (_registry != null)
+                foreach (var e in _registry.Entities.Values)
+                    if (e.Kind == 12)
+                    {
+                        e.SetBroken(true); n++;
+                        if (n == 1)
+                        {
+                            var vis = e.GetNodeOrNull<Node3D>("Visual");
+                            if (vis != null)
+                                GD.Print("[broken-test] nœuds : " +
+                                    string.Join(", ",
+                                        vis.FindChildren("*", "Node3D",
+                                            true, false)
+                                            .Select(c => c.Name.ToString())
+                                            .Take(80)));
+                        }
+                    }
+            GD.Print($"[broken-test] SetBroken(true) sur {n} mob(s)");
+            done.SetResult(n);
+        });
+        await done.Task;
+        if (_brokenRestore)
+        {
+            // Laisse l'œil constater l'état brisé dans le log/
+            // stream, puis restaure (FUN_00771920) : la capture
+            // finale montre les KNOCK de retour.
+            await Task.Delay(4000, _liveCts.Token);
+            var back = new TaskCompletionSource<int>();
+            _pending.Enqueue(() =>
+            {
+                var n = 0;
+                if (_registry != null)
+                    foreach (var e in _registry.Entities.Values)
+                        if (e.Kind == 12) { e.SetBroken(false); n++; }
+                GD.Print($"[broken-test] SetBroken(false) sur {n} mob(s)");
+                back.SetResult(n);
+            });
+            await back.Task;
+        }
+        // Petite temporisation : le --shot part 150 f après
+        // MobTestActive=false — l'état Broken reste appliqué.
+        await Task.Delay(500, _liveCts.Token);
     }
 
     /// <summary>Liste les NPC kind 8 en vue triés par distance —
@@ -2605,6 +2709,7 @@ public partial class GameScene : Node3D
     /// restent disponibles dans <see cref="MiscPackets.Latest"/>.</summary>
     private void OnMiscPacket(NetMessage m)
     {
+        using var _pt = Perf.PerfTrace.Scope($"misc:{m.Opcode}");
         switch (m.Opcode)
         {
             // 270 ResetCoord [f32 x][f32 z] — position autoritaire
@@ -2633,6 +2738,21 @@ public partial class GameScene : Node3D
                 {
                     te.Hp = hp.Field3;
                     te.UpdateHpBar();
+                }
+                break;
+            // 284 ClientLevelUp [u32 charId][u8 flag][s16 niveau]…
+            // flag 0 = niveau perso, 1 = niveau de classe — le FX est
+            // posé par SpellFx ; ici on met à jour le niveau affiché
+            // et la base du ratio de la barre EXP/Classe.
+            case 284 when m is ZoneClientLevelUp lu &&
+                          lu.Field1 == _registry?.SelfCharId:
+                if (lu.Field2 == 0) _hud?.SetSelfLevel(lu.Field3);
+                else
+                {
+                    // Flag 1 = level-up de CLASSE : hotbar + le JobLv
+                    // du portrait (sinon libellé figé à l'entrée).
+                    _hud?.Hotbar?.SetLevels(0, lu.Field3);
+                    _hud?.Vitals?.SetJobLv(lu.Field3);
                 }
                 break;
             // 441 TurnChar [u32 handle][f32 facing] — orientation
@@ -2716,7 +2836,11 @@ public partial class GameScene : Node3D
                         $"[live] parse {m.Name} : {ex.Message}"));
                     return;
                 }
-                _pending.Enqueue(() => act(m));
+                _pending.Enqueue(() =>
+                {
+                    using var _pt = Perf.PerfTrace.Scope($"pkt:{m.Name}");
+                    act(m);
+                });
             });
 
         // Données d'entrée du personnage self.
@@ -3212,8 +3336,21 @@ public partial class GameScene : Node3D
             DeferIfMigrating(() => _registry!.HandleMovePrediction(m)));
         Bind(new ZoneMoveChar(), m =>
             DeferIfMigrating(() => _registry!.HandleMoveChar(m)));
-        Bind(new ZoneClientGoto(), m =>
-            DeferIfMigrating(() => _registry!.HandleGoto(m)));
+        Bind(new ZoneClientGoto(), m => DeferIfMigrating(() =>
+        {
+            // Self (charge DistanceGoto, recalage serveur) : le serveur
+            // a déjà déplacé st.Pos — le client snappe sa position au
+            // lieu de marcher (le self n'est jamais dans _entities).
+            if (m.Handle == _registry!.SelfCharId && _player != null)
+            {
+                var dst = SnapToGround(
+                    WorldConv.ToGodot(m.X, m.Y, 0f));
+                _player.TeleportTo(dst);
+                _lastSentPos = dst;
+                return;
+            }
+            _registry!.HandleGoto(m);
+        }));
         Bind(new ZoneLifeEradicate(), m =>
             DeferIfMigrating(() => _registry!.HandleLifeEradicate(m)));
         Bind(new ZoneLeaveNode(), m =>
@@ -3402,14 +3539,10 @@ public partial class GameScene : Node3D
         _hud?.SetZone(nodeMap, _zoneLabel);
 
         _migratingMap = false;
-        while (_deferredDuringMigration.TryDequeue(out var act))
-        {
-            try { act(); }
-            catch (Exception err)
-            {
-                GD.PrintErr($"[live] post-migration dispatch : {err}");
-            }
-        }
+        // Le reliquat différé est vidé par le drain borné de
+        // _Process (prioritaire sur _pending, 8 ms/frame) : les ~300
+        // SeeMob empilés pendant le chargement s'étalent au lieu
+        // d'un pic de ~1,2 s dans cette frame (mesuré --perf).
 
         Screens.LoadingScreen.Report(1f, "Entering…");
         Screens.LoadingScreen.Finish();
@@ -3796,14 +3929,44 @@ public partial class GameScene : Node3D
         _lastFrameTickUs = nowUs;
         System.Threading.Interlocked.Exchange(ref _heartbeatMs, System.Environment.TickCount64);
 
-        // Drain des actions postées par les handlers réseau.
-        while (_pending.TryDequeue(out var act))
+        // Drain des actions postées par les handlers réseau — borné
+        // en ms/frame : le burst d'entrée de zone (des centaines de
+        // SeeMob/SeeChar → ~4 ms de création d'entité pièce, pic de
+        // 1,2 s mesuré au --perf sur migration S002) se répartit sur
+        // plusieurs images au lieu de figer le client. Le reliquat
+        // différé de migration passe en premier (ordre 298→326
+        // préservé vis-à-vis des actions déjà empilées).
+        var drainT0 = Time.GetTicksUsec();
+        const ulong drainBudgetUs = 8000;
+        using (EdenClient.Perf.PerfTrace.Scope("gs.pending"))
+        for (;;)
         {
+            Action act;
+            if (!_migratingMap &&
+                _deferredDuringMigration.TryDequeue(out var dact))
+                act = dact;
+            else if (!_pending.TryDequeue(out var pact))
+                break;
+            else
+                act = pact;
+            var actT0 = Time.GetTicksUsec();
             try { act(); }
             catch (Exception ex)
             {
                 GD.PrintErr($"[live] dispatch : {ex}");
             }
+            var actMs = (Time.GetTicksUsec() - actT0) / 1000.0;
+            if (actMs >= 4.0)
+                // Une action seule peut dépasser le budget du drain
+                // (ex. construction d'un visuel) — on la nomme pour
+                // l'attribuer (closure générée → méthode englobante).
+                Perf.PerfTrace.Event(
+                    $"act:{act.Method.DeclaringType?.Name}" +
+                    $" {actMs:F0}ms");
+            // Cap dur : le producteur remplit la file pendant les
+            // rafales (kill + loot + attrs) — sans lui le drain suivait
+            // toute la rafale en direct (~70 ms de gel).
+            if (Time.GetTicksUsec() - drainT0 >= drainBudgetUs) break;
         }
         if (_live) MaybeSendMove(delta);
 
@@ -3839,7 +4002,9 @@ public partial class GameScene : Node3D
         if (_hudDebugFrames > 0 && --_hudDebugFrames == 0)
             DumpHudCoverage();
 
-        // --shot=<path> : capture d'écran après ~4 s (démo HUD).
+        // --shot=<path>[:<sec>] : capture d'écran après ~4 s (démo HUD)
+        // ou après <sec> secondes (vérifs différées — invasions,
+        // cycles d'events de zone).
         if (!_shotArgParsed)
         {
             _shotArgParsed = true;
@@ -3850,13 +4015,23 @@ public partial class GameScene : Node3D
                     _shotFrames = 240;
                     var shotP = a.Contains('=')
                         ? a.Split('=', 2)[1] : "/tmp/eden_game.png";
+                    var colon = shotP.LastIndexOf(':');
+                    if (colon > 0 && int.TryParse(shotP[(colon + 1)..],
+                            out var shotSec) && shotSec > 0)
+                    {
+                        _shotFrames = int.MaxValue;
+                        _shotDeadline = DateTime.UtcNow +
+                            TimeSpan.FromSeconds(shotSec);
+                        shotP = shotP[..colon];
+                    }
                     // Un chemin relatif tomberait dans res:// (non
                     // écrivable) — on le résout sur le cwd.
                     _shotPath = System.IO.Path.IsPathRooted(shotP)
                         ? shotP : System.IO.Path.GetFullPath(shotP);
                 }
         }
-        if (_shotFrames > 0 && --_shotFrames == 0)
+        if (_shotFrames > 0 && (--_shotFrames == 0 ||
+            DateTime.UtcNow >= _shotDeadline))
         {
             // Le HUD se charge en async (CEGUI ~1 s) et l'écran de
             // chargement peut encore être en fondu de sortie — si le
@@ -3869,7 +4044,11 @@ public partial class GameScene : Node3D
                 // --combat-test : capturer APRÈS l'engage/le cast —
                 // la fenêtre de test (mob-test + engage + cast ≈
                 // 1-2 min) dépasse le délai standard de 4 s.
-                Combat.SkillCast.CombatTestActive)
+                Combat.SkillCast.CombatTestActive ||
+                // --mob-test seul : attendre la fin du pilotage
+                // (téléportation + attente du sight) pour que la
+                // capture cadre le mob, pas le trajet.
+                MobTestActive)
             {
                 // 150 f (~2,5 s) > timers hud-open (1,0 s) et
                 // hud-dump (1,2 s) — ils doivent s'exécuter avant la

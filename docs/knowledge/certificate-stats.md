@@ -2,9 +2,13 @@
 
 > Statut : **verified** (données `corpus/fr-full`, désasm `server_us/
 > ZoneServer/ZoneServer` ELF32, tests `Eden.Tests.LicenseTests` 87/87
-> verts, suite complète 1546/1546 — 2026-11-03).
-> Impact visuel client : *hypothesis* — l'émission serveur des stats est
-> prouvée, le rendu panneau reste à confirmer en jeu.
+> verts, suite complète 1546/1546 — 2026-11-03 ; **preuve wire live**
+> 2026-11-03 22:44 + **preuve client graphique** 2026-11-03 ~23:00,
+> voir § « Preuve live »).
+> Impact visuel client : **verified** — fenêtre « Character Info »
+> ouverte par `--hud-open=profile`, capture écran prise, valeurs lues
+> du 296 (décodage wire) cohérentes à l'unité près avec les commandes
+> des enchants équipés.
 
 ## Chaîne complète
 
@@ -139,6 +143,80 @@ comptait en passif → MP/ATQ/heal octroyés en permanence).
 - `ActiveEnchantIds` déduplique par `Distinct()` comme `FindEnchant`
   natif : deux licences sur le même enchant = une seule application.
 - Aucune migration DB : `player_license`/`lic_1..7` sont conformes.
+
+## Preuve live (2026-11-03 ~22:44)
+
+Cause racine du symptôme « les stats des certificats ne s'appliquent
+pas » : **la zone tournait un binaire obsolète** (process démarré
+04:09, `/proc/<pid>/exe` = `Eden.Zone (deleted)`), soit ~16 h avant le
+commit `4839e2e` (20:35, « Certificats classe : 5 bugs de stats
+corrigés ») et le rebuild 22:35. Le slotting (182 → 509 echo, loc
+persistée) fonctionnait, mais la contribution stats n'arrivait pas.
+
+Après `./start-native.sh` (22:41) — headless `HeadlessBot cert-test`
+(char 200000002 « TestGirl », lv 1, capacité 1 slot) :
+
+```
+509 entrée  : 33273:loc1   (cert J502 « DÉF +5 % » item 33273 = s16
+                           -32263 ; posé via 182 la veille → loc
+                           persistée en player_license)
+296 entrée  : def=568      = 541 × 1.05 exactement — +5 % appliqué
+182 slot=0  : 509 echo 33273:loc0
+296 suivant : def=541      — retrait propre, pas de reste
+```
+
+- Avec le binaire obsolète (22:38, avant restart) : même séquence →
+  `def=541` avant **et** après — aucune application, symptôme reproduit.
+- Contrôle proc : cert 24235 (`1014|5` marqué col40=1) posée → 296
+  inchangé — exclusion passif conforme (le +PM est un déclencheur).
+- Règle d'activation native confirmée : **pas d'application tant que
+  le cert n'est pas posé dans un slot actif** (loc 1..`lv/10+1`) —
+  « posséder ≠ appliquer ». Les 4 certs de test123 (char 200000001)
+  étaient tous loc=0 au moment du signalement.
+
+## Preuve client graphique (2026-11-03 ~23:00)
+
+Client réel `engine/current/godot` (lock `/tmp/godot.lock`), compte
+`test123`, char **200000001** « [GM]EE聖境傳說 » (warrior lv 100,
+classe 1). Fenêtre profil ouverte via `--hud-open=profile`,
+`--shot` + dump `[wire]` des paquets reçus :
+
+| Champ 296 | loc=0 (avant) | loc 1-4 (après) | Δ | attendu |
+|---|---|---|---|---|
+| INT | 141 | 154 | +13 | 52534 `2085` V(2)=10 → **INT +10 %** (141×1,10=155, arrondi pipeline) |
+| WIS | 161 | 177 | +16 | 52533 `2085` V(3)=10 → **WIS +10 %** (161×1,10=177 exact) |
+| DEF | 1016 | 1067 | +51 | 52507 `2083` V(1)=5 → **DEF +5 %** (1016×1,05=1066,8→1067 exact) |
+| M-ATK | 1252 | 1320 | +68 | dérivé d'INT (formule `MagicDamage`, intTerm×para307) |
+| STR/AGI/LCK | 161/165/134 | idem | 0 | pas de cert sur ces stats ✓ |
+| P-ATK | 1466 | 1466 | 0 | pas de cert P-ATK ✓ |
+
+Retour `loc=0` (retest ~23:05) : INT=141, WIS=161, DEF=1016 — **retrait
+propre, aucun double comptage**. Les 4 certs équipés (33272→52506
+aggro, 33273→52507 DEF, 33299→52533 WIS, 33300→52534 INT) sont les
+certs réellement possédés du perso, posés en `player_license.loc`
+(identique à l'opcode 182 de l'UI classe).
+
+Pixel-proof de la fenêtre : `/tmp/eden_profile_{before,after}.png` —
+la région fenêtre (50,8,653×660) diffère de 62-72 % d'une capture
+sans `--hud-open` (panneau opaque rendu, thème Purple), et de ~10 %
+entre avant/après (chiffres des stats). Affichage = lecture directe
+de `PlayerVitals.TotalStats` (`ProfileWindow.RefreshStats`,
+ProfileWindow.cs:604-635) — aucun recalcul local de licences.
+
+### Artefact résolu — Block 0↔393 (pas un effet certificat)
+
+Le champ Block du 296 valait **0** aux runs loc=0 et **393** au run
+loc>0 — coïncidence non liée : le perso spamme son propre debuff
+**enchant 52153 « 崩壞打擊 » (`2117|−200` AttrBlock, `2118|−200`
+AttrParry)** en jeu. Formule `BlockRate` =
+`(equipBlock + bonusBlock + strTerm×para320)/(niv×0,4+1)×100` =
+`(0 + (−200 ou 0) + 161)/41×100` → **0** (clamp) quand le debuff est
+dans la contribution « buffs », **393** (=161/41×100) quand il est
+absent. Le PATK a varié de ±15 pour la même raison (buffs live).
+Preuve collatérale : le pipeline des buffs temporaires fonctionne
+bout en bout en live sur les mêmes canaux que les licences.
+
+- Reste à vérifier : rien de bloquant. Le panneau suit le paquet.
 
 ## Preuves natives citées
 

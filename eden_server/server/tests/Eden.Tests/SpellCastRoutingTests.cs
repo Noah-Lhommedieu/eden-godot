@@ -57,6 +57,47 @@ public class SpellCastRoutingTests
             SpellCastRouting.ShapeOf(Def(p1: 4, sub: 0)));
     }
 
+    // ---------- Règle propriétaire : pas de cast ciblé sans cible ----------
+
+    [Theory]
+    // cercle au sol : le point visé (ou le centre lanceur) fait office de cible
+    [InlineData(SpellCastRouting.ShapeGround, 50127, true)]   // Enfer Ardent (visée)
+    [InlineData(SpellCastRouting.ShapeGround, 50109, true)]   // Rayonnement de Guérison « autour de l'invocateur »
+    // secteur / direction / croix : cible requise sauf description « autour/devant le lanceur »
+    [InlineData(SpellCastRouting.ShapeSector, 50663, false)]  // Grille Sonique : éventail vers la cible
+    [InlineData(SpellCastRouting.ShapeSector, 50398, true)]   // Onde de Choc : « autour de lui »
+    [InlineData(SpellCastRouting.ShapeSector, 58478, true)]   // Coup Sismique : « devant le lanceur »
+    [InlineData(SpellCastRouting.ShapeDirection, 50389, false)] // Impact Océanique : ligne droite vers la cible
+    [InlineData(SpellCastRouting.ShapeDirection, 50184, false)] // Purgatoire : « devant la cible sélectionnée »
+    [InlineData(SpellCastRouting.ShapeDirection, 50385, true)]  // Flash Gordon : « Jeteur de sort téléporté »
+    [InlineData(SpellCastRouting.ShapeCross, 50469, false)]   // Traversombre : croix à la cible
+    // formes qui ne passent jamais par le 16
+    [InlineData(SpellCastRouting.ShapeSingle, 50027, false)]
+    [InlineData(SpellCastRouting.ShapeSelf, 50015, false)]
+    public void AcceptsLocationWithoutTarget_ByShapeAndDescription(
+        int shape, int spellId, bool ok) =>
+        Assert.Equal(ok, SpellCastRouting.AcceptsLocationWithoutTarget(
+            shape, spellId));
+
+    [Fact]
+    public void NoTargetMatrix_CoversAllCategories()
+    {
+        // Catégories de lancer (docs/knowledge/definitions.md) :
+        //  - cible unique hostile (50022 Perforation, forme 0) : exige une cible → 9 seul
+        Assert.True(SpellCastRouting.RequiresLifeTarget(SpellCastRouting.ShapeSingle));
+        Assert.False(SpellCastRouting.Accepts(SpellCastRouting.NcidToNowhere, SpellCastRouting.ShapeSingle));
+        Assert.False(SpellCastRouting.AcceptsLocationWithoutTarget(SpellCastRouting.ShapeSingle, 50022));
+        //  - AoE centrée lanceur (50015 Cyclone, forme 3) : 17 sans cible
+        Assert.True(SpellCastRouting.Accepts(SpellCastRouting.NcidToNowhere, SpellCastRouting.ShapeSelf));
+        //  - buff de groupe autour du joueur (50107, forme 3) : 17 sans cible
+        Assert.True(SpellCastRouting.AcceptsToNowhere(SpellCastRouting.ShapeSelf));
+        //  - AoE de zone à visée au sol (forme 1) : 16 avec point
+        Assert.True(SpellCastRouting.AcceptsLocationWithoutTarget(SpellCastRouting.ShapeGround, 50622));
+        //  - AoE directionnelle : 16 sans cible SEULEMENT si centrée lanceur
+        Assert.False(SpellCastRouting.AcceptsLocationWithoutTarget(SpellCastRouting.ShapeSector, 50663));
+        Assert.True(SpellCastRouting.AcceptsLocationWithoutTarget(SpellCastRouting.ShapeSector, 50398));
+    }
+
     // ---------- Routage NCID ↔ forme (CSpellFactory) ----------
 
     [Theory]

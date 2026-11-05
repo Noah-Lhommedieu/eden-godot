@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/GameScene.cs": {
-    "mtime": 1793727433.9375727,
-    "seen": 1793727836.284297,
-    "ast_hash": "a91568adf2fd34eb45dd4d82dd662635",
+    "mtime": 1793827334.090945,
+    "seen": 1793830054.5312,
+    "ast_hash": "0eb17fc61ee330224ed4fb4935f7c3a6",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/Main.cs": {
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/AutoAttack.cs": {
-    "mtime": 1793733847.8812156,
-    "seen": 1793734464.162368,
-    "ast_hash": "4f398794cb1e4b0b6f09a83dd249ca45",
+    "mtime": 1793815320.0762072,
+    "seen": 1793824215.7426279,
+    "ast_hash": "461c98ff90945d71f25c6f4e0d97540c",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/CastBar.cs": {
@@ -90,15 +90,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SkillCast.cs": {
-    "mtime": 1793741551.348228,
-    "seen": 1793742303.1687105,
-    "ast_hash": "4a22acf1932d55a48302d3f2b3eb7f8f",
+    "mtime": 1793815400.4470286,
+    "seen": 1793824215.7426405,
+    "ast_hash": "dcbf3662e5735edffc9943526228e48d",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SpellFx.cs": {
-    "mtime": 1793741951.279436,
-    "seen": 1793742303.1687133,
-    "ast_hash": "0ffbdec8d867f2d24bc74a6d218956b6",
+    "mtime": 1793816064.8392503,
+    "seen": 1793824215.7426414,
+    "ast_hash": "0d05decc0e0dfb0a2b03d30624f89f61",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/TreasurePickup.cs": {
@@ -108,9 +108,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/BreakPointUi.cs": {
-    "mtime": 1793411992.4630716,
-    "seen": 1793580342.7691276,
-    "ast_hash": "9a10bb6b77b3c1065625e7094f92b677",
+    "mtime": 1793764715.3181868,
+    "seen": 1793764975.5666997,
+    "ast_hash": "8ac2f1f29ed01698ce0fbfec0d7f90a2",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/ClassIconMap.cs": {
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/ItemTipFormat.cs": {
-    "mtime": 1793386919.8441038,
-    "seen": 1793580342.7691345,
-    "ast_hash": "2ef14326ff09dcd9d3398e46e2434e4b",
+    "mtime": 1793764715.318244,
+    "seen": 1793764975.5667074,
+    "ast_hash": "e9a1998625c89e030ef757dfcb69c6a5",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/LegendaryWiki.cs": {
@@ -204,9 +204,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/UiTextEn.cs": {
-    "mtime": 1793590440.6752374,
-    "seen": 1793592012.1266582,
-    "ast_hash": "0b55d0eec547a04c00cfc53b3c47cba3",
+    "mtime": 1793764715.3182878,
+    "seen": 1793764975.5667186,
+    "ast_hash": "2d1b79d80c4fdc8689516591fb10c131",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/WorldBossText.cs": {
@@ -252,9 +252,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/CollectionTable.cs": {
-    "mtime": 1793642933.278678,
-    "seen": 1793646851.09856,
-    "ast_hash": "69e9efe7a0d9e1263b18b078d077e983",
+    "mtime": 1793764715.3183348,
+    "seen": 1793764975.5667295,
+    "ast_hash": "ca0022a05b35ebeaf812ef295beeaa51",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/CraftTable.cs": {
@@ -276,9 +276,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/EnchantTable.cs": {
-    "mtime": 1793722425.3197553,
-    "seen": 1793726602.6673164,
-    "ast_hash": "7a72cb2b69fdabba06574000cee5836e",
+    "mtime": 1793816043.730364,
+    "seen": 1793824215.742688,
+    "ast_hash": "a81912be1a3b01612c0eece6c78ef0eb",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/EquipSetTable.cs": {
@@ -294,9 +294,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/ItemTable.cs": {
-    "mtime": 1793639015.4646876,
-    "seen": 1793646851.098567,
-    "ast_hash": "aa31d61eeffddcf7727d1371c05ece95",
+    "mtime": 1793764715.318443,
+    "seen": 1793764975.5667384,
+    "ast_hash": "9edb0705c98001b666172c78dc2c85a1",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/MapAreaFile.cs": {
@@ -390,9 +390,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/debug/VisTest.cs": {
-    "mtime": 1793741707.5742667,
-    "seen": 1793742303.1688254,
-    "ast_hash": "cad19d8e6d0af0eb317ced4e1ce72f27",
+    "mtime": 1793764715.3186734,
+    "seen": 1793764975.5667648,
+    "ast_hash": "babdbeb9271f8102c66a28188745d221",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CharBodyCache.cs": {
@@ -408,21 +408,21 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CharVisual.cs": {
-    "mtime": 1793727903.5867536,
-    "seen": 1793728275.1105692,
-    "ast_hash": "09d5553e8450b428c15719b28bb977c7",
+    "mtime": 1793832065.743633,
+    "seen": 1793832302.7169256,
+    "ast_hash": "acd98bb4134663f3733a63a4e786bef2",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CostumeVisual.cs": {
-    "mtime": 1793387030.0935104,
-    "seen": 1793580342.7691777,
-    "ast_hash": "15502fec966d10ca3ea6ef67a0766235",
+    "mtime": 1793764715.318715,
+    "seen": 1793764975.5667703,
+    "ast_hash": "7d087c49a894dd0c14e3183bbf712135",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/DirectionalLocomotion.cs": {
-    "mtime": 1793741489.48565,
-    "seen": 1793742303.1688385,
-    "ast_hash": "8ac69f334b457179465dbe30fc1a768a",
+    "mtime": 1793819786.0419357,
+    "seen": 1793824215.742726,
+    "ast_hash": "d0526524d23d98c806ad849d9736bb8a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/EdenDir.cs": {
@@ -432,8 +432,8 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/EntityAnimator.cs": {
-    "mtime": 1793741454.8162591,
-    "seen": 1793742303.1688426,
+    "mtime": 1793764715.31884,
+    "seen": 1793764975.5667734,
     "ast_hash": "f82ed1ac190dd37f04faeece42ff3c7d",
     "semantic_hash": ""
   },
@@ -474,9 +474,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ArchiveWindow.cs": {
-    "mtime": 1793742233.5484216,
-    "seen": 1793742303.1688597,
-    "ast_hash": "f9fd5281eadd784445fe228a5d853216",
+    "mtime": 1793764715.318937,
+    "seen": 1793764975.5667832,
+    "ast_hash": "cf8691b1591dec2f9b52c95fd51c05e9",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/AuctionWindow.cs": {
@@ -510,15 +510,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/BuffBar.cs": {
-    "mtime": 1793722425.319983,
-    "seen": 1793726602.6673815,
-    "ast_hash": "8400f0dfe81747e7f6b805b18f103c04",
+    "mtime": 1793764715.3190644,
+    "seen": 1793764975.5667903,
+    "ast_hash": "2ec43074e23f7f8a9d045f384302ea29",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/BuffBridge.cs": {
-    "mtime": 1793119343.735826,
-    "seen": 1793580342.7691948,
-    "ast_hash": "c829784b1285c0344bcbb2588f384780",
+    "mtime": 1793764715.3191092,
+    "seen": 1793764975.5667915,
+    "ast_hash": "6fb43398c10a775706a9e589b02cfb33",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ChatPanel.cs": {
@@ -540,9 +540,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClassWindow.cs": {
-    "mtime": 1793734122.202347,
-    "seen": 1793734464.1625333,
-    "ast_hash": "08f5d995981904d2215e7a0deb614b63",
+    "mtime": 1793764715.3193576,
+    "seen": 1793764975.5667953,
+    "ast_hash": "8e1e425ec884c1f739d60ebb39c4c308",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClientUiStore.cs": {
@@ -552,9 +552,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/CooldownOverlay.cs": {
-    "mtime": 1793734178.9668963,
-    "seen": 1793734464.1625369,
-    "ast_hash": "94f2d95e4f1a32f39615de29605b730a",
+    "mtime": 1793831770.874002,
+    "seen": 1793832302.7169523,
+    "ast_hash": "a481004536ffcb30f63a032c2faea0a9",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/CostumeWindow.cs": {
@@ -642,9 +642,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/EquipSlotsPanel.cs": {
-    "mtime": 1793674091.5372164,
-    "seen": 1793675247.6988316,
-    "ast_hash": "b0f5526f3d90a67c729ed02590c5184d",
+    "mtime": 1793810506.1080801,
+    "seen": 1793824215.7427669,
+    "ast_hash": "a2210e1ee1ee51f41e04653cfd59f92a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ExpertiseWindows.cs": {
@@ -678,9 +678,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HotbarPanel.cs": {
-    "mtime": 1793596258.6261635,
-    "seen": 1793611066.7338836,
-    "ast_hash": "bcbcdd685d9dcd81d105b707c60a6df4",
+    "mtime": 1793764715.3195672,
+    "seen": 1793764975.5668185,
+    "ast_hash": "3b635346d230687219eca008853696d8",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HotelWindow.cs": {
@@ -690,15 +690,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HpLossAnim.cs": {
-    "mtime": 1793418777.2443686,
-    "seen": 1793580342.7692182,
-    "ast_hash": "4a61af085027961085b3c0b1e733bb07",
+    "mtime": 1793810267.5351837,
+    "seen": 1793824215.7427745,
+    "ast_hash": "48e22ab0213bd4eb27b3e18731619e6a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudExtensions.cs": {
-    "mtime": 1793727433.3564036,
-    "seen": 1793727836.284555,
-    "ast_hash": "a7601654f33fbe8c62b48831c7593dd4",
+    "mtime": 1793764715.3197134,
+    "seen": 1793764975.5668216,
+    "ast_hash": "3a1cd426e569b768794c23abc5632d32",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudLayout.cs": {
@@ -708,15 +708,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudNetBridge.cs": {
-    "mtime": 1793421266.5350873,
-    "seen": 1793580342.7692208,
-    "ast_hash": "cc86ca731b916823dc0ca0e38259b023",
+    "mtime": 1793764715.3197756,
+    "seen": 1793764975.5668235,
+    "ast_hash": "4e9c602854fc4aebdb97676ec98d37f0",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudRoot.cs": {
-    "mtime": 1793725995.163724,
-    "seen": 1793726602.6674206,
-    "ast_hash": "5b50bf1342b78f67b7ef51d04cd52efe",
+    "mtime": 1793827318.871224,
+    "seen": 1793830054.5313442,
+    "ast_hash": "300a849a09660387be6de4c5e852cc70",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudWindows.cs": {
@@ -726,8 +726,8 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/InspectWindow.cs": {
-    "mtime": 1793241568.208571,
-    "seen": 1793580342.7692232,
+    "mtime": 1793746532.3973682,
+    "seen": 1793747138.965429,
     "ast_hash": "2fe58c641bf6c94edbb9f1bbeb869c00",
     "semantic_hash": ""
   },
@@ -738,9 +738,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/InventoryWindow.cs": {
-    "mtime": 1793729631.8192847,
-    "seen": 1793730799.780945,
-    "ast_hash": "243027951173d4103060fe7c1d8020b9",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668283,
+    "ast_hash": "053194bf6b87139c3ca766ae7ce58e2f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ItemMallWindow.cs": {
@@ -762,9 +762,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ItemTooltip.cs": {
-    "mtime": 1793721620.6168423,
-    "seen": 1793726602.6674347,
-    "ast_hash": "bf9cc301ed6dcc0771a3c634410a7bb1",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668323,
+    "ast_hash": "0281b4220d1a3ecd6d729a48fc6ea7e9",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/LotteryWindow.cs": {
@@ -822,9 +822,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/NpcDialogueWindow.cs": {
-    "mtime": 1793412719.597139,
-    "seen": 1793580342.7692358,
-    "ast_hash": "7a6fe6b814ba672e70d8969ba2a96610",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668445,
+    "ast_hash": "2c58511468dfa03cb4e12a105e2ad768",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/PartyHud.cs": {
@@ -852,15 +852,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ProfileStatInfo.cs": {
-    "mtime": 1793674841.9083974,
-    "seen": 1793675247.698866,
-    "ast_hash": "0b6b9a9bfef1df87518a1526e3746423",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668511,
+    "ast_hash": "47bccb7c9d516fce7800b85cc33296ad",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ProfileWindow.cs": {
-    "mtime": 1793674841.9086246,
-    "seen": 1793675247.6988668,
-    "ast_hash": "bdf43c0c3574881538054796a0b3bad4",
+    "mtime": 1793810279.678239,
+    "seen": 1793824215.7428045,
+    "ast_hash": "c6333e59603ed867b9b59939379261d8",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/QuestObjectiveMarks.cs": {
@@ -876,9 +876,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/QuestSheetWindow.cs": {
-    "mtime": 1793403201.3118865,
-    "seen": 1793580342.7692435,
-    "ast_hash": "5bc1456b37811bb9dc1b296ce7d0bc50",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668578,
+    "ast_hash": "1eb8cfdd353d884c68f48b661f135d4b",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/QuestTracker.cs": {
@@ -954,9 +954,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/TargetFrame.cs": {
-    "mtime": 1793417007.8893535,
-    "seen": 1793580342.7692537,
-    "ast_hash": "e6b4b1bbb96346c44137af161b7bee1c",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668857,
+    "ast_hash": "e469c11930d757fb873d72b21107b254",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ThemePalette.cs": {
@@ -966,9 +966,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/TopLeftVitals.cs": {
-    "mtime": 1793412298.3881094,
-    "seen": 1793580342.7692552,
-    "ast_hash": "22047d7e0abbfd6b2a60880af986fd14",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5668895,
+    "ast_hash": "fe559f8f01ddda3a19b6a0b4b950f4e5",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/TradeWindow.cs": {
@@ -1104,9 +1104,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/player/PlayerController.cs": {
-    "mtime": 1793741505.0226412,
-    "seen": 1793742303.1690848,
-    "ast_hash": "c6b82db1d994bba830b85f2c9f49eba6",
+    "mtime": 1793820503.771191,
+    "seen": 1793824215.7428617,
+    "ast_hash": "c6a43f217c3fa90c7022271476bfc6b3",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/AppearanceCodec.cs": {
@@ -1278,9 +1278,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEnchantMessages.cs": {
-    "mtime": 1793001825.5516293,
-    "seen": 1793580342.7692988,
-    "ast_hash": "548bca1222bade3a6e38e34ba0a938a9",
+    "mtime": 1793816039.493817,
+    "seen": 1793824215.7428908,
+    "ast_hash": "00dca1b30b0a5842d137d6be7e58a543",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEntityMessages.cs": {
@@ -1302,15 +1302,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEquipMessages.cs": {
-    "mtime": 1793419331.8437517,
-    "seen": 1793580342.7693014,
-    "ast_hash": "c6b05e7178dcf1083721c556e19df0be",
+    "mtime": 1793810279.55211,
+    "seen": 1793824215.7428944,
+    "ast_hash": "219102492ed1c01aac2ef41e5ccafb2c",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneHudMessages.cs": {
-    "mtime": 1793638946.3608239,
-    "seen": 1793646851.0987504,
-    "ast_hash": "20fa551cb8c999d5ce1ad3b56d195654",
+    "mtime": 1793811105.4162931,
+    "seen": 1793824215.7428954,
+    "ast_hash": "f01f215e5d2337a00c94aa026827d5f4",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneItemMallMessages.cs": {
@@ -1398,9 +1398,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneVitalsMessages.cs": {
-    "mtime": 1793203262.642768,
-    "seen": 1793580342.7693145,
-    "ast_hash": "20790101e67c783d98cece3741366594",
+    "mtime": 1793827328.4013224,
+    "seen": 1793830054.531471,
+    "ast_hash": "8cc775a92e02513e5337b0c3c3678680",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/scene/CinemaMode.cs": {
@@ -1542,27 +1542,27 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsApplier.Render.cs": {
-    "mtime": 1793726408.7033355,
-    "seen": 1793726602.6675808,
-    "ast_hash": "e6c8602b7e7303ed54a166c85717f2f8",
+    "mtime": 1793764715.3202631,
+    "seen": 1793764975.5670118,
+    "ast_hash": "d44a4884a943e7d55ea3172e27f046e7",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsApplier.cs": {
-    "mtime": 1793733394.8655555,
-    "seen": 1793733737.054163,
-    "ast_hash": "417216854517979a7279cb4c4e2f1e61",
+    "mtime": 1793764715.3202631,
+    "seen": 1793764975.5670125,
+    "ast_hash": "268597d1a8c0959621e9e5f106976c64",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsWindow.Prefs.cs": {
-    "mtime": 1793418795.2875721,
-    "seen": 1793580342.7693353,
-    "ast_hash": "5ebbbebd9eb16a968575bcf1882ad010",
+    "mtime": 1793764715.3202631,
+    "seen": 1793764975.5670145,
+    "ast_hash": "6e8ada3ca4d4b2bf18cbb16f719071da",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsWindow.cs": {
-    "mtime": 1793733386.9392965,
-    "seen": 1793733737.054165,
-    "ast_hash": "82437107423a693c9f05e59eea342986",
+    "mtime": 1793764715.3215313,
+    "seen": 1793764975.5670152,
+    "ast_hash": "dc4866c91be20625021ad93bfa160629",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/CeguiBuilder.cs": {
@@ -1656,9 +1656,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/BlobShadow.cs": {
-    "mtime": 1793654667.435918,
-    "seen": 1793655601.57394,
-    "ast_hash": "dc882a245fd3c10fdb99ca0b8b7085e8",
+    "mtime": 1793764715.3215907,
+    "seen": 1793764975.5670347,
+    "ast_hash": "cd305ba256d4e282c8eb29e59db632df",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/ColliderConsolidator.cs": {
@@ -1674,9 +1674,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/EntityRegistry.cs": {
-    "mtime": 1793741513.336168,
-    "seen": 1793742303.1692529,
-    "ast_hash": "9140bf848bf483f262c548c1f3471f62",
+    "mtime": 1793822824.4141154,
+    "seen": 1793824215.742957,
+    "ast_hash": "ad3cd68d0ce10c7e61e38f019810da23",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/FogCeiling.cs": {
@@ -1710,9 +1710,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/MapLoader.cs": {
-    "mtime": 1793642521.9367487,
-    "seen": 1793646851.0988138,
-    "ast_hash": "e8fce0788279b7f883fc1d5e3a08934b",
+    "mtime": 1793821924.7818503,
+    "seen": 1793824215.7429626,
+    "ast_hash": "d490f4be38c8bec1a9e1dd043668cc07",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/MobDanger.cs": {
@@ -1794,15 +1794,15 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/HeadlessBot/HeadlessBot.csproj": {
-    "mtime": 1793741905.9634976,
-    "seen": 1793742303.169291,
+    "mtime": 1793764715.3220882,
+    "seen": 1793764975.5670602,
     "ast_hash": "955aa17e86d450bc51b8d0a8a1a43bd6",
     "semantic_hash": ""
   },
   "eden_godot/tools/HeadlessBot/Program.cs": {
-    "mtime": 1793741970.9970453,
-    "seen": 1793742303.1692927,
-    "ast_hash": "87946686eda0d064c406e77dff1b8f56",
+    "mtime": 1793764715.3221338,
+    "seen": 1793764975.5670614,
+    "ast_hash": "cac3d469b889043b607d1abf1084ae4e",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetSmoke/NetSmoke.csproj": {
@@ -1854,9 +1854,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/DirectionalLocomotionTests.cs": {
-    "mtime": 1793741550.2688277,
-    "seen": 1793742303.1693182,
-    "ast_hash": "173288903f767213f051e8602255ed21",
+    "mtime": 1793819828.7740455,
+    "seen": 1793824215.7429984,
+    "ast_hash": "1bbdb0e23626bb166ae29fa717c0e2bc",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/EdenDirTests.cs": {
@@ -1956,9 +1956,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/Plan22Tests.cs": {
-    "mtime": 1793387149.05226,
-    "seen": 1793580342.7693903,
-    "ast_hash": "39a120dab603ef6671e6043feda882c4",
+    "mtime": 1793764715.3221338,
+    "seen": 1793764975.5671024,
+    "ast_hash": "a131958e0b721210b1d7f40f1320cead",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/QuestCatalogTests.cs": {
@@ -2070,9 +2070,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneItemTests.cs": {
-    "mtime": 1792907430.1326532,
-    "seen": 1793580342.7694085,
-    "ast_hash": "b736e1216c263d18767854cde8f5923f",
+    "mtime": 1793764715.3223042,
+    "seen": 1793764975.5671263,
+    "ast_hash": "e63c6edbac477980732b7a3b84c8e6ff",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneLotGTests.cs": {
@@ -2094,9 +2094,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneServicesTests.cs": {
-    "mtime": 1792902458.6941583,
-    "seen": 1793580342.7694118,
-    "ast_hash": "b513a17f308f8ef257271b85dce7687e",
+    "mtime": 1793764715.3223593,
+    "seen": 1793764975.5671303,
+    "ast_hash": "0a2428abf864c2d21eb57f261fdcfca4",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneSocialTests.cs": {
@@ -2112,9 +2112,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneVague2Tests.cs": {
-    "mtime": 1793002025.0285542,
-    "seen": 1793580342.7694142,
-    "ast_hash": "b9f184d698a84e8959adc3fc0c833e80",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.567133,
+    "ast_hash": "b7c886f2b1c2a0e7d740b85d968303fa",
     "semantic_hash": ""
   },
   "eden_godot/tools/anim/merge_anim_glb.py": {
@@ -2562,9 +2562,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/EnchantParser.cs": {
-    "mtime": 1793721239.3770912,
-    "seen": 1793726602.6677628,
-    "ast_hash": "d3ee4fff6f710c4973a7cfc374db1385",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.5672107,
+    "ast_hash": "bd0bc5740337998fe99acd31aeb37398",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/EquipSetParser.cs": {
@@ -2610,9 +2610,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/MonsterParser.cs": {
-    "mtime": 1793479461.3636684,
-    "seen": 1793580342.7694812,
-    "ast_hash": "35ccfa1c2f32c0e47cd099868a7713aa",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.5672185,
+    "ast_hash": "71bae43de613e6d39b601975560791dc",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/MotionParser.cs": {
@@ -2652,9 +2652,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/SceneParser.cs": {
-    "mtime": 1793479461.36434,
-    "seen": 1793580342.7694867,
-    "ast_hash": "7d163783d4ce03282c7332555b51c32c",
+    "mtime": 1793818381.5011487,
+    "seen": 1793824215.7431364,
+    "ast_hash": "6be32b362c3e64ae27e63c9713aefef5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/ShopAndMiscParsers.cs": {
@@ -3114,9 +3114,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Classes/CustomClassState.cs": {
-    "mtime": 1793479461.3745706,
-    "seen": 1793580342.7695482,
-    "ast_hash": "85d6f80ffce4a2a79f0dfdfe8606a523",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.567298,
+    "ast_hash": "d0a8be3144f194dfc921def43b465a3f",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Classes/LicenseEntity.cs": {
@@ -3480,9 +3480,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/MonsterService.cs": {
-    "mtime": 1793479461.3717327,
-    "seen": 1793580342.7695973,
-    "ast_hash": "f64ff7118e49baa1f720357405e7c0b4",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.5673544,
+    "ast_hash": "d9ece25804f9ff93718af71d4c194ec4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/MountService.cs": {
@@ -4062,9 +4062,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/MissionDb.cs": {
-    "mtime": 1793479461.3361385,
-    "seen": 1793580342.769679,
-    "ast_hash": "892dfe18c8705e51a4ea7381ae5ebed2",
+    "mtime": 1793825483.9669347,
+    "seen": 1793830054.5319374,
+    "ast_hash": "b14a09df49013a50e821ef84079ffac0",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/MissionServer.cs": {
@@ -4080,9 +4080,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Dialogue.cs": {
-    "mtime": 1793479461.337413,
-    "seen": 1793580342.7696815,
-    "ast_hash": "5afc06b785c2dc0d017cc04fb7bcae2d",
+    "mtime": 1793825853.9251366,
+    "seen": 1793830054.53194,
+    "ast_hash": "30eea46057a405aeb22faec8ba1ca6af",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Events.cs": {
@@ -4092,9 +4092,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Objectives.cs": {
-    "mtime": 1793663858.7674193,
-    "seen": 1793665852.606648,
-    "ast_hash": "e89f53550483eb3cca02efab48f6d09d",
+    "mtime": 1793825500.8661115,
+    "seen": 1793830054.531942,
+    "ast_hash": "08094b0e8e873c151314efa1502a204f",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Share.cs": {
@@ -4110,9 +4110,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.cs": {
-    "mtime": 1793663858.7676487,
-    "seen": 1793665852.606651,
-    "ast_hash": "1cbde11ccd07cd42816df8cc185f40dc",
+    "mtime": 1793826233.4899902,
+    "seen": 1793830054.5319445,
+    "ast_hash": "dad04d631dac51c7e147b5056c0c9d60",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/RankInfoService.cs": {
@@ -4356,9 +4356,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Combat/SpellEffects/SpellEffectHandlers.cs": {
-    "mtime": 1793479461.3502574,
-    "seen": 1793580342.7697194,
-    "ast_hash": "560475e2c3317cd52d516733673006bb",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.567494,
+    "ast_hash": "9667973e0be818214a2e9b89fd76726d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Eden.Zone.csproj": {
@@ -4398,9 +4398,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/EntryHandlers.cs": {
-    "mtime": 1793479461.348466,
-    "seen": 1793580342.7697246,
-    "ast_hash": "4d9d89cd52c7f0a2234c1df54a648e72",
+    "mtime": 1793811200.186872,
+    "seen": 1793824215.7434058,
+    "ast_hash": "c8d62330e848249cbb4bdf81bed3ab37",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/EquipTrainHandlers.cs": {
@@ -4620,9 +4620,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Admin.cs": {
-    "mtime": 1793722526.327555,
-    "seen": 1793726602.668112,
-    "ast_hash": "3bfef0cc05985addd45226149b62b466",
+    "mtime": 1793827633.5364673,
+    "seen": 1793830054.5320265,
+    "ast_hash": "e262a6fbb4601c158fd03c5b77fab070",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.AdvancedAbility.cs": {
@@ -4644,9 +4644,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Breakpoint.cs": {
-    "mtime": 1793479461.3515685,
-    "seen": 1793580342.7697577,
-    "ast_hash": "68e27bdbd0e787da23f6469e7c4d65df",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.5675406,
+    "ast_hash": "5f6d34aec9148ea01dcd23551f5c175b",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Broadcast.cs": {
@@ -4686,15 +4686,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Death.cs": {
-    "mtime": 1793479461.345263,
-    "seen": 1793580342.7697632,
-    "ast_hash": "404308f286515d3cd7520398f40fbef7",
+    "mtime": 1793818173.2914855,
+    "seen": 1793824215.7434497,
+    "ast_hash": "6f45455852c865eeef778ccf90e9dbc2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Mob.cs": {
-    "mtime": 1793733419.1587887,
-    "seen": 1793733737.0546787,
-    "ast_hash": "4bf35aadc34f8f0c1927d6251fbfd044",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.56755,
+    "ast_hash": "38505946df12e714b497c542cb20a4f9",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Procs.cs": {
@@ -4704,9 +4704,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Rewards.cs": {
-    "mtime": 1793722607.2823176,
-    "seen": 1793726602.668127,
-    "ast_hash": "67849be3cf6987776f73038757d7cc67",
+    "mtime": 1793809374.2058392,
+    "seen": 1793824215.7434523,
+    "ast_hash": "50ce3f723ca29f381f408d8fdcca3c27",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Ride.cs": {
@@ -4716,15 +4716,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Spells.Resolution.cs": {
-    "mtime": 1793741355.9182506,
-    "seen": 1793742303.1702297,
-    "ast_hash": "a353c273dfbe299c12cb20d001cfb5a0",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.5675535,
+    "ast_hash": "31ee70f4168e4ee3bedf7d00404ff150",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Spells.cs": {
-    "mtime": 1793741711.9031808,
-    "seen": 1793742303.1702316,
-    "ast_hash": "7aaca7269f2f6ff43851fc124e82607c",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.5675545,
+    "ast_hash": "f2988c9bc372acb779f725a2b4ec9041",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Timing.cs": {
@@ -4734,9 +4734,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.cs": {
-    "mtime": 1793734855.058692,
-    "seen": 1793736253.0483654,
-    "ast_hash": "6bffe620989599a494a55b0c9e23dee9",
+    "mtime": 1793815364.8266351,
+    "seen": 1793824215.743457,
+    "ast_hash": "3013899669f852c5c180d8c7a1414e04",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.CombineStation.cs": {
@@ -4752,9 +4752,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.CustomClass.cs": {
-    "mtime": 1793479461.339532,
-    "seen": 1793580342.769772,
-    "ast_hash": "7c1d2f05fc0dba88ce7257af6ce105fa",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.56756,
+    "ast_hash": "d4354a0e3815685bf344ef20a711f9f2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.DailyAward.cs": {
@@ -4776,9 +4776,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.DisplayChar.cs": {
-    "mtime": 1793479461.3523874,
-    "seen": 1793580342.7697754,
-    "ast_hash": "335db16d8900480059ffb90fd8e84bcc",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.567564,
+    "ast_hash": "c30c2c16c34bce44394597044281c1b7",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Duel.cs": {
@@ -4812,9 +4812,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.EntryPipeline.Install.cs": {
-    "mtime": 1793479461.3385441,
-    "seen": 1793580342.7697802,
-    "ast_hash": "44c6e3c1a956bf27ee1052f08f513d21",
+    "mtime": 1793764715.3232632,
+    "seen": 1793764975.5675697,
+    "ast_hash": "55a1663e341e1e75e21593491cd8d605",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.EntryPipeline.Load.cs": {
@@ -4848,9 +4848,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Events.cs": {
-    "mtime": 1793479461.3519316,
-    "seen": 1793580342.769785,
-    "ast_hash": "31b3ad5663b8270b57c3384078276073",
+    "mtime": 1793818403.3615806,
+    "seen": 1793824215.7434747,
+    "ast_hash": "671ec95f2b6eae3e71cb031a95f8fb51",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Family.cs": {
@@ -4866,9 +4866,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.FastDress.cs": {
-    "mtime": 1793479461.3425488,
-    "seen": 1793580342.769787,
-    "ast_hash": "cfd603ed22a06d088f043c17cb6b99a4",
+    "mtime": 1793764715.3232632,
+    "seen": 1793764975.5675778,
+    "ast_hash": "bd25e066c381d835125c88001f733811",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.FortuneBag.cs": {
@@ -4890,9 +4890,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Items.cs": {
-    "mtime": 1793479461.3397896,
-    "seen": 1793580342.7697904,
-    "ast_hash": "bafb036dda45b8277449c30a74d843c1",
+    "mtime": 1793764715.3232632,
+    "seen": 1793764975.5675814,
+    "ast_hash": "020b886d36adbdbbbbb488ac38381d86",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.ItemsExpiry.cs": {
@@ -4914,9 +4914,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Lifecycle.cs": {
-    "mtime": 1793724891.7636607,
-    "seen": 1793726602.6681597,
-    "ast_hash": "480eb9894c9d260b1bf7ae0ff4d33bc4",
+    "mtime": 1793764715.324322,
+    "seen": 1793764975.5675852,
+    "ast_hash": "4cffb0dffa449a30fceeac9168026f66",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Lifelong.cs": {
@@ -4944,9 +4944,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.MagicBox.cs": {
-    "mtime": 1793479461.3427124,
-    "seen": 1793580342.7697976,
-    "ast_hash": "dbce6874eb9c3c9180f0ca1882d8a004",
+    "mtime": 1793764715.324399,
+    "seen": 1793764975.56759,
+    "ast_hash": "b2b5bfee06b012db0e018c5fae4e14c2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Migration.cs": {
@@ -4962,21 +4962,21 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Mission.cs": {
-    "mtime": 1793665611.0728424,
-    "seen": 1793665852.6067867,
-    "ast_hash": "a246801c04b78afa66d5eb5b8b9afaaa",
+    "mtime": 1793764715.324537,
+    "seen": 1793764975.5675929,
+    "ast_hash": "4f6c8a9c603eec3e85282b4bee808fb0",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.MobEnchants.cs": {
-    "mtime": 1793479461.3383226,
-    "seen": 1793580342.7698007,
-    "ast_hash": "d70600d321e7d70122606327837c735f",
+    "mtime": 1793764715.324619,
+    "seen": 1793764975.5675938,
+    "ast_hash": "506a3989b4c75aed6aefa0a407edef78",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.MobWander.cs": {
-    "mtime": 1793479461.3438227,
-    "seen": 1793580342.7698014,
-    "ast_hash": "204a9434d8261a1af0eaa02953a46cb7",
+    "mtime": 1793819370.8009982,
+    "seen": 1793824215.7434933,
+    "ast_hash": "c096a1e489caebd89d59ff4d0aabe1c0",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Movement.cs": {
@@ -4986,9 +4986,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.PayEvent.cs": {
-    "mtime": 1793479461.346372,
-    "seen": 1793580342.769803,
-    "ast_hash": "3189386a67a1b5893dc3ece9dd6a6007",
+    "mtime": 1793764715.3247592,
+    "seen": 1793764975.5675962,
+    "ast_hash": "e47798aeee414ff42acbd3badbb42b88",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.PlayerGuide.cs": {
@@ -4998,9 +4998,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.PortalStone.cs": {
-    "mtime": 1793479461.3394911,
-    "seen": 1793580342.7698045,
-    "ast_hash": "c6794f470663c1acd8bd7f88344c056a",
+    "mtime": 1793764715.3248208,
+    "seen": 1793764975.567598,
+    "ast_hash": "a372b27ac43ac65c1d070e81ffc294ab",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Prestige.cs": {
@@ -5034,9 +5034,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Recommend.cs": {
-    "mtime": 1793479461.352544,
-    "seen": 1793580342.7698095,
-    "ast_hash": "04c3bccadaa3320bfe3875a17e39559c",
+    "mtime": 1793764715.324878,
+    "seen": 1793764975.5676038,
+    "ast_hash": "d4420fec21018fbcdfcf57c6311841a4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Recruit.cs": {
@@ -5082,15 +5082,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Status.cs": {
-    "mtime": 1793680155.8969178,
-    "seen": 1793680266.7291768,
-    "ast_hash": "77b25c596f635fb3cecb4dd43806aac1",
+    "mtime": 1793764715.3250349,
+    "seen": 1793764975.5676115,
+    "ast_hash": "2f85ffa2819acaa7bca17ce554b8c445",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Strengthen.cs": {
-    "mtime": 1793479461.343691,
-    "seen": 1793580342.7698166,
-    "ast_hash": "bde5a23ab804177f375f0b3b9d7bae7c",
+    "mtime": 1793764715.3251126,
+    "seen": 1793764975.5676122,
+    "ast_hash": "c231ba6dc03cb3cb36be00f79c9e5601",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Summon.cs": {
@@ -5166,9 +5166,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneLiveWorld.cs": {
-    "mtime": 1793479461.342328,
-    "seen": 1793580342.769827,
-    "ast_hash": "094e29a868f4aedd1c3d71cc97fe3661",
+    "mtime": 1793818382.0583296,
+    "seen": 1793824215.743523,
+    "ast_hash": "a9f66d792da8a7c46144e72dc69cff3d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneLoop.cs": {
@@ -6096,9 +6096,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/Eden.Tests.csproj": {
-    "mtime": 1792626208.851915,
-    "seen": 1793580342.7699537,
-    "ast_hash": "efa1596c0439df4628b622b083bc4344",
+    "mtime": 1793764715.325276,
+    "seen": 1793764975.5677848,
+    "ast_hash": "bbe8da2258d565d2d4fc1d515bf75b56",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ElfCodecTests.cs": {
@@ -6408,9 +6408,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ProgressionTests.cs": {
-    "mtime": 1793479461.3762414,
-    "seen": 1793580342.7700489,
-    "ast_hash": "c3effe3f27db9aad0fd194fe15a42de3",
+    "mtime": 1793809085.1333256,
+    "seen": 1793824215.74373,
+    "ast_hash": "a3a184c8bdbac96c035a34b2e1c69182",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ProtocolAndSerializationTests.cs": {
@@ -6528,9 +6528,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/SpellEffectTests.cs": {
-    "mtime": 1793479461.3826604,
-    "seen": 1793580342.7700799,
-    "ast_hash": "8f342f87859249b2d2a886afabbcbbe5",
+    "mtime": 1793764715.325276,
+    "seen": 1793764975.5679305,
+    "ast_hash": "a694bf1d62ba9de95fb8d209ef95d8a8",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/StatPipelineTests.cs": {
@@ -7008,9 +7008,9 @@
     "semantic_hash": ""
   },
   "src/Eden.Core/Data/ItemTipFormat.cs": {
-    "mtime": 1793479318.165323,
-    "seen": 1793580342.7702038,
-    "ast_hash": "2ef14326ff09dcd9d3398e46e2434e4b",
+    "mtime": 1793764715.3295944,
+    "seen": 1793764975.5680783,
+    "ast_hash": "5fa6a836fe446c72959ba8db89bf389e",
     "semantic_hash": ""
   },
   "src/Eden.Core/Data/LegendaryWiki.cs": {
@@ -7296,9 +7296,9 @@
     "semantic_hash": ""
   },
   "src/Eden.Core/Formats/NifFile.cs": {
-    "mtime": 1793742341.5407991,
-    "seen": 1793742458.6437516,
-    "ast_hash": "b4742a238f1c742259208528ac95c8e1",
+    "mtime": 1793764715.3298287,
+    "seen": 1793764975.5681612,
+    "ast_hash": "496675851c6d958ead8fa1db5633fa0f",
     "semantic_hash": ""
   },
   "src/Eden.Core/Formats/NodeMapFile.cs": {
@@ -7380,9 +7380,9 @@
     "semantic_hash": ""
   },
   "src/Eden.Core/Game/DirectionalLocomotion.cs": {
-    "mtime": 1793741481.2321115,
-    "seen": 1793742303.171079,
-    "ast_hash": "573d08b2421e27e872db4c2631f2fbec",
+    "mtime": 1793819809.2172334,
+    "seen": 1793824215.743894,
+    "ast_hash": "1f1274689137c6d0642aa62e80756c7c",
     "semantic_hash": ""
   },
   "src/Eden.Core/Game/EdenDir.cs": {
@@ -7968,9 +7968,9 @@
     "semantic_hash": ""
   },
   "src/Eden.Core/Windows/ProfileView.cs": {
-    "mtime": 1793563469.6852973,
-    "seen": 1793580342.7704623,
-    "ast_hash": "f28604e2032a9aab7833f1d9368f1124",
+    "mtime": 1793764715.329931,
+    "seen": 1793764975.568365,
+    "ast_hash": "40e7727dea06645022b9f613bc82b6e9",
     "semantic_hash": ""
   },
   "src/Eden.Core/Windows/StorageView.cs": {
@@ -8040,9 +8040,9 @@
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/DirectionalLocomotionTests.cs": {
-    "mtime": 1793741544.4748855,
-    "seen": 1793742303.1713016,
-    "ast_hash": "173288903f767213f051e8602255ed21",
+    "mtime": 1793764715.32998,
+    "seen": 1793764975.56838,
+    "ast_hash": "a766d575a5df10ce0c076cf2daa5b731",
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/Eden.Core.Tests.csproj": {
@@ -8568,9 +8568,9 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1793724628.8138094,
-    "seen": 1793726602.6688488,
-    "ast_hash": "ddefc851df2b3fff2a23681a2d05ec11",
+    "mtime": 1793764715.3122635,
+    "seen": 1793764975.5686445,
+    "ast_hash": "f61468fed19f7c66b5c960550bf627aa",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -8646,9 +8646,9 @@
     "semantic_hash": ""
   },
   "docs/workflows/EDENFR-GAPS.md": {
-    "mtime": 1793717864.5326693,
-    "seen": 1793726602.6688874,
-    "ast_hash": "6909eb497fac654b2e06e981815ef6cd",
+    "mtime": 1793824471.9421828,
+    "seen": 1793830054.5328379,
+    "ast_hash": "7fa08904243cc5ad7eb5747ed2df948c",
     "semantic_hash": ""
   },
   "docs/workflows/task-contract.md": {
@@ -10494,8 +10494,8 @@
     "semantic_hash": ""
   },
   "eden_server/server.config.txt": {
-    "mtime": 1793397838.5534387,
-    "seen": 1793580342.7711332,
+    "mtime": 1793814267.045803,
+    "seen": 1793824215.7445517,
     "ast_hash": "3ee87c0bef211774eea9aa078edb11cd",
     "semantic_hash": ""
   },
@@ -10662,9 +10662,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/debug/NativeFxDemo.cs": {
-    "mtime": 1793586266.4878843,
-    "seen": 1793586334.7187474,
-    "ast_hash": "392558df78db755c36e30e611ef6bcdb",
+    "mtime": 1793829889.6506302,
+    "seen": 1793830054.531277,
+    "ast_hash": "cc51f8df94b4259e9c1441bd862cc2da",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/DdsTexture.cs": {
@@ -10674,15 +10674,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NativeFx.cs": {
-    "mtime": 1793729196.9264908,
-    "seen": 1793730799.7810328,
-    "ast_hash": "36f08b2598f691ff7364ba0df6b91dd2",
+    "mtime": 1793829879.5438318,
+    "seen": 1793830054.5314026,
+    "ast_hash": "c6e86ef8a33dbc8050698a8020296206",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NativeFxHost.cs": {
-    "mtime": 1793642282.4452858,
-    "seen": 1793646851.0986958,
-    "ast_hash": "12ed4335b4cd9ba46c3516a73b549c9d",
+    "mtime": 1793831589.7106063,
+    "seen": 1793832302.7170353,
+    "ast_hash": "699b0fc5c2f413b28ea314ae80a02146",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NativeMode.cs": {
@@ -10692,15 +10692,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NiControllerRuntime.cs": {
-    "mtime": 1793655210.2930615,
-    "seen": 1793655601.5737643,
-    "ast_hash": "1c1bafd9f738faec3ff8dcb80741b450",
+    "mtime": 1793764715.3200822,
+    "seen": 1793764975.5669107,
+    "ast_hash": "b1ba8fea40ff0619d0e19dc68f1db49a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NiParticleRuntime.cs": {
-    "mtime": 1793736925.559564,
-    "seen": 1793737617.2574854,
-    "ast_hash": "5bcc6f3577e911f2198c5b1ad5b60c4f",
+    "mtime": 1793831662.7810836,
+    "seen": 1793832302.7170384,
+    "ast_hash": "1d575ab5c8ef5ca8d91d9cdb6fec3516",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NifMaterial.cs": {
@@ -11088,9 +11088,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SpellFxWarmup.cs": {
-    "mtime": 1793596237.9848428,
-    "seen": 1793611066.7337766,
-    "ast_hash": "052c036c7e38f82852a606c2930400fa",
+    "mtime": 1793764715.3180335,
+    "seen": 1793764975.566696,
+    "ast_hash": "508edfa91d6a8f85eba9dfed9984eea9",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NativeFxAttach.cs": {
@@ -11346,15 +11346,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/SlowFree.cs": {
-    "mtime": 1793670926.6163852,
-    "seen": 1793671992.9371653,
-    "ast_hash": "3d169f0d6d34510cf6588fd354241773",
+    "mtime": 1793764715.3220124,
+    "seen": 1793764975.567052,
+    "ast_hash": "206f55d35d8210d73ef2f918df37e8f0",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/StatDetailWindow.cs": {
-    "mtime": 1793676650.7495418,
-    "seen": 1793679234.024197,
-    "ast_hash": "6242466e934180669e2269457b8e3cca",
+    "mtime": 1793765701.098005,
+    "seen": 1793765803.2401364,
+    "ast_hash": "139b259d3decf0efd8f74c9ac858d9d1",
     "semantic_hash": ""
   },
   "tools/model-catalog.py": {
@@ -11490,21 +11490,21 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/KillLoopProbe.cs": {
-    "mtime": 1793723146.9128332,
-    "seen": 1793726602.6672704,
-    "ast_hash": "fd1da7eca58c3790eca2bc83869b087d",
+    "mtime": 1793764715.3177004,
+    "seen": 1793764975.56669,
+    "ast_hash": "d8aef732d4644ce00b6284e7445c2623",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SpellZone.cs": {
-    "mtime": 1793741694.2042964,
-    "seen": 1793742303.1687188,
-    "ast_hash": "5893b70ab40293cd546e3cd502aeb516",
+    "mtime": 1793764715.3181276,
+    "seen": 1793764975.5666971,
+    "ast_hash": "7ca40fa784c8dfdb5df0deb2a9987c79",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/debug/RideLab.cs": {
-    "mtime": 1793741529.4706154,
-    "seen": 1793742303.1688168,
-    "ast_hash": "ea436a0ec2c623e71851e3120bd99330",
+    "mtime": 1793829082.5922558,
+    "seen": 1793830054.5312822,
+    "ast_hash": "1595638166f44f8719b65c7850ecf7f6",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/debug/SkinViewer.cs": {
@@ -11532,9 +11532,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/SpellZoneTests.cs": {
-    "mtime": 1793741750.1018293,
-    "seen": 1793742303.1693757,
-    "ast_hash": "80a4e6f85649d3dea02586e13838fc00",
+    "mtime": 1793764715.3222592,
+    "seen": 1793764975.56711,
+    "ast_hash": "0010f8aeb5ae9ab98f9404c4cac39cf1",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/TalentResetTests.cs": {
@@ -11651,46 +11651,616 @@
     "ast_hash": "720fe0d722c2df74060949cf55ce2363",
     "semantic_hash": ""
   },
-  "eden_godot/godot_project/scripts/combat/CastCircle.cs": {
-    "mtime": 1793741490.6324995,
-    "seen": 1793742303.1686883,
-    "ast_hash": "f78093a54790f9385db618149f30a58c",
-    "semantic_hash": ""
-  },
   "eden_godot/godot_project/scripts/data/tables/CollectionTree.cs": {
-    "mtime": 1793742021.9604912,
-    "seen": 1793742303.1687717,
+    "mtime": 1793764715.3513367,
+    "seen": 1793764975.566731,
     "ast_hash": "4f25986f06cbbc64dd6a8e3c3cb8e7b1",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/CollectionTreeTests.cs": {
-    "mtime": 1793742155.3847866,
-    "seen": 1793742303.1693113,
-    "ast_hash": "b592f97052a4590edf064fb958aeb219",
+    "mtime": 1793764715.3519187,
+    "seen": 1793764975.5670722,
+    "ast_hash": "ec4126355acd241e970bcc2172f8be9b",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Combat/SpellCastRouting.cs": {
-    "mtime": 1793741277.8151917,
-    "seen": 1793742303.170116,
-    "ast_hash": "c0951068c57861372c9797c3b756e077",
+    "mtime": 1793764715.3224123,
+    "seen": 1793764975.567492,
+    "ast_hash": "96101c7f1d1cebb3992907543d3926c0",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/SpellCastRoutingTests.cs": {
-    "mtime": 1793741905.9493346,
-    "seen": 1793742303.1707835,
-    "ast_hash": "6ebf503da4fd60d07bd14f37db1dbaca",
+    "mtime": 1793764715.325276,
+    "seen": 1793764975.5679202,
+    "ast_hash": "9d9f5a1d45f8017dc0f5f347cd89a1da",
     "semantic_hash": ""
   },
   "eden_server/docs/temp-plans/2026-11-03-spell-cast-target-gates.md": {
-    "mtime": 1793741258.0891578,
-    "seen": 1793742303.1723228,
-    "ast_hash": "6d6f0f83a68e0a482d6911a7e5d99059",
+    "mtime": 1793742756.5428636,
+    "seen": 1793743401.0757415,
+    "ast_hash": "7776d182017c45afc1980bfac2580dc7",
     "semantic_hash": ""
   },
   "eden_server/docs/temp-plans/2026-11-04-certificate-stats-live-proof.md": {
-    "mtime": 1793741543.4621005,
-    "seen": 1793742303.1723313,
-    "ast_hash": "3d99bd8211b1d41bad00ec3fb88fdd8d",
+    "mtime": 1793764715.35204,
+    "seen": 1793764975.5690844,
+    "ast_hash": "3c3fd579ec3e3d868d0c408d427b626b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/debug/NifAttachDiag.cs": {
+    "mtime": 1793764715.3514535,
+    "seen": 1793764975.5667572,
+    "ast_hash": "57804da4dd006d3e4130e868d4b15443",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-03-status-system.md": {
+    "mtime": 1793764715.350759,
+    "seen": 1793764975.568748,
+    "ast_hash": "d7d800ee5f3b8f58d4bc580751f2a912",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/data/MobInfoData.cs": {
+    "mtime": 1793764715.3512733,
+    "seen": 1793764975.5667124,
+    "ast_hash": "1ab72b746de29215ea5eca02c455f453",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/data/tables/StatSources.cs": {
+    "mtime": 1793764715.3513818,
+    "seen": 1793764975.5667465,
+    "ast_hash": "13940ba9d93358168150a7da62d5a9b3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/data/tables/StatusKind.cs": {
+    "mtime": 1793764715.3514156,
+    "seen": 1793764975.5667477,
+    "ast_hash": "9af8e67a48e8e60f06532f21aa0fa6c9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/MobInfoWindow.cs": {
+    "mtime": 1793764715.3515968,
+    "seen": 1793764975.5668411,
+    "ast_hash": "83973d9718f2792825be284bb52a0788",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/OverheadLayout.cs": {
+    "mtime": 1793764715.351634,
+    "seen": 1793764975.5668457,
+    "ast_hash": "efb733623f385b5c75e8db4227b378fe",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/settings/OutlineFx.cs": {
+    "mtime": 1793764715.3517475,
+    "seen": 1793764975.5670109,
+    "ast_hash": "65a3e4426572fe556069654a94397bb0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/settings/SettingsText.cs": {
+    "mtime": 1793764715.3517811,
+    "seen": 1793764975.5670137,
+    "ast_hash": "b57bf2fef4a9f7c23c14e174574778b3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/world/MonsterModelTable.cs": {
+    "mtime": 1793764715.351847,
+    "seen": 1793764975.567045,
+    "ast_hash": "b67e99ffec3a1cf3a4db167f2e1e8864",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/MobInfoDataTests.cs": {
+    "mtime": 1793764715.35195,
+    "seen": 1793764975.5670896,
+    "ast_hash": "e3c09d1a108c8fd81710583b47b26682",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/StatusKindTests.cs": {
+    "mtime": 1793764715.3519907,
+    "seen": 1793764975.5671115,
+    "ast_hash": "bccb3b44103862cd565056275d090608",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Core/Game/MobSkillRules.cs": {
+    "mtime": 1793764715.3521779,
+    "seen": 1793764975.5673256,
+    "ast_hash": "10dfeb8b4a067b807daad80254dc1cf6",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/CertificateProfileTests.cs": {
+    "mtime": 1793764715.3522208,
+    "seen": 1793764975.5676355,
+    "ast_hash": "f6663959970334ed4b3091e28b8a318d",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/MobSkillRulesTests.cs": {
+    "mtime": 1793764715.3522885,
+    "seen": 1793764975.5678558,
+    "ast_hash": "34d49bc953b36d48ad51b405d2395fbf",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/StatusSweepTests.cs": {
+    "mtime": 1793764715.3523178,
+    "seen": 1793764975.5679371,
+    "ast_hash": "30f40a347d2cbf2fdbf8b9657a889d75",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/00-PLAN.md": {
+    "mtime": 1793764715.339769,
+    "seen": 1793764975.5687132,
+    "ast_hash": "f1fb281abd2e5c4bd85710c1cb8716e7",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/K1-crafts-raciaux.md": {
+    "mtime": 1793764715.3408413,
+    "seen": 1793764975.5687277,
+    "ast_hash": "1f5237a597fd29cab952cb0fe76abd4a",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/plan-retours-2026-11-03.md": {
+    "mtime": 1793764715.3508584,
+    "seen": 1793764975.5687504,
+    "ast_hash": "c01b0ba417c1b57bccd890ebf8babfe6",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D1-tables-craft.md": {
+    "mtime": 1793764715.3398857,
+    "seen": 1793764975.568715,
+    "ast_hash": "fc9be69511365705892f3723edaa5a65",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D2-tables-guilde-vdg.md": {
+    "mtime": 1793764715.339975,
+    "seen": 1793764975.5687168,
+    "ast_hash": "d2188e16816406d20cc989b2027d3288",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D3-items-craft.md": {
+    "mtime": 1793764715.339975,
+    "seen": 1793764975.5687184,
+    "ast_hash": "75529e6742d1b40166c9d3ae36f715b5",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D4-layouts-craft-fusion.md": {
+    "mtime": 1793764715.339975,
+    "seen": 1793764975.5687194,
+    "ast_hash": "f920c9febba0011bcc95f2101e54a53d",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D5-layouts-guilde-commerce.md": {
+    "mtime": 1793764715.339975,
+    "seen": 1793764975.5687206,
+    "ast_hash": "6024145f166f532d858f174ecbe38e0e",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D6-visuels-refshots.md": {
+    "mtime": 1793764715.339975,
+    "seen": 1793764975.5687218,
+    "ast_hash": "3911b984aeb3007ab38b10f2c78211fd",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/G1-client-fenetres.md": {
+    "mtime": 1793764715.3405638,
+    "seen": 1793764975.5687244,
+    "ast_hash": "25ec9934fe257242ee9f2f35825e48b3",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/G2-client-protocole.md": {
+    "mtime": 1793764715.3406363,
+    "seen": 1793764975.5687256,
+    "ast_hash": "529b694b6fdeb4faf719586b410edea8",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/G3-client-hud-tooltips.md": {
+    "mtime": 1793764715.3407147,
+    "seen": 1793764975.5687263,
+    "ast_hash": "fe0c4fd1cdddafe933c77d0b9cc05fcc",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/K2-guilde-vdg-metier.md": {
+    "mtime": 1793764715.3409302,
+    "seen": 1793764975.568729,
+    "ast_hash": "6a87cb3475f1f2e7f951405d91527484",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/K3-recolte-outils.md": {
+    "mtime": 1793764715.3410583,
+    "seen": 1793764975.5687299,
+    "ast_hash": "c3d267bf61a7b5cced3f6077aa7878e0",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/K4-fortif-fusion-enchant-metier.md": {
+    "mtime": 1793764715.3411717,
+    "seen": 1793764975.568731,
+    "ast_hash": "bb53fc3a202f716376e3c42dafde10c9",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/K5-economie-obtention.md": {
+    "mtime": 1793764715.341289,
+    "seen": 1793764975.5687323,
+    "ast_hash": "3110ec98b37b80d193abd46410c13b86",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/R1-natif-guilde-vdg.md": {
+    "mtime": 1793764715.341359,
+    "seen": 1793764975.5687332,
+    "ast_hash": "76b760f242fde12fe482e010c394127d",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/R2-natif-work-craft-shop.md": {
+    "mtime": 1793764715.3414345,
+    "seen": 1793764975.5687342,
+    "ast_hash": "0cb662752769bb8b39e6693d0414bcc0",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/S1-serveur-craft-enchant.md": {
+    "mtime": 1793764715.3416636,
+    "seen": 1793764975.568737,
+    "ast_hash": "28d89598100d7607bd83fc0f7c5f660d",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/S2-serveur-guilde-vdg.md": {
+    "mtime": 1793764715.3417306,
+    "seen": 1793764975.568738,
+    "ast_hash": "2276500272744ba038b095e128125310",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/S3-serveur-commerce.md": {
+    "mtime": 1793764715.3417866,
+    "seen": 1793764975.5687392,
+    "ast_hash": "bf8b4ed547827f36f9d4b116895684ad",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-04-exec-retours.md": {
+    "mtime": 1793764715.3507903,
+    "seen": 1793764975.568749,
+    "ast_hash": "b7cc94e42abe0f3221a08abe143b9ef2",
+    "semantic_hash": ""
+  },
+  "eden_server/docs/temp-plans/2026-11-04-statuses-profile-refresh.md": {
+    "mtime": 1793764715.3521376,
+    "seen": 1793764975.5690908,
+    "ast_hash": "35dd861b5315fb9d3bfda8cc98f33ce5",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/R3-natif-client-ui.md": {
+    "mtime": 1793764715.3415573,
+    "seen": 1793764975.5687358,
+    "ast_hash": "da868536b2c9c46e44fe4790d7c9cb51",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/SYNTHESE.md": {
+    "mtime": 1793764715.3418925,
+    "seen": 1793764975.5687401,
+    "ast_hash": "73ce6ac182d2e5483bbae7c7da35e0ec",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/client-ui-maps/genmap.txt": {
+    "mtime": 1793764715.3418925,
+    "seen": 1793764975.568741,
+    "ast_hash": "485f77982f6636e623e69d5a64167dea",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/client-ui-maps/sender_callers.txt": {
+    "mtime": 1793764715.3420682,
+    "seen": 1793764975.568742,
+    "ast_hash": "8cce5dd92e0554577543ddda71e8e554",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/client-ui-maps/sender_ctor.txt": {
+    "mtime": 1793764715.3421552,
+    "seen": 1793764975.5687437,
+    "ast_hash": "6fceb8520a2ba83d335cb8504b63f270",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/MANIFEST.md": {
+    "mtime": 1793764715.3480022,
+    "seen": 1793764975.5687456,
+    "ast_hash": "e8724d6f4720f1d8c80ec45e243cffa1",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/image-name-histogram.txt": {
+    "mtime": 1793764715.350691,
+    "seen": 1793764975.5687468,
+    "ast_hash": "3eae400c5adf9a627fd9e18e59a64b71",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Alec_shop.png": {
+    "mtime": 1793764715.342541,
+    "seen": 1793764975.5691042,
+    "ast_hash": "b65b4b707e7efda4ceb972e258e8f7dc",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Assign.png": {
+    "mtime": 1793764715.3426566,
+    "seen": 1793764975.5691056,
+    "ast_hash": "e0126689e66326d30dac17c869147fae",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Auctioneericon.png": {
+    "mtime": 1793764715.3427043,
+    "seen": 1793764975.5691063,
+    "ast_hash": "99699ef4cf1b2832c10388a09dbe408f",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Backpack.png": {
+    "mtime": 1793764715.3429275,
+    "seen": 1793764975.5691075,
+    "ast_hash": "9c22fade224b2459bbed2a7c00ef0f00",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Blueprints.png": {
+    "mtime": 1793764715.3430893,
+    "seen": 1793764975.5691085,
+    "ast_hash": "95d345a31b5724ed916b24f772399876",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Chatwindow.png": {
+    "mtime": 1793764715.34324,
+    "seen": 1793764975.5691094,
+    "ast_hash": "d037b084c1b4543b371260e99a256d65",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Collective_Language_Dictionary_preview.png": {
+    "mtime": 1793764715.34324,
+    "seen": 1793764975.569111,
+    "ast_hash": "d05c4fbca9ad111a4beefa9b3abe36ab",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Craftingicon.png": {
+    "mtime": 1793764715.34324,
+    "seen": 1793764975.5691118,
+    "ast_hash": "01547e820e37f6c2fdeaf4967f0bb3c6",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/EdenEternalForet_Guilde_Ville.png": {
+    "mtime": 1793764715.3452997,
+    "seen": 1793764975.569113,
+    "ast_hash": "709cb5a4ade2d65fd243dd9ffa74bfe1",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Eden_Warehouse.png": {
+    "mtime": 1793764715.3456206,
+    "seen": 1793764975.569114,
+    "ast_hash": "e167146c1edd6c773953a29aa7ef3e42",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Engineer_screenie.png": {
+    "mtime": 1793764715.3457294,
+    "seen": 1793764975.5691152,
+    "ast_hash": "16625d8d592bc06e52723d6280a7fc71",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Engineer_stats.png": {
+    "mtime": 1793764715.3458078,
+    "seen": 1793764975.569116,
+    "ast_hash": "83d9c825c88745e676e74a7cc8563d51",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Guildicon.png": {
+    "mtime": 1793764715.3458078,
+    "seen": 1793764975.569117,
+    "ast_hash": "15b371d26a84b078fb38f56780b848ad",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Guildinterface.png": {
+    "mtime": 1793764715.3463042,
+    "seen": 1793764975.5691183,
+    "ast_hash": "01a2bdab79fc9c6990aec373d2337fd4",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Guildranks.png": {
+    "mtime": 1793764715.3464348,
+    "seen": 1793764975.5691192,
+    "ast_hash": "18931f4e0816b5258c97cc06c024bef0",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Guildtown.png": {
+    "mtime": 1793764715.3468547,
+    "seen": 1793764975.5691202,
+    "ast_hash": "12b1bf5ed4b5b54cc21e601f0f0f77cc",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Horn_shop_1.png": {
+    "mtime": 1793764715.3469877,
+    "seen": 1793764975.5691214,
+    "ast_hash": "6ce69133652390f9e766e2f79256d6ba",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Horn_shop_2.png": {
+    "mtime": 1793764715.3470993,
+    "seen": 1793764975.569123,
+    "ast_hash": "35aecc7c5e52634245e873841f0eac37",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Industrial.png": {
+    "mtime": 1793764715.347176,
+    "seen": 1793764975.5691245,
+    "ast_hash": "d36552f91db1f511270bc4f84054a9f6",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Item_mall_2023-09-02.png": {
+    "mtime": 1793764715.3476784,
+    "seen": 1793764975.5691254,
+    "ast_hash": "1b810f9a41baf9150077fdd2285de634",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Itemmallicon.png": {
+    "mtime": 1793764715.3477335,
+    "seen": 1793764975.5691261,
+    "ast_hash": "0ed8d4bc466a72ef51d1b22d183c06cc",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Lady_rainbow_dye_shop_1.png": {
+    "mtime": 1793764715.3478699,
+    "seen": 1793764975.569127,
+    "ast_hash": "770e327a879ea52443ef80034f15ff80",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Lady_rainbow_dye_shop_2.png": {
+    "mtime": 1793764715.3479464,
+    "seen": 1793764975.5691283,
+    "ast_hash": "8cb9e03f43ff50ab03080673a2a389c4",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Menuicon.png": {
+    "mtime": 1793764715.348074,
+    "seen": 1793764975.5691297,
+    "ast_hash": "dcd77f3f5b7827bcbb035f5a03d6d85e",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Minerairy.png": {
+    "mtime": 1793764715.34817,
+    "seen": 1793764975.5691304,
+    "ast_hash": "9edb3b8f1d75f0ca6247fba0f5e2c05c",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Molding.png": {
+    "mtime": 1793764715.3483298,
+    "seen": 1793764975.5691319,
+    "ast_hash": "1420d1585f6fa5daf793df7c5b04112c",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Montagne.png": {
+    "mtime": 1793764715.3488684,
+    "seen": 1793764975.5691378,
+    "ast_hash": "147a4b3bea18d0bd1d6c20bfc3f26240",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Openbackpackicon.png": {
+    "mtime": 1793764715.3489468,
+    "seen": 1793764975.569139,
+    "ast_hash": "0b60fa3c177c14b0e6569853541069ae",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Painting_Andrew_V._Mine_preview.png": {
+    "mtime": 1793764715.3490407,
+    "seen": 1793764975.5691402,
+    "ast_hash": "ffaaa54f91d4da8998f82f7d3161d7b2",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Painting_Ulta_Hall_preview.png": {
+    "mtime": 1793764715.3491144,
+    "seen": 1793764975.5691414,
+    "ast_hash": "cb69a0955c7693ec3be9d46d36508cea",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Questbag.png": {
+    "mtime": 1793764715.3492298,
+    "seen": 1793764975.5691426,
+    "ast_hash": "370ceadbf4b2c01097418f8cf86be7b4",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Racial_crafting_button.png": {
+    "mtime": 1793764715.3495827,
+    "seen": 1793764975.569144,
+    "ast_hash": "0e00a27cbd6be51443de5dd4ba7ffe34",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Relics_Rune_Blueprint_preview.png": {
+    "mtime": 1793764715.3496943,
+    "seen": 1793764975.5691454,
+    "ast_hash": "cdefe1362c59f00f78c9afd709d54483",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Shoprecipe.png": {
+    "mtime": 1793764715.3497841,
+    "seen": 1793764975.5691462,
+    "ast_hash": "a6872396acec7ec77c12825a38b32ecd",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Stella_shop_1.png": {
+    "mtime": 1793764715.349943,
+    "seen": 1793764975.569147,
+    "ast_hash": "66b313e4d90dbded706b91d498a502ee",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Stella_shop_2.png": {
+    "mtime": 1793764715.350121,
+    "seen": 1793764975.569148,
+    "ast_hash": "6774bbe055e8b449b06b7ea1daf89ab5",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Stella_shop_3.png": {
+    "mtime": 1793764715.3502874,
+    "seen": 1793764975.5691493,
+    "ast_hash": "9e4bf04f72137b33b7d9f7d4524b6477",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Villageheadanrew.png": {
+    "mtime": 1793764715.3503883,
+    "seen": 1793764975.5691502,
+    "ast_hash": "f6409e6497f2c6f5ebf0fa3f5b046a2e",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/web-shots/Villageheadschoss.png": {
+    "mtime": 1793764715.3504834,
+    "seen": 1793764975.5691512,
+    "ast_hash": "117d24be9b05354ca36e8dc5decda58b",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/D6b-refshots-corrections.md": {
+    "mtime": 1793764715.340494,
+    "seen": 1793764975.5687232,
+    "ast_hash": "92999bf69117bbeafc02c34d7430fbc9",
+    "semantic_hash": ""
+  },
+  "docs/reports/craft-guild-recon-2026-11-03/ref-shots-descriptions.md": {
+    "mtime": 1793764715.3422177,
+    "seen": 1793764975.568745,
+    "ast_hash": "5629f36d77d4b332e83293f9d0886618",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/SettingsWindow.PrefsVitals.cs": {
+    "mtime": 1793764715.351662,
+    "seen": 1793764975.5668695,
+    "ast_hash": "f3b9f7eff85d1af573663fc10123359a",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/MobRulesTests.cs": {
+    "mtime": 1793764755.8414736,
+    "seen": 1793764975.5678544,
+    "ast_hash": "838c1eec94d48f4d67900dcb0134bc38",
+    "semantic_hash": ""
+  },
+  "eden_server/docs/temp-plans/2026-11-04-mob-rules.md": {
+    "mtime": 1793764715.3521068,
+    "seen": 1793764975.5690887,
+    "ast_hash": "ebe6a1ba696cf228b3ff01b3fcb6136d",
+    "semantic_hash": ""
+  },
+  "eden_server/docs/temp-plans/2026-11-04-mob-cast-range-first-hit.md": {
+    "mtime": 1793764899.7002263,
+    "seen": 1793764975.5690877,
+    "ast_hash": "738a19643c3006d99a1b19bdce582b3d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/buffbar-55869-portal-2026-11-04.png": {
+    "mtime": 1793765434.8172104,
+    "seen": 1793765472.285046,
+    "ast_hash": "3054afa208c1c82b3902e92fedbc5c78",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/game-55869-hud-2026-11-04.png": {
+    "mtime": 1793765435.0939155,
+    "seen": 1793765472.2850492,
+    "ast_hash": "2398a6ad0319a33188c4d53ec1f83ff9",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-04-B1-elites-cristaux.md": {
+    "mtime": 1793819412.6894739,
+    "seen": 1793824215.7442322,
+    "ast_hash": "1f35f6f0394051112c6f13278fa05b5b",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-04-mission-craft.md": {
+    "mtime": 1793824463.0963569,
+    "seen": 1793830054.5328348,
+    "ast_hash": "366c6543e788d18512e438a398025d19",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-04-auto-quests-node.md": {
+    "mtime": 1793826290.836794,
+    "seen": 1793830054.5328321,
+    "ast_hash": "36e5026542aea27742989f0873a888e1",
     "semantic_hash": ""
   }
 }

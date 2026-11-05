@@ -484,6 +484,7 @@ void fragment() {
     {
         SetBar(_hp, _hpText, hp, maxHp);
         SetBar(_mp, _mpText, mp, maxMp);
+        HudPrefs.SetSelfMp(mp, maxMp);
     }
 
     /// <summary>Couronne de chef de groupe (LeaderIcon natif).</summary>

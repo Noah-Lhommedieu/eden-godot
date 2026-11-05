@@ -166,25 +166,43 @@ public sealed partial class ZoneEntryFlow
     /// `restSec &lt; 0` = durée infinie (monture, statut permanent).
     /// `refreshStats` = faux pendant la restauration d'entrée (le burst
     /// de login couvre déjà les attributs — évite N réémissions).</summary>
+    /// <summary>Effect_id natif de l'état « portail gratuit débutant »
+    /// — `S_ItemMallEnchant` 55869 新手傳送石 (commande 2047|1). Posé
+    /// par `CCharacter::OnMigrationDone` natif (@0x0843fbxx) via
+    /// `EffectToLife(this,this,-0x25c3,-2,0x2000,true,0,1,0,0)` :
+    /// -0x25c3 signé = 55869 u16, durée -2 (infini), icône visible.
+    /// Retiré par `CCharacter::SetLevel` quand le niveau dépasse
+    /// <see cref="BeginnerPortalMaxLevel"/> (0x50).</summary>
+    private const int BeginnerPortalEnchantId = 55869;
+    /// <summary>Variante item-mall « FREE » (-0x25c2 = 55870) — le
+    /// scan natif des enchants actifs (Mission_TC_MissionGoto) accepte
+    /// les deux ids pour le TP gratuit.</summary>
+    private const int FreePortalEnchantId = 55870;
+    /// <summary>Dernier niveau gratuit — borne native 0x50.</summary>
+    private const int BeginnerPortalMaxLevel = 80;
+
     /// <summary>Commandes à effet INSTANTANÉ natif — exécutées à
     /// l'apply puis l'effet disparaît (aucun `CEnchant` persistant) :
     /// gate `EffectToLife` natif `effet+0x12c != 0` (commande gérée)
     /// reste faux pour un effet purement instantané — c'est le cas
     /// des dispels (1821/1822/1823/1824), soins instantanés
-    /// (1001/1011/2033/2034), téléport/charge (1802/1803/1804/1807/
+    /// (1001/1011), téléport/charge (1802/1803/1804/1807/
     /// 1809), revive (1811/1812), LifeFloat/SpellAttack (1997/1999/
-    /// 2000). Un heal pur comme Cure 50028 (enchant 52028 = dispel
+    /// 2000). Un heal pur comme Guérison 50028 (enchant 52028 = dispel
     /// 1824 seul) ne doit donc JAMAIS apparaître dans la liste de
-    /// status (bug live « Cure en status »).</summary>
-    private static readonly HashSet<int> InstantOnlyCommands = new()
+    /// status (bug live « Guérison en status »).
+    /// 2033/2034 (DamageAddPlus) et 2039/2047 (HealPlus) RETIRÉS :
+    /// commandes de stats live — le natif leur crée un CEnchant tant
+    /// que durée != -1 (preuve : l'état portail natif 55869 =
+    /// `2047|1` pur, posé persistant par OnMigrationDone ; un heal
+    /// +N% ou un tag dégât n'a de sens que sur un enchant vivant).</summary>
+    internal static readonly HashSet<int> InstantOnlyCommands = new()
     {
         1001, 1011,                       // HP / MP min max
         1802, 1803, 1804, 1807, 1809,     // DistanceGoto / summon
         1811, 1812,                       // RevivePlus / Revive
         1821, 1822, 1823, 1824, 1825,     // dispels / EnchantIncrease
         1997, 1999, 2000,                 // LifeFloat / SpellAttack
-        2033, 2034,                       // DamageAddPlus (tag formule)
-        2039, 2047,                       // HealPlus variantes
         // 2031/2032 MultiStroke retirés : commande gérée → le natif
         // crée un CEnchant persistant (SEffectData+0x12c != 0), qui
         // sert de source de proc passif (talents « +N % double hit »).
@@ -294,6 +312,58 @@ public sealed partial class ZoneEntryFlow
             -9, 1, token, refreshStats: true, hidden: true,
             persist: false);
     }
+
+    /// <summary>État « pierre de portail gratuite » du débutant —
+    /// miroir de `CCharacter::OnMigrationDone`/`SetLevel` natifs :
+    /// l'enchant <see cref="BeginnerPortalEnchantId"/> (55869,
+    /// `2047|1` S_ItemMallEnchant) est posé avec durée -2 (infini)
+    /// et icône visible tant que `level ≤ 80` ; `SetLevel` le retire
+    /// dès `level > 80`. Appelé à l'entrée en zone (point
+    /// OnMigrationDone) et à chaque montée de niveau — idempotent :
+    /// n'ajoute que s'il manque, ne retire que s'il traîne.</summary>
+    private async Task SyncBeginnerPortalStateAsync(NetSession session,
+        EntryState st, CancellationToken token)
+    {
+        if (_services.Enchants.Get(BeginnerPortalEnchantId) == null)
+            return;   // table absente — pas d'état à dériver
+        if (st.Level <= BeginnerPortalMaxLevel)
+        {
+            if (st.Statuses.ContainsKey(BeginnerPortalEnchantId))
+                return;
+            // EffectToLife natif : durée -2 (infinie), icône visible
+            // (flags 0x2000 — le bit hide 0x1000 n'est pas posé),
+            // caster = le perso lui-même, level 1.
+            await AddPlayerEnchantAsync(session, st, (int)st.CharId,
+                BeginnerPortalEnchantId, -2, 1, token,
+                refreshStats: true);
+            EdenLog.Write($"[Status] portal gratuit char={st.CharId} " +
+                $"level={st.Level} (≤{BeginnerPortalMaxLevel})");
+        }
+        else if (st.Statuses.ContainsKey(BeginnerPortalEnchantId))
+        {
+            // CCharacter::SetLevel natif : RemoveEnchantByID(-0x25c3)
+            // dès que le niveau dépasse 0x50 (couvre level-up XP et
+            // //level admin — la descente re-pose au prochain add).
+            await RemovePlayerEnchantAsync(session, st,
+                BeginnerPortalEnchantId, token);
+            EdenLog.Write($"[Status] portal gratuit retiré " +
+                $"char={st.CharId} level={st.Level}");
+        }
+    }
+
+    /// <summary>Durée d'enchant <c>S_Spell</c> col41 0-idx (champ
+    /// <c>Value</c> du <see cref="SpellParser.SpellDef"/>, copié natif
+    /// en <c>SSpellData+0x84</c> par <c>LoadAllSpellData</c> zone
+    /// @0x8380130 depuis <c>CSpellData+0xb8</c>) : la valeur est en
+    /// <b>dixièmes de seconde</b> — <c>CEnchantMgr::Add</c> @0x856a059
+    /// applique <c>GetRestTime()/10</c> sur le CEnchant (c41=120 →
+    /// 12 s réels). Le bug live « statut de 12 s affiché qui dure
+    /// ~90 s » venait du passage direct des ds comme des secondes.
+    /// Sentinelles inchangées : -1 pas d'enchant (filtré en amont),
+    /// -9 durée propre de l'effet (icône cachée, jamais expirée),
+    /// -2 permanent.</summary>
+    internal static int EnchantRestSeconds(int ds) =>
+        ds >= 0 ? Math.Max(1, ds / 10) : ds;
 
     private async Task AddPlayerEnchantAsync(NetSession session,
         EntryState st, int casterId, int effectId, int restSec,
@@ -638,6 +708,15 @@ public sealed partial class ZoneEntryFlow
             await AddPlayerEnchantAsync(session, st, status.CasterId,
                 next, status.InitialRestSec, status.Level, token,
                 refreshStats: false, persist: status.Persisted);
+        // CEC_UseTwoWeapon::RollBack natif (commande 9101) : le flag
+        // double-arme (char+0x77e) retombe avec son enchant — attr
+        // 1000 = 0 au client (miroir du Set à l'apply, Items.cs).
+        if (st.TwoWeaponUnlocked && _services.Enchants
+                .GetUseCommands(eid).Any(c => c.CommandId == 9101))
+        {
+            st.TwoWeaponUnlocked = false;
+            await SendAttrAsync(session, st.CharId, 1000, 0, 0, token);
+        }
         // Le retrait retire aussi la contribution de l'enchant (la
         // ligne player_enchants est déjà supprimée) → réémission.
         await RefreshStatsAfterStatusAsync(session, st, token);
@@ -924,6 +1003,18 @@ public sealed partial class ZoneEntryFlow
             {
                 await _services.PlayerEnchants.DeleteEnchantAsync(
                     (int)st.CharId, r.EffectId);
+                continue;
+            }
+            // Ligne héritée d'un enchant désormais classé instantané
+            // (heal/dispel — aucun CEnchant natif) : sans purge elle
+            // serait routée vers ExecuteInstantEnchantAsync à CHAQUE
+            // login (dispels fantômes) sans jamais disparaître.
+            if (IsInstantOnlyEnchant(r.EffectId))
+            {
+                await _services.PlayerEnchants.DeleteEnchantAsync(
+                    (int)st.CharId, r.EffectId);
+                EdenLog.Write($"[Status] char={st.CharId} purge " +
+                    $"enchant instantané persisté effect={r.EffectId}");
                 continue;
             }
             if (aaIds.Contains(r.EffectId & 0xffff))

@@ -262,7 +262,8 @@ public sealed class SpellEffectTests
             new SpellEffectContext(1, 0, 0, mob, 11164),
             new EnchantService.UseCommand(7003,
                 new double[] { 2, 1, 30, 11163, 300, 0 }));
-        Assert.Equal(new[] { (11163, 300) }, host.MobApplied);
+        // arg4 = durée en dixièmes de seconde (EnchantRestSeconds).
+        Assert.Equal(new[] { (11163, 30) }, host.MobApplied);
         Assert.Empty(host.CasterApplied);
     }
 
@@ -286,7 +287,7 @@ public sealed class SpellEffectTests
         await new Effect2TargetHandler().ExecuteAsync(host, ctx,
             new EnchantService.UseCommand(7003,
                 new double[] { 4, 1, 300, 10063, 50, 0 }));
-        Assert.Equal(new[] { (10063, 50) }, host.MobApplied);
+        Assert.Equal(new[] { (10063, 5) }, host.MobApplied);
         // mode 4 arg1=1 (ennemi) → touche AUSSI les joueurs hostiles
         // au lanceur (IsMyEnemy natif — contexte PvP partagé).
         Assert.Equal(new[] { true }, host.PlayersFoes);
@@ -294,7 +295,7 @@ public sealed class SpellEffectTests
         await new Effect2TargetHandler().ExecuteAsync(host, ctx,
             new EnchantService.UseCommand(7003,
                 new double[] { 5, 0, 10, 11175, 300, 0 }));
-        Assert.Equal(new[] { (10063, 50), (11175, 300) },
+        Assert.Equal(new[] { (10063, 5), (11175, 30) },
             host.PlayersApplied);
         Assert.Equal(new[] { true, false }, host.PlayersFoes);
     }

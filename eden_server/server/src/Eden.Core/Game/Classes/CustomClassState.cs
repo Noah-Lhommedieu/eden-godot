@@ -39,10 +39,11 @@ public static class CustomClass
     public const int MaxSpells = 8;
     /// <summary>`CEffectFactory::AngelChangeStyleID` = u16 signée
     /// -18931 (donnée statique @0x087b4b0c) = 46605 — enchant posé par
-    /// EffectToLife après la sauvegarde (rest 0x32 s).</summary>
+    /// EffectToLife après la sauvegarde (rest 0x32 ticks).</summary>
     public const int AngelStyleEnchantId = 46605;
-    /// <summary>rest_time natif du EffectToLife (param_4 = 0x32 = 50 s).</summary>
-    public const int AngelStyleRestSec = 0x32;
+    /// <summary>rest_time natif du EffectToLife (param_4 = 0x32 =
+    /// 50 dixièmes = 5 s — convertir via EnchantRestSeconds).</summary>
+    public const int AngelStyleRestDs = 0x32;
 
     /// <summary>Texte 0x193d — sauvegarde refusée en combat
     /// (`char+0x3c &amp; 4`).</summary>

@@ -259,6 +259,7 @@ public partial class HudExtensions : Node
         Mount(new RankWindow { Name = "RankWnd" });
         Mount(new RollTreasureDialog { Name = "RollTreasureDlg" });
         Mount(new InspectWindow { Name = "InspectWnd" });
+        Mount(new MobInfoWindow { Name = "MobInfoWnd" });
 
         GD.Print("[hud-ext] S1/S4/S7+1C+1D+V2 montés (skillbar, " +
             "castbar, floaters, loot, shop, bank, familystorage, " +

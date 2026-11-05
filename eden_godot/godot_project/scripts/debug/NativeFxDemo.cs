@@ -82,7 +82,7 @@ public partial class NativeFxDemo : Node3D
             root.Position = new Godot.Vector3(x, 0, 0);
             root.Scale = Godot.Vector3.One * scale;
             AddChild(root);
-            var host = NativeFx.Attach(root, nif, new NativeFxOptions { PauseWhenHidden = false, HandleBillboards = System.Environment.GetEnvironmentVariable("EDEN_NATIVE_BB") != "1", TexPrefix = rel.Split('/')[0] + "/texture/" });
+            var host = NativeFx.Attach(root, nif, new NativeFxOptions { PauseWhenHidden = false, HandleBillboards = System.Environment.GetEnvironmentVariable("EDEN_NATIVE_BB") != "1", TexPrefix = rel.Split('/')[0] + "/texture/", InvertV = !args.Contains("--fx-native") /* DemoTree flippe le V ; LoadNativeScene (NifScene) non */ });
             host.Paused = true;               // pas fixe piloté par _Process ci-dessous
             _hosts.Add(host);
             GD.Print($"[fxdemo] {rel}: ps={host.Report.ParticleSystems} geoms={host.Report.Geoms} " +
@@ -116,10 +116,42 @@ public partial class NativeFxDemo : Node3D
         }
         if (_shot == null) return;
         if (++_wait < 4) return;
+        if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "4")
+            foreach (var h in _hosts)
+            {
+                GD.Print($"[fxvis] host root={(h.Root?.GetPath().ToString() ?? "null")}");
+                if (h.Root != null) DumpVis(h.Root);
+            }
         RenderingServer.ForceDraw();
         GetViewport().GetTexture()?.GetImage()?.SavePng(_shot);
         GD.Print($"[fxdemo] shot {_shot} t={_hosts[0].Time:0.00} particles={string.Join("/", _hosts.Select(h => h.ParticleCount))}");
         GetTree().Quit();
+    }
+
+    /// <summary>EDEN_FX_DIAG=4 : à la capture, liste chaque nœud 3D de
+    /// l'effet — visibilité, alpha de l'albedo du matériau — pour
+    /// diagnostiquer un résidu visible après la fin native.</summary>
+    static void DumpVis(Node n)
+    {
+        GD.Print($"[fxvis] {n.GetPath()} ({n.GetType().Name}) children={n.GetChildCount()}");
+        foreach (var c in n.GetChildren())
+        {
+            if (c is MeshInstance3D mi)
+            {
+                var mat = mi.MaterialOverride ?? mi.GetSurfaceOverrideMaterial(0)
+                    ?? mi.Mesh?.SurfaceGetMaterial(0);
+                string a = mat switch
+                {
+                    StandardMaterial3D s => $"alb={s.AlbedoColor.A:0.##}",
+                    ShaderMaterial s => $"alb={(s.GetShaderParameter("albedo").AsColor().A):0.##} blend={(int)s.GetShaderParameter("blend_mode").AsInt32()}",
+                    _ => mat?.GetType().Name ?? "none",
+                };
+                GD.Print($"[fxvis] {mi.GetPath()} vis={mi.Visible} {a}");
+            }
+            else if (c is Node3D n3 && !n3.Visible)
+                GD.Print($"[fxvis] {n3.GetPath()} node-hidden");
+            DumpVis(c);
+        }
     }
 
     void Sweep(string outPath, string[] args)
@@ -140,7 +172,7 @@ public partial class NativeFxDemo : Node3D
                 withPs++;
                 var tree = DemoTree.Build(nif);
                 AddChild(tree);
-                var host = NativeFx.Attach(tree, nif, new NativeFxOptions { PauseWhenHidden = false });
+                var host = NativeFx.Attach(tree, nif, new NativeFxOptions { PauseWhenHidden = false, InvertV = true /* DemoTree flippe le V */ });
                 for (int i = 0; i < 60; i++) host.Step(1f / 30f);
                 sb.AppendLine(string.Join('\t', rel, host.Report.ParticleSystems, host.Report.Geoms, host.ParticleCount,
                     string.Join(",", host.Report.Drivers.OrderBy(k => k.Key).Select(k => k.Key + k.Value)), "",

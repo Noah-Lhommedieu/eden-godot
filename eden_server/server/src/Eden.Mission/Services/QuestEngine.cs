@@ -172,8 +172,14 @@ public sealed partial class QuestEngine
             // FMS==5 = "checked" — l'UI la grise, jamais ré-offerte.
             foreach (var (mid, f) in ctx.FMS)
                 if (f == 1 || f == 5) ctx.Completed.Add(mid);
-            var (level, gender) = await _db.GetLevelGenderAsync(charUid);
+            var (level, gender, dbNode) =
+                await _db.GetLevelGenderNodeAsync(charUid);
             ctx.Level = level; ctx.Gender = gender;
+            // Natif : MigrationDone lit le node en DB (Deserialize
+            // 0x813e1f0) — le 142 ne le porte pas et
+            // GlobalNodes.FirstOrDefault() renvoyait le premier node
+            // global (1) au lieu du node réel du perso.
+            ctx.NodeId = dbNode;
             ctx.ClassId = await _db.GetClassIdAsync(charUid);
         }
         catch (Exception ex)
@@ -220,16 +226,32 @@ public sealed partial class QuestEngine
                 await SendPmsAsync(s, charUid, pk,
                     q.Pms.GetValueOrDefault(pk));
         }
-        // PAS d'auto-acceptation à l'entrée : le joueur accepte les
-        // quêtes explicitement (dialogue NPC → MissionListOp op=1).
-        // La boucle native col6==10 (auto-quêtes tutorielles) est
-        // retirée à la demande du live — « le jeu prend des quêtes
-        // sans que je le veuille » : plus aucune quête n'est injectée
-        // dans Active/FMS au login.
+        // AutoAcceptByNode natif (@0x08081f20) : à l'entrée d'un node,
+        // les missions « auto » (col6==10, sans donneur col11==0) dont
+        // le NPC de rendu (col17) est placé dans ce node, niveau requis
+        // (col8) et conditions (col13) passés, FMS vierge/reprenable,
+        // sont accordées — la quête tutoriel 1009 n'a pas de donneur
+        // et n'est jamais offerte par un NPC sans ce pass. Scopé au
+        // node : seules les quêtes « guide » de la zone traversée sont
+        // injectées (pas les 66 d'un coup — la plainte live initiale).
+        foreach (var m in _data.Missions)
+        {
+            if (Col(m, 6) != 10 || Col(m, 11) != 0) continue;
+            var submitNpc = Col(m, 17);
+            if (submitNpc <= 0 ||
+                !(_npcNodes.TryGetValue(submitNpc, out var nodes)
+                  && nodes.Contains(ctx.NodeId))) continue;
+            var req = Col(m, 8);
+            if (req > 0 && ctx.Level < req) continue;
+            if (!ConditionsPass(ctx, m)) continue;
+            if (ctx.FMS.GetValueOrDefault(m.Id) is not (0 or 6)) continue;
+            await AcceptMissionAsync(s, ctx, m, m.Id);
+        }
         // Symboles « ! »/« ? » initiaux des PNJ (ZMis 65 → 345).
         await PushNpcSymbolsAsync(s, ctx);
-        EdenLog.Write($"[Mission] char={charUid} migré node={nodeId} " +
-            $"({ctx.Active.Count} actives, {ctx.Completed.Count} faites)");
+        EdenLog.Write($"[Mission] char={charUid} migré node={ctx.NodeId} " +
+            $"(lien={nodeId}) ({ctx.Active.Count} actives, " +
+            $"{ctx.Completed.Count} faites)");
     }
 
     /// <summary>Contexte d'un perso (créé vide s'il n'existe pas) —

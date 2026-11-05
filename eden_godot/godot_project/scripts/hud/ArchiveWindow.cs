@@ -268,20 +268,17 @@ public partial class ArchiveWindow : Control
     /// Pégase Sacré sans enchant).</summary>
     private const int MountTab = 5;
 
-    /// <summary>Cartes « Testing ID » / « … Ver. ID » : lignes de test
-    /// du client taïwanais rangées dans l'onglet monture, sans objet
-    /// jouable.</summary>
-    private static bool IsPlaceholder(CollectionTable.Card c) =>
-        c.NameBig5.EndsWith(" ID", StringComparison.Ordinal);
-
     private static List<CollectionTable.Card>? _extra;
     private static HashSet<int>? _extraIds;
+    private static List<CollectionTable.Card> _extraWeapons = new();
+    private static HashSet<int> _extraWeaponIds = new();
 
     /// <summary>Objets de monture (enchant 2134 → rideKey) ABSENTS de
     /// c_collection : le client natif ne peut pas les archiver (ex.
     /// Renard blanc du blizzard légendaire 48813). Listés à part dans
-    /// « Montures &gt; Hors archive » pour ne pas les perdre de vue ;
-    /// jamais comptés dans le taux de collection.</summary>
+    /// la feuille diagnostic « Hors archive » du groupe Special Items
+    /// pour ne pas les perdre de vue ; jamais comptés dans le taux de
+    /// collection ni dans les compteurs des feuilles natives.</summary>
     private static List<CollectionTable.Card> ExtraCards()
     {
         if (_extra != null) return _extra;
@@ -296,6 +293,22 @@ public partial class ArchiveWindow : Control
                 NameBig5 = kv.Value.Name,
             }).ToList();
         _extraIds = _extra.Select(c => c.Id).ToHashSet();
+        // Armes (kinds 17-34) de c_item/c_itemmall ABSENTES de c_collection :
+        // le natif ne peut pas les archiver (ni le serveur) ; listées à part
+        // dans « Armes > Hors archive » pour prouver qu'aucune arme n'est
+        // oubliée (diagnostic, jamais comptées dans le taux).
+        _extraWeapons = InventoryWindow.AllDefs()
+            .Where(kv => !inArchive.Contains(kv.Key) &&
+                         kv.Value.Kind is >= 17 and <= 34 &&
+                         !_extraIds.Contains(kv.Key))
+            .OrderBy(kv => kv.Value.Kind).ThenBy(kv => kv.Key)
+            .Select(kv => new CollectionTable.Card
+            {
+                Id = kv.Key, Special = false, Tab = -1,
+                NameBig5 = kv.Value.Name,
+            }).ToList();
+        _extraWeaponIds = _extraWeapons.Select(c => c.Id).ToHashSet();
+        _extra.AddRange(_extraWeapons);
         return _extra;
     }
 
@@ -311,60 +324,69 @@ public partial class ArchiveWindow : Control
         CollectionTable.Cards().Concat(ExtraCards());
 
     private static string NameOf(CollectionTable.Card c) =>
-        TextResolver.ItemName(c.Id) ?? c.NameBig5;
+        CollectionTable.DisplayName(c, TextResolver.ItemName(c.Id));
 
-    /// <summary>Clé de catégorie d'une carte — « Fam » ou
-    /// « Fam|Sub » selon l'arbre natif (kind + slot c_item) :
-    /// armes par type (Dagger, Sword…), armures par classe
-    /// (Heavy/Light/Cloth), accessoires et costumes par slot
-    /// (Head, Body, Ring…). Le dos (kind 16) vit avec les
-    /// accessoires, comme la col3 native de c_collection.</summary>
-    private static string CategoryOf(CollectionTable.Card c)
-    {
-        var d = InventoryWindow.LookupDef(c.Id);
-        var k = d?.Kind ?? 0;
-        string fam, sub = "";
-        if (ExtraMounts().Contains(c.Id))
-            return "Mounts|Not in archive";
-        if (c.Tab == MountTab && !IsPlaceholder(c) ||
-            d != null && EnchantTable.RideKeyOf(d.UseEnchantId) > 0)
-            fam = "Mounts";
-        else fam = k switch
-        {
-            >= 1 and <= 15 => "Armor",
-            16 or >= 37 and <= 39 => "Accessories",
-            >= 17 and <= 34 => "Weapons",
-            >= 61 and <= 68 => "Costumes",
-            60 or 81 => "Pets",
-            // autres kinds connus : libellé natif (Item, Gem, Reward Bag…)
-            _ => ItemTipFormat.KindLabel(k) is { Length: > 0 } kl
-                ? kl : "Other",
-        };
-        switch (fam)
-        {
-            case "Weapons" or "Armor":
-                sub = ItemTipFormat.KindLabel(k); break;
-            case "Accessories" or "Costumes":
-                sub = ItemTipFormat.LocLabel(d!.EquipLoc);
-                if (sub.Length == 0) sub = "Other";
-                break;
-        }
-        return sub.Length == 0 ? fam : fam + "|" + sub;
-    }
+    /// <summary>Clé de catégorie diagnostic des montures hors archive
+    /// (feuille ajoutée sous « Special Items », cf.
+    /// <see cref="ExtraCards"/>).</summary>
+    private const string ExtraLeafKey = "g3|x5";
+    private const string ExtraWeaponKey = "g1|x0";
+
+    /// <summary>Clé de catégorie d'une carte — « g{groupe}|t{onglet} »
+    /// suivant l'arbre natif (<see cref="CollectionTree"/>) : la col3
+    /// de c_collection est la clé de rangement, pas le kind ni le slot
+    /// c_item — les libellés d'emplacement ordinaires (Legs, Hands…)
+    /// ne s'appliquent pas aux costumes/montures/familiers.</summary>
+    private static string CategoryOf(CollectionTable.Card c) =>
+        ExtraMounts().Contains(c.Id) ? ExtraLeafKey
+        : _extraWeaponIds.Contains(c.Id) ? ExtraWeaponKey
+                                     : CollectionTree.KeyOf(c.Tab);
 
     /// <summary>Sélectionne une famille dans l'arbre des catégories —
     /// exposé pour <c>--hud-open=archive:&lt;fam&gt;</c> (clé EN stable :
     /// « Mounts », « Weapons »… indépendante de la langue d'affichage).
+    /// Accepte les clés internes (« g1 », « g1|t6 », « t31 ») et les
+    /// anciens noms de famille/feuille.
     /// Différé : le sélecteur doit courir après BuildTree (déclenché par
     /// le passage en visibilité), sinon la sélection « All » écrase _cat.</summary>
     public void SelectCategory(string cat) =>
         CallDeferred(nameof(DeferredSelectCategory), cat);
 
+    /// <summary>Alias historiques/conviviaux → clé « g{g}|t{tab} ».</summary>
+    private static readonly Dictionary<string, string> CatAliases =
+        new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["Appearance"] = "g0", ["Costumes"] = "g0",
+        ["Weapon"] = "g1", ["Weapons"] = "g1",
+        ["Armor"] = "g2", ["Accessories"] = "g2|t26",
+        ["Special Items"] = "g3", ["Special"] = "g3",
+        ["Mounts"] = "g3|t5", ["Pets"] = "g3|t29",
+        ["Arcane Box"] = "g3|t30", ["Other Items"] = "g3|t32",
+        ["Daggers"] = "g1|t6", ["Rapiers"] = "g1|t7",
+        ["1H Swords"] = "g1|t8", ["Maces"] = "g1|t9",
+        ["Cestus"] = "g1|t10", ["Clubs"] = "g1|t11",
+        ["Katanas"] = "g1|t12", ["Greatswords"] = "g1|t13",
+        ["Axes"] = "g1|t14", ["Pikes"] = "g1|t15",
+        ["Hammers"] = "g1|t16", ["Bows"] = "g1|t17",
+        ["Artillery Guns"] = "g1|t18", ["Guitars"] = "g1|t19",
+        ["Grimoires"] = "g1|t20", ["Staff"] = "g1|t21",
+        ["Shields"] = "g1|t22", ["Sickleshot"] = "g1|t31",
+        ["Capes"] = "g2|t27", ["Trophies"] = "g2|t28",
+        ["Not in archive"] = ExtraLeafKey,
+        ["Weapons not in archive"] = ExtraWeaponKey,
+    };
+
     private void DeferredSelectCategory(string cat)
     {
         var root = _tree?.GetRoot();
         if (root == null) return;
-        if (FindByKey(root.GetFirstChild(), cat) is { } it)
+        var key = cat;
+        if (CatAliases.TryGetValue(cat, out var alias)) key = alias;
+        else if (cat.StartsWith('t') &&
+                 int.TryParse(cat[1..], out var tab) &&
+                 CollectionTree.OfTab(tab) is { } l)
+            key = CollectionTree.KeyOf(l.Tab);
+        if (FindByKey(root.GetFirstChild(), key) is { } it)
         {
             it.Select(0);   // déclenche ItemSelected → _cat + Refresh
             _tree?.ScrollToItem(it);
@@ -384,37 +406,98 @@ public partial class ArchiveWindow : Control
         return null;
     }
 
+    /// <summary>Libellé d'une feuille : t_textindex natif
+    /// (FR — « Coiffe », « Poignards »…), repli nom EN canonique.</summary>
+    private static string LeafLabel(CollectionTree.Leaf l) =>
+        TextResolver.TextIndex(l.TextIndex) ?? l.EnName;
+
     private void BuildTree()
     {
         if (_tree == null) return;
         _tree.Clear();
+        var counts = Shown().GroupBy(CategoryOf)
+            .ToDictionary(g => g.Key, g => g.Count());
         var root = _tree.CreateItem();
         var all = _tree.CreateItem(root);
         all.SetText(0, UiTextEn.Translate("All") + $" ({Shown().Count()})");
         all.SetMetadata(0, "");
-        // Parents = familles, enfants = sous-catégories « Fam|Sub »
-        // (le clic parent filtre toute la famille par préfixe).
-        foreach (var g in Shown()
-                     .GroupBy(c => CategoryOf(c).Split('|')[0])
-                     .OrderBy(g => g.Key))
+        // Arbre natif : 4 groupes × feuilles onglet (CollectionTree) ;
+        // le clic groupe filtre toutes ses feuilles par préfixe.
+        for (var g = 0; g < CollectionTree.GroupEnNames.Length; g++)
         {
+            var leaves = CollectionTree.Leaves.Where(l => l.Group == g);
             var fam = _tree.CreateItem(root);
-            fam.SetText(0, UiTextEn.Translate(g.Key) + $" ({g.Count()})");
-            fam.SetMetadata(0, g.Key);
-            foreach (var s in g.GroupBy(CategoryOf).OrderBy(s => s.Key))
+            var gKey = $"g{g}";
+            var gCount = leaves.Sum(l =>
+                counts.GetValueOrDefault(CollectionTree.KeyOf(l.Tab), 0));
+            var gLabel = TextResolver.TextIndex(
+                CollectionTree.GroupTextIndex[g]) ??
+                UiTextEn.Translate(CollectionTree.GroupEnNames[g]);
+            fam.SetText(0, gLabel + $" ({gCount})");
+            fam.SetMetadata(0, gKey);
+            foreach (var l in leaves)
             {
-                if (s.Key.IndexOf('|') < 0) continue;
+                var key = CollectionTree.KeyOf(l.Tab);
                 var it = _tree.CreateItem(fam);
-                it.SetText(0, UiTextEn.Translate(s.Key.Split('|')[1]) +
-                    $" ({s.Count()})");
-                it.SetMetadata(0, s.Key);
+                it.SetText(0, LeafLabel(l) +
+                    $" ({counts.GetValueOrDefault(key, 0)})");
+                it.SetMetadata(0, key);
             }
-            // Famille sans sous-groupe : pas d'enfant factice.
+            // Feuille diagnostic : montures de objets ABSENTES de
+            // c_collection (non archivables — FIX-F), rangée sous
+            // « Montures » du groupe Special Items.
+            if (g == 1 && counts.GetValueOrDefault(ExtraWeaponKey, 0) > 0)
+            {
+                var it = _tree.CreateItem(fam);
+                it.SetText(0, "Hors archive" +
+                    $" ({counts[ExtraWeaponKey]})");
+                it.SetMetadata(0, ExtraWeaponKey);
+            }
+            if (g == 3 && counts.GetValueOrDefault(ExtraLeafKey, 0) > 0)
+            {
+                var it = _tree.CreateItem(fam);
+                it.SetText(0, UiTextEn.Translate("Not in archive") +
+                    $" ({counts[ExtraLeafKey]})");
+                it.SetMetadata(0, ExtraLeafKey);
+            }
         }
-        var mounts = Shown().Count(c => CategoryOf(c).StartsWith("Mounts"));
+        var mounts = counts.GetValueOrDefault("g3|t5", 0);
         GD.Print($"[archive] cartes={CollectionTable.Cards().Count} " +
             $"montures={mounts} dont hors-archive={ExtraCards().Count}");
+        // --hud-dump : sortie texte des feuilles + comptes — preuve
+        // « table vs UI » consultable en headless (le PNG reste la
+        // preuve visuelle en session graphique).
+        if (OS.GetCmdlineUserArgs().Contains("--hud-dump") ||
+            OS.GetCmdlineArgs().Contains("--hud-dump"))
+            DumpCategories(counts);
         all.Select(0);
+    }
+
+    /// <summary>Imprime chaque feuille « clé → libellé (comptes) » —
+    /// les comptes viennent de <see cref="CategoryOf"/> sur
+    /// <see cref="Shown"/>, donc de la table, pas de l'affichage.</summary>
+    private static void DumpCategories(Dictionary<string, int> counts)
+    {
+        for (var g = 0; g < CollectionTree.GroupEnNames.Length; g++)
+        {
+            var leaves = CollectionTree.Leaves.Where(l => l.Group == g);
+            var gLabel = TextResolver.TextIndex(
+                CollectionTree.GroupTextIndex[g]) ??
+                CollectionTree.GroupEnNames[g];
+            var gCount = leaves.Sum(l =>
+                counts.GetValueOrDefault(CollectionTree.KeyOf(l.Tab), 0));
+            GD.Print($"[archive-cat] g{g} {gLabel} ({gCount})");
+            foreach (var l in leaves)
+                GD.Print($"[archive-cat]   g{g}|t{l.Tab} " +
+                    $"{LeafLabel(l)} " +
+                    $"({counts.GetValueOrDefault(CollectionTree.KeyOf(l.Tab), 0)})");
+        }
+        if (counts.GetValueOrDefault(ExtraWeaponKey, 0) > 0)
+            GD.Print($"[archive-cat]   {ExtraWeaponKey} Armes hors archive " +
+                $"({counts[ExtraWeaponKey]})");
+        if (counts.GetValueOrDefault(ExtraLeafKey, 0) > 0)
+            GD.Print($"[archive-cat]   {ExtraLeafKey} Not in archive " +
+                $"({counts[ExtraLeafKey]})");
     }
 
     private void Refresh()
@@ -427,8 +510,12 @@ public partial class ArchiveWindow : Control
         var mall = _cbMall?.ButtonPressed ?? true;
         var onlyOwned = _cbOwned?.ButtonPressed ?? false;
         var all = Shown().Where(c =>
-            (_cat.Length == 0 || CategoryOf(c) == _cat ||
-             CategoryOf(c).StartsWith(_cat + "|")) &&
+            (_cat.Length == 0 && !CategoryOf(c).Contains("|x") ||
+             CategoryOf(c) == _cat ||
+             // clic sur un GROUPE : feuilles natives seulement (les
+             // feuilles diagnostic « x* » restent hors des comptes).
+             CategoryOf(c).StartsWith(_cat + "|") &&
+             !CategoryOf(c).Contains("|x")) &&
             ((c.Special && mall) || (!c.Special && game)) &&
             (!onlyOwned || owned.Contains(c.Id)));
         if (q.Length > 0)
@@ -436,6 +523,10 @@ public partial class ArchiveWindow : Control
                 StringComparison.OrdinalIgnoreCase));
         var list = all.ToList();
         if (_cbRev?.ButtonPressed == true) list.Reverse();
+        if (OS.GetCmdlineUserArgs().Contains("--hud-dump") ||
+            OS.GetCmdlineArgs().Contains("--hud-dump"))
+            GD.Print($"[archive-view] cat='{_cat}' affichées={list.Count} " +
+                $"premiers={string.Join(',', list.Take(8).Select(c => c.Id))}");
         var total = CollectionTable.Cards().Count;
         if (_rate != null)
             _rate.Text = UiTextEn.Translate("Collection rate: ") +
@@ -443,7 +534,11 @@ public partial class ArchiveWindow : Control
                 $"%  ({owned.Count}/{total})";
 
         foreach (var ch in _grid.GetChildren()) ch.QueueFree();
-        foreach (var c in list.Take(1200))
+        // ~8000 cartes FR : cap haut pour que la vue « All » montre
+        // aussi les armes/armures après les costumes (l'ancien cap
+        // 1200 coupait la grille au milieu de l'onglet dos-costumes —
+        // « très peu d'armes » venait de là autant que des filtres).
+        foreach (var c in list.Take(8192))
         {
             var has = owned.Contains(c.Id);
             var cell = new Panel

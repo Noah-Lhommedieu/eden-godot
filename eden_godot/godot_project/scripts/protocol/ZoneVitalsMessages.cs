@@ -164,7 +164,9 @@ public sealed class ZoneRevive : NetMessage
 /// ProfileStatEmitter.cs (ordre NotifyRefreshAttr natif).</summary>
 public sealed record PlayerStats(
     int Str, int Int, int Agi, int Wis, int Lck,
-    int[] Resists,          // 9 — ordre wire 8,9,6,4,5,7,1,2,3 → index id-1
+    int[] Resists,          // 9 — ORDRE D'AFFICHAGE natif (slash, strike,
+                            // pierce, fire, lightning, ice, nature, holy,
+                            // dark) — réordonné du wire par ResistWire
     int MaxMp,
     int PhysicalAttack,     // MeleeDamage (P-ATK)
     int MagicAttack,        // MagicDamage (M-ATK)
@@ -229,6 +231,16 @@ public static class PlayerVitals
     /// <summary>XP/points de la classe active (280 attr 0x06,
     /// p1=class_point — désasm GainClassPoint @0841c24b).</summary>
     public static long ClassExp { get; private set; }
+    /// <summary>Amorce l'XP de classe depuis le 310 (+74 i32) — le
+    /// serveur ne réémet l'attr 0x06 qu'au prochain kill : sans ce
+    /// seed la barre d'XP de classe affiche 0% jusqu'au premier mob
+    /// tué alors que la progression est persistée.</summary>
+    public static void SeedClassExp(long exp)
+    {
+        if (ClassExp == exp) return;
+        ClassExp = exp;
+        ClassExpChanged?.Invoke();
+    }
     /// <summary>Or (280 attr 0x02).</summary>
     public static long Gold { get; set; }
     /// <summary>Stats totales du dernier 296 (null avant réception).</summary>
@@ -288,6 +300,21 @@ public static class PlayerVitals
         }
     }
 
+    /// <summary>Position wire 296 (Fields1to14[5+k]) de la résistance
+    /// affichée en position i du profil. Le serveur émet les ids natifs
+    /// 8,9,6,4,5,7,1,2,3 (ordre d'appels AttrResist de
+    /// NotifyRefreshAttr — ProfileStatEmitter.resistOrder) ; les ids
+    /// suivent l'ordre c_item/AttrResist 1..9 = slash, strike, pierce,
+    /// fire, ice, lightning, nature, holy, dark (CCharFormula::
+    /// AttrResist : equip[type−1] = colonne c_item 62+type — « Ice Gem »
+    /// = col 67, « Thunder Gem » = col 68). Le wire porte donc
+    /// {holy, dark, lightning, fire, ice, nature, slash, strike,
+    /// pierce} ; l'affichage natif (AntiChop…AntiDark) veut
+    /// {slash, strike, pierce, fire, lightning, ice, nature, holy,
+    /// dark} — les deux ordres divergent sur ice/lightning (ids 5/6)
+    /// ET sur les positions physiques.</summary>
+    public static readonly int[] ResistWire = { 6, 7, 8, 3, 2, 4, 5, 0, 1 };
+
     /// <summary>Enregistre le 296 — nommage du ProfileStatEmitter :
     /// Fields1to14 = 5 stats + 9 résists ; Fields15to18 =
     /// [0][MaxMP][P-ATK][M-ATK] ; Field21 = DEF ;
@@ -297,7 +324,7 @@ public static class PlayerVitals
         var f = m.Fields1to14;
         TotalStats = new PlayerStats(
             f[0], f[1], f[2], f[3], f[4],
-            f[5..14].Select(v => (int)v).ToArray(),
+            ResistWire.Select(k => (int)f[5 + k]).ToArray(),
             m.Fields15to18[1], m.Fields15to18[2], m.Fields15to18[3],
             m.Fields19to20[0], m.Fields19to20[1],
             m.Field21,

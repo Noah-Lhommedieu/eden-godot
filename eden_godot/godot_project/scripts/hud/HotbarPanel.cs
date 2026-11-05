@@ -287,6 +287,8 @@ public partial class HotbarPanel : Control
     /// centrés, ancre 0.297852) et décore ses slots : label touche,
     /// clic droit = activation, drag/drop = raccourcis (slots 0-9 —
     /// 10 par page en wire ; 11/12 = extras non bindés).</summary>
+    private const float SlotGrowTop = 2f, SlotGrowBottom = 3f;
+
     private void PlaceBar(Control root, string barName, int topOffset,
         int bottomOffset, string[] keys, int row)
     {
@@ -313,6 +315,10 @@ public partial class HotbarPanel : Control
             if (slot == null) continue;
             slot.ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize;
             slot.StretchMode = TextureRect.StretchModeEnum.Scale;
+            // Retour propriétaire : cases trop petites/rectangulaires
+            // (~37×32 natif) → +5 px de haut, la rangée de 45 px les contient.
+            slot.OffsetTop -= SlotGrowTop;
+            slot.OffsetBottom += SlotGrowBottom;
             // Case vide fleur-de-lys native sous l'icône (ref).
             if (empty != null)
             {

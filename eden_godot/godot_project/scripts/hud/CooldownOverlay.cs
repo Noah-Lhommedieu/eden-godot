@@ -78,7 +78,7 @@ public partial class CooldownOverlay : Control
         }
         Visible = true;
         _frac = v.Total > 0 ? Math.Clamp((double)v.Remain / v.Total, 0, 1) : 1;
-        _label.Text = v.Remain >= 10000
+        _label.Text = v.Remain >= 60000
             ? $"{v.Remain / 60000 + 1}m"
             : $"{v.Remain / 1000.0:0.#}";
         QueueRedraw();

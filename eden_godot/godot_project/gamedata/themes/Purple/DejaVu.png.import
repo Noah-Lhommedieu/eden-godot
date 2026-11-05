@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://chqf7cc6owi4e"
-path="res://.godot/imported/DejaVu.png-ce5aea6882f55c2a0d85a352b13635d7.ctex"
+path="res://.godot/imported/DejaVu.png-2ccafe4876d19cb50f58ae9a3204064f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui_textures/themes/Purple/DejaVu.png"
-dest_files=["res://.godot/imported/DejaVu.png-ce5aea6882f55c2a0d85a352b13635d7.ctex"]
+source_file="res://gamedata/themes/Purple/DejaVu.png"
+dest_files=["res://.godot/imported/DejaVu.png-2ccafe4876d19cb50f58ae9a3204064f.ctex"]
 
 [params]
 

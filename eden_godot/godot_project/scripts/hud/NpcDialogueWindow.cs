@@ -55,10 +55,12 @@ public partial class NpcDialogueWindow : Control
         else
         {
             AddChild(_window);
-            // Fenêtre centrée (400×460) — le rect natif est une
-            // position sauvegardée à une autre résolution.
-            HudRoot.Pin(_window, 0.5f, 0.5f, 0.5f, 0.5f,
-                -150, -160, 150, 160);
+            // Taille IDENTIQUE à la fiche de quête (QuestWnd natif
+            // 358×664) et même ancrage à gauche (3,1 % / 1,8 %) : toutes
+            // les interfaces de talk (hors shop) ont le même panneau ;
+            // reste déplaçable (DragHelper.Persist).
+            HudRoot.Pin(_window, TalkAnchorX, TalkAnchorY,
+                TalkAnchorX, TalkAnchorY, 0, 0, TalkW, TalkH);
             // La Listbox2 native est remplacée par notre mise en page
             // (portrait + texte + boutons) — la fenêtre EE native la
             // remplit de lignes génériques sans style.
@@ -83,9 +85,12 @@ public partial class NpcDialogueWindow : Control
             else sheet.QueueFree();
         }).CallDeferred();
         DragHelper.EnsureTitleBar(_window ?? this, "Dialogue");
-        DragHelper.Persist(_window ?? this, "npc_dialogue");
+        DragHelper.Persist(_window ?? this, "npc_dialogue_left");
         Visible = false;
     }
+
+    public const float TalkAnchorX = 0.0309942f, TalkAnchorY = 0.0182741f;
+    public const float TalkW = 358, TalkH = 664;
 
     private static readonly Color Paper = Color.Color8(238, 236, 228);
     private static readonly Color Ink = Color.Color8(40, 38, 36);
@@ -254,7 +259,7 @@ public partial class NpcDialogueWindow : Control
         IReadOnlyList<DialogOption> options)
     {
         _npcUid = npcUid;
-        var npcName = TextResolver.NpcName(npcUid) ?? $"NPC #{npcUid}";
+        var npcName = TextResolver.NpcName(npcUid) ?? "PNJ";
         var npcTitle = TextResolver.NpcTitle(npcUid);
         SetTitle(npcTitle != null ? $"{npcTitle}  {npcName}" : npcName);
         var body = DialogueText(textId);
@@ -279,6 +284,11 @@ public partial class NpcDialogueWindow : Control
             new DialogOption(1, UiTextEn.Translate("Shop"), 0),
             new DialogOption(2, "Quest: Awakening I", 0),
             new DialogOption(3, "Gossip", 0),
+            // Entrées quête serveur : displayId -3, Name = id mission en
+            // texte -> doit s'afficher en titre, jamais en « 1012 ».
+            new DialogOption(-3, "1012", 0),
+            new DialogOption(-3, "1013", 0),
+            new DialogOption(0, "29931", 0),
             new DialogOption(4, UiTextEn.Translate("Farewell"), 0),
         });
         Visible = true;
@@ -303,7 +313,7 @@ public partial class NpcDialogueWindow : Control
             return;
         }
         _npcUid = npcUid;
-        var title = TextResolver.MissionTitle(mid) ?? UiTextEn.Translate($"Quest #{mid}");
+        var title = TextResolver.MissionTitle(mid) ?? "Quête";
         SetTitle(title);
         var sb = new System.Text.StringBuilder();
         sb.Append($"[b]{title}[/b]\n");
@@ -381,20 +391,50 @@ public partial class NpcDialogueWindow : Control
         for (var i = 0; i < options.Count; i++)
         {
             var opt = options[i];
-            var label = opt.Name.Length > 0
-                ? opt.Name : DialogueText(opt.DisplayId);
-            var isQuest = false;
-            // Option de quête : le displayId est l'id de mission (titre
-            // « Niv. N. … » via t_mission) quand T_Dialogue n'a rien.
-            if ((label.Length == 0 ||
-                 label == opt.DisplayId.ToString()) &&
-                TextResolver.MissionTitle(opt.DisplayId) is { Length: > 0 } mt)
-            { label = mt; isQuest = true; }
-            if (label.Length == 0) label = UiTextEn.Translate($"Option {opt.DisplayId}");
+            var (label, isQuest) = ResolveOptionLabel(opt);
             var idx = (short)i;
             _options.AddChild(MakeOption(label, isQuest || LooksLikeQuest(label),
                 () => OptionChosen?.Invoke(idx)));
         }
+    }
+
+    /// <summary>Libellé d'un choix SANS identifiant visible. Entrée quête
+    /// serveur : displayId -3 et Name = id de mission en texte ("1012")
+    /// -> titre t_mission. Name purement numérique ou « NULL???? » = ID
+    /// brut : on retombe sur T_Dialogue/t_mission, puis un libellé neutre.</summary>
+    private static (string label, bool quest) ResolveOptionLabel(DialogOption opt)
+    {
+        var name = opt.Name.Trim();
+        if (IsBareId(name) && int.TryParse(name, out var mid) &&
+            TextResolver.MissionTitle(mid) is { Length: > 0 } t0)
+            return (StripId(t0), true);
+        var label = IsBareId(name) ? "" : name;
+        if (label.Length == 0 && opt.DisplayId > 0)
+        {
+            label = DialogueText(opt.DisplayId);
+            if (IsBareId(label)) label = "";
+        }
+        if (label.Length == 0 && opt.DisplayId > 0 &&
+            TextResolver.MissionTitle(opt.DisplayId) is { Length: > 0 } mt)
+            return (StripId(mt), true);
+        if (label.Length == 0)
+            return (UiTextEn.Translate("Discuter"), false);
+        return (StripId(label), false);
+    }
+
+    private static bool IsBareId(string s) =>
+        s.Length == 0 || s.StartsWith("NULL?") ||
+        System.Text.RegularExpressions.Regex.IsMatch(s, @"^[#\[(]?-?\d+[\])]?$");
+
+    /// <summary>Retire un ID résiduel en tête (« [123] », « #123 »,
+    /// « 123: ») ou en queue (« , 29931 », « (123) ») d'un libellé.</summary>
+    private static string StripId(string s)
+    {
+        var r = System.Text.RegularExpressions.Regex.Replace(s,
+            @"^\s*[#\[(]\d{3,}[\])]?\s*[:\-.]?\s*", "");
+        r = System.Text.RegularExpressions.Regex.Replace(r,
+            @"\s*[,(\[#]\s*\d{4,}\s*[\])]?\s*[.]?\s*$", "");
+        return r.Length > 0 ? r : s;
     }
 
     /// <summary>Titre de la barre de titre CEGUI auto-générée.</summary>

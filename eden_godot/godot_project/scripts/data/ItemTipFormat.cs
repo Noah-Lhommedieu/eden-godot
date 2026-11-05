@@ -22,8 +22,8 @@ public static class ItemTipFormat
     /// « Thunder Gem » = col 68, « Nature Gem » = col 69, « Holy Light
     /// Gem » = col 70, « Dark Gem » = col 71 ; désasm @0x00898d70 :
     /// +0x8c→0x4b2 Slash … +0x9c→0x4ba Dark). ⚠️ Ce n'est PAS l'ordre
-    /// des ids wire de <c>PlayerVitals.Resists</c> (Lightning avant
-    /// Ice).</summary>
+    /// d'affichage du profil (Lightning avant Ice —
+    /// <c>PlayerVitals.ResistWire</c> fait la correspondance).</summary>
     public static readonly string[] ResistNames =
     {
         "Slash Resistance", "Strike Resistance", "Pierce Resistance",
@@ -196,7 +196,11 @@ public static class ItemTipFormat
             case 56: return "Enchanting Formula";
             case 57: return "Talent Item";
             case 60: return "Pet";
-            case >= 61 and <= 68: return "Costume";
+            // Costumes : libellés natifs t_textindex 8499-8506 (« Arme de
+            // Costume à 1 main », « Griffes de Costume »… « Costume »).
+            case >= 61 and <= 68:
+                return TextResolver.TextIndex(8499 + kind - 61) is
+                    { Length: > 0 } cl ? cl : "Costume";
             case 69: return "Small Furniture";
             case 70: return "Large Furniture";
             case 71: return "Carpet";
@@ -243,6 +247,23 @@ public static class ItemTipFormat
     /// loc 9 = « 2-Handed » ref Heritage Spear, loc 12 = « Trophy
     /// Exclusive » ref Neondo). Au-delà de 20 : pas de libellé
     /// (ref Blazing Jet loc 35 : aucune mention).</summary>
+    public static string LocLabel(int loc, int kind)
+    {
+        // Costumes (kind 68) : les locs 4/5 ne sont PAS Mains/Jambes mais
+        // les accessoires de visage (lunettes, masques, boucles) et
+        // spéciaux (moustache, cigarette, tétine…) — t_textindex 3451
+        // « Accessoire Facial », 3452 « Accessoire Spécial » (vérifié sur
+        // les 145 + 182 items kind 68 loc 4/5 de c_item/c_itemmall FR).
+        if (kind == 68)
+        {
+            if (loc == 4 && TextResolver.TextIndex(3451) is { Length: > 0 } f)
+                return f;
+            if (loc == 5 && TextResolver.TextIndex(3452) is { Length: > 0 } sp)
+                return sp;
+        }
+        return LocLabel(loc);
+    }
+
     public static string LocLabel(int loc) => loc switch
     {
         1 => "Head", 2 => "Body", 3 => "Belt", 4 => "Hands",

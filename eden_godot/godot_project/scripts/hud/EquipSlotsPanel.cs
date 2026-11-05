@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using Godot;
 using EdenClient.Data;
 using EdenClient.Data.Tables;
@@ -43,11 +45,26 @@ public partial class EquipSlotsPanel : Control
     private const int CellSize = 36;
 
     private Panel? _window;
-    private readonly Dictionary<int, EquipCell> _cells = new();
+    /// <summary>(conteneur équipement, loc) → cellule. Conteneur 0 =
+    /// tenue portée ; 2/3/4 = pages d'ensemble cloth/light/heavy
+    /// (fast-dress natif, <see cref="PlayerEquipment.CostumeAt"/>).</summary>
+    private readonly Dictionary<(int Container, int Loc), EquipCell>
+        _cells = new();
     private EdenSession? _session;
     private readonly ConcurrentQueue<Action> _pending = new();
     private bool _equipmentHooked;
     private Node3D? _playerBody;
+    private string? _kusoPending = KusoArg();
+
+    /// <summary>--kuso=&lt;suffix&gt;:&lt;0|1&gt; ligne de commande.</summary>
+    private static string? KusoArg()
+    {
+        foreach (var a in OS.GetCmdlineArgs()
+                     .Concat(OS.GetCmdlineUserArgs()))
+            if (a.StartsWith("--kuso=", StringComparison.Ordinal))
+                return a["--kuso=".Length..];
+        return null;
+    }
 
     /// <summary>Construit le panneau (fenêtre flottante stylée —
     /// montée comme enfant de l'InventoryWindow qui pilote sa
@@ -87,13 +104,14 @@ public partial class EquipSlotsPanel : Control
         var slotTex = hud.Region("main", "FunctionSlot");
         foreach (var (loc, label) in SlotDefs)
         {
-            var cell = new EquipCell(loc, label, slotTex, EeSkin.EmptySlot(hud))
+            var cell = new EquipCell(loc, 0, label, slotTex,
+                EeSkin.EmptySlot(hud))
             {
                 CustomMinimumSize = new Vector2(CellSize, CellSize + 12),
             };
             cell.UnequipRequested += OnUnequip;
             cell.ItemDropped += OnItemDropped;
-            _cells[loc] = cell;
+            _cells[(0, loc)] = cell;
             grid.AddChild(cell);
         }
         _window.AddChild(grid);
@@ -126,14 +144,29 @@ public partial class EquipSlotsPanel : Control
     private HudRoot? _hud;
 
     /// <summary>Pose une cellule de loc d'équipement dans le slot natif
-    /// <paramref name="host"/> (plein cadre, fond transparent).</summary>
-    public void Attach(int loc, Control host, string label)
+    /// <paramref name="host"/> (plein cadre, fond transparent).
+    /// <paramref name="container"/> : conteneur d'équipement natif —
+    /// 0 = tenue portée (défaut), 2/3/4 = page d'ensemble sauvegardée
+    /// (rangées Cloth/Leather/Armor du profil natif). Un appel sur un
+    /// host déjà occupé remplace l'ancienne cellule (réassignation lors
+    /// d'un changement de classe : la rangée « current gear » suit la
+    /// licence d'armure).</summary>
+    public void Attach(int loc, Control host, string label,
+        int container = 0)
     {
-        var cell = new EquipCell(loc, label, null, null, bare: true);
+        foreach (var c in host.GetChildren())
+            if (c is EquipCell old)
+            {
+                _cells.Remove((old.Container, old.Loc));
+                host.RemoveChild(old);
+                old.QueueFree();
+            }
+        var cell = new EquipCell(loc, container, label, null, null,
+            bare: true);
         cell.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
         cell.UnequipRequested += OnUnequip;
         cell.ItemDropped += OnItemDropped;
-        _cells[loc] = cell;
+        _cells[(container, loc)] = cell;
         host.AddChild(cell);
         RefreshIcons();
     }
@@ -156,10 +189,26 @@ public partial class EquipSlotsPanel : Control
             PlayerEquipment.Changed += OnEquipmentChanged;
             // Changement de classe / de style : la tenue de base change (c_class garde-robe).
             PlayerVitals.ClassChanged += () => Callable.From(ApplyBodyEquipment).CallDeferred();
-            ClassChangeDialog.ClassesChanged += () => Callable.From(ApplyBodyEquipment).CallDeferred();
+            // 489 revient à chaque kill (XP de classe) : on ne refait le corps que si (classe, style) a bougé.
+            ClassChangeDialog.ClassesChanged += () =>
+            {
+                if (CharVisual.LocalClass() != _bodyClassKey)
+                    Callable.From(ApplyBodyEquipment).CallDeferred();
+            };
             // État déjà connu à la pose du hook (311 arrivé avant la
             // construction du panneau).
             OnEquipmentChanged();
+        }
+        // --kuso=<suffix>:<0|1> — rejoue un clic de case ShowKuso*
+        // du profil (banc visuel : toggle sans cliquer dans l'UI).
+        if (_kusoPending is { } kuso)
+        {
+            _kusoPending = null;
+            var parts = kuso.Split(':');
+            var on = parts.Length < 2 || parts[1] != "0";
+            HudPrefs.SetKusoVisible(parts[0], on);
+            PlayerEquipment.RaiseChanged();
+            GD.Print($"[kuso] {parts[0]} → {(on ? "visible" : "caché")}");
         }
     }
 
@@ -175,42 +224,55 @@ public partial class EquipSlotsPanel : Control
         ApplyBodyEquipment();
     }
 
-    /// <summary>Rafraîchit icônes/tooltips depuis
-    /// <see cref="PlayerEquipment.Worn"/>.</summary>
+    /// <summary>Rafraîchit icônes/tooltips : conteneur 0 →
+    /// <see cref="PlayerEquipment.Worn"/>, pages d'ensemble →
+    /// <see cref="PlayerEquipment.CostumeAt"/>.</summary>
     private void RefreshIcons()
     {
         EnsureTable();
-        foreach (var (loc, cell) in _cells)
+        foreach (var ((container, loc), cell) in _cells)
         {
-            var itemId = PlayerEquipment.Worn.TryGetValue(loc,
-                out var id) ? id : 0;
+            var itemId = container == 0
+                ? (PlayerEquipment.Worn.TryGetValue(loc, out var id)
+                    ? id : 0)
+                : PlayerEquipment.CostumeAt(container, loc);
             cell.SetItem(itemId, itemId != 0 ? LookupDef(itemId) : null);
         }
     }
 
     // ---------- actions ----------
 
-    /// <summary>Double-clic slot → déséquipe : NCID 7 (1,loc,0)→
-    /// (0,−1,−1) puis NCID 8 (mask de la loc) → 282 serveur.</summary>
-    private void OnUnequip(int loc)
+    /// <summary>Double-clic slot → déséquipe : NCID 7 (1,loc,page)→
+    /// (0,−1,−1) ; NCID 8 mask seulement pour la tenue portée (le 282
+    /// ne renvoie que le conteneur 0 — natif
+    /// <c>BroadcastEquipmentAsync</c> filtre <c>BagId == 0</c>).</summary>
+    private void OnUnequip(int loc, int container)
     {
         var s = _session;
         if (s?.Zone?.IsConnected != true) return;
-        _ = Send(s, ZoneItemActions.UnequipRequest(loc));
-        _ = Send(s, new ZoneUpdateEquipment { UpdateFlags = 1u << loc });
+        _ = Send(s, ZoneItemActions.UnequipRequest(loc, container));
+        if (container == 0)
+            _ = Send(s, new ZoneUpdateEquipment
+            {
+                UpdateFlags = 1u << loc,
+            });
     }
 
     /// <summary>Drop d'un item d'inventaire sur un slot équipe →
-    /// NCID 7 (0,slot,sac)→(1,loc,0) + NCID 8 mask.</summary>
-    private void OnItemDropped(int loc, int srcBag, int srcSlot)
+    /// NCID 7 (0,slot,sac)→(1,loc,page) + NCID 8 mask (conteneur 0
+    /// seulement — le gate page est côté serveur : kind % 3 = poids
+    /// d'armure de la page).</summary>
+    private void OnItemDropped(int loc, int srcBag, int srcSlot,
+        int container)
     {
         var s = _session;
         if (s?.Zone?.IsConnected != true) return;
         _ = Send(s, new ZoneSwitchItemLocation
         {
             SrcType = 0, SrcSlot = (short)srcSlot, SrcIndex = (short)srcBag,
-            DstType = 1, DstSlot = (short)loc, DstIndex = 0,
+            DstType = 1, DstSlot = (short)loc, DstIndex = (short)container,
         });
+        if (container != 0) return;
         var def = InventoryWindow.LookupDef(
             InventoryWindow.ItemAt(srcBag, srcSlot)?.ItemId ?? 0);
         _ = Send(s, new ZoneUpdateEquipment
@@ -230,6 +292,8 @@ public partial class EquipSlotsPanel : Control
     /// <summary>Applique l'équipement courant au corps du joueur
     /// (recherche paresseuse du nœud « Player » → enfant « Model » →
     /// GLB corps). Sans corps GLB (capsule repli) : no-op.</summary>
+    private (int Class, int Style) _bodyClassKey;
+
     private void ApplyBodyEquipment()
     {
         if (_playerBody == null || !GodotObject.IsInstanceValid(_playerBody))
@@ -240,9 +304,23 @@ public partial class EquipSlotsPanel : Control
         EnsureTable();
         var letter = CharVisual.BodyLetterOf(_playerBody);
         var (lcls, lsty) = CharVisual.LocalClass();
-        CharVisual.ApplyEquipment(_playerBody, letter,
-            PlayerEquipment.VisualWorn(
-                id => LookupDef(id)?.Kind ?? -1), LookupModel, lcls, lsty);
+        _bodyClassKey = (lcls, lsty);
+        // Loc 9 : aucun slot UI natif, aucun routage serveur
+        // (ResolveEquipLocAsync) ni AllowedLocations client ne la
+        // produit — mais CharVisual la projette sur « Bip01 Prop1 »
+        // comme le loc 7. Une ligne fantôme y peignait une 2e arme
+        // dans la main droite (loc 7 + 8 + 9 = trois armes visibles).
+        // On la masque du visuel ; l'état _worn n'est pas touché.
+        var shown = new Dictionary<int, int>(PlayerEquipment.VisualWorn(
+            id => LookupDef(id)?.Kind ?? -1));
+        shown.Remove(9);
+        // Cases « ShowKuso* » du profil (préférence locale — le natif
+        // les écrit dans options.ini sans paquet serveur) : seule la
+        // case pilote l'affichage de la tête d'armure / cape / tenue.
+        CharVisual.ApplyEquipment(_playerBody, letter, shown,
+            LookupModel, lcls, lsty,
+            attachVisible: HudPrefs.AttachVisibleForLoc,
+            hideOutfit: !HudPrefs.KusoClothesVisible);
     }
 
     /// <summary>Corps GLB du joueur local (enfant Node3D sous
@@ -283,19 +361,26 @@ public partial class EquipSlotsPanel : Control
     private sealed partial class EquipCell : Panel
     {
         private readonly int _loc;
+        private readonly int _container;
         private readonly TextureRect _icon;
         private int _itemId;
         private ItemTable.ItemDef? _def;
 
-        /// <summary>Double-clic / clic droit → demande de déséquipe (loc).</summary>
-        public event Action<int>? UnequipRequested;
-        /// <summary>Drop inventaire → (loc, sac, slot).</summary>
-        public event Action<int, int, int>? ItemDropped;
+        /// <summary>Loc d'équipement natif de la cellule.</summary>
+        public int Loc => _loc;
+        /// <summary>Conteneur d'équipement (0 = porté, 2-4 = pages).</summary>
+        public int Container => _container;
 
-        public EquipCell(int loc, string label, Texture2D? slotTex,
-            StyleBox? emptySlot, bool bare = false)
+        /// <summary>Double-clic / clic droit → déséquipe (loc, conteneur).</summary>
+        public event Action<int, int>? UnequipRequested;
+        /// <summary>Drop inventaire → (loc, sac, slot, conteneur).</summary>
+        public event Action<int, int, int, int>? ItemDropped;
+
+        public EquipCell(int loc, int container, string label,
+            Texture2D? slotTex, StyleBox? emptySlot, bool bare = false)
         {
             _loc = loc;
+            _container = container;
             AddThemeStyleboxOverride("panel", new StyleBoxEmpty());
             // Case fleur-de-lys native (36×36) au-dessus du libellé.
             var bg = new Panel { MouseFilter = MouseFilterEnum.Ignore };
@@ -363,14 +448,14 @@ public partial class EquipSlotsPanel : Control
             if (!mb.Pressed && mb.ButtonIndex == MouseButton.Left)
             {
                 if (InventoryWindow.TakeHeld() is { } h)
-                    ItemDropped?.Invoke(_loc, h.Bag, h.Slot);
+                    ItemDropped?.Invoke(_loc, h.Bag, h.Slot, _container);
                 AcceptEvent();
             }
             // Clic droit = déséquiper (le double-clic ne fait plus rien).
             else if (mb.Pressed && mb.ButtonIndex == MouseButton.Right
                      && _itemId != 0)
             {
-                UnequipRequested?.Invoke(_loc);
+                UnequipRequested?.Invoke(_loc, _container);
                 AcceptEvent();
             }
         }
@@ -390,7 +475,7 @@ public partial class EquipSlotsPanel : Control
                 d.TryGetValue("slot", out var slot))
             {
                 ItemDropped?.Invoke(_loc, bag.AsInt32(),
-                    slot.AsInt32());
+                    slot.AsInt32(), _container);
             }
         }
 

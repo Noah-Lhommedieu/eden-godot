@@ -218,6 +218,11 @@ public static class PlayerEquipment
     /// <summary>Émis à chaque mutation (311 entrée, 276, 282).</summary>
     public static event Action? Changed;
 
+    /// <summary>Re-notifie l'état courant — les cases « ShowKuso » du
+    /// profil ne changent pas l'équipement mais forcent un rebuild du
+    /// visuel porté (même canal que les vraies mutations).</summary>
+    public static void RaiseChanged() => Changed?.Invoke();
+
     /// <summary>loc → itemId actuellement porté (conteneur 0 = tenu).</summary>
     private static readonly Dictionary<int, int> _worn = new();
     /// <summary>Snapshot loc → itemId.</summary>
@@ -347,6 +352,12 @@ public static class PlayerSkills
         var i = _spells.FindIndex(s => s.SpellMaster == spellMaster);
         var k = new KnownSpell(spellMaster, (byte)Math.Clamp(level, 0, 255));
         if (i >= 0) _spells[i] = k; else _spells.Add(k);
-        Changed?.Invoke();
+        // Un level-up de classe envoie ~70 × 286 d'affilée : un seul Changed par frame
+        // (hotbar + fenêtre Classe se reconstruisaient 70 fois).
+        if (_changedQueued) return;
+        _changedQueued = true;
+        Godot.Callable.From(() => { _changedQueued = false; Changed?.Invoke(); }).CallDeferred();
     }
+
+    private static bool _changedQueued;
 }

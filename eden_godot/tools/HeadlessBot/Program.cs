@@ -19,12 +19,31 @@ using EdenClient.Session;
 
 var mode = args.Length > 0 ? args[0] : "";
 string account, password, teleX, teleY, mailSubject = "";
+uint certCharId = 0; short certLicId = 0, certClassId = 1;
+byte certSlot = 1;
 if (mode == "mail-check")
 {
     mailSubject = args.Length > 1 ? args[1] : "limitless-";
     account = args.Length > 2 ? args[2] : "admin";
     password = args.Length > 3 ? args[3] : "adminmdp";
     teleX = teleY = "";
+}
+else if (mode == "cert-test")
+{
+    // cert-test <charId> <licItemId> <slot> [classId] — preuve live
+    // chaîne certificats → 296 : entre en zone sur le perso voulu,
+    // pose la licence via 182 et capture le nouveau bloc stats.
+    account = "test123"; password = "test123"; teleX = teleY = "";
+    if (args.Length < 4 ||
+        !uint.TryParse(args[1], out certCharId) ||
+        !short.TryParse(args[2], out certLicId) ||
+        !byte.TryParse(args[3], out certSlot))
+    {
+        Console.Error.WriteLine("usage : HeadlessBot cert-test " +
+            "<charId> <licItemId> <slot> [classId]");
+        return 2;
+    }
+    if (args.Length > 4) short.TryParse(args[4], out certClassId);
 }
 else
 {
@@ -34,11 +53,15 @@ else
     teleY = args.Length > 4 ? args[4] : "396";
 }
 
-if (mode != "duel-accept" && mode != "mail-check")
+if (mode != "duel-accept" && mode != "mail-check" &&
+    mode != "cert-test" && mode != "enchant-test")
 {
     Console.Error.WriteLine("usage : HeadlessBot duel-accept " +
         "[account] [password] [x] [y]\n" +
-        "       HeadlessBot mail-check <sujet> [account] [password]");
+        "       HeadlessBot mail-check <sujet> [account] [password]\n" +
+        "       HeadlessBot cert-test <charId> <licItemId> <slot> " +
+        "[classId]\n" +
+        "       HeadlessBot enchant-test [account] [password]");
     return 2;
 }
 
@@ -60,7 +83,37 @@ s.Frame += (sent, ncid, payload) => Console.WriteLine(
     Convert.ToHexString(payload).ToLowerInvariant());
 
 var mailHit = false;
-if (mode == "duel-accept")
+var last296 = "";
+if (mode == "cert-test")
+{
+    // Décodage 296 (mapping ProfileStatEmitter) : str,int,agi,wis,lck
+    // F1-5 ; résists F6-14 ; zéro F15 ; MaxMP F16 ; P-ATK F17 ;
+    // M-ATK F18 ; DEF F21 ; ratings F22-29.
+    s.OnZone(296, r =>
+    {
+        var m = new ZoneAttrRefresh();
+        m.Deserialize(r);
+        last296 = $"str={m.Fields1to14[0]} int={m.Fields1to14[1]} " +
+            $"agi={m.Fields1to14[2]} wis={m.Fields1to14[3]} " +
+            $"lck={m.Fields1to14[4]} mp={m.Fields15to18[1]} " +
+            $"patk={m.Fields15to18[2]} matk={m.Fields15to18[3]} " +
+            $"def={m.Field21} parry={m.Fields22to29[0]} " +
+            $"block={m.Fields22to29[1]} hit={m.Fields22to29[2]} " +
+            $"dodge={m.Fields22to29[3]} crit={m.Fields22to29[4]} " +
+            $"critdmg={m.Fields22to29[5]} mcrit={m.Fields22to29[6]} " +
+            $"mcritdmg={m.Fields22to29[7]}";
+        Console.WriteLine($"[bot] <<< 296 {last296}");
+    });
+    s.OnZone(509, r =>
+    {
+        var m = new ZonePlayerLicense();
+        m.Deserialize(r);
+        Console.WriteLine("[bot] <<< 509 licences : " +
+            string.Join(", ", m.Entries.Select(
+                e => $"{(ushort)e.ItemId}:loc{e.Loc}")));
+    });
+}
+else if (mode == "duel-accept")
 {
     // Réponse au défi : 451 [i32 demandeur][str nom] → 136 [s16][i32].
     s.OnZone(451, r =>
@@ -92,10 +145,34 @@ else
 }
 
 Console.WriteLine($"[bot] login {account}…");
-await s.EnterZoneAsync(ct: ct).ConfigureAwait(false);
+await s.EnterZoneAsync(charId: mode == "cert-test" ? certCharId : null,
+    ct: ct).ConfigureAwait(false);
 Console.WriteLine($"[bot] en zone char#{s.SelectedCharId}");
 
-if (mode == "duel-accept")
+// Pompe de réception : démarre AVANT les envois du mode pour ne
+// rater aucune trame serveur (296/509 post-entrée compris).
+var listen = s.ZoneListenLoopAsync(ct);
+
+if (mode == "cert-test")
+{
+    // Attente de la fin du burst d'entrée (296/492/493 initiaux +
+    // 509 déjà loggés ci-dessus), puis requête 181 + pose 182.
+    await Task.Delay(3000, ct).ConfigureAwait(false);
+    var before = last296;
+    Console.WriteLine($"[bot] --- baseline 296 : {before}");
+    await s.SendZoneAsync(new ZoneServerQueryLicense(), ct)
+        .ConfigureAwait(false);
+    await Task.Delay(800, ct).ConfigureAwait(false);
+    var msg = new ZoneServerPlayerLicense { ClassId = certClassId };
+    msg.Selections.Add((certLicId, certSlot));
+    Console.WriteLine($"[bot] >>> 182 lic={certLicId} slot={certSlot} " +
+        $"class={certClassId}");
+    await s.SendZoneAsync(msg, ct).ConfigureAwait(false);
+    await Task.Delay(4000, ct).ConfigureAwait(false);
+    Console.WriteLine($"[bot] --- après 182 : {last296}");
+    return last296 == before ? 1 : 0;   // 0 = stats changées
+}
+else if (mode == "duel-accept")
 {
     // Même rendez-vous que le pilote GUI : node 1 + téléport marché.
     await s.SendZoneAsync(new ZoneTextCommand
@@ -130,7 +207,6 @@ else
 }
 
 // Écoute jusqu'au verdict du mode ou fin du budget.
-var listen = s.ZoneListenLoopAsync(ct);
 var deadline = DateTime.UtcNow + TimeSpan.FromMinutes(5);
 while (DateTime.UtcNow < deadline && !ct.IsCancellationRequested)
 {

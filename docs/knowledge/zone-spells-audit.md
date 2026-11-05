@@ -367,3 +367,128 @@ forme 0/3 sont des paquets forgés que le serveur doit refuser.
   (3169 µs > seuil) au run de suite — domaine montures/FX, hors lot.
 - `CastCircle.cs` (fichier SpellFx non commité d'un autre agent)
   cassait le build — fix mécanique `Godot.Mesh.PrimitiveType` posé.
+
+## 9. FX natifs : rotation racine, phases cast, corps self --live (2026-11-04)
+
+Session de vérification live (`--live --account=test123 --combat-test`,
+caméras `--cast-cam=80,9` top-down et `55,9` diagonale, captures
+`--zshot-*` inspectées). Tous les effets sont les .nif EDENFR natifs
+(`corpus/fr-full/effect/model`).
+
+### 9.1 Bugs corrigés
+
+- **Rotation racine manquante** (`SpellFx.SpawnNative`,
+  `scripts/combat/SpellFx.cs:793`) : les scènes NIF de production
+  n'appliquaient pas `WorldConv.EdenRootEulerDeg` (−90°/X, repère Z-up
+  → Y-up) contrairement au banc `--fx-native` et aux modèles/map.
+  Effets plats dressés à la verticale, entonnoirs couchés —
+  « Cyclone totalement inversé ». (verified, images A/B)
+- **Corps self absent en `--live`** (`GameScene.EnsureSelfVisual`,
+  `scripts/GameScene.cs:930`) : la session créée dans la scène
+  n'alimentait ni `SessionCarry.Character` ni `_attached` → joueur
+  capsule sans `EntityAnimator` → chant `magic01` et geste `shootNN`
+  jamais rendus en test live. Le corps natif est construit après
+  `EnterZoneAsync` quand le perso sélectionné est connu ;
+  `[live] corps self construit (animator=True)`. (verified)
+- **Release dupliquée par victime** : l'effet de zone/release
+  (C_Spell col 6) est posé une seule fois par blast
+  (`ReleaseForBlast`/`ReleaseAt`, `SpellFx.cs:421/439`, dédoublonné
+  sort+hôte 0,4 s). Tornade 50027 : `s11722` UNE fois sur la cible
+  primaire ; `s11741` (col 10) reste par victime — fidèle.
+- **Hit des formes auto-centrées** (`Impact`, `SpellFx.cs:546`) :
+  Self/Nearby posent l'effet AoE une fois au lanceur du blast
+  (dédoublonné), plus une ancre par victime — Cyclone n'apparaît plus
+  « à l'envers » sur les cibles.
+- **Cercle d'incantation procédural supprimé** : `CastCircle` (mesh
+  inventé) retiré du cast ; `SpellFx.BeginCastFx` pose les effets
+  natifs col 4/5 (`E11611`/`E11621` → `s11611`/`s11621`) tenus pendant
+  `castDs`, retirés par `EndCastFx` au blast (288/289/297), au break
+  (287 → `SkillCast.StopCastVisuals`) et aux changements de nœud.
+  Repli natif `s11611` pour un sort temporisé sans col 4/5.
+- **Chant distant** (`OnOtherCast`, `SpellFx.cs:532`) : lanceur distant
+  temporisé tient `HoldAnim=magicNN` jusqu'au blast
+  (`RemoteBlastAnim` relâche avant le one-shot, + filet timer).
+
+### 9.2 Preuves live (compte test123, S002, `//god`, `//change_class 4`)
+
+- **Cyclone 50015** (Self, NCID 17 `sans cible`) : `s10521`+`s10541`
+  x1 sur Player, `s10541` x1 sur la victime. Vortex cyan spiralé
+  centré joueur (~71k px cyan, rayon ~185 px écran) à 0,3-0,6 s,
+  fondu à ~0,9 s (timing natif). Captures :
+  `artifacts/shots/cyclone_live2/cast_0_0,3s.png`,
+  `cast_1_0,6s.png`, `cast_2_0,9s.png`, `cast_3_1,5s.png`.
+- **Tornade 50027** (Single) : `s11711`/`s11721` sur Player,
+  `s11722` x1 sur la cible primaire, `s11741` x1 par victime.
+  Entonnoir cyan dressé sur la cible. Captures :
+  `artifacts/shots/tornado_live/cast_*.png`, `tornado_live_final.png`.
+- **Séisme 50026** (Single, castDs=15) : `s11611`/`s11621` sur Player
+  pendant TOUT le cast (24-26k px or à 0,5/1,0/1,4 s), cercle+barre
+  retirés au blast, `s11641` explosion dorée+roches sur la cible,
+  `chant magic01 tenu (kf=301)`, `cast anim : shoot01 (blastKf=401)`.
+  Captures : `artifacts/shots/timed_live2/cast_*.png`,
+  `timed_live2_final.png`.
+- **Interruption** (`--cast-break=800` → NCID 13 → 287) : cercle
+  visible à 0,5 s (24,7k px or), disparu à 1,0 s (1,5k = bruit de
+  fond), gestuelle relâchée, `verrou de cast #50026 libéré`.
+  Captures : `artifacts/shots/timed_break/cast_*.png`.
+
+### 9.3 Limites / restes
+
+- Cyclone : visibilité courte (~0,9 s) et nappe fine — conforme aux
+  clés alpha UV natives (verified placement/forme ; fidélité
+  temporelle hypothesis, ref-shot réel du jeu absent).
+- Erreurs HUD `Cannot get path of node as it is not in a scene tree`
+  (OverheadLayout/RemoteEntity) au spawn distant — cycle de vie
+  overhead, hors lot.
+- Fuites RID/ObjectDB à la fermeture Godot — hors lot.
+- `EDEN_FX_DIAG=3` : dump opt-in des contrôleurs/shapes NIF
+  (`NiControllerRuntime.cs`) conservé pour diagnostic.
+
+## 9.4 Suite 2026-11-04 — lot « FX résiduels / level-up / loot »
+
+- **FX vert persistant après soin (50028/50026) — CAUSE TROUVÉE,
+  déjà corrigée dans l'arbre** : `s11811` (cercle vert col 4
+  `E11811`, posé par `BeginCastFx`) est l'UNIQUE modèle de la chaîne à
+  émetteur `cyc=Loop` (dump NIF : 34/35 contrôleurs Loop — fait pour
+  tourner en continu). `s11821` (col 5) et `s11841` (col 10, hit) sont
+  100 % Clamp, fins ≤0,833 s. `NativeFxSeconds` retourne null sur le
+  modèle bouclé → l'ancien plancher de 3 s gardait le cercle ~1,8 s
+  après un soin instantané. `SpellFx.cs:845-854` : durée = `hold`
+  quand tenu (pas de plancher 3 s) ; `hold=0` → fin native du dernier
+  contrôleur clampé +0,5 s. FxCoverage confirme : `s11841`
+  `particles_at_end=0` à 4 s, émission stoppée à 0,33 s (vis-bools
+  `[0=T;0,33=F;0,5=F]`). Le nœud vit 1,33 s — fidèle. Statut :
+  verified par dumps NIF ; re-validation live recommandée.
+- **Rectangle noir derrière les drops (halo)** : `SetTreasureVisual`
+  ajoutait le quad `Halo` APRÈS la passe `BlobShadow.ExemptVisuals` de
+  `SetVisual` → halo resté couche 1, le Decal blob sous l'entité
+  (3 m, ajouté à toutes les entités `EntityRegistry.cs:1873`) se
+  projetait sur le billboard face-caméra → tache/fond sombre selon
+  l'angle de vue — même famille de bug que le « capot noir des
+  champignoïdes » (fix D4 déjà prouvé). Correctif : exempt posé après
+  `AddChild(halo)` (`EntityRegistry.cs:706-712`). Note : le nif
+  `g00006` porte en natif deux quads `Plane` additifs (blend src=6
+  dst=0 → `BlendMode==3`, gérés par `NifMaterial.cs:220-228` et la
+  chaîne FX) — piste additive vérifiée bout en bout, non fautive.
+  Statut : hypothesis forte, capture live à refaire pour valider.
+- **Cast « à l'envers » (rotation 90°)** : la convention racine NIF
+  `-90°/X` (`WorldConv.EdenRootEulerDeg`, `SpawnNative`,
+  `SpellFx.cs:829-835`) est appliquée uniformément — cyclone à plat
+  et tornade dressée (captures §9.2). Les ancres directionnelles
+  utilisent `Atan2(-ax,ay)` = `EdenDir.ToYaw` (`SpellFx.cs:345`).
+  AUCUN offset +90° famille-spécifique n'a de preuve native ; tout
+  correctif restant exigerait une capture directionnelle live
+  (`--fx-show` sur une forme Direction/Cross/Sector) vs référence.
+- **Level-up jaune (NCID 284)** : serveur émet 284 perso (flag 0)
+  + classe (flag 1, broadcast) — déjà implémenté côté serveur
+  (`ZoneEntryFlow.Combat.Rewards.cs`). Client : `SpellFx` écoute
+  `MiscPackets.Received` (`ZoneClientLevelUp`, bindée par
+  `MiscPackets` depuis `ZoneMiscBinds.cs`) → `Spawn` de l'effet natif
+  sur le perso local (flag 0) ou l'entité `Entities[Field1]` sinon.
+  **HYPOTHÈSE clé : `s99211`** — famille `s99*` système
+  (E99211 dans dynEffect, sprays en éventail + marqueur « ~>UP< ») ;
+  la clé exacte du handler 284 natif n'a pas été retrouvée dans
+  client_game (dispatch en table de sauts [FAILED]). À corriger si la
+  capture montre un autre visuel que le pilier doré attendu — le
+  câblage (284 → spawn sur l'entité flaggée) est, lui, conforme au
+  wire. `SpellFx.cs:44-95`.

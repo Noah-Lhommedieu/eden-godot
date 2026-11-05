@@ -617,9 +617,13 @@ public partial class InventoryWindow : Control
         {
             // Empilable : le 312 ne pose pas le bit6 — la quantité est la
             // durabilité (même convention que 274, ZonePutItem.Amount).
-            var it = it0.Amount == 0 && it0.Durability > 1 &&
-                     LookupDef(it0.ItemId) is { MaxStack: > 1 }
-                ? it0 with { Amount = it0.Durability } : it0;
+            // Non-empilable : Amount du wire = durabilité → on la garde
+            // dans Durability (tooltip) mais jamais en pastille compteur
+            // (les équipements ne se stackent pas).
+            var it = LookupDef(it0.ItemId) is { MaxStack: > 1 }
+                ? (it0.Amount == 0 && it0.Durability > 1
+                    ? it0 with { Amount = it0.Durability } : it0)
+                : it0 with { Amount = 0 };
             _slots[(it.Bag, it.Slot)] = it;
             _sharedSlots[(it.Bag, it.Slot)] = it;
         }
@@ -845,11 +849,20 @@ public partial class InventoryWindow : Control
                 if (m.ContainerType == 0 &&
                     _slots.TryGetValue((m.ContainerIndex, m.Slot),
                         out var it))
+                {
+                    // 291 = count pour les empilables, DURABILITÉ pour
+                    // les équipements — jamais de pastille compteur sur
+                    // une pièce non-empilable (durabilité → tooltip).
+                    var stackable =
+                        LookupDef(it.ItemId) is { MaxStack: > 1 };
                     MutateSlot(m.ContainerIndex, m.Slot, it with
                     {
-                        Amount = m.Count,
+                        Amount = stackable ? m.Count : 0,
+                        Durability = stackable ? it.Durability
+                            : m.Count,
                         MaxDurability = m.MaxDurability,
                     });
+                }
                 PlayerBag.ApplyModifySlot(m);
             });
         });
@@ -1180,6 +1193,23 @@ public partial class InventoryWindow : Control
                      $"type={def.EquipLoc}");
             return;
         }
+        // Équipement de familier (kinds 0x3d-0x44 = 61-68 et 0x51 = 81)
+        // : conteneur équipement index 1 natif (gate serveur
+        // ResolveEquipLocAsync — locs {1,2,4,5,6,7,8}, le col9 de
+        // l'item EST le slot panneau). Sans ce routage le clic droit
+        // sur ces pièces ne faisait rien.
+        if (def.Kind is >= 61 and <= 68 or 81 &&
+            def.EquipLoc is 1 or 2 or 4 or 5 or 6 or 7 or 8)
+        {
+            Send(new ZoneSwitchItemLocation
+            {
+                SrcType = 0, SrcSlot = (short)slot, SrcIndex = (short)bag,
+                DstType = 1, DstSlot = (short)def.EquipLoc, DstIndex = 1,
+            });
+            GD.Print($"[inv] équipe pet {it.ItemId} (sac{bag},slot{slot}) " +
+                     $"loc={def.EquipLoc}");
+            return;
+        }
         // Sac d'extension (kind 43, col28 = cases) : ni équipable joueur
         // (kind hors 1-34/37-40) ni UseType → ce double-clic / clic droit
         // ne faisait rien. Natif : SwitchItemLocation inventaire →
@@ -1252,15 +1282,23 @@ public partial class InventoryWindow : Control
     public static void CancelHeld() => Held = null;
 
     /// <summary>Clic gauche relâché dans le vide (aucun Control sous le
-    /// curseur) avec un objet en main : on le repose (même pattern que
-    /// HotbarPanel._UnhandledInput).</summary>
+    /// curseur — le monde, pas un panneau) avec un objet en main :
+    /// proposition « jeter » = détruire l'item (NCID 6 DropItem natif —
+    /// <c>CItemFactory::EradicateItem</c>, pas de drop au sol).</summary>
     public override void _UnhandledInput(InputEvent e)
     {
-        if (Held != null &&
+        if (Held is { } h &&
             e is InputEventMouseButton { ButtonIndex: MouseButton.Left,
                 Pressed: false } &&
             GetViewport().GuiGetHoveredControl() == null)
-            CancelHeld();
+        {
+            Held = null;
+            GetViewport().SetInputAsHandled();
+            if (_slots.TryGetValue((h.Bag, h.Slot), out var it))
+                AskDiscard(h.Bag, h.Slot, it.ItemId);
+            else
+                CancelHeld();
+        }
     }
 
     /// <summary>Consomme l'objet en main (cible équipement) : renvoie

@@ -773,6 +773,19 @@ public sealed partial class CharacterRepository : ICharacterRepository
             "WHERE id = @c", new { c = characterId });
     }
 
+    /// <summary>Assigne le trait héroïque — <c>UPDATE
+    /// player_characters SET create_flag</c> (commande GM
+    /// <c>//trait</c> : persos créés avant le sélecteur).
+    /// 0 = aucun, 1..8 = enchant 52000+n.</summary>
+    public async Task SetCreationFlagAsync(int characterId, int flag)
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        await connection.ExecuteAsync(
+            "UPDATE player_characters SET create_flag = @f " +
+            "WHERE id = @c", new { f = flag, c = characterId });
+    }
+
     /// <summary>Titre actif persisté — `player_characters.appellation`
     /// (char+0x6fc natif). Utilisé par l'étape stats « titles » :
     /// seul l'enchant du titre actif compte.</summary>

@@ -14,6 +14,23 @@ public class Plan22Tests
     public void Costume_PageForKind(int kind, int container) =>
         Assert.Equal(container, CostumeVisual.ContainerForKind(kind));
 
+    /// <summary>Archétype c_class → rangée profil (licence d'armure) :
+    /// 1 戰士/騎士/聖騎士 = heavy → « Armor »/conteneur 4 ; 2 light →
+    /// « Leather »/3 ; 3 cloth → « Cloth »/2 ; inconnu → repli Cloth.
+    /// Même mapping conteneur que ContainerForKind (kind % 3).</summary>
+    [Theory]
+    [InlineData(1, "Armor", 4)]
+    [InlineData(2, "Leather", 3)]
+    [InlineData(3, "Cloth", 2)]
+    [InlineData(0, "Cloth", 2)]
+    [InlineData(99, "Cloth", 2)]
+    public void Profile_RowForArchetype(int arch, string row, int cont)
+    {
+        var r = CostumeVisual.RowForArchetype(arch);
+        Assert.Equal(row, r.Row);
+        Assert.Equal(cont, r.Container);
+    }
+
     [Fact]
     public void Costume_OverridesSameLocOnly_WeaponsUntouched()
     {

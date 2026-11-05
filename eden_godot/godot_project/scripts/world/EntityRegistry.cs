@@ -57,12 +57,13 @@ public partial class RemoteEntity : Node3D
     /// trame d'arrêt) : passé ~0,45 s sans repush l'input « moving »
     /// de l'animator est périmé.</summary>
     public double LastMoveAt;
-    /// <summary>Vitesse observée (u/s, lissée) d'un joueur distant :
+    /// <summary>Vitesse observée (u/s, lissée) d'une entité distante :
     /// distance entre deux 326 consécutifs / délai d'arrivée. Le client
-    /// ne reçoit pas la vitesse courante (le 265/263 porte celle du
-    /// spawn, périmée dès qu'on monte ou qu'un buff change) — elle sert
-    /// uniquement à régler la vitesse de lecture des anims de marche
-    /// (<see cref="MoveAnimSpeed"/>).</summary>
+    /// ne reçoit pas la vitesse courante (le 298/265 porte celle du
+    /// spawn, périmée dès qu'on monte, qu'un buff change ou qu'un mob
+    /// passe en poursuite) — elle règle la vitesse de lecture des anims
+    /// de marche (<see cref="MoveAnimSpeed"/>) et borne l'horizon de
+    /// prédiction (<see cref="EntityRegistry.PredictSpeed"/>).</summary>
     public float ObsSpeed;
     /// <summary>Dernière position (monde X/Z) et date du 326 précédent
     /// pour <see cref="ObsSpeed"/> ; date 0 = chaîne rompue (arrêt).</summary>
@@ -87,28 +88,60 @@ public partial class RemoteEntity : Node3D
     public int Patience = 100;
     /// <summary>Patience max (champ +0x4c du 298 ; défaut 100).</summary>
     public int MaxPatience = 100;
-    /// <summary>Mob brisé : patience &lt; 1 sur un mob à faiblesses.</summary>
+    /// <summary>Une patience positive a déjà été reçue — distingue le
+    /// 0 par défaut (mob sans jauge BP) du 0 « barre vidée ».</summary>
+    public bool PatienceSeen;
+    /// <summary>Mob brisé : patience &lt; 1 sur un mob à faiblesses
+    /// dont la jauge a existé.</summary>
     public bool Broken { get; private set; }
-    private static StandardMaterial3D? _brokenOverlay;
 
-    /// <summary>Apparence « brisée » (wiki : coquille cassée, corne
-    /// manquante) — aucun asset/nœud « break » n'est prouvé : teinte
-    /// violacée persistante via <c>MaterialOverlay</c> (approximation
-    /// documentée), retirée au respawn/leash.</summary>
+    /// <summary>Apparence « brisée » native (wiki : coquille cassée,
+    /// corne manquante) : le client cache les nœuds <c>KNOCK</c> et
+    /// <c>KNOCKNODE</c> du NIF (FUN_0072ffe0 @0x0072ffe0 — flag
+    /// « app culled » bit 0 posé sur les deux objets trouvés par nom,
+    /// déclenché quand l'attr 0x13 patience tombe &lt; 1 dans
+    /// FUN_00761610/FUN_00764f00/FUN_00765760, restauré à l'état 3 de
+    /// FUN_00771920). 181 NIF de <c>monster/model/</c> portent un
+    /// mesh rigide « KNOCK » (coquille/corne d'hermite…), 5 un
+    /// « KNOCKNODE ». Remplace l'ancienne teinte violacée
+    /// <c>MaterialOverlay</c> qui était une approximation inventée.</summary>
     public void SetBroken(bool on)
     {
         if (on == Broken) return;
         Broken = on;
+        ApplyBrokenKnock();
+    }
+
+    /// <summary>Applique la visibilité native des pièces « KNOCK »/
+    /// « KNOCKNODE » à l'état <see cref="Broken"/> courant — rappelé
+    /// par <see cref="SetVisual"/> quand le modèle arrive ou change
+    /// alors que le mob est déjà brisé. Le lookup natif ne prend que
+    /// la première occurrence de chaque nom ; <c>Unique()</c> de
+    /// NifScene suffixe les doublons (« KNOCK2 »), donc le match
+    /// exact reproduit aussi cette limite.</summary>
+    private void ApplyBrokenKnock()
+    {
         if (GetNodeOrNull<Node3D>("Visual") is not { } vis) return;
-        _brokenOverlay ??= new StandardMaterial3D
+        var knockHidden = false;
+        var knockNodeHidden = false;
+        foreach (var n in vis.FindChildren("*", "Node3D", true, false))
         {
-            AlbedoColor = new Color(0.45f, 0.2f, 0.65f, 0.38f),
-            Transparency = BaseMaterial3D.TransparencyEnum.Alpha,
-            ShadingMode = BaseMaterial3D.ShadingModeEnum.Unshaded,
-        };
-        foreach (var n in vis.FindChildren("*", "MeshInstance3D", true, false))
-            if (n is MeshInstance3D mi)
-                mi.MaterialOverlay = on ? _brokenOverlay : null;
+            var nm = n.Name.ToString();
+            var isKnock = !knockHidden &&
+                nm.Equals("KNOCK", StringComparison.OrdinalIgnoreCase);
+            var isKnockNode = !isKnock && !knockNodeHidden &&
+                nm.Equals("KNOCKNODE", StringComparison.OrdinalIgnoreCase);
+            if (!isKnock && !isKnockNode) continue;
+            if (Broken)
+                ((Node3D)n).Visible = false;
+            else if (!n.HasMeta("nif_hidden"))
+                // Jamais vu caché d'office dans les NIF, mais on ne
+                // réaffiche pas un nœud que la donnée masquait déjà.
+                ((Node3D)n).Visible = true;
+            knockHidden |= isKnock;
+            knockNodeHidden |= isKnockNode;
+            if (knockHidden && knockNodeHidden) return;
+        }
     }
     /// <summary>rideKey de la monture courante (0 = à pied) — posé
     /// par <see cref="SetRide"/>.</summary>
@@ -135,6 +168,7 @@ public partial class RemoteEntity : Node3D
             _rideLift = 0f;
             if (visual != null)
                 visual.Transform = visual.GetMeta("ride_rest").AsTransform3D();
+            RelayoutOverhead();
             return;
         }
         var mount = CharVisual.BuildRideVisual(rideKey);
@@ -158,6 +192,7 @@ public partial class RemoteEntity : Node3D
             // Natif : racine cavalier sur le nœud L17 de la monture.
             Hud.RideFit.Follow(holder, mount, visual);
         }
+        RelayoutOverhead();
     }
 
     /// <summary>loc → itemId de l'équipement porté (conteneur 0
@@ -195,6 +230,9 @@ public partial class RemoteEntity : Node3D
                 id => Hud.InventoryWindow.LookupDef(id)?.Kind ?? -1);
         CharVisual.ApplyEquipment(visual, ModelStem, shown,
             LookupEquipItem, ClassId, 0);
+        // Casques/accessoires posés sur les os peuvent dépasser le
+        // haut du corps — une re-mesure puis le cache se fige.
+        InvalidateOverheadTop();
     }
 
     /// <summary>itemId → (Code, ModelCode) — même résolution c_item
@@ -276,7 +314,7 @@ public partial class RemoteEntity : Node3D
     /// <summary>Bulle de dialogue 3D (268 ClientSay) au-dessus du
     /// nom — remplace la précédente, disparaît seule.</summary>
     public void ShowBubble(string text) =>
-        Scene.SpeechBubble3D.Show(this, text, _labelTop + 0.5f);
+        Scene.SpeechBubble3D.Show(this, text, _stackTop + 0.15f);
 
     /// <summary>Séquence de mort : marque l'entité, gèle la
     /// locomotion automatique (sinon le cadavre se relève en stand01
@@ -340,7 +378,7 @@ public partial class RemoteEntity : Node3D
     /// (corps perso de <see cref="CharVisual.BuildBody"/>) est utilisé
     /// tel quel — pas de re-attach.</summary>
     public void SetVisual(Node3D? glb, bool isPlayer,
-        string? animStem = null, string? skinTex = null)
+        string? animStem = null, string? skinTex = null, float scale = 1f)
     {
         var old = GetNodeOrNull<Node3D>("Visual");
         if (old != null)
@@ -382,6 +420,11 @@ public partial class RemoteEntity : Node3D
                 ? MakeHumanoidPlaceholder(color)
                 : MakeCapsule(color);
         }
+        // Échelle native (monsterlist col 2) posée AVANT la mesure de
+        // hauteur (label/PV/zone de clic suivent la taille réelle — un
+        // world boss ×3 n'a plus son nom noyé dans le corps).
+        if (glb != null && scale > 0f && scale != 1f)
+            visual.Scale = Vector3.One * scale;
         AddChild(visual);
         // Perso monté dont le corps vient d'être remplacé (263 de
         // refresh) : le nouveau visuel reprend la hauteur de selle.
@@ -430,8 +473,6 @@ public partial class RemoteEntity : Node3D
         // Labels : posés juste au-dessus du modèle (hauteur réelle
         // AABB — les petits mobs n'ont pas un tag flottant à 2 m).
         var top = VisualTopHeight(visual);
-        var lbl = GetNodeOrNull<Label3D>("Label");
-        if (lbl != null) lbl.Position = new Vector3(0f, top + 0.15f, 0f);
         _labelTop = top;
         // Capsule de picking (H11) : hauteur suivant le modèle réel —
         // un gros boss garde une zone cliquable généreuse.
@@ -442,6 +483,9 @@ public partial class RemoteEntity : Node3D
                 Mathf.Max(top + 0.3f, 1.2f) * 0.5f, 0f);
         }
         UpdateHpBar();
+        // Mob déjà brisé quand le modèle (re)charge : le natif garde
+        // l'état « app culled » sur les nœuds KNOCK — réapplique.
+        if (Broken) ApplyBrokenKnock();
     }
 
     /// <summary>Applique la texture variante npc/mob sur les surfaces
@@ -505,6 +549,39 @@ public partial class RemoteEntity : Node3D
     }
 
     private float _labelTop = 1.95f;
+    private float _stackTop = 2.4f;
+    private bool _topDirty = true;
+
+    /// <summary>Le sommet du modèle a pu changer (échelle posée après
+    /// SetVisual, équipement attaché sur les os) : la prochaine
+    /// RelayoutOverhead re-mesure une fois puis le pile reste stable —
+    /// re-mesurer à chaque relayout (tick 2 Hz, chaque update PV)
+    /// faisait sauter les labels au rythme des AABB skinnées animées
+    /// et des FX (pseudo qui « monte et descend » immobile).</summary>
+    internal void InvalidateOverheadTop()
+    {
+        _topDirty = true;
+        RelayoutOverhead();
+    }
+
+    /// <summary>Repose barre PV / valeurs / nom / guilde / titre / marque
+    /// de quête au-dessus du modèle réel (AABB, monture et échelle
+    /// comprises). Le sommet n'est re-mesuré que sur invalidation —
+    /// sinon il est repris du cache (_labelTop, posé par SetVisual) :
+    /// la pile ne bouge plus entre deux updates.</summary>
+    public void RelayoutOverhead()
+    {
+        if (_topDirty)
+        {
+            _labelTop = Hud.OverheadLayout.ModelTop(this, _labelTop);
+            _topDirty = false;
+        }
+        _stackTop = Hud.OverheadLayout.Apply(this, _labelTop);
+        // Le blob Decal sous l'entité ne doit pas se projeter sur le
+        // modèle (couche 2 — couvre aussi monture/équipement ajoutés
+        // après coup).
+        BlobShadow.ExemptVisuals(this);
+    }
     private CollisionShape3D? _pickShape;
 
     /// <summary>Bit de collision layer pour la capsule de picking
@@ -655,6 +732,11 @@ void fragment() {
         if (haloTex != null) mat.SetShaderParameter("halo_tex", haloTex);
         halo.MaterialOverride = mat;
         AddChild(halo);
+        // Le quad halo (billboard face caméra) est ajouté APRÈS la
+        // passe d'exemption de SetVisual : laissé couche 1, le Decal
+        // d'ombre sous l'entité s'y projetait → tache sombre dépendant
+        // de l'angle de vue (même fix D4 que les toiles alpha mobs).
+        BlobShadow.ExemptVisuals(this);
     }
     private static Shader? _haloShader, _haloTexShader;
 
@@ -765,6 +847,7 @@ void fragment() {
         if (Label == null) return;
         Label.Visible = !Dying && (Kind == 0 ? Hud.HudPrefs.ShowNames
                                   : Hud.HudPrefs.ShowNpcNames);
+        RelayoutOverhead();
     }
 
     public override void _EnterTree() => Hud.HudPrefs.Changed += ApplyNamePref;
@@ -783,7 +866,9 @@ void fragment() {
         var want = (Kind == 12 || Kind == 0) && MaxHp > 0 && !Dying;
         if (!want)
         {
-            _hpBar?.SetDeferred("visible", false);
+            _hpBar?.SetHp(0, 0, false);   // masque la barre
+            Hud.OverheadLayout.SetValues(this, "");
+            RelayoutOverhead();
             return;
         }
         if (_hpBar == null)
@@ -792,11 +877,12 @@ void fragment() {
                 ? Hud.HudPrefs.BarRole.Mob : Hud.HudPrefs.BarRole.Other,
                 new Vector2(1.1f, 0.12f));
             if (Kind != 12) _hpBar.FixedFill = new Color(0.85f, 0.15f, 0.2f);
-            _hpBar.Position = new Vector3(0f, _labelTop - 0.02f, 0f);
             AddChild(_hpBar);
         }
-        _hpBar.Position = new Vector3(0f, _labelTop - 0.02f, 0f);
         _hpBar.SetHp(Hp, MaxHp);
+        Hud.OverheadLayout.SetValues(this, Hud.OverheadLayout.ValuesText(
+            Hud.HudPrefs.OverheadValues, true, Hp, MaxHp, false, 0, 0));
+        RelayoutOverhead();
     }
 }
 
@@ -866,7 +952,6 @@ public partial class EntityRegistry : Node3D
     private readonly HashSet<uint> _whoisWanted = new();
     private EdenSession? _session;
     private PlayerController? _player;
-    private bool _playerSearched;
     private uint _selfCharId;
     /// <summary>charId du joueur local (posé à l'entrée de zone —
     /// sert aux paquets « complétude » qui visent le self).</summary>
@@ -878,20 +963,71 @@ public partial class EntityRegistry : Node3D
     /// bornée en ms/frame dans <see cref="_Process"/> pour ne pas
     /// bloquer la boucle principale sur un burst de 263 SeeMob).</summary>
     private readonly Queue<(uint Handle, string Stem, string Skin,
-        float Scale)> _pendingVisuals = new();
+        float Scale, double QueuedAt)> _pendingVisuals = new();
+
+    /// <summary>Réchauffage fond des ressources d'un modèle de mob —
+    /// proto GLB + texture variante + fichiers .kf (P0.5). À froid le
+    /// <see cref="RemoteEntity.SetVisual"/> d'un nouveau stem coûte
+    /// 18-37 ms de parse dans la frame (mesuré --perf : grind =
+    /// respawns → pics à chaque mob entrant en vue). Le warm démarre
+    /// dès le 298 ; <see cref="DrainPendingVisuals"/> ne construit le
+    /// visuel qu'une fois les trois ressources chaudes (filet ~1,5 s
+    /// si la tâche traîne). 0 = en cours, 1 = prêt (ou raté — repli
+    /// synchrone).</summary>
+    private static readonly ConcurrentDictionary<string, byte>
+        s_mobWarm = new(StringComparer.OrdinalIgnoreCase);
+
+    private static bool IsMobModelWarm(string stem, string skin) =>
+        s_mobWarm.TryGetValue(stem + "|" + skin, out var s) && s == 1;
+
+    private static void WarmMobModel(string stem, string skin)
+    {
+        if (stem.Length == 0) return;
+        if (!s_mobWarm.TryAdd(stem + "|" + skin, 0)) return;
+        _ = System.Threading.Tasks.Task.Run(() =>
+        {
+            try
+            {
+                if (AssetCatalog.TryGetGlb($"monster/model/{stem}",
+                        out var gp))
+                    AssetCatalog.GetProto(gp);
+                if (skin.Length > 0)
+                    AssetCatalog.GetTexture($"monster/texture/{skin}");
+                EntityAnimator.PreloadAnimFiles(
+                    new[] { $"monster/animation/{stem}" });
+            }
+            catch (Exception ex)
+            {
+                GD.PrintErr($"[mobwarm] {stem} : {ex.Message}");
+            }
+            s_mobWarm[stem + "|" + skin] = 1;
+        });
+    }
 
     /// <summary>Construit les visuels GLB en attente dans un budget de
     /// <paramref name="maxMs"/> ms par frame (triés du plus proche du
-    /// joueur au plus loin).</summary>
+    /// joueur au plus loin). Une entrée dont le modèle n'est pas
+    /// réchauffé est repoussée en queue au lieu de payer le parse à
+    /// froid dans la frame.</summary>
     private void DrainPendingVisuals(double maxMs = 4.0)
     {
         if (_pendingVisuals.Count == 0) return;
         var t0 = Time.GetTicksUsec();
         var budgetUs = (ulong)(maxMs * 1000.0);
         var built = 0;
-        while (_pendingVisuals.Count > 0 && built < 4)
+        // Un passage borne sur le contenu présent : les entrées froides
+        // repartent en queue sans bloquer les suivantes.
+        var scanned = _pendingVisuals.Count;
+        while (_pendingVisuals.Count > 0 && built < 4 && scanned-- > 0)
         {
-            var (handle, stem, skin, scale) = _pendingVisuals.Dequeue();
+            var (handle, stem, skin, scale, queuedAt) =
+                _pendingVisuals.Dequeue();
+            if (!IsMobModelWarm(stem, skin) && Now - queuedAt < 1.5)
+            {
+                _pendingVisuals.Enqueue(
+                    (handle, stem, skin, scale, queuedAt));
+                continue;
+            }
             if (!_entities.TryGetValue(handle, out var e) ||
                 !GodotObject.IsInstanceValid(e) ||
                 e.ModelStem != stem)
@@ -901,6 +1037,7 @@ public partial class EntityRegistry : Node3D
             if (scale > 0f && scale != 1f &&
                 e.GetNodeOrNull<Node3D>("Visual") is { } vis)
                 vis.Scale = Vector3.One * scale;
+            e.InvalidateOverheadTop();
             built++;
             if (Time.GetTicksUsec() - t0 >= budgetUs) break;
         }
@@ -977,10 +1114,20 @@ public partial class EntityRegistry : Node3D
         if (m.Kind == 12 && m.EntityId != -2537 && !e.IsElfPet &&
             System.Environment.GetEnvironmentVariable("EDEN_MOB_SCALE") != "0")
         {
-            // Taille : HYPOTHESIS (aucune colonne de taille prouvée) —
-            // rares/boss plus gros, communs légèrement variés.
+            // Taille + skin NATIFS : monsterlist.ini (col 2 échelle, col 8
+            // texture) indexé par le code modèle c_monster. Les variantes
+            // d'un même NIF (3 couleurs de champignoïde, version « world
+            // boss » 2-4× plus grande…) y sont distinguées ; sans cette
+            // table tous les mobs d'un modèle partageaient texture et taille.
             var sd = MobDanger.Lookup?.Invoke(m.EntityId & 0xFFFF);
-            if (sd is { IsStationary: false })
+            if (sd != null && MonsterModelTable.Resolve(sd.ModelCode) is { } mm)
+            {
+                npcScale = mm.Scale;
+                skinTex = mm.Texture;
+            }
+            else if (sd is { IsStationary: false })
+                // Code absent de monsterlist (typos des ini) : repli
+                // HYPOTHESIS historique.
                 npcScale = EdenClient.Data.BreakPointUi.MobScale(
                     sd.MonsterType, m.Handle);
         }
@@ -1019,7 +1166,9 @@ public partial class EntityRegistry : Node3D
         if (modelStem.Length > 0 && modelStem != e.ModelStem)
         {
             e.ModelStem = modelStem;
-            _pendingVisuals.Enqueue((m.Handle, modelStem, skinTex, npcScale));
+            _pendingVisuals.Enqueue(
+                (m.Handle, modelStem, skinTex, npcScale, Now));
+            WarmMobModel(modelStem, skinTex);
         }
 
         // FieldZ = DIRECTION (radians), pas une hauteur : le passer
@@ -1090,6 +1239,13 @@ public partial class EntityRegistry : Node3D
     private static readonly bool FacingDiag =
         System.Environment.GetEnvironmentVariable("EDEN_FACING_DIAG") == "1";
 
+    /// <summary>EDEN_HIT_DIST=1 : logue la distance <b>rendue</b>
+    /// attaquant↔joueur au moment d'un 272 reçu sur soi — mesure le
+    /// retard de l'interpolation du mob (serveur tape à ~6 u ; un
+    /// rendu à 15-25 u = lag de prédiction).</summary>
+    private static readonly bool HitDistDiag =
+        System.Environment.GetEnvironmentVariable("EDEN_HIT_DIST") == "1";
+
     /// <summary>326 MovePrediction — mouvement interpolé d'une entité.
     /// Positions ×16. Sémantique native : le client marche LUI-MÊME
     /// de cur vers dst à la vitesse de l'entité (MobWander n'émet
@@ -1118,7 +1274,7 @@ public partial class EntityRegistry : Node3D
             var (dx, dy, dz) = GroundPos(d.X, d.Y, 0f);
             var dist = Mathf.Sqrt((dx - gx) * (dx - gx) +
                 (dz - gz) * (dz - gz));
-            var speed = e.MoveSpeed > 0.5f ? e.MoveSpeed : 6f;
+            var speed = PredictSpeed(e);
             if (FacingDiag)
             {
                 // Le cap reçu doit regarder vers la destination : le
@@ -1137,7 +1293,7 @@ public partial class EntityRegistry : Node3D
             e.Interp.Buffer.Push(Now, gx, gy, gz, yaw);
         }
         e.LastMoveAt = Now;
-        if (e.Kind == 0) ObserveSpeed(e, moving, gx, gz);
+        ObserveSpeed(e, moving, gx, gz);
         if (e.Animator != null)
         {
             e.Animator.InputMoving = moving;
@@ -1150,9 +1306,24 @@ public partial class EntityRegistry : Node3D
                 e.Animator.MoveAnim = anim;
                 if (e.Animator.RideMount is { } ma &&
                     GodotObject.IsInstanceValid(ma))
-                    ma.MoveAnim = anim;
+                    // Flancs croisés côté monture (contenu .kf inversé).
+                    ma.MoveAnim = DirectionalLocomotion.MountAnimFor(
+                        DirectionalLocomotion.RecordFromFlag(m.Flag));
             }
         }
+    }
+
+    /// <summary>Vitesse utilisée pour l'horizon de prédiction des
+    /// 326/267 : la vitesse annoncée (298 FieldSpeed / 265) sauf quand
+    /// l'observée (<see cref="RemoteEntity.ObsSpeed"/>) est supérieure —
+    /// les mobs sont annoncés à RoamSpeed (~2 u/s) alors que le serveur
+    /// les poursuit à ~7 u/s : sans l'observée, le rendu traînait
+    /// derrière la position serveur et leurs coups « arrivaient de
+    /// loin ».</summary>
+    private static float PredictSpeed(RemoteEntity e)
+    {
+        var announced = e.MoveSpeed > 0.5f ? e.MoveSpeed : 6f;
+        return e.ObsSpeed > announced ? e.ObsSpeed : announced;
     }
 
     /// <summary>Met à jour <see cref="RemoteEntity.ObsSpeed"/> depuis ce
@@ -1200,9 +1371,8 @@ public partial class EntityRegistry : Node3D
             var dist = Mathf.Sqrt(ddx * ddx + ddz * ddz);
             if (dist * dist <= e.Interp.Buffer.MaxCurCorrectionSq)
             {
-                var speed = e.MoveSpeed > 0.5f ? e.MoveSpeed : 6f;
                 e.Interp.Buffer.PushMovement(Now, px, py, pz,
-                    e.Rotation.Y, Now + dist / speed, gx, gy, gz);
+                    e.Rotation.Y, Now + dist / PredictSpeed(e), gx, gy, gz);
                 return;
             }
         }
@@ -1279,9 +1449,15 @@ public partial class EntityRegistry : Node3D
         else if (m.AttrId == 0x13)
         {
             // Patience (jauge Break Point) — i32 courant, éventuellement
-            // négatif ; < 1 sur un mob à faiblesses = brisé.
+            // négatif ; < 1 sur un mob à faiblesses = brisé. La valeur
+            // 0 est aussi l'état par défaut des mobs SANS jauge BP :
+            // n'exiger la coquille retirée qu'après une patience
+            // positive reçue (sinon tous les mobs à faiblesses
+            // apparaissent « cassés » à pleins PV).
             e.Patience = m.Current;
-            e.SetBroken(e.WeakMask != 0 && e.Patience < 1);
+            if (e.Patience > 0) e.PatienceSeen = true;
+            e.SetBroken(e.WeakMask != 0 && e.PatienceSeen &&
+                e.Patience < 1);
             PatienceChanged?.Invoke((uint)m.Handle);
         }
     }
@@ -1350,6 +1526,12 @@ public partial class EntityRegistry : Node3D
         GD.Print($"[combat] hit atk=0x{m.Attacker:x8} tgt=0x{m.Target:x8} " +
             $"dmg={m.Damage} type={m.HitType} kf={m.MotionKfId}" +
             (atkAnim != null ? $" → {atkAnim}" : ""));
+        if (HitDistDiag && m.Target == _selfCharId &&
+            _entities.TryGetValue(m.Attacker, out var a) &&
+            a.IsInsideTree() && SelfPlayer() is { } sp && sp.IsInsideTree())
+            GD.Print($"[hit-dist] rendue={a.GlobalPosition
+                .DistanceTo(sp.GlobalPosition):F1}u " +
+                $"obsSpeed={a.ObsSpeed:F1} annoncée={a.MoveSpeed:F1}");
     }
 
     /// <summary>Destinataire visuel d'un 268 ClientSay.</summary>
@@ -1403,8 +1585,9 @@ public partial class EntityRegistry : Node3D
             if (e.Animator != null)
                 played = e.Animator.PlayOnceAny(names.ToArray());
         }
-        else if (handle == _selfCharId && _player?.Animator != null)
-            played = _player.Animator.PlayOnceAny(names.ToArray());
+        else if (handle == _selfCharId &&
+                 SelfPlayer()?.Animator is { } selfAnim)
+            played = selfAnim.PlayOnceAny(names.ToArray());
         GD.Print($"[scene] action 495 handle=0x{handle:x8} kf={m.Field2} " +
                  $"→ {(played.Length > 0 ? played : "(aucune anim)")}");
         return played;
@@ -1550,6 +1733,11 @@ public partial class EntityRegistry : Node3D
     // détruit ses descendants par paquets, feuilles d'abord.
     private readonly Queue<Node> _slowFree = new();
 
+    /// <summary>Compteurs pour le banc --kill-loop : arriérés de
+    /// libération des cadavres et cadavres en attente de grâce.</summary>
+    internal int DebugSlowFreeQueued => _slowFree.Count;
+    internal int DebugCorpseCount => _corpses.Count;
+
     private void SlowFree(Node e)
     {
         if (!GodotObject.IsInstanceValid(e)) return;
@@ -1577,10 +1765,11 @@ public partial class EntityRegistry : Node3D
             e.Die();
             return true;
         }
-        if (handle == _selfCharId && _player?.Animator != null)
+        if (handle == _selfCharId &&
+            SelfPlayer()?.Animator is { } selfAnim)
         {
-            _player.Animator.AutoLocomotion = false;
-            _player.Animator.PlayOnceAny("death01", "die01");
+            selfAnim.AutoLocomotion = false;
+            selfAnim.PlayOnceAny("death01", "die01");
             return true;
         }
         return false;
@@ -1593,7 +1782,19 @@ public partial class EntityRegistry : Node3D
         if (_entities.TryGetValue(handle, out var e))
             e.PlayOnce(anim);
         else if (handle == _selfCharId)
-            _player?.Animator?.PlayOnce(anim);
+            SelfPlayer()?.Animator?.PlayOnce(anim);
+    }
+
+    /// <summary>Joueur local (nœud <c>Player</c> de la scène, sibling du
+    /// registre) — résolution lazy : le champ n'était jamais assigné, ce
+    /// qui rendait inertes les branches anim self (hurt/death).</summary>
+    private PlayerController? SelfPlayer()
+    {
+        if (_player != null && !GodotObject.IsInstanceValid(_player))
+            _player = null;
+        _player ??= GetTree()?.Root?
+            .FindChild("Player", true, false) as PlayerController;
+        return _player;
     }
 
     /// <summary>Stem KFM d'un combattant : <see cref="RemoteEntity.ModelStem"/>
@@ -1619,42 +1820,77 @@ public partial class EntityRegistry : Node3D
     {
         if (_session == null && SessionCarry.Session is { } s)
             BindSession(s);
-        while (_netPending.TryDequeue(out var act))
         {
-            try { act(); }
-            catch (Exception ex)
+            using var _pt = EdenClient.Perf.PerfTrace.Scope("reg.net");
+            // Budget par frame : un burst (entrée de node, kill +
+            // loot + cascade level-up) se répartit sur plusieurs
+            // images au lieu d'un pic de ~40 ms. L'ordre est préservé
+            // (file FIFO) ; le reliquat part en tête la frame suivante.
+            var netT0 = Time.GetTicksUsec();
+            const ulong netBudgetUs = 6000;
+            while (_netPending.TryDequeue(out var act))
             {
-                GD.PrintErr($"[registry] dispatch : {ex}");
+                var actT0 = Time.GetTicksUsec();
+                try { act(); }
+                catch (Exception ex)
+                {
+                    GD.PrintErr($"[registry] dispatch : {ex}");
+                }
+                var actMs = (Time.GetTicksUsec() - actT0) / 1000.0;
+                if (actMs >= 4.0)
+                    // Une action seule peut dépasser le budget (spawn
+                    // de visuel, decode KF) — on la nomme pour
+                    // l'attribuer (closure → méthode englobante).
+                    EdenClient.Perf.PerfTrace.Event(
+                        $"regact:{act.Method.DeclaringType?.Name}" +
+                        $" {actMs:F0}ms");
+                // Cap dur : le producteur réseau remplit la file
+                // pendant une rafale de combat (272/495/280/326…) —
+                // exiger Count>0 pour couper laissait le drain suivre
+                // toute la rafale en direct (reg.net ~39 ms, gel ~0,1 s).
+                if (Time.GetTicksUsec() - netT0 >= netBudgetUs) break;
             }
         }
-        DrainPendingVisuals(4.0);
-        // Tick mutualisé des interpolateurs + animators d'entités —
-        // évite ~500 callbacks natifs→C# par frame (S001 : ~260
-        // entités × 2 composants ; mesuré au --perf).
-        foreach (var e in _entities.Values)
         {
-            e.Interp?.Tick(delta);
-            if (e.Animator != null)
+            using var _pt = EdenClient.Perf.PerfTrace.Scope("reg.visual");
+            DrainPendingVisuals(4.0);
+        }
+        {
+            using var _pt = EdenClient.Perf.PerfTrace.Scope("reg.tick");
+            // Tick mutualisé des interpolateurs + animators d'entités —
+            // évite ~500 callbacks natifs→C# par frame (S001 : ~260
+            // entités × 2 composants ; mesuré au --perf).
+            foreach (var e in _entities.Values)
             {
-                // Pas de trame d'arrêt serveur : passé 0,45 s sans 326
-                // l'input « moving » est périmé — l'animator mesure
-                // alors l'immobilité réelle (arrêt franc) ou continue
-                // via la fenêtre de décélération si l'entité glisse
-                // encore vers sa destination prédite.
-                if (e.Animator.InputMoving && Now - e.LastMoveAt > 0.45)
-                    e.Animator.InputMoving = false;
-                e.Animator.Tick(delta);
+                e.Interp?.Tick(delta);
+                if (e.Animator != null)
+                {
+                    // Pas de trame d'arrêt serveur : passé 0,45 s sans 326
+                    // l'input « moving » est périmé — l'animator mesure
+                    // alors l'immobilité réelle (arrêt franc) ou continue
+                    // via la fenêtre de décélération si l'entité glisse
+                    // encore vers sa destination prédite.
+                    if (e.Animator.InputMoving && Now - e.LastMoveAt > 0.45)
+                        e.Animator.InputMoving = false;
+                    e.Animator.Tick(delta);
+                }
             }
         }
-        PumpSlowFree();
-        // Expiration des cadavres graciés.
-        for (var i = _corpses.Count - 1; i >= 0; i--)
         {
-            if (!GodotObject.IsInstanceValid(_corpses[i].Entity) ||
-                Now >= _corpses[i].FreeAt)
+            using var _pt = EdenClient.Perf.PerfTrace.Scope("reg.pump");
+            PumpSlowFree();
+        }
+        {
+            using var _pt = EdenClient.Perf.PerfTrace.Scope("reg.corpse");
+            // Expiration des cadavres graciés.
+            for (var i = _corpses.Count - 1; i >= 0; i--)
             {
-                SlowFree(_corpses[i].Entity);
-                _corpses.RemoveAt(i);
+                if (!GodotObject.IsInstanceValid(_corpses[i].Entity) ||
+                    Now >= _corpses[i].FreeAt)
+                {
+                    SlowFree(_corpses[i].Entity);
+                    _corpses.RemoveAt(i);
+                }
             }
         }
         FlushWhois();
@@ -1776,10 +2012,6 @@ public partial class EntityRegistry : Node3D
         };
         e.Interp = new NetworkInterpolator { Name = "Interp" };
         e.AddChild(e.Interp);
-        // Tick mutualisé par EntityRegistry._Process — un callback
-        // managé par frame pour toutes les entités au lieu d'un par
-        // composant (~260 × 2 sur S001).
-        e.Interp.SetProcess(false);
         // Ombre « blob » au sol (Decal projeté ~0,6 u au-dessus des
         // pieds — même convention que les NPC de scène MapLoader).
         var shadow = BlobShadow.Make(0.7f);
@@ -1787,6 +2019,12 @@ public partial class EntityRegistry : Node3D
         e.AddChild(shadow);
         e.SetVisual(null, isPlayer: kind == 0 && entityId == 0);
         AddChild(e);
+        // Tick mutualisé par EntityRegistry._Process — un callback
+        // managé par frame pour toutes les entités au lieu d'un par
+        // composant (~260 × 2 sur S001). Après l'entrée dans
+        // l'arbre : posé hors arbre le flag ne tenait pas
+        // (proc-dump : les ~256 Interp restaient en process).
+        e.Interp.SetProcess(false);
         _entities[handle] = e;
         return e;
     }

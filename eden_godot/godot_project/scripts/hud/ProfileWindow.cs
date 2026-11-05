@@ -1,5 +1,7 @@
 using Godot;
 using EdenClient.Data;
+using EdenClient.Data.Tables;
+using EdenClient.Game;
 using EdenClient.Protocol;
 using EdenClient.Screens;
 
@@ -126,6 +128,8 @@ public partial class ProfileWindow : Control
         AchievementWindow.TitleLinkClicked -= FocusTitle;
         PlayerVitals.StatsChanged -= RefreshStats;
         PlayerTitles.Changed -= RefreshTitles;
+        if (_armorClassHandler != null)
+            PlayerVitals.ClassChanged -= _armorClassHandler;
     }
 
     // ------------------------------------------------------------
@@ -396,6 +400,9 @@ public partial class ProfileWindow : Control
             }
         }
         // Cases « afficher » des accessoires : losanges bleus natifs.
+        // Chaque case pilote la visibilité de la pièce (helmet =
+        // tête d'armure, cloak = cape, clothes = tenue…) — préférence
+        // locale client, comme le natif (options.ini, aucun paquet).
         foreach (var cb in nat.FindChildren("*ShowKuso*", "CheckBox", true,
                      false).Cast<CheckBox>())
         {
@@ -404,7 +411,14 @@ public partial class ProfileWindow : Control
                 cb.AddThemeStyleboxOverride(st, new StyleBoxEmpty());
             cb.AddThemeIconOverride("unchecked", EeSkin.Diamond(false));
             cb.AddThemeIconOverride("checked", EeSkin.Diamond(true));
-            cb.ButtonPressed = true;
+            var suffix = cb.Name.ToString()["ShowKuso".Length..]
+                .ToLowerInvariant();
+            cb.ButtonPressed = HudPrefs.KusoVisible(suffix);
+            cb.Toggled += on =>
+            {
+                HudPrefs.SetKusoVisible(suffix, on);
+                PlayerEquipment.RaiseChanged();
+            };
         }
         // Résistances : Number1..9 (chop, stroke, stuck, fire, lightning,
         // ice, nature, holy, dark).
@@ -426,6 +440,8 @@ public partial class ProfileWindow : Control
             var eq = new EquipSlotsPanel { Name = "EquipPanel" };
             eq.BuildHeadless(_hud);
             page.AddChild(eq);
+            _equipPanel = eq;
+            _equipNat = nat;
             void At(string path, int loc, string label)
             {
                 if (TopLeftVitals.Find<Control>(nat, path) is { } h)
@@ -440,12 +456,20 @@ public partial class ProfileWindow : Control
             At("Weapon1_Slot7", 13, "Ring");
             At("Weapon1_Slot8", 6, UiTextEn.Translate("Back"));
             At("Weapon1_Slot9", 10, "Ranged");
-            // Set courant (rangée « Cloth ») = équipement porté réel.
-            At("Cloth_Slot1", 1, "Head");
-            At("Cloth_Slot2", 2, "Body");
-            At("Cloth_Slot3", 3, "Legs");
-            At("Cloth_Slot4", 5, "Feet");
-            At("Cloth_Slot5", 4, "Hands");
+            // Rangées Cloth/Leather/Armor = les 3 pages d'ensemble
+            // natives (kind % 3 → conteneurs 2/3/4, fast-dress).
+            // La rangée de la licence d'armure de la classe affiche
+            // l'équipement PORTÉ (« Current Gear »).
+            AttachArmorRows();
+            if (!_armorHooked)
+            {
+                _armorHooked = true;
+                // Changement de classe → la rangée « current gear »
+                // suit la nouvelle licence d'armure.
+                _armorClassHandler = () =>
+                    Callable.From(AttachArmorRows).CallDeferred();
+                PlayerVitals.ClassChanged += _armorClassHandler;
+            }
         }
         foreach (var (path, txt) in new[]
                  { ("Equio2_GrowthBtn", "Gear Upgrade"),
@@ -462,10 +486,85 @@ public partial class ProfileWindow : Control
         // défaut du thème, bien plus grande. Même taille imposée aux
         // trois ; si le TextLab est un conteneur (texte porté par un
         // fils __text), c'est le Label fils qui est réglé.
-        foreach (var (path, txt) in new[]
-                 { ("Weapon2", "Cloth Armor (Current Gear)"),
-                   ("Weapon2_Leather", "Light Armor"),
-                   ("Weapon2_Armor", "Heavy Armor") })
+        RefreshArmorTitles();
+        RefreshStats();
+    }
+
+    /// <summary>Posé à la construction de la page stats (layout natif)
+    /// — panneau d'équipement headless + racine du layout.</summary>
+    private EquipSlotsPanel? _equipPanel;
+    private Control? _equipNat;
+    private bool _armorHooked;
+    private Action? _armorClassHandler;
+
+    /// <summary>Rangée d'armure active = licence d'armure de la classe
+    /// courante — archétype c_class (cellule certsBase−10, mesuré sur
+    /// fr-full : 1 = 鎧甲/heavy pour 戰士/騎士/聖騎士, 2 = 皮甲/light
+    /// pour 獵人/盜賊/吟遊詩人/工程師/武鬥家/舞者/遊俠, 3 = 布衣/cloth
+    /// pour 魔術師/神官/幻術師/巫醫). 0/inconnu → repli Cloth (ordre
+    /// natif de la première rangée).</summary>
+    private static string ActiveArmorRow()
+    {
+        var (cls, _) = CharVisual.LocalClass();
+        int arch = 0;
+        try
+        {
+            ClassSkillTree.EnsureLoaded(AssetCatalog.ResolveRawAsset);
+            arch = ClassSkillTree.ClassDef(cls)?.Archetype ?? 0;
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[profile] archétype classe {cls} : {ex.Message}");
+        }
+        return EdenClient.Game.CostumeVisual.RowForArchetype(arch).Row;
+    }
+
+    /// <summary>Range les 5 cellules d'armure sur la rangée de la
+    /// licence de la classe (conteneur 0 = équipement porté) ; les deux
+    /// autres rangées affichent leur page d'ensemble sauvegardée
+    /// (conteneurs 2/3/4) sous l'overlay natif « Unable ». Rejouable à
+    /// un changement de classe : Attach remplace la cellule du host.
+    /// Correspondance rangée ↔ page : kind % 3 natif (serveur
+    /// ResolveEquipLocAsync — 0→Cloth/2, 2→Leather/3, 1→Armor/4).</summary>
+    private void AttachArmorRows()
+    {
+        if (_equipPanel == null || _equipNat == null) return;
+        var nat = _equipNat;
+        var active = ActiveArmorRow();
+        foreach (var (row, page, unable) in new[]
+                 { ("Cloth", 2, "Unable1"),
+                   ("Leather", 3, "Unable2"),
+                   ("Armor", 4, "Unable3") })
+        {
+            var container = row == active ? 0 : page;
+            void At(string path, int loc, string label)
+            {
+                if (TopLeftVitals.Find<Control>(nat, path) is { } h)
+                    _equipPanel.Attach(loc, h, label, container);
+            }
+            At($"{row}_Slot1", 1, "Head");
+            At($"{row}_Slot2", 2, "Body");
+            At($"{row}_Slot3", 3, "Legs");
+            At($"{row}_Slot4", 5, "Feet");
+            At($"{row}_Slot5", 4, "Hands");
+            if (TopLeftVitals.Find<Control>(nat, unable) is { } u)
+                u.Visible = row != active;
+        }
+        RefreshArmorTitles();
+    }
+
+    /// <summary>Titres des 3 rangées : « (Current Gear) » suit la
+    /// licence d'armure de la classe (un guerrier lit « Heavy Armor
+    /// (Current Gear) », pas « Cloth »).</summary>
+    private void RefreshArmorTitles()
+    {
+        if (_equipNat == null) return;
+        var nat = _equipNat;
+        var active = ActiveArmorRow();
+        foreach (var (path, row, label) in new[]
+                 { ("Weapon2", "Cloth", "Cloth Armor"),
+                   ("Weapon2_Leather", "Leather", "Light Armor"),
+                   ("Weapon2_Armor", "Armor", "Heavy Armor") })
         {
             var host = TopLeftVitals.Find<Control>(nat, path + "_TextLab");
             var tl = host as Label
@@ -476,13 +575,13 @@ public partial class ProfileWindow : Control
                     "Label introuvable");
                 continue;
             }
-            tl.Text = UiTextEn.Translate(txt);
+            tl.Text = UiTextEn.Translate(row == active
+                ? $"{label} (Current Gear)" : label);
             EeSkin.Shadowed(tl, ArmorLabelSize, Colors.White);
             if (OS.GetCmdlineUserArgs().Contains("--profile-equip"))
                 GD.Print($"[profile] armor-label {path} size=" +
                     $"{tl.GetThemeFontSize("font_size")} text={tl.Text}");
         }
-        RefreshStats();
     }
 
     /// <summary>M4 : boutons Gear Upgrade / Gear Swap, sets d'armure
@@ -508,8 +607,18 @@ public partial class ProfileWindow : Control
         HudRoot.Pin(setBox, 0, 0, 0, 0, 258, 446, 520, 598);
         setBox.AddThemeStyleboxOverride("panel", EeSkin.InsetBox());
         page.AddChild(setBox);
-        var titles = new[] { "Cloth Armor (Current Gear)", "Light Armor",
-            "Heavy Armor" };
+        // « (Current Gear) » sur la rangée de la licence d'armure de
+        // la classe (même règle que le layout natif — AttachArmorRows).
+        var activeRow = ActiveArmorRow();
+        var titles = new[]
+        {
+            activeRow == "Cloth" ? "Cloth Armor (Current Gear)"
+                : "Cloth Armor",
+            activeRow == "Leather" ? "Light Armor (Current Gear)"
+                : "Light Armor",
+            activeRow == "Armor" ? "Heavy Armor (Current Gear)"
+                : "Heavy Armor",
+        };
         var empty = _hud != null ? EeSkin.EmptySlot(_hud) : null;
         for (var r = 0; r < 3; r++)
         {
@@ -527,8 +636,8 @@ public partial class ProfileWindow : Control
                 setBox.AddChild(cell);
             }
         }
-        // Résistances élémentaires (ordre wire 8,9,6,4,5,7,1,2,3 →
-        // index id-1).
+        // Résistances élémentaires — ordre d'affichage natif
+        // (PlayerStats.Resists est déjà réordonné depuis le wire).
         var resBox = new Panel();
         HudRoot.Pin(resBox, 0, 0, 0, 0, 526, 446, 636, 598);
         resBox.AddThemeStyleboxOverride("panel", EeSkin.InsetBox());
@@ -609,25 +718,60 @@ public partial class ProfileWindow : Control
                         total = new[] { s.Str, s.Int, s.Agi, s.Wis, s.Lck }[idx];
                         if (PlayerVitals.BaseStats is { } bs && idx < bs.Stats.Length) bse = bs.Stats[idx];
                     }
-                    StatDetailWindow.Open(_hud ?? HudExtensions.FindHud()!, k, _names.TryGetValue(k, out var nl) ? nl.Text : k, value, total, bse);
+                    StatDetailWindow.Open(_hud ?? HudExtensions.FindHud()!, k, _names.TryGetValue(k, out var nl) ? nl.Text : k, value, total, bse,
+                        () => _values.TryGetValue(k, out var cur) ? cur.Text : value);
                 };
             }
         }
         Hook(_values); Hook(_names);
+        // Résistances : clic sur la valeur → détail avec provenances
+        // (pas de « naturel » transmis — cf. StatDetailWindow).
+        for (var i = 0; i < _resistVals.Count; i++)
+        {
+            var idx = i;
+            var cell = _resistVals[i];
+            cell.MouseFilter = MouseFilterEnum.Stop;
+            cell.MouseDefaultCursorShape = CursorShape.PointingHand;
+            cell.GuiInput += e =>
+            {
+                if (e is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left }) return;
+                var s = PlayerVitals.TotalStats;
+                var k = ProfileStatInfo.ResistKey(idx);
+                StatDetailWindow.Open(_hud ?? HudExtensions.FindHud()!,
+                    k, ProfileStatInfo.ResistTitle(idx), cell.Text,
+                    s != null && idx < s.Resists.Length ? s.Resists[idx] : 0,
+                    null, () => _resistVals[idx].Text);
+            };
+        }
         foreach (var a in OS.GetCmdlineUserArgs())
-            if (a.StartsWith("--stat-click=") && _names.TryGetValue(a[13..], out var target))
-                Callable.From(() => _win.GetTree().CreateTimer(9.5).Timeout += () =>
+        {
+            // --stat-click=<clé>[@secondes] : ouvre le détail d'une stat
+            // (défaut 9,5 s après le build). Accepte aussi res_*.
+            if (!a.StartsWith("--stat-click=")) continue;
+            var k = a[13..].Split('@')[0];
+            var ri = ProfileStatInfo.ResistIndex(k);
+            if (ri < 0 && !_names.ContainsKey(k)) continue;
+            Callable.From(() => GetTree().CreateTimer(
+                a.Contains('@') && double.TryParse(a.Split('@')[1],
+                    System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out var after) ? after : 9.5).Timeout += () =>
+            {
+                var s = PlayerVitals.TotalStats;
+                int total = 0; int? bse = null;
+                if (s != null && ProfileStatInfo.CoreIndex.TryGetValue(k, out var idx))
                 {
-                    var s = PlayerVitals.TotalStats;
-                    var k = a[13..];
-                    int total = 0; int? bse = null;
-                    if (s != null && ProfileStatInfo.CoreIndex.TryGetValue(k, out var idx))
-                    {
-                        total = new[] { s.Str, s.Int, s.Agi, s.Wis, s.Lck }[idx];
-                        if (PlayerVitals.BaseStats is { } bs && idx < bs.Stats.Length) bse = bs.Stats[idx];
-                    }
-                    StatDetailWindow.Open(HudExtensions.FindHud()!, k, target.Text, _values.TryGetValue(k, out var v) ? v.Text : "", total, bse);
-                }).CallDeferred();
+                    total = new[] { s.Str, s.Int, s.Agi, s.Wis, s.Lck }[idx];
+                    if (PlayerVitals.BaseStats is { } bs && idx < bs.Stats.Length) bse = bs.Stats[idx];
+                }
+                else if (s != null && ri >= 0 && ri < s.Resists.Length)
+                    total = s.Resists[ri];
+                var title = ri >= 0 ? ProfileStatInfo.ResistTitle(ri)
+                    : _names.TryGetValue(k, out var t) ? t.Text : k;
+                var value = ri >= 0 && ri < _resistVals.Count ? _resistVals[ri].Text
+                    : _values.TryGetValue(k, out var v) ? v.Text : "";
+                StatDetailWindow.Open(HudExtensions.FindHud()!, k, title, value, total, bse);
+            }).CallDeferred();
+        }
     }
 
     private void RefreshStats()

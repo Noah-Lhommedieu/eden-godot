@@ -139,3 +139,15 @@ Vérifié le 2026-11-03 : les 15 fichiers existent ; les constats de code citent
 | `live-vs-test-visual-parity.md` | Écart rendu live (`run.sh --char`) vs bancs de test (2026-11-03) |
 | `zone-spells-audit.md` | Sorts de zone : formes natives 0-6 décodées, routage NCID, 6 fixes client (Z1-Z6), géométrie serveur restante |
 | `backlog-2026-11-03.md` | Backlog demandé par le propriétaire (FX, montures, skins, sorts de zone…) |
+
+## Vérification visuelle : la caméra compte (règle propriétaire 2026-11-03)
+
+Un joueur regarde bien plus **de dessus** que de côté. Prouver un FX avec la
+mauvaise vue fausse le verdict.
+- Animations de cast / sorts : vue **diagonale en hauteur** (dessus + dos du joueur).
+- Animations « plates » (Cyclone, cercles au sol, timed cast) : vue **du dessus**.
+- Vues de côté : réservées aux montures, skins de costume, silhouettes.
+- Tester aussi en jeu réel (`tools/run.sh -- --login=test123:test123 --channel --char`),
+  pas seulement avec un banc dédié (ex. texture bug invisible en banc).
+- Un mob qui passe dans le cadre ne justifie pas de valider/invalider ; refaire la capture.
+- Définitions status/buff/nerf/BP/drops : `docs/knowledge/definitions.md`.

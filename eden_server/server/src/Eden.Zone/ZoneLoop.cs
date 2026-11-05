@@ -148,7 +148,18 @@ public sealed class ZoneLoop : IAsyncDisposable
             _scheduled.RemoveAll(s => s.Due <= now);
         }
         foreach (var s in due)
-            try { await s.Work(s.Token).ConfigureAwait(false); }
+            try
+            {
+                var t0 = System.Diagnostics.Stopwatch.GetTimestamp();
+                await s.Work(s.Token).ConfigureAwait(false);
+                var ms = System.Diagnostics.Stopwatch
+                    .GetElapsedTime(t0).TotalMilliseconds;
+                if (ms > 30)
+                    EdenLog.Write(
+                        $"[ZoneLoop] tâche schedulée lente {ms:F0} ms " +
+                        $"({s.Work.Method.DeclaringType?.Name}." +
+                        $"{s.Work.Method.Name})");
+            }
             catch (Exception ex)
             {
                 EdenLog.Write(
@@ -303,11 +314,18 @@ public sealed class ZoneLoop : IAsyncDisposable
         finally { RecordSubsystem(subsystem, started); }
     }
 
-    private static void RecordSubsystem(string subsystem, long started) =>
-        EdenMetrics.ZoneSubsystemMs.Record(
-            System.Diagnostics.Stopwatch.GetElapsedTime(started)
-                .TotalMilliseconds,
+    private static void RecordSubsystem(string subsystem, long started)
+    {
+        var ms = System.Diagnostics.Stopwatch.GetElapsedTime(started)
+            .TotalMilliseconds;
+        EdenMetrics.ZoneSubsystemMs.Record(ms,
             new KeyValuePair<string, object?>("subsystem", subsystem));
+        // Un bloc > 50 ms gèle toute la zone (file unique) : log du
+        // coupable — les kills y empilaient des requêtes PG en série.
+        if (ms > 50)
+            EdenLog.Write(
+                $"[ZoneLoop] {subsystem} a pris {ms:F0} ms");
+    }
 
     /// <summary>Tick à la seconde — trésors au sol. Chaque bloc est
     /// borné : une exception ne doit ni tuer la boucle ni remonter

@@ -2,6 +2,7 @@ using Eden.Core.Logging;
 using Eden.Core.Networking;
 using Eden.Core.Networking.Session;
 using Eden.Core.Networking.Messages.Generated;
+using Eden.Zone.Combat.SpellEffects;
 
 namespace Eden.Zone;
 
@@ -52,6 +53,20 @@ public sealed partial class ZoneEntryFlow
         EntryState st, ZoneLiveWorld.LiveMob mob, int casterId, int eid,
         int restSec, int level, bool hidden, CancellationToken token)
     {
+        // Enchant purement instantané — même gate natif que la voie
+        // joueur (EffectToLife `effet+0x12c == 0` @0x08060ec0) : ses
+        // commandes s'exécutent une fois (dispels 1821-1824, pulls,
+        // contre-sorts…) sans créer de CEnchant ni émettre d'icône
+        // 299 — sinon un sort instantané « fuyait » en status du mob.
+        if (IsInstantOnlyEnchant(eid))
+        {
+            var host = new MobSpellEffectHost(this, session, st, token);
+            var ctx = new SpellEffectContext(casterId, st.PosX, st.PosZ,
+                mob, eid);
+            foreach (var c in _services.Enchants.GetUseCommands(eid))
+                await SpellEffects.TryExecuteAsync(host, ctx, c);
+            return;
+        }
         // CEnchantMgr::Add @0x08569a50 — FindByType : même type
         // (col38) → rejet si l'existant domine, sinon remplacement
         // (300) — voir EnchantService.TypeAddAllowed. shortcut: la
@@ -234,7 +249,14 @@ public sealed partial class ZoneEntryFlow
     /// <summary>1999 SpellAttack — le mob recaste `spellId` vers son
     /// attaquant via le pipeline de cast mob existant (wind-up
     /// `CastTimeMs` honoré, génération courante = pas de staleness).
-    /// </summary>
+    /// Le cast passe le même test de portée que la cible native
+    /// (<c>CSpellToLife::CastTest</c> @0x084f04d0 : borne =
+    /// portée + rayons + <see cref="Combat.SpellCastRouting.
+    /// OuterRangeBonus"/>) — sans ça un proc d'enchant déclenché par
+    /// un coup à distance faisait recaster le mob de très loin.
+    /// Pas de condition « premier hit » ici : le contre-sort est un
+    /// effet d'enchant déclenché par un coup REÇU, pas une décision
+    /// d'IA de cast.</summary>
     private async Task MobCounterCastAsync(NetSession session,
         EntryState st, ZoneLiveWorld.LiveMob mob, int spellId,
         CancellationToken token)
@@ -242,6 +264,11 @@ public sealed partial class ZoneEntryFlow
         if (!mob.Alive) return;
         var sdef = _services.Spells.GetDefinition(spellId);
         if (sdef == null) return;
+        var dx = mob.X - st.PosX; var dy = mob.Y - st.PosZ;
+        var mdef = _services.Monsters.GetDefinition(mob.MobId);
+        if (!MobSpellInCastRange(mdef, sdef, dx * dx + dy * dy,
+                Combat.SpellCastRouting.OuterRangeBonus))
+            return;
         await MobCastSpellAsync(session, st, mob, sdef,
             mob.CombatGeneration, token);
     }

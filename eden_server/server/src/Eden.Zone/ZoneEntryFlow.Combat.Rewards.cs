@@ -346,12 +346,17 @@ public sealed partial class ZoneEntryFlow
             //   · RefreshEQsAttr (stats équipement) — le 489 + vitals
             //     ci-dessous couvrent l'essentiel visible.
             // u8=1 : variante CLASSE (le 0 = level-up perso).
-            await session.SendAsync(new CNC_CZ_ClientLevelUp
+            var lvUp = new CNC_CZ_ClientLevelUp
             {
                 Field1 = st.CharId, Field2 = 1,
                 Field3 = (short)lv,
                 Field4 = st.PlayerMaxHp, Field5 = st.PlayerMaxMp,
-            }, CancellationToken.None);
+            };
+            await session.SendAsync(lvUp, CancellationToken.None);
+            // GainClassPoint natif @0x841c140 : FastBroadCastToCanSee
+            // — les observateurs jouent aussi l'effet de level-up.
+            await BroadcastToNodeAsync(session, st, lvUp,
+                CancellationToken.None);
             // GainAAPoint(this,1) natif @0x840c7f0 : +1 sur
             // player_characters.aa_point (cap 120) PAR NIVEAU gagné —
             // le natif ne monte qu'un niveau par GainClassPoint et
@@ -810,6 +815,13 @@ public sealed partial class ZoneEntryFlow
         st.Experience = newLevel >= _services.Progression.MaxLevel
             ? 0 : st.Experience + exp - spent;
         st.Level = newLevel;
+        // CCharacter::SetLevel natif — retire l'état « portail
+        // gratuit » (-0x25c3 = 55869) dès que le niveau dépasse 0x50
+        // (80) ; le sync idempotent couvre aussi le re-add sur
+        // descente //level admin.
+        if (gained > 0)
+            await SyncBeginnerPortalStateAsync(session, st,
+                CancellationToken.None);
 
         await session.SendAsync(new CNC_CZ_ClientUpdateAttrNewExp
         {
@@ -824,29 +836,31 @@ public sealed partial class ZoneEntryFlow
             CancellationToken.None);
 
         if (gained <= 0) return 0;
-        // Level-up : recalcule les max vitals (formule native
-        // CCharFormula::MaxHP/MaxMP — S_Level × %HP/%MP classe +
-        // équipement, cf. ProfileStatEmitter.ComputeVitals). Le
-        // courant n'est pas rempli (natif).
-        var eqV = EquipmentStatService.Sum(
-            await _services.InventoryRepo
-                .GetEquippedItemEntitiesAsync((int)st.CharId),
-            _services.GameData.Items,
-            _services.EquipTrain.ItemTrainAdds);
-        var (upHp, upMp) = ProfileStatEmitter.ComputeVitals(_services,
-            st.RaceId, st.ClassId, st.Level, eqV.BonusHp, eqV.BonusMp,
-            eqV.Def);
+        // RefreshEQsAttr natif (GainExp @0x0841d2xx — appelé AVANT
+        // ClientLevelUp : UpdateAttr 0x11/0x12 puis 296/492/493) : le
+        // palier franchi ré-indexe S_Level → les stats de base et les
+        // totaux changent. Les vitals retournées incluent le pipeline
+        // complet (équipement, buffs, licences) — le 284 porte les
+        // totaux réels comme le GetMaxHP/GetMaxMP natif du corps.
+        // Le courant n'est pas rempli (natif).
+        var (upHp, upMp) = await ProfileStatEmitter.SendForCharacterAsync(
+            session, _services, (int)st.CharId, CancellationToken.None);
         if (upHp > 0 && upMp > 0)
         {
             st.PlayerMaxHp = upHp;
             st.PlayerMaxMp = upMp;
         }
-        await session.SendAsync(new CNC_CZ_ClientLevelUp
+        var lvUp0 = new CNC_CZ_ClientLevelUp
         {
             Field1 = st.CharId, Field2 = 0,
             Field3 = (short)st.Level,
             Field4 = st.PlayerMaxHp, Field5 = st.PlayerMaxMp,
-        }, CancellationToken.None);
+        };
+        await session.SendAsync(lvUp0, CancellationToken.None);
+        // GainExp natif @0x841cb80 : NotifyClient PUIS
+        // BroadCastToCanSee — les témoins reçoivent aussi le 284.
+        await BroadcastToNodeAsync(session, st, lvUp0,
+            CancellationToken.None);
         // BUG corrigé : le max HP était passé comme PlayerMaxMp — le
         // client affichait un max HP = MP et le ratio vital était
         // corrompu après chaque level-up.

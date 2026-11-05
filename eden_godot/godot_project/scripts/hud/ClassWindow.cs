@@ -69,7 +69,8 @@ public partial class ClassWindow : Control
                     ClassChangeDialog.RequestChange(cid);
         }
 
-        ClassChangeDialog.ClassesChanged += Refresh;
+        // 489 revient à chaque kill : fenêtre masquée = rien à faire, VisibilityChanged rafraîchit à l'ouverture.
+        ClassChangeDialog.ClassesChanged += OnClassesChanged;
         PlayerVitals.ClassChanged += OnActiveClassChanged;
         PlayerSkills.Changed += RefreshSkills;
         PlayerVitals.GoldChanged += RefreshBanners;
@@ -108,7 +109,7 @@ public partial class ClassWindow : Control
     public override void _ExitTree()
     {
         PlayerVitals.ClassChanged -= OnActiveClassChanged;
-        ClassChangeDialog.ClassesChanged -= Refresh;
+        ClassChangeDialog.ClassesChanged -= OnClassesChanged;
         PlayerSkills.Changed -= RefreshSkills;
         PlayerVitals.GoldChanged -= RefreshBanners;
         PlayerVitals.PointsChanged -= OnPointsChanged;
@@ -624,6 +625,16 @@ public partial class ClassWindow : Control
         RefreshNews();
     }
 
+    /// <summary>Résolution itemId → (Code, ModelCode) pour les armes
+    /// de l'aperçu Class News — même convention que
+    /// <see cref="EquipSlotsPanel"/> (4pequip/WeaponModelStem).</summary>
+    private static (string Code, string ModelCode)? PreviewWeaponLookup(
+        int itemId)
+    {
+        var def = InventoryWindow.LookupDef(itemId);
+        return def == null ? null : (def.Code, def.ModelCode);
+    }
+
     private static Dictionary<int, Data.Tables.ClassTable.ClassDef>? _classDefs;
 
     private static Data.Tables.ClassTable.ClassDef? ClassDefOf(int id)
@@ -894,13 +905,27 @@ public partial class ClassWindow : Control
         if (_outfitHolder == null) return;
         if (_outfitShownClass == id && _outfitShownStyle == _outfitSel) return;
         _outfitShownClass = id; _outfitShownStyle = _outfitSel;
-        foreach (var c in _outfitHolder.GetChildren()) c.QueueFree();
+        // Libération immédiate : QueueFree diffère la destruction à la
+        // fin de frame — le nouveau corps ajouté juste après cohabitait
+        // un instant avec l'ancien (tenues superposées visibles).
+        foreach (var c in _outfitHolder.GetChildren()) c.Free();
         var app = SessionCarry.Character?.Appearance;
         if (app == null) return;
         var body = EdenClient.Game.CharVisual.BuildBody(app, classId: id, style: _outfitSel);
         if (body == null) return;
         body.RotationDegrees = new Vector3(-90f, 0f, 0f);
         _outfitHolder.AddChild(body);
+        // Tenue = celle de la classe et de l'outfit SÉLECTIONNÉS (repli
+        // ClassOutfitRow(id, _outfitSel) quand worn ne contient aucune
+        // armure) ; armes = celles réellement portées (locs 7/8/10 —
+        // jamais l'armure du joueur ni d'armes fictives). Loc 9 filtrée
+        // : pas de slot natif, elle dessinerait une 2e arme en Prop1.
+        var weapons = new Dictionary<int, int>();
+        foreach (var (wloc, wid) in PlayerEquipment.Worn)
+            if (wloc is >= 7 and <= 10 and not 9) weapons[wloc] = wid;
+        var letter = EdenClient.Game.CharVisual.BodyLetterOf(body);
+        EdenClient.Game.CharVisual.ApplyEquipment(body, letter, weapons,
+            PreviewWeaponLookup, id, _outfitSel);
         EdenClient.Game.CharVisual.PlayIdle(body);
         if (_newsPreviewName != null)
             _newsPreviewName.Text = $"{TextResolver.ClassInfo(id)?.Name ?? ""}  ·  {_outfitSel + 1}/{Math.Max(1, closet.Count)}";
@@ -1297,7 +1322,9 @@ public partial class ClassWindow : Control
         }
         // Géométrie : cases 44 px, pas 68×62 (arbre 8 colonnes × 3 branches).
         // 8 colonnes dans la boîte parchemin (408 px) : cases 34, pas 48.
-        const int Cell = 34, PitchX = 46, PitchY = 62, OrgX = 34, OrgY = 22;
+        // Hauteur réduite (retour propriétaire) : 3 rangées pas 54, centrées
+        // dans la boîte parchemin de 182 px.
+        const int Cell = 34, PitchX = 46, PitchY = 54, OrgX = 34, OrgY = 38;
         // Déblocage : niveau de classe requis + points minimum du prérequis
         // (confirmés + saisis non validés).
         bool Unlocked(Data.Tables.TalentTable.Slot sl)
@@ -1733,6 +1760,11 @@ public partial class ClassWindow : Control
         PlayerVitals.ActiveClass > 0 ? PlayerVitals.ActiveClass
             : SessionCarry.Character?.ClassId ?? -1;
 
+    private void OnClassesChanged()
+    {
+        if (_win?.Visible == true) Refresh();
+    }
+
     private void Refresh()
     {
         if (_lastActive <= 0) _lastActive = CurrentClass;
@@ -2113,6 +2145,7 @@ public partial class ClassWindow : Control
     private void RefreshSkills()
     {
         if (_regGrid == null || _classGrid == null) return;
+        if (_win?.Visible != true) return;   // l'ouverture rappelle Refresh()
         try { RefreshSkillsCore(); }
         catch (Exception ex)
         {

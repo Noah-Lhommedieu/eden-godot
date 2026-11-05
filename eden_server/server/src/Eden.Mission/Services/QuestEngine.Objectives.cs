@@ -728,7 +728,7 @@ public sealed partial class QuestEngine
         CharContext c, int groupId)
     {
         // Sync du niveau/gender live (les conditions les consomment).
-        var (lvl, gender) = await _db.GetLevelGenderAsync(c.CharUid);
+        var (lvl, gender, _) = await _db.GetLevelGenderNodeAsync(c.CharUid);
         c.Level = lvl; c.Gender = gender;
         foreach (var m2 in _data.Missions.Where(x => x.TriggerGroup == groupId))
         {

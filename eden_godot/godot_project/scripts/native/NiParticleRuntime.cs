@@ -19,6 +19,7 @@ internal sealed class NiParticleRuntime : IFxDriver
     readonly MultiMesh _mm;
     readonly float[] _buf;
     readonly bool _world, _sort;
+    bool _diagDone, _diagRigid;
     Transform3D _frame, _frameInv;
     bool _frameSet;
     // Émetteur mesh skinné : re-posé par frame depuis les Skeleton3D
@@ -71,10 +72,9 @@ internal sealed class NiParticleRuntime : IFxDriver
             node.SetMeta("nif_block", ps.Block);
             host.Nodes[ps.Block] = node;
         }
-        // Les géométries émettrices ne se dessinent pas.
-        foreach (var e in ps.Of<NifPSysEmitter>())
-            foreach (var mb in e.MeshBlocks)
-                if (host.NodeOf(mb) is { } mn) mn.Visible = false;
+        // Un émetteur peut doubler comme géométrie visible (corps r502 : PArray01
+        // émet depuis R502:0/1) — Gamebryo le dessine ; la visibilité vient du
+        // flag Hidden du NIF, déjà appliqué par NifScene (émetteurs r253).
 
         var nm = ps.Properties.OfType<EdenClient.World.NifMaterial>().FirstOrDefault();
         var tex = ps.Properties.OfType<NifTexturingProperty>().FirstOrDefault();
@@ -222,8 +222,31 @@ internal sealed class NiParticleRuntime : IFxDriver
             _sim.EmitterTransform = NativeFx.ToMatrix(_frameInv * nodeG);
         }
         Reskin();
+        if (!_diagRigid && System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "2" && _node.IsInsideTree())
+        {
+            _diagRigid = true;
+            var g = _node.GlobalTransform; var mp = _sim.Def.Emitter.MeshPoints;
+            var c = Godot.Vector3.Zero;
+            if (mp != null && mp.Length > 0) { foreach (var q in mp) c += new Godot.Vector3(q.X, q.Y, q.Z); c /= mp.Length; }
+            var cw = g * c;
+            GD.Print($"[psdiag3] {_ps.Name} nodeParent={_node.GetParent()?.Name} nodeGlobal={g.Origin.X:0.00},{g.Origin.Y:0.00},{g.Origin.Z:0.00} meshPts={mp?.Length} centroidWorld={cw.X:0.00},{cw.Y:0.00},{cw.Z:0.00} skinned={_skin != null}");
+        }
         _sim.Step(dt);
         FillBuffers();
+        if (System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "5" && _node.IsInsideTree() && _world)
+        {
+            var mv = Vector3.Zero; var mp = Vector3.Zero; int nn = 0;
+            foreach (var p in _sim.Particles) { mv += p.Velocity; mp += p.Position; nn++; }
+            if (nn > 0)
+            {
+                mv /= nn; mp /= nn;
+                // particules en espace frame → monde via _frame
+                var fb = _frame.Basis;
+                var wv = fb * new Godot.Vector3(mv.X, mv.Y, mv.Z);
+                var wp = _frame * new Godot.Vector3(mp.X, mp.Y, mp.Z);
+                GD.Print($"[psvel] {_ps.Name} n={nn} velWorld=({wv.X:F3},{wv.Y:F3},{wv.Z:F3}) posWorld=({wp.X:F2},{wp.Y:F2},{wp.Z:F2})");
+            }
+        }
     }
 
     /// <summary>Re-pose les sous-meshes d'émetteur skinnés dans l'espace du
@@ -252,6 +275,19 @@ internal sealed class NiParticleRuntime : IFxDriver
             }
         }
         _skin.Reskin(_bw, pts, e.MeshNormals);
+        if (!_diagDone && System.Environment.GetEnvironmentVariable("EDEN_FX_DIAG") == "2")
+        {
+            _diagDone = true;
+            var c = Godot.Vector3.Zero;
+            foreach (var q in pts) c += new Godot.Vector3(q.X, q.Y, q.Z);
+            c /= Math.Max(1, pts.Length);
+            var cw = nodeG * c;
+            var names = string.Join(",", Enumerable.Range(0, _bind.Length).Where(i => _bind[i] != null)
+                .SelectMany(i => _bind[i]!.Bones.Select(bi => bi >= 0 ? _bind[i]!.Sk.GetBoneName(bi) : "?")).Distinct());
+            var hb = _bind[0]!.Sk.FindBone("Bip01 Head");
+            var hp = hb >= 0 ? _bind[0]!.Sk.GlobalTransform * _bind[0]!.Sk.GetBoneGlobalPose(hb).Origin : Godot.Vector3.Zero;
+            GD.Print($"[psdiag2] {_ps.Name} pts={pts.Length} centroidWorld={cw.X:0.00},{cw.Y:0.00},{cw.Z:0.00} headBone={hp.X:0.00},{hp.Y:0.00},{hp.Z:0.00} bones={names} nodeParent={_node.GetParent()?.Name}");
+        }
     }
 
     void FillBuffers()

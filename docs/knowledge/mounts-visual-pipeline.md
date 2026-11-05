@@ -14,6 +14,20 @@ Session 2026-11-03 nuit : **fix émetteurs skinnés livré** (`EmitterSkin`
 Anomalies tranchées le 2026-11-03 : halos r014 (émissif non texturé →
 fix shader `NativeFx`), badge épée type ≠ 0 (type 1 = montures à
 sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
+Session 2026-11-04 (suite soir) : **sens des anims de flanc monture =
+MAPPING CROISÉ** (`MountAnimFor` : A→`move03`, D→`move02`) —
+le demandeur décrit le voulou : strafe-A = mouvement « droite vers
+gauche » = **penché dans le strafe**. Captures ride-lab 253010
+cam90/cam270 : A et D penchés dans le sens du strafe (validé).
+⚠️ Historique : le mapping a basculé natif↔croisé plusieurs fois parce
+que le client testé tournait des binaires obsolètes ; le verdict final
+repose sur les captures ci-dessus, pas sur la parole de l'audit.
+Mapping record→action conservé (9→102, 10→103) ; seul le choix de
+kf joué est croisé.
+**Audit attachement yeux r253** (sonde headless `NifAttachDiag` :
+déjà skinné à `Bip01 Head`, 0 bind pendant — aucun patch requis).
+Mesures conservées ci-dessous (move02 = flanc droit, move03 = gauche,
+espace rendu ET fichier concordants).
 
 ## Statut par point
 
@@ -23,7 +37,8 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
 | Attache cavalier = nœud `L17` animé (natif `CRide::Attach`, rf_game `FUN_0073fc60`) + RideSeat orthonormé + repli RideFit si L17 absent/aberrant | verified | `eden_godot/docs/MONTURES-L17.md` ; `RideSeatMathTests` |
 | Textures manquantes = surfaces référençant `nif_tex` sans albedo ; meshes cachés/aides sans texture ≠ trou de données. **Analyse du 2026-11-03 : les 29 FAIL du sweep ont TOUS `notex>0`, aucun ne manque `stand01`** — faux positifs de l'ancien critère (toute surface sans AlbedoTexture, ex. 21 surfaces sur r253) | verified (code + tsv) | `RideLab.Finish` — `notex` ne compte que les références non résolues (`nif_tex` meta copiée par `ToonMaterializer` :414,515), `untx` = info |
 | `move01` non requis pour le statut OK (ex. r711 « Tour à Canon » sans marche, natif) | verified (code) | `RideLab.Finish`, note `noMove` |
-| Anims directionnelles montées : A→`move02`/yaw +90, D→`move03`/yaw −90, WA/WD ±45° (`DirectionalLocomotion`, `MountSideAnims`) | verified (tests + **captures 2026-11-04**) | `DirectionalLocomotionTests` ; `artifacts/ride-lab/{cam90,cam270}` — r253/r014 : A = arrière cam90 / face cam270, D = miroir exact → **non inversés** ; r091 : modèle symétrique ±90 identique au pixel (pivot prouvé via STAND≠A) ; r711 : aucune anim de marche (donnée native, `noMove`) |
+| Anims directionnelles montées : corps/cavalier ET monture A→`move02`, D→`move03` (mapping natif records 9/10 → actions 102/103), ±45°/±90° facing (`DirectionalLocomotion`, `MountSideAnims`) | verified (natif + tests 2026-11-04) | `DirectionalLocomotionTests.Mount_SideAnims_NativeRecords` ; `artifacts/ride-lab/{cam90,cam270}` — r253/r014 : A = arrière cam90 / face cam270, D = miroir exact → pivot correct ; r091 : modèle symétrique ±90 identique au pixel (pivot prouvé via STAND≠A) ; r711 : aucune anim de marche (donnée native, `noMove`) |
+| **Contenu KF des flancs monture** — sondes CPU (`KfPose`+skinning) et rendu (`--probe` ride-lab, repère holder ±90° défait) CONCORDANTES : `move02` cambre la tête `Bip01 Head` vers le **flanc DROIT** (+X rendu / −X fichier, L-bones `Bip01 L*` à −X rendu) et `move03` vers la **GAUCHE**. Les .kf perso penchent dans le strafe (move02 = gauche) ; les .kf monture penchent **hors** du strafe — convention du contenu natif, fidèlement reproduite par le mapping non croisé. `MountAnimFor` : `Left→move02`, `Right→move03`, `Back*→move04`, diagonales/avant→`move01` ; corps `AnimFor`, cavalier `EntityAnimator.RiderAnimFor` (move02→ride05, move03→ride06). Le croisement appliqué le 2026-11-04 matin a été **réverté le soir même** : retour demandeur = « inversé » → attendu = mapping natif | verified (mesure + tests + sonde 2026-11-04) | `PlayerController:1182`, `EntityRegistry:1154`, `RideLab` ; `DirectionalLocomotionTests.Mount_SideAnims_NativeRecords` ; move04 = recul (bassin +0,42 Y, cycle 1,07 s) ; aucun mirror/scale négatif natif (`reindex` « mirror » : aucun usage monture) ; captures `artifacts/ride-lab/fixdir-cam{90,270}/` (r25310 STAND/W/A/D) + `probe-25310/run.log` (X(t) tête/mains) |
 | **« Inversion » live des anims directionnelles = boucle de rétroaction caméra debug, PAS le mapping anim** — `_Process` recuisait `_yaw = ModelYaw + _dbgYaw` alors que `ModelYaw` contient déjà le `FaceOffset` ±90° : le cap gonflait à chaque frame (run avant : `modelYaw` 644→1889→2036°, `camYaw` 2036° en ~4 s). Fix `PlayerController.cs` : `_faceBase` = cap hors `FaceOffset` (clavier→`_yaw` hors debug, clic→`targetYaw`, **gelé sous `_dbgYawOn`** car `_yaw` y est dérivé) ; la caméra debug lit `_faceBase + _dbgYaw`. | verified (**run réel input 2026-11-03**) | `tools/ride-script.sh 14010` (touches injectées via `Input.ParseInputEvent`, `DebugCam` actif — même chemin que le live `ride_key.txt`) : camYaw **120° constant**, modelYaw STAND=0 / W=120 / **A=210 (+90)** / **D=30 (−90)** / S=120, anims `move01/02/03/04` correctes (`artifacts/ride-script/14010/run.log` ; le run avant-fix montrait `modelYaw` 644→1889→2036° et `camYaw` 2036° — chiffres consignés ici, PNG écrasés) |
 | Vitesse d'anim : monté 100 %→×1.0, 150 %→×1.5, pied 20 %→×1.0, bornes 1–3 | verified | `MoveAnimSpeedTests` (InlineData 100/150/200/35/900, 0/20/30/40) |
 | Vitesse distante : dérivée du déplacement snapshot (`EntityRegistry.ObserveSpeed`, base pied 6 u/s, lissage 0.4) — pas de champ protocole ajouté (pas de preuve native) | verified (code) | `ServerMoveSpeedTests` |
@@ -35,6 +50,9 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
 | Sweep complet hors archive | verified (2026-11-04) | `artifacts/mount-sweep-lab2/results.tsv` : 90 lignes TSV = **58 rideKeys uniques**, 58 OK / **0 FAIL**, `notex=0` partout ; seule note `noMove` sur r711 (natif) — les 29 faux FAIL `notex` passent tous |
 | Particules émetteurs mesh **skinnés** re-posées par frame (`EmitterSkin` pur + `NiParticleRuntime.Reskin`, pose `Skeleton3D`/`AnimationPlayer`) — émetteurs rigides inchangés | verified (tests + **captures A/B 2026-11-03**) | Eden.Core.Tests +5 (966 verts, coût 3,5–24 µs/psys) ; `artifacts/ride-lab/skinfix-{off,on}/` r014+r253 `STAND:1,W:1,A:1` |
 | VfsReadGuardTests | verified (2026-11-04) | `RideLab` (StreamReader/DirectoryInfo) et `RideProbe` (DirectoryInfo) n'utilisent plus les API plafonnées — fichiers de contrôle `/tmp`/TSV, pas de donnée corpus ; test 2/2 vert |
+
+|| **Scroll UV des textures animées** (flammes coulant le long des queues r253, `R25351.dds` sur les rubans, 4 `NiTextureTransformController` op=1 = trans V) : le sens dépend de `NativeFxOptions.InvertV` → `MatState.Apply` envoie `±Tv` dans `uv_offset`. Il était `true` par défaut (calibré sur `DemoTree` qui flippe V) alors que `NifScene` copie les UV bruts → motif pointe→base au lieu de base→pointe, sur **tous** les modèles NIF (montures + effets de sorts). Fix : `InvertV=false` par défaut, `true` seulement dans `NativeFxDemo` | verified (données : V=0 à la pointe des rubans + in-game 2026-11-04) | `NativeFx.cs`, `NativeFxDemo.cs` |
+|| **Meshes émetteurs masqués** : `NiParticleRuntime` rendait `Visible=false` TOUT mesh référencé par un `NiPSysMeshEmitter` (« les géométries émettrices ne se dessinent pas ») — faux : Gamebryo les dessine si non cachés. r502 (Dragon Illusoire) émet depuis R502:0/1 = **tout le corps** → dragon invisible (rider + particules seules). 48/159 montures + 38/531 mobs avaient des émetteurs = meshes visibles. Fix : bloc supprimé — le flag `Hidden` du NIF décide (déjà appliqué par `NifScene`) | verified (données + captures r502/r151/r253 2026-11-04) | `NiParticleRuntime.cs` |
 
 ## Points non prouvés / limites
 
@@ -139,6 +157,64 @@ sorts), commandes 3024 (heal one-shot) / 2055 (mort natif).
   signalé n'est pas reproductible sur le chemin natif actuel. `verified`
   (flags NIF + captures) ; la comparaison pixel-perfect avec le client
   oracle reste `hypothesis`.
+- **« Bloc noir » sur la toile — cause réelle trouvée et corrigée
+  (2026-11-04)** : ce n'était ni l'alpha ni l'outline mais le **blob
+  shadow `Decal`** (`BlobShadow.Make`, volume 3 m posé sous chaque
+  entité — `EntityRegistry` ~1818, `PlayerController` ~179,
+  `MapLoader` ~1052). Sans `CullMask`, le Decal se projetait sur
+  TOUS les meshes dans sa boîte, dont le modèle de l'entité
+  elle-même : ellipse noire plaquée sur le quad alpha-test de la
+  toile → « bloc noir de texture ». Reproductible uniquement en jeu
+  réel (les bancs ne posent pas de blob — flag `--blob` de VisTest
+  ajouté pour ça). Fix : visuels d'entités passés sur la couche
+  visuelle 2 (`BlobShadow.ExemptVisuals`, appelé depuis
+  `RelayoutOverhead` — couvre corps/monture/équipement/labels), et
+  `Decal.CullMask = toutes couches sauf 2`. Preuve : capture VisTest
+  `--mob=M609 --blob` — toile translucide, 0 bloc noir ; ombre au sol
+  conservée. Le même mécanisme assombrissait le capot des
+  champignoïdes (« skin presque mort » à full HP, D4). `verified`
+  (capture).
+- **Yeux r253 « parentés à la racine » — déjà attachés via le skin,
+  aucun patch requis (2026-11-04, sonde headless)** : `eye light`
+  (NiTriShape blk 483, tex `R25353.dds`, matériau émissif additif
+  natif `dst=ONE` → `BlendModeEnum.Add`) a bien son nœud AV sous
+  `Scene Root` — **mais il est skinné à `Bip01 Head`** : `NifScene`
+  le place sous le `Skeleton3D` avec un bind résolu, donc il suit
+  l'os tête (le parenting du graphe est ignoré pour les meshes
+  skinnés, comme dans Gamebryo). Mesures (`NifAttachDiag`,
+  `--headless`, même assemblage que `BuildRideVisual`) :
+  - repos : centroïde œil (−0,00 ; 2,66 ; −1,86) vs tête
+    (−0,00 ; 2,56 ; −1,37) → sur la face, 0,5 m devant le pivot
+    (museau) ;
+  - crâne (verts w>0,5 sur tête) : AABB Y −2,34…−1,07 — l'œil
+    (Y −1,98…−1,68, X ±0,32 vs crâne ±0,33) est **dans** l'enveloppe,
+    affleurant la surface ;
+  - tête pivotée +45° : l'œil suit (−1,86→−1,19, +0,37 haut) →
+    **attaché à l'os** ;
+  - audit complet : 1 squelette/100 os, **0 bind pendant, 24
+    BoneAttachment3D OK** (Bip01 Ponytail1, Ear Bone 01/02, Bone04-82) ;
+    billboard œil `Plane` (blk 37, 4 verts) sous `Plane04`→`Bip01 Head`
+    → attachment résolu ;
+  - corpus : **0** mesh rigide près-tête hors chaîne osseuse sur tous
+    les `ride/model/*.nif` → aucun vrai cas « œil racine » ;
+  - NiSkinData `m_transform` (global) : non-identitaire sur la plupart
+    des shapes r253 **y compris les corrects** → vérifié inutile
+    (ignoré au parsing, `NifFile.cs:1190` — les offsets encodent déjà
+    skin→os sur les verts bruts ; appliquer G dégrade tout, mesuré
+    4–7 m d'erreur). L'écart skinné-vs-`s.Vertices` des `PlaneNN`
+    (0,4–1,3 m, ailerons dorés ARRIÈRE) est une métadonnée de transform
+    de nœud périmée, pas un décalage de rendu — le natif rend les verts
+    skinnés.
+  - Limite : si un défaut visuel persiste in-game il est
+    matériau/visibilité, pas attachement — le point de vérif est
+    `NifAttachDiag` (0 bind pendant). **Captures ride-lab refaites
+    2026-11-04** (`artifacts/ride-lab/fixdir-cam{90,270}/` r25310,
+    STAND/W/A/D aux deux azimuts + sonde `--probe`
+    `artifacts/ride-lab/probe-25310/`) : la bande tête inspectée ne
+    montre **aucun quad œil détaché** (œil dans l'enveloppe crâne
+    confirmée : centroïde (−0,00 ; 2,66 ; −1,86) sur le museau) —
+    aucune anomalie d'attachement visible au rendu ; reste à
+    confirmer en live client.
 - Caméra ride-lab : `--cam=…,dist` est un facteur de la hauteur
   (×h/6, plancher 3) — pour les grosses montures boîte (r091), dist
   < ~8 place la caméra DANS la coque ; les runs cam90/cam270 du

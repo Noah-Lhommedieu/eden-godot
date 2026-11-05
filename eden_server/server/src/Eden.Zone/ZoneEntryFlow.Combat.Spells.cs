@@ -865,7 +865,8 @@ public sealed partial class ZoneEntryFlow
                 : session;
             await AddPlayerEnchantAsync(statusSession, tst,
                 (int)st.CharId, def.ResultSpellId,
-                def.Value + GetSpellAttrModify(st, 9, spellId),
+                EnchantRestSeconds(
+                def.Value + GetSpellAttrModify(st, 9, spellId)),
                 statusLevel, CancellationToken.None,
                 hidden: def.Value == -9);
         }

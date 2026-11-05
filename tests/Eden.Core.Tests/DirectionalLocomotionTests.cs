@@ -71,6 +71,29 @@ public class DirectionalLocomotionTests
         Assert.Equal("move03", DirectionalLocomotion.AnimFor(5, true));
     }
 
+    [Fact]
+    public void Mount_SideAnims_NativeRecords()
+    {
+        // Penché dans le strafe (demandeur, itérations répétées) :
+        // move03 = flanc gauche anatomique (os Bip01 L* à −X, sonde
+        // rendu) → A/record 3 ; move02 = droit → D/record 5. Le
+        // mapping natif 102/103 produit le penché inverse (hors
+        // strafe) — écart consigné dans mounts-visual-pipeline.md.
+        Assert.Equal("move03", DirectionalLocomotion.MountAnimFor(3));
+        Assert.Equal("move02", DirectionalLocomotion.MountAnimFor(5));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(7));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(6));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(8));
+        Assert.Equal("move04", DirectionalLocomotion.MountAnimFor(1));
+        Assert.Equal("move04", DirectionalLocomotion.MountAnimFor(0));
+        Assert.Equal("move04", DirectionalLocomotion.MountAnimFor(2));
+        var saved = DirectionalLocomotion.MountSideAnims;
+        DirectionalLocomotion.MountSideAnims = false;
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(3));
+        Assert.Equal("move01", DirectionalLocomotion.MountAnimFor(5));
+        DirectionalLocomotion.MountSideAnims = saved;
+    }
+
     [Theory]
     [InlineData(7, "move01")]
     [InlineData(3, "move02")]

@@ -141,9 +141,12 @@ public sealed partial class ZoneEntryFlow
             Field3 = (int)st.CharId,
         }, CancellationToken.None);
         // 326 — le mob part vers le joueur (même flux de marche que
-        // la riposte mêlée).
+        // la riposte mêlée). dst = le cercle d'arrêt mêlée, pas la
+        // position du joueur : engagé à portée le mob rendu marchait
+        // jusque dans le modèle du perso.
+        var (gx, gy) = MeleeChaseDst(st, mob.X, mob.Y);
         await SendMovePredictionAsync(session, mob.Handle,
-            mob.X, mob.Y, st.PosX, st.PosZ, CancellationToken.None);
+            mob.X, mob.Y, gx, gy, CancellationToken.None);
         StartMobCombatLoop(session, st, mob);
     }
 }

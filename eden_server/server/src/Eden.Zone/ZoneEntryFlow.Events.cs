@@ -135,8 +135,11 @@ public sealed partial class ZoneEntryFlow
 
     /// <summary>Exécute l'événement `eventId` de la scène `scene` pour
     /// le personnage `st` — équivalent de TriggerArea natif. Retourne
-    /// true si un Event_Transport a migré le joueur.</summary>
-    private async Task<bool> RunSceneEventAsync(NetSession session,
+    /// true si un Event_Transport a migré le joueur. `session` peut
+    /// être null (events de cycle de vie des reborn — timers/cristaux
+    /// sans joueur déclencheur) : les actions purement personnelles
+    /// (Transport/buffs/achievements) sont alors ignorées.</summary>
+    private async Task<bool> RunSceneEventAsync(NetSession? session,
         EntryState st, SceneParser.Scene scene, int eventId,
         CancellationToken token, int depth = 0)
     {
@@ -168,6 +171,127 @@ public sealed partial class ZoneEntryFlow
             }
         }
         return transported;
+    }
+
+    /// <summary>Événement de scène tiré par le cycle de vie d'un
+    /// reborn (mort d'un cristal / fin de timer d'invasion) — natif :
+    /// <c>CRebornMonster::OneDie</c> et <c>Born</c> appellent
+    /// <c>CSceneEventCmds::ExecuteCommand(serverId, reborn, chid)</c>
+    /// avec la clef de la ligne (<see cref="ZoneLiveWorld.LiveMob.
+    /// DeathEventId"/> col8 / <c>BornEventId</c> col9). Fabrique un
+    /// EntryState de contexte (node+instance) — les events 據點
+    /// n'ont que des conditions/actions de node.</summary>
+    private async Task<bool> RunNodeSceneEventAsync(int nodeId,
+        int inst, int eventId, NetSession? session,
+        CancellationToken token)
+    {
+        var scene = _services.Scenes.GetScene($"S{nodeId:D3}");
+        if (scene == null) return false;
+        EdenLog.Write($"[Zone-Event] node={nodeId} inst={inst} " +
+            $"event={eventId} (reborn lifecycle)");
+        var st = new EntryState
+        {
+            NodeId = (short)nodeId,
+            InstanceGroup = inst,
+        };
+        return await RunSceneEventAsync(session, st, scene, eventId,
+            token);
+    }
+
+    /// <summary>Sessions migrées d'une cellule (node, instance) —
+    /// destinataires des diffusions d'events sans déclencheur.</summary>
+    private IEnumerable<NetSession> NodeSessions(int nodeId, int inst) =>
+        _services.Sessions.All.Where(s =>
+            _states.TryGetValue(s.SessionId, out var ost) &&
+            ost.Migrated && ost.NodeId == nodeId &&
+            ost.InstanceGroup == inst);
+
+    /// <summary>Timers reborn armés (node,inst,spawnId) — évite de
+    /// reprogrammer naissance/expiration à chaque tick ; réarmé quand
+    /// le groupe meurt puis renaît (cycle horaire 56038).</summary>
+    private readonly ConcurrentDictionary<long, byte> _bornTimerArmed =
+        new();
+
+    private static long BornKey(int nodeId, int inst, int spawnId) =>
+        ((long)nodeId << 40) | ((long)inst << 20) | (uint)spawnId;
+
+    /// <summary>Arme le cycle de vie d'un groupe reborn — appelée par
+    /// le tick wander pour chaque cellule peuplée. Deux déclencheurs
+    /// natifs distincts (preuve : lignes S005) :
+    ///   • col9 (reborn+0x38) : event tiré À LA NAISSANCE du groupe
+    ///     (ScriptEntry '\b' du Born natif) — 56038 → event 1
+    ///     (invasion), ~1 s après le spawn effectif ;
+    ///   • col11 (info+0x34) : DURÉE DE VIE — mort naturelle du groupe
+    ///     à born+TTL, qui évalue alors la clef col8 comme une mort
+    ///     ordinaire (56039 : 420 s → event 2 « 7分後關閉 » ;
+    ///     60019 : 1200 s → event 4 retour au cristal bleu).</summary>
+    private void ArmBornTimers(int nodeId, int inst,
+        SceneParser.Scene scene)
+    {
+        foreach (var spawn in scene.Monsters)
+        {
+            if (spawn.BornEventId <= 0 && spawn.LifetimeSeconds <= 0)
+                continue;
+            var anyAlive = _services.Live
+                .GroupMobs(nodeId, inst, spawn.AreaId)
+                .Any(m => m.Alive);
+            var key = BornKey(nodeId, inst, spawn.AreaId);
+            if (!anyAlive)
+            {
+                _bornTimerArmed.TryRemove(key, out _);
+                continue;
+            }
+            if (!_bornTimerArmed.TryAdd(key, 1)) continue;
+            if (spawn.BornEventId > 0)
+                ScheduleOnLoop(TimeSpan.FromSeconds(1),
+                    ct => FireBornEventAsync(nodeId, inst, spawn, ct));
+            if (spawn.LifetimeSeconds > 0)
+                ScheduleOnLoop(
+                    TimeSpan.FromSeconds(spawn.LifetimeSeconds),
+                    ct => ExpireBornGroupAsync(nodeId, inst, spawn, ct));
+        }
+    }
+
+    /// <summary>Event de naissance d'un reborn (col9) — tiré seulement
+    /// si le groupe est encore vivant (Born natif ne rejoue pas un
+    /// script sur un groupe mort entre-temps).</summary>
+    private async Task FireBornEventAsync(int nodeId, int inst,
+        SceneParser.MonsterSpawn spawn, CancellationToken token)
+    {
+        if (!_services.Live.GroupMobs(nodeId, inst, spawn.AreaId)
+                .Any(m => m.Alive))
+            return;
+        await RunNodeSceneEventAsync(nodeId, inst, spawn.BornEventId,
+            null, token);
+    }
+
+    /// <summary>Mort de vieillesse d'un groupe reborn (col11 écoulé) :
+    /// chaque mob vivant tombe par <see cref="KillSceneMobAsync"/> —
+    /// la clef col8 s'évalue exactement comme sur un kill joueur
+    /// (OneDie natif), puis le respawn naturel col4 repart
+    /// (56038 : cycle 3600 s ≈ 1 h ; 56039/cristaux : col4=0,
+    /// fin de vie définitive jusqu'au prochain event).</summary>
+    private async Task ExpireBornGroupAsync(int nodeId, int inst,
+        SceneParser.MonsterSpawn spawn, CancellationToken token)
+    {
+        var group = _services.Live
+            .GroupMobs(nodeId, inst, spawn.AreaId)
+            .Where(m => m.Alive).ToList();
+        if (group.Count == 0) return;
+        EdenLog.Write($"[Zone-Event] node={nodeId} spawn={spawn.AreaId} " +
+            $"fin de vie (+{spawn.LifetimeSeconds}s)");
+        foreach (var mob in group)
+        {
+            await KillSceneMobAsync(nodeId, inst, mob, mob.Handle);
+            // Le respawn de la ligne recrée le cycle — KillSceneMob
+            // ne le programe pas (cycle porté par les events, sauf
+            // timers : col4>0 = rebirth naturel horaire).
+            if (mob.RowRespawnSeconds > 0)
+            {
+                mob.NoRespawn = false;
+                ScheduleRespawn(mob);
+            }
+        }
     }
 
     /// <summary>Évalue une condition Event_If_* — false bloque la
@@ -267,7 +391,7 @@ public sealed partial class ZoneEntryFlow
 
     /// <summary>Exécute une action Event_* ; retourne true uniquement
     /// quand un transport a eu lieu (le perso a quitté le node).</summary>
-    private async Task<bool> RunSceneActionAsync(NetSession session,
+    private async Task<bool> RunSceneActionAsync(NetSession? session,
         EntryState st, SceneParser.Scene scene, SceneParser.SceneEvent.Cmd a,
         CancellationToken token, int depth)
     {
@@ -278,6 +402,7 @@ public sealed partial class ZoneEntryFlow
             // l'arrivée = aire gateway pairée (même LinkKey) ou position.
             case "Event_Transport":
             {
+                if (session == null) return false;
                 var target = A(0);
                 if (target <= 0) return false;
                 var dest = _services.Scenes.GetScene($"S{target:D3}");
@@ -299,9 +424,16 @@ public sealed partial class ZoneEntryFlow
                     token);
                 return true;
             }
-            // ScreenMessage idx — message système 316 (texte T_TextIndex).
+            // ScreenMessage idx — message système 316 (texte
+            // T_TextIndex). Sans session déclencheuse (event node
+            // issu d'un cycle reborn), diffusion à tout le node.
             case "Event_ScreenMessage":
-                await SendTextIndexAsync(session, (short)A(0), token);
+                if (session != null)
+                    await SendTextIndexAsync(session, (short)A(0), token);
+                else
+                    foreach (var s in NodeSessions(st.NodeId,
+                            st.InstanceGroup))
+                        await SendTextIndexAsync(s, (short)A(0), token);
                 return false;
             // RebornMonster spawnId mode delay — 5=faire naître le
             // groupe, 6=le retirer ; delay==8 → clear immédiat du handle
@@ -395,10 +527,12 @@ public sealed partial class ZoneEntryFlow
             // GiveBuff ? enchantId durée — enchant jeté sur le joueur
             // qui déclenche (292 EffectReport comme les buffs objet).
             case "Event_GiveBuff":
-                await ApplyEventBuffAsync(session, st, A(1), A(2), token);
+                if (session != null)
+                    await ApplyEventBuffAsync(session, st, A(1), A(2), token);
                 return false;
             case "Event_DeleteBuff":
-                await RemoveEventBuffAsync(session, st, A(1), token);
+                if (session != null)
+                    await RemoveEventBuffAsync(session, st, A(1), token);
                 return false;
             // TriggerEvent eventId — chaîne vers un autre événement.
             case "Event_TriggerEvent":
@@ -424,14 +558,16 @@ public sealed partial class ZoneEntryFlow
             // zone : TC_SetAchievement @0x083d51d0 — flag!=0 ET team
             // → grant à tous les membres locaux, sinon l'exécutant.
             case "Event_SetAchievement":
-                await GrantSceneAchievementAsync(session, st, A(0),
-                    A(1), token);
+                if (session != null)
+                    await GrantSceneAchievementAsync(session, st, A(0),
+                        A(1), token);
                 return false;
             // Variante NPC : token2 ignoré par le natif (id décoratif),
             // le flag d'équipe est le token 3.
             case "Event_SetAchievementNPC":
-                await GrantSceneAchievementAsync(session, st, A(0),
-                    A(2), token);
+                if (session != null)
+                    await GrantSceneAchievementAsync(session, st, A(0),
+                        A(2), token);
                 return false;
             default:
                 // Verbes non encore portés (Event_EventTimeDelay…)

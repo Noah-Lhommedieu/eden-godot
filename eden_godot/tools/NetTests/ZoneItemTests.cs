@@ -246,4 +246,39 @@ public class ZoneItemTests
         Assert.Equal((1u << 7) | (1u << 8), ZoneItemActions.LocMask(7));
         Assert.Equal(1u << 7, ZoneItemActions.LocMask(9));
     }
+
+    /// <summary>Déséquipe d'une page d'ensemble (fast-dress) :
+    /// SrcIndex = conteneur page 2/3/4 — natif
+    /// <c>UnEquip</c> accepte le groupe ; aucune règle « armure
+    /// minimale » n'existe (désasm <c>CItemFactory::UnEquip</c>
+    /// @0x0808dfd0 — dst −1 → premier slot libre).</summary>
+    [Theory]
+    [InlineData(0)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void UnequipRequest_PageGroup(int group)
+    {
+        var un = ZoneItemActions.UnequipRequest(2, group);
+        Assert.Equal(1, un.SrcType);
+        Assert.Equal(2, un.SrcSlot);
+        Assert.Equal(group, un.SrcIndex);
+        Assert.Equal(0, un.DstType);
+        Assert.Equal(-1, un.DstSlot);
+        Assert.Equal(-1, un.DstIndex);
+    }
+
+    /// <summary>2H (type 9) reste sur loc 7 même occupée — jamais de
+    /// reroutage vers 8 (bug live côté serveur documenté dans
+    /// ResolveEquipLocAsync) ; seules les 1H (7/19) dual-wieldent.</summary>
+    [Fact]
+    public void PredictEquipLoc_TwoHandedNeverOffhand()
+    {
+        var worn = new Dictionary<int, int> { [7] = 1009 };
+        Assert.Equal(7, ZoneItemActions.PredictEquipLoc(9, worn));
+        // Bouclier (type 8) → toujours loc 8.
+        Assert.Equal(8, ZoneItemActions.PredictEquipLoc(8, null));
+        // Arc/arme longue (type 35) → loc 10.
+        Assert.Equal(10, ZoneItemActions.PredictEquipLoc(35, null));
+    }
 }

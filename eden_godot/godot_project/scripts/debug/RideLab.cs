@@ -52,6 +52,8 @@ public partial class RideLab : Node3D
             else if (a.StartsWith("--shots=")) _dir = a[8..];
             else if (a.StartsWith("--sweep=")) _sweep = a[8..];
             else if (a.StartsWith("--rider=")) _rider = a[8..];
+            else if (a.StartsWith("--burst=")) _burst = int.Parse(a[8..]);
+            else if (a == "--probe") _probe = true;
             else if (a.StartsWith("--cam="))
             {
                 var p = a[6..].Split(',');
@@ -148,6 +150,7 @@ public partial class RideLab : Node3D
         if (_ra != null) _ra.RideMount = _ma;
         if (!onL17) _notes.Add("noL17");
         _ma?.PlayLoop("stand01");
+        if (_probe) DumpMeshes();
         FrameCamera();
         return true;
     }
@@ -190,12 +193,16 @@ public partial class RideLab : Node3D
         if (rec >= 0)
         {
             var anim = DirectionalLocomotion.AnimFor(rec, true);
-            _ma.MoveAnim = anim; _ra.MoveAnim = anim;
+            _ra.MoveAnim = anim;
+            _ma.MoveAnim = DirectionalLocomotion.MountAnimFor(rec);
             _holder.Rotation = new Vector3(0f, DirectionalLocomotion.FaceOffset(rec, true), 0f);
             _ra.InputMoving = true;
         }
         else switch (name)
         {
+            case "M01": case "M02": case "M03": case "M04":
+                _ma.MoveAnim = "move" + name[1..]; _ra.MoveAnim = DirectionalLocomotion.AnimFor(DirectionalLocomotion.Fwd);
+                _ra.InputMoving = true; break;
             case "J": _ra.InputMoving = true; _ra.Airborne = true; break;
             case "ATK": _ra.PlayOnce("attack01"); break;
             case "ATK2": _ra.PlayOnce("attack02"); break;
@@ -239,16 +246,168 @@ public partial class RideLab : Node3D
                 _shots = 1;
             }
         }
+        else if (_burst > 0)
+        {
+            if (_probe) Sample();
+            if (_burstDone < _burst && _t > st.Secs * (_burstDone + 1f) / (_burst + 1f))
+            {
+                RenderingServer.ForceDraw();
+                GetViewport().GetTexture().GetImage().SavePng(
+                    $"{_dir}/{_keys[_ki]}-{_si:D2}-{st.Name}-f{_burstDone:D2}.png");
+                _burstDone++;
+            }
+        }
         else
         {
             if (_shots == 0 && _t > st.Secs * 0.5f) { Shoot("a"); Log(st.Name); }
             else if (_shots == 1 && _t > st.Secs * 0.9f) Shoot("b");
         }
         if (_t < st.Secs) return;
+        if (_probe) ReportProbe(st.Name);
+        _burstDone = 0;
         _si++; _shots = 0; _stepStarted = false;
     }
 
     private bool _stepStarted;
+
+    // --burst=N : N captures espacées sur toute la durée du pas (séquence
+    // d'une même anim). --probe : trajectoire Z/Y des os (repère holder,
+    // cap = −Z) pendant chaque pas de marche, résumé loggé en fin de pas.
+    private int _burst;
+    private bool _probe;
+    private int _burstDone;
+    private readonly List<(float t, Dictionary<string, Vector3> p)> _samples = new();
+
+    private void DumpMeshes()
+    {
+        var hd = _mount!.FindChildren("*", "Skeleton3D", true, false).OfType<Skeleton3D>().FirstOrDefault();
+        var inv = _holder!.GlobalTransform.AffineInverse();
+        foreach (var mi in _mount.FindChildren("*", "MeshInstance3D", true, false).OfType<MeshInstance3D>())
+        {
+            var chain = ""; for (Node? q = mi; q != null && q != _mount; q = q.GetParent()) chain += q.GetType().Name + ":" + q.Name + (q is BoneAttachment3D ba ? "[bone=" + ba.BoneName + "]" : "") + "<";
+            GD.Print($"[ride-mesh] chain {chain}");
+            for (var sf = 0; sf < (mi.Mesh?.GetSurfaceCount() ?? 0); sf++)
+            {
+                var sb = mi.Mesh!.SurfaceGetArrays(sf)[(int)Mesh.ArrayType.Vertex].AsVector3Array();
+                if (sb.Length == 0) continue;
+                var mn = sb[0]; var mx = sb[0]; foreach (var v in sb) { mn = mn.Min(v); mx = mx.Max(v); }
+                var m = mi.GetActiveMaterial(sf);
+                var tx = m is StandardMaterial3D sm ? sm.AlbedoTexture?.ResourcePath : (m as ShaderMaterial)?.GetShaderParameter("albedo_tex").Obj is Texture2D t2 ? t2.ResourcePath : "?";
+                GD.Print($"[ride-surf] {mi.Name} s{sf} verts={sb.Length} tex={tx} meta={m?.HasMeta("nif_tex")} bind=({mn.X:0.00},{mn.Y:0.00},{mn.Z:0.00})-({mx.X:0.00},{mx.Y:0.00},{mx.Z:0.00})");
+            }
+            var bb = mi.GetAabb(); var c = inv * (mi.GlobalTransform * (bb.Position + bb.Size / 2));
+            GD.Print($"[ride-mesh] {mi.Name} vis={mi.Visible} skin={(mi.Skin != null)} parent={mi.GetParent()?.Name} sz={bb.Size.X:0.00},{bb.Size.Y:0.00},{bb.Size.Z:0.00} c={c.X:0.00},{c.Y:0.00},{c.Z:0.00}");
+        }
+    }
+
+    private void Sample()
+    {
+        if (_mount == null || _holder == null) return;
+        var inv = _holder.GlobalTransform.AffineInverse();
+        var d = new Dictionary<string, Vector3>();
+        foreach (var n in _mount.FindChildren("*", "Skeleton3D", true, false))
+            if (n is Skeleton3D sk)
+                for (var i = 0; i < sk.GetBoneCount(); i++)
+                    d[sk.GetBoneName(i)] = inv * (sk.GlobalTransform * sk.GetBoneGlobalPose(i)).Origin;
+        if (_body != null)
+            foreach (var n in _body.FindChildren("*", "Skeleton3D", true, false))
+                if (n is Skeleton3D rk)
+                    foreach (var bn in new[] { "Bip01 Head", "Bip01 R Hand", "Bip01 L Hand", "Bip01 Spine1" })
+                        if (rk.FindBone(bn) is var bi and >= 0)
+                            d["RIDER " + bn] = inv * (rk.GlobalTransform * rk.GetBoneGlobalPose(bi)).Origin;
+        _samples.Add((_t, d));
+    }
+
+    private void ReportProbe(string step)
+    {
+        if (_samples.Count < 4) { _samples.Clear(); return; }
+        var names = _samples[0].p.Keys.ToList();
+        // os "bas" : Y min sur le cycle le plus faible, hors racine
+        var low = names.Select(n => (n, ymin: _samples.Min(s => s.p[n].Y)))
+            .OrderBy(x => x.ymin).Take(6).ToList();
+        var head = names.FirstOrDefault(n => n.Contains("Head")) ?? "";
+        var zs = $"key={_keys[_ki]} step={step} frames={_samples.Count}";
+        if (head != "")
+            zs += $" headZ-rootZ={(_samples[0].p[head].Z - _samples[0].p[names[0]].Z):0.00} (neg=tete vers -Z=avant)";
+        GD.Print($"[ride-probe] {zs}");
+        // Latéralité : os L/R dans le repère holder (cap −Z ⇒ gauche = −X).
+        foreach (var n in names.Where(n => n.Contains(" L ") || n.Contains(" R ")).Take(40))
+            if (n.EndsWith("Toe0") || n.EndsWith("Hand") || n.EndsWith("Foot") || n.EndsWith("Clavicle") || n.EndsWith("Thigh"))
+                GD.Print($"[ride-probe]   lat {n} X={_samples[0].p[n].X:0.00}");
+        // Verdict : sens « avant » = côté de la tête (ou, sans os tête, de
+        // l'os le plus éloigné) ; en marche avant, les points d'appui
+        // doivent reculer (dZ de même signe que −avant).
+        float fwdSign = 0f, push = 0f, pushX = 0f;
+        if (head != "") fwdSign = Math.Sign(_samples[0].p[head].Z - _samples[0].p[names[0]].Z);
+        foreach (var (n, ymin) in low)
+        {
+            var ymax0 = _samples.Max(s => s.p[n].Y);
+            var thr0 = ymin + (ymax0 - ymin) * 0.3f;
+            for (var i = 1; i < _samples.Count; i++)
+                if (_samples[i].p[n].Y <= thr0 && _samples[i - 1].p[n].Y <= thr0)
+                {
+                    push += _samples[i].p[n].Z - _samples[i - 1].p[n].Z;
+                    pushX += _samples[i].p[n].X - _samples[i - 1].p[n].X;
+                }
+        }
+        {
+            // Latéral (repère holder : gauche = −X) : X moyen / min / max
+            // de quelques os clés relativement à la racine, + dX du 1er au dernier quart.
+            string R(string n)
+            {
+                if (!_samples[0].p.ContainsKey(n)) return "";
+                var xs = _samples.Select(q => q.p[n].X - q.p[names[0]].X).ToList();
+                var tl = xs.Skip((int)(xs.Count * 0.6)).ToList();
+                return $" {n.Replace("Bip01 ", "")}[end={tl.Average():0.00} min={xs.Min():0.00} max={xs.Max():0.00}]";
+            }
+            var lat = "";
+            foreach (var n in new[] { "Bip01 Head", "Bip01 Spine1", "Tail Bone 04", "Bip01 R Hand", "Bip01 L Hand", "RIDER Bip01 Head", "RIDER Bip01 R Hand", "RIDER Bip01 L Hand" }) lat += R(n);
+            foreach (var tn in new[] { "RIDER Bip01 R Hand", "RIDER Bip01 Head", "Bip01 Head" })
+                if (_samples[0].p.ContainsKey(tn))
+                    GD.Print($"[ride-trace] key={_keys[_ki]} step={step} {tn} X(t): " + string.Join(" ",
+                        Enumerable.Range(0, 12).Select(i => _samples[Math.Min(_samples.Count - 1, i * _samples.Count / 12)])
+                            .Select(q => (q.p[tn].X - q.p[names[0]].X).ToString("0.00"))));
+            GD.Print($"[ride-lat] key={_keys[_ki]} step={step} mountAnim={_ma?.Current} riderAnim={_ra?.Current}{lat}");
+        }
+        // Déplacement implicite en espace holder (cap −Z ; A/D montés
+        // pivotent le holder ±90° ⇒ leur déplacement est −Z local).
+        var travel = step switch
+        {
+            "W" or "A" or "D" or "WA" or "WD" or "M01" => new Vector3(0f, 0f, -1f),
+            "S" or "SA" or "SD" or "M04" => new Vector3(0f, 0f, 1f),
+            _ => Vector3.Zero,
+        };
+        var vel = new Vector3(pushX, 0f, push);
+        var score = travel != Vector3.Zero ? vel.Dot(travel) : 0f;
+        GD.Print($"[ride-verdict] key={_keys[_ki]} step={step} fwdSign={fwdSign} " +
+            $"stancePush=({pushX:0.00},{push:0.00}) headDZ={(_samples[0].p.TryGetValue(head, out var hd) ? hd.Z - _samples[0].p[names[0]].Z : 0f):0.00} " +
+            $"=> {(travel == Vector3.Zero ? "-" : score < -0.005 ? "OK-avant" : score > 0.005 ? "INVERSE" : "?nul")}");
+        foreach (var (n, ymin) in low)
+        {
+            var ymax = _samples.Max(s => s.p[n].Y);
+            var thr = ymin + (ymax - ymin) * 0.3f;
+            float dz = 0; var c = 0;
+            for (var i = 1; i < _samples.Count; i++)
+                if (_samples[i].p[n].Y <= thr && _samples[i - 1].p[n].Y <= thr)
+                { dz += _samples[i].p[n].Z - _samples[i - 1].p[n].Z; c++; }
+            var line = string.Join(" ", _samples.Where((_, i) => i % Math.Max(1, _samples.Count / 8) == 0)
+                .Select(s => $"{s.p[n].Z:0.00}/{s.p[n].Y:0.00}"));
+            GD.Print($"[ride-probe]   {n} ymin={ymin:0.00} stance dZ={dz:0.000} over {c} steps (Z/Y: {line})");
+        }
+        // Diag vague de queue : trajectoires Y des os Bone## triés (EDEN_TAILWAVE=1)
+        if (System.Environment.GetEnvironmentVariable("EDEN_TAILWAVE") == "1")
+        {
+            var bones = names.Where(n => System.Text.RegularExpressions.Regex.IsMatch(n, @"^Bone\d+$"))
+                .OrderBy(n => int.Parse(n[4..])).ToList();
+            GD.Print($"[tailwave] key={_keys[_ki]} step={step} frames={_samples.Count} bones={bones.Count}");
+            foreach (var n in bones)
+            {
+                var ys = _samples.Select(s => s.p[n].Y.ToString("0.00"));
+                GD.Print($"[tailwave]   {n} Y: {string.Join(" ", ys)}");
+            }
+        }
+        _samples.Clear();
+    }
 
     private void Log(string step)
     {

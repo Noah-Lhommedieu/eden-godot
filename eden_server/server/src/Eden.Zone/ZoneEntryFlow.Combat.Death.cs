@@ -45,6 +45,10 @@ public sealed partial class ZoneEntryFlow
         ZoneLiveWorld.LiveMob mob, CancellationToken token,
         int spellId = 0, int dmg = 0)
     {
+        // Déjà mort (MarkDead d'un autre chemin — sort, proc, elf) :
+        // ne pas re-scheduler une seconde séquence (double 305/loot/
+        // exp constaté en live).
+        if (!mob.Alive) return;
         mob.MarkDead();
         mob.DeadAt = DateTime.UtcNow;
         if (spellId == 0)
@@ -66,6 +70,9 @@ public sealed partial class ZoneEntryFlow
     private async Task KillMobBroadcastAsync(NetSession session,
         EntryState st, ZoneLiveWorld.LiveMob mob, int spellId, int dmg)
     {
+        // Broadcast schedulé devenu obsolète : un sort/aoe a émis la
+        // mort entre la planification (+300 ms) et l'exécution.
+        if (mob.DeathEmitted) return;
         using var killScope = EdenMetrics.BeginDbOperation("mob_kill");
         var token = CancellationToken.None;
         // Attrs à zéro AVANT le coup fatal (ordre de la capture).
@@ -91,6 +98,12 @@ public sealed partial class ZoneEntryFlow
     private async Task FinishMobDeathAsync(NetSession session, EntryState st,
         ZoneLiveWorld.LiveMob mob, bool bySpell, CancellationToken token)
     {
+        // Invariant « la mort n'est émise qu'une fois » — premier
+        // arrivé (sort immédiat vs broadcast mêlée schedulé +300 ms)
+        // gagne, les suivants (procs multi-stroke, second coup en vol)
+        // repartent sans rejouer 305/loot/exp.
+        if (mob.DeathEmitted) return;
+        mob.DeathEmitted = true;
         // Timers armés EN TÊTE : une exception plus bas (session morte,
         // loot, procs) ne doit jamais laisser un cadavre éternel.
         ScheduleCorpseDespawn(mob);
@@ -186,6 +199,14 @@ public sealed partial class ZoneEntryFlow
             ScheduleOnLoop(TimeSpan.Zero,
                 ct => RunGroupDeathEventsAsync(session, st, mob, ct));
         }
+        // Clef d'event de la ligne reborn (col8 → CRebornMonster+0x34) :
+        // OneDie natif appelle ExecuteCommand(serverId, reborn, chid)
+        // à CHAQUE mort — cristaux 據點 : bleu détruit → event 3
+        // (spawn rouge), rouge détruit → event 4 (retour bleu).
+        if (mob.SpawnId > 0 && mob.DeathEventId > 0)
+            ScheduleOnLoop(TimeSpan.Zero,
+                ct => RunNodeSceneEventAsync(mob.NodeId, mob.InstanceKey,
+                    mob.DeathEventId, session, ct));
     }
     /// <summary>Évalue les événements de scène dont une branche teste
     /// le groupe `mob.SpawnId` (If_RebornMonster/If_Monster) — natif :
@@ -491,6 +512,9 @@ public sealed partial class ZoneEntryFlow
         mob.RespawnAt = DateTime.UtcNow.AddSeconds(mob.RespawnSeconds);
         ScheduleOnLoop(TimeSpan.FromSeconds(mob.RespawnSeconds), async _ =>
         {
+            // Retiré du registre entre-temps (DespawnGroup d'event —
+            // cristal remplacé par son successeur) : pas de fantôme.
+            if (_services.Live.GetMob(mob.Handle) == null) return;
             _services.Live.Respawn(mob);
             // Annonce d'apparition encodée en scène (col19), ex. 70-S.
             await AnnounceSpawnAsync(mob);

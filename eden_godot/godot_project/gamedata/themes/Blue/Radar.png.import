@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://3jet6jvuf3sa"
-path="res://.godot/imported/Radar.png-6d577af86729ab095afacbb3586ae491.ctex"
+path="res://.godot/imported/Radar.png-f3f442b2f327dace7066f20effdb3630.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ui_textures/themes/Blue/Radar.png"
-dest_files=["res://.godot/imported/Radar.png-6d577af86729ab095afacbb3586ae491.ctex"]
+source_file="res://gamedata/themes/Blue/Radar.png"
+dest_files=["res://.godot/imported/Radar.png-f3f442b2f327dace7066f20effdb3630.ctex"]
 
 [params]
 

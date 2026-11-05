@@ -57,6 +57,9 @@ public partial class BuffBar : Control
 
     private Control? _window;
     private int _selfHandle;
+
+    /// <summary>Handle du joueur dont les statuts sont affichés (0 avant la session).</summary>
+    public static int SelfHandle => Instance?._selfHandle ?? 0;
     private double _textTimer;
 
     /// <summary>Envoi d'un abandon d'enchant (NCID 85) — branché par
@@ -542,27 +545,27 @@ public partial class BuffBar : Control
     {
         var list = EntityBuffs.Snapshot(_selfHandle)
             .Where(b => Displayable(b.EffectId)).ToList();
+        // Buffs d'abord, états ensuite (liseré bleu) ; la NerfBar liste
+        // les nerfs puis les états malus.
         if (DebuffsOnly)
         {
-            var d = list.Where(b => !IsBuff(b)).ToList();
+            var d = list.Where(b => !IsBuff(b))
+                .OrderBy(b => KindOf(b) == StatusKind.State ? 1 : 0).ToList();
             for (var i = 0; i < SlotCount; i++)
-                Fill(i, i < d.Count ? d[i] : null, true);
+                Fill(i, i < d.Count ? d[i] : null);
             Relayout();
             return;
         }
-        var buffs = list.Where(IsBuff).ToList();
+        var buffs = list.Where(IsBuff)
+            .OrderBy(b => KindOf(b) == StatusKind.State ? 1 : 0).ToList();
 
         for (var i = 0; i < SlotCount; i++)
         {
             EntityBuffs.BuffInst? b = null;
-            var debuff = false;
-            if (i < BuffSlotCount)
-            {
-                if (i < buffs.Count) b = buffs[i];
-            }
-            // Les debuffs vont à la NerfBar (hud-interfaces §51) : les
+            if (i < BuffSlotCount && i < buffs.Count) b = buffs[i];
+            // Les nerfs vont à la NerfBar (hud-interfaces §51) : les
             // cases Debuff natives de cette fenêtre restent vides.
-            Fill(i, b, debuff);
+            Fill(i, b);
         }
         Relayout();
     }
@@ -571,7 +574,7 @@ public partial class BuffBar : Control
     /// c_enchant et porte une icône (les effets sans visuel ne sont
     /// pas des « status »).</summary>
     internal static bool Displayable(int effectId) =>
-        Data.Tables.EnchantTable.Get(effectId) != null &&
+        Data.Tables.EnchantTable.KindOf(effectId) != StatusKind.None &&
         IconTexture(effectId) != null;
 
     /// <summary>Rafraîchit uniquement les textes durée/stack des
@@ -599,12 +602,19 @@ public partial class BuffBar : Control
             .FirstOrDefault(b => b.EffectId == eid);
     }
 
-    private void Fill(int i, EntityBuffs.BuffInst? b, bool debuff)
+    private void Fill(int i, EntityBuffs.BuffInst? b)
     {
         var slot = _slots[i];
         if (slot == null) return;
         _slotEffect[i] = b?.EffectId ?? 0;
-        if (_marks[i] != null) _marks[i]!.Visible = b != null && debuff;
+        // Liseré : rouge = nerf, bleu = état ; un buff n'en a pas.
+        if (_marks[i] is ReferenceRect mark)
+        {
+            var kind = b != null ? KindOf(b) : StatusKind.None;
+            mark.Visible = kind is StatusKind.Nerf or StatusKind.State;
+            mark.BorderColor = kind == StatusKind.State
+                ? new Color(0.35f, 0.65f, 1f) : new Color(0.9f, 0.15f, 0.15f);
+        }
         if (b == null)
         {
             slot.Visible = false;
@@ -638,18 +648,22 @@ public partial class BuffBar : Control
     private static string Tooltip(EntityBuffs.BuffInst b)
     {
         var name = Data.Tables.EnchantTable.NameOf(b.EffectId);
-        var kind = IsBuff(b) ? "Buff" : "Debuff";
+        var kind = UiTextEn.Translate(KindOf(b) switch
+        {
+            StatusKind.Buff => "Buff",
+            StatusKind.Nerf => "Nerf",
+            _ => "State",
+        });
         var rem = b.Remaining;
-        var dur = rem < 0 ? "permanent"
-            : $"{(int)rem / 60}:{(int)rem % 60:D2} left";
+        var dur = rem < 0 ? UiTextEn.Translate("permanent")
+            : $"{(int)rem / 60}:{(int)rem % 60:D2} " + UiTextEn.Translate("left");
         var s = $"{name}  [{kind}]\nLv{b.Level}" +
             (b.StackCount > 1 ? $"  ×{b.StackCount}" : "") +
             $"  ·  {dur}";
         var desc = Data.Tables.EnchantTable.ActiveTextOf(b.EffectId);
         if (desc != null) s += $"\n{desc}";
-        s += $"\n#{b.EffectId}";
         var def = Data.Tables.EnchantTable.Get(b.EffectId);
-        if (def is { NoAbandon: true }) s += "  (can't cancel)";
+        if (def is { NoAbandon: true }) s += "  (" + UiTextEn.Translate("can't cancel") + ")";
         return s;
     }
 
@@ -664,10 +678,19 @@ public partial class BuffBar : Control
                ?? AssetCatalog.GetTexture($"UI/uiicon/{code}.png");
     }
 
-    /// <summary>Classification buff/debuff — S_Enchant col7 bit0
-    /// (EnchantService natif). Inconnu → buff par défaut.</summary>
-    private static bool IsBuff(EntityBuffs.BuffInst b) =>
-        Data.Tables.EnchantTable.Get(b.EffectId) is not { IsBuff: false };
+    private static StatusKind KindOf(EntityBuffs.BuffInst b) =>
+        Data.Tables.EnchantTable.KindOf(b.EffectId);
+
+    /// <summary>Côté d'affichage : buffs et états bénéfiques à la BuffBar,
+    /// nerfs et états malus à la NerfBar. Bénéfique = statistiques en
+    /// hausse (<see cref="StatusKind.Buff"/>) ou, pour un état, drapeau
+    /// c_enchant col7 bit0.</summary>
+    private static bool IsBuff(EntityBuffs.BuffInst b) => KindOf(b) switch
+    {
+        StatusKind.Buff => true,
+        StatusKind.Nerf => false,
+        _ => Data.Tables.EnchantTable.Get(b.EffectId) is not { IsBuff: false },
+    };
 
     /// <summary>Clic droit → abandon (NCID 85) si l'enchant n'est pas
     /// « can't-abandon » (col8 bit 0x10).</summary>
@@ -754,6 +777,24 @@ public partial class BuffBar : Control
             // EffectId wire = u16 (court-circuité en short côté codec).
             Handle = h, EffectId = unchecked((short)51007),
             RestSeconds = 42, StackCount = 1, Level = 1,
+        });
+        // État : pierre de portail gratuite (55869, illimitée jusqu'au niv. 80).
+        EntityBuffs.ApplyAdd(new ZoneEnchantAdd
+        {
+            Handle = h, EffectId = unchecked((short)55869), RestSeconds = -1,
+            StackCount = 1, Level = 1,
+        });
+        // Nerf : « Frappe Destructrice » (AttrBlock/AttrParry −200).
+        EntityBuffs.ApplyAdd(new ZoneEnchantAdd
+        {
+            Handle = h, EffectId = unchecked((short)52153), RestSeconds = 25,
+            StackCount = 1, Level = 1,
+        });
+        // Guérison (soin instantané 52028) : ne doit RIEN afficher.
+        EntityBuffs.ApplyAdd(new ZoneEnchantAdd
+        {
+            Handle = h, EffectId = unchecked((short)52028), RestSeconds = 300,
+            StackCount = 1, Level = 1,
         });
         SetSelfHandle(h);
     }

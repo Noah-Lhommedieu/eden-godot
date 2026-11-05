@@ -156,10 +156,10 @@ public static class CharVisual
         }
 
         // Visible : visage (+ suffixe HAIR du modèle M) + cheveux
-        // choisis + tenues/peaux de l'ensemble voulu + corps nu
-        // « #<L>000 » éventuel. Tout le reste (autres tenues/peaux,
-        // bones/helpers sans texture) est masqué.
+        // choisis + tenues/peaux de l'ensemble voulu. Tout le reste
+        // (autres tenues/peaux, bones/helpers sans texture) est masqué.
         var visible = 0;
+        var anyOutfit = false;
         foreach (var mi in meshes)
         {
             var n = mi.Name.ToString();
@@ -172,11 +172,30 @@ public static class CharVisual
                 n.EndsWith("FACE", StringComparison.OrdinalIgnoreCase) ||
                 n.EndsWith("HAIR", StringComparison.OrdinalIgnoreCase) ||
                 (hairMesh != null && n == hairMesh) ||
-                n == $"#{up}000" ||
                 (isVariant && wanted.Contains(n[2..]));
             mi.Visible = show;
-            if (show) visible++;
+            if (show)
+            {
+                visible++;
+                // Seule une tenue « # » voulue compte : une peau S*
+                // seule ne forme pas un corps (mesh orphelin) et les
+                // cheveux #X1xx ne sont pas des tenues.
+                if (n[0] == '#' && isVariant && wanted.Contains(n[2..]))
+                    anyOutfit = true;
+            }
         }
+        // Corps nu « #<L>000 » : repli SEULEMENT quand aucune tenue
+        // voulue n'existe dans ce méga-modèle (races sans squelette
+        // partagé ou mesh absent — « nu plutôt que mauvaise tenue »).
+        // Il est hidden=True dans les 4 NIF qui le portent (g/f/l/c) :
+        // corps complet NON découpé, plus grand que les armures — forcé
+        // visible en permanence il dépassait sous les tenues (taches
+        // pâles par-dessus l'armure, ex. humaine Chasseur #G204+SG204).
+        if (!anyOutfit)
+            foreach (var mi in meshes)
+                if (mi.Name.ToString().Equals($"#{up}000",
+                        StringComparison.OrdinalIgnoreCase))
+                { mi.Visible = true; visible++; }
         return visible;
     }
 
@@ -397,10 +416,16 @@ public static class CharVisual
             // (style+peau) posée par ApplyFaceVariant suffit.
             Godot.Color? tint = null;
             float floor = 0f;
+            // Peau (S* et #<L>000) : masque rouge NORMALISÉ (floor=0 →
+            // teinte×r/rMax) — le mode « gain ×2 » des cheveux
+            // saturait : r_max peau ≈0.84 (vs ~0.48 cheveux) →
+            // teinte×1.68 → R clampe à 255 → corps crème/blanc au lieu
+            // de la carnation choisie (ex. Chasseuse humaine sc=3 :
+            // jambes/cou pâles alors que le visage est bronzé).
             if (n.Length > 2 && n[0] == 'S' && char.IsLetter(n[1]))
             {
                 tint = skin;
-                floor = -SkinGain;
+                floor = 0f;
             }
             // Corps nu « #<L>000 » : même masque rouge de peau que les
             // S* — sans teinte il sortait en rouge vif sous les tenues.
@@ -408,7 +433,7 @@ public static class CharVisual
                      n.EndsWith("000"))
             {
                 tint = skin;
-                floor = -SkinGain;
+                floor = 0f;
             }
             else if (n.Length >= 4 && n[0] == '#' && n[2] == '1' &&
                      char.IsDigit(n[3]))
@@ -848,8 +873,11 @@ public static class CharVisual
         return new Godot.Color(c.R, c.G, c.B);
     }
 
-    /// <summary>Gain « modulate ×2 » Gamebryo sur le masque peau (corps) et sur le terme
-    /// kr·peau du visage ; réglables (--skin-gain / --face-gain du SkinViewer) pour la mesure.
+    /// <summary>Gain du terme kr·peau du visage ; réglables
+    /// (--skin-gain / --face-gain du SkinViewer) pour la mesure.
+    /// SkinGain est LÉGACY (le corps peau est normalisé r/rMax depuis
+    /// le fix « corps blanc » — le gain 2 saturait la teinte à r_max
+    /// ≈0.84 : R clampe → crème pâle au lieu de la carnation).
     /// FaceSkinGain = 1,35 — calibré sur la ref-shot chevalier (visage 234,188,130,
     /// G/R 0,81) : le masque visage (kr moyen ~0,71, p90 0,81 vs corps 0,58/0,84)
     /// sature dès ~1,52 (kr·0,81·gain ≥ 1) ; 1,35 donne (234,189,142) mesuré.</summary>
@@ -1052,7 +1080,7 @@ public static class CharVisual
     /// <see cref="ApplyEquipment"/> (jeu) et
     /// <see cref="OutfitSuffixes"/> (sélecteur — même tenue).</summary>
     private static (HashSet<string> Outfits,
-            List<(string Bone, string Rel, CharModelSpec.EquipMesh? Row)> Attach,
+            List<(string Bone, string Rel, CharModelSpec.EquipMesh? Row, int Loc)> Attach,
             Dictionary<string, CharModelSpec.EquipMesh> Rows)
         ResolveEquippedMeshes(string letter,
             IReadOnlyDictionary<int, int> worn,
@@ -1060,7 +1088,7 @@ public static class CharVisual
     {
         var map = CharModelSpec.LoadEquipMap(letter);
         var outfits = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        var attach = new List<(string Bone, string Rel, CharModelSpec.EquipMesh? Row)>();
+        var attach = new List<(string Bone, string Rel, CharModelSpec.EquipMesh? Row, int Loc)>();
         var rows = new Dictionary<string, CharModelSpec.EquipMesh>(
             StringComparer.OrdinalIgnoreCase);
         foreach (var (loc, itemId) in worn)
@@ -1087,7 +1115,7 @@ public static class CharVisual
                 else if (!string.Equals(row.Mesh, "NULL",
                              StringComparison.OrdinalIgnoreCase))
                     attach.Add((AttachmentBone(row.Group),
-                        $"char/model/{row.Mesh}", row));
+                        $"char/model/{row.Mesh}", row, loc));
                 // « NULL » = porté mais invisible (rien à attacher).
             }
             // Arme : code W… → item/model/<stem>.glb sur bone prop.
@@ -1112,7 +1140,7 @@ public static class CharVisual
                         CharModelSpec.WeaponSkinCode(info.Value.Code);
                     attach.Add((bone, skin != null
                         ? $"item/model/{stem}#{skin}"
-                        : $"item/model/{stem}", null));
+                        : $"item/model/{stem}", null, loc));
                 }
             }
         }
@@ -1183,11 +1211,17 @@ public static class CharVisual
     /// S&lt;L&gt;2xx) vers les tenues des items portés (repli tenue de
     /// base si aucune armure 4pequip), attache les GLB casque/cape/
     /// armes aux bones. <paramref name="lookup"/> : itemId →
-    /// (Code, ModelCode) c_item.</summary>
+    /// (Code, ModelCode) c_item.
+    /// <paramref name="attachVisible"/> : filtre d'affichage par loc
+    /// (cases « ShowKuso » du profil natif — option locale, jamais
+    /// l'état porté ; null = tout visible, cas des entités distantes).
+    /// <paramref name="hideOutfit"/> : case « ShowKusoClothes » —
+    /// masque les meshes armure « #… » en gardant la peau « S… ».</summary>
     public static void ApplyEquipment(Node3D body, string letter,
         IReadOnlyDictionary<int, int> worn,
         Func<int, (string Code, string ModelCode)?> lookup,
-        int classId = 0, int style = 0)
+        int classId = 0, int style = 0,
+        Func<int, bool>? attachVisible = null, bool hideOutfit = false)
     {
         ClearEquipAttachments(body);
         var (outfits, attach, rowsIn) =
@@ -1202,11 +1236,13 @@ public static class CharVisual
             if (!attach.Any(a => a.Bone == "Bip01 Head") &&
                 CharModelSpec.ClassHeadRow(letter, classId, style) is { } hr)
                 attach.Add((AttachmentBone(hr.Group),
-                    $"char/model/{hr.Mesh}", hr));
+                    $"char/model/{hr.Mesh}", hr, 1));
         }
-        ApplyOutfitVisibility(body, letter, outfits);
-        foreach (var (bone, rel, row) in attach)
+        ApplyOutfitVisibility(body, letter, outfits,
+            hideOutfit: hideOutfit);
+        foreach (var (bone, rel, row, loc) in attach)
         {
+            if (attachVisible != null && !attachVisible(loc)) continue;
             var node = AttachGlbToBone(body, bone, rel);
             // Casque/cape : leur texture « <skin>B » est un masque dye
             // 3 canaux (comme les tenues #X2xx) — sans teinture elle
@@ -1326,15 +1362,20 @@ public static class CharVisual
     /// préfixe #/S) ou la tenue de base si l'ensemble est vide ; les
     /// autres meshes #&lt;L&gt;2xx+/S&lt;L&gt;2xx+ sont masqués.
     /// Cheveux (#&lt;L&gt;1xx), visage et meshes sans suffixe
-    /// numérique ne sont pas touchés.</summary>
+    /// numérique ne sont pas touchés.
+    /// <paramref name="hideOutfit"/> : case « ShowKusoClothes » —
+    /// masque les meshes armure « #… » mais garde la peau « S… »
+    /// (tête d'armure gérée par loc, pas ici).</summary>
     private static void ApplyOutfitVisibility(Node3D body,
-        string letter, HashSet<string> outfits)
+        string letter, HashSet<string> outfits, bool hideOutfit = false)
     {
         var wanted = outfits.Count > 0
             ? outfits
             : new HashSet<string>(BaseEquipIds,
                 StringComparer.OrdinalIgnoreCase);
         var up = letter.ToUpperInvariant();
+        var anyOutfit = false;
+        MeshInstance3D? naked = null;
         foreach (var mi in body
                      .FindChildren("*", "MeshInstance3D", true, false)
                      .Cast<MeshInstance3D>())
@@ -1346,19 +1387,43 @@ public static class CharVisual
                 n[1].ToString().Equals(up, StringComparison.OrdinalIgnoreCase))
             {
                 var suffix = n[2..];
-                if (!int.TryParse(suffix, out var num) || num < 200)
-                    continue;                     // cheveux/visage/…
-                mi.Visible = wanted.Contains(suffix);
+                if (!int.TryParse(suffix, out var num))
+                    continue;                     // visage/…
+                if (num < 200)
+                {
+                    // Corps nu « #<L>000 » : repli nu uniquement si
+                    // aucune tenue/peau ne s'affiche (voir ApplyLook) —
+                    // sinon il dépasse sous les armures.
+                    if (n.Equals($"#{up}000",
+                            StringComparison.OrdinalIgnoreCase))
+                        naked = mi;
+                    continue;
+                }
+                mi.Visible = wanted.Contains(suffix) &&
+                    !(hideOutfit && n[0] == '#');
+                // Une peau S* seule ne dispense pas du corps nu ;
+                // hideOutfit masque la tenue → le corps nu reste le
+                // repli (look « kuso »).
+                if (mi.Visible && n[0] == '#') anyOutfit = true;
             }
         }
+        if (naked != null) naked.Visible = !anyOutfit;
     }
 
     /// <summary>Retire les attachements d'équipement posés par
-    /// <see cref="AttachGlbToBone"/> (nœuds « __equip_* »).</summary>
+    /// <see cref="AttachGlbToBone"/> (nœuds « __equip_* »). Détachés du
+    /// parent AVANT le QueueFree : sinon ils restent trouvables par
+    /// FindChildren dans la même frame et le réattachement suivant se
+    /// fait sous un BoneAttachment condamné (casque/arme « perdu »
+    /// quand deux états d'équipement tombent dans la même frame —
+    /// 277+282 du déséquipe/rééquipe, bug live).</summary>
     private static void ClearEquipAttachments(Node3D body)
     {
         foreach (var n in body.FindChildren("__equip_*", "", true, false))
+        {
+            n.GetParent()?.RemoveChild(n);
             n.QueueFree();
+        }
     }
 
     /// <summary>Attache le GLB <paramref name="rel"/> à l'os
@@ -1391,6 +1456,11 @@ public static class CharVisual
                 .FindChildren($"__equip_ba_{boneName}",
                     "BoneAttachment3D", false, false)
                 .Cast<BoneAttachment3D>().FirstOrDefault();
+            // Jamais réutiliser un BoneAttachment en file de
+            // destruction (ClearEquipAttachments du même frame) —
+            // le nouveau GLB serait libéré avec lui.
+            if (attach != null && attach.IsQueuedForDeletion())
+                attach = null;
             if (attach == null)
             {
                 attach = new BoneAttachment3D

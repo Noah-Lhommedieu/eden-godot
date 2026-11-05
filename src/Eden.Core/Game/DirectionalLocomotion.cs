@@ -94,6 +94,33 @@ public static class DirectionalLocomotion
         mounted && !MountSideAnims && record is Left or Right
             ? "move01" : AnimFor(record);
 
+    /// <summary>Anim jouée par la MONTURE pour ce record — seul
+    /// l'EntityAnimator de la monture doit l'utiliser (le cavalier
+    /// dérive sa ride* de l'anim courante de la monture via
+    /// <see cref="RiderAnimFor"/> ; à pied c'est
+    /// <see cref="AnimFor(int)"/> qui s'applique).
+    ///
+    /// Natif (ANIMS-DIRECTIONNELLES.md §2.1-2.2) : monté A → record 9
+    /// → callback « gauche » → action 102 → <c>move02</c> + pivot
+    /// −90° ; monté D → record 10 → action 103 → <c>move03</c> +
+    /// pivot +90°. AUCUN swap : le contenu mesuré des .kf monture
+    /// (tête −X sur move02) est la gauche anatomique — la convention
+    /// « −X = droite » du re-audit précédent était l'erreur (−X =
+    /// gauche pour un modèle capant −Z, cf. os « L » à −X). La
+    /// marche suit le sens du pivot ±90° du holder.
+    /// Sans <see cref="MountSideAnims"/> : move01 (inchangé).</summary>
+    public static string MountAnimFor(int record) => record switch
+    {
+        // Spec natif (DirectionControl.cpp, records 9/10 de
+        // DAT_00fe49a8) : record 9 = Left à pied + facing −90° D3D,
+        // même callback vtable+0x38 → action 102 → move02 ; record
+        // 10 = Right + facing +90° → move03. Pas de croisement —
+        // le remote (flag 326 → AnimForFlag) joue déjà ce mapping.
+        Left => MountSideAnims ? "move02" : "move01",
+        Right => MountSideAnims ? "move03" : "move01",
+        _ => AnimFor(record),
+    };
+
     /// <summary>Anim cavalier (corps assis sur la monture) pour une
     /// anim de locomotion <paramref name="mountAnim"/> : stand01→
     /// ride01, stand02/03→ride02/03, move01-04→ride04-07, jump→ride08

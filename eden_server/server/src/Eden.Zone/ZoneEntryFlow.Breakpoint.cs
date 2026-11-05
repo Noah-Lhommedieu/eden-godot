@@ -146,9 +146,12 @@ public sealed partial class ZoneEntryFlow
     internal static byte DieFlags(ZoneLiveWorld.LiveMob mob) =>
         mob.BpBroken ? (byte)8 : (byte)0;
 
-    /// <summary>Le 2ᵉ pool « break » de <c>S_DropItem</c> est tiré quand la
-    /// patience est sous 1 à la mort (<c>GiveItem</c> @0x08496590 :
-    /// <c>if (mob+0x78 &lt; 1) GenerateDrop(1, …)</c>).</summary>
+    /// <summary>Le 2ᵉ pool « break » de <c>S_DropItem</c> est tiré en plus du
+    /// pool normal, uniquement si la barre BP a été entièrement cassée
+    /// (<c>GiveItem</c> @0x08496590 : <c>if (mob+0x78 &lt; 1)
+    /// GenerateDrop(1, …)</c> ; règle propriétaire definitions.md : le flag
+    /// <see cref="ZoneLiveWorld.LiveMob.BpBroken"/> posé à la rupture, pas un
+    /// simple masque de faiblesses sans barre).</summary>
     internal static bool BreakPoolDrops(ZoneLiveWorld.LiveMob mob) =>
-        mob.Patience < 1;
+        mob.BpBroken;
 }

@@ -292,7 +292,7 @@ public static partial class ItemTooltip
     {
         if (d == null) return;
         var kl = ItemTipFormat.KindLabel(d.Kind);
-        var loc = ItemTipFormat.LocLabel(d.EquipLoc);
+        var loc = ItemTipFormat.LocLabel(d.EquipLoc, d.Kind);
         if (kl.Length > 0 || loc.Length > 0)
             g.AddChild(Pair(kl.Length > 0 ? UiTextEn.Translate(kl) : "",
                 loc.Length > 0 ? UiTextEn.Translate(loc) : "", 14,

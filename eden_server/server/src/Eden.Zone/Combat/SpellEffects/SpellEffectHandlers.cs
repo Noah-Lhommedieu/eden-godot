@@ -383,7 +383,9 @@ public sealed class Effect2TargetHandler : ISpellEffectHandler
         var foes = (int)A(1) == 1;
         var radius = (float)(A(2) * 0.5);
         var eid = (int)A(3);
-        var rest = (int)A(4);
+        // arg4 = durée passée à EffectToLife → dixièmes de seconde
+        // (58174 : 7003|4|0|999|58173|600 = 60 s, cf. desc du sort).
+        var rest = ZoneEntryFlow.EnchantRestSeconds((int)A(4));
         if (eid <= 0) return;
         switch (mode)
         {

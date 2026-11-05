@@ -325,6 +325,13 @@ public sealed partial class ZoneEntryFlow
         try { await ApplyDevMoveSpeedBuffAsync(session, st, token); }
         catch (Exception ex)
         { EdenLog.Write($"[Status] dev move buff : {ex.Message}"); }
+        // État « pierre de portail gratuite » ≤ lvl 80 — OnMigrationDone
+        // natif @0x0843fbxx (EffectToLife -0x25c3 durée -2), posé après
+        // la restauration des enchants comme dans le flux natif.
+        try
+        { await SyncBeginnerPortalStateAsync(session, st, token); }
+        catch (Exception ex)
+        { EdenLog.Write($"[Status] portal state : {ex.Message}"); }
         // Activités recommandées + lifelong : chargées dans le
         // pipeline (reset hebdo mission et reset daily DB déjà
         // faits hors-boucle) — il ne reste que les 554 de reset

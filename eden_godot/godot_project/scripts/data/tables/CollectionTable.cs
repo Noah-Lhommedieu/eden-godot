@@ -75,6 +75,56 @@ public static class CollectionTable
         }
     }
 
+    private static Dictionary<int, string>? _names;
+
+    /// <summary>Noms FR de <c>t_collection.ini</c> (id|nom|) — repli des
+    /// cartes dont l'item mall porte un gabarit « Testing ID » / « Ver.
+    /// ID » (cartes d'autres régions : 190 cartes du corpus FR).</summary>
+    public static string? CollectionName(int id)
+    {
+        lock (_lock)
+        {
+            if (_names == null)
+            {
+                _names = new Dictionary<int, string>();
+                try
+                {
+                    var path = PathProvider?.Invoke("data/db/t_collection.ini");
+                    if (path != null)
+                        foreach (var kv in TextTable.Load(path))
+                            _names[kv.Key] = kv.Value.Field(1).Trim();
+                }
+                catch (Exception e)
+                {
+#if GODOT
+                    Godot.GD.PrintErr($"[archive] t_collection : {e.Message}");
+#else
+                    _ = e;
+#endif
+                }
+            }
+            return _names.TryGetValue(id, out var n) ? n : null;
+        }
+    }
+
+    /// <summary>Gabarits de test laissés dans t_item/t_itemmall (« Testing
+    /// ID », « JP Testing ID », « CN Ver. ID », « Ver. Thaïlandaise
+    /// ID »…) ou vides / « ? » : jamais un vrai nom.</summary>
+    public static bool IsPlaceholderName(string? n) =>
+        string.IsNullOrWhiteSpace(n) || n.Trim() == "?" ||
+        n.EndsWith(" ID", StringComparison.Ordinal);
+
+    /// <summary>Nom affiché d'une carte : nom d'item (t_itemmall/t_item)
+    /// s'il est réel, sinon t_collection, sinon libellé neutre — jamais
+    /// de gabarit « Testing ID » ni de Big5 brut.</summary>
+    public static string DisplayName(Card c, string? itemName)
+    {
+        if (!IsPlaceholderName(itemName)) return itemName!.Trim();
+        var t = CollectionName(c.Id);
+        if (!IsPlaceholderName(t)) return t!;
+        return "Objet sans nom";
+    }
+
     public static IReadOnlyList<Award> Awards()
     {
         lock (_lock)

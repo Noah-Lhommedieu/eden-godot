@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports: ["8080:8080"]
+    environment:
+      ConnectionStrings__Account: "Host=db;Port=5432;Database=fnaccount;Username=postgres;Password=postgres"
+      ConnectionStrings__Game: "Host=db;Port=5432;Database=fndb1;Username=postgres;Password=postgres"
+      Jwt__Key: "${JWT_KEY:-limitless-dev-key-change-me-32+chars!!}"
+    depends_on: [db]
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports: ["3000:3000"]
+    environment:
+      API_INTERNAL_URL: "http://api:8080"
+    depends_on: [api]
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fndb1
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    ports: ["5432:5432"]
+volumes:
+  pgdata:

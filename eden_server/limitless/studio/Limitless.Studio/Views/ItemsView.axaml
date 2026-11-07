@@ -1,0 +1,187 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Limitless.Studio.ViewModels"
+             x:Class="Limitless.Studio.Views.ItemsView"
+             x:DataType="vm:ItemsViewModel">
+    <Grid RowDefinitions="Auto,*" Margin="20,14,20,12">
+        <!-- En-tête contextuel -->
+        <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,10">
+            <DockPanel>
+                <StackPanel>
+                    <TextBlock Classes="h2" Text="{Binding Title}"/>
+                    <TextBlock Classes="meta" Text="{Binding Subtitle}"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"
+                            Spacing="8" VerticalAlignment="Bottom">
+                    <TextBox Width="240" Watermark="Search name or id…"
+                             Text="{Binding Filter}">
+                        <TextBox.KeyBindings>
+                            <KeyBinding Gesture="Enter"
+                                        Command="{Binding SearchCommand}"/>
+                        </TextBox.KeyBindings>
+                    </TextBox>
+                    <Button Content="Search" Command="{Binding SearchCommand}"/>
+                    <Button Content="Reload" Classes="Flat"
+                            Command="{Binding RefreshCommand}"/>
+                </StackPanel>
+            </DockPanel>
+            <Border Classes="hr"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,380">
+            <!-- Liste dense : vraies icônes + noms EN -->
+            <Border Classes="panel">
+                <Grid>
+                    <!-- Pas de ScrollViewer externe : le ListBox
+                         garde son scroll interne et sa
+                         virtualisation (sinon les ~20k containers
+                         seraient tous réalisés). -->
+                    <ListBox x:Name="ItemList" ItemsSource="{Binding Items}"
+                             SelectedItem="{Binding SelectedItem}"
+                             Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="34,*" Margin="2">
+                                    <Border Classes="raised" Width="30"
+                                            Height="30" CornerRadius="4">
+                                        <Image Source="{Binding Icon}"
+                                               Stretch="Uniform"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Margin="8,0,0,0"
+                                                VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Display}"
+                                                   FontSize="13"/>
+                                        <TextBlock Text="{Binding IconCode,
+                                                   StringFormat='icon {0}'}"
+                                                   Classes="meta"/>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <!-- État vide -->
+                    <StackPanel IsVisible="{Binding IsEmpty}"
+                                VerticalAlignment="Center" Spacing="8"
+                                Margin="40">
+                        <TextBlock Classes="emptyTitle" Text="No items to show"/>
+                        <TextBlock Classes="emptyHint"
+                                   Text="{Binding EmptyMessage}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Fiche -->
+            <Border Grid.Column="1" Classes="panel" Margin="12,0,0,0"
+                    Padding="{DynamicResource PanelPadding}">
+                <ScrollViewer>
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h3" Text="Detail"/>
+                        <Grid ColumnDefinitions="64,*">
+                            <Border Classes="raised" Width="64" Height="64"
+                                    CornerRadius="6">
+                                <Image Source="{Binding SelectedItem.Icon}"
+                                       Stretch="Uniform"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="10,0,0,0"
+                                        VerticalAlignment="Center" Spacing="2">
+                                <TextBlock Text="{Binding SelectedItem.Id,
+                                           StringFormat='#{0}'}"
+                                           Classes="gold" FontWeight="SemiBold"/>
+                                <TextBlock Text="{Binding SelectedItem.Name}"
+                                           TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding IconInfo}"
+                                           Classes="meta" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Grid>
+                        <!-- Ce que modifier S_Item implique -->
+                        <Border Classes="raised" Padding="8,6" CornerRadius="4"
+                                IsVisible="{Binding SelectedItem,
+                                    Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="2">
+                                <TextBlock Classes="meta" FontSize="11"
+                                           FontWeight="SemiBold"
+                                           Text="Editing this file affects"/>
+                                <TextBlock Classes="meta" FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding ImpactText}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Formulaire par colonnes nommées -->
+                        <ItemsControl IsVisible="{Binding !RawMode}"
+                                      ItemsSource="{Binding FieldGroups}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander Header="{Binding Name}"
+                                              IsExpanded="{Binding !StartCollapsed}"
+                                              Margin="0,2">
+                                        <ItemsControl ItemsSource="{Binding Fields}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="120,*,Auto"
+                                                          Margin="0,3">
+                                                        <TextBlock Text="{Binding Label}"
+                                                                   FontSize="12"
+                                                                   VerticalAlignment="Center"
+                                                                   Margin="0,0,6,0"/>
+                                                        <StackPanel Grid.Column="1" Spacing="1">
+                                                            <TextBox Classes.error="{Binding HasError}"
+                                                                     Text="{Binding Value}"
+                                                                     FontSize="12"/>
+                                                            <TextBlock Text="{Binding RefName}"
+                                                                       Classes="aurora" FontSize="10"
+                                                                       IsVisible="{Binding RefName,
+                                                                           Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                                        </StackPanel>
+                                                        <!-- Bouton « ? » → fenêtre de
+                                                             référence complète du champ -->
+                                                        <Button Grid.Column="2" Content="?"
+                                                                Classes="Flat" Padding="7,2"
+                                                                FontSize="11"
+                                                                VerticalAlignment="Top"
+                                                                Command="{Binding ShowHelpCommand}"
+                                                                ToolTip.Tip="{Binding Hint}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <Expander Header="Raw line (advanced)"
+                                  IsVisible="{Binding SelectedItem,
+                                      Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="6">
+                                <TextBox Classes="mono" Text="{Binding EditRaw}"
+                                         IsReadOnly="{Binding !RawMode}"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap" MinHeight="90"/>
+                                <CheckBox IsChecked="{Binding RawMode}"
+                                          Content="Edit the raw line instead of the form"/>
+                            </StackPanel>
+                        </Expander>
+                        <DockPanel>
+                            <Button Content="Save row"
+                                    Command="{Binding SaveSelectedCommand}"/>
+                            <Button DockPanel.Dock="Right" Content="Model…"
+                                    Classes="Flat"
+                                    Command="{Binding LoadModelCommand}"/>
+                        </DockPanel>
+                        <TextBlock Text="{Binding ModelInfo}" Classes="aurora"
+                                   TextWrapping="Wrap" FontSize="12"/>
+                        <StackPanel IsVisible="{Binding SelectedItem,
+                                    Converter={x:Static ObjectConverters.IsNull}}"
+                                    Spacing="4">
+                            <TextBlock Classes="emptyTitle"
+                                       Text="No item selected"/>
+                            <TextBlock Classes="emptyHint"
+                                       Text="Pick a row on the left — its real game icon loads automatically."/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

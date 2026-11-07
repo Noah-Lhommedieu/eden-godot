@@ -1,0 +1,224 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Limitless.Studio.ViewModels"
+        x:Class="Limitless.Studio.Views.FieldHelpWindow"
+        Width="860" Height="780" MinWidth="560" MinHeight="420"
+        Title="Field reference"
+        Background="{DynamicResource EdenNightBrush}"
+        FontFamily="{DynamicResource EdenBodyFont}"
+        x:DataType="vm:FieldHelpViewModel"
+        RequestedThemeVariant="Dark">
+
+    <!-- Styles locaux de la fenêtre « ? » — contraste fort
+         (texte #EDEFF9 sur #181D33/#232A47), corps ≥13px, titres
+         de section 18px. Tableaux : valeur aurora / sens ink /
+         exemple en gris lisible #C6CCF0 (pas de gris-sur-gris). -->
+    <Window.Styles>
+        <Style Selector="TextBlock.helpTitle">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.helpMeta">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#C6CCF0"/>
+        </Style>
+        <Style Selector="TextBlock.helpSection">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource EdenGoldBrush}"/>
+        </Style>
+        <Style Selector="TextBlock.helpBody">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineHeight" Value="20"/>
+        </Style>
+        <Style Selector="TextBlock.helpNote">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#C6CCF0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineHeight" Value="18"/>
+        </Style>
+        <Style Selector="TextBlock.helpColHead">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#9AA3CE"/>
+        </Style>
+        <Style Selector="TextBlock.helpValue">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource EdenAuroraBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style Selector="TextBlock.helpCell">
+            <Setter Property="FontSize" Value="13.5"/>
+            <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="LineHeight" Value="18"/>
+        </Style>
+        <Style Selector="TextBlock.helpSeen">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{DynamicResource EdenGoldBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        <Style Selector="TextBlock.helpExample">
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="Foreground" Value="#C6CCF0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style Selector="Grid.helpColHeadRow">
+            <Setter Property="Background" Value="{DynamicResource EdenNightSoftBrush}"/>
+        </Style>
+        <Style Selector="Border.helpRow">
+            <Setter Property="BorderBrush" Value="{DynamicResource EdenBorderBrush}"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+    </Window.Styles>
+
+    <Border Classes="panel" Margin="14">
+        <ScrollViewer>
+            <StackPanel Spacing="14" Margin="4">
+
+                <!-- En-tête : fichier · champ + valeur courante -->
+                <StackPanel Spacing="4">
+                    <TextBlock Classes="helpTitle" Text="{Binding FieldTitle}"/>
+                    <TextBlock Classes="helpMeta" Text="{Binding Header}"/>
+                    <TextBlock Classes="helpValue" FontSize="14"
+                               Text="{Binding CurrentValue}"/>
+                </StackPanel>
+                <Border Classes="hr"/>
+
+                <!-- Utilité -->
+                <StackPanel Spacing="6"
+                            IsVisible="{Binding HasPurpose}">
+                    <TextBlock Classes="helpSection" Text="What it does"/>
+                    <TextBlock Classes="helpBody"
+                               Text="{Binding Purpose}"/>
+                </StackPanel>
+
+                <!-- Table de référence des valeurs -->
+                <StackPanel Spacing="8"
+                            IsVisible="{Binding HasValues}">
+                    <TextBlock Classes="helpSection" Text="Possible values"/>
+                    <Border Classes="raised" CornerRadius="4">
+                        <StackPanel>
+                            <Grid Classes="helpColHeadRow"
+                                  ColumnDefinitions="95,*,60,170"
+                                  Margin="0,0,0,0" MinHeight="28">
+                                <TextBlock Classes="helpColHead" Margin="8,6"
+                                           Text="VALUE"/>
+                                <TextBlock Grid.Column="1"
+                                           Classes="helpColHead" Margin="8,6"
+                                           Text="NAME / CASE"/>
+                                <TextBlock Grid.Column="2"
+                                           Classes="helpColHead" Margin="8,6"
+                                           HorizontalAlignment="Right"
+                                           Text="SEEN"/>
+                                <TextBlock Grid.Column="3"
+                                           Classes="helpColHead" Margin="8,6"
+                                           Text="REAL EXAMPLE"/>
+                            </Grid>
+                            <ItemsControl ItemsSource="{Binding Values}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="helpRow">
+                                            <Grid ColumnDefinitions="95,*,60,170">
+                                                <TextBlock Text="{Binding Value}"
+                                                           Classes="helpValue"/>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Meaning}"
+                                                           Classes="helpCell"
+                                                           Margin="8,0"/>
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Seen}"
+                                                           Classes="helpSeen"/>
+                                                <TextBlock Grid.Column="3"
+                                                           Text="{Binding Example}"
+                                                           Classes="helpExample"
+                                                           Margin="8,0"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Classes="helpNote"
+                               IsVisible="{Binding HasValuesNote}"
+                               Text="{Binding ValuesNote}"/>
+                </StackPanel>
+
+                <!-- Recette : comment obtenir un cas d'usage -->
+                <StackPanel Spacing="6"
+                            IsVisible="{Binding HasRecipe}">
+                    <TextBlock Classes="helpSection"
+                               Text="How to get a specific case"/>
+                    <Border Classes="raised" CornerRadius="4" Padding="12,9">
+                        <TextBlock Classes="helpBody"
+                                   Text="{Binding Recipe}"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Exemples réels distribués en data -->
+                <StackPanel Spacing="8"
+                            IsVisible="{Binding HasObserved}">
+                    <TextBlock Classes="helpSection"
+                               Text="{Binding ObservedHeader}"/>
+                    <Border Classes="raised" CornerRadius="4">
+                        <StackPanel>
+                            <Grid Classes="helpColHeadRow"
+                                  ColumnDefinitions="95,60,*">
+                                <TextBlock Classes="helpColHead" Margin="8,6"
+                                           Text="VALUE"/>
+                                <TextBlock Grid.Column="1"
+                                           Classes="helpColHead" Margin="8,6"
+                                           HorizontalAlignment="Right"
+                                           Text="COUNT"/>
+                                <TextBlock Grid.Column="2"
+                                           Classes="helpColHead" Margin="8,6"
+                                           Text="EXAMPLE RECORD"/>
+                            </Grid>
+                            <ItemsControl ItemsSource="{Binding Observed}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="helpRow">
+                                            <Grid ColumnDefinitions="95,60,*">
+                                                <TextBlock Text="{Binding Value}"
+                                                           Classes="helpValue"/>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Count,
+                                                           StringFormat='×{0}'}"
+                                                           Classes="helpSeen"/>
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Record}"
+                                                           Classes="helpExample"
+                                                           Margin="8,0"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Liens -->
+                <StackPanel Spacing="5"
+                            IsVisible="{Binding HasSeeAlso}">
+                    <TextBlock Classes="helpSection" Text="See also"/>
+                    <ItemsControl ItemsSource="{Binding SeeAlso}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding .}"
+                                           Classes="helpNote"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</Window>

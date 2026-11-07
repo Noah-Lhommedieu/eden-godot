@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Limitless.Studio.ViewModels"
+             x:Class="Limitless.Studio.Views.AssetsView"
+             x:DataType="vm:AssetsViewModel">
+    <Grid RowDefinitions="Auto,*" Margin="20,14,20,12">
+        <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,10">
+            <DockPanel>
+                <StackPanel>
+                    <TextBlock Classes="h2" Text="{Binding Title}"/>
+                    <TextBlock Classes="meta" Text="{Binding Subtitle}"/>
+                </StackPanel>
+            </DockPanel>
+            <Border Classes="hr"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <StackPanel MaxWidth="720" Spacing="12">
+
+                <Border Classes="panel" Padding="{DynamicResource PanelPadding}">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="h3" Text="Client paths"/>
+                        <TextBlock Classes="meta"
+                                   Text="{Binding ClientPath,
+                                           StringFormat='Client: {0}'}"/>
+                        <TextBlock Classes="meta"
+                                   Text="{Binding PkgPath,
+                                           StringFormat='Packages: {0}'}"/>
+                        <DockPanel>
+                            <TextBlock Classes="aurora"
+                                       Text="{Binding ClientStatus}"/>
+                            <TextBlock DockPanel.Dock="Right" Classes="meta"
+                                       Text="{Binding PkgStatus}"/>
+                        </DockPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="panel" Padding="{DynamicResource PanelPadding}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h3" Text="Replace a client asset"/>
+                        <TextBlock Classes="meta" TextWrapping="Wrap"
+                                   Text="Compresses the local file (zlib), appends it to pkg999.pkg and patches pkg.idx in place — the client loads the override on next launch."/>
+                        <TextBox Watermark="Asset name (e.g. Q00134.dds)"
+                                 Text="{Binding ReplaceAssetName}"/>
+                        <TextBox Watermark="Local source file (absolute path)"
+                                 Text="{Binding ReplaceSourcePath}"/>
+                        <Button Content="Patch pkg"
+                                Command="{Binding ReplaceAssetCommand}"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="panel" Padding="{DynamicResource PanelPadding}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h3" Text="Update manifest"/>
+                        <TextBlock Classes="meta" TextWrapping="Wrap"
+                                   Text="Writes manifest.json at the client root — sha256 per file, the launcher diff-downloads only changed files."/>
+                        <Button Content="Build manifest.json"
+                                Command="{Binding BuildManifestCommand}"
+                                IsEnabled="{Binding !IsBusy}"
+                                HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

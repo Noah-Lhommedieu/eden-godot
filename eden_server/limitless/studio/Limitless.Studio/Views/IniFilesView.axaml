@@ -1,0 +1,240 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Limitless.Studio.ViewModels"
+             x:Class="Limitless.Studio.Views.IniFilesView"
+             x:DataType="vm:IniFilesViewModel">
+    <Grid RowDefinitions="Auto,*" Margin="20,14,20,12">
+        <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,10">
+            <DockPanel>
+                <StackPanel>
+                    <TextBlock Classes="h2" Text="{Binding Title}"/>
+                    <TextBlock Classes="meta" Text="{Binding Subtitle}"/>
+                </StackPanel>
+                <Button DockPanel.Dock="Right" Content="Re-scan copies"
+                        Classes="Flat" VerticalAlignment="Bottom"
+                        Command="{Binding ScanConflictsCommand}"/>
+            </DockPanel>
+            <Border Classes="hr"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <!-- Doublons serveur/client — replié par défaut et borné
+                 en hauteur : les ~70 fichiers présents des deux côtés
+                 ne débordent plus sur la liste. -->
+            <Expander Margin="0,0,0,10" IsExpanded="False">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Classes="gold" FontSize="12"
+                                   Text="Duplicate copies (server vs client)"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Classes="meta"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding ConflictSummary}"/>
+                    </StackPanel>
+                </Expander.Header>
+                <Border Classes="raised" Padding="10,8" MaxHeight="160">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="meta" TextWrapping="Wrap" FontSize="11"
+                                       Text="Some .ini exist both in the server db (db_decoded, what the server actually uses) and in the client folder (data/db — C_* copies for logic, T_* for the English labels players read). When contents differ, the game shows data that does not match server behavior — edit both sides, or expect inconsistency. Files listed here exist on both sides; diverged content sorts first."/>
+                            <ItemsControl ItemsSource="{Binding Conflicts}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="panel" Padding="8,3"
+                                                Margin="0,4,6,0" CornerRadius="4"
+                                                ToolTip.Tip="{Binding Paths}">
+                                            <TextBlock Text="{Binding Display}"
+                                                       Classes="meta" FontSize="11"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+            </Expander>
+
+            <Grid Grid.Row="1" ColumnDefinitions="220,*,420">
+                <!-- Fichiers -->
+                <Border Classes="panel">
+                    <Grid RowDefinitions="Auto,Auto,*">
+                        <StackPanel Orientation="Horizontal" Margin="8,8,8,0"
+                                    Spacing="4">
+                            <Button Content="S_* data" Padding="8,4"
+                                    IsEnabled="{Binding !IsScopeS}"
+                                    Command="{Binding SetFileScopeCommand}"
+                                    CommandParameter="S"/>
+                            <Button Content="T_* labels" Padding="8,4"
+                                    IsEnabled="{Binding !IsScopeT}"
+                                    Command="{Binding SetFileScopeCommand}"
+                                    CommandParameter="T"/>
+                            <Button Content="All" Padding="8,4"
+                                    IsEnabled="{Binding !IsScopeAll}"
+                                    Command="{Binding SetFileScopeCommand}"
+                                    CommandParameter="all"/>
+                        </StackPanel>
+                        <TextBox Grid.Row="1" Margin="8"
+                                 Watermark="Filter files…"
+                                 Text="{Binding FileFilter}">
+                            <TextBox.KeyBindings>
+                                <KeyBinding Gesture="Enter"
+                                    Command="{Binding SearchFilesCommand}"/>
+                            </TextBox.KeyBindings>
+                        </TextBox>
+                        <ListBox Grid.Row="2" ItemsSource="{Binding IniFiles}"
+                                 SelectedItem="{Binding SelectedIniFile}"
+                                 Background="Transparent" BorderThickness="0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding .}" FontSize="12"
+                                               FontFamily="Consolas, monospace"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <!-- Lignes : id + nom EN -->
+                <Border Grid.Column="1" Classes="panel" Margin="12,0">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBox Margin="8" Watermark="Filter rows by id or EN name…"
+                                 Text="{Binding RowFilter}">
+                            <TextBox.KeyBindings>
+                                <KeyBinding Gesture="Enter"
+                                    Command="{Binding SearchRowsCommand}"/>
+                            </TextBox.KeyBindings>
+                        </TextBox>
+                        <Grid Grid.Row="1">
+                            <ListBox ItemsSource="{Binding IniRows}"
+                                     SelectedItem="{Binding SelectedIniRow}"
+                                     Background="Transparent" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Display}"
+                                                   FontSize="12"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel IsVisible="{Binding SelectedIniFile,
+                                        Converter={x:Static ObjectConverters.IsNull}}"
+                                        VerticalAlignment="Center" Spacing="8"
+                                        Margin="40">
+                                <TextBlock Classes="emptyTitle"
+                                           Text="No file selected"/>
+                                <TextBlock Classes="emptyHint"
+                                           Text="Pick a .ini on the left — rows show their id plus the English name from the client's T_* tables when one exists."/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Éditeur piloté par schéma -->
+                <Border Grid.Column="2" Classes="panel"
+                        Padding="{DynamicResource PanelPadding}">
+                    <Grid>
+                        <ScrollViewer IsVisible="{Binding SelectedIniRow,
+                                      Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <StackPanel Spacing="8">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Classes="h3" Text="Row editor"/>
+                                    <TextBlock Classes="gold" FontSize="12"
+                                               Text="{Binding SelectedRowCaption}"/>
+                                    <TextBlock Classes="meta"
+                                               Text="{Binding SchemaTitle}"/>
+                                </StackPanel>
+
+                                <!-- Ce que modifier ce fichier implique -->
+                                <Border Classes="raised" Padding="8,6"
+                                        CornerRadius="4">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Classes="meta" FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   Text="Editing this file affects"/>
+                                        <TextBlock Classes="meta" FontSize="11"
+                                                   TextWrapping="Wrap"
+                                                   Text="{Binding ImpactText}"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Formulaire dynamique -->
+                                <ItemsControl IsVisible="{Binding !RawMode}"
+                                              ItemsSource="{Binding FieldGroups}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Expander Header="{Binding Name}"
+                                                      IsExpanded="{Binding !StartCollapsed}"
+                                                      Margin="0,2">
+                                                <ItemsControl ItemsSource="{Binding Fields}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid ColumnDefinitions="130,*,Auto"
+                                                                  Margin="0,3">
+                                                                <TextBlock Text="{Binding Label}"
+                                                                           FontSize="12"
+                                                                           VerticalAlignment="Center"
+                                                                           Margin="0,0,6,0"/>
+                                                                <StackPanel Grid.Column="1" Spacing="1">
+                                                                    <TextBox Classes.error="{Binding HasError}"
+                                                                             Text="{Binding Value}"
+                                                                             FontSize="12"/>
+                                                                    <TextBlock Text="{Binding RefName}"
+                                                                               Classes="aurora" FontSize="10"
+                                                                               IsVisible="{Binding RefName,
+                                                                                   Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                                                                </StackPanel>
+                                                                <Button Grid.Column="2" Content="?"
+                                                                        Classes="Flat" Padding="7,2"
+                                                                        FontSize="11"
+                                                                        VerticalAlignment="Top"
+                                                                        Command="{Binding ShowHelpCommand}"
+                                                                        ToolTip.Tip="{Binding Hint}"/>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Expander>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <!-- Raw en repliable / déblocable -->
+                                <Expander Header="Raw line (advanced)"
+                                          IsExpanded="{Binding RawMode, Mode=OneWay}">
+                                    <StackPanel Spacing="6">
+                                        <TextBox Classes="mono"
+                                                 Text="{Binding EditRaw}"
+                                                 IsReadOnly="{Binding !RawMode}"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 MinHeight="90"/>
+                                        <CheckBox IsChecked="{Binding RawMode}"
+                                                  Content="Edit the raw line instead of the form — Big5 line written as-is."/>
+                                    </StackPanel>
+                                </Expander>
+
+                                <Button Content="Save row"
+                                        Command="{Binding SaveIniRowCommand}"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <StackPanel IsVisible="{Binding SelectedIniRow,
+                                    Converter={x:Static ObjectConverters.IsNull}}"
+                                    VerticalAlignment="Center" Spacing="8"
+                                    Margin="30">
+                            <TextBlock Classes="emptyTitle"
+                                       Text="No row selected"/>
+                            <TextBlock Classes="emptyHint"
+                                       Text="Pick a row — each column becomes a named field grouped by purpose (Identity, Stats, Economy…). Unknown columns stay editable under &quot;Other columns&quot;."/>
+                            <TextBlock Classes="emptyHint"
+                                       Text="{Binding SchemaPurpose}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

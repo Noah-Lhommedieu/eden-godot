@@ -1,0 +1,21 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Limitless.Studio.App"
+             xmlns:local="using:Limitless.Studio"
+             xmlns:sukiUi="clr-namespace:SukiUI;assembly=SukiUI"
+             RequestedThemeVariant="Dark">
+    <!-- Thème sombre SukiUI + palette Limitless (tokens dans
+         Themes/LimitlessTheme.axaml). Le color theme « Eden »
+         (or/aurora) est enregistré dans App.OnFrameworkInitialization
+         Completed via SukiTheme.AddColorTheme/ChangeColorTheme —
+         SukiUI ne permet pas de déclarer un SukiColorTheme en XAML. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <sukiUi:SukiTheme ThemeColor="Blue" />
+        <StyleInclude Source="avares://Limitless.Studio/Themes/LimitlessTheme.axaml"/>
+    </Application.Styles>
+</Application>

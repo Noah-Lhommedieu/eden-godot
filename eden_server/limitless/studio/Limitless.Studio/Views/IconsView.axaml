@@ -1,0 +1,218 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Limitless.Studio.ViewModels"
+             x:Class="Limitless.Studio.Views.IconsView"
+             x:DataType="vm:IconsViewModel">
+    <Grid RowDefinitions="Auto,*" Margin="20,14,20,12">
+        <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,10">
+            <DockPanel>
+                <StackPanel>
+                    <TextBlock Classes="h2" Text="{Binding Title}"/>
+                    <TextBlock Classes="meta" Text="{Binding Subtitle}"/>
+                </StackPanel>
+            </DockPanel>
+            <Border Classes="hr"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnDefinitions="250,*,290">
+            <!-- Rail entités : trouver l'icône par nom d'item/mob -->
+            <Border Classes="panel" Padding="10">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="h3" FontSize="14"
+                                   Text="Find by entity"/>
+                        <TextBlock Classes="meta" FontSize="11"
+                                   TextWrapping="Wrap"
+                                   Text="Search an item or monster by its English name — get its icon code and preview."/>
+                        <DockPanel Margin="0,4,0,0">
+                            <Button DockPanel.Dock="Right" Content="Go"
+                                    Command="{Binding SearchEntitiesCommand}"/>
+                            <TextBox Watermark='e.g. "box", "candy", id…'
+                                     Text="{Binding EntityFilter}">
+                                <TextBox.KeyBindings>
+                                    <KeyBinding Gesture="Enter"
+                                        Command="{Binding SearchEntitiesCommand}"/>
+                                </TextBox.KeyBindings>
+                            </TextBox>
+                        </DockPanel>
+                    </StackPanel>
+                    <Border Grid.Row="1" Classes="hr" Margin="0,8"/>
+                    <ListBox Grid.Row="2" ItemsSource="{Binding EntityResults}"
+                             SelectedItem="{Binding SelectedEntity}"
+                             Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="26,*" Margin="1">
+                                    <Border Classes="raised" Width="24"
+                                            Height="24" CornerRadius="4">
+                                        <Image Source="{Binding Image}"
+                                               Stretch="Uniform"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Display}"
+                                               FontSize="11" Margin="6,0,0,0"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Grille d'icônes — toolbar visible + pagination
+                 en pied : la recherche par nom de fichier vit avec
+                 la grille qu'elle filtre. -->
+            <Border Grid.Column="1" Classes="panel" Margin="12,0">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <DockPanel Margin="10,8">
+                        <ComboBox ItemsSource="{Binding Sets}"
+                                  SelectedItem="{Binding SelectedSet}"
+                                  Width="120" PlaceholderText="set"/>
+                        <StackPanel DockPanel.Dock="Right"
+                                    Orientation="Horizontal" Spacing="6">
+                            <TextBox Width="220"
+                                     Watermark="Filter file name…"
+                                     Text="{Binding Filter}">
+                                <TextBox.KeyBindings>
+                                    <KeyBinding Gesture="Enter"
+                                        Command="{Binding SearchCommand}"/>
+                                </TextBox.KeyBindings>
+                            </TextBox>
+                            <Button Content="Apply"
+                                    Command="{Binding SearchCommand}"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <Grid Grid.Row="1">
+                        <ScrollViewer>
+                            <ListBox ItemsSource="{Binding Tiles}"
+                                     SelectedItem="{Binding SelectedTile}"
+                                     Background="Transparent" BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel ItemWidth="106"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="raised" Width="96"
+                                                Height="112" Margin="5" Padding="6">
+                                            <StackPanel Spacing="5">
+                                                <Border Classes="panel" Width="64"
+                                                        Height="64" CornerRadius="4"
+                                                        HorizontalAlignment="Center">
+                                                    <Image Source="{Binding Image}"
+                                                           Stretch="Uniform"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding Name}"
+                                                           Classes="meta" FontSize="10"
+                                                           TextWrapping="NoWrap"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                        <StackPanel IsVisible="{Binding IsEmpty}"
+                                    VerticalAlignment="Center" Spacing="8"
+                                    Margin="40">
+                            <TextBlock Classes="emptyTitle" Text="No icons here"/>
+                            <TextBlock Classes="emptyHint"
+                                       Text="{Binding EmptyMessage}"/>
+                        </StackPanel>
+                    </Grid>
+                    <DockPanel Grid.Row="2" Margin="10,8">
+                        <TextBlock Classes="meta" VerticalAlignment="Center"
+                                   Text="{Binding MatchCount,
+                                          StringFormat='{}{0} icons'}"/>
+                        <StackPanel DockPanel.Dock="Right"
+                                    Orientation="Horizontal" Spacing="6"
+                                    VerticalAlignment="Center">
+                            <Button Content="◀" Classes="Flat" Padding="8,2"
+                                    Command="{Binding PrevPageCommand}"/>
+                            <TextBlock Classes="meta" VerticalAlignment="Center"
+                                       Text="{Binding PageLabel}"/>
+                            <Button Content="▶" Classes="Flat" Padding="8,2"
+                                    Command="{Binding NextPageCommand}"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Grid>
+            </Border>
+
+            <!-- Fiche détail : entité ou tuile sélectionnée -->
+            <Border Grid.Column="2" Classes="panel"
+                    Padding="{DynamicResource PanelPadding}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="h3" FontSize="14" Text="Detail"/>
+                    <Grid IsVisible="{Binding HasDetail}">
+                        <StackPanel Spacing="8">
+                            <Border Classes="raised" Width="72" Height="72"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Left">
+                                <Image Source="{Binding DetailImage}"
+                                       Stretch="Uniform"/>
+                            </Border>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{Binding DetailTitle}"
+                                           TextWrapping="Wrap" FontSize="13"/>
+                                <TextBlock Text="{Binding DetailMeta}"
+                                           Classes="meta" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding DetailCode,
+                                           StringFormat='code {0}'}"
+                                           Classes="aurora" FontSize="11"
+                                           FontFamily="Consolas, monospace"/>
+                            </StackPanel>
+                            <DockPanel>
+                                <Button Content="Copy code"
+                                        Command="{Binding CopyCodeCommand}"/>
+                                <Button DockPanel.Dock="Right" Classes="Flat"
+                                        Content="Show in grid"
+                                        IsVisible="{Binding CanLocate}"
+                                        Command="{Binding LocateIconCommand}"/>
+                            </DockPanel>
+                            <Border Classes="hr"/>
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding UsedByLabel}"
+                                           Classes="meta" FontSize="11"
+                                           TextWrapping="Wrap"/>
+                                <ListBox ItemsSource="{Binding UsedByList}"
+                                         SelectedItem="{Binding SelectedEntity}"
+                                         Background="Transparent"
+                                         BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="20,*"
+                                                  Margin="0,2">
+                                                <Border Classes="raised"
+                                                        Width="18" Height="18"
+                                                        CornerRadius="3">
+                                                    <Image Source="{Binding Image}"
+                                                           Stretch="Uniform"/>
+                                                </Border>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Display}"
+                                                           FontSize="11"
+                                                           Margin="6,0,0,0"
+                                                           TextWrapping="Wrap"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <StackPanel IsVisible="{Binding !HasDetail}" Spacing="4">
+                        <TextBlock Classes="emptyTitle" Text="Nothing selected"/>
+                        <TextBlock Classes="emptyHint"
+                                   Text="Click an entity on the left to get its icon, or click an icon tile to see which items/monsters use it."/>
+                    </StackPanel>
+                </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

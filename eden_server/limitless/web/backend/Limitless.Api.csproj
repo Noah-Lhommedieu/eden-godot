@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Limitless.Api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.13" />
+    <PackageReference Include="Dapper" Version="2.1.89" />
+    <PackageReference Include="Npgsql" Version="10.0.3" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Réutilise le repo natif exact (player_characters +
+         classlist + spells + starter items + character_number)
+         au lieu de dupliquer le SQL. -->
+    <ProjectReference Include="..\..\..\server\src\Eden.Core\Eden.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Datasets wiki exportés (tools/export_web_data.py) — déjà
+         Content par défaut ; on force la copie dans l'output
+         pour publish/docker. -->
+    <Content Update="App_Data\**\*.json"
+             CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

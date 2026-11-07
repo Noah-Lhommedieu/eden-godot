@@ -1,0 +1,115 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Tokens Limitless — mêmes valeurs que docs/limitless/DESIGN-WEB.md
+         (direction visuelle partagée avec le portail web). -->
+    <Styles.Resources>
+        <Color x:Key="EdenNight">#0F1220</Color>
+        <Color x:Key="EdenPanel">#181D33</Color>
+        <Color x:Key="EdenRaised">#232A47</Color>
+        <Color x:Key="EdenInk">#EDEFF9</Color>
+        <Color x:Key="EdenMuted">#8B93B8</Color>
+        <Color x:Key="EdenGold">#F2C04D</Color>
+        <Color x:Key="EdenAurora">#7BE3C8</Color>
+        <Color x:Key="EdenEmber">#E5607A</Color>
+
+        <SolidColorBrush x:Key="EdenNightBrush" Color="{StaticResource EdenNight}"/>
+        <SolidColorBrush x:Key="EdenPanelBrush" Color="{StaticResource EdenPanel}"/>
+        <SolidColorBrush x:Key="EdenRaisedBrush" Color="{StaticResource EdenRaised}"/>
+        <SolidColorBrush x:Key="EdenInkBrush" Color="{StaticResource EdenInk}"/>
+        <SolidColorBrush x:Key="EdenMutedBrush" Color="{StaticResource EdenMuted}"/>
+        <SolidColorBrush x:Key="EdenGoldBrush" Color="{StaticResource EdenGold}"/>
+        <SolidColorBrush x:Key="EdenAuroraBrush" Color="{StaticResource EdenAurora}"/>
+        <SolidColorBrush x:Key="EdenEmberBrush" Color="{StaticResource EdenEmber}"/>
+        <SolidColorBrush x:Key="EdenBorderBrush" Color="#2E3760"/>
+        <SolidColorBrush x:Key="EdenNightSoftBrush" Color="#141830"/>
+
+        <!-- Typographie — edenRoboto du client extrait (corps/UI),
+             gg sans pour le wordmark (fallback Inter). -->
+        <FontFamily x:Key="EdenBodyFont">avares://Limitless.Studio/Assets/fonts/edenRoboto.ttf#Roboto</FontFamily>
+        <FontFamily x:Key="EdenDisplayFont">avares://Limitless.Studio/Assets/fonts/edenGG.ttf#gg sans SemiBold</FontFamily>
+
+        <Thickness x:Key="PanelPadding">14</Thickness>
+    </Styles.Resources>
+
+    <!-- Panneaux bordés (radius 6-8 max, hiérarchie par filets,
+         pas par ombres — règle du design). -->
+    <Style Selector="Border.panel">
+        <Setter Property="Background" Value="{DynamicResource EdenPanelBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource EdenBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+    </Style>
+
+    <Style Selector="Border.raised">
+        <Setter Property="Background" Value="{DynamicResource EdenRaisedBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource EdenBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+    </Style>
+
+    <!-- Typographie utilitaire -->
+    <Style Selector="TextBlock.h1">
+        <Setter Property="FontFamily" Value="{DynamicResource EdenDisplayFont}"/>
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+    </Style>
+    <Style Selector="TextBlock.h2">
+        <Setter Property="FontFamily" Value="{DynamicResource EdenDisplayFont}"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+    </Style>
+    <Style Selector="TextBlock.h3">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+    </Style>
+    <Style Selector="TextBlock.muted">
+        <Setter Property="Foreground" Value="{DynamicResource EdenMutedBrush}"/>
+    </Style>
+    <Style Selector="TextBlock.meta">
+        <Setter Property="Foreground" Value="{DynamicResource EdenMutedBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style Selector="TextBlock.gold">
+        <Setter Property="Foreground" Value="{DynamicResource EdenGoldBrush}"/>
+    </Style>
+    <Style Selector="TextBlock.aurora">
+        <Setter Property="Foreground" Value="{DynamicResource EdenAuroraBrush}"/>
+    </Style>
+    <Style Selector="TextBlock.ember">
+        <Setter Property="Foreground" Value="{DynamicResource EdenEmberBrush}"/>
+    </Style>
+
+    <!-- État vide centré -->
+    <Style Selector="TextBlock.emptyTitle">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{DynamicResource EdenInkBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="TextBlock.emptyHint">
+        <Setter Property="Foreground" Value="{DynamicResource EdenMutedBrush}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="MaxWidth" Value="420"/>
+    </Style>
+
+    <!-- Ligne de filet -->
+    <Style Selector="Border.hr">
+        <Setter Property="Height" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource EdenBorderBrush}"/>
+    </Style>
+
+    <!-- Champ mono pour le Raw des lignes .ini -->
+    <Style Selector="TextBox.mono">
+        <Setter Property="FontFamily" Value="Consolas, monospace"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <!-- Champ du formulaire .ini en erreur de validation -->
+    <Style Selector="TextBox.error">
+        <Setter Property="BorderBrush" Value="{DynamicResource EdenEmberBrush}"/>
+    </Style>
+
+</Styles>

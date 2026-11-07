@@ -1,0 +1,314 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "./style.css";
+
+/* ============================================================
+   Limitless — thème « aetherfall » (docs/limitless/DESIGN-WEB.md)
+   Le hall de cristal d'Eden : nuit violette, or, aurore, cristal.
+   void #120F1E · panel #1D1830 · raised #2B2450 · ink #F1EFFB
+   muted #9D96C9 · eden-gold #F0BC55 · aurora #7FE3C6
+   crystal #9B8AF5 · ember #E5647C
+   ============================================================ */
+
+.theme-eden {
+  --background: 252 33% 9%;            /* void    #120F1E */
+  --foreground: 248 55% 96%;           /* ink     #F1EFFB */
+  --card: 251 33% 14%;                 /* panel   #1D1830 */
+  --card-foreground: 248 55% 96%;
+  --popover: 250 31% 18%;
+  --popover-foreground: 248 55% 96%;
+  --primary: 39 84% 64%;               /* gold    #F0BC55 */
+  --primary-foreground: 252 33% 9%;
+  --secondary: 250 37% 23%;            /* raised  #2B2450 */
+  --secondary-foreground: 248 55% 96%;
+  --muted: 250 37% 23%;
+  --muted-foreground: 249 30% 69%;     /* muted   #9D96C9 */
+  --accent: 250 34% 21%;
+  --accent-foreground: 164 65% 69%;
+  --destructive: 348 71% 65%;          /* ember   #E5647C */
+  --destructive-foreground: 248 55% 98%;
+  --border: 250 30% 25%;
+  --input: 250 30% 29%;
+  --ring: 39 84% 64%;
+  --sidebar: 251 33% 14%;
+  --sidebar-foreground: 248 55% 96%;
+  --sidebar-primary: 39 84% 64%;
+  --sidebar-primary-foreground: 252 33% 9%;
+  --sidebar-accent: 250 34% 21%;
+  --sidebar-accent-foreground: 248 55% 96%;
+  --sidebar-border: 250 30% 25%;
+  --sidebar-ring: 39 84% 64%;
+  --radius: 0.4rem;
+
+  /* Tokens Eden hors kit shadcn */
+  --night: #120f1e;
+  --panel: #1d1830;
+  --raised: #2b2450;
+  --ink: #f1effb;
+  --muted-tx: #9d96c9;
+  --gold: #f0bc55;
+  --aurora: #7fe3c6;
+  --crystal: #9b8af5;
+  --ember: #e5647c;
+
+  /* Rareté des items — convention MMO (nom coloré par qualité).
+     Couleurs sémantiques, pas décoratives — cf. DESIGN-WEB. */
+  --q-common: #f1effb;   /* 1 blanc/ink */
+  --q-uncommon: #5dd39e; /* 2 vert */
+  --q-rare: #6ba8f0;     /* 3 bleu */
+  --q-epic: #b48af0;     /* 4 violet */
+  --q-legendary: #f0bc55;/* 5 or */
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  /* Palette Eden utilisable en utilitaires (bg-night, text-gold…) */
+  --color-night: var(--night);
+  --color-panel: var(--panel);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-mutedx: var(--muted-tx);
+  --color-gold: var(--gold);
+  --color-aurora: var(--aurora);
+  --color-crystal: var(--crystal);
+  --color-ember: var(--ember);
+  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cinzel), "Times New Roman", serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-night text-ink font-sans antialiased;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--crystal) 35%, transparent);
+  }
+}
+
+/* ---------- Corrections du kit (DESIGN-WEB : panneaux filetés,
+   chanfrein cristal, hiérarchie par couleur — pas par ombres) ---- */
+.style-luma .cn-card {
+  @apply rounded-lg border border-raised bg-panel shadow-none ring-0;
+}
+.style-luma .cn-card-header,
+.style-luma .cn-card-footer {
+  @apply rounded-t-lg;
+}
+.style-luma .cn-card-footer {
+  @apply rounded-b-lg rounded-t-none;
+}
+.style-luma .cn-button-variant-default {
+  @apply bg-gold text-night hover:bg-gold/85;
+}
+.style-luma .cn-button-variant-secondary {
+  @apply bg-raised text-ink hover:bg-raised/80;
+}
+.style-luma .cn-button-variant-outline {
+  @apply border-raised bg-transparent text-ink hover:bg-raised/50;
+}
+.style-luma .cn-input {
+  @apply border-raised bg-night/60 text-ink placeholder:text-mutedx/70;
+}
+.style-luma .cn-tabs-list {
+  @apply bg-panel border border-raised;
+}
+.style-luma .cn-tabs-trigger[data-state="active"] {
+  @apply bg-raised text-gold;
+}
+
+/* ---------- Typo display ---------- */
+.font-display {
+  font-family: var(--font-cinzel), "Times New Roman", serif;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Structure : panneaux à coin cristal.
+   Le chanfrein haut-droit imite les cadres d'items du jeu — la
+   marque de fabrique discrète du site (DESIGN-WEB). ---------- */
+.panel {
+  @apply rounded-lg border border-raised bg-panel;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px,
+    100% 100%, 0 100%);
+}
+.panel-raised {
+  @apply rounded-lg border border-raised bg-raised/40;
+}
+.filet-t {
+  @apply border-t border-raised;
+}
+.text-dim {
+  color: var(--muted-tx);
+}
+
+/* ---------- Échelle Limitless / flèche de cristal — l'unique
+   orchestration motion : révélation facette par facette au
+   chargement (300 ms), coupée si prefers-reduced-motion. ------ */
+@keyframes ladder-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.ladder-bar {
+  transform-origin: left center;
+  animation: ladder-grow 0.3s ease-out both;
+}
+@keyframes facet-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.spire-facet {
+  animation: facet-in 0.35s ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ladder-bar, .spire-facet { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Icônes du jeu ---------- */
+.game-icon {
+  @apply rounded border border-raised bg-night object-cover;
+}
+
+/* Noms/bordures colorés par qualité item (0-1 ink, 2 vert, 3 bleu,
+   4 violet, 5 or) — lisible dans les grilles et les en-têtes. */
+.q1 { color: var(--q-common); }
+.q2 { color: var(--q-uncommon); }
+.q3 { color: var(--q-rare); }
+.q4 { color: var(--q-epic); }
+.q5 { color: var(--q-legendary); }
+.qb1 { border-color: color-mix(in srgb, var(--q-common) 35%, transparent); }
+.qb2 { border-color: color-mix(in srgb, var(--q-uncommon) 55%, transparent); }
+.qb3 { border-color: color-mix(in srgb, var(--q-rare) 55%, transparent); }
+.qb4 { border-color: color-mix(in srgb, var(--q-epic) 55%, transparent); }
+.qb5 { border-color: color-mix(in srgb, var(--q-legendary) 65%, transparent); }
+
+/* Tooltip wiki au survol des tuiles icônes — panneau ancré sous la
+   tuile, CSS pur (:hover sur le <li> group), pas de JS. */
+.wiki-tip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  z-index: 30;
+  margin-top: 0.25rem;
+  width: 14rem;
+  transform: translateX(-50%);
+  border-radius: 0.375rem;
+  border: 1px solid var(--raised);
+  background: color-mix(in srgb, var(--night) 95%, transparent);
+  padding: 0.75rem;
+  text-align: left;
+  pointer-events: none;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.4);
+}
+.group:hover .wiki-tip { display: block; }
+
+/* ---------- Hero accueil ---------- */
+/* Mosaïque d'icônes du jeu — la « matière » du site, estompée aux
+   bords, statique. */
+.icon-mosaic {
+  mask-image: linear-gradient(to right, transparent, black 12%,
+    black 88%, transparent);
+}
+/* Halo discret derrière le hero — cristal→or très dilués, comme
+   l'éclat d'une gemme, pas un « gradient wash » générique. */
+.hero-halo {
+  background:
+    radial-gradient(40rem 15rem at 78% 8%,
+      color-mix(in srgb, var(--crystal) 14%, transparent),
+      transparent 70%),
+    radial-gradient(34rem 13rem at 15% 0%,
+      color-mix(in srgb, var(--gold) 11%, transparent),
+      transparent 70%);
+}
+
+/* Flèche de cristal — l'échelle Limitless matérialisée : empilement
+   de facettes trapézoïdes or→aurore→cristal (clip-path pur CSS). */
+.spire {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 3px;
+}
+.spire-facet {
+  height: 1.35rem;
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--gold) 80%, transparent),
+    color-mix(in srgb, var(--aurora) 55%, transparent));
+}
+.spire-facet.top {
+  clip-path: polygon(50% 0, 88% 100%, 12% 100%);
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--aurora) 70%, transparent),
+    color-mix(in srgb, var(--crystal) 80%, transparent));
+}
+.spire-glow {
+  background:
+    radial-gradient(9rem 22rem at 50% 60%,
+      color-mix(in srgb, var(--crystal) 16%, transparent),
+      transparent 75%);
+}
+
+/* Point live dans la nav — pulsation douce, coupée par le reset
+   reduced-motion global ci-dessus. */
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.live-dot { animation: live-pulse 2.4s ease-in-out infinite; }
+
+/* ---------- Listes longues : content-visibility ---------- */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 76px;
+}
+
+/* ---------- Focus clavier visible ---------- */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- Scrollbars discrètes ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--raised) transparent;
+}

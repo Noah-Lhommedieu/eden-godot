@@ -124,6 +124,99 @@ public class ZoneLotGTests
         finally { ShopState.Changed -= On; ShopState.Close(); }
     }
 
+    /// <summary>Corps 512 flag=1 : [u8][u16 n] + n×records SoA +
+    /// s16 terminal — layout prouvé par le codec serveur
+    /// BuybackPackets.BuildClientBuyBackList.</summary>
+    private static byte[] BuybackRecord(ushort itemId, short count,
+        short strengthen, uint price)
+    {
+        var w = new BinWriter();
+        w.WriteUShort(itemId);           // u16 — item_id
+        w.WriteShort(count);             // s16 — durability/count
+        w.WriteShort(0);                 // s16 — identify
+        w.WriteShort(0);                 // s16 — +0x34
+        w.WriteShort(0);                 // s16 — bind
+        w.WriteByte(2);                  // u8  — embedded_amount
+        for (var i = 0; i < 6; i++)
+            w.WriteShort((short)(7000 + i));  // 6×s16 embedded
+        w.WriteShort(888);               // s16 — witchcraft/combo
+        w.WriteString("");               // str — maker vide
+        for (var i = 0; i < 11; i++)
+            w.WriteShort((short)(100 + i));   // 11×s16 extra combos
+        w.WriteShort(strengthen);        // s16 — strengthen
+        w.WriteShort(0);                 // s16 — cur_maxdurability
+        w.WriteLong(123456789L);         // i64 — due_date
+        w.WriteBytes(new byte[20]);      // CEquipTrainAttrs
+        w.WriteShort(0);                 // s16 — +0x54
+        w.WriteInt((int)price);          // u32 — prix de rachat
+        w.WriteShort(0);                 // s16 — +0x6c
+        w.WriteShort(0); w.WriteShort(0);// 2×s16 magicbox
+        w.WriteUShort(0); w.WriteUShort(0);   // 2×u16 energy/star
+        return w.ToArray();
+    }
+
+    [Fact]
+    public void BuyBackList_Parse512_ContentFlag()
+    {
+        var w = new BinWriter();
+        w.WriteByte(1);                  // flag=1 contenu (append)
+        w.WriteUShort(2);
+        w.WriteBytes(BuybackRecord(30001, 4, 9, 12500));
+        w.WriteBytes(BuybackRecord(30002, 1, 0, 800));
+        w.WriteShort(-1);                // terminal
+        var m = new ZoneClientBuyBackList();
+        m.Deserialize(new BinReader(w.ToArray()));
+        Assert.Equal(1, m.Flag);
+        Assert.Equal(2, m.Entries.Count);
+        Assert.Equal(30001, m.Entries[0].ItemId);
+        Assert.Equal(4, m.Entries[0].Count);
+        Assert.Equal(9, m.Entries[0].Strengthen);
+        Assert.Equal(12500u, m.Entries[0].Price);
+        Assert.Equal((short)7000, m.Entries[0].EmbeddedIds[0]);
+        Assert.Equal(123456789L, m.Entries[0].DueDate);
+        Assert.Equal(30002, m.Entries[1].ItemId);
+        Assert.Equal(-1, m.RemovedIndex);
+    }
+
+    [Fact]
+    public void BuyBackList_Flags_OpenEtRemove()
+    {
+        // flag=3 — ouverture vide (3 octets : flag, count=0, terminal)
+        var open = new ZoneClientBuyBackList();
+        open.Deserialize(new BinReader(Hex("03 0000 ffff")));
+        Assert.Equal(3, open.Flag);
+        Assert.Empty(open.Entries);
+        Assert.Equal(-1, open.RemovedIndex);
+        // flag=2 — retrait : index du row racheté en terminal
+        var rem = new ZoneClientBuyBackList();
+        rem.Deserialize(new BinReader(Hex("02 0000 0200")));
+        Assert.Equal(2, rem.Flag);
+        Assert.Equal(2, rem.RemovedIndex);
+        // ShopState : append flag=1, retrait à l'index flag=2
+        var m1 = new ZoneClientBuyBackList();
+        var w = new BinWriter();
+        w.WriteByte(1); w.WriteUShort(2);
+        w.WriteBytes(BuybackRecord(10, 1, 0, 5));
+        w.WriteBytes(BuybackRecord(11, 1, 0, 6));
+        w.WriteShort(-1);
+        m1.Deserialize(new BinReader(w.ToArray()));
+        ShopState.OnBuyBackList(m1);
+        var before = ShopState.Buyback.Count;
+        var m2 = new ZoneClientBuyBackList();
+        m2.Deserialize(new BinReader(Hex("02 0000 0000")));
+        ShopState.OnBuyBackList(m2);
+        Assert.Equal(before - 1, ShopState.Buyback.Count);
+    }
+
+    [Fact]
+    public void BuyBackOpen_Wire185()
+    {
+        var m = new ZoneBuyBackOpen { Value = 1 };
+        var w = new BinWriter();
+        m.Serialize(w);
+        Assert.Equal(new byte[] { 1 }, w.ToArray());
+    }
+
     [Fact]
     public void TransportState_OpenClose()
     {

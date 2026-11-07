@@ -108,6 +108,25 @@ public partial class HudExtensions : Node
         return built;
     }
 
+    /// <summary>Centre une fenêtre native construite par
+    /// <c>Build()</c>. <c>SetAnchorsAndOffsetsPreset(Center)</c> lit
+    /// la taille <i>avant</i> le premier passage de layout — pour les
+    /// racines à ancres d'échelle (left==right=0.0x, taille en offset
+    /// px : magiccube, paysystem…) elle rapporte 0 et la fenêtre se
+    /// replie en pilule. Ici on calcule l'étendue native en pixels
+    /// depuis les offsets (ancres égales) et on épingle à demi-taille
+    /// — même technique que <see cref="BuildNativeWindow"/>.</summary>
+    public static void CenterNative(Control w, Vector2 fallback)
+    {
+        var sz = new Vector2(
+            Mathf.Abs(w.OffsetRight - w.OffsetLeft),
+            Mathf.Abs(w.OffsetBottom - w.OffsetTop));
+        if (sz.X < 60 || sz.Y < 60) sz = fallback;
+        HudRoot.Pin(w, 0.5f, 0.5f, 0.5f, 0.5f,
+            -sz.X / 2, -sz.Y / 2, sz.X / 2, sz.Y / 2);
+        w.CustomMinimumSize = sz;
+    }
+
     /// <summary>Trouve le <see cref="HudRoot"/> de la scène courante
     /// (recherche par type puis par nom « Hud »). Null hors game.tscn
     /// ou avant son montage.</summary>
@@ -139,7 +158,8 @@ public partial class HudExtensions : Node
 
     public override void _Process(double delta)
     {
-        if (_session == null && SessionCarry.Session is { } s)
+        if (SessionCarry.Session is { } s &&
+            !ReferenceEquals(s, _session))
             BindSession(s);
         while (_pending.TryDequeue(out var act))
         {
@@ -170,10 +190,12 @@ public partial class HudExtensions : Node
         var skillCast = new SkillCast { Name = "SkillCast" };
         scene.AddChild(skillCast);
         scene.AddChild(new SpellFx { Name = "SpellFx" });
+        scene.AddChild(new DungeonPortals { Name = "DungeonPortals" });
         var floaters = new DamageFloaters { Name = "DamageFloaters" };
         scene.AddChild(floaters);
         var loot = new TreasurePickup { Name = "TreasurePickup" };
         scene.AddChild(loot);
+        scene.AddChild(new World.FamilyHallBuildings { Name = "HallB" });
 
         // Fenêtres 2D sur le canvas HUD.
         Mount(new CastBar { Name = "CastBar" });
@@ -251,10 +273,14 @@ public partial class HudExtensions : Node
             Description = UiTextEn.Translate("Offer Eden Gems to draw rewards from the altar."),
         });
         Mount(new BattlefieldWindow { Name = "BattlefieldWnd" });
+        Mount(new DungeonEntryWindow { Name = "DungeonEntryWnd" });
         Mount(new HotelWindow { Name = "HotelWnd" });
         Mount(new TerritoryWindow { Name = "TerritoryWnd" });
         Mount(new ColosseumWindow { Name = "ColosseumWnd" });
+        Mount(new EvaluateWindow { Name = "EvaluateWnd" });
+        Mount(new TowerWindow { Name = "TowerWnd" });
         Mount(new RecruitWindow { Name = "RecruitWnd" });
+        Mount(new CrusadeWindow { Name = "CrusadeWnd" });
         Mount(new FastDressWindow { Name = "FastDressWnd" });
         Mount(new RankWindow { Name = "RankWnd" });
         Mount(new RollTreasureDialog { Name = "RollTreasureDlg" });
@@ -278,11 +304,13 @@ public partial class HudExtensions : Node
     private void BindSession(EdenSession s)
     {
         _session = s;
+        GD.Print("[hud-ext] session liée");
         // Parseurs « complétude » : tout NCID S→C émis par le serveur
         // est désérialisé (plus de « non géré ») — MiscPackets.Latest +
         // event Received pour les états/UX branchés dessus.
         MiscPackets.BindZone(s, _pending.Enqueue);
         MiscPackets.BindWorld(s, _pending.Enqueue);
+        DungeonUi.Bind(s, _pending.Enqueue);
         // Classes existantes jusque-là non bindées — même traitement.
         foreach (var proto in new NetMessage[]
         {

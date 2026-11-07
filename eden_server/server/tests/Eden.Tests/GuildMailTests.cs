@@ -21,6 +21,11 @@ public class GuildServiceTests
     public async Task Guild_LevelUpAndTaxes()
     {
         var svc = new GuildService();
+        // Courbe c_level col11 (GainExp natif — seuil lvl2 = 2000).
+        svc.AttachFamilyExpCurve(new Dictionary<int, int>
+        {
+            [2] = 2000, [3] = 7000, [4] = 24000,
+        });
         var g = await svc.CreateGuildAsync(1, "G", 50);
         await svc.AddMemberAsync(g.Id, 2, "P2");
         svc.AddExperience(g.Id, 25000);

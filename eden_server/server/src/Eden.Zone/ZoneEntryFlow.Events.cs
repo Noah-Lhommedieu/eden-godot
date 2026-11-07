@@ -373,10 +373,14 @@ public sealed partial class ZoneEntryFlow
             "Event_If_Variable" =>
                 CondOp(EventVars.GetValueOrDefault(EvKey(st.NodeId, A(0))),
                     A(1), A(2)),
-            // If_Monster spawnId op val — vivants du groupe.
+            // If_Monster spawnId op val — vivants du groupe. Natif
+            // (Event_If_Monster @0x080deea0) : GetRebornMonsterAmount
+            // retourne -1 quand le spawnId n'existe pas dans la scène
+            // → la condition ÉCHOUE entièrement ; un groupe défini
+            // (même dormant) compte 0, ce qui est différent de -1.
             "Event_If_Monster" or "Event_If_RebornMonsterSum" =>
-                CondOp(_services.Live.GroupMobs(st.NodeId, st.InstanceGroup, A(0))
-                        .Count(m => m.Alive), A(1), A(2)),
+                RebornAliveCount(st, A(0)) is { } alive &&
+                    CondOp(alive, A(1), A(2)),
             // If_RebornMonster spawnId 5|6 — groupe né / absent
             // (CSceneCondRebornMonsterState : op5 = flag posé).
             // Drapeau explicite sinon état vivant du groupe.
@@ -387,6 +391,21 @@ public sealed partial class ZoneEntryFlow
                         .Any(m => m.Alive)) == (A(1) == 5),
             _ => false,
         };
+    }
+
+    /// <summary>Vivants d'un groupe reborn — <c>null</c> si la scène
+    /// ne définit pas ce spawnId (<c>GetRebornMonsterAmount</c> natif
+    /// = -1 : la condition échoue au lieu de compter 0). Chaque ligne
+    /// [reborn_monsters] a un CRebornMonster dès l'init
+    /// (<c>InitRebornMonster</c> @0x080c0ef0), dormant compris.</summary>
+    private int? RebornAliveCount(EntryState st, int spawnId)
+    {
+        var scene = _services.Scenes.GetScene($"S{st.NodeId:D3}");
+        if (scene == null ||
+            !scene.Monsters.Any(m => m.AreaId == spawnId))
+            return null;
+        return _services.Live.GroupMobs(st.NodeId, st.InstanceGroup, spawnId)
+            .Count(m => m.Alive);
     }
 
     /// <summary>Exécute une action Event_* ; retourne true uniquement
@@ -415,7 +434,12 @@ public sealed partial class ZoneEntryFlow
                     return false;
                 }
                 float dx = 100, dy = 100, dz = 0;
-                if (dest.Positions.Count > 0)
+                // Arg 2 = clé d'aire d'arrivée ([normal_area] ea→clé) :
+                // l'entrée du donjon, pas le premier [position] (boss).
+                var entry = ResolveArrivalArea(dest, A(1));
+                if (entry != null)
+                    (dx, dy, dz) = (entry.X, entry.Y, entry.Z);
+                else if (dest.Positions.Count > 0)
                     (dx, dy, dz) = dest.Positions[0];
                 else if (dest.EventAreas.FirstOrDefault(
                     e => e.Type == "GATEWAY") is { } ga)
@@ -461,7 +485,7 @@ public sealed partial class ZoneEntryFlow
                     {
                         var announced = false;
                         foreach (var e in _services.Live
-                            .SpawnGroup(st.NodeId, st.InstanceGroup, spawn))
+                            .SpawnGroup(st.NodeId, st.InstanceGroup, spawn, scene))
                         {
                             await BroadcastSeeMobAsync(st.NodeId, st.InstanceGroup, e, token);
                             // Annonce encodée en scène (col19) : « Le Pouvoir
@@ -604,6 +628,9 @@ public sealed partial class ZoneEntryFlow
             // d'event doit apparaître même hors scan courant.
             ost.Sent[e.Handle] = 0;
             ost.EntityPos[e.Handle] = (e.X, e.Y);
+            // handle→templateId comme le scan de vue (Sinon TalkToNpc
+            // « handle inconnu » sur tout NPC né par event).
+            ost.HandleToEntity[e.Handle] = e.EntityId;
             try { await s.SendAsync(body, token); }
             catch { ost.Sent.TryRemove(e.Handle, out _); }
         }

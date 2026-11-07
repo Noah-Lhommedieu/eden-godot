@@ -53,6 +53,22 @@ public static class ProgressionParsers
         /// LoadPetExp` natif (Ins+0x3b4), consommé par
         /// `CKFElf::GainExp` @0x8456ed0.</summary>
         public int PetExp { get; set; }
+        /// <summary>Seuil d'EXP de famille pour passer au niveau
+        /// suivant (col 11 0-indexée → CLevelData+0x30) — courbe
+        /// 2000/7000/24000… lue par `CFamily::GainExp` mission
+        /// @0x81beec0 (level-up seulement pour level &lt; 3, sinon
+        /// cap à la valeur).</summary>
+        public int FamilyExpNeeded { get; set; }
+        /// <summary>Fonds de guilde requis pour atteindre ce niveau (col 18
+        /// → CLevelData+0x4c) : 3 400 000 au niv. 4 … 560 000 000 au 12.</summary>
+        public int FamilyFundNeeded { get; set; }
+        /// <summary>Seuils d'EXP des bâtiments de production par type
+        /// de station (cols 12-17 → CLevelData+0x34..+0x48), indexés
+        /// par station-0x18 (ferme 24→[0], mine 25→[1], autel 26→[2],
+        /// alchimie 27→[3], fonderie 28→[4], mare 29→[5]). Consommés
+        /// par `CFamily::UpdateBuildingExp`/`CheckBuildingLevelUp`
+        /// (mission) — identiques pour les 6 types en EDENFR.</summary>
+        public int[] BuildingExps { get; set; } = new int[6];
         public string[] Raw { get; set; } = Array.Empty<string>();
     }
 
@@ -83,6 +99,14 @@ public static class ProgressionParsers
                 Tier = IniTable.GetInt(row, 25),
                 ClassExpNeeded = IniTable.GetInt(row, 10),
                 PetExp = IniTable.GetInt(row, 24),
+                FamilyExpNeeded = IniTable.GetInt(row, 11),
+                FamilyFundNeeded = IniTable.GetInt(row, 18),
+                BuildingExps = new[]
+                {
+                    IniTable.GetInt(row, 12), IniTable.GetInt(row, 13),
+                    IniTable.GetInt(row, 14), IniTable.GetInt(row, 15),
+                    IniTable.GetInt(row, 16), IniTable.GetInt(row, 17),
+                },
                 Raw = row,
             });
         }

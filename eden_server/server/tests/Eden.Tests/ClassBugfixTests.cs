@@ -58,6 +58,33 @@ public class ClassBugfixTests
     }
 
     [Fact]
+    public void FrEnchants_ChanceStones_UseNativeParamLayout()
+    {
+        // Kind 8002 : param[i] @ col(9+i) sur la ligne normalisée —
+        // p1=bonus, p5=safe-level, p7=bind, p9/p11=fenêtre
+        // (CGameData::Integration @0x85995b0).
+        var path = Path.Combine(FrDb, "c_enchant.ini");
+        if (!File.Exists(path)) return;
+        var defs = EnchantParser.Parse(path);
+        var byId = defs.Where(d => d.TriggerParams[0] == 0x1f42)
+            .ToDictionary(d => d.Id);
+        Assert.True(byId.Count >= 6);
+        // 59170-72 « pierre bénie +3~6/+6~8/+8~10 » : bonus 100, seuil.
+        Assert.Equal(100, byId[59170].ChanceBonus);
+        Assert.Equal(6, byId[59170].ChanceSafeLevel);
+        Assert.Equal(8, byId[59171].ChanceSafeLevel);
+        Assert.Equal(10, byId[59172].ChanceSafeLevel);
+        // 57538/57539 « pierre de chance » : faible bonus, seuil 1.
+        Assert.Equal(2, byId[57538].ChanceBonus);
+        Assert.Equal(1, byId[57538].ChanceSafeLevel);
+        Assert.Equal(7, byId[57539].ChanceBonus);
+        // 59901 « 必成強化 » dev : +100 %, aucune borne → libre partout.
+        Assert.Equal(100, byId[59901].ChanceBonus);
+        Assert.Equal(0, byId[59901].ChanceSafeLevel);
+        Assert.Equal(0, byId[59901].ChanceUpper);
+    }
+
+    [Fact]
     public void ClassRankBuff_LookupIsByClassIdNotRowIndex()
     {
         var gd = new GameDataService(TestPaths.ServerUsData + "/db");

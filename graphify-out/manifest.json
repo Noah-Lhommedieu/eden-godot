@@ -12,9 +12,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/AssetCatalog.cs": {
-    "mtime": 1793596135.401907,
-    "seen": 1793611066.7337554,
-    "ast_hash": "5e371630ec9146d7948279ee5d2b15e4",
+    "mtime": 1793992305.8288074,
+    "seen": 1794001909.5100293,
+    "ast_hash": "f181be6e864a19b0620fdcfab1902761",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ClientConfig.cs": {
@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/GameScene.cs": {
-    "mtime": 1793827334.090945,
-    "seen": 1793830054.5312,
-    "ast_hash": "0eb17fc61ee330224ed4fb4935f7c3a6",
+    "mtime": 1793992339.6600459,
+    "seen": 1794001909.5100398,
+    "ast_hash": "95dcd4450f735e0a012b81466f4ee667",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/Main.cs": {
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/AutoAttack.cs": {
-    "mtime": 1793815320.0762072,
-    "seen": 1793824215.7426279,
-    "ast_hash": "461c98ff90945d71f25c6f4e0d97540c",
+    "mtime": 1793866311.8675377,
+    "seen": 1793868422.1990578,
+    "ast_hash": "450a299c6ffab484152f17489e742726",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/CastBar.cs": {
@@ -90,15 +90,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SkillCast.cs": {
-    "mtime": 1793815400.4470286,
-    "seen": 1793824215.7426405,
-    "ast_hash": "dcbf3662e5735edffc9943526228e48d",
+    "mtime": 1793866311.8677442,
+    "seen": 1793868422.1990733,
+    "ast_hash": "99e249e88868845d02323dd073a93046",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SpellFx.cs": {
-    "mtime": 1793816064.8392503,
-    "seen": 1793824215.7426414,
-    "ast_hash": "0d05decc0e0dfb0a2b03d30624f89f61",
+    "mtime": 1793866311.86792,
+    "seen": 1793868422.1990745,
+    "ast_hash": "cf595f26c16961d6a073caa7a322879d",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/TreasurePickup.cs": {
@@ -258,9 +258,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/CraftTable.cs": {
-    "mtime": 1792907441.714382,
-    "seen": 1793580342.7691522,
-    "ast_hash": "f24f21d68a1316d710692a28a3dbc815",
+    "mtime": 1793990139.2164984,
+    "seen": 1794001909.5101335,
+    "ast_hash": "2b98a48d84c4acbc65fc3a88164df776",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/DailyAwardTable.cs": {
@@ -294,9 +294,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/ItemTable.cs": {
-    "mtime": 1793764715.318443,
-    "seen": 1793764975.5667384,
-    "ast_hash": "9edb0705c98001b666172c78dc2c85a1",
+    "mtime": 1793917052.5071802,
+    "seen": 1793919513.1780198,
+    "ast_hash": "0c6d60a498b6e5ed3d58b3dea7c71603",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/MapAreaFile.cs": {
@@ -306,9 +306,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/MapEnvIni.cs": {
-    "mtime": 1793397838.5304391,
-    "seen": 1793580342.7691588,
-    "ast_hash": "d38ac7f879e058837a0bcc22b06b0743",
+    "mtime": 1793997630.0112715,
+    "seen": 1794001909.510149,
+    "ast_hash": "6ea10cffd9285bac29e32e8b1877de7a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/data/tables/MonsterTable.cs": {
@@ -408,9 +408,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CharVisual.cs": {
-    "mtime": 1793832065.743633,
-    "seen": 1793832302.7169256,
-    "ast_hash": "acd98bb4134663f3733a63a4e786bef2",
+    "mtime": 1793998655.500479,
+    "seen": 1794001909.510196,
+    "ast_hash": "8c0d9f6cf6e81977c69ed960aed32dc8",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/CostumeVisual.cs": {
@@ -432,9 +432,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/EntityAnimator.cs": {
-    "mtime": 1793764715.31884,
-    "seen": 1793764975.5667734,
-    "ast_hash": "f82ed1ac190dd37f04faeece42ff3c7d",
+    "mtime": 1793886183.9534228,
+    "seen": 1793915970.3417838,
+    "ast_hash": "1e00bf2d4837d23099f99d97772d0ae5",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/game/PetClientRules.cs": {
@@ -480,9 +480,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/AuctionWindow.cs": {
-    "mtime": 1793397838.5343747,
-    "seen": 1793580342.7691898,
-    "ast_hash": "086cd5df09c7b12632c5ea8c5ba3dfc8",
+    "mtime": 1793986192.6833253,
+    "seen": 1794001909.510218,
+    "ast_hash": "b9ada63ed51203e5f829efeb5427906f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/AutoRoute.cs": {
@@ -492,9 +492,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/AutoTranslate.cs": {
-    "mtime": 1793444604.6771195,
-    "seen": 1793580342.7691915,
-    "ast_hash": "b5d53463cad6a3afc6b2f2b24b50dba4",
+    "mtime": 1793984126.611113,
+    "seen": 1794001909.510221,
+    "ast_hash": "bcf23e518d67c8a1c158aec6a7c045c1",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/BankWindow.cs": {
@@ -522,9 +522,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ChatPanel.cs": {
-    "mtime": 1793661525.818488,
-    "seen": 1793662868.0371733,
-    "ast_hash": "7761756e8414459a6f6d8c973991b14b",
+    "mtime": 1793914284.7372591,
+    "seen": 1793915970.3418143,
+    "ast_hash": "c87d4fa868882044fd84c208e4d9918a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClassChangeDialog.cs": {
@@ -540,9 +540,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClassWindow.cs": {
-    "mtime": 1793764715.3193576,
-    "seen": 1793764975.5667953,
-    "ast_hash": "8e1e425ec884c1f739d60ebb39c4c308",
+    "mtime": 1793847554.3605995,
+    "seen": 1793849949.0066168,
+    "ast_hash": "ce7898be30d679c38ee775b8c36f999f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ClientUiStore.cs": {
@@ -552,8 +552,8 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/CooldownOverlay.cs": {
-    "mtime": 1793831770.874002,
-    "seen": 1793832302.7169523,
+    "mtime": 1793914687.6633315,
+    "seen": 1793915970.3418226,
     "ast_hash": "a481004536ffcb30f63a032c2faea0a9",
     "semantic_hash": ""
   },
@@ -570,9 +570,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/CraftWindow.cs": {
-    "mtime": 1793397838.534439,
-    "seen": 1793580342.7692018,
-    "ast_hash": "f28b2bb123e6b5467bfb8cc049cfa344",
+    "mtime": 1793991666.9775739,
+    "seen": 1794001909.510246,
+    "ast_hash": "aaa99eb8016f4e8077bf1ca4028a557c",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/DailyRewardWindow.cs": {
@@ -582,9 +582,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/DeathWindow.cs": {
-    "mtime": 1793241568.2060914,
-    "seen": 1793580342.7692034,
-    "ast_hash": "efb994a8d089cc27b5da4c1b1a88e913",
+    "mtime": 1793866311.8681145,
+    "seen": 1793868422.199186,
+    "ast_hash": "3a745880365791a3b857e6314ead7d5e",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/DestinyBridge.cs": {
@@ -600,9 +600,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/DragHelper.cs": {
-    "mtime": 1793397838.535439,
-    "seen": 1793580342.7692058,
-    "ast_hash": "c2b8bd62a5126a8223b5bdda0bd5c9f9",
+    "mtime": 1793914702.4539123,
+    "seen": 1793915970.3418357,
+    "ast_hash": "9bbb82e6381ddbaf47c30c0a12ef76ea",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/DuelDialog.cs": {
@@ -642,9 +642,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/EquipSlotsPanel.cs": {
-    "mtime": 1793810506.1080801,
-    "seen": 1793824215.7427669,
-    "ast_hash": "a2210e1ee1ee51f41e04653cfd59f92a",
+    "mtime": 1793960719.660549,
+    "seen": 1793970381.1993961,
+    "ast_hash": "076e59b9652ffd41bbfef7eca3c3313d",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ExpertiseWindows.cs": {
@@ -654,21 +654,21 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/FamilyStorageWindow.cs": {
-    "mtime": 1793728017.441327,
-    "seen": 1793728275.1106186,
-    "ast_hash": "40002fb5803fc0b49835aa1a443fec70",
+    "mtime": 1793984866.130287,
+    "seen": 1794001909.510274,
+    "ast_hash": "e23e704baa8575bb5784bc6ea731cb37",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/FeatureDialogWindow.cs": {
-    "mtime": 1793241568.206646,
-    "seen": 1793580342.769214,
-    "ast_hash": "bead5dff29b98563bea81af241840d6e",
+    "mtime": 1793984769.593093,
+    "seen": 1794001909.5102756,
+    "ast_hash": "79ddc9835061bfe693985ae2702e151c",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/GuildWindow.cs": {
-    "mtime": 1793397838.5374389,
-    "seen": 1793580342.7692146,
-    "ast_hash": "a2ce14b2078ead521c03ea94681f5d4b",
+    "mtime": 1794000831.7220669,
+    "seen": 1794001909.5102792,
+    "ast_hash": "4fcd8dbe5e1a5a12d94785cdc55fe312",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HeroTrait.cs": {
@@ -678,15 +678,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HotbarPanel.cs": {
-    "mtime": 1793764715.3195672,
-    "seen": 1793764975.5668185,
-    "ast_hash": "3b635346d230687219eca008853696d8",
+    "mtime": 1793866311.868372,
+    "seen": 1793868422.1992052,
+    "ast_hash": "64b1ff1b2f0019844233bc5327af90c7",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HotelWindow.cs": {
-    "mtime": 1793397838.5374389,
-    "seen": 1793580342.7692175,
-    "ast_hash": "f33f08e2cef6c708b99b1a51cfff7a06",
+    "mtime": 1793984671.0845764,
+    "seen": 1794001909.5102847,
+    "ast_hash": "e85b82373980b6132012e23a24808c9f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HpLossAnim.cs": {
@@ -696,9 +696,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudExtensions.cs": {
-    "mtime": 1793764715.3197134,
-    "seen": 1793764975.5668216,
-    "ast_hash": "3a1cd426e569b768794c23abc5632d32",
+    "mtime": 1793977795.3535354,
+    "seen": 1793982748.8824065,
+    "ast_hash": "7ba9726fb3e9212d28baa1df0c415fa0",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudLayout.cs": {
@@ -708,21 +708,21 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudNetBridge.cs": {
-    "mtime": 1793764715.3197756,
-    "seen": 1793764975.5668235,
-    "ast_hash": "4e9c602854fc4aebdb97676ec98d37f0",
+    "mtime": 1793980845.8872788,
+    "seen": 1793982748.8824084,
+    "ast_hash": "9d66d9aa422cf8745f17dfc049be3036",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudRoot.cs": {
-    "mtime": 1793827318.871224,
-    "seen": 1793830054.5313442,
-    "ast_hash": "300a849a09660387be6de4c5e852cc70",
+    "mtime": 1793986619.3610284,
+    "seen": 1794001909.5102928,
+    "ast_hash": "38b46117f09d841bd8d82d9c7e14ec5c",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/HudWindows.cs": {
-    "mtime": 1793397838.539439,
-    "seen": 1793580342.7692225,
-    "ast_hash": "33b0e66cc780e28ad2f83f3f4752c494",
+    "mtime": 1793914915.2002273,
+    "seen": 1793915970.3418753,
+    "ast_hash": "9173abdff6232a8c43eb70016bfa6af3",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/InspectWindow.cs": {
@@ -738,15 +738,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/InventoryWindow.cs": {
-    "mtime": 1793764715.3200822,
-    "seen": 1793764975.5668283,
-    "ast_hash": "053194bf6b87139c3ca766ae7ce58e2f",
+    "mtime": 1793984636.0627499,
+    "seen": 1794001909.5102994,
+    "ast_hash": "094062625587938484124517ce7ec2ef",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ItemMallWindow.cs": {
-    "mtime": 1793241416.4214358,
-    "seen": 1793580342.7692254,
-    "ast_hash": "137bce2e1b684445eb070456ad939adf",
+    "mtime": 1793986826.5203166,
+    "seen": 1794001909.5103009,
+    "ast_hash": "3e7f3a65d080f0ebd0dc8fb5b8f0cb50",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ItemPreviewWindow.cs": {
@@ -762,9 +762,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ItemTooltip.cs": {
-    "mtime": 1793764715.3200822,
-    "seen": 1793764975.5668323,
-    "ast_hash": "0281b4220d1a3ecd6d729a48fc6ea7e9",
+    "mtime": 1793984701.7072377,
+    "seen": 1794001909.5103083,
+    "ast_hash": "173251dd6af78e0314f5990f2dc69eb7",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/LotteryWindow.cs": {
@@ -798,15 +798,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/MinimapPanel.cs": {
-    "mtime": 1793411617.2738798,
-    "seen": 1793580342.769233,
-    "ast_hash": "ad64a5da50e5dfb53123df66daa7fdb6",
+    "mtime": 1794001064.8819587,
+    "seen": 1794001909.5103264,
+    "ast_hash": "84396459d039119de07b71b3d454cb90",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/MissionBridge.cs": {
-    "mtime": 1793642063.8781927,
-    "seen": 1793646851.0986547,
-    "ast_hash": "d92613ad53fe18bb54f8469e76f296a6",
+    "mtime": 1793954416.7358117,
+    "seen": 1793959231.6245809,
+    "ast_hash": "37b26908056e4f98a3da3b2082023028",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/NeobankWindow.cs": {
@@ -882,8 +882,8 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/QuestTracker.cs": {
-    "mtime": 1793728030.8391855,
-    "seen": 1793728275.1106594,
+    "mtime": 1793914702.454289,
+    "seen": 1793915970.3419309,
     "ast_hash": "e9e041d64e1d65f1aac8acb7dcb14971",
     "semantic_hash": ""
   },
@@ -894,9 +894,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/RegionMapWindow.cs": {
-    "mtime": 1793289612.1013484,
-    "seen": 1793580342.7692456,
-    "ast_hash": "a20688a1f6c4e87812a605604684b500",
+    "mtime": 1794001090.4860504,
+    "seen": 1794001909.5103562,
+    "ast_hash": "cd880a2d8653e0cbb6604195b199c017",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/RideFitData.cs": {
@@ -918,9 +918,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ShopWindow.cs": {
-    "mtime": 1793728017.1821167,
-    "seen": 1793728275.1106656,
-    "ast_hash": "a7bca4050a6d649147683f26c8a68621",
+    "mtime": 1793984675.763057,
+    "seen": 1794001909.5103645,
+    "ast_hash": "605f91dfcbfbf83941df91dd3bee8950",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/SkillBarWindow.cs": {
@@ -930,9 +930,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/SocialWindow.cs": {
-    "mtime": 1793244288.8954468,
-    "seen": 1793580342.7692504,
-    "ast_hash": "0ec6e9488bb1480ce10adb495940c2d6",
+    "mtime": 1793984701.7071223,
+    "seen": 1794001909.5103674,
+    "ast_hash": "164b52f9a653c9ff5369881a34ed16d4",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/StorageItemCell.cs": {
@@ -948,14 +948,14 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/SystemServiceWindows.cs": {
-    "mtime": 1793241568.2110093,
-    "seen": 1793580342.7692528,
-    "ast_hash": "f5998f82d046dafb4beeb64245ef96f4",
+    "mtime": 1793987047.5810103,
+    "seen": 1794001909.5103786,
+    "ast_hash": "352e96320ac01f18e4690edafffaad66",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/TargetFrame.cs": {
-    "mtime": 1793764715.3200822,
-    "seen": 1793764975.5668857,
+    "mtime": 1793914707.6912017,
+    "seen": 1793915970.3419576,
     "ast_hash": "e469c11930d757fb873d72b21107b254",
     "semantic_hash": ""
   },
@@ -978,9 +978,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/TransportWindow.cs": {
-    "mtime": 1793590624.099792,
-    "seen": 1793592012.1267877,
-    "ast_hash": "9285e77c835e992351805cf105f3d011",
+    "mtime": 1793967947.796523,
+    "seen": 1793970381.19951,
+    "ast_hash": "4eae0cab8ab6daa82cd471215386c8ba",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/UltimateBar.cs": {
@@ -990,15 +990,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/VendingWindow.cs": {
-    "mtime": 1793728024.8040795,
-    "seen": 1793728275.1106782,
-    "ast_hash": "c3d1a8f9482e84c4a18090eac2946707",
+    "mtime": 1793984646.3032687,
+    "seen": 1794001909.5103924,
+    "ast_hash": "f4f9078d8d6589ea8cfd21fb229f20f7",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/WorldMapWindow.cs": {
-    "mtime": 1793242636.999457,
-    "seen": 1793580342.769261,
-    "ast_hash": "677d3a162c549c56c65d996e8054a2a7",
+    "mtime": 1794001100.0075781,
+    "seen": 1794001909.5103939,
+    "ast_hash": "eb1ef5b4a985bfaf282e208c2f039537",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/ZoneBanner.cs": {
@@ -1080,9 +1080,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/perf/PerfProbe.cs": {
-    "mtime": 1793722968.255193,
-    "seen": 1793726602.6675053,
-    "ast_hash": "0f6a756217d7375137ec1bf90ae8b58f",
+    "mtime": 1793845542.4702501,
+    "seen": 1793849949.0067873,
+    "ast_hash": "95074fd70acc4452c854393004113bee",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/player/InterpBuffer.cs": {
@@ -1104,9 +1104,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/player/PlayerController.cs": {
-    "mtime": 1793820503.771191,
-    "seen": 1793824215.7428617,
-    "ast_hash": "c6a43f217c3fa90c7022271476bfc6b3",
+    "mtime": 1794000205.498179,
+    "seen": 1794001909.5104425,
+    "ast_hash": "620a3ada0f21d4584ce08aebdb1934e2",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/AppearanceCodec.cs": {
@@ -1134,9 +1134,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/NativeItemRecord.cs": {
-    "mtime": 1792995727.2902365,
-    "seen": 1793580342.7692792,
-    "ast_hash": "196716729f5b4a29bccec2510d8fde2a",
+    "mtime": 1793866311.869728,
+    "seen": 1793868422.1993089,
+    "ast_hash": "411255396b7582dca0545368aff64cbd",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/PlayerAchievements.cs": {
@@ -1146,9 +1146,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/PlayerBag.cs": {
-    "mtime": 1793727970.943774,
-    "seen": 1793728275.1107278,
-    "ast_hash": "34c5efbab14cc20fcbb84a331f5743d3",
+    "mtime": 1793866311.8698146,
+    "seen": 1793868422.1993105,
+    "ast_hash": "082bdef8b9c434e0006608c80437e699",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/PlayerStateLocks.cs": {
@@ -1194,9 +1194,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/WorldMiscMessages.cs": {
-    "mtime": 1793025407.5781224,
-    "seen": 1793580342.769287,
-    "ast_hash": "704607b9d16c6c0d60aa29f4236edeef",
+    "mtime": 1793872494.7524931,
+    "seen": 1793872800.9539697,
+    "ast_hash": "2b4d40409ec50e735b8d960a292a361a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneAchievementMessages.cs": {
@@ -1212,9 +1212,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneAuctionMessages.cs": {
-    "mtime": 1792998001.4244854,
-    "seen": 1793580342.76929,
-    "ast_hash": "1cacc2f61c86497445ddc62a436890a6",
+    "mtime": 1793871144.8206096,
+    "seen": 1793871305.8069406,
+    "ast_hash": "a33681b4d8a10001c7c73011d43d9616",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneClassMessages.cs": {
@@ -1224,9 +1224,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneClientToServerMessages.cs": {
-    "mtime": 1793262545.724546,
-    "seen": 1793580342.7692914,
-    "ast_hash": "2afd4d9f9d03a97eedee766cabc938fd",
+    "mtime": 1793960489.8306336,
+    "seen": 1793970381.1995924,
+    "ast_hash": "ed82b61bdabfdacc655a618a87b2eedb",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneCoinsMessages.cs": {
@@ -1284,15 +1284,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEntityMessages.cs": {
-    "mtime": 1793082777.0990121,
-    "seen": 1793580342.7692995,
-    "ast_hash": "0681a46b0bc7dd088293664e4e719b6c",
+    "mtime": 1793992339.6590793,
+    "seen": 1794001909.5104914,
+    "ast_hash": "98b2e0f4e5ea33740b1b36a8f502048f",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEntryDataMessages.cs": {
-    "mtime": 1793722113.1498737,
-    "seen": 1793726602.667542,
-    "ast_hash": "ff851b25db70e049075e0f01964cea0c",
+    "mtime": 1793866311.8699825,
+    "seen": 1793868422.1993346,
+    "ast_hash": "1ae8c152a89ff0dfc673a348d9124655",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEntryExtraMessages.cs": {
@@ -1302,15 +1302,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneEquipMessages.cs": {
-    "mtime": 1793810279.55211,
-    "seen": 1793824215.7428944,
-    "ast_hash": "219102492ed1c01aac2ef41e5ccafb2c",
+    "mtime": 1793866311.8700535,
+    "seen": 1793868422.1993365,
+    "ast_hash": "70cd081ada8a86b547c7097335f20b65",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneHudMessages.cs": {
-    "mtime": 1793811105.4162931,
-    "seen": 1793824215.7428954,
-    "ast_hash": "f01f215e5d2337a00c94aa026827d5f4",
+    "mtime": 1793866311.870136,
+    "seen": 1793868422.1993372,
+    "ast_hash": "1fa7f9a05c4007e7a1ba7e40223c4001",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneItemMallMessages.cs": {
@@ -1320,9 +1320,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneItemMessages.cs": {
-    "mtime": 1793638922.6275544,
-    "seen": 1793646851.0987523,
-    "ast_hash": "80d27d14c619ab68d5e941eeb770e83b",
+    "mtime": 1793866311.8701591,
+    "seen": 1793868422.199339,
+    "ast_hash": "23d56af5f76d9cb5d3db9da1805443dc",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneLoverMessages.cs": {
@@ -1350,9 +1350,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneMiscMessages.cs": {
-    "mtime": 1793200542.2104948,
-    "seen": 1793580342.7693079,
-    "ast_hash": "5f692e85e702cd6b5d32ff4a0799cb27",
+    "mtime": 1793975978.9066305,
+    "seen": 1793982748.8825612,
+    "ast_hash": "d38f29304cee3be577c9b0d29230c7e8",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneMissionMessages.cs": {
@@ -1368,15 +1368,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneShopMessages.cs": {
-    "mtime": 1793001116.751222,
-    "seen": 1793580342.7693105,
-    "ast_hash": "778ff27d617a7b623c9c6bf6a3c4a7ca",
+    "mtime": 1793866311.8704753,
+    "seen": 1793868422.1993465,
+    "ast_hash": "1363c1a23bd5b95acab0a377ceae8190",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneSocialMessages.cs": {
-    "mtime": 1793397838.5464387,
-    "seen": 1793580342.7693112,
-    "ast_hash": "44e8f034ed24ba266218b86b7f7d9aa7",
+    "mtime": 1793985312.3978286,
+    "seen": 1794001909.5105147,
+    "ast_hash": "d8a32a93183a52537f2ae1c41fe6fb89",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/protocol/ZoneStorageMessages.cs": {
@@ -1446,9 +1446,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/CharCreateScreen.cs": {
-    "mtime": 1793723182.572641,
-    "seen": 1793726602.6675663,
-    "ast_hash": "cdc29235498bfa21762d84e474bd0d4c",
+    "mtime": 1793971107.953759,
+    "seen": 1793982748.8825848,
+    "ast_hash": "b21e0eb15c04a45e338201c2f1f23fbd",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/CharDressing.cs": {
@@ -1506,9 +1506,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/TempleBackdrop.cs": {
-    "mtime": 1793397838.5484388,
-    "seen": 1793580342.7693288,
-    "ast_hash": "56e384e62dc99f124fe067be2f3b8b5b",
+    "mtime": 1793914049.12066,
+    "seen": 1793915970.3421195,
+    "ast_hash": "38164c385086716e79c7c8c88c5c0031",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/screens/TempleOrbitProbe.cs": {
@@ -1548,9 +1548,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsApplier.cs": {
-    "mtime": 1793764715.3202631,
-    "seen": 1793764975.5670125,
-    "ast_hash": "268597d1a8c0959621e9e5f106976c64",
+    "mtime": 1793834128.4252238,
+    "seen": 1793849949.0069034,
+    "ast_hash": "8fc33bda9a77ff3feabd623eaa14a5fb",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/settings/SettingsWindow.Prefs.cs": {
@@ -1566,9 +1566,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/CeguiBuilder.cs": {
-    "mtime": 1793397838.5494387,
-    "seen": 1793580342.7693372,
-    "ast_hash": "666316d233e7d802e7e969cd74397122",
+    "mtime": 1793962935.9305806,
+    "seen": 1793970381.199702,
+    "ast_hash": "8c8121026a03af8b2da0bb65944fecb9",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/CeguiImageset.cs": {
@@ -1596,9 +1596,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/CeguiToGodot.cs": {
-    "mtime": 1793721607.5544508,
-    "seen": 1793726602.667589,
-    "ast_hash": "76168b832d5361e1e7207093e7efe8db",
+    "mtime": 1793913984.7932146,
+    "seen": 1793915970.3421447,
+    "ast_hash": "f20bd14c6709e9b87be70e37988a58bb",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/ui/GridResizeMath.cs": {
@@ -1674,15 +1674,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/EntityRegistry.cs": {
-    "mtime": 1793822824.4141154,
-    "seen": 1793824215.742957,
-    "ast_hash": "ad3cd68d0ce10c7e61e38f019810da23",
+    "mtime": 1793997547.3218908,
+    "seen": 1794001909.5105975,
+    "ast_hash": "a9482df9d0c40ad1a8e423940826f921",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/FogCeiling.cs": {
-    "mtime": 1793726408.7051778,
-    "seen": 1793726602.6676037,
-    "ast_hash": "1955f7c5ac88c17f63379935f743c8bc",
+    "mtime": 1793997630.0115097,
+    "seen": 1794001909.5106008,
+    "ast_hash": "c4b50d5cfbd5bd244b1882b8a99e88d6",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/FsmFile.cs": {
@@ -1710,9 +1710,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/MapLoader.cs": {
-    "mtime": 1793821924.7818503,
-    "seen": 1793824215.7429626,
-    "ast_hash": "d490f4be38c8bec1a9e1dd043668cc07",
+    "mtime": 1793997630.011764,
+    "seen": 1794001909.5106084,
+    "ast_hash": "5ce72dd2857d9e44f349b284470bbea7",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/MobDanger.cs": {
@@ -1728,9 +1728,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/NpcCategoryTable.cs": {
-    "mtime": 1793171651.8645022,
-    "seen": 1793580342.7693589,
-    "ast_hash": "c6a20f670228953097d9c6a468afe68a",
+    "mtime": 1794001041.8902156,
+    "seen": 1794001909.5106163,
+    "ast_hash": "cc4089c2051054a25a399850925022d1",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/Pathfinder.cs": {
@@ -1764,15 +1764,15 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/ToonMaterializer.cs": {
-    "mtime": 1793642392.8638995,
-    "seen": 1793646851.098823,
-    "ast_hash": "3c922fd4659f80ff5f4588f1ad96ec8d",
+    "mtime": 1793992305.8285272,
+    "seen": 1794001909.510628,
+    "ast_hash": "4302e94b1da225d827fdd4a4c989211a",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/WalkableGround.cs": {
-    "mtime": 1793627683.7379425,
-    "seen": 1793646851.0988243,
-    "ast_hash": "6702bbbdd5ecf7cd4c79b10802348ba9",
+    "mtime": 1793938606.1553264,
+    "seen": 1793939091.66392,
+    "ast_hash": "a2dbb3d95bb93d6b1fe447ac264c6b28",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/WaterAnimator.cs": {
@@ -1830,15 +1830,15 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/CeguiTests.cs": {
-    "mtime": 1793581676.182565,
-    "seen": 1793581880.8563244,
-    "ast_hash": "60497cb58800852bf5d81426d34d32c0",
+    "mtime": 1793866311.871312,
+    "seen": 1793868422.1994267,
+    "ast_hash": "09891452bc0ebdb5805d1d04d32f8121",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/CharColorTests.cs": {
-    "mtime": 1793432363.2147229,
-    "seen": 1793580342.7693737,
-    "ast_hash": "40edd6198e1c10bb57d36f6691b0c3b0",
+    "mtime": 1793925699.6420329,
+    "seen": 1793926067.144778,
+    "ast_hash": "6355d2784f569e8cc2714ec2a3d12256",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ClientUiSettingsTests.cs": {
@@ -1902,9 +1902,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/IniTableTests.cs": {
-    "mtime": 1793577134.5999432,
-    "seen": 1793580342.7693832,
-    "ast_hash": "e003fd70bb20b61152e9149edf81e7b5",
+    "mtime": 1793925696.0334506,
+    "seen": 1793926067.144796,
+    "ast_hash": "96050ab61f405f701ae9cc5f5b81551e",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ItemTipFormatTests.cs": {
@@ -2016,9 +2016,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/UiTextIsTranslationTests.cs": {
-    "mtime": 1793444726.4739218,
-    "seen": 1793580342.7694008,
-    "ast_hash": "eb471a6dbe816f87c0b03d8446df53ef",
+    "mtime": 1793925699.710048,
+    "seen": 1793926067.1448257,
+    "ast_hash": "d7bfa4c87bfcb207f7d302eaf1a71bbc",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/UxFlowTests.cs": {
@@ -2070,15 +2070,15 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneItemTests.cs": {
-    "mtime": 1793764715.3223042,
-    "seen": 1793764975.5671263,
-    "ast_hash": "e63c6edbac477980732b7a3b84c8e6ff",
+    "mtime": 1793866311.8713675,
+    "seen": 1793868422.199482,
+    "ast_hash": "2cfe13c7e8d45886f5c3d6a20f7e5beb",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneLotGTests.cs": {
-    "mtime": 1792906187.7009044,
-    "seen": 1793580342.7694092,
-    "ast_hash": "7324c174d47f9686dc878b89a8689498",
+    "mtime": 1793866311.8714414,
+    "seen": 1793868422.199483,
+    "ast_hash": "2ebe9b33e987d6e85b2a09f74adfd7ea",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ZoneLotS6S8Tests.cs": {
@@ -2532,9 +2532,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/CraftRecipeParser.cs": {
-    "mtime": 1793479461.3641245,
-    "seen": 1793580342.7694707,
-    "ast_hash": "a18cf670afffec8ab917ecbacfc7da6c",
+    "mtime": 1793866311.8715022,
+    "seen": 1793868422.1995592,
+    "ast_hash": "9207995042c29516123226ee2cb41276",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/DailyAwardParser.cs": {
@@ -2562,9 +2562,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/EnchantParser.cs": {
-    "mtime": 1793764715.3224123,
-    "seen": 1793764975.5672107,
-    "ast_hash": "bd0bc5740337998fe99acd31aeb37398",
+    "mtime": 1793974421.4258733,
+    "seen": 1793982748.8828382,
+    "ast_hash": "478dd5830d08314f9ffac8a6dba48e82",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/EquipSetParser.cs": {
@@ -2592,9 +2592,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/ItemParser.cs": {
-    "mtime": 1793479461.3630745,
-    "seen": 1793580342.7694788,
-    "ast_hash": "86bc825f4cc33ec23b082430622e0e2e",
+    "mtime": 1793916945.4956005,
+    "seen": 1793919513.1790044,
+    "ast_hash": "d74cec88ea9a87d48ca7242514b8b764",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/LifeSkillParser.cs": {
@@ -2604,9 +2604,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/MissionParser.cs": {
-    "mtime": 1793479461.3646345,
-    "seen": 1793580342.7694805,
-    "ast_hash": "c8b7ac2afd9a94ab15054e187f527047",
+    "mtime": 1793901185.3965528,
+    "seen": 1793915970.3424451,
+    "ast_hash": "49fe3711bb5e9a2310a15e28810d241a",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/MonsterParser.cs": {
@@ -2640,9 +2640,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/ProgressionParsers.cs": {
-    "mtime": 1793479461.362862,
-    "seen": 1793580342.7694852,
-    "ast_hash": "c190fe62a6a79e92dca115702b8ad04e",
+    "mtime": 1793869499.3988657,
+    "seen": 1793870309.2044184,
+    "ast_hash": "d5af2d1efe4c5a0f4a8048324e9db3bb",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/RewardScoreParser.cs": {
@@ -2652,9 +2652,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/SceneParser.cs": {
-    "mtime": 1793818381.5011487,
-    "seen": 1793824215.7431364,
-    "ast_hash": "6be32b362c3e64ae27e63c9713aefef5",
+    "mtime": 1793984784.3158739,
+    "seen": 1794001909.5108445,
+    "ast_hash": "ad333e0a6e32a5486ae5c887f150b4a6",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/ShopAndMiscParsers.cs": {
@@ -2682,9 +2682,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/Parsers/WorldParsers.cs": {
-    "mtime": 1793479461.3644934,
-    "seen": 1793580342.769491,
-    "ast_hash": "636aa4919d35548a68879435a78fd9cf",
+    "mtime": 1793940180.1892583,
+    "seen": 1793959231.625001,
+    "ast_hash": "ba854b074679b963ab4d76d7bebf01c7",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Data/ReforgedDataLocator.cs": {
@@ -2766,9 +2766,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/AuctionRepository.cs": {
-    "mtime": 1793479461.3675365,
-    "seen": 1793580342.7695022,
-    "ast_hash": "37ae96a41e0e9cacdf3352f512be9354",
+    "mtime": 1793871006.3919394,
+    "seen": 1793871305.8072176,
+    "ast_hash": "265c7f371e397b224c4edaa54edb33f4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/BankRepository.cs": {
@@ -2790,15 +2790,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/CharacterRepository.cs": {
-    "mtime": 1793563469.5755692,
-    "seen": 1793580342.7695053,
-    "ast_hash": "b1d493719fbfe4a3feb1bef1d4628ee0",
+    "mtime": 1793867863.1927752,
+    "seen": 1793868422.199599,
+    "ast_hash": "d11505b672816a15049e1361c2604933",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/ClassRepository.cs": {
-    "mtime": 1793722511.3421073,
-    "seen": 1793726602.6677997,
-    "ast_hash": "378bde9a03e84c2b48a9101e9d171112",
+    "mtime": 1793833379.5749426,
+    "seen": 1793849949.0072508,
+    "ast_hash": "b52f09a3a41ea31a57e6224812024325",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/CustomClassRepository.cs": {
@@ -2826,9 +2826,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/EvaluateRepository.cs": {
-    "mtime": 1793479461.3657176,
-    "seen": 1793580342.76951,
-    "ast_hash": "b848280e6eec32b0e8be9ae46715222b",
+    "mtime": 1793866311.871653,
+    "seen": 1793868422.199605,
+    "ast_hash": "640d0572ca77388fea21894978205542",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/FamilyBankRepository.cs": {
@@ -2874,9 +2874,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/IClassRepository.cs": {
-    "mtime": 1793722511.3422825,
-    "seen": 1793726602.6678116,
-    "ast_hash": "3a4c46ba75c9b1fcb4efd90c5957ec9c",
+    "mtime": 1793833375.5374324,
+    "seen": 1793849949.0072691,
+    "ast_hash": "cc9b5f17a7b104588ee6ae6e0c6b45b5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/IInventoryRepository.cs": {
@@ -2940,9 +2940,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/InventoryRepository.cs": {
-    "mtime": 1793479461.3667037,
-    "seen": 1793580342.7695253,
-    "ast_hash": "3a678f68b280ac71f33642a070906748",
+    "mtime": 1793866311.8717852,
+    "seen": 1793868422.1996224,
+    "ast_hash": "0e393cbfbfd9763fef50e623722b61f4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/ItemMallRepositories.cs": {
@@ -3012,9 +3012,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/SocialRepositories.cs": {
-    "mtime": 1793479461.3672943,
-    "seen": 1793580342.769535,
-    "ast_hash": "9cb733b66d889731a2eac3ce3afc27dc",
+    "mtime": 1793909074.1767726,
+    "seen": 1793915970.3425488,
+    "ast_hash": "64bfe06e0cb7f7bd11c64822f2be4120",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Database/Repositories/TicketRepository.cs": {
@@ -3054,9 +3054,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/EdenConfig.cs": {
-    "mtime": 1793563469.5755692,
-    "seen": 1793580342.7695403,
-    "ast_hash": "02810f78489272959e8d5ee9b77d8a3a",
+    "mtime": 1793866311.8718429,
+    "seen": 1793868422.19964,
+    "ast_hash": "121370a1a0869770e0bd3a69bca121c0",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/AppearanceBlob.cs": {
@@ -3066,9 +3066,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Auction/AuctionEntity.cs": {
-    "mtime": 1793479461.3683453,
-    "seen": 1793580342.769542,
-    "ast_hash": "24486b4bbf8f7546eee4529abc833d28",
+    "mtime": 1793870992.363821,
+    "seen": 1793871305.8072658,
+    "ast_hash": "c1dde3fc9945356f970878bb028016d2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Bank/BankItemEntity.cs": {
@@ -3162,33 +3162,33 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Family/FamilyHallRules.cs": {
-    "mtime": 1793479461.3733816,
-    "seen": 1793580342.7695546,
-    "ast_hash": "6e1b40289c815ad4e268e18576e7ef51",
+    "mtime": 1793874045.8293672,
+    "seen": 1793874705.6123495,
+    "ast_hash": "2321eb7ba7c8b145a35e988f5e68015c",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Family/FamilyModels.cs": {
-    "mtime": 1793479461.3731287,
-    "seen": 1793580342.7695556,
-    "ast_hash": "8962027b1e5719b25352c9778ce408d5",
+    "mtime": 1793872082.0651407,
+    "seen": 1793872800.954514,
+    "ast_hash": "1382ddd17fa6ae1bcf7f5024d4a05a25",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Family/FamilyPackets.cs": {
-    "mtime": 1793479461.373218,
-    "seen": 1793580342.7695563,
-    "ast_hash": "1aa5efc4ba13aaf31d5054f18b8156ee",
+    "mtime": 1793872831.667231,
+    "seen": 1793874705.6123533,
+    "ast_hash": "3abd3d63ea288c73cf5b1979ed1e48ca",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Family/FamilyRepository.cs": {
-    "mtime": 1793479461.3730109,
-    "seen": 1793580342.769557,
-    "ast_hash": "7e169b440f2a7c1025a7eef7bd609c7b",
+    "mtime": 1793872592.2430263,
+    "seen": 1793872800.9545178,
+    "ast_hash": "2974240866e81d1f64f34c9f7ccfb7b8",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Family/FamilyService.cs": {
-    "mtime": 1793479461.3733253,
-    "seen": 1793580342.7695577,
-    "ast_hash": "b26193d0208d745a54220d495e172461",
+    "mtime": 1793872164.8367128,
+    "seen": 1793872800.9545195,
+    "ast_hash": "1346e583e5ddb9cd8458b911b689ace6",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Fortune/FortuneBags.cs": {
@@ -3228,9 +3228,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Inventory/ItemEntity.cs": {
-    "mtime": 1793479461.3735518,
-    "seen": 1793580342.7695632,
-    "ast_hash": "10fb1a6441d97d07e67cb122d25db8db",
+    "mtime": 1793866311.8719034,
+    "seen": 1793868422.1996746,
+    "ast_hash": "f743737d636f7f48890d190a528f46b2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Inventory/NativeEquipmentSlots.cs": {
@@ -3324,9 +3324,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/AuctionService.cs": {
-    "mtime": 1793479461.3697946,
-    "seen": 1793580342.7695758,
-    "ast_hash": "a546b072aec7fbcaa39f80f2ff02f76b",
+    "mtime": 1793871066.680463,
+    "seen": 1793871305.8073127,
+    "ast_hash": "386bb3183869ef28b97a95f261cdb4c5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/BankService.cs": {
@@ -3378,9 +3378,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/EnchantService.cs": {
-    "mtime": 1793734104.5330935,
-    "seen": 1793734464.163386,
-    "ast_hash": "dbe31929297b2a4fd08b11261f214b7e",
+    "mtime": 1793866311.8719947,
+    "seen": 1793868422.1997008,
+    "ast_hash": "fd69ab1ca5c6a5092765b2113da15dde",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/EquipTrainService.cs": {
@@ -3408,9 +3408,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/GameDataService.cs": {
-    "mtime": 1793687120.8455794,
-    "seen": 1793687251.010317,
-    "ast_hash": "bdde8a97df4620826444591181b1a6b8",
+    "mtime": 1793997935.8045762,
+    "seen": 1794001909.510973,
+    "ast_hash": "2e5d0325527eab8fdc2f2ccef4e37f95",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/GmCommandService.cs": {
@@ -3420,21 +3420,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/GuildService.cs": {
-    "mtime": 1793479461.3687036,
-    "seen": 1793580342.7695892,
-    "ast_hash": "8ca2bfe660ed426b18cfa693464594a2",
+    "mtime": 1793998146.5887609,
+    "seen": 1794001909.5109746,
+    "ast_hash": "7c18b032ab083af149b5be24c72e334a",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/InventoryService.cs": {
-    "mtime": 1793479461.3689644,
-    "seen": 1793580342.76959,
-    "ast_hash": "5e684d6d8c7ce83ed1fb673f4b5d3382",
-    "semantic_hash": ""
-  },
-  "eden_server/server/src/Eden.Core/Game/Services/ItemMallService.cs": {
-    "mtime": 1793479461.3709278,
-    "seen": 1793580342.7695909,
-    "ast_hash": "0f5196ba632a49cc53edacbb55ed7e2c",
+    "mtime": 1793947408.5454636,
+    "seen": 1793959231.6251245,
+    "ast_hash": "19c11d9cbda01caa4bb3d4d40aab25f9",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/LifeSkillService.cs": {
@@ -3540,15 +3534,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/SceneService.cs": {
-    "mtime": 1793479461.3716497,
-    "seen": 1793580342.7696056,
-    "ast_hash": "0cf473778d338b9a0d542ae395c12695",
+    "mtime": 1793984794.384126,
+    "seen": 1794001909.5109932,
+    "ast_hash": "0de7ff71579035030f801fa19c5ebc41",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/ShopService.cs": {
-    "mtime": 1793479461.3707325,
-    "seen": 1793580342.7696064,
-    "ast_hash": "912f4ec4c34f313de9c49110c3837a28",
+    "mtime": 1793890769.031543,
+    "seen": 1793915970.342713,
+    "ast_hash": "bd639bce277d8b634dd20ead4d67f536",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Services/SpellService.cs": {
@@ -3642,15 +3636,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Work/WorkModels.cs": {
-    "mtime": 1793479461.3682318,
-    "seen": 1793580342.769619,
-    "ast_hash": "621a9d5ed6ee247c6906b786ecca7259",
+    "mtime": 1793867128.4274096,
+    "seen": 1793868422.1997433,
+    "ast_hash": "0cda76823ef66a04c0d5e4e80055bef5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/Work/WorkOrderService.cs": {
-    "mtime": 1793479461.3682802,
-    "seen": 1793580342.7696197,
-    "ast_hash": "7ffa345263b3239f5d6f66b594f88517",
+    "mtime": 1793866587.0564332,
+    "seen": 1793868422.199744,
+    "ast_hash": "ae3fb7d8027bbe6d987b9a1fe26dd874",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Core/Game/WorldBoss/MutantScheduler.cs": {
@@ -4068,9 +4062,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/MissionServer.cs": {
-    "mtime": 1793479461.3371654,
-    "seen": 1793580342.7696798,
-    "ast_hash": "db67cc6e282206d474cc965c4f2d114a",
+    "mtime": 1793904953.0941036,
+    "seen": 1793915970.342845,
+    "ast_hash": "d1385de05cba21464218a3ffce08167b",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/MissionSession.cs": {
@@ -4080,21 +4074,21 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Dialogue.cs": {
-    "mtime": 1793825853.9251366,
-    "seen": 1793830054.53194,
-    "ast_hash": "30eea46057a405aeb22faec8ba1ca6af",
+    "mtime": 1793940186.5471377,
+    "seen": 1793959231.6252275,
+    "ast_hash": "43c1ad38da09147adf30c97c68fbc817",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Events.cs": {
-    "mtime": 1793663858.7675471,
-    "seen": 1793665852.606647,
-    "ast_hash": "8f2e14a2693ffdd936414b414fe8b5fc",
+    "mtime": 1793901220.7608833,
+    "seen": 1793915970.3428495,
+    "ast_hash": "345bfb75a5607eca38b91f0d4a9cc882",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Objectives.cs": {
-    "mtime": 1793825500.8661115,
-    "seen": 1793830054.531942,
-    "ast_hash": "08094b0e8e873c151314efa1502a204f",
+    "mtime": 1793901489.887586,
+    "seen": 1793915970.3428512,
+    "ast_hash": "6a7a555bff668a9f54bd29dadd7d7556",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.Share.cs": {
@@ -4110,9 +4104,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/QuestEngine.cs": {
-    "mtime": 1793826233.4899902,
-    "seen": 1793830054.5319445,
-    "ast_hash": "dad04d631dac51c7e147b5056c0c9d60",
+    "mtime": 1793904943.3333914,
+    "seen": 1793915970.3428557,
+    "ast_hash": "fd8f3b79638e78a21989561c7d36535a",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Mission/Services/RankInfoService.cs": {
@@ -4164,9 +4158,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.World/Handlers/FamilyHandlers.cs": {
-    "mtime": 1793479461.3751323,
-    "seen": 1793580342.7696927,
-    "ast_hash": "65f5a61633eb382394854d6c747863a7",
+    "mtime": 1793872176.2024806,
+    "seen": 1793872800.9547646,
+    "ast_hash": "ff7175de6ae6b61a65640bf48349bc15",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.World/Handlers/FriendHandlers.cs": {
@@ -4206,9 +4200,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.World/ZoneLinkServer.cs": {
-    "mtime": 1793479461.374972,
-    "seen": 1793580342.7696986,
-    "ast_hash": "3dc8c203ca53f4d55458975a88e044d7",
+    "mtime": 1793963785.509571,
+    "seen": 1793970381.2004514,
+    "ast_hash": "38b366a9ca7815825f6e5645730b777e",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/CharacterWriteBehind.cs": {
@@ -4284,9 +4278,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Codecs/NativeItemCodec.cs": {
-    "mtime": 1793479461.3406613,
-    "seen": 1793580342.7697096,
-    "ast_hash": "eaf3bfc9191856db0ba84dea896d5318",
+    "mtime": 1793947342.464597,
+    "seen": 1793959231.625261,
+    "ast_hash": "52984181af4f3285a07164b857acd1be",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Codecs/PvpRankEquipPackets.cs": {
@@ -4380,9 +4374,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/GroundTreasureService.cs": {
-    "mtime": 1793479461.351355,
-    "seen": 1793580342.7697225,
-    "ast_hash": "2463fb98d377b259244ea9efcbaa7bfa",
+    "mtime": 1793899775.6311152,
+    "seen": 1793915970.3429253,
+    "ast_hash": "bfbc9632681cb6034df9cb79a143dacc",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/CombatHandlers.cs": {
@@ -4410,9 +4404,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/FamilyHandlers.cs": {
-    "mtime": 1793479461.346981,
-    "seen": 1793580342.7697263,
-    "ast_hash": "f2e8ef3a75ef3b21242562c54248466b",
+    "mtime": 1793871452.5420575,
+    "seen": 1793872800.9548268,
+    "ast_hash": "eced18c64498f5896a60a1d765764f44",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/GmGuildHandlers.cs": {
@@ -4434,9 +4428,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/InstanceHandlers.cs": {
-    "mtime": 1793479461.3482273,
-    "seen": 1793580342.7697294,
-    "ast_hash": "a196be7124c0e01131189264ada256a4",
+    "mtime": 1793870454.9515142,
+    "seen": 1793871305.8074975,
+    "ast_hash": "14806940fbd887499fb92422348a0e03",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/InventoryHandlers.Helpers.cs": {
@@ -4452,9 +4446,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/ItemActionHandlers.cs": {
-    "mtime": 1793479461.3477035,
-    "seen": 1793580342.7697318,
-    "ast_hash": "292e2e9c7ee5e1f66ff6eea8e9385481",
+    "mtime": 1793951730.0653203,
+    "seen": 1793959231.6252904,
+    "ast_hash": "aaace4ed5aa63065e31fb8bd00f82d5b",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/MiscHandlers.cs": {
@@ -4476,21 +4470,21 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/ReforgedPackets.cs": {
-    "mtime": 1793479461.3481927,
-    "seen": 1793580342.769735,
-    "ast_hash": "b74a08efc4c24a3b28c633ab4ef8b329",
+    "mtime": 1793866311.8722067,
+    "seen": 1793868422.1998765,
+    "ast_hash": "8463bc90e54d25585b694396025263b3",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/ShopHandlers.cs": {
-    "mtime": 1793479461.348267,
-    "seen": 1793580342.769736,
-    "ast_hash": "b300f167db6eff0afafcba925cdd4331",
+    "mtime": 1793871055.1988986,
+    "seen": 1793871305.8075056,
+    "ast_hash": "99305b68e20bf945ae32eac5fc5f0e6d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/SocialHandlers.cs": {
-    "mtime": 1793479461.3480902,
-    "seen": 1793580342.7697368,
-    "ast_hash": "466b1c49594db2e0422a6fed1821f9e6",
+    "mtime": 1793963369.730412,
+    "seen": 1793970381.2005293,
+    "ast_hash": "4a0e219d6a94f015ac48382a1559db91",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Handlers/TeamHandlers.cs": {
@@ -4518,9 +4512,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Links/ZoneMissionLink.cs": {
-    "mtime": 1793479461.349258,
-    "seen": 1793580342.7697406,
-    "ast_hash": "fcadb4227e1c7d6f5c7f2dfdc4febfd2",
+    "mtime": 1793888565.4644287,
+    "seen": 1793915970.3429601,
+    "ast_hash": "0967097916b84abe154148edb6a9055a",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Links/ZoneWorldLink.cs": {
@@ -4554,9 +4548,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/Program.cs": {
-    "mtime": 1793722535.1959045,
-    "seen": 1793726602.6681013,
-    "ast_hash": "1a19f8808b1754924f8808c9d96cfcbc",
+    "mtime": 1794001410.4230177,
+    "seen": 1794001909.5111554,
+    "ast_hash": "7ee7d65d434a8d065aa99d01054a5fc4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/QuestItemRules.cs": {
@@ -4614,15 +4608,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Achievement.cs": {
-    "mtime": 1793479461.3443956,
-    "seen": 1793580342.7697537,
-    "ast_hash": "2495c0946468d008ba00476b9219b286",
+    "mtime": 1793872201.7689345,
+    "seen": 1793872800.9548776,
+    "ast_hash": "953e4f537e5a2b30e1ad73e25f139c6b",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Admin.cs": {
-    "mtime": 1793827633.5364673,
-    "seen": 1793830054.5320265,
-    "ast_hash": "e262a6fbb4601c158fd03c5b77fab070",
+    "mtime": 1793953624.8724759,
+    "seen": 1793959231.625319,
+    "ast_hash": "54c573780dabaafa52935d58914f89e8",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.AdvancedAbility.cs": {
@@ -4680,21 +4674,21 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Aggro.cs": {
-    "mtime": 1793479461.3392224,
-    "seen": 1793580342.7697625,
-    "ast_hash": "4863a3d924e2edf795135e879aeecfcd",
+    "mtime": 1793843982.673876,
+    "seen": 1793849949.007725,
+    "ast_hash": "1cb300a5314479af202ed9a31ad63c58",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Death.cs": {
-    "mtime": 1793818173.2914855,
-    "seen": 1793824215.7434497,
-    "ast_hash": "6f45455852c865eeef778ccf90e9dbc2",
+    "mtime": 1793947007.881459,
+    "seen": 1793959231.6253304,
+    "ast_hash": "e33106cf50a1500d203ae49d9b22951b",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Mob.cs": {
-    "mtime": 1793764715.3224123,
-    "seen": 1793764975.56755,
-    "ast_hash": "38505946df12e714b497c542cb20a4f9",
+    "mtime": 1793992394.27422,
+    "seen": 1794001909.5111787,
+    "ast_hash": "6b555c7438c42cd7c8d517b9b42e9138",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Procs.cs": {
@@ -4704,9 +4698,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Rewards.cs": {
-    "mtime": 1793809374.2058392,
-    "seen": 1793824215.7434523,
-    "ast_hash": "50ce3f723ca29f381f408d8fdcca3c27",
+    "mtime": 1793947357.4555533,
+    "seen": 1793959231.6253333,
+    "ast_hash": "a691eab9e3ec67b96c51e784667323e4",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Ride.cs": {
@@ -4722,9 +4716,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Spells.cs": {
-    "mtime": 1793764715.3224123,
-    "seen": 1793764975.5675545,
-    "ast_hash": "f2988c9bc372acb779f725a2b4ec9041",
+    "mtime": 1793917003.68112,
+    "seen": 1793919513.1797187,
+    "ast_hash": "fa915322c8af47b959f978de3239b7e6",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.Timing.cs": {
@@ -4734,9 +4728,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Combat.cs": {
-    "mtime": 1793815364.8266351,
-    "seen": 1793824215.743457,
-    "ast_hash": "3013899669f852c5c180d8c7a1414e04",
+    "mtime": 1793898416.22935,
+    "seen": 1793915970.3430188,
+    "ast_hash": "79435e59d8ec3dab9cda3963c1fcf975",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.CombineStation.cs": {
@@ -4770,9 +4764,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Dialogue.cs": {
-    "mtime": 1793479461.3459709,
-    "seen": 1793580342.7697747,
-    "ast_hash": "ce77866bb9c9a3c0bd8c84c2942fcf21",
+    "mtime": 1793940195.2559726,
+    "seen": 1793959231.6253433,
+    "ast_hash": "428ff5deafe1e97f4404134a79556b1d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.DisplayChar.cs": {
@@ -4812,21 +4806,21 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.EntryPipeline.Install.cs": {
-    "mtime": 1793764715.3232632,
-    "seen": 1793764975.5675697,
-    "ast_hash": "55a1663e341e1e75e21593491cd8d605",
+    "mtime": 1793947053.6023805,
+    "seen": 1793959231.6253514,
+    "ast_hash": "28aa365da81e9d34d82ade9e1cd9b453",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.EntryPipeline.Load.cs": {
-    "mtime": 1793721994.722319,
-    "seen": 1793726602.668145,
-    "ast_hash": "80421fd148aa0169a0c3681b50deeea3",
+    "mtime": 1793866311.8726728,
+    "seen": 1793868422.1999347,
+    "ast_hash": "aaa22cedca3af190b5be040b453c13c1",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.EntryPipeline.cs": {
-    "mtime": 1793660934.8781383,
-    "seen": 1793662868.0381858,
-    "ast_hash": "cd2e95c8b19733352912c26a0f2c2bb8",
+    "mtime": 1793947062.6853254,
+    "seen": 1793959231.625353,
+    "ast_hash": "914641a5a5a29fef97aeb4ef83e8d767",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Equipment.cs": {
@@ -4836,9 +4830,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Evaluate.cs": {
-    "mtime": 1793479461.3499198,
-    "seen": 1793580342.7697833,
-    "ast_hash": "375e6067a9b2b7d0de313d4f557d132e",
+    "mtime": 1793945476.9134083,
+    "seen": 1793959231.625355,
+    "ast_hash": "3343ec883fd72db05f8e00dbe858a5cb",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Events.Scene.cs": {
@@ -4848,9 +4842,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Events.cs": {
-    "mtime": 1793818403.3615806,
-    "seen": 1793824215.7434747,
-    "ast_hash": "671ec95f2b6eae3e71cb031a95f8fb51",
+    "mtime": 1793984813.7904508,
+    "seen": 1794001909.5112035,
+    "ast_hash": "b7f9c50fad89e7fcf12bdff5cf5d3b58",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Family.cs": {
@@ -4860,9 +4854,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.FamilyInstance.cs": {
-    "mtime": 1793479461.3420372,
-    "seen": 1793580342.7697864,
-    "ast_hash": "6adcc71a7cdf84e923ca8744f62248de",
+    "mtime": 1794001396.1423287,
+    "seen": 1794001909.5112064,
+    "ast_hash": "da2fd34129d713600867125a272114c2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.FastDress.cs": {
@@ -4878,9 +4872,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Instancing.cs": {
-    "mtime": 1793479461.3494487,
-    "seen": 1793580342.7697887,
-    "ast_hash": "2ba4682f6027b5b4e972ec279026015e",
+    "mtime": 1793947041.7146227,
+    "seen": 1793959231.6253614,
+    "ast_hash": "4421b8d8ef6946a5921245057a5d34ba",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.ItemMall.cs": {
@@ -4908,15 +4902,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.LifeSkill.cs": {
-    "mtime": 1793479461.3520584,
-    "seen": 1793580342.7697928,
-    "ast_hash": "0e072ef4ecdb8fcb1d1192e2e688edad",
+    "mtime": 1793977393.2154734,
+    "seen": 1793982748.8832252,
+    "ast_hash": "949c1cde6cfdaece3db8bfd94ab44561",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Lifecycle.cs": {
-    "mtime": 1793764715.324322,
-    "seen": 1793764975.5675852,
-    "ast_hash": "4cffb0dffa449a30fceeac9168026f66",
+    "mtime": 1793946983.782293,
+    "seen": 1793959231.6253686,
+    "ast_hash": "5bda3096be88ccdf63dd866f641717ee",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Lifelong.cs": {
@@ -4950,15 +4944,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Migration.cs": {
-    "mtime": 1793479461.344182,
-    "seen": 1793580342.7697985,
-    "ast_hash": "bc90050840b347742c78cff29c86c616",
+    "mtime": 1794001415.3320448,
+    "seen": 1794001909.5112212,
+    "ast_hash": "edb855c061ef8eb589de37d915d25a39",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Mission.Commands.cs": {
-    "mtime": 1793722526.3268023,
-    "seen": 1793726602.668166,
-    "ast_hash": "f99628d018d7c78377e3fd77e6cdc3d2",
+    "mtime": 1793946997.6994133,
+    "seen": 1793959231.625375,
+    "ast_hash": "098f2eaa773fb9dd02eaa09479191a44",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Mission.cs": {
@@ -4974,15 +4968,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.MobWander.cs": {
-    "mtime": 1793819370.8009982,
-    "seen": 1793824215.7434933,
-    "ast_hash": "c096a1e489caebd89d59ff4d0aabe1c0",
+    "mtime": 1793995679.2185383,
+    "seen": 1794001909.5112247,
+    "ast_hash": "cbc9637a353ffbed96e0d91579149e5d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Movement.cs": {
-    "mtime": 1793479461.343337,
-    "seen": 1793580342.7698023,
-    "ast_hash": "cdcff583ae8d608a99bbf8bfec2db60a",
+    "mtime": 1793946988.655256,
+    "seen": 1793959231.6253784,
+    "ast_hash": "702e72f88dfe31d73e852a4307a1d560",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.PayEvent.cs": {
@@ -5058,15 +5052,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Services.cs": {
-    "mtime": 1793726251.8892884,
-    "seen": 1793726602.6681817,
-    "ast_hash": "99275f3a48b224e74bb989390183d0a1",
+    "mtime": 1793866311.8731096,
+    "seen": 1793868422.1999722,
+    "ast_hash": "d6b6308561be9be785d43b3f5f7945e2",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Sight.cs": {
-    "mtime": 1793479461.345563,
-    "seen": 1793580342.7698135,
-    "ast_hash": "dc140fbfb02fa7d7d7b2770f34ab3d12",
+    "mtime": 1793893780.247198,
+    "seen": 1793915970.3431032,
+    "ast_hash": "def9c525d6423277d2d8706b4cd654c5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.SpellAttr.cs": {
@@ -5076,9 +5070,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.State.cs": {
-    "mtime": 1793479461.3439732,
-    "seen": 1793580342.769815,
-    "ast_hash": "2cb8deaa10003237dd93e76220cc6474",
+    "mtime": 1793946940.9566038,
+    "seen": 1793959231.625394,
+    "ast_hash": "cd348a6028517b2ab04249af871c188d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Status.cs": {
@@ -5088,9 +5082,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Strengthen.cs": {
-    "mtime": 1793764715.3251126,
-    "seen": 1793764975.5676122,
-    "ast_hash": "c231ba6dc03cb3cb36be00f79c9e5601",
+    "mtime": 1793974423.2866023,
+    "seen": 1793982748.8832533,
+    "ast_hash": "0d82bc76d8f7a59212131bdac5176bb5",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Summon.cs": {
@@ -5130,9 +5124,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Treasure.cs": {
-    "mtime": 1793479461.3516445,
-    "seen": 1793580342.7698221,
-    "ast_hash": "2b7df3356cbb146f6a571063100b102e",
+    "mtime": 1793899784.2845259,
+    "seen": 1793915970.3431199,
+    "ast_hash": "9dd13ac4c775d2b35969dbe3f6a9cc77",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Vending.cs": {
@@ -5148,9 +5142,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Work.cs": {
-    "mtime": 1793479461.3522024,
-    "seen": 1793580342.7698245,
-    "ast_hash": "dec88941f2518e7ee2d47e27ed3c78f9",
+    "mtime": 1793998146.5892835,
+    "seen": 1794001909.5112517,
+    "ast_hash": "4e8204d76ec4c5595f6fde70e04f41f6",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.WorldBoss.cs": {
@@ -5160,27 +5154,27 @@
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneEntryFlow.cs": {
-    "mtime": 1793741372.2914479,
-    "seen": 1793742303.1703618,
-    "ast_hash": "d24a55795560e9bff4bff17da7c8857b",
+    "mtime": 1793916995.7082767,
+    "seen": 1793919513.1798677,
+    "ast_hash": "237e4c0ca107aae7e05d128e49351bf6",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneLiveWorld.cs": {
-    "mtime": 1793818382.0583296,
-    "seen": 1793824215.743523,
-    "ast_hash": "a9f66d792da8a7c46144e72dc69cff3d",
+    "mtime": 1793984829.6172636,
+    "seen": 1794001909.511254,
+    "ast_hash": "8408864623052ae03bf9f1c8dc555d69",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneLoop.cs": {
-    "mtime": 1793479461.3457396,
-    "seen": 1793580342.7698276,
-    "ast_hash": "4cd7c168cfa79848b7259388be96b2ca",
+    "mtime": 1793841662.9306135,
+    "seen": 1793849949.007843,
+    "ast_hash": "f0c3eb4406e7b615bfb62192379d0c6d",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneServices.cs": {
-    "mtime": 1793563469.5765767,
-    "seen": 1793580342.7698283,
-    "ast_hash": "f3e668fcf1fb65a4e40ea3c48d6ccbe1",
+    "mtime": 1793916952.7211223,
+    "seen": 1793919513.1798732,
+    "ast_hash": "81aff744e1321d972fa1781923c54661",
     "semantic_hash": ""
   },
   "eden_server/server/src/Eden.Zone/ZoneSessionManager.cs": {
@@ -5196,9 +5190,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/AchievementRankingTests.cs": {
-    "mtime": 1793479461.3769546,
-    "seen": 1793580342.769831,
-    "ast_hash": "72668d1d101b7befa69b6d1a19af5307",
+    "mtime": 1793871107.8886368,
+    "seen": 1793871305.8076272,
+    "ast_hash": "7c70297de6da26ef3339fb6a61a1c2ce",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/AppearanceBlobTests.cs": {
@@ -5292,9 +5286,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/CraftParserTests.cs": {
-    "mtime": 1793479461.3766346,
-    "seen": 1793580342.7698443,
-    "ast_hash": "ec9fa22e48fa27fe73e53487c0d16b83",
+    "mtime": 1793868085.9046416,
+    "seen": 1793868422.2000105,
+    "ast_hash": "602faa3d0efc61e1e09047999297d07e",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/CubeServiceTests.cs": {
@@ -6150,15 +6144,15 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/FamilyHallRulesTests.cs": {
-    "mtime": 1793479461.3798335,
-    "seen": 1793580342.7699609,
-    "ast_hash": "8fcb68a508f53e29aeee1868c1c3d98e",
+    "mtime": 1793874179.4154024,
+    "seen": 1793874705.6130114,
+    "ast_hash": "25cb4d65d888cf4105972e1794019121",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/FamilyHandlerTests.cs": {
-    "mtime": 1793479461.376843,
-    "seen": 1793580342.7699618,
-    "ast_hash": "a992defed119ebe358e1ad29ac5ac48e",
+    "mtime": 1793870081.38499,
+    "seen": 1793870309.2049978,
+    "ast_hash": "6685d6f09a9413b0b588b602fc80ea60",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/FamilyPacketsTests.cs": {
@@ -6228,9 +6222,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/GuildMailTests.cs": {
-    "mtime": 1793479461.3772535,
-    "seen": 1793580342.769975,
-    "ast_hash": "ea101e9a2c41d15c48ebdfcb2869f516",
+    "mtime": 1793870210.2914588,
+    "seen": 1793870309.2050111,
+    "ast_hash": "f3d2b4c80ea651a4b66c9caca6234135",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/HeroTraitAndPhaseCTests.cs": {
@@ -6264,9 +6258,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/InventoryServiceTests.cs": {
-    "mtime": 1793479461.3799894,
-    "seen": 1793580342.770008,
-    "ast_hash": "771548a6d07cf294d3291c7d4e1c47bd",
+    "mtime": 1793947450.0277882,
+    "seen": 1793959231.6256034,
+    "ast_hash": "28192568b4e32572c46d75b3de556ec0",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/InventoryTests.cs": {
@@ -6408,9 +6402,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ProgressionTests.cs": {
-    "mtime": 1793809085.1333256,
-    "seen": 1793824215.74373,
-    "ast_hash": "a3a184c8bdbac96c035a34b2e1c69182",
+    "mtime": 1793913716.3888762,
+    "seen": 1793915970.343459,
+    "ast_hash": "0e3655e4f86063d7c4118a9bfa8886cf",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ProtocolAndSerializationTests.cs": {
@@ -6492,9 +6486,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ShopServiceTests.cs": {
-    "mtime": 1793479461.3767185,
-    "seen": 1793580342.7700706,
-    "ast_hash": "36747a47ca31a3170258e09b8b291fd2",
+    "mtime": 1793868079.369763,
+    "seen": 1793868422.200212,
+    "ast_hash": "44fa5f9676049ceae247b76142ec7676",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/SocialPacketsTests.cs": {
@@ -6630,9 +6624,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/WorkOrderTests.cs": {
-    "mtime": 1793479461.3759315,
-    "seen": 1793580342.7701063,
-    "ast_hash": "a55b13de623c911b7977aba5c4a915ed",
+    "mtime": 1793997984.744394,
+    "seen": 1794001909.5115175,
+    "ast_hash": "1f8f9b7f1f6940478873bdeb28beeb71",
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/WorldBossPlan12Tests.cs": {
@@ -6822,9 +6816,9 @@
     "semantic_hash": ""
   },
   "eden_server/tools/gen_feature_matrix.py": {
-    "mtime": 1793479461.3300493,
-    "seen": 1793580342.7701557,
-    "ast_hash": "54b10678b8529cc124da3cb676cfc425",
+    "mtime": 1793916132.6781447,
+    "seen": 1793919513.1804683,
+    "ast_hash": "468e72038abb47d8127ea6d683b6b7ca",
     "semantic_hash": ""
   },
   "eden_server/tools/gen_golden_data.py": {
@@ -7824,9 +7818,9 @@
     "semantic_hash": ""
   },
   "src/Eden.Core/Ui/CeguiBuilder.cs": {
-    "mtime": 1793520711.6016006,
-    "seen": 1793580342.7704246,
-    "ast_hash": "82ac4b480970a2e3e6e4cd3fa9a251cf",
+    "mtime": 1793866311.8780725,
+    "seen": 1793868422.200459,
+    "ast_hash": "d15097467054842af0adba626c6936e9",
     "semantic_hash": ""
   },
   "src/Eden.Core/Ui/CeguiImageset.cs": {
@@ -8040,9 +8034,9 @@
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/DirectionalLocomotionTests.cs": {
-    "mtime": 1793764715.32998,
-    "seen": 1793764975.56838,
-    "ast_hash": "a766d575a5df10ce0c076cf2daa5b731",
+    "mtime": 1793913073.1838994,
+    "seen": 1793915970.3439074,
+    "ast_hash": "0f9d75fcb3fada89fef93e819530ccca",
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/Eden.Core.Tests.csproj": {
@@ -8490,9 +8484,9 @@
     "semantic_hash": ""
   },
   "tools/legacy-flax/ukey.py": {
-    "mtime": 1793576061.8987556,
-    "seen": 1793580342.7706285,
-    "ast_hash": "c90aa493b59e8a28911507423fc9d60a",
+    "mtime": 1793922106.829712,
+    "seen": 1793923557.3764148,
+    "ast_hash": "e7702166bac4779952b7c88bee890fc1",
     "semantic_hash": ""
   },
   "tools/legacy-flax/ukeyd.py": {
@@ -8646,9 +8640,9 @@
     "semantic_hash": ""
   },
   "docs/workflows/EDENFR-GAPS.md": {
-    "mtime": 1793824471.9421828,
-    "seen": 1793830054.5328379,
-    "ast_hash": "7fa08904243cc5ad7eb5747ed2df948c",
+    "mtime": 1793970307.7841337,
+    "seen": 1793970381.201928,
+    "ast_hash": "0b4242330fafb75974915512de19562b",
     "semantic_hash": ""
   },
   "docs/workflows/task-contract.md": {
@@ -9192,9 +9186,9 @@
     "semantic_hash": ""
   },
   "eden_server/docs/generated/FEATURE-MATRIX.md": {
-    "mtime": 1792769484.813653,
-    "seen": 1793580342.7707996,
-    "ast_hash": "1abc4db84077f25a73d97daf776e0d3b",
+    "mtime": 1793916120.3913717,
+    "seen": 1793919513.1816382,
+    "ast_hash": "e1c8db5435ac55713c19e606b1a7d038",
     "semantic_hash": ""
   },
   "eden_server/docs/generated/GM-COMMANDS.md": {
@@ -10692,9 +10686,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NiControllerRuntime.cs": {
-    "mtime": 1793764715.3200822,
-    "seen": 1793764975.5669107,
-    "ast_hash": "b1ba8fea40ff0619d0e19dc68f1db49a",
+    "mtime": 1793915484.315821,
+    "seen": 1793915970.341988,
+    "ast_hash": "b53a07a77aedcacda6514042e23b4fee",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/NiParticleRuntime.cs": {
@@ -10812,9 +10806,9 @@
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/NifParticleMapperTests.cs": {
-    "mtime": 1793737388.968119,
-    "seen": 1793737617.2593272,
-    "ast_hash": "83659e186fa4fc4108d494109982e6c3",
+    "mtime": 1793915774.785381,
+    "seen": 1793915970.3439503,
+    "ast_hash": "264173b4117b9270b66f74b9bd82df3e",
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/ParticleSimTests.cs": {
@@ -10854,9 +10848,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/KfAnimation.cs": {
-    "mtime": 1793664342.3103378,
-    "seen": 1793665852.6061418,
-    "ast_hash": "7842a583eaf71adf8cf9694515383511",
+    "mtime": 1793866311.8693066,
+    "seen": 1793868422.1992776,
+    "ast_hash": "1eb29b693c2139a737a04133c5403880",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/native/KfmMotions.cs": {
@@ -10902,9 +10896,9 @@
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/VfsReadGuardTests.cs": {
-    "mtime": 1793646074.3469806,
-    "seen": 1793646851.0999062,
-    "ast_hash": "9e92b50d79544fe15c91b1da5ffd2cb3",
+    "mtime": 1793913083.4619796,
+    "seen": 1793915970.3439991,
+    "ast_hash": "74e8b0d64f7e16edb8a655e3c0d859fa",
     "semantic_hash": ""
   },
   "tools/native-coverage/AllCoverage/AllCoverage.csproj": {
@@ -11100,9 +11094,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/NodeGeometry.cs": {
-    "mtime": 1793597594.754979,
-    "seen": 1793611066.734086,
-    "ast_hash": "c0b56369db87cbc4b823b908e7231562",
+    "mtime": 1793866311.8711977,
+    "seen": 1793868422.1994069,
+    "ast_hash": "c9015aa6872362e91280e7a5a5735148",
     "semantic_hash": ""
   },
   "tests/Eden.Core.Tests/ItemDictionaryTests.cs": {
@@ -11280,9 +11274,9 @@
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/ItemProcDumpTests.cs": {
-    "mtime": 1793643666.6219487,
-    "seen": 1793646851.0988472,
-    "ast_hash": "8cbef28ed713205da665f9d37d09f2bb",
+    "mtime": 1793925699.6844926,
+    "seen": 1793926067.1447968,
+    "ast_hash": "ff902f3f31d7018ef39e4a46ab084aac",
     "semantic_hash": ""
   },
   "eden_godot/tools/NetTests/QuestStateLogicTests.cs": {
@@ -11346,9 +11340,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/world/SlowFree.cs": {
-    "mtime": 1793764715.3220124,
-    "seen": 1793764975.567052,
-    "ast_hash": "206f55d35d8210d73ef2f918df37e8f0",
+    "mtime": 1793842617.858483,
+    "seen": 1793849949.0069609,
+    "ast_hash": "f0e1a7199d2bce82f8be641b737f34b3",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/StatDetailWindow.cs": {
@@ -11490,9 +11484,9 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/KillLoopProbe.cs": {
-    "mtime": 1793764715.3177004,
-    "seen": 1793764975.56669,
-    "ast_hash": "d8aef732d4644ce00b6284e7445c2623",
+    "mtime": 1793967955.6889777,
+    "seen": 1793970381.1992135,
+    "ast_hash": "5b6bbd173754f5a4e88ee277a6a3e231",
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/combat/SpellZone.cs": {
@@ -11556,9 +11550,9 @@
     "semantic_hash": ""
   },
   "eden_server/server/tests/Eden.Tests/ClassBugfixTests.cs": {
-    "mtime": 1793722629.5345914,
-    "seen": 1793726602.66821,
-    "ast_hash": "914ef64c7e20051bc9a1dcd9dd5ad96f",
+    "mtime": 1793974443.6914327,
+    "seen": 1793982748.8832817,
+    "ast_hash": "bc68e56252d78d9132ff7f4bd5a5f524",
     "semantic_hash": ""
   },
   "tools/fx-audit.sh": {
@@ -11928,9 +11922,9 @@
     "semantic_hash": ""
   },
   "docs/reports/craft-guild-recon-2026-11-03/SYNTHESE.md": {
-    "mtime": 1793764715.3418925,
-    "seen": 1793764975.5687401,
-    "ast_hash": "73ce6ac182d2e5483bbae7c7da35e0ec",
+    "mtime": 1793885179.3965743,
+    "seen": 1793885249.3446834,
+    "ast_hash": "40ccd2d0cb3aea745e9b47716c416703",
     "semantic_hash": ""
   },
   "docs/reports/craft-guild-recon-2026-11-03/client-ui-maps/genmap.txt": {
@@ -12210,8 +12204,8 @@
     "semantic_hash": ""
   },
   "eden_godot/godot_project/scripts/hud/SettingsWindow.PrefsVitals.cs": {
-    "mtime": 1793764715.351662,
-    "seen": 1793764975.5668695,
+    "mtime": 1793914707.6910434,
+    "seen": 1793915970.3419406,
     "ast_hash": "f3b9f7eff85d1af573663fc10123359a",
     "semantic_hash": ""
   },
@@ -12252,15 +12246,2343 @@
     "semantic_hash": ""
   },
   "docs/temp-plans/2026-11-04-mission-craft.md": {
-    "mtime": 1793824463.0963569,
-    "seen": 1793830054.5328348,
-    "ast_hash": "366c6543e788d18512e438a398025d19",
+    "mtime": 1794000750.2908585,
+    "seen": 1794001909.5120041,
+    "ast_hash": "b2ebaa6c6f4e5f9d6731a9572d90b53e",
     "semantic_hash": ""
   },
   "docs/temp-plans/2026-11-04-auto-quests-node.md": {
     "mtime": 1793826290.836794,
     "seen": 1793830054.5328321,
     "ast_hash": "36e5026542aea27742989f0873a888e1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/combat/DeathProbe.cs": {
+    "mtime": 1793852377.9376612,
+    "seen": 1793860749.28171,
+    "ast_hash": "ef91507868b79bde716f85906d674ebe",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Zone/ReviveRules.cs": {
+    "mtime": 1793851898.7358878,
+    "seen": 1793860749.282572,
+    "ast_hash": "6954e26eab26a2205ac746cdfeabbe32",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/ReviveRulesTests.cs": {
+    "mtime": 1793851898.7361147,
+    "seen": 1793860749.282917,
+    "ast_hash": "93f995738e67027d34adc86e2ba52db6",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-mobs-vitesse-poursuite.md": {
+    "mtime": 1793844481.3479567,
+    "seen": 1793849949.0089407,
+    "ast_hash": "68fb13836eec8817ffe5fcf02156dc92",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/DungeonUi.cs": {
+    "mtime": 1793952209.0626423,
+    "seen": 1793959231.6245363,
+    "ast_hash": "cd2b69a266e90b3277f56431b76768c7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/ItemSlotCell.cs": {
+    "mtime": 1793991436.0699055,
+    "seen": 1794001909.510305,
+    "ast_hash": "03e4e0cce7cc434535a2e48be6398910",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/MclList.cs": {
+    "mtime": 1793983935.6576033,
+    "seen": 1794001909.510321,
+    "ast_hash": "12a098ec1504fc1c03432e6d50e61f48",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Core/Game/Services/DungeonCatalog.cs": {
+    "mtime": 1793851913.9797144,
+    "seen": 1793860749.2823553,
+    "ast_hash": "54788e3f5bc36e0249a6fb104078b94a",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Dungeon.cs": {
+    "mtime": 1793851913.968534,
+    "seen": 1793860749.2826128,
+    "ast_hash": "e15ad07fa433b36bd3282dbf03312277",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/DungeonEntryTests.cs": {
+    "mtime": 1793851913.979858,
+    "seen": 1793860749.2828472,
+    "ast_hash": "c914537b026d93eb839032936651220e",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/DungeonSceneTests.cs": {
+    "mtime": 1793868833.7225528,
+    "seen": 1793870309.2049851,
+    "ast_hash": "7f9f7664c1c7041a598dd882c221d5dc",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/data/tables/PaySystemTable.cs": {
+    "mtime": 1793864066.6384177,
+    "seen": 1793868422.199125,
+    "ast_hash": "fe62330376d4ffa330951acb2e61ac1e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/FamilyBuildingWindow.cs": {
+    "mtime": 1794000942.0967827,
+    "seen": 1794001909.5102725,
+    "ast_hash": "50e5dec181b3efcdbef18e1448979b17",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/LifeSkillWindow.cs": {
+    "mtime": 1793985816.6069863,
+    "seen": 1794001909.5103102,
+    "ast_hash": "5c85aa75711da0921be226b30b04e74e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/MagicBoxWindow.cs": {
+    "mtime": 1793986428.8896887,
+    "seen": 1794001909.510315,
+    "ast_hash": "f1bd8448a04bfbe4d074d2ec84437607",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/MagicCubeWindow.cs": {
+    "mtime": 1793984621.0129967,
+    "seen": 1794001909.510317,
+    "ast_hash": "7f70a5d76f310ad28922263a52d18a87",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/PaySystemWindow.cs": {
+    "mtime": 1793984650.1791244,
+    "seen": 1794001909.5103393,
+    "ast_hash": "f99dee8ce45abc3fb703618a348a8670",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/SpecialCoinWindow.cs": {
+    "mtime": 1793886813.0932796,
+    "seen": 1793915970.341947,
+    "ast_hash": "5319e6d8f537ecf99d39d1b495a902d0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/StrengthenWindow.cs": {
+    "mtime": 1793984557.163197,
+    "seen": 1794001909.5103745,
+    "ast_hash": "0200af5dfd5b8908fb4b517129c1dd6a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/TownListWindow.cs": {
+    "mtime": 1793997791.1169531,
+    "seen": 1794001909.5103862,
+    "ast_hash": "8efe7ca43b1ac774c56869d23b767255",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/FamilyTownTests.cs": {
+    "mtime": 1793863367.977545,
+    "seen": 1793868422.1994402,
+    "ast_hash": "b3ed7d8b0946cd4533af7e817a5f52e4",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/LifeSkillTests.cs": {
+    "mtime": 1793862187.5496411,
+    "seen": 1793868422.1994503,
+    "ast_hash": "f295b99e300aa6df7a3dfa38c80906b7",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/PaySystemTableTests.cs": {
+    "mtime": 1793864071.4382045,
+    "seen": 1793868422.1994572,
+    "ast_hash": "99283d196f585edb71ec74d497377405",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Core/Game/Services/ItemComboRollService.cs": {
+    "mtime": 1793867029.180235,
+    "seen": 1793868422.1997087,
+    "ast_hash": "308147d22b7b905fe303b191b2c899e9",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Core/Game/Services/StrengthenComboService.cs": {
+    "mtime": 1793866116.9063928,
+    "seen": 1793868422.1997302,
+    "ast_hash": "7faa870d816e9c8fb89c84e4abc183ea",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/ItemComboRollTests.cs": {
+    "mtime": 1793867054.7164328,
+    "seen": 1793868422.200172,
+    "ast_hash": "0febaeddf5c38d333d6e87de2c3df555",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/StrengthenComboTests.cs": {
+    "mtime": 1793866173.8850877,
+    "seen": 1793868422.2002237,
+    "ast_hash": "baa77de046d98f50062f7a516e9badbe",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-e2-strengthen-combos.md": {
+    "mtime": 1793976059.3069224,
+    "seen": 1793982748.8840923,
+    "ast_hash": "bddcab878edfe87dd26433aded6e7c95",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-e3-shop-currencies.md": {
+    "mtime": 1793893589.203982,
+    "seen": 1793915970.3442535,
+    "ast_hash": "1d57a3f99e63b0bf517804da975c5952",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Core/Game/Family/FamilyBuildingWorkRules.cs": {
+    "mtime": 1793869547.7084444,
+    "seen": 1793870309.2045028,
+    "ast_hash": "b7f3b03423fa2c332e92e6f67481947f",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Zone/ZoneEntryFlow.Work.Family.cs": {
+    "mtime": 1793869719.230468,
+    "seen": 1793870309.2048326,
+    "ast_hash": "e474f02d0d123d772a71587149f62eb2",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/FamilyBuildingWorkRulesTests.cs": {
+    "mtime": 1793869868.377159,
+    "seen": 1793870309.2049959,
+    "ast_hash": "a4f4af0752cbab63a39384fddf5caae5",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-e4-building-lifecycle.md": {
+    "mtime": 1793870228.4233308,
+    "seen": 1793870309.2055597,
+    "ast_hash": "c77d6e43c6cd553243fde0c7fb5cccea",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/AuctionFilterTests.cs": {
+    "mtime": 1793871130.4005613,
+    "seen": 1793871305.8076296,
+    "ast_hash": "798d2419ba7397741d952a49eabc8e21",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-e6-auction-filters.md": {
+    "mtime": 1793870966.9264455,
+    "seen": 1793871305.8083684,
+    "ast_hash": "cc57df0fcba8f1a58112092f913b869b",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/FamilyAchievementTests.cs": {
+    "mtime": 1793872514.1069715,
+    "seen": 1793872800.9552648,
+    "ast_hash": "37fba94aeadf19e632cbd614ee30b6b4",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-e5-family-achievement.md": {
+    "mtime": 1793912347.077472,
+    "seen": 1793915970.3442569,
+    "ast_hash": "39c49022df7ebf9a5a77d1909df7a559",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-f5-building-put.md": {
+    "mtime": 1793876870.2622008,
+    "seen": 1793877894.1639633,
+    "ast_hash": "b92bc52c926cdbed87bcfc18d3d77958",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/data/tables/HouseTable.cs": {
+    "mtime": 1793925422.4506433,
+    "seen": 1793926067.1444595,
+    "ast_hash": "7dd0f17cfd5289c278fa3f4087d7448f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/world/FamilyHallBuildings.cs": {
+    "mtime": 1794001636.7090194,
+    "seen": 1794001909.5105991,
+    "ast_hash": "3ed5426a70cf067796cc69ab02b11b72",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/HouseTableTests.cs": {
+    "mtime": 1793925699.6637225,
+    "seen": 1793926067.144795,
+    "ast_hash": "f4938ff81d77982ec00a8e62bdc07f4c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-hall-entry.png": {
+    "mtime": 1793879336.1325767,
+    "seen": 1793885249.3450973,
+    "ast_hash": "14cf8d6433258fb88dc02e6b45ea8217",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-hall-statue.png": {
+    "mtime": 1793879602.1809645,
+    "seen": 1793885249.3450987,
+    "ast_hash": "8de866cdd19b64d5cefcc25ba8737d7f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-hall-statue2.png": {
+    "mtime": 1793879757.5856922,
+    "seen": 1793885249.3450997,
+    "ast_hash": "bf2bab0ac1d7d22c0b47ecf454c28788",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue10.png": {
+    "mtime": 1793880781.717136,
+    "seen": 1793885249.3451009,
+    "ast_hash": "4703ca183cbbfab156056ee5f9a32ca1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue11.png": {
+    "mtime": 1793880892.7347991,
+    "seen": 1793885249.3451016,
+    "ast_hash": "f3650099afcbf20483c18c274a33f803",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue12.png": {
+    "mtime": 1793881165.2540631,
+    "seen": 1793885249.3451025,
+    "ast_hash": "2b245be5e3ec0100836f2b3663ebee2c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue13.png": {
+    "mtime": 1793881278.7226748,
+    "seen": 1793885249.3451035,
+    "ast_hash": "9192813464520d4715a2773c75fa3ee3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue14.png": {
+    "mtime": 1793881377.2696006,
+    "seen": 1793885249.3451047,
+    "ast_hash": "ccf6b83babe53d1193221ebf4dd705c3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue15.png": {
+    "mtime": 1793881468.5806787,
+    "seen": 1793885249.345106,
+    "ast_hash": "96190941366bd624c89e750dc03f7a03",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue16.png": {
+    "mtime": 1793881563.7156763,
+    "seen": 1793885249.3451068,
+    "ast_hash": "8160e9352310e8b1184057d3c1892e31",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue17.png": {
+    "mtime": 1793881827.3464022,
+    "seen": 1793885249.3451078,
+    "ast_hash": "88e61ad79e4572a73ce210edb7c2929a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue18.png": {
+    "mtime": 1793881933.2464173,
+    "seen": 1793885249.3451087,
+    "ast_hash": "d30916e1c67ec888754f7e468131cfe0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue19.png": {
+    "mtime": 1793882026.2136748,
+    "seen": 1793885249.3451097,
+    "ast_hash": "59ff465ea5c4030bdc8c0b93eadb6f63",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue3.png": {
+    "mtime": 1793879848.0907872,
+    "seen": 1793885249.345111,
+    "ast_hash": "ab6fbb7b6abba09fbb49b80a3374b569",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue4.png": {
+    "mtime": 1793879963.646355,
+    "seen": 1793885249.3451116,
+    "ast_hash": "62dd94d2903c5d7c9d041d12183ebc0c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue5.png": {
+    "mtime": 1793880145.8305202,
+    "seen": 1793885249.3451126,
+    "ast_hash": "46a8e2c3f83963fb6dcfb929745dcaed",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue6.png": {
+    "mtime": 1793880280.1936922,
+    "seen": 1793885249.3451133,
+    "ast_hash": "76f24f97636d4f1795d7f6bca2c8362a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue7.png": {
+    "mtime": 1793880423.3746784,
+    "seen": 1793885249.3451142,
+    "ast_hash": "deff046cfdb251854c46b651b627b2da",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue8.png": {
+    "mtime": 1793880535.7453132,
+    "seen": 1793885249.345115,
+    "ast_hash": "b5f850ea7fe052e15a6aa128db6bb3e5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/20261106-statue9.png": {
+    "mtime": 1793880675.3123755,
+    "seen": 1793885249.345116,
+    "ast_hash": "50421df28fb7bcc583fc349b275b83a2",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-ab-crop.png": {
+    "mtime": 1793884464.3008966,
+    "seen": 1793885249.3451192,
+    "ast_hash": "c5fa0e91fb68419742d05d60005244f5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-ab2-crop.png": {
+    "mtime": 1793884529.8138268,
+    "seen": 1793885249.345215,
+    "ast_hash": "db1f6619b1ee32916382843716459f2b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-ab2-zoom.png": {
+    "mtime": 1793884539.7416646,
+    "seen": 1793885249.3452163,
+    "ast_hash": "c513d6fb61dafd71f87d68d492387e06",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-ab2-zoom2.png": {
+    "mtime": 1793884549.8275,
+    "seen": 1793885249.3452172,
+    "ast_hash": "5c93fdb16bef5da553c54f5ef66dc12d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-1-crop.png": {
+    "mtime": 1793884032.2045512,
+    "seen": 1793885249.345218,
+    "ast_hash": "1ea6f9f818bbc49e1331940b6c9bdf22",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-1.png": {
+    "mtime": 1793884015.3732271,
+    "seen": 1793885249.3452191,
+    "ast_hash": "6a78d60826ce6a0648018929cf723d7a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-2-crop.png": {
+    "mtime": 1793884101.404822,
+    "seen": 1793885249.3452199,
+    "ast_hash": "59b68ee01610fb08c274f71c6763dc69",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-2.png": {
+    "mtime": 1793884094.2949383,
+    "seen": 1793885249.3452208,
+    "ast_hash": "ebd37030103280e8ad1e0192d70cb8d7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-3-crop.png": {
+    "mtime": 1793884166.5135183,
+    "seen": 1793885249.345222,
+    "ast_hash": "a5d8246ff3d633993326040cc0c9d3f8",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-3.png": {
+    "mtime": 1793884166.2247639,
+    "seen": 1793885249.345223,
+    "ast_hash": "ba1086df7bd29f3a6633654b96d7fe9f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-4-crop.png": {
+    "mtime": 1793884228.6947436,
+    "seen": 1793885249.345224,
+    "ast_hash": "4976e39b7a61774e50ce729045155b0a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-4-zoom.png": {
+    "mtime": 1793884236.749612,
+    "seen": 1793885249.3452246,
+    "ast_hash": "78bf2110394dde8bf30f1ecfcafa32e8",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-5-crop.png": {
+    "mtime": 1793884301.4725554,
+    "seen": 1793885249.3452258,
+    "ast_hash": "8a28a52a806abce891f6ff001804fffb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-5-zoom.png": {
+    "mtime": 1793884310.8314025,
+    "seen": 1793885249.3452268,
+    "ast_hash": "bad97b978b8a71290756321318c17e8e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-5-zoom2.png": {
+    "mtime": 1793884330.4794314,
+    "seen": 1793885249.3452275,
+    "ast_hash": "5c9d86d2bbc658d32ab6a5c255ffd06e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-equip-6-crop.png": {
+    "mtime": 1793884397.1749418,
+    "seen": 1793885249.3452284,
+    "ast_hash": "5f738f6fb7986021cd9d9064332f3573",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w-crop.png": {
+    "mtime": 1793884708.4949093,
+    "seen": 1793885249.3452294,
+    "ast_hash": "1d91b9f2c367932feeae094fb87770f8",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w2-crop.png": {
+    "mtime": 1793884774.216836,
+    "seen": 1793885249.34523,
+    "ast_hash": "e1fc4a72425414eb7277b49785f4c221",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w2-zoom.png": {
+    "mtime": 1793884783.2126892,
+    "seen": 1793885249.345231,
+    "ast_hash": "42aefdff6fb0b523044930b9d1efdcbf",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w3-crop.png": {
+    "mtime": 1793884847.0786023,
+    "seen": 1793885249.345232,
+    "ast_hash": "4ea0fd34c34a5c64ba5de516d24cce66",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w3-zoom.png": {
+    "mtime": 1793884858.9713867,
+    "seen": 1793885249.345233,
+    "ast_hash": "8d4e77479e9a057710b0a37723ef12f6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w3-zoom2.png": {
+    "mtime": 1793884868.1782196,
+    "seen": 1793885249.3452337,
+    "ast_hash": "c9685ccbb1940f5bb74e9d0cc8f62f9a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w4-crop.png": {
+    "mtime": 1793884929.5763192,
+    "seen": 1793885249.3452344,
+    "ast_hash": "ec228063ee95a52d938fe6738bd724eb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w4-zoom.png": {
+    "mtime": 1793884941.8958824,
+    "seen": 1793885249.345235,
+    "ast_hash": "bb96b83e9a0e9dbe38280219decdab0c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w5-crop.png": {
+    "mtime": 1793885016.1366227,
+    "seen": 1793885249.345236,
+    "ast_hash": "c2659a3386f54b0203a97806bbc78477",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-w5-zoom.png": {
+    "mtime": 1793885026.155354,
+    "seen": 1793885249.345237,
+    "ast_hash": "c7f92b1dbebe7e7f9a395d1dfcf3bb10",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-weapon-crop.png": {
+    "mtime": 1793884625.4192505,
+    "seen": 1793885249.3452377,
+    "ast_hash": "dfb489240433f2d0976eaf08badfaae9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-weapon-crop2.png": {
+    "mtime": 1793884635.3271039,
+    "seen": 1793885249.3452387,
+    "ast_hash": "8326d30feef0a0fc0a29caf1baecdbe0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-weapon-zoom.png": {
+    "mtime": 1793884617.7693906,
+    "seen": 1793885249.3452396,
+    "ast_hash": "9c3973caa7b0da69b9ffa26ba2144a77",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-weapon-zoom2.png": {
+    "mtime": 1793884646.1499271,
+    "seen": 1793885249.3452408,
+    "ast_hash": "362ba0f2d635db8e3240e5fee1e733b4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/GmFileProbe.cs": {
+    "mtime": 1794000320.222129,
+    "seen": 1794001909.5102777,
+    "ast_hash": "d892eca0061c5ac2e8d6b0a4e5574f3b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-auction-c.png": {
+    "mtime": 1793886585.7332208,
+    "seen": 1793915970.3449285,
+    "ast_hash": "3b93d47570cfc9eb4c6617d18b401652",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-auction.png": {
+    "mtime": 1793886011.044522,
+    "seen": 1793915970.345038,
+    "ast_hash": "257baf0f15baa1f88fde671702b965cd",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-auction2-c.png": {
+    "mtime": 1793885556.0647416,
+    "seen": 1793915970.345041,
+    "ast_hash": "6dc8c2ae2d2025491ecebbace18828f1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-auction2.png": {
+    "mtime": 1793885555.7107482,
+    "seen": 1793915970.3450434,
+    "ast_hash": "edd629a73e7baffc8da484368e1d4667",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-familybuilding-c.png": {
+    "mtime": 1793886588.241176,
+    "seen": 1793915970.3450453,
+    "ast_hash": "849a7d174005bde00d27c74322d858c7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-familybuilding.png": {
+    "mtime": 1793886375.4089909,
+    "seen": 1793915970.345047,
+    "ast_hash": "251480cc2757d0ebc585c3609708f104",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-familystorage-c.png": {
+    "mtime": 1793886589.242158,
+    "seen": 1793915970.345049,
+    "ast_hash": "dc58e40cb317fab0bfd27fef618df174",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-familystorage.png": {
+    "mtime": 1793886519.7414038,
+    "seen": 1793915970.3450508,
+    "ast_hash": "9ee2aac1d4aeeef8f5f03486d00cb844",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-guild-c.png": {
+    "mtime": 1793886588.9931624,
+    "seen": 1793915970.3450527,
+    "ast_hash": "f43e3dc8d208cf9f36e6fcf16eb1a8f9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-guild.png": {
+    "mtime": 1793886482.9220638,
+    "seen": 1793915970.3450541,
+    "ast_hash": "1a0de91ea453e89507fc3a0b6e7a1ef6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-hotel-c.png": {
+    "mtime": 1793886587.7421849,
+    "seen": 1793915970.345056,
+    "ast_hash": "9934a727598bf792144f4b931b174fda",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-hotel.png": {
+    "mtime": 1793886303.8112743,
+    "seen": 1793915970.3450575,
+    "ast_hash": "64d572e9f556b89c6855eb7144ee8d74",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-itemmall-c.png": {
+    "mtime": 1793886586.9721987,
+    "seen": 1793915970.3450592,
+    "ast_hash": "0cb4a8b1cc5693a025f2fb2a69f6a5b2",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-itemmall.png": {
+    "mtime": 1793886192.2372742,
+    "seen": 1793915970.3450606,
+    "ast_hash": "a3dba5577c66a75bf6e3c90fc9c9f739",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-lifeskill-c.png": {
+    "mtime": 1793886588.7611666,
+    "seen": 1793915970.3450618,
+    "ast_hash": "36eccfc835da2a3c9d7277c35b205b4d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-lifeskill.png": {
+    "mtime": 1793886447.1187055,
+    "seen": 1793915970.3450632,
+    "ast_hash": "103004c03e79f0d78bc7ff970e6de5f4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-magicbox-c.png": {
+    "mtime": 1793886586.2482116,
+    "seen": 1793915970.3450646,
+    "ast_hash": "db5674b088a4db57e3cd063d32f6cddc",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-magicbox.png": {
+    "mtime": 1793886082.7012377,
+    "seen": 1793915970.345066,
+    "ast_hash": "48659b5c6395a2ccb6ee5537d9f864bf",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-magiccube-c.png": {
+    "mtime": 1793886585.9892163,
+    "seen": 1793915970.3450675,
+    "ast_hash": "3fdfe7e0929e182e1611fc0906a72dca",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-magiccube.png": {
+    "mtime": 1793886046.8638802,
+    "seen": 1793915970.3450692,
+    "ast_hash": "19ec0e70148f8e31ac58c116d738d8c4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-mail-c.png": {
+    "mtime": 1793886589.4781537,
+    "seen": 1793915970.3450708,
+    "ast_hash": "20a8e5a4a4387bc20e9b08ea690f618d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-mail.png": {
+    "mtime": 1793886555.5757613,
+    "seen": 1793915970.3450723,
+    "ast_hash": "579815c7d13182143195b1b4f87dac20",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-paysystem-c.png": {
+    "mtime": 1793886586.7432027,
+    "seen": 1793915970.3450737,
+    "ast_hash": "436771077a4d5b65ce9a2d23e362492c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-paysystem.png": {
+    "mtime": 1793886155.3789349,
+    "seen": 1793915970.345075,
+    "ast_hash": "9449bdb0dc0835ad39b921b11c01e56b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-specialcoin-c.png": {
+    "mtime": 1793887007.8016558,
+    "seen": 1793915970.3450766,
+    "ast_hash": "ce167175eccdc9221f325eb7e42af5f1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-specialcoin-zoom.png": {
+    "mtime": 1793887007.8706543,
+    "seen": 1793915970.3450778,
+    "ast_hash": "644f820171736c6a4f6f9a3b655c304b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-specialcoin.png": {
+    "mtime": 1793887003.8287268,
+    "seen": 1793915970.3450792,
+    "ast_hash": "bbecaaf0e33d873a38e621c45a5a7657",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-stall-c.png": {
+    "mtime": 1793886587.4911892,
+    "seen": 1793915970.3450809,
+    "ast_hash": "d0ede3b45e936c84187bae3c60a5ab41",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-stall.png": {
+    "mtime": 1793886267.9719167,
+    "seen": 1793915970.345082,
+    "ast_hash": "24187d08fa7cfb7a53db3bb411942d1e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-strengthen-c.png": {
+    "mtime": 1793886588.5061712,
+    "seen": 1793915970.3450835,
+    "ast_hash": "18f1363767c8b010cff0fbd073bf93fd",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-strengthen.png": {
+    "mtime": 1793886411.2953477,
+    "seen": 1793915970.345085,
+    "ast_hash": "68505f5500242c1371c65c08ee19516b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-townlist-c.png": {
+    "mtime": 1793886587.9911804,
+    "seen": 1793915970.3450866,
+    "ast_hash": "419cf701621b7fe20c1b0751cf80f2d6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-townlist.png": {
+    "mtime": 1793886339.6306322,
+    "seen": 1793915970.345088,
+    "ast_hash": "aa8464421fe8d12de8b8626186c47e00",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-trade-c.png": {
+    "mtime": 1793886587.2501936,
+    "seen": 1793915970.3450894,
+    "ast_hash": "8513b2f9778cc9f6cd0ec776b5655322",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/D-trade.png": {
+    "mtime": 1793886232.1535587,
+    "seen": 1793915970.345091,
+    "ast_hash": "000d253cb70a8d140b9b13ba7720cd0a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/P-charselect-c.png": {
+    "mtime": 1793887270.6769445,
+    "seen": 1793915970.3450923,
+    "ast_hash": "55ad173a03b4f2afd4ec4f53eaeff903",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/P-charselect.png": {
+    "mtime": 1793887270.4679482,
+    "seen": 1793915970.345094,
+    "ast_hash": "d0db4f8866e4fcc2503f551aba5bfb26",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/auction-house-live.png": {
+    "mtime": 1793907784.883954,
+    "seen": 1793915970.3450954,
+    "ast_hash": "805b342e4530cf80c70869caca2aaead",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-window.png": {
+    "mtime": 1793905338.3749576,
+    "seen": 1793915970.345099,
+    "ast_hash": "3b631019417119bce49985f004b52da7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/craft-e2e-132.png": {
+    "mtime": 1793908660.686527,
+    "seen": 1793915970.3451004,
+    "ast_hash": "95fdca16e5f4621fd9f196224193c376",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/craft-worklist-live.png": {
+    "mtime": 1793907957.1597228,
+    "seen": 1793915970.3451018,
+    "ast_hash": "3483ec856ef105c44573421a8f9e5075",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/crusade-battle.png": {
+    "mtime": 1793911114.9165232,
+    "seen": 1793915970.345103,
+    "ast_hash": "99d4844e8a9aee8488410e4622fd2e71",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/death-window.png": {
+    "mtime": 1793912585.1890213,
+    "seen": 1793915970.3451047,
+    "ast_hash": "a6b0dea1cb431e204711eb56218e6048",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/g7-shopbuy.png": {
+    "mtime": 1793906405.645875,
+    "seen": 1793915970.3451061,
+    "ast_hash": "99b90ec8eb4751d0f20571d779a063db",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/inlay-tooltip.png": {
+    "mtime": 1793905343.239866,
+    "seen": 1793915970.3451095,
+    "ast_hash": "af104810bf0b34731620b73b061c964a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/itemmall-live.png": {
+    "mtime": 1793907811.3144584,
+    "seen": 1793915970.345111,
+    "ast_hash": "91abdc9374ca2abca092f6f555908fce",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/revive-here.png": {
+    "mtime": 1793912612.425512,
+    "seen": 1793915970.345112,
+    "ast_hash": "8ab3f820c3a07da7258572adc62f24a3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/revive-savepoint.png": {
+    "mtime": 1793912640.9529788,
+    "seen": 1793915970.3451138,
+    "ast_hash": "f81f989432595d088a380fbf3bd07bd4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/shop-tabs-final.png": {
+    "mtime": 1793893561.7174911,
+    "seen": 1793915970.3451152,
+    "ast_hash": "256d8e994c3fc5f551f53732cc1c08ee",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-close.png": {
+    "mtime": 1793913198.7295527,
+    "seen": 1793915970.345124,
+    "ast_hash": "855a67fcd2dcb8b9eed1676fcf5688f9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-crop.png": {
+    "mtime": 1793913272.75034,
+    "seen": 1793915970.345126,
+    "ast_hash": "47769ea3b784b44ae226db0c445e597c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/statue-hall.png": {
+    "mtime": 1793913185.4778004,
+    "seen": 1793915970.3451467,
+    "ast_hash": "7ace31d70ea62c68026f718f76cf6f51",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/strengthen-14-equipped.png": {
+    "mtime": 1793904499.5517423,
+    "seen": 1793915970.3451693,
+    "ast_hash": "53961d915c233bf0538a28486f0567ef",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/strengthen-14-tooltip.png": {
+    "mtime": 1793904762.0818021,
+    "seen": 1793915970.345174,
+    "ast_hash": "ab48caae20e865c7c82ceb4f8598480e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/strengthen-14-window.png": {
+    "mtime": 1793904464.8303957,
+    "seen": 1793915970.3451757,
+    "ast_hash": "2099c66498d0bf476b05ad5fa00df2d2",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/vdg-hall-5001.png": {
+    "mtime": 1793909398.416692,
+    "seen": 1793915970.3451774,
+    "ast_hash": "2fe232d7e7226d094999df14128f2945",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/vdg-hall-g5.png": {
+    "mtime": 1793910525.6385605,
+    "seen": 1793915970.3451786,
+    "ast_hash": "f8c18d4e51b561b7a70bc35871327bac",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Zone/ZoneEntryFlow.ItemUse.cs": {
+    "mtime": 1793916988.2688475,
+    "seen": 1793919513.1797752,
+    "ast_hash": "f32db7e26da288a02683dfa2074bd57c",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/ItemUseTimeTests.cs": {
+    "mtime": 1793917175.844579,
+    "seen": 1793919513.18026,
+    "ast_hash": "c3f53aad56f02edfe6ba72238bdf289b",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-05-item-usetime.md": {
+    "mtime": 1793919399.0354543,
+    "seen": 1793919513.1814263,
+    "ast_hash": "77a71ac9e8c50b2267d5e729832720f1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-00-boot.png": {
+    "mtime": 1793917312.5800445,
+    "seen": 1793919513.1827214,
+    "ast_hash": "06c21fa04d4ad08e0aca3a2016fdd084",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-01-state.png": {
+    "mtime": 1793917439.260553,
+    "seen": 1793919513.1827238,
+    "ast_hash": "72db043ef02f3d19f5d951e736dc95ec",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-02-chat.png": {
+    "mtime": 1793917465.2580416,
+    "seen": 1793919513.1827261,
+    "ast_hash": "44cbcb8e9079e6bd6d93e1e9e5cc6e80",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-03-chatfocus.png": {
+    "mtime": 1793917481.0817304,
+    "seen": 1793919513.182728,
+    "ast_hash": "debc08233a76ebee560145d39d3a16bb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-04.png": {
+    "mtime": 1793917502.4743097,
+    "seen": 1793919513.18273,
+    "ast_hash": "a2d14bcc6288c844f798d802ed974197",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-05.png": {
+    "mtime": 1793917519.175981,
+    "seen": 1793919513.1827319,
+    "ast_hash": "7e33b0d4bbee0a9356b2969711858404",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-channel-armed.png": {
+    "mtime": 1793919360.989376,
+    "seen": 1793919513.1827335,
+    "ast_hash": "f2d389f3dd18ece65292a66075da816c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-channel-bar.png": {
+    "mtime": 1793919268.0441694,
+    "seen": 1793919513.1827362,
+    "ast_hash": "1417c2a8edc827eb6069d1162f7a05f7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-channel-broken.png": {
+    "mtime": 1793919281.7759047,
+    "seen": 1793919513.182739,
+    "ast_hash": "a65a58fcd507949779c6ed155bc33542",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/usetime-channel-cancelled.png": {
+    "mtime": 1793919365.507289,
+    "seen": 1793919513.1827404,
+    "ast_hash": "49c8c545991282ab8dcb7b05fa0a21fc",
+    "semantic_hash": ""
+  },
+  ".claude/completions/2026-11-06-b1-b8-live-validation.md": {
+    "mtime": 1793922692.142829,
+    "seen": 1793923557.3764708,
+    "ast_hash": "76027b944d4874f7e75ceeec1f03f65f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/b8-treasure-chest-ground.png": {
+    "mtime": 1793922339.361047,
+    "seen": 1793923557.3771062,
+    "ast_hash": "58375ededbc22bd28a52b6114204cb70",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/b8-treasure-pickup-ok.png": {
+    "mtime": 1793922339.358167,
+    "seen": 1793923557.3771074,
+    "ast_hash": "0f98c40e29fadbcb63b36096d21ddb91",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/final-pass-2026-11-06.png": {
+    "mtime": 1793923451.211843,
+    "seen": 1793923557.3771148,
+    "ast_hash": "f41a9dc0093fb4b89fa85dd7a43b2d52",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/EvaluateWindow.cs": {
+    "mtime": 1793945858.6495283,
+    "seen": 1793959231.6245449,
+    "ast_hash": "d7b389e1fba3fbd37b7940dbb27155bc",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-consent-577.png": {
+    "mtime": 1793925047.7937381,
+    "seen": 1793925146.6552773,
+    "ast_hash": "24904a1d51013ecdc4ffe9248659eca1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-trial-655-entry.png": {
+    "mtime": 1793924549.89515,
+    "seen": 1793925146.6552792,
+    "ast_hash": "a0f9d73b445ebbd871bf8f3a912805bd",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-trial-end-lottery.png": {
+    "mtime": 1793925054.713203,
+    "seen": 1793925146.6552804,
+    "ast_hash": "55c1163efb1e9ccc5c9d9a3318b6691a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s829-solo-illusion.png": {
+    "mtime": 1793925032.3011758,
+    "seen": 1793925146.65529,
+    "ast_hash": "0236c8cd5dcf1b8d7afb5f246edba92a",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-reverification-totale.md": {
+    "mtime": 1793979676.6111186,
+    "seen": 1793982748.8841107,
+    "ast_hash": "3293740a4fd306d0547c7ec84abf8945",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/auction-list.png": {
+    "mtime": 1793933596.3788495,
+    "seen": 1793936201.7123837,
+    "ast_hash": "c5a726314db13e8ce1b1ebea68f924c3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/auction.png": {
+    "mtime": 1793933547.5437748,
+    "seen": 1793936201.7123868,
+    "ast_hash": "07891e397fbe1d60a8d612440f2f5b2b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combat-s110.png": {
+    "mtime": 1793932830.2324061,
+    "seen": 1793936201.7123947,
+    "ast_hash": "449ad7135e7f19a124fda259fd87115e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/craft.png": {
+    "mtime": 1793933266.4751117,
+    "seen": 1793936201.7124023,
+    "ast_hash": "2bfe6fcd416477fd36b2e5a0f1ceac08",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/g-tab0.png": {
+    "mtime": 1793932753.4168668,
+    "seen": 1793936201.7124145,
+    "ast_hash": "4432207dc3f1d173211bfcece48fa414",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/g-tab1.png": {
+    "mtime": 1793932757.0897968,
+    "seen": 1793936201.7124164,
+    "ast_hash": "af3051c35694b95e5a480f3f28dfd5a9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/g-tab2.png": {
+    "mtime": 1793932760.7877266,
+    "seen": 1793936201.7124183,
+    "ast_hash": "6681165fae90546eb9591df0c3c59e20",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/guild-new.png": {
+    "mtime": 1793934010.444004,
+    "seen": 1793936201.7124236,
+    "ast_hash": "a047866fc11b9bda39d182a2a965107f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/height-check-1.png": {
+    "mtime": 1793930353.2430208,
+    "seen": 1793936201.7124255,
+    "ast_hash": "5f4797bd33716c1e06ae616bc8978957",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/live-guild.png": {
+    "mtime": 1793931894.7562468,
+    "seen": 1793936201.7124305,
+    "ast_hash": "dd27bd1df92c56e5994718e0cddf5d7c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-50177.png": {
+    "mtime": 1793932990.4133606,
+    "seen": 1793936201.7124326,
+    "ast_hash": "ca1eea58067097f2319c6d41bb220687",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-depenetrate-ok.png": {
+    "mtime": 1793935708.1780791,
+    "seen": 1793936201.7124343,
+    "ast_hash": "37c6c1f295d4cfe0d3997ef46ba4ceea",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-shop.png": {
+    "mtime": 1793933042.1673765,
+    "seen": 1793936201.7124357,
+    "ast_hash": "4eb4e17e0697f39410694526ec4243e5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-shop2.png": {
+    "mtime": 1793933093.1214077,
+    "seen": 1793936201.712437,
+    "ast_hash": "6b090c60d4ad3b5839f2b15ac63ae9f1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-shop3.png": {
+    "mtime": 1793933153.4462607,
+    "seen": 1793936201.7124388,
+    "ast_hash": "1c7e5c7c4e7a60e9eefe26920cd7c915",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-talk-astar.png": {
+    "mtime": 1793934666.8975906,
+    "seen": 1793936201.7124403,
+    "ast_hash": "fa34a58065f9cfa0618b23a34b208db7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/npc-talk.png": {
+    "mtime": 1793932942.741267,
+    "seen": 1793936201.712442,
+    "ast_hash": "483509d2356c45c25e954b747e237d6c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-bag.png": {
+    "mtime": 1793931428.8831544,
+    "seen": 1793936201.7124436,
+    "ast_hash": "d8efaf78896a75da5a739769b1ad8a26",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-char.png": {
+    "mtime": 1793931433.5940642,
+    "seen": 1793936201.7124453,
+    "ast_hash": "a5a2a6eac7595e1bf1aa1a73ddb69bac",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-commu.png": {
+    "mtime": 1793931470.324362,
+    "seen": 1793936201.7124472,
+    "ast_hash": "9accaab8124406aa772282e20d6ace5e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-findguild.png": {
+    "mtime": 1793931960.6859863,
+    "seen": 1793936201.712449,
+    "ast_hash": "2211999be8734c0e07bdaa9c0c4c0f3b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild-fixed.png": {
+    "mtime": 1793932241.4836175,
+    "seen": 1793936201.7124507,
+    "ast_hash": "93eb084e8926a8330d1f6090a4668d15",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild-fixed2.png": {
+    "mtime": 1793932257.6523082,
+    "seen": 1793936201.7124527,
+    "ast_hash": "a7940970e7f7ac1cc7eeb48293d3ebf9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild-info.png": {
+    "mtime": 1793931956.0030758,
+    "seen": 1793936201.7124543,
+    "ast_hash": "3d524f7c7d93a344f1488ac94b8b6ff4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild.png": {
+    "mtime": 1793931465.6344516,
+    "seen": 1793936201.712456,
+    "ast_hash": "59c9d1600bd41fd8b942d48747034a85",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild2.png": {
+    "mtime": 1793931532.1081808,
+    "seen": 1793936201.7124581,
+    "ast_hash": "d0d6a2a0e97a3cfad9d367c6b0c2c2f2",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild3.png": {
+    "mtime": 1793931940.8103664,
+    "seen": 1793936201.7124603,
+    "ast_hash": "fa1b6592e6275081e3d0a39ec17f8e83",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-guild3b.png": {
+    "mtime": 1793932735.8672004,
+    "seen": 1793936201.7124622,
+    "ast_hash": "f0b38572c1c3560b6071ca1dbc682e65",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-mall.png": {
+    "mtime": 1793931475.9962535,
+    "seen": 1793936201.7124636,
+    "ast_hash": "401b13c13335485ab66469957d95bd98",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-questlog.png": {
+    "mtime": 1793932876.9165184,
+    "seen": 1793936201.712465,
+    "ast_hash": "c5696b30d3b1b228f815d5c3b5d34baa",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/p-skill.png": {
+    "mtime": 1793931438.2889745,
+    "seen": 1793936201.7124667,
+    "ast_hash": "f37fbddcba121fa6eab9c32e76544f80",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s003-stuck.png": {
+    "mtime": 1793934921.7647946,
+    "seen": 1793936201.7124727,
+    "ast_hash": "d6ad328f7c9e5f2546f17034bc42ccb7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s003-town.png": {
+    "mtime": 1793932910.6198778,
+    "seen": 1793936201.712474,
+    "ast_hash": "37ebc933827eb2f705c693830b84232e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s003-town2.png": {
+    "mtime": 1793932926.4665763,
+    "seen": 1793936201.7124755,
+    "ast_hash": "f12736e32464f069b59b97dc26c3102e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s101.png": {
+    "mtime": 1793934068.4149055,
+    "seen": 1793936201.712477,
+    "ast_hash": "11026d4fd67a2ec6beb64aade8425ab6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s110-after-fix.png": {
+    "mtime": 1793930468.4387841,
+    "seen": 1793936201.7124786,
+    "ast_hash": "488110734959496dd39752401f2c1f40",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s110-machineloop.png": {
+    "mtime": 1793930064.9566243,
+    "seen": 1793936201.7124803,
+    "ast_hash": "d75a73e511553b0cce604e12b8aa1cc5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s110-mobs-height.png": {
+    "mtime": 1793931304.6135504,
+    "seen": 1793936201.7124815,
+    "ast_hash": "6460a905a526370769002f8a2523cae2",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s110-revive.png": {
+    "mtime": 1793931331.9270203,
+    "seen": 1793936201.7124832,
+    "ast_hash": "8e5652be185478a7df98803a661095ff",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s110-revive2.png": {
+    "mtime": 1793931338.7488878,
+    "seen": 1793936201.7124846,
+    "ast_hash": "ec2e8b358fa0217a6a589d5a2ea35a12",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s120.png": {
+    "mtime": 1793934087.235549,
+    "seen": 1793936201.712486,
+    "ast_hash": "377609f110bd548098385706b100b0af",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s176.png": {
+    "mtime": 1793934128.033776,
+    "seen": 1793936201.7124875,
+    "ast_hash": "e828fa69ff81831fd053350fde9c151f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s176b.png": {
+    "mtime": 1793934149.5483682,
+    "seen": 1793936201.712489,
+    "ast_hash": "6f949439737bec1e502cf47ddcdea553",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s177-check.png": {
+    "mtime": 1793936120.947479,
+    "seen": 1793936201.7124903,
+    "ast_hash": "26ce8f34f1b0fbbda2930e50538fd4bc",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s191-check.png": {
+    "mtime": 1793935986.7199504,
+    "seen": 1793936201.7124915,
+    "ast_hash": "3ea097acf6d041c33b02f0a28fa8ebf3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s501-heights.png": {
+    "mtime": 1793931392.752845,
+    "seen": 1793936201.712493,
+    "ast_hash": "ed50ae4d34d2d2b8ed78e7a4900fe68e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s764-check.png": {
+    "mtime": 1793936030.2121496,
+    "seen": 1793936201.7124944,
+    "ast_hash": "6998ecb20e6661aa89522aa4b4f8b404",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/s773-check.png": {
+    "mtime": 1793936092.5130026,
+    "seen": 1793936201.7124958,
+    "ast_hash": "a84e29b5073f19f4f67fe2e54597679e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/shop-open.png": {
+    "mtime": 1793933231.8217704,
+    "seen": 1793936201.7124994,
+    "ast_hash": "dda940ab979ce8de21cab02111f3e0c2",
+    "semantic_hash": ""
+  },
+  "eden_godot/tools/NetTests/ScratchSpawnHeight.cs": {
+    "mtime": 1793937626.5834327,
+    "seen": 1793939091.6639729,
+    "ast_hash": "ecd4e0e79cf53d61d65f44abdc8ab358",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/CombineWindow.cs": {
+    "mtime": 1793942743.334727,
+    "seen": 1793959231.624523,
+    "ast_hash": "64fffaf7a9bd5683da63b37bbcac3b44",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot_project/scripts/hud/TowerWindow.cs": {
+    "mtime": 1793945849.159311,
+    "seen": 1793959231.624619,
+    "ast_hash": "312d8521ea19c3054c6ba8a96d0ccb1e",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-dialogs-55-59.md": {
+    "mtime": 1793946490.4500844,
+    "seen": 1793959231.6262019,
+    "ast_hash": "d3301312b641d3db3fef284f7f815d36",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-01-bag.png": {
+    "mtime": 1793941054.6506622,
+    "seen": 1793959231.6268282,
+    "ast_hash": "732ace8b66a8ccca8127c6230b14469f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-02-start.png": {
+    "mtime": 1793941182.3852344,
+    "seen": 1793959231.6268296,
+    "ast_hash": "560ed9885711d4b0da44c5fb8c7a6b4f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-03-bag.png": {
+    "mtime": 1793941197.9369388,
+    "seen": 1793959231.6268306,
+    "ast_hash": "15e735fd89b61a75911531a475dd8778",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-04-open.png": {
+    "mtime": 1793941285.0372832,
+    "seen": 1793959231.6268315,
+    "ast_hash": "92a4cf2a5fc2950096eac3cf1afde3cd",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-05-native.png": {
+    "mtime": 1793941453.4360824,
+    "seen": 1793959231.6268325,
+    "ast_hash": "0542c8e3279f8bac30688597661ad5d6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-06-drop.png": {
+    "mtime": 1793941708.569233,
+    "seen": 1793959231.6268334,
+    "ast_hash": "25884d9027efadf9a9be7cfdc99072d7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-07-dropped.png": {
+    "mtime": 1793941907.4744387,
+    "seen": 1793959231.6268344,
+    "ast_hash": "acfe16527d36eb3327ae4f08485292f1",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-08-catalyst.png": {
+    "mtime": 1793942010.5054734,
+    "seen": 1793959231.626835,
+    "ast_hash": "db179d68993178e54d38b31ba238bb2b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-08-zoom.png": {
+    "mtime": 1793942068.0143764,
+    "seen": 1793959231.626836,
+    "ast_hash": "fdf00c03aa1318e7a4ad7c0265996eeb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-09-filled.png": {
+    "mtime": 1793942458.6699245,
+    "seen": 1793959231.6268373,
+    "ast_hash": "997079add0845df66f604a7145f63674",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-09-zoom.png": {
+    "mtime": 1793942458.8689208,
+    "seen": 1793959231.6268382,
+    "ast_hash": "c9d609afb7194132b8ca5e7cdc1702bc",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-10-success.png": {
+    "mtime": 1793942726.9738066,
+    "seen": 1793959231.626839,
+    "ast_hash": "460c54719c700bebc3b132156ae7ddf9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/combine-10-zoom.png": {
+    "mtime": 1793942727.1309109,
+    "seen": 1793959231.6268442,
+    "ast_hash": "1eb05e02382316369efed5a556b0d185",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-101-mine.png": {
+    "mtime": 1793953566.6957202,
+    "seen": 1793959231.626852,
+    "ast_hash": "bce1562c3c7845ab5e83f7a59513ca22",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-101-solo.png": {
+    "mtime": 1793953907.7693605,
+    "seen": 1793959231.6268532,
+    "ast_hash": "fcdebd43ce04ed8a003ef48885154fa4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-701-mine.png": {
+    "mtime": 1793953021.9958856,
+    "seen": 1793959231.6268542,
+    "ast_hash": "9f8d10b1e09580506595448d7a89ba6c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-701-oldmine.png": {
+    "mtime": 1793953996.502706,
+    "seen": 1793959231.6268551,
+    "ast_hash": "a72f35d130187e0c3d62777c64918612",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-701.png": {
+    "mtime": 1793953088.967628,
+    "seen": 1793959231.626856,
+    "ast_hash": "69936887961dc40d9223c938b3eeddd0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-702-eaglefort.png": {
+    "mtime": 1793954033.2710204,
+    "seen": 1793959231.6268575,
+    "ast_hash": "cef1875901bddeac9d94985010cc8bce",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-703-waterfall.png": {
+    "mtime": 1793954070.1533327,
+    "seen": 1793959231.626859,
+    "ast_hash": "dc411d6bb2c0f4f07eef75cf83a097a3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-706-skullcave.png": {
+    "mtime": 1793954107.034641,
+    "seen": 1793959231.6268601,
+    "ast_hash": "e7f9043026c8094bf016d6b30e61cdfd",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-707-brandroot.png": {
+    "mtime": 1793954180.617256,
+    "seen": 1793959231.6268609,
+    "ast_hash": "403056839edb3e859ff3b881f4b4d588",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-708-darkpalace.png": {
+    "mtime": 1793954217.3695643,
+    "seen": 1793959231.6268618,
+    "ast_hash": "e43da443f6e9df60bbf8310ed9abdc46",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-709-poisonbug.png": {
+    "mtime": 1793954254.2448702,
+    "seen": 1793959231.6268625,
+    "ast_hash": "a627955850d0be7d7e245a211593d62a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-710-georift.png": {
+    "mtime": 1793954328.0204816,
+    "seen": 1793959231.6268637,
+    "ast_hash": "321b1e84b1ff6a0753a9a9d6cae21c0e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-711-baltcore.png": {
+    "mtime": 1793954364.9837856,
+    "seen": 1793959231.6268647,
+    "ast_hash": "b51592ab5c3bbc153f4594cd761568a4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-712-mayordream.png": {
+    "mtime": 1793954917.9333777,
+    "seen": 1793959231.6268656,
+    "ast_hash": "5aa4b4e8d9cf113def99f0cca5f74ca6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-713-voidabyss.png": {
+    "mtime": 1793954439.0363917,
+    "seen": 1793959231.6268666,
+    "ast_hash": "3a49c7604be357a9bd4f5fc54458fae6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-714-amulroom.png": {
+    "mtime": 1793954475.8136995,
+    "seen": 1793959231.6268678,
+    "ast_hash": "bbdd58a528ce9d8f2edbdadc90bfe487",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-715-geobeast.png": {
+    "mtime": 1793954549.5373118,
+    "seen": 1793959231.6268685,
+    "ast_hash": "e57344e482d1c3d7a09b96e0ed31df90",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-716-deftemple.png": {
+    "mtime": 1793954512.6970053,
+    "seen": 1793959231.6268697,
+    "ast_hash": "926ac278a01316cd2b5f8ff6e8939e27",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-717-stratacore.png": {
+    "mtime": 1793954623.1259267,
+    "seen": 1793959231.6268706,
+    "ast_hash": "e57fdcd94c0c9defe5671d082b03688c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-718-cultaltar.png": {
+    "mtime": 1793954660.0532317,
+    "seen": 1793959231.6268716,
+    "ast_hash": "ed8e5fbeff2bfe08f475697083a7cbc0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-719-fallsmtn.png": {
+    "mtime": 1793954733.6608462,
+    "seen": 1793959231.6268725,
+    "ast_hash": "bace91cb3381bc848fbbcedff8e0c797",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-720-ragewhirlpool.png": {
+    "mtime": 1793954770.495153,
+    "seen": 1793959231.626874,
+    "ast_hash": "a884ddb7602b1e29ce503ee740ca64de",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-721-fedarmory.png": {
+    "mtime": 1793954844.226765,
+    "seen": 1793959231.6268747,
+    "ast_hash": "8f5830eaf7ce5bd806ea418bdac776ca",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-801-sharkbase.png": {
+    "mtime": 1793954143.8729477,
+    "seen": 1793959231.6268754,
+    "ast_hash": "f211c58f5fe29cf336c52fe002aaa8c0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-802-monarchhall.png": {
+    "mtime": 1793954291.235174,
+    "seen": 1793959231.626876,
+    "ast_hash": "88c005dadb2b02ae78e106fc0c6afe93",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-803-wolfkeep.png": {
+    "mtime": 1793954402.0770876,
+    "seen": 1793959231.6268775,
+    "ast_hash": "0a862709479f9685213f5d730bf2b537",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-804-bloodfang.png": {
+    "mtime": 1793954586.3116198,
+    "seen": 1793959231.6268785,
+    "ast_hash": "00c4be5a024c0317859ad9754236739f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-805-axerealm.png": {
+    "mtime": 1793954696.898538,
+    "seen": 1793959231.6268795,
+    "ast_hash": "071cb0d3ae802b153a2230114e4d8d65",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-806-ironfist.png": {
+    "mtime": 1793954807.3974583,
+    "seen": 1793959231.6268804,
+    "ast_hash": "81ff1bfe66bed1ff337cdb7c17b360f7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-807-basseborder.png": {
+    "mtime": 1793954881.1660697,
+    "seen": 1793959231.6268814,
+    "ast_hash": "e1da33b4d05b9d80fe1742c52efae4d3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-808-stormmom.png": {
+    "mtime": 1793954954.8266833,
+    "seen": 1793959231.6268826,
+    "ast_hash": "58588ea05be882f6017076d9304b919d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-809-icepit.png": {
+    "mtime": 1793955065.1966057,
+    "seen": 1793959231.6268837,
+    "ast_hash": "4265b0e424bd72d21377a0d629b08fa5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-810-furnace.png": {
+    "mtime": 1793954991.6159906,
+    "seen": 1793959231.6268847,
+    "ast_hash": "f2de63c8d66e08409fd08eb5e5e8370e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-811-windcave.png": {
+    "mtime": 1793955028.4362977,
+    "seen": 1793959231.6268857,
+    "ast_hash": "e45a4005d8cbdc0137095e2e7d92616f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-812-empirejail.png": {
+    "mtime": 1793955138.7822208,
+    "seen": 1793959231.6268864,
+    "ast_hash": "abb860598bc3cb4aef5847c0103ac635",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-813-guillotine.png": {
+    "mtime": 1793955101.9139147,
+    "seen": 1793959231.626887,
+    "ast_hash": "81eff5f5bbf042c9b8bc198805c1d1b7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-814-waveridge.png": {
+    "mtime": 1793955175.4975305,
+    "seen": 1793959231.626888,
+    "ast_hash": "796fc6e63288974847b3a4b0ad682e17",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-815-axedeep.png": {
+    "mtime": 1793955212.4498353,
+    "seen": 1793959231.6268892,
+    "ast_hash": "a93477623a2a94f4334d3d85b523c248",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-816-eviltemple.png": {
+    "mtime": 1793955376.772745,
+    "seen": 1793959231.62689,
+    "ast_hash": "b513022be21a2d960c1e557aa57ad3e7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-817-rosemanor.png": {
+    "mtime": 1793955313.073943,
+    "seen": 1793959231.6268919,
+    "ast_hash": "bfdc3206c2d5bf55eb9cc470c02ccb86",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-818-secretrail.png": {
+    "mtime": 1793955249.3271418,
+    "seen": 1793959231.6268928,
+    "ast_hash": "5c8aacac3bd1bbdaf0f4d182b66aef17",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-819-meteorite.png": {
+    "mtime": 1793955413.5810525,
+    "seen": 1793959231.6268935,
+    "ast_hash": "f3eca5587acbc085d3a8c3c5e841e769",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-820-gohncave.png": {
+    "mtime": 1793955450.287362,
+    "seen": 1793959231.6268942,
+    "ast_hash": "dd96c3aac489232bf68b4cf1b3c85410",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-821-kalosanqi.png": {
+    "mtime": 1793955487.190668,
+    "seen": 1793959231.6268952,
+    "ast_hash": "e9802b1a80b9af9ebc635bbca1ef5617",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-822-aiernafei.png": {
+    "mtime": 1793955523.984976,
+    "seen": 1793959231.6268961,
+    "ast_hash": "daeab72da1797ff17e8a4f1f2a37dac8",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-823-komodo.png": {
+    "mtime": 1793955560.8872821,
+    "seen": 1793959231.6268969,
+    "ast_hash": "a3cdd52a60fe3128349615ce22abe31f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-824-watertemple.png": {
+    "mtime": 1793955597.793588,
+    "seen": 1793959231.6268978,
+    "ast_hash": "bdc632ccbc90a6714089daa62f3436f4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-825-antigrav.png": {
+    "mtime": 1793955671.327205,
+    "seen": 1793959231.6268988,
+    "ast_hash": "5842c451b8f7f4f4b785210a0691e597",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-826-grelerion.png": {
+    "mtime": 1793955634.5738962,
+    "seen": 1793959231.6268995,
+    "ast_hash": "3482c9145329b7bbcba036a45bc5774a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-destdim-direct.png": {
+    "mtime": 1793955339.9004383,
+    "seen": 1793959231.6269004,
+    "ast_hash": "dc0b6aa1a8444a6ef5757a6cd584ac00",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-milresearch-direct.png": {
+    "mtime": 1793955276.2346358,
+    "seen": 1793959231.6269011,
+    "ast_hash": "f545397693f7e06ea63db6e44451dcc4",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-offer-after-tele.png": {
+    "mtime": 1793952437.3429399,
+    "seen": 1793959231.626902,
+    "ast_hash": "0de1ab812ab825d0714ad1c2977427ac",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-offer-before-tele.png": {
+    "mtime": 1793952424.1591892,
+    "seen": 1793959231.626903,
+    "ast_hash": "a7dc7a60766da3ce80c3cf6817806401",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-offer-closed-v2.png": {
+    "mtime": 1793952737.5212643,
+    "seen": 1793959231.6269038,
+    "ast_hash": "45941accf722758d78608897bebc65fb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-offer-open-v2.png": {
+    "mtime": 1793952722.6565454,
+    "seen": 1793959231.6269047,
+    "ast_hash": "c980062cc717b15c56427df3012b4680",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dj-timespace-direct.png": {
+    "mtime": 1793955698.2596984,
+    "seen": 1793959231.6269057,
+    "ast_hash": "579c6239706e5b26974bc1cbcbccf1f5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-804-bloodfang.png": {
+    "mtime": 1793957898.7943647,
+    "seen": 1793959231.6269069,
+    "ast_hash": "233fa43f8c756aa1b2f5e2dbd5ec493e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-808-stormmom.png": {
+    "mtime": 1793957942.752544,
+    "seen": 1793959231.6269076,
+    "ast_hash": "d32f7037767df744728cb2f38f11aaa3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-809-icepit.png": {
+    "mtime": 1793958090.4807854,
+    "seen": 1793959231.6269088,
+    "ast_hash": "b5aa01774847f875fc49479553159de9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-810-furnace.png": {
+    "mtime": 1793957987.1327152,
+    "seen": 1793959231.6269097,
+    "ast_hash": "b2562954d4e86f3d4f13f4ca9e880976",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-811-windcave.png": {
+    "mtime": 1793958031.2298918,
+    "seen": 1793959231.626911,
+    "ast_hash": "e008af86241a51a43bbd4342949f15ac",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-813-guillotine.png": {
+    "mtime": 1793958134.3879657,
+    "seen": 1793959231.626912,
+    "ast_hash": "3c67d441317eeab0909f6c6b20ad61f9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-814-waveridge.png": {
+    "mtime": 1793958178.2631464,
+    "seen": 1793959231.626913,
+    "ast_hash": "720e17f799d9fb2fe68e787e56a927b8",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djf-817-rosemanor.png": {
+    "mtime": 1793958222.0393288,
+    "seen": 1793959231.6269143,
+    "ast_hash": "1a9f8cc6cc84fe121e2161fa10899378",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-702-eaglefort.png": {
+    "mtime": 1793956771.6704853,
+    "seen": 1793959231.626915,
+    "ast_hash": "e5521c93a3437ae6cf2bcd1ba4340b33",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-707-brandroot.png": {
+    "mtime": 1793955805.4846818,
+    "seen": 1793959231.6269162,
+    "ast_hash": "2a872d8fb220a2a42065a895657de714",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-708-darkpalace.png": {
+    "mtime": 1793955851.4318175,
+    "seen": 1793959231.626917,
+    "ast_hash": "3b97fd0bdde716af8eea8f6442558dd7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-710-georift.png": {
+    "mtime": 1793955897.1659575,
+    "seen": 1793959231.6269176,
+    "ast_hash": "f89eed1bd37c7e0e9dff20f31ea8cc4c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-713-voidabyss.png": {
+    "mtime": 1793955942.9480965,
+    "seen": 1793959231.6269186,
+    "ast_hash": "fed619c38501e411deca13c598e31d8d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-716-deftemple.png": {
+    "mtime": 1793955988.8482332,
+    "seen": 1793959231.6269195,
+    "ast_hash": "bdafb86da5b958cdb7b88475ff9db443",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-719-fallsmtn.png": {
+    "mtime": 1793956080.3355124,
+    "seen": 1793959231.6269202,
+    "ast_hash": "3bcc86b745360530571d0a093e4d4f9b",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-720-ragewhirlpool.png": {
+    "mtime": 1793956126.2006497,
+    "seen": 1793959231.626921,
+    "ast_hash": "91d74cd1e48f38cc3a7c056276fc8305",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-804-bloodfang.png": {
+    "mtime": 1793956034.4893746,
+    "seen": 1793959231.6269228,
+    "ast_hash": "d24d93d491da3d46155db8676999a84f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-805-axerealm.png": {
+    "mtime": 1793956817.5876198,
+    "seen": 1793959231.6269236,
+    "ast_hash": "dd343698560e3dc80fc92bd552fa21a0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-806-ironfist.png": {
+    "mtime": 1793956172.1117857,
+    "seen": 1793959231.6269243,
+    "ast_hash": "157d89f97e8be4fd68ae113d3e509cb5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-807-basseborder.png": {
+    "mtime": 1793956218.0039206,
+    "seen": 1793959231.6269255,
+    "ast_hash": "edd4b1791283b907c74cc8c673c3f02a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-808-stormmom.png": {
+    "mtime": 1793956263.7960575,
+    "seen": 1793959231.626927,
+    "ast_hash": "e94e034dc6fa2cf26f3b5ff310358e56",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-809-icepit.png": {
+    "mtime": 1793956401.1814682,
+    "seen": 1793959231.6269276,
+    "ast_hash": "7711bbacfe6d8ca39931d56c25922c9e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-810-furnace.png": {
+    "mtime": 1793956309.5181959,
+    "seen": 1793959231.6269283,
+    "ast_hash": "7175c0fa4eaba2f14c5a53018db260a6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-811-windcave.png": {
+    "mtime": 1793956355.4313304,
+    "seen": 1793959231.6269295,
+    "ast_hash": "d77c4c74292257206af129b697895fb0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-813-guillotine.png": {
+    "mtime": 1793956446.8916066,
+    "seen": 1793959231.6269302,
+    "ast_hash": "1ef14cca9ee95fb87d9354895016bd8d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-814-waveridge.png": {
+    "mtime": 1793956492.6227446,
+    "seen": 1793959231.626931,
+    "ast_hash": "0619f003060630acdb74bb78178d1130",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-815-axedeep.png": {
+    "mtime": 1793956538.5188797,
+    "seen": 1793959231.626932,
+    "ast_hash": "fe6581af25a33a0839dc684a3c28bd99",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-817-rosemanor.png": {
+    "mtime": 1793956584.2990167,
+    "seen": 1793959231.626933,
+    "ast_hash": "4d3bf6dc4a85d77634814b7e9975858a",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-821-kalosanqi.png": {
+    "mtime": 1793956863.422756,
+    "seen": 1793959231.626934,
+    "ast_hash": "986203aa9f8cc6b8aaf285b7a41557d0",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-822-aiernafei.png": {
+    "mtime": 1793956630.0431545,
+    "seen": 1793959231.6269348,
+    "ast_hash": "8f7197705d040fd2a162c2c062868739",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-823-komodo.png": {
+    "mtime": 1793956909.5008874,
+    "seen": 1793959231.6269357,
+    "ast_hash": "2e60e27031f0737d4e764fd82417644e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-destdim.png": {
+    "mtime": 1793956693.853952,
+    "seen": 1793959231.6269367,
+    "ast_hash": "e455cfef82f69ff71337263d0d2e1cf9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-milresearch.png": {
+    "mtime": 1793956662.069551,
+    "seen": 1793959231.6269376,
+    "ast_hash": "eb660df8c54bb358dd81087e9f43397f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/djr-timespace.png": {
+    "mtime": 1793956725.686352,
+    "seen": 1793959231.6269383,
+    "ast_hash": "87d62739bf1d31203badd681309c1997",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dungeon-offer-s105.png": {
+    "mtime": 1793950743.6030157,
+    "seen": 1793959231.6269393,
+    "ast_hash": "b4634d7e89f1b2910f57c2a42445c3ad",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dungeon-s705-in.png": {
+    "mtime": 1793950787.5041811,
+    "seen": 1793959231.6269407,
+    "ast_hash": "35976054711874e79131e9c43ba2bf87",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/dungeon-s705-inside.png": {
+    "mtime": 1793950769.7095194,
+    "seen": 1793959231.6269414,
+    "ast_hash": "9e5cb74241bb523167e9ef5705016b63",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-01.png": {
+    "mtime": 1793944138.3159263,
+    "seen": 1793959231.6269422,
+    "ast_hash": "09099c563505aa6e6ffd67a9eaf0bdca",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-02.png": {
+    "mtime": 1793944168.0633593,
+    "seen": 1793959231.6269433,
+    "ast_hash": "9dc9654213ae1c8fe8f307cb107abd34",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-03.png": {
+    "mtime": 1793944371.368484,
+    "seen": 1793959231.626944,
+    "ast_hash": "3f052ea052f8f129d508a89c7d267c44",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-04.png": {
+    "mtime": 1793944398.4829674,
+    "seen": 1793959231.6269448,
+    "ast_hash": "2259e3bc037b47d1d99cc2c9a3a14ce9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-05.png": {
+    "mtime": 1793944645.4452598,
+    "seen": 1793959231.6269455,
+    "ast_hash": "077f111055c93e6fc31270393ab34c05",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/eval-06.png": {
+    "mtime": 1793944873.7819073,
+    "seen": 1793959231.6269462,
+    "ast_hash": "141c016697fcd646181eaf3040eb3cc2",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/goss-1108-dlg.png": {
+    "mtime": 1793949610.588565,
+    "seen": 1793959231.626957,
+    "ast_hash": "8e4b4b1c2bb947e010454791832a8f10",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/goss-1108-dlg2.png": {
+    "mtime": 1793949642.9569488,
+    "seen": 1793959231.6269581,
+    "ast_hash": "9c6fe22821c1c1e1c69ce53f07a9a7cb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/goss-1108-done.png": {
+    "mtime": 1793949746.7249727,
+    "seen": 1793959231.6269596,
+    "ast_hash": "451d13d2b7cd33ccd28017a18701cd73",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/goss-chain-done.png": {
+    "mtime": 1793952132.2487085,
+    "seen": 1793959231.6269603,
+    "ast_hash": "7119132c6ad2979bbc377ab79c1b1d62",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tower-01.png": {
+    "mtime": 1793944897.459456,
+    "seen": 1793959231.627053,
+    "ast_hash": "14e0d27767d5558640f67d69b4991de5",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tower-02.png": {
+    "mtime": 1793945821.6758351,
+    "seen": 1793959231.627054,
+    "ast_hash": "2f90a48190c751a6a223ddc9f21af724",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tower-03.png": {
+    "mtime": 1793946464.045588,
+    "seen": 1793959231.627055,
+    "ast_hash": "5090d56b1aea2fcd8078bc6ac1ea2136",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-boot.png": {
+    "mtime": 1793939688.9095716,
+    "seen": 1793959231.627056,
+    "ast_hash": "f5582e0941c5c5207866567bf78bd2f6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-dialog.png": {
+    "mtime": 1793939949.269636,
+    "seen": 1793959231.6270568,
+    "ast_hash": "7eb111d047d450b2f0e82b28e9812f00",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-npc.png": {
+    "mtime": 1793939911.8963444,
+    "seen": 1793959231.6270576,
+    "ast_hash": "876912cd11d0b99cd5f21c4ea9d0a82d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-result.png": {
+    "mtime": 1793939977.7370963,
+    "seen": 1793959231.6270587,
+    "ast_hash": "62cc5964a97875637ee162329a74d185",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-result2.png": {
+    "mtime": 1793940400.4580827,
+    "seen": 1793959231.6270602,
+    "ast_hash": "8ebbd1a531bc122bcb8b725423ab821f",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-s120.png": {
+    "mtime": 1793939776.1859171,
+    "seen": 1793959231.627061,
+    "ast_hash": "879f5c2653880e051e27562a081f5961",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-state2.png": {
+    "mtime": 1793940355.1169422,
+    "seen": 1793959231.6270618,
+    "ast_hash": "12329331fe6f8da17869fffdc1d5a9e3",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/tpa-walk.png": {
+    "mtime": 1793939846.1525908,
+    "seen": 1793959231.6270628,
+    "ast_hash": "c08d5ba65c95335303c8e3ce94ec3114",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-wire-panels-guilde-crusade.md": {
+    "mtime": 1793960396.3643925,
+    "seen": 1793970381.2019231,
+    "ast_hash": "77bd38f1fbfd050f9dbb09c7df449e7d",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-donate-state.png": {
+    "mtime": 1793962362.1223855,
+    "seen": 1793970381.2023401,
+    "ast_hash": "85969b65dc135f8bb3e6969ecc30d78c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-guild-create-attempt.png": {
+    "mtime": 1793961473.8011167,
+    "seen": 1793970381.2023413,
+    "ast_hash": "a956582edfad1caeaf9f1ea97bcc59a9",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-guild-created.png": {
+    "mtime": 1793961806.9138427,
+    "seen": 1793970381.2023425,
+    "ast_hash": "97b4f6ae1b5486b4ada3f3b7b8013d57",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-guild-inguild.png": {
+    "mtime": 1793962189.6856332,
+    "seen": 1793970381.2023444,
+    "ast_hash": "50552252c3ccb81930db705eb7c97875",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-guild-typed.png": {
+    "mtime": 1793961631.8691394,
+    "seen": 1793970381.2023454,
+    "ast_hash": "5b7b5177125f8e471d196c3d103eab4c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-guild-view.png": {
+    "mtime": 1793961830.6383958,
+    "seen": 1793970381.2023468,
+    "ast_hash": "3d5bd2f953efddd2c352858b54c8267c",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-guildwindow-347.png": {
+    "mtime": 1793961446.6036289,
+    "seen": 1793970381.2023478,
+    "ast_hash": "95e45dfc396034104e9bac4a175f201e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-inlay-pre.png": {
+    "mtime": 1793968693.7491052,
+    "seen": 1793970381.202349,
+    "ast_hash": "245e25e842b97d0e503410f671111815",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-inlay-sockets.png": {
+    "mtime": 1793969862.4866884,
+    "seen": 1793970381.2023501,
+    "ast_hash": "22b639a8d975a20a2b29d4faa58d2db7",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-inlay-sockets2.png": {
+    "mtime": 1793970206.4070811,
+    "seen": 1793970381.202351,
+    "ast_hash": "a14bdbbdf4e1ce2eab1dab6caa3d8232",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-inlay-sockets3.png": {
+    "mtime": 1793970229.1776438,
+    "seen": 1793970381.2024693,
+    "ast_hash": "776c1c079f9320308774f38ef99822eb",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-inlay-sockets4.png": {
+    "mtime": 1793970248.8632655,
+    "seen": 1793970381.2024715,
+    "ast_hash": "64e7d2896383c9ed1539f86c7b2b564e",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-inlay-tooltip.png": {
+    "mtime": 1793969579.8911152,
+    "seen": 1793970381.2024724,
+    "ast_hash": "f17e20862ee356b43577fdba65fea7b6",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-state.png": {
+    "mtime": 1793969343.0246568,
+    "seen": 1793970381.2024734,
+    "ast_hash": "6f38f5a4178d258f5b8ade4dea5dba52",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06-towncreate-501.png": {
+    "mtime": 1793960985.6513042,
+    "seen": 1793970381.2024748,
+    "ast_hash": "4469eb0fb2f3d7d86d985a814427f596",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/audit-now.png": {
+    "mtime": 1793959404.1120818,
+    "seen": 1793970381.2025464,
+    "ast_hash": "d8e164cdae50b70cf2e0e101b0e06661",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-balayage-hauteurs.md": {
+    "mtime": 1793971032.6681743,
+    "seen": 1793982748.8841043,
+    "ast_hash": "298dbd7bf578e70af1f5b1db093166fa",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-chemins-natifs-ouverts.md": {
+    "mtime": 1793971727.6433644,
+    "seen": 1793982748.8841057,
+    "ast_hash": "6913aeaaf4c3687bc7792dcb0f830264",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-inventaire-panels.md": {
+    "mtime": 1793971728.4001563,
+    "seen": 1793982748.8841088,
+    "ast_hash": "d320a552db48cf5d6b4c66dda8d74ece",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-server-readiness.md": {
+    "mtime": 1793971490.3345165,
+    "seen": 1793982748.884112,
+    "ast_hash": "54a1cb8bcc00315e0d5ae765f5c8e24f",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-spec-visuelle-refshots.md": {
+    "mtime": 1793971009.9936416,
+    "seen": 1793982748.884113,
+    "ast_hash": "ebc4c818e243cabe0f17903349868edc",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/2026-11-06_14-52.png": {
+    "mtime": 1793973132.2422762,
+    "seen": 1793982748.8846803,
+    "ast_hash": "89600df721c9260d28806c86b97ca815",
+    "semantic_hash": ""
+  },
+  "eden_godot/godot-shots/workorder-collect-commission-2026-11-06.png": {
+    "mtime": 1793982612.5910196,
+    "seen": 1793982748.885004,
+    "ast_hash": "5e1f3d6bf157ae23343df51df1071983",
+    "semantic_hash": ""
+  },
+  "godot-shots/2026-11-06-strengthen-plus14-ncid369.png": {
+    "mtime": 1793975840.2472825,
+    "seen": 1793982748.8850348,
+    "ast_hash": "2ffddc86b05633ca68921553cd054e8e",
+    "semantic_hash": ""
+  },
+  "godot-shots/2026-11-06-strengthen-plus14-tooltip-crop.png": {
+    "mtime": 1793975896.9509504,
+    "seen": 1793982748.8850362,
+    "ast_hash": "7709e85f7c294b6c589ba7e239222ec3",
+    "semantic_hash": ""
+  },
+  "godot-shots/2026-11-06-strengthen-plus14-tooltip.png": {
+    "mtime": 1793975884.1244416,
+    "seen": 1793982748.8850374,
+    "ast_hash": "df01353380dad762346d592e46012bd3",
+    "semantic_hash": ""
+  },
+  "godot-shots/lifeskill-production-36915.png": {
+    "mtime": 1793979490.7567058,
+    "seen": 1793982748.8850386,
+    "ast_hash": "5216f1bcd563f383ead125482297804b",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Core/Game/Family/FamilyCityRules.cs": {
+    "mtime": 1794001554.2124474,
+    "seen": 1794001909.5109272,
+    "ast_hash": "adcf95f035b99a4637e0be86a4c72c7b",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Zone/Handlers/GmHallSetupHandlers.cs": {
+    "mtime": 1794001379.4716196,
+    "seen": 1794001909.5111332,
+    "ast_hash": "bcaa2ae549cf1e805a12137c329c8632",
+    "semantic_hash": ""
+  },
+  "eden_server/server/src/Eden.Zone/ZoneEntryFlow.FamilyCity.cs": {
+    "mtime": 1794001410.391729,
+    "seen": 1794001909.5112054,
+    "ast_hash": "ef17d55a455d9584a733aec31778d180",
+    "semantic_hash": ""
+  },
+  "eden_server/server/tests/Eden.Tests/FamilyCityRulesTests.cs": {
+    "mtime": 1794001561.2869296,
+    "seen": 1794001909.5114279,
+    "ast_hash": "eb0d6db58120199c55733f31fb6362f1",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-craft-flux-natif.md": {
+    "mtime": 1793990154.7866251,
+    "seen": 1794001909.5120177,
+    "ast_hash": "ce0e82b177602220913998234ed09117",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-vdg-batiments-matrice.md": {
+    "mtime": 1793998255.614269,
+    "seen": 1794001909.512025,
+    "ast_hash": "0cd2ea9973049f440aaf6903dbabc1c5",
+    "semantic_hash": ""
+  },
+  "docs/temp-plans/2026-11-06-vdg-ressources.md": {
+    "mtime": 1794001834.7866693,
+    "seen": 1794001909.5120263,
+    "ast_hash": "04ba700acaa2fdc0382e5c131c0dc1b3",
+    "semantic_hash": ""
+  },
+  "docs/workflows/AGENT-IA-GAMEPLAY.md": {
+    "mtime": 1794000602.0026991,
+    "seen": 1794001909.5120316,
+    "ast_hash": "0f4db076a202b3c27d1b1474e657159e",
     "semantic_hash": ""
   }
 }

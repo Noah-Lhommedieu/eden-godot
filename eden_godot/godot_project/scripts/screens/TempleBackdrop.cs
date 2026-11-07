@@ -151,7 +151,8 @@ public sealed class TempleBackdrop
         {
             tb.Root.GetParent()?.RemoveChild(tb.Root);
             screen.AddChild(tb.Root);
-            screen.MoveChild(tb.Root, 0);   // derrière l'UI
+            // Parent encore en setup (warning move_child) → différé.
+            screen.CallDeferred(Node.MethodName.MoveChild, tb.Root, 0);
         }
         tb.ApplyShot(shot, raceWireId);
         tb.EnsurePlaceholder(screen);
@@ -172,11 +173,11 @@ public sealed class TempleBackdrop
         return null;
     }
 
-    /// <summary>Splash vanilla (loading_0 du client d'origine — pas
-    /// le visuel Reforged) plein écran tant que le temple GLB n'est
-    /// pas monté (~1,4 s de parse) : plus de vide noir au login. Le
-    /// 3D Godot rend sous le canvas → le rect recouvre le fond vide,
-    /// puis disparaît à <see cref="AttachMap"/>.</summary>
+    /// <summary>Splash vanilla (loading_0.dds du corpus EDENFR) plein
+    /// écran tant que le temple GLB n'est pas monté (~1,4 s de parse) :
+    /// plus de vide noir au login. Le 3D Godot rend sous le canvas →
+    /// le rect recouvre le fond vide, puis disparaît à
+    /// <see cref="AttachMap"/>.</summary>
     private void EnsurePlaceholder(Control screen)
     {
         if (TempleLoaded ||
@@ -184,7 +185,7 @@ public sealed class TempleBackdrop
              GodotObject.IsInstanceValid(_placeholder)))
             return;
         var tex = AssetCatalog.GetTexture(
-            "UI/loadingframe/Loading_0_vanilla.png");
+            "UI/loadingframe/loading_0.dds");
         if (tex == null) return;
         _placeholder = new TextureRect
         {
@@ -197,7 +198,8 @@ public sealed class TempleBackdrop
         _placeholder.SetAnchorsAndOffsetsPreset(
             Control.LayoutPreset.FullRect);
         screen.AddChild(_placeholder);
-        screen.MoveChild(_placeholder, 0);   // sous tout le reste
+        // Le parent est encore en setup (warning move_child) → différé.
+        screen.CallDeferred(Node.MethodName.MoveChild, _placeholder, 0);
     }
 
     /// <summary>Vide le marqueur perso (le preview de l'écran
@@ -366,7 +368,8 @@ public sealed class TempleBackdrop
         };
         _world = world;
         Root.AddChild(world);
-        Root.MoveChild(world, 0);
+        // Root peut être encore en setup (warning move_child) → différé.
+        Root.CallDeferred(Node.MethodName.MoveChild, world, 0);
         Perf.PerfTrace.Abs("temple : proto demandé");
         Task.Run(() =>
         {

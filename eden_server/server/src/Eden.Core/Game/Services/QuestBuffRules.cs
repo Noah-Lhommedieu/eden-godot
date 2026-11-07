@@ -84,6 +84,13 @@ public static class QuestBuffRules
         foreach (var m in missions)
             foreach (var o in Objectives(m))
                 if (IsTrackedId(o.EnchantId)) set.Add(o.EnchantId);
+        // Conditions d'acceptation If_CheckBuff (fatigue des quêtes de
+        // ville 54991/58759) : le miroir de compteur doit exister.
+        foreach (var m in missions)
+            foreach (var c in m.Conditions)
+                if (c.Name == "If_CheckBuff" && c.Args.Count > 0 &&
+                    int.TryParse(c.Args[0], out var cid) && IsTrackedId(cid))
+                    set.Add(cid);
         return set;
     }
 }

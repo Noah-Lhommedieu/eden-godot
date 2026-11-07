@@ -101,7 +101,12 @@ public static partial class HudWindows
         while (n.GetParent() is Node p && p is not CanvasLayer) n = p;
         if (n.GetParent() is CanvasLayer layer &&
             n.GetIndex() != layer.GetChildCount() - 1)
-            layer.MoveChild(n, layer.GetChildCount() - 1);
+        {
+            // Une fenêtre rendue visible pendant l'instanciation de la
+            // scène (parent encore busy) : différer le move_child.
+            layer.CallDeferred(Node.MethodName.MoveChild, n,
+                layer.GetChildCount() - 1);
+        }
     }
 
     /// <summary>Clic dans le HUD : la fenêtre inscrite qui contient

@@ -84,6 +84,21 @@ public sealed class ZoneLinkServer
     /// par le flux de création ZW (NCID 34, natif 143/634).</summary>
     public static Eden.Core.Game.Family.FamilyService? Families { get; set; }
 
+    /// <summary>Diffuse l'état de ville d'une famille (house_open) à la
+    /// zone (ZW 35) et à ses membres en ligne (fiche famille).</summary>
+    public static async Task PushHouseOpenAsync(Eden.Core.Game.Family.Family fam)
+    {
+        var s = new Eden.Core.Networking.OutBinStream();
+        s.WriteInt(fam.Id);
+        s.WriteShort(fam.HouseOpen);
+        if (ActiveZoneSession is { } z)
+            await z.SendPacketAsync(NcidZoneServerFamilyDataUpdate, s.ToArray());
+        foreach (var id in fam.Members.Keys.ToList())
+            if (ClientSessions.TryGetValue(id, out var ms))
+                await ms.SendPacketAsync(50,
+                    Eden.Core.Game.Family.FamilyPackets.QueryFamilyInfo(fam, 0, 1));
+    }
+
     /// <summary>Accès à la table native <c>prestige</c> — les commandes
     /// ZW <c>gain_prestige</c>/<c>set_prestige</c> y écrivent
     /// (équivalent des textes mission <c>GainExp Prestige</c>/
@@ -616,6 +631,47 @@ public sealed class ZoneLinkServer
             }
             return true;
         }
+        // « family_achievement <charId> <achId> <type> <groupKey>
+        // <gained> » — la zone appelle ça quand un succès personnel
+        // rapporte des points (SetAchievement natif →
+        // CFamily::UpdataAchievement mission @0x081be030). Le monde
+        // applique : family_achievement upsert (clé GroupKey),
+        // compteurs, spell_point (si elfking), log type 4, rank
+        // snapshot, puis broadcast NCID 67 flag=0 + log 68 aux membres.
+        if (text.StartsWith("family_achievement ", StringComparison.Ordinal)
+            && Families is not null)
+        {
+            var parts = text.Split(' ');
+            if (parts.Length >= 6
+                && int.TryParse(parts[1], out var charId)
+                && int.TryParse(parts[2], out var achId)
+                && short.TryParse(parts[3], out var achType)
+                && short.TryParse(parts[4], out var groupKey)
+                && int.TryParse(parts[5], out var gained))
+            {
+                var fam = Families.GetFamilyOf(charId);
+                var r = await Families.ApplyFamilyAchievementAsync(
+                    charId, achId, achType, groupKey, gained);
+                if (fam is not null && r is { } res)
+                {
+                    // NCID 67 flag=0 : [u8 0][u16 1][s16 groupKey]
+                    // [u32 newPoint][i32 charId][u32 channel=0] —
+                    // monde case 0x14 de CNE_DBA_ClientChangeFamily.
+                    var pkt = Eden.Core.Game.Family.FamilyPackets
+                        .FamilyAchievementUpdate(0, 0,
+                            [(res.GroupKey, res.GroupPoint, charId, 0u)]);
+                    var log = Eden.Core.Game.Family.FamilyPackets
+                        .FamilyLogUpdate(4, 0, [res.Log]);
+                    foreach (var id in fam.Members.Keys.ToList())
+                        if (ClientSessions.TryGetValue(id, out var ms))
+                        {
+                            await ms.SendPacketAsync(67, pkt);
+                            await ms.SendPacketAsync(68, log);
+                        }
+                }
+            }
+            return true;
+        }
         // « family_instance_create <charId> <type> <vip> » — relais de
         // la commande texte DBA native « FamilyInstanceCreate fm_id=
         // %d type=%hd vip=%hhd » (zone → CDBAgent → TC_FamilyInstanceCreate
@@ -639,6 +695,11 @@ public sealed class ZoneLinkServer
                 if (r.TextIndex < 0) return true;     // type invalide — silencieux natif
                 if (r.TextIndex != 0)
                 {
+                    var fr = Families.GetFamilyOf(charId);
+                    EdenLog.Write($"[FamilyInstance] refus monde : " +
+                        $"char={charId} gate=0x{r.TextIndex:x} " +
+                        $"fam={fr?.Id} treasury={fr?.Treasury} " +
+                        $"members={fr?.Members.Count}");
                     // Erreur — équivalent de TextOutputIndex mission :
                     // ClientTextOutputIndex monde→client (NCID 43).
                     if (ClientSessions.TryGetValue(charId, out var cs))
@@ -682,7 +743,7 @@ public sealed class ZoneLinkServer
             {
                 await Families.LockedAsync(async () =>
                 {
-                    gf.Level = (byte)Math.Clamp(level, 1, 10);
+                    gf.Level = (byte)Math.Clamp(level, 1, 12);
                     gf.HouseOpen = node;
                     gf.Treasury = Math.Clamp(treasury, 0, 999999999);
                     await Families.Repo.SetLevelAsync(gf.Id, gf.Level,
@@ -717,10 +778,25 @@ public sealed class ZoneLinkServer
                 && int.TryParse(parts[2], out var fLevel)
                 && Families.GetFamily(famId) is { } lf)
             {
-                lf.Level = (byte)Math.Clamp(fLevel, 1, 10);
+                lf.Level = (byte)Math.Clamp(fLevel, 1, 12);
                 await Families.Repo.SetLevelAsync(famId, lf.Level,
                     lf.Exp);
             }
+            return true;
+        }
+        // « family_donate <familyId> <amount> » — relais du don zone
+        // (CNE_CZ_ZoneServerFamilyDonateMoney) : le monde est
+        // l'autorité trésorerie — InstanceCreate lit fam.Treasury.
+        if (text.StartsWith("family_donate ", StringComparison.Ordinal)
+            && Families is not null)
+        {
+            var parts = text.Split(' ');
+            if (parts.Length >= 3
+                && int.TryParse(parts[1], out var dfamId)
+                && int.TryParse(parts[2], out var damount)
+                && Families.GetFamily(dfamId) is { } df)
+                df.Treasury = await Families.Repo
+                    .AddTreasuryAsync(dfamId, damount);
             return true;
         }
         // « family_set_house_open <familyId> <node> » — //open_hall :

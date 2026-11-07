@@ -41,6 +41,30 @@ public partial class WorldMapWindow : Control
     private Control? _playerImg;
     private Control? _preview;
     private MinimapPanel? _minimap;
+    private readonly List<Control> _charImgs = new();
+
+    /// <summary>Pose l'icône native <c>UI/uiicon/{file}.png</c> sur un
+    /// contrôle du layout (HintImage « Nofoto »).</summary>
+    private static void SetIcon(Control? c, string file)
+    {
+        if (c == null) return;
+        var tex = AssetCatalog.GetTexture($"UI/uiicon/{file}.png");
+        if (tex == null)
+        {
+            GD.PrintErr($"[worldmap] icône {file} absente");
+            return;
+        }
+        if (c is TextureRect tr) { tr.Texture = tex; return; }
+        var r = new TextureRect
+        {
+            Name = "Icon", Texture = tex,
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+            MouseFilter = MouseFilterEnum.Ignore,
+        };
+        r.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        c.AddChild(r);
+    }
 
     /// <summary>NodeIds affichés sur la page continent 1 — les boutons
     /// réellement présents dans le layout sont découverts à
@@ -84,15 +108,21 @@ public partial class WorldMapWindow : Control
                     btn.Pressed += () => ShowZonePreview(captured);
                 }
             }
-            // Marqueurs natifs sans données : CharImg (groupe) et
-            // LoverImg masqués — PlayerImg est posé par _Process.
+            // Marqueurs natifs : le layout les laisse « Nofoto », le code
+            // natif (ZoneMap.cpp, FUN_00a5f640 @0xa5f640) les texture avec
+            // uiicon map013 (LoverImg), map014 (PlayerImg), map002
+            // (CharImg1..10 = coéquipiers).
+            SetIcon(_playerImg, "map014");
             for (var i = 1; i <= 10; i++)
             {
                 var c = TopLeftVitals.Find<Control>(_window, $"CharImg{i}");
-                if (c != null) c.Visible = false;
+                if (c == null) continue;
+                SetIcon(c, "map002");
+                c.Visible = false;
+                _charImgs.Add(c);
             }
             var lover = TopLeftVitals.Find<Control>(_window, "LoverImg");
-            if (lover != null) lover.Visible = false;
+            if (lover != null) { SetIcon(lover, "map013"); lover.Visible = false; }
 
             // Boutons natifs : ExitBtn referme ; OptionUI = panneau
             // « City Features » du shot de référence — affiché avec
@@ -268,13 +298,36 @@ public partial class WorldMapWindow : Control
             r.Position.X + r.Size.X / 2f + 8f,
             r.Position.Y + r.Size.Y / 2f + 8f);
         _playerImg.Visible = true;
+        PlacePartyIcons();
+    }
+
+    /// <summary>CharImg1..10 : un icône par coéquipier, posé au centre du
+    /// bouton de son node (même approximation que PlayerImg).</summary>
+    private void PlacePartyIcons()
+    {
+        var nodes = _minimap?.PartyNodes.ToList() ?? new List<int>();
+        for (var i = 0; i < _charImgs.Count; i++)
+        {
+            var c = _charImgs[i];
+            Control? btn = i < nodes.Count && _window != null
+                ? TopLeftVitals.Find<Control>(_window, $"mapBtn{nodes[i]}")
+                : null;
+            if (btn == null) { c.Visible = false; continue; }
+            var r = btn.GetRect();
+            HudRoot.Pin(c, 0, 0, 0, 0,
+                r.Position.X + r.Size.X / 2f + 6f,
+                r.Position.Y + r.Size.Y / 2f - 8f,
+                r.Position.X + r.Size.X / 2f + 22f,
+                r.Position.Y + r.Size.Y / 2f + 8f);
+            c.Visible = true;
+        }
     }
 
     private void SetTitle(string title)
     {
         var lbl = _window?
-            .FindChildren("*", "CeguiTitleBar", true, false)
-            .Cast<Ui.CeguiTitleBar>().FirstOrDefault()?
+            .FindChildren("*", "Control", true, false)
+            .OfType<Ui.CeguiTitleBar>().FirstOrDefault()?
             .FindChildren("*", "Label", true, false)
             .Cast<Label>().FirstOrDefault();
         if (lbl != null) lbl.Text = title;

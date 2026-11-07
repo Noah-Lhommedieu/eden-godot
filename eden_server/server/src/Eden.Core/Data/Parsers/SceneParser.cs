@@ -277,6 +277,16 @@ public static class SceneParser
     {
         public int Id { get; init; }
         public List<(float X, float Z)> Waypoints { get; } = new();
+        /// <summary>Colonne « fixe » de chaque point (4e valeur du
+        /// groupe de 5). Observé sur les donjons (~85 % de mobs
+        /// immobiles) : tous les points à 1 = emplacements de
+        /// formation (un par mob, le mob y reste) ; un point à 0 après
+        /// le premier = vrai chemin à parcourir.</summary>
+        public List<bool> Fixed { get; } = new();
+        /// <summary>Le groupe reste sur place (emplacements fixes ou
+        /// point unique).</summary>
+        public bool IsStationary =>
+            Waypoints.Count <= 1 || Fixed.All(f => f);
     }
 
     /// <summary>Scène complète d'une map.</summary>
@@ -285,6 +295,12 @@ public static class SceneParser
         public required string MapCode { get; init; }
         public int MapWidth { get; set; }
         public int MapHeight { get; set; }
+        /// <summary>Géométrie déclarée par [globe_data] col0 (« S101.nif »
+        /// → « S101 »), en majuscules ; vide si absente. Les scènes
+        /// solo/héroïque/event (S701, S603, S801…) partagent la géométrie
+        /// — et donc la grille .smp — d'un donjon multi (S101, S201…) :
+        /// la grille se cherche sous ce code, pas sous celui du node.</summary>
+        public string GlobeCode { get; set; } = string.Empty;
         public List<MonsterSpawn> Monsters { get; } = new();
         public List<NpcSpawn> Npcs { get; } = new();
         /// <summary>Slots statue de famille (templates 54901-54905)
@@ -332,6 +348,36 @@ public static class SceneParser
         /// z=0 finissent sous les maps intérieures sans heightfield
         /// (S100 « Andrew V. Mine » : sol ~16, position/event_area à
         /// z≈16). 0 s'il n'y a aucun point porteur.</summary>
+        /// <summary>Distance max (unités) entre un monstre et le point de
+        /// référence z le plus proche pour que ce z soit crédible.</summary>
+        private const float MobZMaxDist = 40f;
+
+        /// <summary>Z d'un monstre de reborn : <see cref="FloorZ"/> seulement
+        /// s'il est crédible. Les donjons n'ont que 3-9 points porteurs de z
+        /// pour des dizaines de mobs répartis sur plusieurs étages (S105 :
+        /// z 63..168, S221 : 321..330) — le point le plus proche pouvait
+        /// être à 100 u et 50-100 u trop haut/bas, et le client (qui ne
+        /// recale le z serveur que s'il est à ≤ 4 u du sol) posait alors
+        /// le mob en l'air ou sur un autre étage. Scène plate (écart de z
+        /// ≤ 6) ou point à ≤ 40 u : on garde ; sinon 0 = « inconnu », le
+        /// client snappe alors le sol sous le mob.</summary>
+        public float MobFloorZ(float x, float y)
+        {
+            float zMin = float.MaxValue, zMax = float.MinValue;
+            var bestD = float.MaxValue;
+            void Offer(float px, float py, float pz)
+            {
+                zMin = Math.Min(zMin, pz); zMax = Math.Max(zMax, pz);
+                var dx = px - x; var dy = py - y;
+                bestD = Math.Min(bestD, dx * dx + dy * dy);
+            }
+            foreach (var (px, py, pz) in Positions) Offer(px, py, pz);
+            foreach (var a in EventAreas) Offer(a.X, a.Y, a.Z);
+            if (bestD == float.MaxValue) return 0f;
+            if (zMax - zMin <= 6f) return FloorZ(x, y);
+            return bestD <= MobZMaxDist * MobZMaxDist ? FloorZ(x, y) : 0f;
+        }
+
         public float FloorZ(float x, float y)
         {
             var best = 0f;
@@ -377,6 +423,8 @@ public static class SceneParser
                     {
                         scene.MapWidth = int.TryParse(fields[1], out var w) ? w : 0;
                         scene.MapHeight = int.TryParse(fields[2], out var h) ? h : 0;
+                        scene.GlobeCode = Path.GetFileNameWithoutExtension(
+                            fields[0].Trim()).ToUpperInvariant();
                     }
                     break;
 
@@ -538,7 +586,9 @@ public static class SceneParser
 
                 case "event_area":
                     // id,x,y,z,radius,shape,type,facing,description
-                    if (fields.Length >= 9)
+                    // — desc optionnelle : les lignes s28x finissent
+                    // en « ,, » que le TrimEnd réduit à 8 champs.
+                    if (fields.Length >= 8)
                         scene.EventAreas.Add(new EventArea
                         {
                             Id = ParseInt(fields[0]),
@@ -549,7 +599,8 @@ public static class SceneParser
                             Shape = ParseInt(fields[5]),
                             Type = fields[6],
                             Facing = ParseFloat(fields[7]),
-                            Description = fields[8],
+                            Description = fields.Length > 8
+                                ? fields[8] : "",
                         });
                     break;
 
@@ -597,7 +648,11 @@ public static class SceneParser
                             var x = ParseFloat(fields[i]);
                             var z = ParseFloat(fields[i + 1]);
                             if (x != 0 || z != 0)
+                            {
                                 route.Waypoints.Add((x, z));
+                                route.Fixed.Add(i + 3 < fields.Length &&
+                                    ParseInt(fields[i + 3]) == 1);
+                            }
                         }
                         if (route.Waypoints.Count > 0)
                             scene.Patrols[route.Id] = route;
@@ -627,8 +682,10 @@ public static class SceneParser
                             RespawnSeconds = ParseInt(fields[4]),
                             X = ParseFloat(fields[5]),
                             Y = ParseFloat(fields[6]),
-                            Z = ParseFloat(fields[7]),
-                            Facing = ParseFloat(fields[8]),
+                            // col7 = cap en radians sur les 20 833 lignes des scènes
+                            // (jamais une hauteur) : z résolu post-parse (FloorZ).
+                            Z = 0f,
+                            Facing = ParseFloat(fields[7]),
                             DeathEventId = ParseInt(fields[8]),
                             BornEventId = fields.Length >= 19
                                 ? ParseInt(fields[9]) : 0,
@@ -689,7 +746,7 @@ public static class SceneParser
         // intérieures (sol S100 ≈ 16). Mobs d'abord : leurs z résolus
         // enrichissent ensuite les candidats des NPC.
         foreach (var m in scene.Monsters)
-            if (m.Z == 0) m.Z = scene.FloorZ(m.X, m.Y);
+            if (m.Z == 0) m.Z = scene.MobFloorZ(m.X, m.Y);
         foreach (var n in scene.Npcs)
             if (n.Z == 0) n.Z = scene.FloorZ(n.X, n.Y);
         return scene;

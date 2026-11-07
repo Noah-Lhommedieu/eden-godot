@@ -230,6 +230,37 @@ public sealed class SocialRepository
             new { familyId, loc, durability });
     }
 
+    /// <summary>Usure/maj de durabilité d'un bâtiment par son uid
+    /// (colonne <c>id</c> — cible de <c>GetBuildingItemByItemNetID</c>
+    /// natif, work+0x2c). Appelé par l'usure des stations de travail
+    /// (<c>SFamily::UpdateBuildingDurability</c> →
+    /// <c>CFamily::UpdateBuildingDurability</c> mission).</summary>
+    public async Task UpdateBuildingDurabilityByIdAsync(int familyId,
+        int id, short durability)
+    {
+        using var db = Open();
+        await db.ExecuteAsync(
+            "UPDATE family_building_container " +
+            "SET durability = @durability " +
+            "WHERE family_id = @familyId AND id = @id",
+            new { familyId, id, durability });
+    }
+
+    /// <summary>Level-up d'un bâtiment — <c>CFamily::UpdateBuildingExp</c>
+    /// mission : écrit ensemble <c>tid</c> (template suivant),
+    /// <c>level</c> (col4 du nouveau template) et <c>exp</c> (reste
+    /// après soustraction du seuil) en un UPDATE.</summary>
+    public async Task UpdateBuildingProgressAsync(int familyId, int id,
+        int tid, short level, int exp)
+    {
+        using var db = Open();
+        await db.ExecuteAsync(
+            "UPDATE family_building_container " +
+            "SET tid = @tid, level = @level, exp = @exp " +
+            "WHERE family_id = @familyId AND id = @id",
+            new { familyId, id, tid, level = (int)level, exp });
+    }
+
     /// <summary>Insertion d'un item dans un conteneur de hall —
     /// <c>CItemDBO::PutItemInFamilyBuilding</c> natif (appelé par
     /// <c>CItemFactory::FamilyBuildingPutItemFromInventroy</c>
@@ -251,7 +282,10 @@ public sealed class SocialRepository
             new
             {
                 id, familyId,
-                itemTid = (int)item.ItemTid, tid = item.Tid,
+                // item_tid = u16 natif (mission +0xc) — colonne integer
+                // PG : on stocke la valeur non signée, la relecture
+                // (short) récupère les mêmes 16 bits.
+                itemTid = (int)(ushort)item.ItemTid, tid = item.Tid,
                 itemType = (int)item.ItemType,
                 durability = (int)item.Durability,
                 containerIndex = (int)item.ContainerIndex,

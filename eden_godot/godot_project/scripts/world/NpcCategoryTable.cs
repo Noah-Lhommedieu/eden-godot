@@ -66,17 +66,60 @@ public static class NpcCategoryTable
         _ => "map005",
     };
 
-    /// <summary>Icône native du marqueur pour un PNJ (tag catégorie
-    /// brut, pas la traduction EN — couvre les catégories sans entrée
-    /// dans <c>En</c> comme 魔方能量活動).</summary>
-    public static string IconOf(int npcId)
+    /// <summary>Icône native <c>mapNNN</c> par type de service PNJ —
+    /// table indexée par type de <c>CZoneMap</c> (client_game
+    /// <c>FUN_008194b0</c> @0x8194b0, 41 entrées ; map000 = « aucune »
+    /// donc absente ici). Recoupée avec c_npc (1 arme=map006, 2 armure=
+    /// map007, 3 général=map005, 18 enchères=map009, 23 gloire=map004)
+    /// et la légende « City Features » du ref carte.png.</summary>
+    private static readonly Dictionary<int, string> TypeIcon = new()
+    {
+        [1] = "map006", [2] = "map007", [3] = "map005", [4] = "map008",
+        [8] = "map011", [12] = "map028", [13] = "map029", [14] = "map030",
+        [15] = "map031", [16] = "map032", [17] = "map033", [18] = "map009",
+        [23] = "map004", [26] = "map017", [27] = "map010", [28] = "map023",
+        [29] = "map024", [30] = "map021", [31] = "map022", [32] = "map024",
+        [36] = "map051", [37] = "map052", [38] = "map026", [39] = "map027",
+        [40] = "map055",
+    };
+
+    /// <summary>Type de service natif du PNJ : <c>atoi(col10.split('#')[1])</c>
+    /// sinon 3e jeton (<c>:Service id TYPE …</c>) du 1er slot d'action
+    /// (cols 11-18) — règle de <c>FUN_007efdc0</c> @0x7efdc0 (CUIRadarWnd,
+    /// remplissage de la liste d'icônes radar). 0 = aucun.</summary>
+    public static int ServiceType(int npcId)
     {
         Ensure();
-        return _tag != null && _tag.TryGetValue(npcId, out var t)
-            ? IconFile(t) : "map005";
+        return _svc != null && _svc.TryGetValue(npcId, out var t) ? t : 0;
     }
 
+    /// <summary>Icône du type (null si le natif n'en a pas).</summary>
+    public static string? IconOfType(int type) =>
+        TypeIcon.TryGetValue(type, out var f) ? f : null;
+
+    /// <summary>Icône native d'un PNJ : type de service d'abord, puis
+    /// repli sur la catégorie c_npc (portails, banque, couple…), sinon
+    /// null — le radar natif ne dessine rien pour un PNJ sans type
+    /// (switch par défaut de <c>FUN_007eea00</c> @0x7eea00).</summary>
+    public static string? IconOrNull(int npcId)
+    {
+        Ensure();
+        var byType = IconOfType(ServiceType(npcId));
+        if (byType != null) return byType;
+        if (_tag != null && _tag.TryGetValue(npcId, out var t))
+        {
+            var f = IconFile(t);
+            if (f != "map005") return f;
+        }
+        return null;
+    }
+
+    /// <summary>Icône native du marqueur pour un PNJ (défaut map005
+    /// conservé pour l'API historique).</summary>
+    public static string IconOf(int npcId) => IconOrNull(npcId) ?? "map005";
+
     private static Dictionary<int, string>? _tag;
+    private static Dictionary<int, int>? _svc;
 
     /// <summary>Catégorie EN du PNJ, « Other » si inconnue.</summary>
     public static string Of(int npcId)
@@ -91,6 +134,7 @@ public static class NpcCategoryTable
         if (_cat != null) return;
         _cat = new Dictionary<int, string>();
         _tag = new Dictionary<int, string>();
+        _svc = new Dictionary<int, int>();
         try
         {
             var path = AssetCatalog.ResolveRawAsset("data/db/c_npc.ini");
@@ -102,9 +146,28 @@ public static class NpcCategoryTable
                     continue;
                 var tag = row[20].Trim();
                 _tag[id] = tag;
+                _svc[id] = ParseServiceType(row);
                 _cat[id] = En.TryGetValue(tag, out var en) ? en : "Other";
             }
         }
-        catch { /* catégories facultatives */ }
+        catch (Exception e)
+        {
+            Godot.GD.PrintErr($"[radar] c_npc catégories : {e.Message}");
+        }
+    }
+
+    private static int ParseServiceType(string[] row)
+    {
+        var p = row[10].Split('#');
+        if (p.Length > 1 && int.TryParse(p[1], out var t) && t > 0) return t;
+        for (var col = 11; col <= 18 && col < row.Length; col++)
+        {
+            var seg = row[col].Split('#');
+            if (seg.Length < 2 || !seg[1].StartsWith(":Service")) continue;
+            var tok = seg[1].Split(' ');
+            if (tok.Length > 2 && int.TryParse(tok[2], out var st) && st > 0)
+                return st;
+        }
+        return 0;
     }
 }

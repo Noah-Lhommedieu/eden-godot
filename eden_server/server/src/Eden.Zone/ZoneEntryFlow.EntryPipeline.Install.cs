@@ -99,6 +99,7 @@ public sealed partial class ZoneEntryFlow
         st.NodeId = sc.NodeId;
         st.PosX = sc.PosX;
         st.PosZ = sc.PosZ;
+        st.PosY = sc.PosY;
         st.Facing = sc.Facing;
         st.RaceId = sc.RaceId;
         st.GenderId = sc.GenderId;
@@ -121,6 +122,7 @@ public sealed partial class ZoneEntryFlow
         st.Appearance = sc.Appearance;
         // --- Vitals ---
         st.PlayerHp = sc.PlayerHp;
+        st.Dead = sc.Dead;
         st.PlayerMp = sc.PlayerMp;
         st.PlayerMaxHp = sc.PlayerMaxHp;
         st.PlayerMaxMp = sc.PlayerMaxMp;

@@ -48,7 +48,26 @@ public sealed class SceneService
     /// <summary>Case (x, y Eden) bloquée par un mur invisible de la map.
     /// Faux si la map n'a pas de carte.</summary>
     public bool IsNodeBlocked(string mapCode, float x, float y) =>
-        _nodeMaps.TryGetValue(mapCode, out var g) && g.IsBlocked(x, y);
+        FindNodeMap(mapCode) is { } g && g.IsBlocked(x, y);
+
+    /// <summary>Grille d'une map : sous la géométrie déclarée par la
+    /// scène ([globe_data], comme le client MapLoader) d'abord, puis
+    /// sous le code lui-même. Les nodes solo/héroïque/event (S701, S603,
+    /// S801…) n'ont pas de .smp propre : ils réutilisent celui du donjon
+    /// multi dont ils partagent la géométrie (S101, S201…).</summary>
+    private NodeMapGrid? FindNodeMap(string mapCode)
+    {
+        if (_scenes.TryGetValue(mapCode, out var sc) &&
+            sc.GlobeCode.Length > 0 &&
+            _nodeMaps.TryGetValue(sc.GlobeCode, out var geo))
+            return geo;
+        return _nodeMaps.TryGetValue(mapCode, out var g) ? g : null;
+    }
+
+    /// <summary>Même test sur une scène déjà résolue (peuplement des
+    /// mobs, sans passer par le code du node).</summary>
+    public bool IsSceneBlocked(SceneParser.Scene scene, float x, float y) =>
+        FindNodeMap(scene.MapCode) is { } g && g.IsBlocked(x, y);
 
     /// <summary>Récupère une scène par code de map (ex: "S001").</summary>
     public SceneParser.Scene? GetScene(string mapCode) =>

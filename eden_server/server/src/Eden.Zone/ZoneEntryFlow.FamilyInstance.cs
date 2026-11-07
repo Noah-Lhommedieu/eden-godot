@@ -53,6 +53,9 @@ public sealed partial class ZoneEntryFlow
         NetSession session, EntryState st, byte[] payload,
         CancellationToken ct)
     {
+        EdenLog.Write($"[FamilyInstance] NCID173 reçu char=" +
+            $"{st.CharId} len={payload.Length} hex=" +
+            $"{Convert.ToHexString(payload.AsSpan(0, Math.Min(payload.Length, 16)))}");
         if (payload.Length < 3) return true;
         var type = BitConverter.ToInt16(payload, 0); // s16 — type de hall
         var vip = payload[2];                        // u8 — vip (10 M vs 500 k)
@@ -74,6 +77,10 @@ public sealed partial class ZoneEntryFlow
         // Lookup SFamily par char+0x5c (family_id) — absente = silence.
         var guild = _services.Guilds.GetGuildOf((int)st.CharId);
         if (guild == null) return true;
+        EdenLog.Write($"[FamilyInstance] gate zone : char={st.CharId} " +
+            $"fam={guild.Id} leader={guild.LeaderCharacterId} " +
+            $"lv={guild.Level} house={guild.HouseOpen} " +
+            $"treasury={guild.Treasury} type={type} vip={vip}");
         // fam+0x10 != char+0x34 → 0x598 (pas le chef de famille).
         if (guild.LeaderCharacterId != (int)st.CharId)
         {
@@ -98,6 +105,10 @@ public sealed partial class ZoneEntryFlow
             await SendTextIndexAsync(session, 0x6ae, ct);
             return true;
         }
+        EdenLog.Write(
+            $"[FamilyInstance] relais monde : char={st.CharId} " +
+            $"fam={guild.Id} lv={guild.Level} treasury={guild.Treasury} " +
+            $"type={type} vip={vip}");
         // Natif : CTalkOp 0x43 requis (char+0x670 — opération ouverte
         // par le dialogue NPC « créer le hall »). Non modélisé chez
         // nous — le monde rejoue l'intégralité des gates mission
@@ -464,7 +475,18 @@ public sealed partial class ZoneEntryFlow
         var familyId = st.VisitedFamilyInstanceId;
         var guild = _services.Guilds.GetGuild(familyId);
         var scene = _services.Scenes.GetScene($"S{st.NodeId:D3}");
+        EdenLog.Write($"[FamilyHall] spawn char={st.CharId} " +
+            $"fam={familyId} node={st.NodeId} " +
+            $"guild={(guild != null ? $"lv{guild.Level} house={guild.HouseOpen}" : "null")} " +
+            $"scene={(scene != null ? "ok" : "null")}");
         if (guild == null || scene == null) return;
+        // Auto-réparation des housekeepers de bâtiment (natif : posés
+        // avec le bâtiment, FamilyBuildingPutItemFromInventroy
+        // @0x808a770) — les anciennes lignes posées par GM n'en
+        // avaient pas. Aucun PNJ de service n'est ajouté ici.
+        await Handlers.GmHallSetupHandlers.PopulateAsync(_services,
+            familyId, guild.Level, (short)st.NodeId,
+            includeStationNpcs: false, reset: false);
         var items = await _services.Social
             .GetFamilyBuildingsAsync(familyId, 0);
         var gameData = _services.GameData;
@@ -492,22 +514,67 @@ public sealed partial class ZoneEntryFlow
                 .FirstOrDefault(i => i.Id == hdef.NpcItemTid);
             var pos = ResolveHallSlot(scene, houseCode,
                 FamilyHallRules.HouseKeeperLoc);
+            EdenLog.Write($"[FamilyHall] housekeeper fam={familyId} " +
+                $"bld={cur} npcItem={hdef.NpcItemTid} " +
+                $"npcTid={npcItem?.FamilyNpcTid ?? 0} " +
+                $"pos={(pos?.X.ToString("F1") ?? "null")}," +
+                $"{pos?.Y.ToString("F1") ?? ""}");
             if (npcItem is { FamilyNpcTid: > 0 } && pos != null)
                 InjectHallNpc(st, npcItem.FamilyNpcTid,
                     pos.Value.X, pos.Value.Y, pos.Value.Z,
                     pos.Value.Facing);
         }
+        else
+            EdenLog.Write($"[FamilyHall] bâtiment tid={cur} absent " +
+                $"de Buildings ({gameData.Buildings.Count} rows)");
 
         // --- NPCs posés dans le hall — conteneur 0, items 0x2a/0x52
         // à leurs coordonnées persistées (BornNPC natif utilise
         // item+0x88/+0x8c/+0x90 = x/y/face_dir). tid = NPC template
         // (proto+0xc natif — stocké tel quel dans la colonne tid).
+        // L'item est indexé par le handle du NPC (item+0x9c natif) —
+        // c'est le lien qu'utilise GetBuildingItemByNpcNetID pour
+        // remonter au bâtiment de la station (base de groupe de loc).
+        var byLoc = items.GroupBy(i => i.Loc)
+            .ToDictionary(g => g.Key, g => g.First());
+        var npcCount = 0;
         foreach (var b in items.Where(b => b.ItemType is 0x2a or 0x52
                      && b.Loc != FamilyHallRules.HolyLoc))
         {
             if (b.Tid > 0)
-                InjectHallNpc(st, b.Tid, b.X, b.Y, 0, b.FaceDir);
+            {
+                // Position = fonction pure du slot (aire [position] +
+                // offsets 4PHouse, GetNpcPositionByNpcLoc natif
+                // @0x84662b0) : on la recalcule pour les slots de
+                // groupe — les lignes posées par GM portaient la
+                // position du GM (hors carte, parfois).
+                var (nx, ny, nf) = (b.X, b.Y, b.FaceDir);
+                if (b.Loc < 50 && b.Loc % 10 != 0
+                    && byLoc.TryGetValue(FamilyHallRules.GroupBase(b.Loc),
+                        out var grpBase)
+                    && grpBase.ItemType == 0x29
+                    && gameData.Buildings.TryGetValue(grpBase.Tid,
+                        out var grpDef)
+                    && ResolveHallSlot(scene, grpDef.Code, b.Loc)
+                        is { } slotPos)
+                {
+                    if (MathF.Abs(slotPos.X - nx) > 0.5f
+                        || MathF.Abs(slotPos.Y - ny) > 0.5f)
+                        EdenLog.Write($"[FamilyHall] npc {b.Tid} loc={b.Loc}" +
+                            $" position persistée ({nx:F0},{ny:F0}) → " +
+                            $"slot natif ({slotPos.X:F0},{slotPos.Y:F0})");
+                    (nx, ny, nf) = (slotPos.X, slotPos.Y, slotPos.Facing);
+                }
+                var h = InjectHallNpc(st, b.Tid, nx, ny, 0, nf);
+                st.HallNpcItems[h] = b;
+                npcCount++;
+                EdenLog.Write($"[FamilyHall] npc tid={b.Tid} loc={b.Loc} " +
+                    $"@({nx:F0},{ny:F0}) handle=0x{h:x8}");
+            }
         }
+        EdenLog.Write($"[FamilyHall] {npcCount} PNJ de conteneur injectés " +
+            $"fam={familyId}");
+        InjectHallToolVendors(st, scene);
 
         // --- Statues de la famille — CZoneServer::InitStatue natif
         // @0x816f8f0 : les slots [npc] négatifs (templates 0xd675-9)
@@ -552,6 +619,19 @@ public sealed partial class ZoneEntryFlow
             row.PlayerName, row.GenderId, row.Face, row.Hair,
             row.WeaponActive, slot.Param, row.ClassId, row.Style,
             row.HideEquip);
+        // Équipements du clone — NotifyStatue natif @0x849b3xx les
+        // packe dans les champs optionnels du 298 : paires u16
+        // (BornStatue → entité+0x60/0x68/0x70/0x74, décodés par
+        // CStatue::Init client @0x775f00 en slots 1-8) ; +0x48 natif
+        // = GetBossID → low16 = slot 10 (shoot), high16 = action
+        // figée ; +0x44 = action<<16 ; +0x3c = transform.
+        cmd.Hp = (int)(row.EquipHead | row.EquipChest << 16);
+        cmd.MaxHp = (int)(row.EquipPants | row.EquipGlove << 16);
+        cmd.Unk34 = row.EquipFeet | row.EquipBack << 16;
+        cmd.Unk38 = row.EquipRight | row.EquipLeft << 16;
+        cmd.Unk3C = row.TransformId;
+        cmd.Unk44 = row.ActionId << 16;
+        cmd.Unk48 = row.EquipShoot | row.ActionId << 16;
         var s = new OutBinStream();
         cmd.Serialize(s);
         st.Replayed[h] = s.ToArray();
@@ -671,8 +751,12 @@ public sealed partial class ZoneEntryFlow
         // CheckPutItemFromInventory — restrictions de kind.
         if (container == 1 && kind != 0x29) return true;
         if (container == 2 && kind is not (0x2a or 0x52)) return true;
+        // Holy loc 0x33 : le gate natif teste le SUBTYPE de l'item
+        // (virtual itemdef+0x10 == 0x16 — col9 S_Item), pas le kind.
+        // Seuls les items sacrés 0x52 et certains contrats 0x2a ont
+        // subtype 0x16 ; les items kind==0x16 (armes) sont refusés.
         if (container == 0 && loc == FamilyHallRules.HolyLoc
-            && kind != 0x16) return true;
+            && def?.EquipLoc != 0x16) return true;
         if (item.IsBound)   // clone+0x24 & 0x10 natif → 0x67f
         {
             await SendTextIndexAsync(session, 0x67f, ct);
@@ -730,16 +814,27 @@ public sealed partial class ZoneEntryFlow
                 return true;
         }
 
-        // Position du NPC pour les items de hall du conteneur 0
+        // Position pour les items de hall du conteneur 0
         // (GetNpcPositionByNpcLoc natif via la scène + 4PHouse).
+        // Exception native : la ligne 0x29 du bâtiment est persistée
+        // avec x=y=face=0.0 (PutItemInFamilyBuilding de
+        // FamilyBuildingPutItemFromInventroy @0x808a770 — les floats
+        // finaux sont des littéraux 0 ; seuls les NPC portent une
+        // position).
         float x = 0, y = 0, face = 0;
-        if (container == 0 && loc != FamilyHallRules.HolyLoc)
+        if (container == 0 && kind != 0x29)
         {
             var scene = _services.Scenes.GetScene($"S{st.NodeId:D3}");
-            var houseCode = c0.TryGetValue(FamilyHallRules.GroupBase(loc),
-                out var bld) &&
-                _services.GameData.Buildings.TryGetValue(bld.Tid,
-                    out var bd) ? bd.Code : null;
+            // Holy (loc 0x33) : GetHolyItemPosition @0x8465d60 —
+            // record [position] de la scène à l'aire 0x38 tel quel,
+            // SANS offsets 4PHouse (houseCode=null dans
+            // ResolveHallSlot). Sinon GetNpcPositionByNpcLoc : code
+            // maison du bâtiment à la base de groupe.
+            var houseCode = loc == FamilyHallRules.HolyLoc ? null
+                : c0.TryGetValue(FamilyHallRules.GroupBase(loc),
+                        out var baseItem)
+                    && _services.GameData.Buildings.TryGetValue(
+                        baseItem.Tid, out var bd) ? bd.Code : null;
             var pos = scene != null
                 ? ResolveHallSlot(scene, houseCode, loc) : null;
             if (pos != null)
@@ -748,10 +843,32 @@ public sealed partial class ZoneEntryFlow
             }
         }
 
-        // tid persisté : NPC → son template (proto+0xc natif, = col35
-        // S_Item) ; sinon le tid de l'item lui-même.
-        var storeTid = kind is 0x2a or 0x52
-            ? (def?.FamilyNpcTid ?? item.ItemId) : item.ItemId;
+        // tid persisté : NPC → son template (proto+0x124 natif, = col35
+        // S_Item) ; bâtiment → son tid S_Buliding (même colonne
+        // conditionnelle — FamilyBuildingPutItemFromInventroy @0x808a770
+        // écrit GetBuildingData(item+0x124) dans la colonne tid, pas le
+        // tid du contrat) ; sinon le tid de l'item lui-même.
+        (int Tid, GameDataService.BuildingDef Def)? bld = null;
+        WorldParsers.NpcDef? npcTpl = null;
+        var storeTid = item.ItemId;
+        if (kind is 0x2a or 0x52)
+        {
+            storeTid = def?.FamilyNpcTid ?? item.ItemId;
+            // Level de la ligne NPC = proto+0xc natif (le record
+            // GameData+0x120 du tid résolu), pas celui du contrat.
+            npcTpl = _services.GameData.Npcs.FirstOrDefault(
+                n => n.Id == storeTid);
+        }
+        else if (kind == 0x29)
+        {
+            if (def == null) return true;
+            bld = FamilyHallRules.ResolveBuildingPut(
+                def.FamilyBuildingTid, guild.Level,
+                _services.GameData.Buildings,
+                _services.GameData.NextBuildingTid);
+            if (bld == null) return true;   // rejet muet natif
+            storeTid = bld.Value.Tid;
+        }
 
         // Transaction native : EradicateItem(inventaire) +
         // PutItemInFamilyBuilding + ClientDropItem au client.
@@ -759,16 +876,107 @@ public sealed partial class ZoneEntryFlow
             (int)st.CharId, bag, slot, 1);
         await _services.Social.DeleteFamilyBuildingItemAsync(
             guild.Id, container, loc);   // remplacement éventuel
+        // due_date natif (InsertItemToBuilding @0x81b0d80) : conteneur
+        // 0 + kinds 0x2a/0x52 avec durée d'item (CItemData+0x70 =
+        // DurationSeconds) → now + durée ; tout le reste → 0. Les
+        // contrats NPC d'EDENFR ont 3 j / 7 j — à l'échéance les
+        // *Shop::OpenShop refusent le service (texte 0xc56).
+        var dueDate = container == 0
+            ? Eden.Core.Game.Family.FamilyBuildingWorkRules.DueDateFor(
+                (short)kind, def?.DurationSeconds ?? 0,
+                DateTimeOffset.UtcNow.ToUnixTimeSeconds())
+            : 0;
         await _services.Social.InsertFamilyBuildingItemAsync(
             new Eden.Core.Game.Family.FamilyBuildingItem
             {
                 ItemTid = (short)item.ItemId, Tid = storeTid,
                 ItemType = (short)kind,
-                Durability = (short)Math.Min(item.Durability, 0x7fff),
+                // Durabilité/niveau natifs : 0x29 → def+0x20
+                // (max_durability col8) et def+0x10 (level col4) de
+                // S_Buliding ; 0x2a/0x52 → itemdef+0xc (durabilité du
+                // contrat) et proto NPC +0xc (level).
+                Durability = (short)Math.Min(
+                    bld?.Def.MaxDurability
+                    ?? (kind is 0x2a or 0x52
+                        ? def?.MaxDurability ?? item.Durability
+                        : item.Durability), 0x7fff),
                 ContainerIndex = container, Loc = loc,
                 X = x, Y = y, FaceDir = face,
+                Level = (short)(bld?.Def.Level ?? npcTpl?.Level ?? 0),
+                DueDate = dueDate,
             }, guild.Id);
         _services.NotifyItemChanged((int)st.CharId, item.ItemId);
+
+        // Housekeeper auto (natif, conteneur 0 uniquement) : un
+        // bâtiment avec item NPC (S_Buliding col6 → +0x18) insère
+        // aussitôt une ligne 0x2a au slot base+1 — item_tid = l'item
+        // NPC, tid = le template NPC (CNpcItem+0x124), position via
+        // GetNpcPositionByNpcLoc(loc+1, code maison). Échec de
+        // résolution → rejet du put entier côté natif ; ici la ligne
+        // est déjà posée — on exige la résolution AVANT d'insérer.
+        if (bld is { Def.NpcItemTid: > 0 } && container == 0)
+        {
+            var npcContract = _services.GameData.Items
+                .FirstOrDefault(i => i.Id == bld.Value.Def.NpcItemTid);
+            var npcTid = npcContract?.FamilyNpcTid ?? 0;
+            var npcTemplate = npcTid > 0
+                ? _services.GameData.Npcs.FirstOrDefault(
+                    n => n.Id == npcTid) : null;
+            var scene = _services.Scenes.GetScene($"S{st.NodeId:D3}");
+            var npcPos = scene != null
+                ? ResolveHallSlot(scene, bld.Value.Def.Code,
+                    (short)(loc + 1)) : null;
+            if (npcContract != null && npcTemplate != null
+                && npcPos != null)
+            {
+                await _services.Social.InsertFamilyBuildingItemAsync(
+                    new Eden.Core.Game.Family.FamilyBuildingItem
+                    {
+                        ItemTid = (short)bld.Value.Def.NpcItemTid,
+                        Tid = npcTid, ItemType = 0x2a,
+                        Durability = (short)Math.Min(
+                            npcContract.MaxDurability, 0x7fff),
+                        ContainerIndex = 0, Loc = (short)(loc + 1),
+                        X = npcPos.Value.X, Y = npcPos.Value.Y,
+                        FaceDir = npcPos.Value.Facing,
+                        Level = (short)npcTemplate.Level,
+                        // due_date comme la ligne posée (durée du
+                        // contrat NPC, InsertItemToBuilding @0x81b0d80).
+                        DueDate = Eden.Core.Game.Family
+                            .FamilyBuildingWorkRules.DueDateFor(0x2a,
+                                npcContract.DurationSeconds,
+                                DateTimeOffset.UtcNow
+                                    .ToUnixTimeSeconds()),
+                    }, guild.Id);
+                var handle = InjectHallNpc(st, npcTid, npcPos.Value.X,
+                    npcPos.Value.Y, npcPos.Value.Z,
+                    npcPos.Value.Facing);
+                var seeBytes = st.Replayed[handle];
+                foreach (var (sid, ost) in _states)
+                {
+                    if (!ost.Migrated || ost.NodeId != st.NodeId
+                        || ost.InstanceGroup != st.InstanceGroup
+                        || ost.CharId == st.CharId
+                        || !guild.Members.Any(
+                            m => (int)m.CharacterId == ost.CharId)
+                        || ost.Session is not { } s) continue;
+                    ost.Replayed[handle] = seeBytes;
+                    ost.HandleToEntity[handle] = npcTid;
+                    ost.EntityPos[handle] = (npcPos.Value.X,
+                        npcPos.Value.Y);
+                    try { await s.SendPacketAsync(298, seeBytes, ct); }
+                    catch { /* session morte */ }
+                }
+            }
+            else
+            {
+                EdenLog.Write($"[Zone-Family] ContainerPut " +
+                    $"char={st.CharId} bâtiment {bld.Value.Tid} posé " +
+                    $"mais housekeeper irrésolu " +
+                    $"(item={bld.Value.Def.NpcItemTid})");
+            }
+        }
+
         // Refresh du conteneur : ZMis FamilyContainerUpdate natif
         // pousse le delta (486 put/485 delete) à TOUS les membres de
         // la famille présents sur le node du hall (Execute @0x8315cb0
@@ -989,14 +1197,18 @@ public sealed partial class ZoneEntryFlow
         // Apparence persistée — clone du perso (SetStatue natif copie
         // genre/face/hair/équipements depuis char+0x4a6+).
         var eq = await LoadStatueEquipsAsync(targetId);
+        // Colonnes DB = champs CStatueDB natifs : head..back =
+        // vec[1..6], equip_left = vec[8], equip_right = vec[7]
+        // (SetStatue @0x81099a0 écrit vec[8]→+0x48 « left » et
+        // vec[7]→+0x4a « right » — stockage inversé).
         var row = new SocialRepository.StatueRow(template,
             ch.GivenName, ch.GenderId, ch.FaceStyle, ch.HairStyle, 1,
             ch.ClassId, ch.Style, 0, (ushort)rot, frame,
-            eq.GetValueOrDefault(0), eq.GetValueOrDefault(1),
-            eq.GetValueOrDefault(2), eq.GetValueOrDefault(3),
-            eq.GetValueOrDefault(4), eq.GetValueOrDefault(5),
-            eq.GetValueOrDefault(6), eq.GetValueOrDefault(7),
-            eq.GetValueOrDefault(8), 0, 0);
+            eq.GetValueOrDefault(1), eq.GetValueOrDefault(2),
+            eq.GetValueOrDefault(3), eq.GetValueOrDefault(4),
+            eq.GetValueOrDefault(5), eq.GetValueOrDefault(6),
+            eq.GetValueOrDefault(8), eq.GetValueOrDefault(7),
+            eq.GetValueOrDefault(10), 0, 0);
         await _services.Social!.SaveStatueAsync(WorldServerId, st.NodeId,
             template, guild.Id, row);
 
@@ -1017,19 +1229,22 @@ public sealed partial class ZoneEntryFlow
             $"target={targetId} pos={position} tpl={template}");
     }
 
-    /// <summary>Template ids des équipements portés (groupes d'equip
-    /// natif 0, locs 0-8 → head/chest/pants/glove/feet/back/left/
-    /// right/shoot) — persistés dans statues_scenes (le CSV du 298 ne
-    /// les transporte pas, fidélité DB).</summary>
+    /// <summary>Template ids des équipements portés — locs natifs
+    /// {1..8, 10} (SetStatue @0x81099a0 remplit un vec u16[11] indexé
+    /// par loc et n'en retient que vec[1..8]) ; le conteneur
+    /// d'apparence (groupe 1, equipment2) est prioritaire item par
+    /// item sur l'équipé (groupe 0) — merge natif char+0x4fc.</summary>
     private async Task<Dictionary<int, int>> LoadStatueEquipsAsync(
         int charId)
     {
         var map = new Dictionary<int, int>();
-        for (var slot = 0; slot <= 8; slot++)
+        foreach (var loc in new[] { 1, 2, 3, 4, 5, 6, 7, 8, 10 })
         {
             var e = await _services.InventoryRepo
-                .GetEquipmentItemAsync(charId, 0, slot);
-            if (e != null) map[slot] = e.ItemId;
+                .GetEquipmentItemAsync(charId, 1, loc)
+                ?? await _services.InventoryRepo
+                    .GetEquipmentItemAsync(charId, 0, loc);
+            if (e != null) map[loc] = e.ItemId;
         }
         return map;
     }

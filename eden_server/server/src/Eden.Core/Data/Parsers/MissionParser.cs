@@ -73,6 +73,12 @@ public static class MissionParser
         public bool KeepLimitRow => (Field6 & 4) != 0;
         public string MapName { get; set; } = string.Empty;
         public List<ScriptCommand> Conditions { get; set; } = new();  // col 13
+        /// <summary>Script d'acceptation (col 15) — exécuté à la prise
+        /// de quête : `AcceptInventoryItem id ± n` (remise/retrait
+        /// d'item), `RewardBuff e d`, `AcceptTPA p a`, `AcceptSRA`,
+        /// `AcceptCloseMission mid…` (abandon des quêtes listées) et
+        /// des gates `If_*` supplémentaires.</summary>
+        public List<ScriptCommand> AcceptActions { get; set; } = new(); // col 15
         public List<ScriptCommand> Actions { get; set; } = new();     // col 16
         public List<ScriptCommand> Rewards { get; set; } = new();     // col 20
         public string Category { get; set; } = string.Empty;          // col 23
@@ -106,6 +112,7 @@ public static class MissionParser
                 Field6 = IniTable.GetInt(row, 6),
                 MapName = IniTable.GetStr(row, 10),
                 Conditions = ParseScript(IniTable.GetStr(row, 13)),
+                AcceptActions = ParseScript(IniTable.GetStr(row, 15)),
                 Actions = ParseScript(IniTable.GetStr(row, 16)),
                 Rewards = ParseScript(IniTable.GetStr(row, 20)),
                 Category = IniTable.GetStr(row, 23),

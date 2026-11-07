@@ -1,4 +1,5 @@
 using Godot;
+using EdenClient.Ui;
 using EdenClient.Data;
 using EdenClient.Data.Tables;
 using EdenClient.Net;
@@ -48,22 +49,43 @@ public partial class AuctionWindow : Control
     private Button? _buyBtn, _cancelBtn;
     private int _selBuyId = -1, _selSellId = -1;
 
+    // --- chemin natif (auctionwnd + auctionbuywnd + auctionsellwnd) ---
+    private bool _native;
+    private const int PageSize = 20;
+    private int _page;
+    private int _cat;                       // 0 tout 1 armes 2 armures 3 conso 4 autre
+    private Control? _buyPane, _sellPane;
+    private MclList? _nBuyMcl, _nSellMcl;
+    private Tree? _nTree;
+    private Label? _nPageText, _nBuyStatus, _nSellStatus, _nSlotName;
+    private BaseButton? _nBuyBtn, _nSellBtn, _nCancelBtn;
+    private LineEdit? _nSearch, _nMinGold, _nMinSilver, _nMaxGold,
+        _nMaxSilver, _nMinLv, _nMaxLv, _nPriceGold, _nPriceSilver;
+    private Label? _nTaxGold, _nTaxSilver;
+    private readonly List<(BaseButton Btn, int[] Tiers)> _nQual = new();
+    private ItemSlotCell? _nSlot;
+
     public override void _Ready()
     {
         var hud = HudExtensions.FindHud();
-        _window = hud?.Build("AuctionWnd.layout");
+        _window = hud?.Build("auctionwnd.layout");
         if (_window == null)
             BuildFallback();
         else
         {
             AddChild(_window);
+            // Géométrie native : UnifiedAreaRect 728×498 (min 630×460).
             HudRoot.Pin(_window, 0.5f, 0.5f, 0.5f, 0.5f,
-                -350, -240, 350, 240);
-            var close = TopLeftVitals.Find<BaseButton>(_window,
-                "closeBtn");
-            if (close != null) close.Pressed += Close;
+                -364, -249, 364, 249);
+            _native = BuildNative(hud!);
+            if (!_native)
+            {
+                var close = TopLeftVitals.Find<BaseButton>(_window,
+                    "closeBtn");
+                if (close != null) close.Pressed += Close;
+            }
         }
-        BuildContent();
+        if (!_native) BuildContent();
         DragHelper.EnsureTitleBar(_window ?? this, "Auction House");
         DragHelper.Persist(_window ?? this, "auction");
         Visible = false;
@@ -85,6 +107,7 @@ public partial class AuctionWindow : Control
     {
         AuctionState.Changed -= OnAuctionChanged;
         AuctionState.Opened -= OnOpened;
+        PlayerVitals.GoldChanged -= RefreshMoney;
         base._ExitTree();
     }
 
@@ -245,6 +268,7 @@ public partial class AuctionWindow : Control
 
     private void RefreshLists()
     {
+        if (_native) { RefreshNative(); return; }
         RefreshBuy();
         RefreshSell();
     }
@@ -276,7 +300,7 @@ public partial class AuctionWindow : Control
                     : UiTextEn.Translate("(no active listing)"),
             });
         if (_status != null)
-            _status.Text = UiTextEn.Translate($"{entries.Count} listing(s) on sale — ") +
+            _status.Text = UiTextEn.Translate("%s1 listing(s) on sale — ").Replace("%s1", entries.Count.ToString()) +
                 UiTextEn.Translate("purchase delivered by mail");
         UpdateButtons();
     }
@@ -305,7 +329,7 @@ public partial class AuctionWindow : Control
     {
         var row = new Button
         {
-            Text = UiTextEn.Translate($"  {name}  —  {e.Price:N0} or   ") +
+            Text = "  " + UiTextEn.Translate("%s1 — %s2 g").Replace("%s1", name).Replace("%s2", e.Price.ToString("N0")) + "   " +
                    $"({TimeLeft(e.ExpireTime)})",
             Alignment = HorizontalAlignment.Left,
             CustomMinimumSize = new Vector2(0, 40),
@@ -329,17 +353,25 @@ public partial class AuctionWindow : Control
         return row;
     }
 
-    private static string ResolveName(AuctionEntry e) =>
-        e.ItemName.Length > 0 ? e.ItemName
-        : TextResolver.ItemName(e.ItemId)
-        ?? ItemTableCache.Get(e.ItemId)?.Name ?? $"#{e.ItemId}";
+    /// <summary>Nom affiché : t_item FR en priorité — le champ wire est
+    /// la clé LIKE côté serveur (Maker+nom c_item Big5, chinois). On
+    /// conserve juste son suffixe « +N » de renforcement.</summary>
+    private static string ResolveName(AuctionEntry e)
+    {
+        var name = TextResolver.ItemName(e.ItemId)
+            ?? ItemTableCache.Get(e.ItemId)?.Name;
+        if (name == null)
+            return e.ItemName.Length > 0 ? e.ItemName : $"#{e.ItemId}";
+        var plus = e.ItemName.LastIndexOf('+');
+        return plus >= 0 ? name + e.ItemName[plus..] : name;
+    }
 
     private static string TimeLeft(long expireUnix)
     {
         if (expireUnix <= 0) return "";
         var left = TimeSpan.FromSeconds(expireUnix -
             DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-        if (left.TotalSeconds <= 0) return "expired";
+        if (left.TotalSeconds <= 0) return UiTextEn.Translate("expired");
         return left.TotalHours >= 1
             ? $"{(int)left.TotalHours}h{left.Minutes:D2}"
             : $"{left.Minutes}min";
@@ -353,7 +385,7 @@ public partial class AuctionWindow : Control
                 .FirstOrDefault(x => x.AuctionId == _selBuyId);
             _buyBtn.Visible = e != null;
             if (e != null)
-                _buyBtn.Text = UiTextEn.Translate($"Buy {ResolveName(e)} — ") +
+                _buyBtn.Text = UiTextEn.Translate("Buy %s1 —").Replace("%s1", ResolveName(e)) + " " +
                     $"{e.Price:N0}g";
         }
         if (_cancelBtn != null)
@@ -391,18 +423,16 @@ public partial class AuctionWindow : Control
     /// <summary>117 — met en vente l'item déposé dans le slot.</summary>
     private void SellSelected()
     {
-        var it = _sellSlot?.Item;
-        if (it == null || _priceEdit == null)
+        var it = _native ? _nSlot?.Item : _sellSlot?.Item;
+        if (it == null || (!_native && _priceEdit == null))
         {
-            if (_sellStatus != null)
-                _sellStatus.Text = UiTextEn.Translate("Drop an item from your bag.");
+            SetSellStatus(UiTextEn.Translate("Drop an item from your bag."));
             return;
         }
-        var price = ParseInt(_priceEdit.Text);
+        var price = _native ? NativePrice() : ParseInt(_priceEdit!.Text);
         if (price < 1)
         {
-            if (_sellStatus != null)
-                _sellStatus.Text = UiTextEn.Translate("Invalid price.");
+            SetSellStatus(UiTextEn.Translate("Invalid price."));
             return;
         }
         Send(new ZoneAuctionSell
@@ -410,10 +440,31 @@ public partial class AuctionWindow : Control
             Bag = (short)it.Bag,
             Slot = (short)it.Slot,
             Price = price,
-            Buyout = ParseInt(_buyoutEdit?.Text),
+            Buyout = _native ? 0 : ParseInt(_buyoutEdit?.Text),
         });
-        if (_sellStatus != null)
-            _sellStatus.Text = "Listing… (response 429)";
+        SetSellStatus(UiTextEn.Translate("Listing… (response 429)"));
+    }
+
+    private void SetSellStatus(string t)
+    {
+        if (_sellStatus != null) _sellStatus.Text = t;
+        if (_nSellStatus != null) _nSellStatus.Text = t;
+    }
+
+    /// <summary>Sonde --auction-drive : pose item + prix comme le
+    /// ferait un drop + saisie (chemin natif ou legacy).</summary>
+    private void ProbeSetSell(InventorySlot it, int price, int buyout)
+    {
+        if (_native)
+        {
+            _nSlot?.SetItem(it);
+            if (_nPriceGold != null) _nPriceGold.Text = (price / 1000).ToString();
+            if (_nPriceSilver != null) _nPriceSilver.Text = (price % 1000).ToString();
+            return;
+        }
+        _sellSlot?.SetItem(it);
+        if (_priceEdit != null) _priceEdit.Text = price.ToString();
+        if (_buyoutEdit != null) _buyoutEdit.Text = buyout.ToString();
     }
 
     private static int ParseInt(string? t) =>
@@ -444,7 +495,14 @@ public partial class AuctionWindow : Control
     public void EnsureDemo()
     {
         var s = SessionCarry.Session;
-        if (s?.Zone?.IsConnected == true) return;
+        if (s?.Zone?.IsConnected == true)
+        {
+            // Live : ouvre sans injecter de données factices — la
+            // fenêtre affichera les vraies listes 425/428 (déjà
+            // requêtées à l'apparition).
+            AuctionState.OnOpenHouse(-1);
+            return;
+        }
         if (AuctionState.BuyList.Count > 0 ||
             AuctionState.SellList.Count > 0) return;
         var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -479,6 +537,424 @@ public partial class AuctionWindow : Control
                     SellerId = 1, ExpireTime = now + 20 * 3600,
                 },
             });
+    }
+
+
+    // ------------------------------------------------------------------
+    // Chemin natif — auctionwnd (TabControl) + auctionbuywnd +
+    // auctionsellwnd injectés comme le client natif
+    // ------------------------------------------------------------------
+
+    private static Control? Leaf(Node? root, string leaf)
+    {
+        if (root == null) return null;
+        foreach (var n in root.FindChildren("*", "Control", true, false))
+        {
+            var nm = n.Name.ToString();
+            if (nm == leaf || nm.EndsWith("_" + leaf) ||
+                nm.EndsWith("/" + leaf))
+                return n as Control;
+        }
+        return null;
+    }
+
+    private static T? Leaf<T>(Node? root, string leaf) where T : class =>
+        Leaf(root, leaf) as T;
+
+    private static void SetT(Node? root, string leaf, string text)
+    {
+        switch (Leaf(root, leaf))
+        {
+            case Label l: l.Text = text; break;
+            case Button bb: bb.Text = text; break;
+            case LineEdit e: e.Text = text; break;
+        }
+    }
+
+    private bool BuildNative(HudRoot hud)
+    {
+        var tabs = _window!.FindChildren("*", "TabContainer", true, false)
+            .FirstOrDefault() as TabContainer;
+        _buyPane = hud.Build("auctionbuywnd.layout");
+        _sellPane = hud.Build("auctionsellwnd.layout");
+        if (tabs == null || _buyPane == null || _sellPane == null)
+        {
+            _buyPane?.QueueFree(); _sellPane?.QueueFree();
+            _buyPane = _sellPane = null;
+            return false;
+        }
+        _buyPane.Name = UiTextEn.Translate("Buy");
+        _sellPane.Name = UiTextEn.Translate("Sell");
+        tabs.AddChild(_buyPane);
+        tabs.AddChild(_sellPane);
+        tabs.SetTabTitle(0, UiTextEn.Translate("Buy"));
+        tabs.SetTabTitle(1, UiTextEn.Translate("Sell"));
+        // Anciennes sous-fenêtres éventuelles du TabControl natif.
+        foreach (var c in tabs.GetChildren())
+            if (c != _buyPane && c != _sellPane && c is Control)
+                c.QueueFree();
+
+        BuildNativeBuy(_buyPane);
+        BuildNativeSell(_sellPane);
+        PlayerVitals.GoldChanged += RefreshMoney;
+        RefreshMoney();
+        return true;
+    }
+
+    private Label MakeStatus(Control host, float l, float t, float r,
+        float b)
+    {
+        var lb = new Label { Name = "__aucstatus" };
+        lb.AddThemeFontSizeOverride("font_size", 10);
+        lb.ClipText = true;
+        lb.MouseFilter = MouseFilterEnum.Ignore;
+        lb.AnchorLeft = l; lb.AnchorTop = t;
+        lb.AnchorRight = r; lb.AnchorBottom = b;
+        lb.OffsetLeft = lb.OffsetTop = lb.OffsetRight = lb.OffsetBottom = 0;
+        lb.VerticalAlignment = VerticalAlignment.Center;
+        host.AddChild(lb);
+        return lb;
+    }
+
+    private void BuildNativeBuy(Control p)
+    {
+        var bg = Leaf(p, "ItemListBG") ?? p;
+        SetT(Leaf(p, "ItemListBG"), "TitleText",
+            UiTextEn.Translate("Auction listings"));
+        var sb = Leaf(p, "searchBG");
+        SetT(sb, "TitleText", UiTextEn.Translate("Search items"));
+        SetT(sb, "mark", UiTextEn.Translate("Quality"));
+        SetT(sb, "MiniTitleText", UiTextEn.Translate("Minimum"));
+        SetT(sb, "MaxTitleText", UiTextEn.Translate("Maximum"));
+        SetT(sb, "titleText", UiTextEn.Translate("Level requirement"));
+        SetT(sb, "Title", UiTextEn.Translate("Name"));
+        SetT(sb, "researchBtn", UiTextEn.Translate("Search"));
+        SetT(bg, "buyBtn", UiTextEn.Translate("Buy item"));
+        SetT(bg, "closeBtn", UiTextEn.Translate("Close"));
+        SetT(bg, "SilverText", "");
+        SetT(bg, "PageText", "1/1");
+        // Fond pâle des cadres border1-4 / arbre : texte sombre.
+        var dark = new Color(0.16f, 0.10f, 0.26f);
+        foreach (var lf in new[] { "mark", "MiniTitleText", "MaxTitleText",
+            "titleText", "lv1", "lv2", "sign", "Title" })
+            if (Leaf(sb, lf) is Label dl)
+                dl.AddThemeColorOverride("font_color", dark);
+
+        // Qualités — palette native Blanc/Vert/Bleu/Orange/Or/Violet
+        // (tiers t_item : 0-1 blanc, 2 vert, 4 bleu, 3 orange, 5 or, 6 violet).
+        void Q(string leaf, string fr, params int[] tiers)
+        {
+            if (Leaf(sb, leaf) is not BaseButton b) return;
+            if (b is Button bt) bt.Text = UiTextEn.Translate(fr);
+            b.ButtonPressed = false;
+            b.Toggled += _ => { _page = 0; RefreshNative(); };
+            _nQual.Add((b, tiers));
+        }
+        Q("WhitBtn", "White", 0, 1);
+        Q("GreenBtn", "Green", 2);
+        Q("buleBtn", "Blue", 4);
+        Q("OrageBtn", "Orange", 3);
+        Q("GoldBtn", "Gold", 5);
+        Q("purpleBtn", "Purple", 6);
+
+        _nMinGold = Leaf<LineEdit>(sb, "MiniGoldEdit");
+        _nMinSilver = Leaf<LineEdit>(sb, "MiniSilverEdit");
+        _nMaxGold = Leaf<LineEdit>(sb, "MaxGoldEdit");
+        _nMaxSilver = Leaf<LineEdit>(sb, "MaxSilverText");
+        _nMinLv = Leaf<LineEdit>(sb, "MniiLvEdit");
+        _nMaxLv = Leaf<LineEdit>(sb, "MaxLvEdit");
+        _nSearch = Leaf<LineEdit>(sb, "searchEdit");
+        foreach (var e in new[] { _nMinGold, _nMinSilver, _nMaxGold,
+            _nMaxSilver, _nMinLv, _nMaxLv })
+        {
+            if (e == null) continue;
+            e.Text = "";
+            e.AddThemeFontSizeOverride("font_size", 9);
+            e.TextSubmitted += _ => ApplySearch();
+        }
+        if (_nSearch != null)
+        {
+            _nSearch.Text = "";
+            _nSearch.PlaceholderText = UiTextEn.Translate("Item name");
+            _nSearch.TextSubmitted += _ => ApplySearch();
+        }
+        if (Leaf<BaseButton>(sb, "researchBtn") is { } rs)
+            rs.Pressed += ApplySearch;
+
+        // Arbre des catégories (ItemListBG/Tree) — filtre local.
+        _nTree = Leaf<Tree>(bg, "Tree");
+        if (_nTree != null)
+        {
+            _nTree.Columns = 1;
+            _nTree.HideRoot = true;
+            foreach (var cn in new[] { "font_color", "font_selected_color",
+                "font_hovered_color", "font_hovered_selected_color" })
+                _nTree.AddThemeColorOverride(cn, dark);
+            var root = _nTree.CreateItem();
+            TreeItem? first = null;
+            foreach (var (id, key) in new[] { (0, "All"), (1, "Weapons"),
+                (2, "Armor"), (3, "Consumables"), (4, "Other") })
+            {
+                var it = _nTree.CreateItem(root);
+                it.SetText(0, UiTextEn.Translate(key));
+                it.SetMetadata(0, id);
+                first ??= it;
+            }
+            first?.Select(0);
+            _nTree.ItemSelected += () =>
+            {
+                var sel = _nTree.GetSelected();
+                if (sel == null) return;
+                _cat = sel.GetMetadata(0).AsInt32();
+                _page = 0;
+                RefreshNative();
+            };
+        }
+
+        _nBuyMcl = Leaf<MclList>(bg, "listbox");
+        _nBuyMcl?.SetColumns(new MclColumn[]
+        {
+            new("", 0.13f, 0f, 0),
+            new(UiTextEn.Translate("Name"), 0.44f, 0f, 1),
+            new("Niv.", 0.17f, 0f, 2),
+            new("Prix", 0.26f, 0f, 3),
+        });
+        if (_nBuyMcl != null)
+            _nBuyMcl.RowSelected += row =>
+            {
+                _selBuyId = (_nBuyMcl.RowTag(row) as AuctionEntry)
+                    ?.AuctionId ?? -1;
+                UpdateNativeButtons();
+            };
+
+        _nPageText = Leaf<Label>(bg, "PageText");
+        void Pg(string leaf, Func<int> target)
+        {
+            if (Leaf<BaseButton>(bg, leaf) is { } b)
+                b.Pressed += () => { _page = target(); RefreshNative(); };
+        }
+        Pg("LLBtn", () => 0);
+        Pg("LBtn", () => _page - 1);
+        Pg("RBtn", () => _page + 1);
+        Pg("RRBtn", () => int.MaxValue / 2);   // borné au rafraîchissement
+
+        _nBuyBtn = Leaf<BaseButton>(bg, "buyBtn");
+        if (_nBuyBtn != null) _nBuyBtn.Pressed += BuySelected;
+        if (Leaf<BaseButton>(bg, "closeBtn") is { } c) c.Pressed += Close;
+        _nBuyStatus = MakeStatus(bg, 0.30f, 0.905f, 0.60f, 0.98f);
+    }
+
+    private void BuildNativeSell(Control p)
+    {
+        var bg = Leaf(p, "backgrand") ?? p;
+        var form = Leaf(bg, "border");
+        SetT(bg, "titile4", UiTextEn.Translate("New listing"));
+        SetT(bg, "title1", UiTextEn.Translate("Items on auction"));
+        SetT(bg, "silverText", "");
+        SetT(bg, "goldText", "0");
+        SetT(bg, "closeBTn", UiTextEn.Translate("Close"));
+        SetT(bg, "cancleBtn", UiTextEn.Translate("Cancel listing"));
+        SetT(form, "titile3", UiTextEn.Translate("Selling price"));
+        SetT(form, "title2", UiTextEn.Translate("Deposit fee"));
+        SetT(form, "SellBtn", UiTextEn.Translate("Sell item"));
+        SetT(form, "SlotName", "");
+        SetT(form, "taxGold", "0");
+        SetT(form, "taxsilver", "0");
+        _nSlotName = Leaf<Label>(form, "SlotName");
+        _nTaxGold = Leaf<Label>(form, "taxGold");
+        _nTaxSilver = Leaf<Label>(form, "taxsilver");
+        _nPriceGold = Leaf<LineEdit>(form, "goldedit");
+        _nPriceSilver = Leaf<LineEdit>(form, "silveredit");
+        foreach (var e in new[] { _nPriceGold, _nPriceSilver })
+            if (e != null)
+            {
+                e.Text = "";
+                e.AddThemeFontSizeOverride("font_size", 9);
+                e.TextChanged += _ => UpdateTax();
+            }
+
+        _nSlot = Leaf<ItemSlotCell>(form, "slot");
+        if (_nSlot != null)
+        {
+            _nSlot.Clear();
+            _nSlot.ItemDropped += (cell, d) =>
+            {
+                var it = InventoryWindow.ItemAt(
+                    d.ContainsKey("bag") ? d["bag"].AsInt32() : 0,
+                    d["slot"].AsInt32());
+                cell.SetItem(it);
+                UpdateSlotName();
+            };
+            _nSlot.RightClicked += cl => { cl.Clear(); UpdateSlotName(); };
+        }
+
+        _nSellMcl = Leaf<MclList>(bg, "list");
+        _nSellMcl?.SetColumns(new MclColumn[]
+        {
+            new("", 0.10f, 0f, 0),
+            new(UiTextEn.Translate("Name"), 0.38f, 0f, 1),
+            new("Niv.", 0.12f, 0f, 2),
+            new("Durée", 0.12f, 0f, 3),
+            new("Prix", 0.28f, 0f, 4),
+        });
+        if (_nSellMcl != null)
+            _nSellMcl.RowSelected += row =>
+            {
+                _selSellId = (_nSellMcl.RowTag(row) as AuctionEntry)
+                    ?.AuctionId ?? -1;
+                UpdateNativeButtons();
+            };
+
+        _nSellBtn = Leaf<BaseButton>(form, "SellBtn");
+        if (_nSellBtn != null) _nSellBtn.Pressed += SellSelected;
+        _nCancelBtn = Leaf<BaseButton>(bg, "cancleBtn");
+        if (_nCancelBtn != null) _nCancelBtn.Pressed += CancelSelected;
+        if (Leaf<BaseButton>(bg, "closeBTn") is { } c) c.Pressed += Close;
+        _nSellStatus = MakeStatus(bg, 0.20f, 0.905f, 0.70f, 0.98f);
+    }
+
+    private static (string Gold, string Silver) Money(long m) =>
+        ($"{m / 1000:#,0}", $"{m % 1000}");
+
+    private static string MoneyText(long m)
+    {
+        var (g, s) = Money(m);
+        return m / 1000 > 0
+            ? UiTextEn.Translate("%s1 Gold %s2 Silver")
+                .Replace("%s1", g).Replace("%s2", s)
+            : UiTextEn.Translate("%s1 Silver").Replace("%s1", s);
+    }
+
+    /// <summary>Or du joueur (BorderTextLab goldText) + or de l'onglet
+    /// achat (GoldText) ; l'argent est affiché dans silverText.</summary>
+    private void RefreshMoney()
+    {
+        if (!_native) return;
+        var (g, s) = Money(PlayerVitals.Gold);
+        SetT(_buyPane, "GoldText", g);
+        SetT(_buyPane, "SilverText", s);
+        SetT(_sellPane, "goldText", g);
+        SetT(_sellPane, "silverText", s);
+    }
+
+    private int NativePrice()
+    {
+        var g = ParseInt(_nPriceGold?.Text);
+        var s = ParseInt(_nPriceSilver?.Text);
+        return (int)Math.Min((long)g * 1000 + s, int.MaxValue);
+    }
+
+    private void UpdateTax()
+    {
+        var tax = (int)(NativePrice() * 5L / 100);
+        if (_nTaxGold != null) _nTaxGold.Text = $"{tax / 1000:#,0}";
+        if (_nTaxSilver != null) _nTaxSilver.Text = $"{tax % 1000}";
+    }
+
+    private void UpdateSlotName()
+    {
+        if (_nSlotName == null) return;
+        var it = _nSlot?.Item;
+        if (it == null || it.ItemId <= 0) { _nSlotName.Text = ""; return; }
+        _nSlotName.Text = TextResolver.ItemName(it.ItemId)
+            ?? ItemTableCache.Get(it.ItemId)?.Name ?? $"#{it.ItemId}";
+        var q = ItemTableCache.Get(it.ItemId)?.Quality ?? 0;
+        _nSlotName.AddThemeColorOverride("font_color",
+            ItemTooltip.QualityColor(q));
+    }
+
+    private void ApplySearch() { _page = 0; RefreshNative(); }
+
+    private static bool InCategory(int cat, ItemTable.ItemDef? d)
+    {
+        if (cat == 0) return true;
+        if (d == null) return cat == 4;
+        var k = d.Kind;
+        var weapon = (k >= 0x11 && k <= 0x1e) || (k >= 0x3d && k <= 0x42);
+        return cat switch
+        {
+            1 => weapon,
+            2 => !weapon && d.EquipLoc != 0,
+            3 => d.UseType is 1 or 2,
+            _ => !weapon && d.EquipLoc == 0 && d.UseType is not (1 or 2),
+        };
+    }
+
+    private IEnumerable<AuctionEntry> FilteredBuy()
+    {
+        var q = (_nSearch?.Text ?? "").Trim();
+        long min = ParseInt(_nMinGold?.Text) * 1000L + ParseInt(_nMinSilver?.Text);
+        long max = ParseInt(_nMaxGold?.Text) * 1000L + ParseInt(_nMaxSilver?.Text);
+        int lmin = ParseInt(_nMinLv?.Text), lmax = ParseInt(_nMaxLv?.Text);
+        var tiers = _nQual.Where(x => x.Btn.ButtonPressed)
+            .SelectMany(x => x.Tiers).ToHashSet();
+        foreach (var e in AuctionState.BuyList)
+        {
+            var d = ItemTableCache.Get(e.ItemId);
+            if (!InCategory(_cat, d)) continue;
+            if (q.Length > 0 && !ResolveName(e).Contains(q,
+                    StringComparison.OrdinalIgnoreCase)) continue;
+            if (min > 0 && e.Price < min) continue;
+            if (max > 0 && e.Price > max) continue;
+            var lv = d?.RequiredLevel ?? 0;
+            if (lmin > 0 && lv < lmin) continue;
+            if (lmax > 0 && lv > lmax) continue;
+            if (tiers.Count > 0 &&
+                !tiers.Contains(ItemTipFormat.QualityTier(d?.Quality ?? 0)))
+                continue;
+            yield return e;
+        }
+    }
+
+    private void FillRow(MclList m, AuctionEntry e, bool withTime)
+    {
+        var d = ItemTableCache.Get(e.ItemId);
+        Texture2D? icon = d != null && d.Code.Length > 0
+            ? AssetCatalog.GetTexture($"UI/itemicon/{d.Code}.png") : null;
+        var cells = withTime
+            ? new[] { "", ResolveName(e), (d?.RequiredLevel ?? 0).ToString(),
+                TimeLeft(e.ExpireTime), MoneyText(e.Price) }
+            : new[] { "", ResolveName(e), (d?.RequiredLevel ?? 0).ToString(),
+                MoneyText(e.Price) };
+        var row = m.AddRow(cells, icon, e);
+        m.SetCellColor(row, 1,
+            ItemTooltip.QualityColor(d?.Quality ?? 0));
+    }
+
+    private void RefreshNative()
+    {
+        if (_nBuyMcl != null)
+        {
+            var all = FilteredBuy().ToList();
+            var pages = Math.Max(1, (all.Count + PageSize - 1) / PageSize);
+            _page = Math.Clamp(_page, 0, pages - 1);
+            _nBuyMcl.ClearRows();
+            foreach (var e in all.Skip(_page * PageSize).Take(PageSize))
+                FillRow(_nBuyMcl, e, false);
+            if (_nPageText != null) _nPageText.Text = $"{_page + 1}/{pages}";
+            if (_nBuyStatus != null)
+                _nBuyStatus.Text = all.Count == 0
+                    ? UiTextEn.Translate("(no active listing)")
+                    : UiTextEn.Translate("%s1 listing(s) on sale — ")
+                        .Replace("%s1", all.Count.ToString()) +
+                      UiTextEn.Translate("purchase delivered by mail");
+            if (!all.Any(x => x.AuctionId == _selBuyId)) _selBuyId = -1;
+        }
+        if (_nSellMcl != null)
+        {
+            _nSellMcl.ClearRows();
+            foreach (var e in AuctionState.SellList)
+                FillRow(_nSellMcl, e, true);
+            if (!AuctionState.SellList.Any(x => x.AuctionId == _selSellId))
+                _selSellId = -1;
+        }
+        UpdateNativeButtons();
+    }
+
+    private void UpdateNativeButtons()
+    {
+        if (_nBuyBtn != null) _nBuyBtn.Disabled = _selBuyId < 0;
+        if (_nCancelBtn != null) _nCancelBtn.Disabled = _selSellId < 0;
     }
 
     private void BuildFallback()
@@ -672,9 +1148,7 @@ public partial class AuctionWindow : Control
                 return;
             }
             AuctionState.LastSellResult = -1;
-            _w._sellSlot?.SetItem(it);
-            if (_w._priceEdit != null) _w._priceEdit.Text = "777";
-            if (_w._buyoutEdit != null) _w._buyoutEdit.Text = "888";
+            _w.ProbeSetSell(it, 777, 888);
             GD.Print($"[auction-drive] vente item={it.ItemId} " +
                      $"bag={it.Bag} slot={it.Slot} " +
                      $"(essai {_sellTries})");

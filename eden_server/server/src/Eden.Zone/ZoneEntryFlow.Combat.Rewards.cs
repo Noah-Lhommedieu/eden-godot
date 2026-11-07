@@ -76,51 +76,58 @@ public sealed partial class ZoneEntryFlow
             // receveur doit être connecté à CETTE zone (session
             // migrée) ; sinon repli sur le tueur. Un loot par
             // attributaire à chaque itération (chaque roll réévalue).
-            foreach (var loot in loots)
+            // Bulk : les items d'un même receveur sont insérés en un
+            // seul passage (2 SELECTs au lieu de ~5 par item — P0 N+1).
+            var receiverLoots = loots
+                .Select(l => (Loot: l, St: ResolveLootReceiver(st)))
+                .GroupBy(t => t.St.CharId);
+            foreach (var grp in receiverLoots)
             {
-                var lootSt = ResolveLootReceiver(st);
+                var lootSt = grp.First().St;
                 var lootSession = lootSt.Session ?? session;
-                var touched =
-                    new List<(int BagId, int Slot, bool Merged)>();
-                var (ok, _, _, _) =
-                    await _services.Inventory.AddItemAsync(
-                        (int)lootSt.CharId, loot.ItemId, loot.Quantity,
-                        0, 0, false, touched);
-                if (!ok)
+                var list = grp.ToList();
+                var results = await _services.Inventory.AddItemsAsync(
+                    (int)lootSt.CharId,
+                    list.Select(t => (t.Loot.ItemId, t.Loot.Quantity,
+                        0, false)).ToList());
+                for (var i = 0; i < list.Count; i++)
                 {
-                    // Inventaire plein → drop au sol en trésor
-                    // (fallback natif : AddCloneItemWorld==NULL →
-                    // DropTreasureOnFloor — jamais de perte sèche) +
-                    // texte 0x4f9 « sac plein » pour que le joueur
-                    // voie POURQUOI l'item n'entre pas en sac (sinon
-                    // le loot semble disparaître devant un sac
-                    // visuellement non plein).
-                    await SendTextIndexAsync(lootSession, 0x4f9,
-                        CancellationToken.None);
-                    await SpawnGroundTreasureAsync(lootSt, loot.ItemId,
-                        loot.Quantity);
-                    continue;
+                    var loot = list[i].Loot;
+                    var res = results[i];
+                    if (!res.Ok)
+                    {
+                        // Inventaire plein → drop au sol en trésor
+                        // (fallback natif : AddCloneItemWorld==NULL →
+                        // DropTreasureOnFloor — jamais de perte sèche) +
+                        // texte 0x4f9 « sac plein » pour que le joueur
+                        // voie POURQUOI l'item n'entre pas en sac.
+                        await SendTextIndexAsync(lootSession, 0x4f9,
+                            CancellationToken.None);
+                        await SpawnGroundTreasureAsync(lootSt,
+                            loot.ItemId, loot.Quantity);
+                        continue;
+                    }
+                    // Merge → 291 (nouveau count), nouveau slot → 274 —
+                    // émis depuis l'entité (pas de re-SELECT).
+                    foreach (var (bag, slot, merged, ent) in res.Touched)
+                        await Codecs.NativeItemCodec.EmitItemSlotAsync(
+                            lootSession, bag, slot, merged, ent,
+                            CancellationToken.None);
+                    // Succès de collection — SetMonsterDropItemAchievement
+                    // natif : grant au receveur si le succès item est
+                    // absent de sa map (dédup native).
+                    await TryGrantItemAchievementAsync(lootSession,
+                        lootSt, loot.ItemId);
+                    // 146 zone→mission : réévalue les ItemCollect sur
+                    // cet item (miroir UpdateQuestItemStatus natif).
+                    if (_mission.Connected)
+                        _ = _mission.SendQuestItemChangedAsync(
+                            lootSt.CharId, loot.ItemId);
+                    EdenLog.Write(
+                        $"[Loot] char={lootSt.CharId} mob={mob.MobId} " +
+                        $"-> item {loot.ItemId} x{loot.Quantity} " +
+                        $"({loot.ItemName}) slots={res.Touched.Count}");
                 }
-                // Merge → 291 (nouveau count), nouveau slot → 274.
-                // Un 274 sur un slot occupé faisait matérialiser un
-                // clone au-dessus de l'existant → crash client au
-                // loot sur stack existant (bug live au kill).
-                await NotifyItemSlotsAsync(lootSession, lootSt, touched,
-                    CancellationToken.None);
-                // Succès de collection — SetMonsterDropItemAchievement
-                // natif : grant au receveur si le succès item est
-                // absent de sa map (dédup native).
-                await TryGrantItemAchievementAsync(lootSession, lootSt,
-                    loot.ItemId);
-                // 146 zone→mission : réévalue les ItemCollect sur cet
-                // item (miroir UpdateQuestItemStatus natif @0x8096b10).
-                if (_mission.Connected)
-                    _ = _mission.SendQuestItemChangedAsync(lootSt.CharId,
-                        loot.ItemId);
-                EdenLog.Write(
-                    $"[Loot] char={lootSt.CharId} mob={mob.MobId} " +
-                    $"-> item {loot.ItemId} x{loot.Quantity} " +
-                    $"({loot.ItemName}) slots={touched.Count}");
             }
 
             // 3. Or — GiveGold natif @08497200 : chance %, puis
@@ -137,7 +144,8 @@ public sealed partial class ZoneEntryFlow
                 var gold = Math.Max(0, goldDrop.GoldCenter - spread +
                     Random.Shared.Next(spread * 2));
                 gold = (int)Math.Min(int.MaxValue, gold *
-                    Eden.Core.Game.ServerConfig.EffectiveGoldRate);
+                    Eden.Core.Game.ServerConfig.EffectiveGoldRate *
+                    DungeonRewardMult(st.NodeId));
                 if (gold > 0)
                     await DistributeGoldAsync(session, st, gold);
             }
@@ -223,7 +231,16 @@ public sealed partial class ZoneEntryFlow
                 var (ok, _, _, _) = await _services.Inventory
                     .AddItemAsync((int)st.CharId, itemId, 1,
                         0, 0, false, touched);
-                if (!ok) continue;
+                if (!ok)
+                {
+                    // Sac plein — même fallback que le loot normal :
+                    // trésor au sol tagué par la mission (le pickup
+                    // enverra l'op 145 et créditera l'objectif).
+                    await SendTextIndexAsync(session, 0x4f9,
+                        CancellationToken.None);
+                    await SpawnGroundTreasureAsync(st, itemId, 1, mid);
+                    continue;
+                }
                 // Merge → 291, nouveau slot → 274 (même règle que le
                 // loot normal — cf. DistributeLootAsync).
                 await NotifyItemSlotsAsync(session, st, touched,
@@ -461,7 +478,7 @@ public sealed partial class ZoneEntryFlow
             var exp = (long)((_services.Live.MonsterDefs
                 .TryGetValue(mob.MobId, out var md) ? md.ExpReward : 0)
                 * Eden.Core.Game.ServerConfig.EffectiveExpRate(
-                    _services.ExpRate));
+                    _services.ExpRate) * DungeonRewardMult(st.NodeId));
             // Class EXP — le kill nourrit aussi la classe active avec
             // le NP du mob (S_Monster col55 = CMonsterData+0xa4), PAS
             // l'exp perso (natif GiveNp : iVar6 = template+0x88 ×
@@ -469,7 +486,8 @@ public sealed partial class ZoneEntryFlow
             var classExp = (long)((_services.Live.MonsterDefs
                 .TryGetValue(mob.MobId, out var mdef) ? mdef.ClassExp : 0)
                 * Eden.Core.Game.ServerConfig.EffectiveClassExpRate(
-                    _services.ClassExpRate, st.ClassId is >= 21 and <= 60));
+                    _services.ClassExpRate, st.ClassId is >= 21 and <= 60)
+                * DungeonRewardMult(st.NodeId));
             if (classExp > 0)
                 await GrantClassPointAsync(session, st, classExp);
             // GiveDp/GiveTeamDp natif (@0x8491850/@0x8493fxx) : la
@@ -815,6 +833,10 @@ public sealed partial class ZoneEntryFlow
         st.Experience = newLevel >= _services.Progression.MaxLevel
             ? 0 : st.Experience + exp - spent;
         st.Level = newLevel;
+        // L'UPDATE exp/level ci-dessus est direct (hors file ordonnée) :
+        // un save périmé déjà enfilé le réécrirait par-dessus — la
+        // marque le rend caduc sans attendre la prochaine sauvegarde.
+        _ = NextSaveMark(st.CharId);
         // CCharacter::SetLevel natif — retire l'état « portail
         // gratuit » (-0x25c3 = 55869) dès que le niveau dépasse 0x50
         // (80) ; le sync idempotent couvre aussi le re-add sur

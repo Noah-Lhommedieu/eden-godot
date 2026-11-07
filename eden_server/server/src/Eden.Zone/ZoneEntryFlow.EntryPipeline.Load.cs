@@ -43,8 +43,13 @@ public sealed partial class ZoneEntryFlow
             sc.PlayerMaxMp = chr.MaxMp > 0 ? chr.MaxMp : 200;
         }
         var staleMax = chr.MaxHp > 0 && chr.MaxHp < sc.PlayerMaxHp;
-        sc.PlayerHp = chr.CurrentHp > 0 && !staleMax
-            ? Math.Min(chr.CurrentHp, sc.PlayerMaxHp) : sc.PlayerMaxHp;
+        // État mort persistant : la mort sauvegarde hp = 0 ; un relog ne
+        // doit pas soigner (HP 0 en base = perso encore mort).
+        sc.Dead = chr.CurrentHp <= 0;
+        sc.PlayerHp = sc.Dead ? 0
+            : chr.CurrentHp > 0 && !staleMax
+                ? Math.Min(chr.CurrentHp, sc.PlayerMaxHp)
+                : sc.PlayerMaxHp;
         staleMax = chr.MaxMp > 0 && chr.MaxMp < sc.PlayerMaxMp;
         sc.PlayerMp = chr.CurrentMp > 0 && !staleMax
             ? Math.Min(chr.CurrentMp, sc.PlayerMaxMp) : sc.PlayerMaxMp;
@@ -142,11 +147,11 @@ public sealed partial class ZoneEntryFlow
                         work, token);
                 else if (work.Running)
                 {
-                    // DEV — même plafond qu'à l'armement (10 s) :
-                    // dev : remettre 30 min natif plus tard.
-                    var devCapMs = (long)DevWorkDurationUnits
+                    // Cap optionnel EDEN_DEV_WORK_CAP (0 = durées
+                    // natives) — identique à l'armement.
+                    var devCapMs = (long)DevWorkCap
                         * WorkOrderService.UnitMs;
-                    if (work.FinishAtMs - now > devCapMs)
+                    if (DevWorkCap > 0 && work.FinishAtMs - now > devCapMs)
                     {
                         work.FinishAtMs = now + devCapMs;
                         await _services.WorksRepo.EnsureAndSaveAsync(

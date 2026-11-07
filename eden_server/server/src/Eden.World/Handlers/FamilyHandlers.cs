@@ -381,7 +381,7 @@ public static class FamilyHandlers
         fam.Messages[msg.MessageId] = msg;
         // Le board est relu via l'agenda (51) — refresh aux membres.
         await SendToMembersAsync(fam, FamilyPackets.NcidFamilySchedule,
-            FamilyPackets.FamilySchedule(0, 0, fam.Schedule.Values.ToList()));
+            FamilyPackets.FamilySchedule(0, 0, fam.Messages.Values.ToList()));
     }
 
     /// <summary>Op 0x11 — suppression de message (privilège delmsg).</summary>
@@ -393,7 +393,7 @@ public static class FamilyHandlers
         fam.Messages.Remove(messageId);
         await _s.Families.Repo.DeleteMessageAsync(fam.Id, messageId);
         await SendToMembersAsync(fam, FamilyPackets.NcidFamilySchedule,
-            FamilyPackets.FamilySchedule(0, 0, fam.Schedule.Values.ToList()));
+            FamilyPackets.FamilySchedule(0, 0, fam.Messages.Values.ToList()));
     }
 
     /// <summary>Op 0x12 — marque de lecture
@@ -431,23 +431,63 @@ public static class FamilyHandlers
             FamilyPackets.QueryFamilyInfo(fam, 0, _s.WorldServerId));
     }
 
-    /// <summary>Op 0x16 — recalcul du niveau depuis l'exploit
-    /// (<c>FamilySetLevel</c> natif — lv dérivé de l'exp).</summary>
+    /// <summary>Niveau max de guilde (guide : 12 niveaux ; la table
+    /// c_level en porte davantage).</summary>
+    public const int MaxFamilyLevel = 12;
+
+    private static List<Eden.Core.Data.Parsers.ProgressionParsers.LevelRow>?
+        _levels;
+
+    private static Eden.Core.Data.Parsers.ProgressionParsers.LevelRow?
+        LevelRowOf(int level)
+    {
+        if (_levels == null)
+        {
+            var dir = Environment.GetEnvironmentVariable(
+                Eden.Core.Data.ReforgedDataLocator.EnvVar);
+            var path = dir == null ? null : Path.Combine(dir, "c_level.ini");
+            _levels = path != null && File.Exists(path)
+                ? Eden.Core.Data.Parsers.ProgressionParsers.ParseLevels(path)
+                : new();
+        }
+        return _levels.FirstOrDefault(r => r.Level == level);
+    }
+
+    /// <summary>Op 0x16 — « Niveau sup. » : <c>CGlobalInfo::FamilySetLevel</c>
+    /// world @0x08052ad0 + <c>TC_FamilySetLevel</c> mission @0x081ef170.
+    /// Niveau ≥ 3 ; chef seul ; ligne c_level[niveau+1] : gloire
+    /// (col 11) ≤ exp de guilde, fonds (col 18) ≤ trésorerie ; puis
+    /// niveau+1, trésorerie −fonds, exp −gloire.</summary>
     private static async Task RefreshLevelAsync(NetSession session, int charId, CancellationToken token)
     {
         var fam = _s.Families.GetFamilyOf(charId);
-        if (fam is null || fam.LeaderId != charId)
+        if (fam is null || fam.Level < 3) return;
+        if (fam.LeaderId != charId)
         { await OpErrorAsync(session, 0x16); return; }
-        // lv natif : croissance par exp — palier simple
-        // (famille niveau 1-10, ~1000 exp/niveau observé en data).
-        var lv = (byte)Math.Clamp(1 + fam.Exp / 1000, 1, 10);
-        if (lv != fam.Level)
+        var next = fam.Level + 1;
+        if (next > MaxFamilyLevel || LevelRowOf(next) is not { } row)
+            return;
+        if (fam.Exp < row.FamilyExpNeeded || fam.Treasury < row.FamilyFundNeeded)
         {
-            fam.Level = lv;
-            await _s.Families.Repo.SetLevelAsync(fam.Id, lv, fam.Exp);
-            await SendToMembersAsync(fam, FamilyPackets.NcidQueryFamilyInfo,
-                FamilyPackets.QueryFamilyInfo(fam, 0, _s.WorldServerId));
+            EdenLog.Write($"[Family] niveau sup. refusé fam={fam.Id} " +
+                $"lv={fam.Level}→{next} gloire {fam.Exp}/{row.FamilyExpNeeded} " +
+                $"fonds {fam.Treasury}/{row.FamilyFundNeeded}");
+            await OpErrorAsync(session, 0x16);
+            return;
         }
+        await _s.Families.LockedAsync(async () =>
+        {
+            fam.Level = (byte)next;
+            fam.Exp -= row.FamilyExpNeeded;
+            if (row.FamilyFundNeeded > 0)
+                fam.Treasury = await _s.Families.Repo.AddTreasuryAsync(
+                    fam.Id, -row.FamilyFundNeeded);
+            await _s.Families.Repo.SetLevelAsync(fam.Id, fam.Level, fam.Exp);
+        });
+        EdenLog.Write($"[Family] niveau sup. fam={fam.Id} → {next} " +
+            $"(−{row.FamilyExpNeeded} gloire, −{row.FamilyFundNeeded} fonds)");
+        await SendToMembersAsync(fam, FamilyPackets.NcidQueryFamilyInfo,
+            FamilyPackets.QueryFamilyInfo(fam, 0, _s.WorldServerId));
     }
 
     /// <summary>Op 0x46 — blob d'emblème (Field4 = octets du blob ;
@@ -545,13 +585,21 @@ public static class FamilyHandlers
                     members.Skip(i).Take(Family.MemberChunkSize).ToList()), token);
         // 3) agenda (51 — le natif l'émet vide au login).
         await session.SendPacketAsync(FamilyPackets.NcidFamilySchedule,
-            FamilyPackets.FamilySchedule(0, 0, fam.Schedule.Values.ToList()), token);
+            FamilyPackets.FamilySchedule(0, 0, fam.Messages.Values.ToList()), token);
         // 4) journal (68 — 6 vecteurs parallèles).
         await session.SendPacketAsync(FamilyPackets.NcidFamilyLogUpdate,
             FamilyPackets.FamilyLogUpdate(1,
                 (short)(fam.Members.TryGetValue(charId, out var mm) ? mm.MsgBoardState : 0),
                 fam.Logs.Where(l => l.Type == 1).ToList()), token);
-        // 5) prestige — même synchro que le cas sans famille.
+        // 5) succès famille (67 flag=3 — synchro complète natif :
+        // total + toutes les paires type→point de fam+0xb4, vecteurs
+        // charId/channel à 0 par _M_fill_assign).
+        await session.SendPacketAsync(
+            FamilyPackets.NcidFamilyAchievementUpdate,
+            FamilyPackets.FamilyAchievementUpdate(3, fam.AchievementTotal,
+                fam.Achievements.Select(kv => (kv.Key, kv.Value, 0, 0u))
+                    .ToList()), token);
+        // 6) prestige — même synchro que le cas sans famille.
         await SendPrestigeSyncAsync(session, charId, _s.Prestige, token);
     }
 

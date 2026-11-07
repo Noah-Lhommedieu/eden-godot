@@ -250,6 +250,21 @@ public partial class EntityAnimator : Node
     /// <summary>Joue une anim en boucle si disponible (no-op sinon).</summary>
     public void PlayLoop(string name) => Play(name, force: false);
 
+    /// <summary>Fige le corps sur une anim à un instant donné
+    /// (statues de hall — action_id du clone natif ; la frame n'est
+    /// pas transmise sur le fil, le natif fige au début de la
+    /// séquence). L'auto-locomotion est coupée : rien ne relancera
+    /// stand01 sur une entité immobile.</summary>
+    public void Freeze(string name, float at = 0f)
+    {
+        if (_player == null || !Has(name)) return;
+        AutoLocomotion = false;
+        _current = name;
+        _player.Play(name);
+        if (at > 0f) _player.Seek(at, true);
+        _player.Pause();
+    }
+
     /// <summary>Coupe net un one-shot d'attaque/sort en cours (cible
     /// morte : plus de coup dans le vide) et rend la main à la
     /// locomotion. No-op si aucun one-shot ou s'il n'est pas offensif

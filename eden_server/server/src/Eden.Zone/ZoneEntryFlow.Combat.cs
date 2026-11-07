@@ -822,7 +822,7 @@ public sealed partial class ZoneEntryFlow
                 // Autosave ~1 min (20 ticks × 3 s) — un kill du process
                 // ne doit pas perdre niveau/XP/position (constaté live).
                 if (++st.RegenTicks % 20 == 0)
-                    await SaveCharacterAsync(st);
+                    await SaveIfLatestAsync(st, NextSaveMark(st.CharId));
                 if (st.Dead || st.PlayerHp <= 0) goto Reschedule;
 
                 // Taux natifs (Regenerate @0x8100100) : combat → MP

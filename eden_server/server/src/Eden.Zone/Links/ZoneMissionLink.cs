@@ -178,8 +178,17 @@ public sealed class ZoneMissionLink : IAsyncDisposable
     /// Execute : GetExecutionerData(charUid) -> MigrationDone -> pousse
     /// node_id (lu en DB) dans player_node_times. N'enregistre PAS la
     /// zone : le routage passe par NodeCreate + player_characters.node_id.</summary>
-    public Task SendMigrationDoneAsync(uint charId, CancellationToken token = default)
-        => SendAsync(142, BitConverter.GetBytes(charId), token);
+    public Task SendMigrationDoneAsync(uint charId, short nodeId = 0,
+        CancellationToken token = default)
+    {
+        // Natif : [i32 charUid] seul, node relu en DB — mais notre
+        // write-behind marque node_id=0 pendant le transit, la mission
+        // lirait toujours 0. Le node réel de la zone part en queue.
+        var b = new byte[6];
+        BitConverter.GetBytes(charId).CopyTo(b, 0);
+        BitConverter.GetBytes(nodeId).CopyTo(b, 4);
+        return SendAsync(142, b, token);
+    }
 
     /// <summary>ListDialogue (127) : demande la liste d'options d'un NPC
     /// pour un perso — la mission répond 56.

@@ -321,6 +321,115 @@ public class ShopServiceTests
         Assert.Equal(31900, store.Items[0].ItemId);
     }
 
+    // --- Monnaies typées (priceType ≠ 1 — BuyItems natif
+    //     @0x080aca40 : col30 S_Item → CItemData+0x78) ---
+
+    private static (InMemoryInventoryRepository inv,
+        List<(int Pt, long Amt)> debits, ShopService shop,
+        ShopService.ShopCurrencyPort port) CreateTyped(
+            byte priceType, long? balance)
+    {
+        var inv = new InMemoryInventoryRepository();
+        var defs = new[]
+        {
+            new ItemParser.ItemDef { Id = 1001, SellPrice = 20,
+                MaxStack = 99, PriceType = priceType },
+        };
+        var invSvc = new InventoryService(inv, defs);
+        var stores = new[] { new ShopAndMiscParsers.StoreDef { Id = 10 } };
+        stores[0].Items.Add((1001, "a", 1));
+        var parameters = new ParameterParser.ParameterSet(
+            new Dictionary<int, float>(), new Dictionary<int, string>());
+        var gold = new Dictionary<int, long> { [1] = 1000 };
+        var shop = new ShopService(invSvc, stores, defs, parameters,
+            getGold: id => Task.FromResult(gold.GetValueOrDefault(id)),
+            setGold: (id, v) => { gold[id] = v; return Task.CompletedTask; });
+        var debits = new List<(int, long)>();
+        var port = new ShopService.ShopCurrencyPort(
+            (cid, pt) => Task.FromResult(
+                pt == priceType ? balance : (long?)null),
+            (cid, pt, amt) =>
+            {
+                debits.Add((pt, amt));
+                return Task.CompletedTask;
+            });
+        return (inv, debits, shop, port);
+    }
+
+    [Fact]
+    public async Task BuyItem_TypedCurrency_DebitsAndGrants()
+    {
+        var (inv, debits, shop, port) = CreateTyped(5, 500);
+        var (success, err, itemId, _, _, _) =
+            await shop.BuyItemAsync(1, 10, 0, 2, port);
+        Assert.True(success, err);
+        Assert.Equal(1001, itemId);
+        Assert.Single(debits);
+        Assert.Equal((5, 40L), debits[0]); // 2 × SysPrice 20
+        Assert.Contains(inv.Items, i => i.ItemId == 1001
+            && i.Quantity == 2);
+    }
+
+    [Fact]
+    public async Task BuyItem_TypedCurrency_InsufficientBalance()
+    {
+        var (inv, debits, shop, port) = CreateTyped(0xb, 39);
+        var (success, _, _, _, _, _) =
+            await shop.BuyItemAsync(1, 10, 0, 2, port);
+        Assert.False(success);
+        Assert.Empty(debits);
+        Assert.Empty(inv.Items);
+    }
+
+    [Fact]
+    public async Task BuyItem_TypedCurrency_UnsupportedRefuses()
+    {
+        // priceType 4 (lover) sans stockage → GetBalance null.
+        var (inv, debits, shop, port) = CreateTyped(4, null);
+        var (success, _, _, _, _, _) =
+            await shop.BuyItemAsync(1, 10, 0, 1, port);
+        Assert.False(success);
+        Assert.Empty(debits);
+        Assert.Empty(inv.Items);
+    }
+
+    [Fact]
+    public async Task BuyItem_TypedCurrency_NullPortRefuses()
+    {
+        var (inv, _, shop, _) = CreateTyped(0x13, 999);
+        var (success, _, _, _, _, _) = await shop.BuyItemAsync(1, 10, 0, 1);
+        Assert.False(success);
+        Assert.Empty(inv.Items);
+    }
+
+    [Fact]
+    public async Task BuyItem_TypedCurrency_DoesNotTouchGold()
+    {
+        var gold = 0L;
+        var inv = new InMemoryInventoryRepository();
+        var defs = new[]
+        {
+            new ItemParser.ItemDef { Id = 1001, SellPrice = 20,
+                MaxStack = 99, PriceType = 0x14 },
+        };
+        var invSvc = new InventoryService(inv, defs);
+        var stores = new[] { new ShopAndMiscParsers.StoreDef { Id = 10 } };
+        stores[0].Items.Add((1001, "a", 1));
+        var parameters = new ParameterParser.ParameterSet(
+            new Dictionary<int, float>(), new Dictionary<int, string>());
+        var shop = new ShopService(invSvc, stores, defs, parameters,
+            getGold: _ => Task.FromResult(0L),
+            setGold: (_, v) => { gold = v; return Task.CompletedTask; });
+        var port = new ShopService.ShopCurrencyPort(
+            (_, _) => Task.FromResult<long?>(100),
+            (_, _, _) => Task.CompletedTask);
+
+        var (success, _, _, _, _, _) =
+            await shop.BuyItemAsync(1, 10, 0, 1, port);
+        Assert.True(success);
+        Assert.Equal(0, gold); // l'or n'est jamais consulté/débité
+    }
+
     private static ShopAndMiscParsers.StoreDef LoadStore()
     {
         var dir = TestPaths.RepoRoot + "/server_us/Data/db_decoded";

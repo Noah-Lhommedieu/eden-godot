@@ -179,7 +179,8 @@ public partial class KillLoopProbe : Node
     {
         int fx = 0;
         foreach (var n in GetTree().Root
-                     .FindChildren("*", "NativeFxHost", true, false))
+                     .FindChildren("*", "Node", true, false)
+                     .OfType<Native.NativeFxHost>())
             fx++;
         return $"nodes={Performance.GetMonitor(Performance.Monitor.ObjectNodeCount):F0} " +
                $"ents={_registry?.Entities.Count ?? -1} " +

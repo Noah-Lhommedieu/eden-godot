@@ -1447,10 +1447,14 @@ public static class CharVisual
         if (weaponSkin != null)
             CharModelSpec.ApplyWeaponSkin(node, weaponSkin);
         node.Name = $"__equip_glb_{boneName}";
+        // Corps natif (NifScene) : plusieurs Skeleton3D possibles (un par
+        // groupe de skin) — prendre CELUI qui porte l'os, pas le premier
+        // (sinon l'arme tombait sur la racine du corps, lame verticale).
         var skel = body
             .FindChildren("*", "Skeleton3D", true, false)
-            .Cast<Skeleton3D>().FirstOrDefault();
-        if (skel != null && skel.FindBone(boneName) >= 0)
+            .Cast<Skeleton3D>()
+            .FirstOrDefault(k => k.FindBone(boneName) >= 0);
+        if (skel != null)
         {
             var attach = skel
                 .FindChildren($"__equip_ba_{boneName}",
@@ -1471,14 +1475,68 @@ public static class CharVisual
                 skel.AddChild(attach);
             }
             attach.AddChild(node);
+            LogWeaponAttach(body, node, boneName, "bone");
             return node;
         }
         // Repli : parent direct au nœud portant le nom de l'os
         // (corps dont le squelette n'a pas les bones prop).
         var host = body.FindChildren(boneName, "", true, false)
             .FirstOrDefault() as Node3D;
+        // NifScene.Unique() suffixe les doublons (« Bip01 Prop1 » →
+        // « Bip01 Prop12 ») : accepter le nom + chiffres, hors nos propres
+        // nœuds « __equip_* ».
+        host ??= body.FindChildren(boneName + "*", "Node3D", true, false)
+            .OfType<Node3D>()
+            .FirstOrDefault(n => !n.Name.ToString().StartsWith("__equip") &&
+                n.Name.ToString()[boneName.Length..].All(char.IsAsciiDigit));
+        // Corps « k » : les dummies sont sous « Bip01_Nub » et se nomment
+        // « Bip01_Nub Prop1 » / « Bip01_Nub Prop2 » (mesuré en jeu sur
+        // ClericQA) : même suffixe PropN, préfixe différent.
+        if (host == null && boneName.StartsWith("Bip01 Prop"))
+        {
+            var suffix = boneName["Bip01 ".Length..];
+            host = body.FindChildren("* " + suffix, "Node3D", true, false)
+                .OfType<Node3D>()
+                .FirstOrDefault(n => !n.Name.ToString().StartsWith("__equip"));
+        }
         (host ?? body).AddChild(node);
+        if (host == null)
+        {
+            var near = body.FindChildren("*Prop*", "", true, false)
+                .Select(n => n.Name.ToString());
+            GD.PushWarning($"[weapon-attach] {boneName} introuvable (ni os ni nœud) : " +
+                $"arme sur la racine. Skeletons={body.FindChildren("*", "Skeleton3D", true, false).Count} " +
+                $"noms *Prop* = [{string.Join(", ", near)}]");
+        }
+        LogWeaponAttach(body, node, boneName,
+            host != null ? "node" : "BODY-ROOT(os introuvable)");
         return node;
+    }
+
+    /// <summary>Diagnostic <c>--look-log</c> : mode d'accroche et pose
+    /// MONDE de l'arme relevée une frame après l'attache, en repère du
+    /// corps (repère NIF Z-up du modèle ; axe lame = +Z du nœud arme ;
+    /// tronc du corps ≈ |x| &lt; 0,25 autour de l'axe vertical Z).
+    /// Preuve natif : le dummy « Bip01 PropN » porte l'orientation, le NIF
+    /// arme (racine W### = Rx(90°), lame le long de +Z NIF) s'y pose en
+    /// identité — aucun offset supplémentaire à appliquer.</summary>
+    private static void LogWeaponAttach(Node3D body, Node3D weapon,
+        string boneName, string mode)
+    {
+        if (!OS.GetCmdlineUserArgs().Contains("--look-log") ||
+            !boneName.StartsWith("Bip01 Prop")) return;
+        Callable.From(() =>
+        {
+            if (!GodotObject.IsInstanceValid(weapon) ||
+                !GodotObject.IsInstanceValid(body) ||
+                !weapon.IsInsideTree() || !body.IsInsideTree()) return;
+            var rel = body.GlobalTransform.AffineInverse() *
+                weapon.GlobalTransform;
+            var up = rel.Basis * new Vector3(0, 0, 1);
+            GD.Print($"[weapon-attach] {boneName} mode={mode} " +
+                $"origine_corps={rel.Origin} lame_dir_corps={up.Normalized()} " +
+                $"pointe_corps={rel.Origin + up.Normalized() * 1.09f}");
+        }).CallDeferred();
     }
 
     // ------------------------------------------------------------------

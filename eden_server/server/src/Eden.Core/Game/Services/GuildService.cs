@@ -90,6 +90,12 @@ public sealed class GuildService
     private readonly Dictionary<int, int> _familyRevision = new();
     private int _nextGuildId = 1;
     private SocialRepository? _repo;
+    /// <summary>Seuils d'XP famille par niveau — <c>c_level.ini</c>
+    /// col11 (CLevelData+0x30 natif) indexé par le niveau de la ligne.
+    /// Injecté au boot depuis <c>GameData.Levels</c> ; clé absente =
+    /// ligne c_level manquante → <c>GainExp</c> natif retourne 0
+    /// (aucun gain).</summary>
+    private IReadOnlyDictionary<int, int>? _familyExpCurve;
 
     /// <summary>Révision courante de la famille du perso
     /// (char+0x4de natif — le client compare pour rafraîchir).</summary>
@@ -104,6 +110,13 @@ public sealed class GuildService
 
     /// <summary>Branche la persistance PostgreSQL.</summary>
     public void Attach(SocialRepository repo) => _repo = repo;
+
+    /// <summary>Branche la courbe d'XP famille — map
+    /// <c>level → c_level[level].FamilyExpNeeded</c> (col11), la
+    /// requête <c>CLevelQuery(level+1)</c> du natif.</summary>
+    public void AttachFamilyExpCurve(
+        IReadOnlyDictionary<int, int> thresholdByLevel) =>
+        _familyExpCurve = thresholdByLevel;
 
     /// <summary>Resynchronise le cache famille depuis la table
     /// <c>family</c> — <b>upsert auto-réparant</b> : les guildes déjà
@@ -292,17 +305,40 @@ public sealed class GuildService
         return true;
     }
 
-    /// <summary>Ajoute de l'XP de guilde — RewardFamilyExp des quetes.</summary>
+    /// <summary>Ajoute de l'XP de guilde — <c>CFamily::GainExp</c>
+    /// mission @0x081beec0 : seuil = <c>CLevelQuery(level+1)+0x30</c>
+    /// (c_level col11) ; ligne absente → aucun gain. Niveau &lt; 3 :
+    /// si l'EXP bankée vaut déjà le seuil un nouveau gain est rejeté,
+    /// sinon exp += gain puis <b>un seul</b> seuil est soustrait et
+    /// <c>SetLevel(level+1)</c> est appelé (qui déclenche
+    /// <c>CheckBuildingLevelUp</c> côté natif — re-joué par
+    /// l'appelant zone). Niveau ≥ 3 : jamais de level-up par cette
+    /// voie — l'EXP est clampée à [0, seuil] (la montée passe par une
+    /// quête d'upgrade). Le cap formule (AllFormulaParas+0x718) n'a
+    /// pas de source dans EDENFR — la borne effective est la fin de
+    /// la table c_level (seuils vides dès le niveau 15).</summary>
     public void AddExperience(int guildId, long amount)
     {
         if (!_guilds.TryGetValue(guildId, out var g)) return;
+        if (_familyExpCurve == null
+            || !_familyExpCurve.TryGetValue(g.Level + 1,
+                out var threshold))
+            return; // CLevelQuery(level+1) == 0 → return 0
+        if (g.Experience == threshold && g.Level < 3 && amount > 0)
+            return; // déjà au seuil — le natif rejette le gain
         g.Experience += amount;
-        // Level up tous les 10000 XP (formule placeholder)
-        while (g.Experience >= g.Level * 10_000)
+        if (g.Level < 3)
         {
-            g.Experience -= g.Level * 10_000;
-            g.Level++;
+            if (threshold <= g.Experience)
+            {
+                g.Experience -= threshold;
+                g.Level++;
+            }
         }
+        else if (threshold < g.Experience)
+            g.Experience = threshold;
+        else if (g.Experience < 0)
+            g.Experience = 0;
     }
 
     /// <summary>Variante persistante — crédite l'exp de famille puis
@@ -382,6 +418,26 @@ public sealed class GuildService
             await _repo.UpdateGuildAsync(g.Id, g.Level, g.Experience,
                 g.Treasury, g.Emblem);
         return tax;
+    }
+
+    /// <summary>Taxe de ville perçue sur un ordre de travail —
+    /// <c>CCharacter::FamilyLevyBusinessTaxes</c> @0x0840c960 : crédite
+    /// la famille VISITÉE de <paramref name="tax"/> si elle existe, a un
+    /// <c>business_tax</c> ≠ 0 (fam+0x32), et si le plafond
+    /// <see cref="MaxTreasuryValue"/> n'est pas dépassé (natif : accumulateur
+    /// fam+0x34 flushé ensuite en trésorerie, ici crédit direct). Rend
+    /// le nom de la guilde créditée (pour le texte 0xd15) ou null.</summary>
+    public async Task<string?> CreditBusinessTaxAsync(int guildId, int tax)
+    {
+        if (tax <= 0 || !_guilds.TryGetValue(guildId, out var g))
+            return null;
+        if (g.BusinessTax == 0 || g.Treasury >= MaxTreasuryValue
+            || g.Treasury + tax > MaxTreasuryValue) return null;
+        g.Treasury += tax;
+        if (_repo != null)
+            await _repo.UpdateGuildAsync(g.Id, g.Level, g.Experience,
+                g.Treasury, g.Emblem);
+        return g.Name;
     }
 
     /// <summary>Distribue le tresor aux membres.</summary>

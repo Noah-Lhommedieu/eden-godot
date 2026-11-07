@@ -19,27 +19,27 @@ L10 煉金小屋	L10 Alchemy Hut
 LV01～30副本討伐	LV01~30 Dungeon Hunt
 LV01～30副本討伐完成率：0.00％	LV01~30 Dungeon Hunt Completion: 0.00%
 NPC：	PNJ :
-String任務追蹤	Quest Tracker
+String任務追蹤	 Traqueur 
 String推薦任務追蹤	Recommended Quest Tracker
 Test99分99秒	99m 99s
-Test使用道具	Use Item
+Test使用道具	Utiliser l'Objet
 Test所需時間	Time Required
 Test所需費用	Required Cost
 Test有機會獲得：	Chance to receive:
-Test特殊虛寶	Special Item
-Test送出委託	Send Request
-Test關閉	Close
+Test特殊虛寶	Objet Spécial
+Test送出委託	Envoyer la commande
+Test關閉	Fermer
 XXX的個人商店	XXX's Personal Shop
 X副本傳送	Dungeon Teleport
 X廣播招募	Broadcast Recruitment
 X戰鬥狀態	Combat Status
 X提示資訊	Hint
-X搜尋	Search
+X搜尋	Recherche 
 X殺人數	Kills
 X特殊寶物	Special Treasure
-X當日累積	Daily Total
+X當日累積	Total quotidien
 X當月累積	Monthly Total
-X確定	Confirm
+X確定	Confirmer
 X積分	Points
 X舉辦宴會	Host Banquet
 X裝備成長	Gear Growth
@@ -48,7 +48,7 @@ X輔助寵物	Support Pet
 X輸出攻擊	Attack Output
 X進階寵物	Advanced Pet
 X開始進階	Start Advance
-X關閉	Close
+X關閉	Fermer
 X點擊確定後，進入貪婪島開戰	Click OK to enter the Greed Island battle
 string一般場景分配	Normal Loot Rule
 string一般場景分配：	Normal Loot Rule:
@@ -56,35 +56,35 @@ string互助清單	Assist List
 string他人加入時進行確認	Confirm when others join
 string副本擲骰	Dungeon Dice Roll
 string副本擲骰 ：	Dungeon Dice Roll:
-string創建隊伍	Create Party
+string創建隊伍	Créer Groupe 
 string加入隊伍	Join Party
-string尋找城鎮	Find Town
+string尋找城鎮	Trouver ville
 string左鍵點選副本 ( 2 / 4 )	Left-click a dungeon   ( 2 / 4 )
-string戰士	Warrior
+string戰士	Guerrier 
 string戰士專研高深的戰術技巧，並穿著厚重的鎧甲，優秀的近戰、防禦技巧讓戰士適合衝鋒、防守角色。活耀於各種場合。	Warriors master advanced tactics and wear heavy armor; their melee and defensive skills suit vanguard roles in any situation.
-string找玩家	Find Player
-string找隊伍	Find Party
+string找玩家	Trouver un joueur 
+string找隊伍	Trouver un Groupe
 string服裝預覽	Outfit Preview
-string申請加入	Apply to Join
+string申請加入	Candidature
 string登錄到組隊清單	Register to Party List
 string白色品質以上的裝備	Gear of white quality or better
 string綠色品質以上的裝備	Gear of green quality or better
 string自由制	Free-for-all
 string英雄特質	Hero Traits
 string藍色品質以上的裝備	Gear of blue quality or better
-string邀請組隊	Invite to Party
+string邀請組隊	Inviter
 string開啟追蹤	Enable Tracking
 string開始尋找	Start Search
 string開始搜尋	Start Search
-string關閉	Close
+string關閉	Fermer
 string隊伍目的	Party Goal
 string隊伍設定	Party Settings
-string隨機制	Random
-string離開隊伍	Leave Party
+string隨機制	Aléatoire
+string離開隊伍	Quitter le Groupe
 string魔法師	Mage
 x0：00：0	0:00:0
 x100小時59分	100h 59m
-x21:00 開始	Starts at 21:00
+x21:00 開始	Commence à 21:00
 x24小時27分	24h 27m
 x3v3炎鷹競技場	3v3 Firehawk Arena
 x99／99	99/99
@@ -105,13 +105,13 @@ x主要裝備	Équipement cible
 x乘以二	x2 
 x互助清單	Liste de Pairs 
 x互助頻道	Cnl des Pairs 
-x人物契約收藏冊	Character Contract Collection
+x人物契約收藏冊	Collection de contrats de personnages
 x介面快取	Interface Rapide
 x他人加入不須詢問	Libre participation
 x休息0	Rest 0
 x住戶名單	Liste des résidents
-x使用	Use
-x使用這個命運圖捲?	Use this Destiny Scroll?
+x使用	Utiliser
+x使用這個命運圖捲?	Utiliser ce Parchemin de la Destinée ?
 x個人排名	Personal Rank
 x個人擊殺	Personal Kills
 x個人殺人	Personal Kills
@@ -147,7 +147,7 @@ x動作鈕	Action Button
 x區域頻道	Canal Zone
 x南方舊曠口【一般模式】LV7 (1/2)	South Old Mine [Normal] LV7 (1/2)
 x原料放置區	Matériau principal
-x反向排列	Reverse Order
+x反向排列	Inverser l'ordre de tri 
 x取消	Annuler
 x取消招募	Annuler
 x受到傷害	Dégâts Reçus
@@ -169,7 +169,7 @@ x城鎮搜尋	Villes
 x城鎮清單	Liste de Villes
 x城鎮營運	Urbanisme
 x城鎮頻道	Town Channel
-x城鎮類型：	Town Type:
+x城鎮類型：	Type de ville :
 x場景選單	Liste de sélection de scène 
 x外框	Frame
 x天空蔚藍風	Thème bleu ciel
@@ -204,7 +204,7 @@ x已�9��點數	9 Points Spent
 x布衣	Robe de Protection
 x布諾拉克方塊x	Bunorac Cube
 x幻惑迷紫風	Thème Violet
-x建物收藏冊	Building Collection
+x建物收藏冊	Collection de bâtiments
 x怪物討伐積分	Monster Hunt Points
 x恢復	Récupération
 x您於此排行榜上的名次為	Your rank on this leaderboard:
@@ -226,14 +226,14 @@ x招募資訊	Informations Recrutement
 x招待券	Invitation
 x拜訪	Visiter
 x排行榜	Classement
-x排行表列表	Ranking List
+x排行表列表	Classement
 x探險值	Exploration à l'Aventure 
 x推薦任務	Recommended Quest
 x搜尋	Recherche
 x搜尋住戶	Chercher un résident
 x搜尋條件	Filtre
 x擊殺數	Créatures Tuées : 
-x支付租金	Pay Rent
+x支付租金	Payer le loyer
 x收藏	Archives
 x收藏積分	Collection
 x改名	Nom
@@ -250,11 +250,11 @@ x星鑽煉化	Star Diamond Refining
 x時空裂縫	Time-Space Rift
 x時空裂縫世界地圖	Time-Space Rift World Map
 x時間倒數	Countdown
-x時間表	Schedule
+x時間表	Programme
 x更換服裝	Tenue
 x更新時間 14：00	Updated at 14:00
 x最高通關層數	Highest Floor Cleared
-x會員	Member
+x會員	Membre
 x會員搜尋	Recherche
 x會員：	Member:
 x會長：一二三四五六七巴	Guild Master: 12345678
@@ -274,7 +274,7 @@ x權限設定	Modifier
 x次	fois
 x殺人數：	Kills:
 x每日登入領獎說明	Information
-x水晶十字勳章	Crystal Cross Medal
+x水晶十字勳章	Médaille de Cristal
 x水晶煉化	Crystal Refining
 x治療者	Guérisseur 
 x法色	Highlight Color
@@ -317,7 +317,7 @@ x登錄組隊需求	Visible par recherche
 x百大冒險者	Top 100 Adventurers
 x皮甲	Armure Légère
 x目前排名	Rang Actuel 
-x目前沒有承租房屋	No house currently rented
+x目前沒有承租房屋	Aucune maison louée actuellement
 x目前狀態：	Statut actuel : 
 x目前隊伍人數：1	Current party size: 1
 x瞳色	Yeux
@@ -327,37 +327,37 @@ x礦場	Mine
 x祈禱1	Prayer 1
 x祈禱技能	Prier
 x祭壇	Autel
-x租金費用	Rent Cost
+x租金費用	Coût de location
 x程式記憶體	Process Memory
 x積分：	Points:
-x第10天	Day 10
-x第11天	Day 11
-x第12天	Day 12
-x第13天	Day 13
-x第14天	Day 14
-x第15天	Day 15
-x第16天	Day 16
-x第17天	Day 17
-x第18天	Day 18
-x第19天	Day 19
-x第1天	Day 1
-x第20天	Day 20
-x第21天	Day 21
-x第22天	Day 22
-x第23天	Day 23
-x第24天	Day 24
-x第25天	Day 25
-x第26天	Day 26
-x第27天	Day 27
-x第28天	Day 28
-x第2天	Day 2
-x第3天	Day 3
-x第4天	Day 4
-x第5天	Day 5
-x第6天	Day 6
-x第7天	Day 7
+x第10天	Jour 10
+x第11天	Jour 11
+x第12天	Jour 12
+x第13天	Jour 13
+x第14天	Jour 14
+x第15天	Jour 15
+x第16天	Jour 16
+x第17天	Jour 17
+x第18天	Jour 18
+x第19天	Jour 19
+x第1天	Jour 1
+x第20天	Jour 20
+x第21天	Jour 21
+x第22天	Jour 22
+x第23天	Jour 23
+x第24天	Jour 24
+x第25天	Jour 25
+x第26天	Jour 26
+x第27天	Jour 27
+x第28天	Jour 28
+x第2天	Jour 2
+x第3天	Jour 3
+x第4天	Jour 4
+x第5天	Jour 5
+x第6天	Jour 6
+x第7天	Jour 7
 x第999名	Rank 999
-x第9天	Day 9
+x第9天	Jour 9
 x等於五	Égal 5
 x等級上限	Nv. Max
 x等級下限	Nv. Min
@@ -380,7 +380,7 @@ x繳交	Payer
 x繳交內容	Contenu de paiement
 x繳交列表	Liste de paiement
 x繳交物品	Turn In Item
-x繼續	Continue
+x繼續	Continuer
 x聖境傳說	Eden Eternal
 x聖境傳說要八個字	Eden Eternal Eight Words
 x聲望：	Fame:
@@ -398,7 +398,7 @@ x舉辦時間	Durée du Banquet
 x舉辦費用	Taxe du Banquet
 x舒適度需求	Confort requis
 x舒適積分	Confort
-x若在有失敗加成下做其他操作時，會遺失該加成效果	Performing other actions while a fail bonus is active will lose it
+x若在有失敗加成下做其他操作時，會遺失該加成效果	Toute autre action annule le bonus d'échec
 x華麗度需求	Luxe requis
 x華麗積分	Luxe
 x藍軍	Équipe Bleue
@@ -409,7 +409,7 @@ x虛寶	Trèfle
 x裂縫狀態	Rift Status
 x裂縫資訊	Rift Information
 x裂縫開啟條件	Rift Opening Conditions
-x製作	Craft
+x製作	Fabriquer
 x製作費用	Prix : 
 x設定權限	Accréditations
 x試衣間	Aperçu
@@ -470,7 +470,7 @@ x需求等級	Niv. Requis :
 x需求裝備:	Équipement nécessaire :
 x領先公會	Leading Guild
 x領取	Récupérer
-x領地戰	Territory War
+x領地戰	Prochainement
 x領地爭奪戰時程表	Programme de la Guerre de Territoire
 x顯卡溫度	Température de la Carte Graphique :
 x顯示記憶體	Video Memory
@@ -484,8 +484,8 @@ x�業��	Sample Text
 ※每周例行維護時將清空煉金累積值	※Alchemy progress resets at weekly maintenance
 ※若強化失敗裝備將會消失	Objet détruit en cas d´échec
 ※若強化失敗裝備將會消失若強化失敗裝備將會消	※Item will be destroyed if fortification fails
-オークション価格	Auction Price
-キアラクタ-	Character
+オークション価格	Mise à Prix
+キアラクタ-	Personnage
 一	1
 一二三四	1234
 一二三四五	12345
@@ -512,8 +512,8 @@ x�業��	Sample Text
 下限	Lower Limit
 不開放個人名片	Profil Verrouillé
 世界地圖	Carte du Monde
-世界暫代	World
-丟棄	Discard
+世界暫代	Monde
+丟棄	Jeter
 中國一定強對不隊	Sample Team
 主手武器耐久度低於	Si la Durabilité de l'arme est inférieure à
 二倍	2x
@@ -522,7 +522,7 @@ x�業��	Sample Text
 交往日期	Annif
 人口：300/300，300位線上	Population: 300/300, 300 online
 人物	Perso
-人物契約收藏冊	Character Contract Collection
+人物契約收藏冊	Collection de contrats de personnages
 人物顯示	Vue du perso
 人際關係	Amis
 他人加入不須詢問	Libre participation
@@ -546,7 +546,7 @@ x�業��	Sample Text
 個人房間	Private Room
 倒數計時...	Countdown...
 傳送到	Teleport to
-傳送口	Portal
+傳送口	Portail
 傳送石	Teleport Stone
 傳送點	Portail
 僅顯示同分流	Mon Canal
@@ -556,19 +556,19 @@ x�業��	Sample Text
 儲存	Save
 先天特性	Caractéristiques
 入場次數	Nb de fois entrées
-內容	Content
+內容	Contenu
 全部	Tous
 全部收藏	Tout archiver 
 全部靜音	Muet
 全部領取	Tout prendre
 公會	Guilde
-公會任務-副	Guild Task - Sub
+公會任務-副	Quête de Guilde - Secondaire
 公會任務-副本	Quêtes de Djn
-公會任務-野	Guild Task - Field
+公會任務-野	Quête de Guilde - Terrain
 公會任務-野外	Quêtes
 公會升級	Amélioration
 公會排名	Rang de guilde
-公會清單	Guild List
+公會清單	Liste des Guildes
 公會留言板	Panneau d'Affichage de la Guilde
 共用技能爹斯	Shared Skill
 其他	Autre
@@ -583,7 +583,7 @@ x�業��	Sample Text
 剩餘空間 99 篇	Space left: 99
 副手	(Main Secondaire)
 副本擲骰	Lancer le Dé en Donjon
-創鎮資格：	Town Charter Eligibility:
+創鎮資格：	Conditions de fondation :
 加入好友	Ajouter
 加入封鎖	Bloquer
 加入隊伍	Participer
@@ -597,13 +597,13 @@ x�業��	Sample Text
 受到暫代	Received
 只顯示商城寶物	Trésors de la Boutique d'Objets Seulement
 只顯示已收藏的寶物	Show collected treasures only
-只顯示遊戲內寶物	Show in-game treasures only
+只顯示遊戲內寶物	Trésors du jeu
 可以接受工作等級99以下的委託	Can accept requests up to job lv99
 可獲得證照	Certificats de Classe
 品質	Qualité
 品質：	Quality:
 哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈	Sample Text
-商 品	Items
+商 品	Objets
 商品瀏覽	Parcourir
 啟動	Commencer
 善惡	Alignment
@@ -626,10 +626,10 @@ x�業��	Sample Text
 城市功能	Carac. de la Ville
 城鎮	Ville
 城鎮傳送陣	Town Portal
-城鎮公告：	Town Notice:
-城鎮列表	Town List
+城鎮公告：	Annonce de la ville :
+城鎮列表	Liste des Villes
 城鎮收回條件：	Condition de Récupération de Ville
-城鎮暫代	Town
+城鎮暫代	Ville
 基本屬性	Stats Principales
 場景材質	Textures
 場景視距	Terrain
@@ -648,7 +648,7 @@ x�業��	Sample Text
 寄件人	Envoyeur
 寄送人	Sender
 密碼	Mot de passe
-密語暫代	Whisper
+密語暫代	Chuchoter
 寵物	Familier
 寶盒結果	Box Result
 寶箱＿ x999000	Chest_ x999000
@@ -665,11 +665,11 @@ x�業��	Sample Text
 幻化結果	Résultat
 序號	Numéro de série
 座標：	Coord :
-建物收藏冊	Building Collection
-建鎮申請書	Town Charter Application
+建物收藏冊	Collection de bâtiments
+建鎮申請書	Candidature à la Fondation d'une Ville
 強制?ܩ?	Force
 強化捲軸	Fortify Scroll
-強忀	Fortify
+強忀	Améliorer
 彈出對話框	Pop-up Dialog
 復活	Résurrection
 復活點	Point de Résurrection
@@ -682,13 +682,13 @@ x�業��	Sample Text
 情侶資訊	Données du Couple
 愛情硬幣	Amour
 成功機率 100.00％	Success Rate 100.00%
-成功機率：	Success Rate:
+成功機率：	Taux de réussite :
 成員名單	Liste des membres
 成就報告	Progression
-我同意留言規章	I agree to the message rules
+我同意留言規章	J'accepte le règlement des messages
 我想對他說	I want to tell them
-我要留言	Leave a Message
-戰場暫代	Battlefield
+我要留言	Laisser un message
+戰場暫代	Guerre de Territoire
 戰士	Guerrier
 戰鬥報告	Battle Report
 戰鬥擊殺積分：	Kill Points:
@@ -696,7 +696,7 @@ x�業��	Sample Text
 所屬公會	Guilde
 所需時間	Temps
 所需費用	Coût
-找尋城鎮	Find Town
+找尋城鎮	Trouver ville
 承接任務 25/25 件	Quests 25/25
 抗性	Résistance
 抽重消失機率90%	90% chance of losing on redraw
@@ -704,11 +704,11 @@ x�業��	Sample Text
 拍賣價格	Mise à Prix
 拍賣場	Enchères
 招募新人	Rct. Auto
-招攬人員	Recruit
+招攬人員	Recruter 
 挑戰副本	Donjon de l'Arène
 挑戰進行時間	Temps Défi
 捐獻金錢	Donation
-捲軸	Scroll
+捲軸	Parchemin
 排行榜	Classement
 排行資訊	Ranking Info
 推薦任務	Recommended Quest
@@ -721,7 +721,7 @@ x�業��	Sample Text
 搜尋結果	Résultats de la Recherche
 搜尋結果（共有15隊）	Search Results (15 parties)
 搜尋項目	Chercher des objets
-搜尋：	Search:
+搜尋：	Recherche :
 擊殺怪物數量	Monsters Killed
 擊殺怪物：	Monsters Killed:
 擊殺王怪數量	Bosses Killed
@@ -733,7 +733,7 @@ x�業��	Sample Text
 收藏清單	Liste d'Archives
 收藏綠：0.0％	Collected: 0.0%
 收藏設定	Archive Save
-攻擊速度	Attack Speed
+攻擊速度	Vitesse d'attaque
 放入裝備	Objet
 放棄任務	Abandon Quest
 放置繼承能力的裝備	Place gear with inheritable ability
@@ -744,10 +744,10 @@ x�業��	Sample Text
 是否同意組隊申請：	Voulez-vous postuler pour rejoindre ce groupe ? 
 是否領取？	Claim?
 普通	Bas
-暫代傷害	Damage
-暫代物品	Item
+暫代傷害	Dégâts
+暫代物品	Objet
 暫代經驗	EXP
-暫代聲望	Fame
+暫代聲望	Gloire
 暫代訊息	Message provisoire
 暫代金錢	Money
 暫代頻道	Channel
@@ -756,7 +756,7 @@ x�業��	Sample Text
 最佳團隊積分	Score meilleure équipe
 最佳通關時間	Meilleur temps
 最佳通關評價	Meilleur taux de complétion
-會員	Member
+會員	Membre
 會員清單	Membres
 會長三四五六七八九十	Guild Master 345678910
 會長：一二三四五六七八九十	Guild Master: 12345678910
@@ -791,7 +791,7 @@ x�業��	Sample Text
 滑鼠速度	Souris
 滑鼠速度bar	Mouse speed bar
 灰岩山 LV1~8	Limestone Mtn. LV1~8
-無隊伍	No Party
+無隊伍	Pas de Groupe
 營業稅率：	Sales Tax:
 物品上架	Ajouter un Objet
 物品下架	Retirer un Objet
@@ -801,20 +801,20 @@ x�業��	Sample Text
 特殊	Spécial
 特殊挑戰項目	Objectifs Défi spécial
 特殊虛寶	Charme
-狀態暫代	Status
+狀態暫代	Statut
 獲得暫代	Obtained
 獲得物品後將自動榜定	Item will be bound automatically once obtained
 玩家姓名	Nom du joueur
-生命	HP
+生命	PV
 生日	Taille
 生涯成就 : 99999999	Lifetime Achievements : 99999999
 生涯成就報告	Lifetime Achievement Report
-留言板	Message Board
+留言板	Tableau d'affichage
 留言者	Poster
-留言規章	Message Rules
+留言規章	Règlement des messages
 畫面效果	Effets Spéciaux
 疲勞 2	Fatigue 2
-發表日期	Post Date
+發表日期	Date de publication
 發表留言	Publier
 白天	Day
 白色	Blanc
@@ -828,7 +828,7 @@ x�業��	Sample Text
 目前玩家積分	Current Player Points
 目前職業	Classe Actuelle
 直接復活	Ressusciter
-直接附活	Attach
+直接附活	Joindre
 眩光	Brillance
 確定	Confirmer
 確定領取	Confirm Claim
@@ -842,7 +842,7 @@ x�業��	Sample Text
 積分賽	Combat
 穫得2000成就	Earned 2000 achievement points
 穫得2000成就擊敗英國炸魚一二三四五六七八九十	Earned 2000 achievement: defeated British Fish 12345678910
-第8天	Day 8
+第8天	Jour 8
 第一格	Emplacement 1
 第一部位	Partie 1
 第三位	3rd
@@ -861,8 +861,8 @@ x�業��	Sample Text
 篩選條件	Filtre
 簡介	Présentation
 系統	Système
-系統暫代	System
-紅利商城	Bonus Mall
+系統暫代	Système
+紅利商城	Boutique des Bonus
 紅隊	Équipe Rouge
 紅隊資訊	Informations Équipe Rouge
 紫色	Violet
@@ -887,7 +887,7 @@ x�業��	Sample Text
 職業專屬技能	Compétences de Classe
 職業專屬技能「」	Class-Exclusive Skill 「」
 職業專屬技能【】	Class-Exclusive Skill 【】
-職業技能爹死	Class Skills
+職業技能爹死	Compétences de classe 
 職業特色	Caractéristiques de Classe 
 職業積分好加成不加嗎	Class Point Bonus
 職業等級 75 級	Class Level 75
@@ -901,7 +901,7 @@ x�業��	Sample Text
 背景張數	Taux de rafraîchissement 
 能量	Energy
 自動尋路	Trajet auto
-自動組隊	Auto Party
+自動組隊	Groupe auto
 自由制	Mode Libre
 良好	Moyen
 落敗感言 :	Defeat Comment :
@@ -937,9 +937,9 @@ x�業��	Sample Text
 請選擇移除哪一位共乘者	Select which rider to remove
 謠言暫代	Rumor
 貨幣	Monnaie 
-販售	Sell
-貪婪	Greed
-買 回	Buy Back
+販售	Vente
+貪婪	Cupidité
+買 回	Racheter
 資金：	Fonds :
 購買	Achat
 超級爽的遭遇 exp+5%，持續30分鐘。	Super Encounter                 EXP +5% for 30 min.
@@ -959,31 +959,31 @@ x�業��	Sample Text
 進入異界塔	Entrer
 進入領地	Enter Territory
 進行中	Actif
-進行轉移	Transfer
+進行轉移	Transférer
 遊戲說明	Game Guide
 過濾不組隊玩家	Ignorer
 過濾封鎖隊員	Pas de perso bloqués
 過濾無名片玩家	Ign. Anonymes
 道具	Objet
 選擇場景：	Select Scene:
-選擇建鎮地區：	Select Town Location:
+選擇建鎮地區：	Choisir la région de la ville :
 遺忘	Oublier
 郵資	Frais
 重抽	Redraw
 重生點	Respawn Point
-重置x	Reset
+重置x	Réinitialiser
 金色	Doré
 鎧甲	Armure Lourde
 鎧甲防具	Armure Lourde
 鎮民稅率：100％	Resident Tax: 100%
 鎮長：一二三四五六七八九十	Mayor: 12345678910
 鑑定成功！物品重新進行了能力組合。	Assessment was a success! The item has a new skill set!
-開啟招募	Open Recruitment
+開啟招募	Recrutement ouvert
 開始搜尋	Recherche
 開始擺攤	Commencer la Vente
 開怪獨享制	Mode Initiative
 開放追蹤	Enable Tracking
-關 閉	Close
+關 閉	Fermer
 關閉	Fermer
 防具商人	Marchand d'Armures
 阿卡貝拉友愛之鎮	Arcabella Friendship Town
@@ -994,7 +994,7 @@ x�業��	Sample Text
 隊伍招募設定	Team Recruitment Settings
 隊伍搜尋	Chercher un Groupe
 隊伍明細（3/5）	Party Details (3/5)
-隊伍暫代	Party
+隊伍暫代	Groupe
 隊伍清單	Team List
 隊伍目的	Objectif
 隊伍積分	Party Points
@@ -1027,13 +1027,35 @@ x�業��	Sample Text
 顯示適合等級	Niv. correspondants
 顯示離線鎮民	Show Offline Residents
 餓死抬頭	Sample Title
-騎乘	Mount
+騎乘	Monture
 鬥士賽	Match Combattant
 黃昏	Dusk
 點卷商城	Point Voucher Mall
 點數：999999	Points: 999999
-－	-
+－	)
 ：	:
 Ｘ	X
 ��	Sample Text
 �� 99 ��點數	99 Points
+階段	Pal.
+攻擊加成	Att.
+魔攻加成	Mag.
+攻擊總和	Σ Att.
+魔攻總和	Σ Mag.
+附加能力	Bonus
+※防爆水晶連續失敗次數：	※Échecs consécutifs (cristal protecteur) : 
+※本階段目前強化加成：	※Bonus d'amélioration actuel du palier : 
+搜尋項目	Recherche d'objets
+拍賣中的物品	Objets en vente
+拍賣價格	Prix de vente
+等級限制	Niveau requis
+下限	Minimum
+上限	Maximum
+品質	Qualité
+搜尋	Rechercher
+オークション価格	Prix de vente
+樣式	Objet
+名稱	Nom
+賣價	Prix
+物品名稱/品質	Nom / Qualité
+招募中公會	Guildes en recrutement

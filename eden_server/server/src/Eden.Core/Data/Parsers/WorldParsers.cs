@@ -118,7 +118,12 @@ public static class WorldParsers
                 NpcType = body.Length > 6 && int.TryParse(body[6], out var t) ? t : 0,
                 Level = body.Length > 7 && int.TryParse(body[7], out var l) ? l : 0,
                 ItemRef = body.Length > 8 ? body[8] : string.Empty,
-                TalkScript = body.Length > 9 ? body[9] : string.Empty,
+                // Les options de dialogue occupent TOUTES les colonnes
+                // 9+ (`#:Talk …#:conds#:actions#:fail` par colonne) —
+                // joindre pour que ParseNpcTalk voie chaque option
+                // (avant : seule la 1re était visible → options perdues).
+                TalkScript = string.Join('|', body.Skip(9)
+                    .Where(c => c.Contains("#:", StringComparison.Ordinal))),
                 Role = body.Length > 18 ? body[18] : string.Empty,
                 // body[17] = masque Locate (CNpcData+0x38) — voir
                 // GetAllNPCTemplate @0x08368260 ; merged : b[17]=head[19].

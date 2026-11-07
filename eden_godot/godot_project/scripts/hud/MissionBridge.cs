@@ -55,7 +55,8 @@ public partial class MissionBridge : Node
     // ---- portails (aires GATEWAY de la scène courante) ----
     private int _nodeId;
     private SceneTable.Scene? _scene;
-    private int _insideGatewayKey = -1;
+    private readonly HashSet<int> _insideGatewayKeys = new();
+    private readonly List<int> _insideScratch = new();
     private int _arrivalSeen;
     private double _rearmSec;
 
@@ -275,7 +276,7 @@ public partial class MissionBridge : Node
         {
             _pending.Enqueue(() =>
             {
-                _insideGatewayKey = -1;
+                _insideGatewayKeys.Clear();
                 _scene = null;
                 SetRideModel(0);
             });
@@ -302,7 +303,7 @@ public partial class MissionBridge : Node
     private void LoadScene(short nodeId)
     {
         _nodeId = nodeId;
-        _insideGatewayKey = -1;
+        _insideGatewayKeys.Clear();
         _scene = null;
         var path = AssetCatalog.ResolveRawAsset(
             $"data/scene/s{nodeId:D3}.ini");
@@ -328,7 +329,8 @@ public partial class MissionBridge : Node
         // l'ancien node (repère étranger) — pas de portail.
         if (PortalArrival.Pending) return;
         var (ex, ey) = WorldConv.ToEdenGround(_player.GlobalPosition);
-        var inside = -1;
+        var inside = _insideScratch;
+        inside.Clear();
         foreach (var g in _scene.Gateways)
         {
             var a = _scene.EventAreas
@@ -336,37 +338,40 @@ public partial class MissionBridge : Node
             if (a == null) continue;
             var dx = ex - a.X; var dy = ey - a.Y;
             if (dx * dx + dy * dy <= a.Radius * a.Radius)
-            {
-                inside = g.KeyId;
-                break;
-            }
+                inside.Add(g.KeyId);
         }
-        // Arrivée appliquée : l'aire où l'on atterrit (aire jumelée du
-        // portail) est « déjà dedans » — front montant requis (natif).
+        // Arrivée appliquée : les aires où l'on atterrit (aire jumelée
+        // du portail) sont « déjà dedans » — front montant requis
+        // (natif).
         if (_arrivalSeen != PortalArrival.Version)
         {
             _arrivalSeen = PortalArrival.Version;
-            _insideGatewayKey = inside;
+            _insideGatewayKeys.Clear();
+            foreach (var k in inside) _insideGatewayKeys.Add(k);
             return;
         }
-        if (inside < 0)
+        _insideGatewayKeys.IntersectWith(inside);  // sorties : réarme.
+        // Aire nouvellement entrée → CheckNodeExit, une par cycle (le
+        // re-arm 2 s évite le spam, les aires suivantes partent aux
+        // cycles d'après). Le suivi est par aire : un petit portail
+        // noyé dans une grande aire gateway (ex. zone de fouille S7)
+        // doit déclencher même quand l'autre reste « dedans ».
+        foreach (var key in inside)
         {
-            _insideGatewayKey = -1;         // sorti : réarme.
-            return;
+            if (!_insideGatewayKeys.Add(key)) continue;
+            // Wire natif CheckNodeExit : [s16 keyId col4][s16 dstNode 0=
+            // résolution serveur] — les champs du codec s'appellent
+            // NodeId/PortalId mais c'est bien (keyId, dstNode) sur le
+            // fil (ZoneEntryFlow.Migration.cs:43-45 serveur).
+            Send(new ZoneCheckNodeExit
+            {
+                NodeId = (short)key,
+                PortalId = 0,
+            });
+            _rearmSec = 2.0;                // anti-spam local
+            GD.Print($"[portal] aire gateway key={key} → CheckNodeExit");
+            break;
         }
-        if (inside == _insideGatewayKey) return;
-        _insideGatewayKey = inside;
-        // Wire natif CheckNodeExit : [s16 keyId col4][s16 dstNode 0=
-        // résolution serveur] — les champs du codec s'appellent
-        // NodeId/PortalId mais c'est bien (keyId, dstNode) sur le fil
-        // (ZoneEntryFlow.Migration.cs:43-45 serveur).
-        Send(new ZoneCheckNodeExit
-        {
-            NodeId = (short)inside,
-            PortalId = 0,
-        });
-        _rearmSec = 2.0;                    // anti-spam local
-        GD.Print($"[portal] aire gateway key={inside} → CheckNodeExit");
     }
 
     // ------------------------------------------------------------------

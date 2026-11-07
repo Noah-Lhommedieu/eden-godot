@@ -27,12 +27,14 @@ namespace Eden.Core.Game.Work;
 ///   rate' = rate - rate×decline/100.
 /// - produit combine : un seul SWorkItem, sockets roulées sur le def
 ///   produit (ChangeEmbeddedAmount), malédiction par
-///   rand()%1e8+1 ≤ curse_rate (toujours 0 en données).
+///   rand()%1e8+1 ≤ curse_rate (toujours 0 en données), combos par
+///   <see cref="ItemComboRollService"/> (SelectWorkItemCombo —
+///   équipement kind 1..0x22 ≠0x10, qualité 0).
 ///
-/// Déviations documentées (hors lot) : RandItemCombo non porté
-/// (combo/extra_combos des produits restent 0 — le vecteur 498 est
-/// émis quand même), événements work_event, famille/bâtiments
-/// (fm_*, building_*) et EndSummon spécialisé du type 14.
+/// Déviations documentées (hors lot) : DiceItemCombo des drops non
+/// porté (qualité d'instance non modélisée), événements work_event,
+/// famille/bâtiments (fm_*, building_*) et EndSummon spécialisé du
+/// type 14.
 /// </summary>
 public sealed class WorkOrderService
 {
@@ -319,6 +321,17 @@ public sealed class WorkOrderService
         {
             var (count, _) = _inlay.RollSockets(def2);
             p.SocketAmount = (short)count;
+            // Combos — SelectWorkItemCombo (EndCombine @0x081657b5) :
+            // équipement seulement (kind 1..0x22, ≠0x10), qualité 0.
+            if (ItemComboRollService.IsWorkComboEligible(def2.Kind))
+            {
+                var (main, extras) = ItemComboRollService.Roll(
+                    0, def2.Kind, def2.RequiredLevel, _data.ItemCombos,
+                    next: _rand.Next);
+                p.Combo = main;
+                for (var i = 0; i < p.ExtraCombos.Length && i < extras.Length; i++)
+                    p.ExtraCombos[i] = extras[i];
+            }
         }
     }
 

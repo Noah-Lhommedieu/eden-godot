@@ -31,12 +31,15 @@ namespace Eden.Mission.Services;
 /// récompenses et déclencheurs de groupes.</summary>
 public sealed partial class QuestEngine
 {
-    /// <summary>Évalue les conditions d'acceptation col13 :
-    /// If_FMS mid done, If_CharLevel &gt;= n, If_Gender … — les
-    /// conditions inconnues passent (log) pour ne pas masquer de quêtes.</summary>
+    /// <summary>Évalue les conditions d'acceptation col13 + les gates
+    /// `If_*` du script d'acceptation col15 (ex. 1103 « If_FMS 1098
+    /// done » en col15) : If_FMS mid done, If_CharLevel &gt;= n,
+    /// If_Gender … — les conditions inconnues passent (log) pour ne
+    /// pas masquer de quêtes.</summary>
     private bool ConditionsPass(CharContext c, MissionParser.MissionDef m)
     {
-        foreach (var cond in m.Conditions)
+        foreach (var cond in m.Conditions.Concat(
+            m.AcceptActions.Where(a => a.Name.StartsWith("If_"))))
         {
             var a = cond.Args;
             switch (cond.Name)
@@ -60,12 +63,35 @@ public sealed partial class QuestEngine
                         return false;
                     break;
                 case "If_Gender":
-                    // Genre requis : If_Gender n — le gender natif du
-                    // perso (player_characters.gender) doit matcher.
-                    if (a.Count >= 1 && int.TryParse(a[0], out var g) &&
-                        c.Gender != g)
+                    // Liste de genres acceptés : If_Gender n [n…] —
+                    // le natif boucle sur les args et teste
+                    // `1<<arg & 1<<(genderByte>>4)` (gender_id en high
+                    // nibble). « If_Gender 0 1 9 8 » = tous genres.
+                    if (a.Count >= 1 &&
+                        !a.Any(x =>
+                            int.TryParse(x, out var g) && g == c.Gender))
                         return false;
                     break;
+                case "If_CheckBuff":
+                {
+                    // MC_IfCheckBuff @0x080e34f0 : compteur courant du
+                    // buff (0 si absent) vs valeur — op 1 ≥, 2 ≤, 3 =, 4 ≠.
+                    // Fatigue des quêtes de ville (54991 ≤ 9, 58759 ≤ 5).
+                    if (a.Count >= 3 && int.TryParse(a[0], out var bid) &&
+                        int.TryParse(a[1], out var bop) &&
+                        int.TryParse(a[2], out var bval) &&
+                        QuestBuffRules.IsTrackedId(bid))
+                    {
+                        var cur = c.Buffs.GetValueOrDefault(bid);
+                        var ok = bop switch
+                        {
+                            1 => cur >= bval, 2 => cur <= bval,
+                            3 => cur == bval, 4 => cur != bval, _ => true,
+                        };
+                        if (!ok) return false;
+                    }
+                    break;
+                }
                 default:
                     // If_Gender / If_CheckBuff / If_InventorySlot /
                     // If_FamilyContributionPoint / If_MidNightLimit…
@@ -292,6 +318,10 @@ public sealed partial class QuestEngine
         // Règle produit : seule une quête QUOTIDIENNE ou RÉPÉTABLE peut être reproposée ;
         // toute autre est une complétion unique, même avec une limite c_mission col4 > 0
         // (compteur de session natif, perdu à la reconnexion → quêtes faites reproposées).
+        // Répétable sans limite (« (重複) » : quêtes de ville) : jamais
+        // bloquée par l'historique.
+        if (m.CompleteLimit <= 0 && IsRepeatable(m) && !m.DailyType)
+            return false;
         if (m.CompleteLimit <= 0 || !IsRepeatable(m))
             return c.Completed.Contains(m.Id) ||
                    c.FMS.GetValueOrDefault(m.Id) is 1 or 5 ||
@@ -302,7 +332,7 @@ public sealed partial class QuestEngine
     }
 
     private static readonly System.Text.RegularExpressions.Regex RepeatTitle = new(
-        @"r[ée]p[ée]t|quotid|daily|hebdo|weekly|repeat", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        @"r[ée]p[ée]t|quotid|daily|hebdo|weekly|repeat|重複|illimit|unlimit", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
     /// <summary>Quête reproposable : type journalier (col6 bit4) ou titre répétable/quotidien.</summary>
     private bool IsRepeatable(MissionParser.MissionDef m) =>
@@ -346,6 +376,13 @@ public sealed partial class QuestEngine
             await _db.SetFMSAsync(charUid, mid, 0);
             return true;
         }
+        if (m.CompleteLimit <= 0 && IsRepeatable(m))
+        {
+            // Répétable illimitée : FMS remise à 0, reprenable.
+            c.FMS.Remove(mid);
+            await _db.SetFMSAsync(charUid, mid, 0);
+            return true;
+        }
         var n = c.SessionCompletions.GetValueOrDefault(mid) + 1;
         c.SessionCompletions[mid] = n;
         if (m.KeepLimitRow && n < m.CompleteLimit)
@@ -373,8 +410,21 @@ public sealed partial class QuestEngine
     private async Task AcceptMissionAsync(MissionSession s, CharContext c,
         MissionParser.MissionDef? m, int mid)
     {
-        if (m == null || c.Active.ContainsKey(mid) ||
-            DoneBlocked(c, m)) return;
+        if (m == null || DoneBlocked(c, m)) return;
+        // Fatigue de ville : If_CheckBuff vérifié aussi à l'acceptation
+        // (un paquet 87 direct ne doit pas contourner la liste).
+        if (m.Conditions.Any(x => x.Name == "If_CheckBuff") &&
+            !ConditionsPass(c, m)) return;
+        if (c.Active.TryGetValue(mid, out var prev))
+        {
+            if (prev.Status != 0xFE) return;
+            // Ré-accept d'une quête abandonnée : le marqueur 0xFE
+            // n'a de sens que pour bloquer l'auto-grant — la prise
+            // explicite par le joueur le remplace (DeleteActive natif
+            // au GiveUp côté client).
+            c.Active.Remove(mid);
+            await _db.DeleteActiveAsync(c.CharUid, mid);
+        }
         var q = new ActiveQuest { Status = 1 };
         q.Required = KillRequired(m);
         if (q.Required == 0 && !HasBlockingObjective(m))
@@ -401,9 +451,66 @@ public sealed partial class QuestEngine
         // posé) : FMSDoAccept natif appelle CheckQuestBuffStatus.
         if (QuestBuffRules.Objectives(m).Count > 0)
             await ReevaluateCompletionAsync(s, c, q, m);
+        // Script d'acceptation col15 — le natif l'exécute à la prise de
+        // quête : remise d'item (AcceptInventoryItem — ex. 1092 donne
+        // 32787), buff, téléportation, point de rez et fermeture des
+        // quêtes alternatives (AcceptCloseMission).
+        foreach (var a in m.AcceptActions)
+        {
+            int A(int i) => i < a.Args.Count &&
+                int.TryParse(a.Args[i], out var v) ? v : 0;
+            switch (a.Name)
+            {
+                case "AcceptInventoryItem":
+                    if (a.Args.Count >= 3)
+                        await SendTransitionAsync(s, c.NodeId, charUid,
+                            a.Args[1] == "-"
+                                ? $"eden-take-item {A(0)} {A(2)}"
+                                : $"eden-give-item {A(0)} {A(2)}");
+                    break;
+                case "RewardBuff":
+                    if (a.Args.Count >= 2)
+                        await SendTransitionAsync(s, c.NodeId, charUid,
+                            $"eden-buff {A(0)} {A(1)}");
+                    break;
+                case "AcceptTPA":
+                    if (a.Args.Count >= 2)
+                        await SendTransitionAsync(s, c.NodeId, charUid,
+                            $"tpa {A(0)} {A(1)}");
+                    break;
+                case "AcceptSRA":
+                    if (a.Args.Count >= 2)
+                        await SendTransitionAsync(s, c.NodeId, charUid,
+                            $"setra {A(0)} {A(1)}");
+                    break;
+                case "AcceptCloseMission":
+                    foreach (var arg in a.Args)
+                        if (int.TryParse(arg, out var cmid) &&
+                            c.Active.TryGetValue(cmid, out var cq))
+                            await CloseActiveAsync(s, c, cmid, cq);
+                    break;
+            }
+        }
         await PushNpcSymbolsAsync(s, c);
         EdenLog.Write($"[Mission] char={charUid} accept {mid} " +
             $"status={q.Status} req={q.Required}");
+    }
+
+    /// <summary>Abandonne une quête active (GiveUp joueur ou
+    /// AcceptCloseMission d'une quête concurrente) — même séquence
+    /// native : marqueur 0xFE, FMS→0, retrait du tracker et purge des
+    /// compteurs PMS.</summary>
+    private async Task CloseActiveAsync(MissionSession s, CharContext c,
+        int mid, ActiveQuest aq)
+    {
+        aq.Status = 0xFE;
+        c.FMS.Remove(mid);
+        await _db.SetFMSAsync(c.CharUid, mid, 0);
+        await _db.ClearTraceAsync(c.CharUid, mid);
+        await _db.DeletePmsAsync(c.CharUid, mid);
+        await _db.SaveActiveAsync(c.CharUid, mid, aq.Packed);
+        await SendStateAsync(s, c.CharUid, mid, 0);
+        await PushNpcSymbolsAsync(s, c);
     }
 
     /// <summary>Recalcule la transition FMS 3↔4 d'une quête active après

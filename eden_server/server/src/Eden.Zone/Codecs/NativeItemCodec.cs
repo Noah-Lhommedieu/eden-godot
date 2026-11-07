@@ -612,22 +612,34 @@ public static class NativeItemCodec
         {
             var item = await repo.GetItemAsync(charId, bag, slot);
             if (item == null) continue;
-            if (merged)
-                await session.SendAsync(
-                    new Eden.Core.Networking.Messages.Generated
-                        .CNC_CZ_ClientModifyItemDurability
-                    {
-                        Field1 = 0,           // s16 — contType (0=sac)
-                        Field2 = (short)slot, // s16 — loc dans le sac
-                        Field3 = (short)item.Quantity,   // s16 — count
-                        Field4 = (short)item.MaxDurability, // s16 — dur.max
-                        Field5 = (short)bag,  // s16 — container_index
-                        Field6 = 0,           // s16 — +0xe natif
-                    }, token);
-            else
-                await session.SendPacketAsync(274, BuildPutItem(item),
-                    token);
+            await EmitItemSlotAsync(session, bag, slot, merged, item,
+                token);
         }
+    }
+
+    /// <summary>Émet un 291/274 à partir de l'entité déjà en mémoire
+    /// (chemin bulk <c>InventoryService.AddItemsAsync</c>) — aucun
+    /// SELECT : l'entité mutée/créée porte déjà tous ses champs.</summary>
+    public static async Task EmitItemSlotAsync(
+        Eden.Core.Networking.Session.NetSession session,
+        int bag, int slot, bool merged, ItemEntity item,
+        CancellationToken token)
+    {
+        if (merged)
+            await session.SendAsync(
+                new Eden.Core.Networking.Messages.Generated
+                    .CNC_CZ_ClientModifyItemDurability
+                {
+                    Field1 = 0,           // s16 — contType (0=sac)
+                    Field2 = (short)slot, // s16 — loc dans le sac
+                    Field3 = (short)item.Quantity,   // s16 — count
+                    Field4 = (short)item.MaxDurability, // s16 — dur.max
+                    Field5 = (short)bag,  // s16 — container_index
+                    Field6 = 0,           // s16 — +0xe natif
+                }, token);
+        else
+            await session.SendPacketAsync(274, BuildPutItem(item),
+                token);
     }
 
     /// <summary>

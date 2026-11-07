@@ -267,7 +267,7 @@ public partial class PlayerController : CharacterBody3D
         var moved = new Vector2(pos.X - _lastPhysPos.X,
             pos.Z - _lastPhysPos.Z).Length();
         _lastPhysPos = pos;
-        if (moveDir == Vector2.Zero || !AutoPathActive || _keyMove)
+        if (moveDir == Vector2.Zero)
         {
             _stuckT = 0f;
             return;
@@ -282,7 +282,38 @@ public partial class PlayerController : CharacterBody3D
         var dir = new Vector3(moveDir.X, 0f, moveDir.Y);
         GD.Print($"[route] bloqué en ({pos.X:F1},{-pos.Z:F1}) " +
                  $"cap=({dir.X:F2},{-dir.Z:F2}) : {DescribeBlocker(dir)}");
-        Stuck?.Invoke(pos, dir);
+        // En overlap dans un collider de prop (spawn/dérive dans un
+        // décor « ColW » des GLB) : ni hit directionnel ni progrès —
+        // un push de dépénétration sort le corps, la route continue.
+        if (TryDepenetrate()) return;
+        // Le replan/liste noire ne sert qu'aux routes A* — un appui
+        // clavier contre un mur n'a rien à replanifier.
+        if (AutoPathActive && !_keyMove) Stuck?.Invoke(pos, dir);
+    }
+
+    /// <summary>Le corps est DANS un collider (aucun test de cap ne
+    /// voit d'overlap en partant de l'intérieur) : un pas de
+    /// dépénétration horizontal le long de la normale de recovery —
+    /// répété à chaque événement « bloqué » jusqu'à la sortie.
+    /// false = pas d'overlap / sortie impossible.</summary>
+    private bool TryDepenetrate()
+    {
+        var prm = new PhysicsTestMotionParameters3D
+        {
+            From = GlobalTransform,
+            Motion = Vector3.Zero,
+            RecoveryAsCollision = true,
+        };
+        var res = new PhysicsTestMotionResult3D();
+        if (!PhysicsServer3D.BodyTestMotion(GetRid(), prm, res))
+            return false;
+        var n = res.GetCollisionNormal();
+        var push = new Vector3(n.X, 0f, n.Z);
+        if (push.LengthSquared() < 1e-8f) return false;
+        push = push.Normalized() *
+            MathF.Min(res.GetCollisionDepth() + 0.05f, 0.5f);
+        MoveAndCollide(push);
+        return true;
     }
 
     /// <summary>Diag : collider qui bloque le cap (nom du nœud + de ses
@@ -293,7 +324,51 @@ public partial class PlayerController : CharacterBody3D
         var prm = new PhysicsTestMotionParameters3D
         { From = GlobalTransform, Motion = dir * 0.4f };
         if (!PhysicsServer3D.BodyTestMotion(GetRid(), prm, res))
-            return "aucun collider physique (mur grille/hors-sol)";
+        {
+            // Pas de hit dans le cap : sonde les 8 directions — un
+            // corps déjà EN overlap (spawn dans un prop à collider)
+            // peut ne rien rapporter dans la direction testée.
+            var scan = "";
+            for (var k = 0; k < 8; k++)
+            {
+                var a = k * Mathf.Pi / 4f;
+                var p2 = new PhysicsTestMotionParameters3D
+                {
+                    From = GlobalTransform,
+                    Motion = new Vector3(Mathf.Cos(a), 0f,
+                        Mathf.Sin(a)) * 0.4f,
+                };
+                scan += PhysicsServer3D.BodyTestMotion(GetRid(), p2,
+                    new PhysicsTestMotionResult3D()) ? "x" : "o";
+            }
+            // Overlap immédiat : la dépénétration peut contrer le
+            // mouvement sans qu'aucun test directionnel ne touche.
+            var overlap = "";
+            var space = GetWorld3D()?.DirectSpaceState;
+            var shape = GetNodeOrNull<CollisionShape3D>(
+                "BodyShape")?.Shape;
+            if (space != null && shape != null)
+            {
+                var sq = new PhysicsShapeQueryParameters3D
+                {
+                    Shape = shape,
+                    Transform = GlobalTransform,
+                    CollisionMask = CollisionMask,
+                };
+                foreach (var hit in space.IntersectShape(sq, 4))
+                {
+                    var b = hit["collider"].AsGodotObject() as Node;
+                    var p = "";
+                    for (var k = 0; k < 4 && b != null;
+                         k++, b = b.GetParent())
+                        p += b.Name + "<";
+                    overlap += $"[{p}]";
+                }
+            }
+            return $"aucun collider dans le cap " +
+                   $"dirs8(E,SE,S,SW,W,NW,N,NE)={scan} " +
+                   $"overlap={overlap}";
+        }
         var id = res.GetColliderId();
         var n = GodotObject.InstanceFromId(id) as Node;
         var path = "";
@@ -453,6 +528,17 @@ public partial class PlayerController : CharacterBody3D
     /// <summary>Force le cap caméra (degrés Godot) — --tele=…,yaw vise
     /// avant un --walk-test : la marche suit _yaw, pas la rotation du
     /// joueur. Le modèle est aligné pour cohérence.</summary>
+    /// <summary>Caméra complète pour le pilotage de test (@cam) : cap
+    /// horizontal, inclinaison (degrés, + = vue plongeante) et distance.</summary>
+    public void SetCamera(float yawDeg, float pitchDeg, float dist)
+    {
+        _yaw = Mathf.DegToRad(yawDeg);
+        _pitch = Mathf.DegToRad(Mathf.Clamp(pitchDeg, -20f, 85f));
+        if (_spring != null)
+            _spring.SpringLength = Mathf.Clamp(dist, ZoomMin, ZoomMax);
+        ApplyCamAngles();
+    }
+
     public void SetCamYawDeg(float deg)
     {
         _yaw = Mathf.DegToRad(deg);
@@ -809,6 +895,24 @@ public partial class PlayerController : CharacterBody3D
         {
             SelectTarget(ent);
         }
+    }
+
+    /// <summary>Parle à <paramref name="npc"/> : même chemin que le
+    /// clic droit (approche puis TalkToNpc à portée) — canal diag
+    /// GmFileProbe quand le picking 3D rate les petits PNJ.</summary>
+    public void TalkToNpc(RemoteEntity npc)
+    {
+        Cancelled?.Invoke();
+        SelectTarget(npc);
+        _talkTarget = npc;
+        // Approche via le routeur AutoRoute : A* + liste noire +
+        // replan sur blocage (la ligne droite se collait aux
+        // obstacles sans jamais atteindre la portée de dialogue).
+        // Sans grille : marche directe ; cible inatteignable : ligne
+        // droite en dernier recours (comportement historique).
+        var (ex, ey) = WorldConv.ToEdenGround(npc.GlobalPosition);
+        if (!EdenClient.Hud.AutoRoute.ToEden(this, ex, ey))
+            _moveTarget = npc.GlobalPosition;
     }
 
     // ------------------------------------------------------------------
@@ -1205,10 +1309,15 @@ public partial class PlayerController : CharacterBody3D
                 GlobalPosition.X, GlobalPosition.Z);
             var dstG = GroundHeight?.Invoke(dst.X, dst.Z);
             // Hors-carte : la destination n'a pas de terrain alors
-            // que la position courante en a → mouvement refusé (le
-            // natif borne au navmesh ; ici on borne à la grille fsm).
+            // que la position courante en a → mouvement refusé. Ce
+            // borne-fsm ne s'applique que SANS grille .smp : quand la
+            // grille existe c'est elle qui borne (ClipByNodeMap), et
+            // les trous de fsm sous les props restent marchables —
+            // sinon un spawn dans un décor (plante géante S003)
+            // enfermait le marcheur sur son îlot de sol.
             // Terrain inconnu partout (maps modèle sans fsm) : libre.
-            if (dstG.HasValue || !curG.HasValue)
+            var fsmBound = NodeMapForRoute?.Invoke() == null;
+            if (!fsmBound || dstG.HasValue || !curG.HasValue)
             {
                 if (MoveAndCollide(motion) is { } col)
                 {
@@ -1221,7 +1330,7 @@ public partial class PlayerController : CharacterBody3D
                         var sdst = GlobalPosition + slide;
                         var sdstG = GroundHeight?.Invoke(
                             sdst.X, sdst.Z);
-                        if (sdstG.HasValue || !curG.HasValue)
+                        if (!fsmBound || sdstG.HasValue || !curG.HasValue)
                             MoveAndCollide(slide);
                     }
                 }
@@ -1323,10 +1432,14 @@ public partial class PlayerController : CharacterBody3D
                     _corneTalkSent = true;
                     GD.Print($"[input] TalkToNpc h=0x{npc.Handle:x8}");
                 }
-                else if (_rechase >= RechaseSeconds)
+                else if (_rechase >= RechaseSeconds && _path.Count == 0)
                 {
+                    // Rechase seulement chemin épuisé : un clic-NPC
+                    // routé A* garde ses waypoints, sinon on les
+                    // écrasait toutes les 0,3 s par la ligne droite.
                     _rechase = 0;
                     _moveTarget = _talkTarget.GlobalPosition;
+                    _pathHead = null;
                 }
             }
         }
@@ -1450,7 +1563,7 @@ public partial class PlayerController : CharacterBody3D
     private int _corneClicks;
     private RemoteEntity? _corneAwaitClick;
     private const string ShotsDir =
-        "/home/ster2lune/Bureau/reverseden/portage/godot-shots";
+        "/home/ster2lune/Bureau/reverseden/eden-godot/artifacts/shots";
 
     /// <summary>Rejoue le scénario clic-sol → clic-droit mob en
     /// appelant les mêmes handlers que la souris (validation
@@ -2440,6 +2553,7 @@ public partial class PlayerController : CharacterBody3D
 
     public override void _Process(double delta)
     {
+        using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.Player");
         if (_dbgYawOn)
         {
             // _faceBase (cap sans FaceOffset) — jamais ModelYaw brut :

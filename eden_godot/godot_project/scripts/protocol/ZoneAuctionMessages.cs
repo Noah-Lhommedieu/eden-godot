@@ -33,12 +33,13 @@ namespace EdenClient.Protocol;
 
 // ---------------------------------------------------------------- C→S ---
 
-/// <summary>C→S NCID 114 — AuctionBuyQuery `[s16][s16][i32][i32][i32]
-/// [s16×4][str][s16]` — demande le catalogue des annonces actives.
-/// Champs natifs = filtres de recherche (catégorie, fourchette prix,
-/// niveau, texte, page) ; le serveur C# les ignore tous
-/// (ShopHandlers.cs:420 → Search() non filtré) — on envoie les
-/// défauts et on filtre le nom côté client.</summary>
+/// <summary>C→S NCID 114 — AuctionBuyQuery `[s16 lvlMin][s16 lvlMax]
+/// [i32 prixMin][i32 prixMax][i32 classMask][s16 qualityMask]
+/// [s16 itemType][s16 tri][s16 desc][str kw][s16 page]` — ordre natif
+/// des pops de TC_AuctionBuyQuery (mission). Filtres APPLIQUÉS par le
+/// serveur (AuctionService.Search) ; convention Godot : 0/vide =
+/// « pas de filtre » — on envoie les défauts pour tout voir, tri
+/// natif par défaut = niveau asc.</summary>
 public sealed class ZoneAuctionBuyQuery : NetMessage
 {
     public override int Opcode => 114;

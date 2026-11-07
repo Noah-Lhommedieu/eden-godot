@@ -1,5 +1,6 @@
 using Eden.Core.Database.Repositories;
 using Eden.Core.Game.Services;
+using Eden.Core.Networking;
 using Eden.Core.Networking.Handlers;
 using Eden.Core.Networking.Messages.Generated;
 using Eden.Core.Networking.Session;
@@ -80,7 +81,8 @@ public static class ShopHandlers
                 var (success, err, itemId, bag, slot, touched) =
                     await s.Shops.BuyItemAsync(
                         charId, session.CurrentStoreId, msg.ShopIndex,
-                        msg.ItemIndex);
+                        msg.ItemIndex,
+                        BuildCurrencyPort(s, session, charId, token));
                 EdenLog.Write($"[Zone] BuyItem char={charId} store={session.CurrentStoreId} " +
                     $"slot={msg.ShopIndex} x{msg.ItemIndex} -> {(success ? "ok" : err)}");
                 if (!success) return;
@@ -304,6 +306,18 @@ public static class ShopHandlers
                 // ×75 puis rendue ×75 à l'annulation — bug dupe).
                 var qty = s.Inventory.IsStackable(item.ItemId)
                     ? item.Quantity : 1;
+                // Champs dénormalisés du catalogue — miroir de
+                // l'INSERT natif SaveAuction (mission @0x0815da30) :
+                // item_type/level/class depuis le template,
+                // quality_filter = 1<<quality d'instance, item_name =
+                // maker + nom + "+N" (filtre LIKE natif).
+                var def = s.Inventory.DefOf(item.ItemId);
+                var denorm = new AuctionService.AuctionDenorm(
+                    def?.ItemType ?? 0, def?.RequiredLevel ?? 0,
+                    def?.ClassMask ?? 0,
+                    1 << Math.Clamp(item.Quality, 0, 15),
+                    $"{item.Maker}{def?.Name ?? item.ItemId.ToString()}" +
+                    (item.EnchantLevel > 0 ? $"+{item.EnchantLevel}" : ""));
                 // Mise en vente ATOMIQUE sur repo SQL : retrait de la
                 // ligne inventaire + débit des frais + INSERT annonce
                 // en une tx (CreateListingAsync) — plus de fenêtre
@@ -311,7 +325,7 @@ public static class ShopHandlers
                 var (listing, atomic) = await s.Auctions
                     .ListPersistedAsync(charId, item.ItemId, qty, price,
                         TimeSpan.FromHours(48), buyout,
-                        msg.Field1, msg.Field2, fee);
+                        msg.Field1, msg.Field2, fee, denorm);
                 if (listing == null) return;
                 if (!atomic)
                 {
@@ -416,12 +430,22 @@ public static class ShopHandlers
                 await session.SendAsync(resp, token);
             });
 
-        // AuctionBuyQuery → catalogue filtrable
+        // AuctionBuyQuery → catalogue filtré. Le wire suit l'ordre
+        // natif des pops de TC_AuctionBuyQuery (mission) :
+        // [s16 lvlMin][s16 lvlMax][i32 prixMin][i32 prixMax]
+        // [i32 classMask][s16 qualityMask][s16 itemType][s16 tri]
+        // [s16 desc][str kw][s16 page] — filtres portés par
+        // AuctionService.Search(AuctionQuery) (0/vide = sans filtre).
         d.RegisterChar(() => new CNE_CZ_ZoneServerAuctionBuyQuery(),
             async (session, msg, charId, token) =>
             {
+                var (entries, _) = s.Auctions.Search(
+                    new AuctionService.AuctionQuery(
+                        msg.Field1, msg.Field2, msg.Field3, msg.Field4,
+                        msg.Field5, msg.Field6, msg.Field7, msg.Field8,
+                        msg.Field9, msg.Field10, msg.Field11));
                 var resp = new CNC_CZ_ClientAuctionBuyList();
-                foreach (var l in s.Auctions.Search())
+                foreach (var l in entries)
                     resp.Entries.Add(MakeBuyEntry(l));
                 await session.SendAsync(resp, token);
             });
@@ -453,6 +477,135 @@ public static class ShopHandlers
     /// <summary>280 ClientUpdateAttr attr 0x02 — l'or après achat/vente.
     /// Format natif (GainGold → ClientUpdateAttr) :
     /// [u32 handle][s16 attrId][i32 cur][i32 max][u32 0].</summary>
+    /// <summary>Port de monnaies typées pour un achat — le mapping
+    /// priceType→bourse suit `BuyItems` natif @0x080aca40 +
+    /// `GetCoinTypeByPriceType` @0x8409e40 : 5=lifelong gold,
+    /// 0xa=trésor famille, 0xb=or colisée, 0xc-0x11/0x15-0x17=
+    /// special_coins (types 0-5 et 9-11), 0x13=war coin,
+    /// 0x14=alpaca coin. Types sans stockage (4 lover — pas de
+    /// colonne, cf. EDENFR-GAPS ; 2 prestige / 6 item-34928 absents
+    /// des stores EDENFR) → solde null → achat refusé.</summary>
+    private static ShopService.ShopCurrencyPort BuildCurrencyPort(
+        ZoneServices s, NetSession session, int charId,
+        CancellationToken token) => new(
+        (cid, pt) => CurrencyBalanceAsync(s, cid, pt),
+        (cid, pt, amount) =>
+            CurrencyDebitAsync(s, session, cid, pt, amount, token));
+
+    /// <summary>Solde de la bourse pour un priceType, ou null si la
+    /// monnaie n'est pas gérée (achat refusé côté service).</summary>
+    private static async Task<long?> CurrencyBalanceAsync(
+        ZoneServices s, int charId, int priceType)
+    {
+        switch (priceType)
+        {
+            case 5:
+                return await s.LifelongRepo.GetGoldAsync(charId);
+            case 0xa:
+                return s.Guilds.GetGuildOf(charId)?.Treasury;
+            case 0xb:
+                return (await s.Characters.GetShopCoinBalancesAsync(
+                    charId)).ColosseumGold;
+            case 0x13:
+                return (await s.Characters.GetShopCoinBalancesAsync(
+                    charId)).WarCoin;
+            case 0x14:
+                return (await s.Characters.GetShopCoinBalancesAsync(
+                    charId)).AlpacaCoin;
+            default:
+                var coinType = SpecialCoinTypeOf(priceType);
+                if (coinType < 0) return null;
+                var coins = await s.Characters
+                    .GetSpecialCoinsAsync(charId);
+                return coins.FirstOrDefault(
+                    c => c.Type == coinType).Total;
+        }
+    }
+
+    /// <summary>priceType → type de special coin
+    /// (`CCharacter::GetCoinTypeByPriceType` @0x8409e40 :
+    /// 0xc-0x11→0-5, 0x15-0x17→9-11, else -1).</summary>
+    private static int SpecialCoinTypeOf(int priceType) =>
+        priceType is >= 0xc and <= 0x11 or >= 0x15 and <= 0x17
+            ? priceType - 0xc : -1;
+
+    /// <summary>Débit post-octroi + notifications client. La bourse
+    /// était vérifiée au check — un échec ici (course) est logué,
+    /// l'item déjà remis.</summary>
+    private static async Task CurrencyDebitAsync(ZoneServices s,
+        NetSession session, int charId, int priceType, long amount,
+        CancellationToken token)
+    {
+        var cost = -(int)Math.Min(amount, int.MaxValue);
+        switch (priceType)
+        {
+            case 5:
+                // 555 absolu (miroir EntryState via le callback
+                // boucle) — même packet que GainLifelongGold natif.
+                var ll = s.LifelongGoldDelta != null
+                    ? await s.LifelongGoldDelta(session, charId, cost,
+                        token)
+                    : await s.LifelongRepo.AddGoldAsync(charId, cost);
+                await session.SendAsync(
+                    new CNC_CZ_ClientUpdateLifelongGold
+                    { Value = ll }, token);
+                break;
+            case 0xa:
+                // Natif : BroadCastTextIndexToFamilyMember 0xa73
+                // (« %s a acheté %s pour %s ») — cosmétique, omis.
+                var fam = s.Guilds.GetGuildOf(charId);
+                if (fam == null ||
+                    !await s.Guilds.TrySpendTreasuryAsync(fam.Id,
+                        amount))
+                    EdenLog.Write($"[Zone] BuyFamilyItem char={charId} " +
+                        "trésorerie insuffisante au débit");
+                break;
+            case 0xb:
+                // Pas de refresh dédié : le compteur client se met à
+                // jour au prochain 525 ClientGladiatorTeamInfo.
+                await s.Characters.AddColosseumGoldAsync(charId, cost);
+                break;
+            case 0x13:
+                var war = await s.Characters.AddWarCoinAsync(charId,
+                    cost);
+                await session.SendAsync(
+                    new CNC_CZ_ClientUpdateWarCoin
+                    { Value = war }, token);
+                break;
+            case 0x14:
+                var alp = await s.Characters.AddAlpacaCoinAsync(charId,
+                    cost);
+                await session.SendAsync(
+                    new CNC_CZ_ClientUpdateAlpacaCoin
+                    { Value = alp }, token);
+                break;
+            default:
+                var coinType = SpecialCoinTypeOf(priceType);
+                if (coinType < 0) return;
+                await s.Characters.AddSpecialCoinAsync(charId,
+                    coinType, cost);
+                // Push natif complet des mérites : zone → monde
+                // ZW 30 `[i32 charId][u16 n][n×(s16 type,i32 total)]`
+                // → client 78 ClientUpdateSpecialCoin.
+                if (s.World is { Connected: true })
+                {
+                    var coins = await s.Characters
+                        .GetSpecialCoinsAsync(charId);
+                    var ob = new OutBinStream();
+                    ob.WriteInt(charId);
+                    ob.WriteShort((short)coins.Count);
+                    foreach (var c in coins)
+                    {
+                        ob.WriteShort(c.Type);
+                        ob.WriteInt(c.Total);
+                    }
+                    await s.World.SendAsync(30,
+                        ob.ToArray(), token);
+                }
+                break;
+        }
+    }
+
     private static async Task SendGoldAttrAsync(NetSession session,
         int charId, ZoneServices s, CancellationToken token)
     {
@@ -495,6 +648,7 @@ public static class ShopHandlers
         AuctionId = l.Id,
         ItemId = l.ItemId,
         Price = (int)Math.Clamp(l.Price, 0, int.MaxValue),
+        ItemName = l.ItemName,
         SellerId = (uint)l.SellerId,
         ExpireTime = new DateTimeOffset(l.ExpiresAt).ToUnixTimeSeconds(),
     };

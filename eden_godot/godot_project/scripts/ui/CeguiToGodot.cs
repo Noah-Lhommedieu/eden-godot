@@ -1,4 +1,5 @@
 using Godot;
+using EdenClient.Hud;
 
 namespace EdenClient.Ui;
 
@@ -377,8 +378,36 @@ public static class CeguiToGodot
     {
         var c = Create(spec, textures);
         ApplyCommon(spec, c, textures);
+        // Zone client : dans CEGUI, les enfants d'un FrameWindow sont
+        // placés dans le « inner rect » (SOUS la barre de titre) — un
+        // enfant à {0,0} comme le TabControl de shopwnd rendait sa
+        // bande d'onglets derrière le titre. Les enfants vont donc
+        // dans un hôte décalé de la hauteur du titre.
+        Control host = c;
+        if (spec.HasTitleBar)
+        {
+            var th = spec.TitlebarHeight > 0 ? spec.TitlebarHeight
+                : (spec.FontSize ?? 12) + 10;
+            host = new Control
+            {
+                Name = "__client",
+                // Ne pas intercepter : simple hôte de géométrie.
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+            };
+            host.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
+            host.OffsetTop = th;
+            c.AddChild(host);
+        }
         foreach (var childSpec in spec.Children)
-            c.AddChild(BuildTree(childSpec, textures));
+        {
+            host.AddChild(BuildTree(childSpec, textures));
+            // TabContainer : titre d'onglet = Text CEGUI du pane
+            // (« 商 品 »/« 買回 ») — sinon Godot titre avec le nom de
+            // nœud (Root_shop_tab_Tabsell → i18n-miss + onglet vide).
+            if (host is TabContainer tc &&
+                childSpec.Text is { Length: > 0 } tabText)
+                tc.SetTabTitle(tc.GetTabCount() - 1, tabText);
+        }
         // La barre de titre auto est posée dans ApplyCommon AVANT les
         // enfants : un enfant plein cadre (Backgrand Static → Panel,
         // MouseFilter.Stop) la recouvrirait et avalerait les clics —
@@ -386,7 +415,10 @@ public static class CeguiToGodot
         // premier par l'ordre inverse du rendu).
         var tb = c.GetNodeOrNull<Control>("__auto_titlebar__");
         if (tb != null && c.GetChildCount() > 1)
-            c.MoveChild(tb, c.GetChildCount() - 1);
+            // Parent parfois encore en setup (warning move_child) →
+            // différé : la barre repasse dernier enfant fin de frame.
+            c.CallDeferred(Node.MethodName.MoveChild, tb,
+                c.GetChildCount() - 1);
         // Enfants « hors onglets » d'un TabContainer : conteneur
         // satellite plein-format sous les panes.
         if (spec.Kind == UiControlKind.TabContainer &&
@@ -443,6 +475,9 @@ public static class CeguiToGodot
                 Editable = !s.ReadOnly,
             },
             UiControlKind.ItemList => new ItemList(),
+            UiControlKind.MultiColumnList => new MclList(s.MclColumns),
+            UiControlKind.ItemSlot => new ItemSlotCell(
+                tex.GetRegion(s.Image)),
             UiControlKind.Tree => new Tree
             {
                 Columns = Math.Max(s.Columns, 1),

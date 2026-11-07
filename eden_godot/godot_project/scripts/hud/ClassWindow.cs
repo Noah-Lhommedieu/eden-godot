@@ -2129,8 +2129,8 @@ public partial class ClassWindow : Control
         if (_goldBanner != null)
             _goldBanner.Text = UiTextEn.Translate(
                     "%s1 Gold %s2 Silver Available")
-                .Replace("%s1", $"{money / 100:#,0}")
-                .Replace("%s2", (money % 100).ToString());
+                .Replace("%s1", $"{money / 1000:#,0}")
+                .Replace("%s2", (money % 1000).ToString());
         if (_cpBanner != null)
             _cpBanner.Text = UiTextEn.Translate("%s1 remaining CP")
                 .Replace("%s1", _cp.ToString());

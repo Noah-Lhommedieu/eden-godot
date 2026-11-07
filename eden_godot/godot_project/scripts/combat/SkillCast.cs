@@ -121,6 +121,8 @@ public partial class SkillCast : Node
     public override void _Ready()
     {
         Instance = this;
+        if (DeathProbe.Requested(out _))
+            AddChild(new DeathProbe { Name = "DeathProbe" });
         if (KillLoopProbe.Requested(out _, out _))
             AddChild(new KillLoopProbe { Name = "KillLoopProbe" });
         foreach (var a in OS.GetCmdlineArgs()

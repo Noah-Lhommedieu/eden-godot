@@ -69,50 +69,12 @@ public static class InstanceHandlers
         d.RegisterChar(() => new CNE_CZ_ZoneServerEnterRoom(),
             (session, msg, charId, token) => Task.CompletedTask);
 
-        // BuySpell [short spellId] — achat/apprentissage chez le maître
-        // de classe. Execute natif vide côté zone (0823f580) : le learn
-        // réel passe par CSpellMasterFactory (spell_level++ en DB) et
-        // répond 286 ClientGetSpell + attr or.
-        // MORT EN NATIF : Execute = corps vide (achat de sort passe
-        // par le vendeur/drop, pas ce NCID).
+        // BuySpell [short spellId] — MORT EN NATIF : Execute zone
+        // @0x0823f570 = corps vide (l'apprentissage passe par le flux
+        // spellmaster CSpellMasterFactory, pas ce NCID). L'ancien
+        // handler spéculatif (débit d'or + 280/286) est retiré :
+        // aucun paquet spéculatif vers le client.
         d.RegisterChar(() => new CNE_CZ_ZoneServerBuySpell(),
-            async (session, msg, charId, token) =>
-            {
-                var spellId = msg.Value;
-                var spell = s.GameData.Spells.FirstOrDefault(
-                    sp => sp.Id == spellId);
-                if (spell == null) return;
-
-                // Coût ~ niveau du sort × 100 or — la vraie formule de
-                // prix vit dans le spellshop natif (coût lu depuis
-                // S_SpellMaster à terme).
-                var cost = Math.Max(1, spell.Value) * 100;
-                var gold = await s.Characters.GetGoldAsync(charId);
-                if (gold < cost) return;
-
-                var level = await s.Classes.LearnSpellAsync(charId,
-                    spellId);
-                s.SpellLevelsDirty?.Invoke(charId);
-                if (level <= 0) return;
-                var newGold = await s.Characters.AddGoldAsync(charId,
-                    -cost);
-
-                // 280 attr=2 — rafraîchit l'or affiché (idem achat shop).
-                await session.SendAsync(new CNC_CZ_ClientUpdateAttr
-                {
-                    Field1 = (int)charId, Field2 = 2,
-                    Field3 = (int)newGold, Field4 = 0,
-                }, token);
-
-                // 286 ClientGetSpell — format du flux de classe :
-                // [s16 spell][s16 spell][s16 level][i32 0].
-                await session.SendAsync(new CNC_CZ_ClientGetSpell
-                {
-                    Field1 = spellId, Field2 = spellId,
-                    Field3 = (short)level, Field4 = 0,
-                }, token);
-                EdenLog.Write($"[Zone] BuySpell char={charId} " +
-                    $"spell={spellId} lv={level} cost={cost}");
-            });
+            (session, msg, charId, token) => Task.CompletedTask);
     }
 }

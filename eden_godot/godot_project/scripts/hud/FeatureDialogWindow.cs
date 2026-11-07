@@ -73,40 +73,30 @@ public partial class FeatureDialogWindow : Control
     {
         switch (m)
         {
-            // MagicBox (612/613) et loterie (448/511/595/596) ont
-            // des fenêtres dédiées (MagicBoxWindow / LotteryWindow).
-            case ZoneClientOpenInstanceDialog d:
-                Show(UiTextEn.Translate("Instance"), UiTextEn.Translate($"Instance creation {d.Field1}/{d.Field2}."));
-                break;
-            case ZoneClientRecruitInstanceResult r:
-                Chat($"Recrutement instance : {r.Field1}/{r.Field2}");
-                break;
-            // Battlefield (462-466) a une fenêtre dédiée
-            // (BattlefieldWindow).
-            case ZoneClientOpenHotel:
-                Show(UiTextEn.Translate("Hotel"), UiTextEn.Translate("Player room hall."));
-                break;
-            case ZoneClientOpenAreaDialog a:
-                Show(UiTextEn.Translate("Service local"), $"Dialog de zone {a.Field1}/{a.Field2}.");
+            // MagicBox (612/613), loterie (448/511/595/596),
+            // instance/recrutement (RecruitWindow) et hôtel
+            // (HotelWindow — 539) ont des fenêtres dédiées.
+            // 0xe (tour du ciel → TowerWindow) et 0x12 (épreuve →
+            // EvaluateWindow) ont leurs fenêtres natives dédiées.
+            case ZoneClientOpenAreaDialog a
+                when a.Field1 != 0xe && a.Field1 != 0x12:
+                Show(UiTextEn.Translate("Service local"),
+                    string.Format(UiTextEn.Translate("Area dialog {0}/{1}."), a.Field1, a.Field2));
                 break;
             case ZoneClientOpenChurchDialog:
                 Show(UiTextEn.Translate("Church"), UiTextEn.Translate("Ceremony available here."));
                 break;
-            case ZoneClientOpenPaySystem:
-                Show(UiTextEn.Translate("Shop"), UiTextEn.Translate("Shop event active."));
-                break;
+            // PaySystem (602) a sa fenêtre dédiée
+            // (PaySystemWindow — lot D5) ; le résultat 604 + les
+            // textes 316 restent affichés par le chat.
             case ZoneClientPayEvent p:
-                Show(UiTextEn.Translate("Shop"), UiTextEn.Translate($"Shop event {p.Field1}/{p.Field2}."));
+                Show(UiTextEn.Translate("Shop"), string.Format(UiTextEn.Translate("Shop event {0}/{1}."), p.Field1, p.Field2));
                 break;
             case ZoneClientOpenMissionShop s:
-                Show(UiTextEn.Translate("Mission shop"), UiTextEn.Translate($"Shop {s.Field1}/{s.Field2}."));
+                Show(UiTextEn.Translate("Mission shop"), string.Format(UiTextEn.Translate("Shop {0}/{1}."), s.Field1, s.Field2));
                 break;
-            case ZoneClientEnterStrengthen:
-                Show("Renforcement", "Enclume ouverte.");
-                break;
-            case ZoneClientStrengthenItemResult sr:
-                Chat($"Renforcement : {sr.Field1}/{sr.Field2}");
-                break;
+            // Strengthen (432-437) a sa fenêtre dédiée
+            // (StrengthenWindow — anclume native, lot B4).
         }
     }
 
@@ -117,6 +107,4 @@ public partial class FeatureDialogWindow : Control
         Visible = true;
     }
 
-    private void Chat(string text) =>
-        (GetParent() as HudRoot)?.AddChat(7, "", text);
 }

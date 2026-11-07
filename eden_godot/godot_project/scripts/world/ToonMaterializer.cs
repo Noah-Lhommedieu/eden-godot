@@ -121,12 +121,12 @@ public static class ToonMaterializer
         System.Environment.GetEnvironmentVariable("EDEN_DECOR_LEGACY") == "1";
 
     public static void Apply(Node root, bool decorScope = false,
-        string? modelName = null)
+        string? modelName = null, bool monsterScope = false)
     {
         if (LegacyDecor) decorScope = false;
         var hasTextured = HasTexturedSurface(root);
         Apply(root, hasTextured, modelName ?? root.Name.ToString(),
-            decorScope);
+            decorScope, monsterScope);
     }
 
     /// <summary>Modèle ENTIER de blocage (« nocamerablock02 »,
@@ -138,12 +138,14 @@ public static class ToonMaterializer
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     private static void Apply(Node root, bool modelHasTextured,
-        string modelName, bool decorScope)
+        string modelName, bool decorScope, bool monsterScope)
     {
         if (root is MeshInstance3D mi && mi.Mesh != null)
-            ApplyToMesh(mi, modelHasTextured, modelName, decorScope);
+            ApplyToMesh(mi, modelHasTextured, modelName, decorScope,
+                monsterScope);
         foreach (var child in root.GetChildren())
-            Apply(child, modelHasTextured, modelName, decorScope);
+            Apply(child, modelHasTextured, modelName, decorScope,
+                monsterScope);
     }
 
     /// <summary>Nom d'un helper de collision dont le NIF a TRONQUÉ le
@@ -276,8 +278,17 @@ public static class ToonMaterializer
     }
 
     private static void ApplyToMesh(MeshInstance3D mi,
-        bool modelHasTextured, string modelName, bool decorScope)
+        bool modelHasTextured, string modelName, bool decorScope,
+        bool monsterScope)
     {
+        // « KNOCK » d'un modèle de monstre = coquille/membre de la
+        // version ENTIÈRE (cachée seulement quand la BP tombe à 0 —
+        // FUN_0072ffe0), PAS un volume de collision de map : le
+        // masquer ici donnait des mobs « cassés » dès le spawn.
+        if (monsterScope &&
+            mi.Name.ToString().StartsWith("KNOCK",
+                StringComparison.OrdinalIgnoreCase))
+            return;
         // Meta « no_collision » (NifScene — groupes de rendu
         // « noalphanoblock »/« enhide »/« water ») : mesh de décor
         // authentique — reste visible même non texturé (les coquilles

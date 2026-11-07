@@ -34,6 +34,11 @@ public sealed partial class ZoneEntryFlow
     /// <c>MobWanderMinMs</c>/<c>MaxMs</c> (balance.ini / EDEN_BAL_*).
     /// La position logique est mise à jour immédiatement — le client
     /// anime la marche lui-même via le 326 (cur→dst).</summary>
+    /// <summary>Vitesse de marche que le client applique au wander =
+    /// FieldSpeed annoncé au 298 (Def.RoamSpeed), min 0,5 u/s.</summary>
+    private static double WanderSpeed(ZoneLiveWorld.LiveMob mob) =>
+        Math.Max(0.5, mob.Def?.RoamSpeed ?? 0f);
+
     private async Task MobWanderStepAsync()
     {
         var rng = Random.Shared;
@@ -99,9 +104,13 @@ public sealed partial class ZoneEntryFlow
                         // la map en file). Les mobs normaux gardent
                         // l'errance ±rayon du home (roam mode 0
                         // natif, SetNewGoalNormal).
+                        var inDungeon = _services.Live.IsDungeonNode(nodeId);
                         if (mob.Kind != Eden.Core.Game.WorldBoss
-                                .BossKind.None || mob.EventSpawned)
+                                .BossKind.None || mob.EventSpawned ||
+                            inDungeon)
                             ResolveMobPatrol(nodeId, mob);
+                        // Donjon : emplacement fixe = il attend.
+                        if (mob.Stationary) continue;
                         float dstX, dstY;
                         int nextDelayMs;
                         bool marchEnd = false;
@@ -133,8 +142,12 @@ public sealed partial class ZoneEntryFlow
                             // « téléporter » trop vite).
                             var ddx = dstX - mob.X; var ddy = dstY - mob.Y;
                             var dist = Math.Sqrt(ddx * ddx + ddy * ddy);
+                            // Vitesse ANNONCÉE au client (298 FieldSpeed =
+                            // RoamSpeed) : c'est celle à laquelle il marche
+                            // de cur vers dst ; 5 u/s codé en dur laissait
+                            // le serveur 2,5x en avance (snap 12-38 u).
                             nextDelayMs = (int)Math.Clamp(
-                                dist / 5.0 * 1000, 300, 30000);
+                                dist / WanderSpeed(mob) * 1000, 300, 120000);
                         }
                         else
                         {
@@ -169,6 +182,11 @@ public sealed partial class ZoneEntryFlow
                                 .MobWanderMaxMs;
                             nextDelayMs = min + rng.Next(
                                 Math.Max(1, max - min + 1));
+                            // Jamais repartir avant l'arrivée client.
+                            var wdx = dstX - mob.X; var wdy = dstY - mob.Y;
+                            nextDelayMs = Math.Max(nextDelayMs, (int)(
+                                Math.Sqrt(wdx * wdx + wdy * wdy)
+                                / WanderSpeed(mob) * 1000));
                         }
                         // Mur invisible : même grille NodeMap que le
                         // mouvement joueur (natif IsFakeBlock /
@@ -213,7 +231,7 @@ public sealed partial class ZoneEntryFlow
                             mob.HomeX = mob.X;
                             mob.HomeY = mob.Y;
                             mob.SiegeMobHandle = FindSiegeTarget(
-                                nodeId, inst, mob.X, mob.Y);
+                                nodeId, inst, mob.X, mob.Y, mob.Handle);
                             mob.NextSiegeAt = now +
                                 TimeSpan.FromSeconds(2);
                             EdenLog.Write($"[Wander] élite #{mob.MobId} " +
@@ -278,6 +296,11 @@ public sealed partial class ZoneEntryFlow
             if (dd < bestD) { bestD = dd; best = i; }
         }
         if (bestD > 40.0 * 40.0) return;
+        if (route.IsStationary && _services.Live.IsDungeonNode(nodeId))
+        {
+            mob.Stationary = true;
+            return;
+        }
         mob.Patrol = route;
         mob.PatrolIndex = best;
     }
@@ -286,11 +309,15 @@ public sealed partial class ZoneEntryFlow
     /// siège de l'élite en bout de route : le cristal 據點 bleu est
     /// un S_Monster « structure » (atk≤1, immobile). 30 u couvre le
     /// dernier waypoint posé à quelques pas du cristal.</summary>
-    private uint FindSiegeTarget(int nodeId, int inst, float x, float y)
+    private uint FindSiegeTarget(int nodeId, int inst, float x, float y,
+        uint attacker)
     {
         uint best = 0; var bestD = 30.0 * 30.0;
         foreach (var m in _services.Live.MobsOf(nodeId, inst))
         {
+            // Une structure marchante se trouvait à 0 u d'elle-même et
+            // s'assiégeait (boucle mort→reborn sur S110).
+            if (m.Handle == attacker) continue;
             if (!m.Alive || m.Def is not { IsStructure: true }) continue;
             var dx = m.X - x; var dy = m.Y - y;
             var dd = dx * dx + dy * dy;
@@ -307,7 +334,8 @@ public sealed partial class ZoneEntryFlow
         ZoneLiveWorld.LiveMob mob, DateTime now)
     {
         var target = _services.Live.GetMob(mob.SiegeMobHandle);
-        if (target == null || !target.Alive)
+        if (target == null || !target.Alive ||
+            target.Handle == mob.Handle)
         {
             mob.SiegeMobHandle = 0;
             return;

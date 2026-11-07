@@ -135,6 +135,10 @@ public partial class MinimapPanel : Control
     /// <summary>Positions coéquipiers (392) : charId → (node, x, y).</summary>
     private readonly Dictionary<int, (short Node, float X, float Y)>
         _partyPos = new();
+    /// <summary>Nodes des coéquipiers (carte du monde : CharImg).</summary>
+    public IEnumerable<int> PartyNodes =>
+        _partyPos.Values.Select(v => (int)v.Node).ToList();
+
     /// <summary>Marqueurs portails (aires GATEWAY de la scène).</summary>
     private readonly List<TextureRect> _portalMarkers = new();
     private readonly Dictionary<int, TextureRect> _partyMarkers = new();
@@ -341,6 +345,8 @@ public partial class MinimapPanel : Control
     /// anglais t_node.ini via <see cref="TextResolver"/> (id = numéro
     /// du code Sxxx) — repli = code. Recharge aussi la scène pour les
     /// marqueurs portails (aires GATEWAY).</summary>
+    public bool HasMapTexture => _map?.Texture != null;
+
     public void SetZone(string mapCode, string? nameOverride = null)
     {
         var name = nameOverride ?? ZoneName(mapCode);
@@ -348,8 +354,15 @@ public partial class MinimapPanel : Control
         if (_title != null) _title.Text = name;
         if (_map != null)
         {
+            // Image propre, sinon colonne minimap de c_node (variantes
+            // solo/héroïque), sinon aucune : jamais l'image de la map
+            // précédente.
             var tex = AssetCatalog.GetTexture($"UI/map/{mapCode}s.png");
-            if (tex != null) _map.Texture = tex;
+            if (tex == null && mapCode.Length > 1 &&
+                int.TryParse(mapCode[1..], out var mmNode) &&
+                World.NodeGeometry.MinimapCode(mmNode) is { } mmCode)
+                tex = AssetCatalog.GetTexture($"UI/map/{mmCode}s.png");
+            _map.Texture = tex;
         }
         // S<d3> → nodeId ; recharge les portails de la map.
         if (mapCode.Length > 1 &&
@@ -372,6 +385,7 @@ public partial class MinimapPanel : Control
     private void LoadScenePortals(int nodeId)
     {
         _scene = null;
+        _staticBuilt = false;
         foreach (var m in _portalMarkers)
             if (GodotObject.IsInstanceValid(m)) m.QueueFree();
         _portalMarkers.Clear();
@@ -561,6 +575,15 @@ public partial class MinimapPanel : Control
                 var (ex, ey) = WorldConv.ToEdenGround(e.GlobalPosition);
                 if (ex < 0 || ey < 0 || ex > WorldSpan || ey > WorldSpan)
                     continue;
+                // Natif (FUN_007eea00 @0x7eea00, switch par défaut) : un
+                // PNJ sans type de service ni symbole de quête n'est pas
+                // dessiné sur le radar.
+                // Ville de guilde : tous les PNJ de service sont dessinés
+                // (housekeepers, fabricants, vendeurs d'outils).
+                if (e.Kind == 8 && !InHallNode() &&
+                    NpcCategoryTable.IconOrNull(e.EntityId & 0xFFFF) == null &&
+                    !_npcSymbols.ContainsKey(e.EntityId))
+                    continue;
                 if (!_markers.TryGetValue(handle, out var dot))
                 {
                     dot = new TextureRect
@@ -627,8 +650,122 @@ public partial class MinimapPanel : Control
         }
         foreach (var h in _pendingRemove) _markers.Remove(h);
         _pendingRemove.Clear();
+        RefreshStaticNpcs(ms);
         RefreshQuestMarks(ms);
         RefreshPartyMarkers(ms);
+        RefreshHallBuildings(ms);
+    }
+
+    private bool InHallNode() => NodeId is 501 or 502;
+
+    private readonly List<(Control Mark, float X, float Y)> _hallMarks = new();
+    private int _hallVersion = -1;
+
+    /// <summary>Bâtiments de la ville de guilde : pastille + « Nom Niv. N »
+    /// (HallMapInfo, alimenté par FamilyHallBuildings).</summary>
+    private void RefreshHallBuildings(Vector2 ms)
+    {
+        if (_map == null) return;
+        var active = InHallNode() && HallMapInfo.NodeId == NodeId;
+        if (!active || _hallVersion != HallMapInfo.Version)
+        {
+            foreach (var (m, _, _) in _hallMarks)
+                if (GodotObject.IsInstanceValid(m)) m.QueueFree();
+            _hallMarks.Clear();
+            _hallVersion = active ? HallMapInfo.Version : -1;
+            if (!active) return;
+            foreach (var (name, lvl, x, y) in HallMapInfo.Buildings)
+            {
+                var dot = new TextureRect
+                {
+                    CustomMinimumSize = new Vector2(14, 14),
+                    Size = new Vector2(14, 14),
+                    Texture = MarkerTexture(new Color(1f, 0.8f, 0.2f)),
+                    StretchMode = TextureRect.StretchModeEnum
+                        .KeepAspectCentered,
+                    MouseFilter = MouseFilterEnum.Pass,
+                    TooltipText = $"{name} Niv. {lvl}",
+                };
+                dot.AddChild(new Label
+                {
+                    Text = $"{lvl}",
+                    Position = new Vector2(2, -4),
+                    MouseFilter = MouseFilterEnum.Ignore,
+                });
+                _map.AddChild(dot);
+                _hallMarks.Add((dot, x, y));
+            }
+        }
+        foreach (var (m, x, y) in _hallMarks)
+        {
+            if (!GodotObject.IsInstanceValid(m)) continue;
+            var en = WorldToNorm(x, y);
+            m.Position = new Vector2(en.X * ms.X - 7f, en.Y * ms.Y - 7f);
+        }
+    }
+
+    // ---- PNJ de la scène (hors streaming réseau) ---------------------
+    private readonly List<(TextureRect Dot, SceneTable.NpcSpawn Npc)>
+        _staticNpcs = new();
+    private bool _staticBuilt;
+    private int _staticLogNode = -1;
+
+    /// <summary>Le natif (CUIRadarWnd <c>FUN_007efdc0</c> @0x7efdc0) remplit
+    /// la liste d'icônes depuis les PNJ du NODE (<c>node+0xb0</c>), pas
+    /// depuis les entités streamées : tous les PNJ typés de la map sont
+    /// visibles, même au loin. Ici : <c>sNNN.ini [npc]</c> (jamais de
+    /// clamp au bord — le cadre <c>mapFrame</c> rogne, comme le natif
+    /// qui saute simplement les icônes hors rayon).</summary>
+    private void RefreshStaticNpcs(Vector2 ms)
+    {
+        if (_map == null) return;
+        if (!_staticBuilt)
+        {
+            _staticBuilt = true;
+            foreach (var (d, _) in _staticNpcs)
+                if (GodotObject.IsInstanceValid(d)) d.QueueFree();
+            _staticNpcs.Clear();
+            var n = 0;
+            foreach (var npc in _scene?.Npcs ?? new List<SceneTable.NpcSpawn>())
+            {
+                if (npc.NpcId <= 0) continue;
+                var file = NpcCategoryTable.IconOrNull(npc.NpcId);
+                if (file == null) continue;
+                var dot = new TextureRect
+                {
+                    Texture = IconTex(file, new Color(0.6f, 0.4f, 0.9f)),
+                    CustomMinimumSize = new Vector2(16, 16),
+                    Size = new Vector2(16, 16),
+                    StretchMode =
+                        TextureRect.StretchModeEnum.KeepAspectCentered,
+                    MouseFilter = MouseFilterEnum.Pass,
+                    TooltipText = AutoRoute.NpcLabel(npc),
+                };
+                _map.AddChild(dot);
+                _staticNpcs.Add((dot, npc));
+                n++;
+            }
+            if (_staticLogNode != NodeId)
+            {
+                _staticLogNode = NodeId;
+                GD.Print($"[radar] node {NodeId} : {n}/{_scene?.Npcs.Count ?? 0} " +
+                    "PNJ de scène typés (icônes natives, sans streaming)");
+            }
+        }
+        // Dé-doublonnage : une entité réseau déjà dessinée au même point
+        // porte le marqueur (et le symbole de quête) — on masque la statique.
+        var live = new List<Vector2>();
+        foreach (var (_, dot) in _markers)
+            if (GodotObject.IsInstanceValid(dot) && dot.Visible)
+                live.Add(dot.Position);
+        foreach (var (dot, npc) in _staticNpcs)
+        {
+            if (!GodotObject.IsInstanceValid(dot)) continue;
+            var en = WorldToNorm(npc.X, npc.Y);
+            var pos = new Vector2(en.X * ms.X - 8f, en.Y * ms.Y - 8f);
+            dot.Position = pos;
+            dot.Visible = !live.Any(p => p.DistanceSquaredTo(pos) < 16f);
+        }
     }
 
     private readonly List<TextureRect> _questDots = new();
@@ -683,9 +820,11 @@ public partial class MinimapPanel : Control
             {
                 dot = new TextureRect
                 {
-                    Texture = MarkerTexture(new Color(1f, 0.6f, 0.85f)),
-                    CustomMinimumSize = new Vector2(6, 6),
-                    Size = new Vector2(6, 6),
+                    Texture = IconTex("map002", new Color(1f, 0.6f, 0.85f)),
+                    CustomMinimumSize = new Vector2(16, 16),
+                    Size = new Vector2(16, 16),
+                    StretchMode =
+                        TextureRect.StretchModeEnum.KeepAspectCentered,
                     MouseFilter = MouseFilterEnum.Pass,
                 };
                 _partyMarkers[charId] = dot;
@@ -695,7 +834,7 @@ public partial class MinimapPanel : Control
                 .TryGetValue((uint)charId, out var tm)
                 ? UiTextEn.Translate($"{tm.CharName} (party)") : UiTextEn.Translate($"party #{charId}");
             var qn = WorldToNorm(p.X, p.Y);
-            dot.Position = new Vector2(qn.X * ms.X - 3f, qn.Y * ms.Y - 3f);
+            dot.Position = new Vector2(qn.X * ms.X - 8f, qn.Y * ms.Y - 8f);
             dot.Visible = true;
             seen.Add(charId);
         }

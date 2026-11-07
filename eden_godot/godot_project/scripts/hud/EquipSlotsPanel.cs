@@ -267,6 +267,23 @@ public partial class EquipSlotsPanel : Control
     {
         var s = _session;
         if (s?.Zone?.IsConnected != true) return;
+        // Gemme/scroll (use-type 3/5) posé sur une pièce portée :
+        // item-on-item natif — cible (contType 1 = équipé,
+        // contIdx = page, loc).
+        var srcDef = InventoryWindow.LookupDef(
+            InventoryWindow.ItemAt(srcBag, srcSlot)?.ItemId ?? 0);
+        if (srcDef?.UseType is 3 or 5)
+        {
+            _ = Send(s, new ZoneItemUse
+            {
+                ContainerType = 0, ContainerIndex = (short)srcBag,
+                Slot = (short)srcSlot,
+                TargetContainerType = 1,
+                TargetContainerIndex = (short)container,
+                TargetLoc = (short)loc,
+            });
+            return;
+        }
         _ = Send(s, new ZoneSwitchItemLocation
         {
             SrcType = 0, SrcSlot = (short)srcSlot, SrcIndex = (short)srcBag,

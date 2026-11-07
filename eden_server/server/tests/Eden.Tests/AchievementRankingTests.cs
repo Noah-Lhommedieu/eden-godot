@@ -169,37 +169,10 @@ public class AuctionItemMallTests
         var l = await svc.ListAsync(1, 31900, 1, 100, TimeSpan.FromHours(1));
         Assert.Null(await svc.BuyAsync(1, l.Id));
     }
-
-    [Fact]
-    public void ItemMall_PurchaseDebitsWallet()
-    {
-        var svc = new ItemMallService();
-        svc.AddToCatalog(new ItemMallService.MallItem
-        {
-            ItemId = 50001, PriceAP = 500, Category = 1,
-        });
-        svc.Credit(1, ItemMallService.Currency.AP, 1000);
-        Assert.True(svc.Purchase(1, 50001, ItemMallService.Currency.AP));
-        Assert.Equal(500, svc.GetBalance(1, ItemMallService.Currency.AP));
-        Assert.True(svc.Purchase(1, 50001, ItemMallService.Currency.AP));
-        Assert.False(svc.Purchase(1, 50001, ItemMallService.Currency.AP)); // solde=0
-    }
-
-    [Fact]
-    public void ItemMall_DiscountAndLimit()
-    {
-        var svc = new ItemMallService();
-        svc.AddToCatalog(new ItemMallService.MallItem
-        {
-            ItemId = 50002, PriceAP = 1000, Discount = 0.5,
-            SaleEndsAt = DateTime.UtcNow.AddDays(1),
-            PurchaseLimit = 1,
-        });
-        svc.Credit(1, ItemMallService.Currency.AP, 10000);
-        Assert.Equal(500, svc.EffectivePrice(50002, ItemMallService.Currency.AP));
-        Assert.True(svc.Purchase(1, 50002, ItemMallService.Currency.AP));
-        Assert.False(svc.Purchase(1, 50002, ItemMallService.Currency.AP)); // limite
-    }
+    // Les tests ItemMallService ont été retirés avec le stub zone :
+    // l'item mall réel vit côté monde (Eden.World/Handlers/
+    // ItemMallHandlers.cs — tb_user pvalues/bonus), le modèle
+    // AP/EP + catalogue en mémoire n'existait que dans le stub mort.
 }
 
 public class CombatTests

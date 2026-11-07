@@ -48,6 +48,7 @@ public partial class SpellFx : Node
         MiscPackets.Received += OnMisc;
         EntityBuffs.VisualAdded += OnBuffVisualAdded;
         EntityBuffs.VisualRemoved += OnBuffVisualRemoved;
+        PlayerSkills.Defer = a => Callable.From(a).CallDeferred();
         PlayerSkills.Changed += WarmKnownSpellFx;
         if (OS.GetCmdlineUserArgs().Concat(OS.GetCmdlineArgs())
             .Contains("--fx-survey"))

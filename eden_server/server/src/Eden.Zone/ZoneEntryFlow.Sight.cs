@@ -224,6 +224,13 @@ public sealed partial class ZoneEntryFlow
             var gone = dx > SightGone || dy > SightGone;
             if (inSight && st.Sent.TryAdd(h, 0))
             {
+                // Repeuple handle→entityId : la sortie de vue le purge
+                // (cf. branche ci-dessous) et IndexSeenEntity ne court
+                // qu'à l'ingestion — TalkToNpc retombait en « handle
+                // inconnu » sur un NPC rejoué revu après téléport.
+                if (body.Length >= 6)
+                    st.HandleToEntity[h] =
+                        BitConverter.ToInt16(body, 4) & 0xFFFF;
                 await session.SendPacketAsync(298, body, token);
                 EdenLog.Write($"[Sight] +npc(replay) h=0x{h:x8} ({pos.X:F0},{pos.Y:F0})");
             }

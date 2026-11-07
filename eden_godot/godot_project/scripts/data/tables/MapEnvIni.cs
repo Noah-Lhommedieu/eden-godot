@@ -42,6 +42,11 @@ public sealed class MapEnvIni
 
     /// <summary>Sections dans l'ordre du fichier (doublons possibles).</summary>
     public List<Section> Sections { get; } = new();
+    /// <summary>Instances dont la teinte ini colle mieux à l'écran de chargement en RGB (mesure teinte, 3 maps sur 23).</summary>
+    private static readonly HashSet<int> RgbInstances = new() { 106, 116, 121 };
+
+    /// <summary>Entiers couleur lus en 0xBBGGRR (instances) — voir Load.</summary>
+    public bool Bgr { get; private set; }
 
     /// <summary>Première section du nom donné, ou null.</summary>
     public Section? Find(string name) =>
@@ -57,6 +62,14 @@ public sealed class MapEnvIni
     public static MapEnvIni Load(string path)
     {
         var env = new MapEnvIni();
+        // Instances (S1xx+) : entiers 0xBBGGRR — mesuré sur 23 maps de
+        // type 5 dont 19 collent à la teinte de leur écran de chargement
+        // en BGR contre 3 en RGB (S101 : brun, pas bleu). Les maps de
+        // champ (S0xx) gardent 0xRRGGBB (S009 ciel bleu).
+        var stem = System.IO.Path.GetFileNameWithoutExtension(path);
+        env.Bgr = stem.Length == 4 && stem[0] is 'S' or 's' &&
+            int.TryParse(stem.AsSpan(1), out var num) && num >= 100 &&
+            !RgbInstances.Contains(num);
         Section? current = null;
         foreach (var rawLine in Vfs.EdenVfs.ReadLines(path,
                      EdenEncoding.Big5))
@@ -92,10 +105,13 @@ public sealed class MapEnvIni
             CultureInfo.InvariantCulture, out var f) ? f : 0f;
 
     /// <summary>Couleur décimale 0xRRGGBB → (r,g,b) en 0-255.</summary>
-    public static (byte R, byte G, byte B) Color(Section? s, string key)
+    public static (byte R, byte G, byte B) Color(Section? s, string key,
+        bool Bgr = false)
     {
         var n = Int(s, key);
-        return ((byte)(n >> 16), (byte)(n >> 8), (byte)n);
+        return Bgr
+            ? ((byte)n, (byte)(n >> 8), (byte)(n >> 16))
+            : ((byte)(n >> 16), (byte)(n >> 8), (byte)n);
     }
 
     /// <summary>Vecteur '#' -séparé → floats (vide si absent).</summary>
@@ -128,8 +144,14 @@ public sealed class MapEnvIni
         public (byte R, byte G, byte B) LitDifColor { get; init; }
         /// <summary>Couleur de brouillard (FogColor*).</summary>
         public (byte R, byte G, byte B) FogColor { get; init; }
-        /// <summary>Opacité max du brouillard (FogMax*).</summary>
+        /// <summary>Valeur brute FogMax* du .ini. Hors [0,1] sur 40 % des
+        /// instances (S118 1,98 ; S110 2,35) : ce n'est donc PAS une
+        /// opacité — utiliser <see cref="FogOpacityCap"/> pour le rendu.</summary>
         public float FogMax { get; init; }
+        /// <summary>Plafond d'opacité réellement appliqué : FogMax borné à
+        /// <see cref="FogOpacityCeiling"/>.</summary>
+        public float FogOpacityCap =>
+            Math.Clamp(FogMax, 0f, FogOpacityCeiling);
         /// <summary>Portée de vue sous brouillard (FogSightRang* —
         /// orthographe native, sans 'e').</summary>
         public float FogSightRange { get; init; }
@@ -138,6 +160,14 @@ public sealed class MapEnvIni
         /// <summary>Vecteur bloom RGBA (Bloom*).</summary>
         public float[] Bloom { get; init; } = Array.Empty<float>();
     }
+
+    /// <summary>Plafond d'opacité du fog (0,45). Cartes de champ validées
+    /// à l'œil : FogMax 0,08-0,45 ; les donjons S1xx/S2xx portent 0,86-2,35
+    /// qui, plafonné à 1, ne laissait voir que du fog au-delà de
+    /// FogSightRang (24-106 u). Sémantique native de FogMax non retrouvée
+    /// dans client_game (aucune chaîne FogMax/FogSightRang) : valeur
+    /// empirique, à confirmer en jeu.</summary>
+    public const float FogOpacityCeiling = 0.45f;
 
     /// <summary>Version du fichier ([Version] Version=20100531).</summary>
     public string Version => Find("Version")?.Get("Version") ?? string.Empty;
@@ -157,9 +187,9 @@ public sealed class MapEnvIni
         return new PhaseEnv
         {
             Hour = Int(s, "Hour" + suf),
-            LitColor = Color(s, "LitColor" + suf),
-            LitDifColor = Color(s, "LitDifColor" + suf),
-            FogColor = Color(s, "FogColor" + suf),
+            LitColor = Color(s, "LitColor" + suf, Bgr),
+            LitDifColor = Color(s, "LitDifColor" + suf, Bgr),
+            FogColor = Color(s, "FogColor" + suf, Bgr),
             FogMax = Float(s, "FogMax" + suf),
             FogSightRange = Float(s, "FogSightRang" + suf),
             Sky = Sky(),

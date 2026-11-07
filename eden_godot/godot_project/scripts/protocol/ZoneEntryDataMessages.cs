@@ -295,6 +295,7 @@ public static class PlayerProfileState
             LifeSkillExps = m.Exps;
             LifeSkillDues = m.Dues;
         }
+        RaiseChanged("lifeskill");
     }
 
     public static void Apply(ZoneRecommendActivities m)

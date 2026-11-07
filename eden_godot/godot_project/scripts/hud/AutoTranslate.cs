@@ -28,7 +28,7 @@ public partial class AutoTranslate : Node
 
     private void OnAdded(Node n)
     {
-        if (n is Label or BaseButton or LineEdit or TabContainer)
+        if (n is Label or BaseButton or LineEdit or TabContainer or RichTextLabel)
             Callable.From(() => Apply(n)).CallDeferred();
     }
 
@@ -36,6 +36,7 @@ public partial class AutoTranslate : Node
     {
         Label l => l.Text,
         Button b => b.Text,
+        RichTextLabel r => r.Text,
         _ => null,
     };
 
@@ -43,9 +44,33 @@ public partial class AutoTranslate : Node
     {
         if (n is Label l) l.Text = t;
         else if (n is Button b) b.Text = t;
+        else if (n is RichTextLabel r) r.Text = t;
     }
 
     private static readonly HashSet<string> _missLogged = new();
+
+    /// <summary>Texte multi-lignes (RichTextLabel CEGUI) : traduit
+    /// la chaîne entière puis, à défaut, chaque ligne non vide.</summary>
+    private static string TranslateLines(string src)
+    {
+        var whole = UiTextEn.Translate(src);
+        if (whole != src || !src.Contains('\n')) return whole;
+        var parts = src.Split('\n');
+        for (var i = 0; i < parts.Length; i++)
+        {
+            var line = parts[i].Trim('\r', ' ');
+            var t = UiTextEn.Translate(line);
+            // « libellé：valeur » : traduit le libellé, garde la valeur.
+            if (t == line && line.IndexOf('：') is var k and > 0)
+            {
+                var lab = line[..(k + 1)];
+                var tl = UiTextEn.Translate(lab);
+                if (tl != lab) t = tl + line[(k + 1)..].Replace("次", "");
+            }
+            parts[i] = t;
+        }
+        return string.Join("\n", parts.Where(l => l.Length > 0));
+    }
 
     private static void Miss(string text)
     {
@@ -77,7 +102,7 @@ public partial class AutoTranslate : Node
             // Texte changé par le code depuis la dernière passe : on repart de lui.
             if (n.HasMeta(Src) && cur != UiTextEn.Translate(src) &&
                 cur != src) src = cur;
-            tr = UiTextEn.Translate(src);
+            tr = TranslateLines(src);
             if (tr == src && !n.HasMeta(Src) && n is not LineEdit) Miss(src);
             if (tr != src || n.HasMeta(Src))
             {
@@ -102,6 +127,6 @@ public partial class AutoTranslate : Node
     private void Retranslate()
     {
         foreach (var n in GetTree().Root.FindChildren("*", "", true, false))
-            if (n is Label or BaseButton or LineEdit or TabContainer) Apply(n);
+            if (n is Label or BaseButton or LineEdit or TabContainer or RichTextLabel) Apply(n);
     }
 }

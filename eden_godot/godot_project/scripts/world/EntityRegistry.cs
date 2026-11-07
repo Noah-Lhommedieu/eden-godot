@@ -65,6 +65,10 @@ public partial class RemoteEntity : Node3D
     /// de marche (<see cref="MoveAnimSpeed"/>) et borne l'horizon de
     /// prédiction (<see cref="EntityRegistry.PredictSpeed"/>).</summary>
     public float ObsSpeed;
+    /// <summary>Date du dernier 267 de ruée (flag 0x6a) — poursuite
+    /// connue avant que ObsSpeed ait deux mesures.</summary>
+    public double ChaseAt = -100;
+    public string LastMobMoveAnim = "";
     /// <summary>Dernière position (monde X/Z) et date du 326 précédent
     /// pour <see cref="ObsSpeed"/> ; date 0 = chaîne rompue (arrêt).</summary>
     public Vector2 ObsPrev;
@@ -110,6 +114,29 @@ public partial class RemoteEntity : Node3D
         if (on == Broken) return;
         Broken = on;
         ApplyBrokenKnock();
+        LogMobSkin("change");
+    }
+
+    /// <summary>Diag `[mobskin]` : état broken/patience + visibilité
+    /// réelle des nœuds KNOCK/KNOCKNODE (spawn + changement).</summary>
+    private void LogMobSkin(string why)
+    {
+        if (Kind != 12) return;
+        var knock = "-";
+        if (GetNodeOrNull<Node3D>("Visual") is { } vis)
+        {
+            var l = new System.Collections.Generic.List<string>();
+            foreach (var n in vis.FindChildren("*", "Node3D", true, false))
+            {
+                var nm = n.Name.ToString();
+                if (nm.StartsWith("KNOCK", StringComparison.OrdinalIgnoreCase))
+                    l.Add($"{nm}={(((Node3D)n).IsVisibleInTree() ? "vis" : "hid")}");
+            }
+            if (l.Count > 0) knock = string.Join(",", l);
+        }
+        GD.Print($"[mobskin] id={EntityId} broken={Broken} " +
+            $"patience={Patience}/{MaxPatience} seen={PatienceSeen} " +
+            $"weak=0x{WeakMask:x} knock={knock} ({why})");
     }
 
     /// <summary>Applique la visibilité native des pièces « KNOCK »/
@@ -478,14 +505,23 @@ public partial class RemoteEntity : Node3D
         // un gros boss garde une zone cliquable généreuse.
         if (_pickShape?.Shape is CapsuleShape3D cap)
         {
-            cap.Height = Mathf.Max(top + 0.3f, 1.2f);
-            _pickShape.Position = new Vector3(0f,
-                Mathf.Max(top + 0.3f, 1.2f) * 0.5f, 0f);
+            // Rayon : demi-empreinte horizontale réelle du modèle (AABB),
+            // plancher 1.0 (petits mobs), plafond 0.6*hauteur ; sans ça
+            // un world boss gardait une capsule r=1.0 fixe.
+            var h = Mathf.Max(top + 0.3f, 1.2f);
+            var r = Mathf.Clamp(VisualHalfFootprint(visual), 1.0f,
+                Mathf.Max(1.0f, h * 0.6f));
+            cap.Radius = r;
+            cap.Height = Mathf.Max(h, r * 2f);
+            _pickShape.Position = new Vector3(0f, cap.Height * 0.5f, 0f);
+            if (r > 1.01f)
+                GD.Print($"[pick] {Name} top={top:0.00} r={r:0.00} h={cap.Height:0.00}");
         }
         UpdateHpBar();
         // Mob déjà brisé quand le modèle (re)charge : le natif garde
         // l'état « app culled » sur les nœuds KNOCK — réapplique.
         if (Broken) ApplyBrokenKnock();
+        LogMobSkin("spawn");
     }
 
     /// <summary>Applique la texture variante npc/mob sur les surfaces
@@ -617,6 +653,37 @@ public partial class RemoteEntity : Node3D
     /// (union des AABB des meshes visibles — transforms LOCAUX
     /// composés jusqu'à <paramref name="visual"/>, donc valable avant
     /// que l'entité soit dans l'arbre ; repli ~1.9 m).</summary>
+    /// <summary>Demi-empreinte horizontale (max des demi-étendues X/Z
+    /// de l'union des AABB, repère visual, échelle incluse).</summary>
+    internal static float VisualHalfFootprint(Node3D visual)
+    {
+        float minX = float.MaxValue, maxX = float.MinValue,
+              minZ = float.MaxValue, maxZ = float.MinValue;
+        foreach (var mi in visual
+                     .FindChildren("*", "MeshInstance3D", true, false)
+                     .Cast<MeshInstance3D>())
+        {
+            if (!mi.Visible || mi.Mesh == null) continue;
+            var rel = mi.Transform;
+            for (var p = mi.GetParent(); p != visual &&
+                 p is Node3D n3; p = p.GetParent())
+                rel = n3.Transform * rel;
+            rel = visual.Transform * rel;
+            var aabb = mi.GetAabb();
+            for (var i = 0; i < 8; i++)
+            {
+                var c = aabb.Position + new Vector3(
+                    (i & 1) == 0 ? 0f : aabb.Size.X,
+                    (i & 2) == 0 ? 0f : aabb.Size.Y,
+                    (i & 4) == 0 ? 0f : aabb.Size.Z);
+                var q = rel * c;
+                minX = Mathf.Min(minX, q.X); maxX = Mathf.Max(maxX, q.X);
+                minZ = Mathf.Min(minZ, q.Z); maxZ = Mathf.Max(maxZ, q.Z);
+            }
+        }
+        return maxX < minX ? 0f : Mathf.Max(maxX - minX, maxZ - minZ) * 0.5f;
+    }
+
     internal static float VisualTopHeight(Node3D visual)
     {
         var top = float.MinValue;
@@ -911,6 +978,55 @@ public partial class EntityRegistry : Node3D
     /// MapLoader (TerrainSampler).</summary>
     public Func<float, float, float?>? GroundHeight;
 
+    /// <summary>Sol physique (godotX, godotZ, refY, terrainY) → y,
+    /// évalué en frame physique — cartes sans heightfield (donjons à
+    /// modèle unique) où le z serveur n'est qu'une estimation de
+    /// scène, et vérif des sols OBJ (ponts/dalles) au-dessus du
+    /// terrain. terrainY = NaN quand la case n'a pas de heightfield :
+    /// le résultat n'a alors aucun plancher minimum.</summary>
+    public Func<float, float, float, float, float?>? PhysicsGround;
+
+    /// <summary>Référence verticale des requêtes de sol physiques : Y du
+    /// joueur local. Sur un donjon multi-étages les entités en vue
+    /// partagent presque toujours son étage ; sans elle le rayon part
+    /// de 0 et peut choisir l'étage du bas.</summary>
+    public Func<float>? RefGroundY;
+    private readonly Dictionary<long, float> _groundCache = new();
+    private readonly Queue<(long Key, float X, float Z, float RefY,
+        float TerrainY)> _groundQueue = new();
+    private readonly HashSet<long> _groundPending = new();
+    private static long GroundKey(float x, float z) =>
+        ((long)MathF.Round(x * 2f) << 32) ^ (uint)(int)MathF.Round(z * 2f);
+
+    /// <summary>Résout les requêtes de sol en attente (frame physique) et
+    /// recale les entités déjà posées sur la case.</summary>
+    public override void _PhysicsProcess(double delta)
+    {
+        if (PhysicsGround == null) return;
+        for (var n = 0; n < 48 && _groundQueue.Count > 0; n++)
+        {
+            var (key, x, z, refY, terrainY) = _groundQueue.Dequeue();
+            _groundPending.Remove(key);
+            if (PhysicsGround(x, z, refY, terrainY) is not { } gy)
+                continue;
+            _groundCache[key] = gy;
+            foreach (var e in _entities.Values)
+            {
+                // Correction poussée dans le buffer — écrire Position
+                // ici serait écrasé la frame suivante par Interp.Tick.
+                var p = e.Position;
+                // Entité en marche (326 < 0,6 s) : un Push(Now, position
+                // rendue d'il y a 0,15 s) casserait le segment cur→dst
+                // (à-coup/recul) ; la case résolue sert au 326 suivant.
+                if (e.Interp != null && Now - e.LastMoveAt > 0.6 &&
+                    Mathf.Abs(p.X - x) < 0.8f &&
+                    Mathf.Abs(p.Z - z) < 0.8f &&
+                    Mathf.Abs(p.Y - gy) > 0.05f)
+                    e.Interp.Buffer.Push(Now, p.X, gy, p.Z, e.Rotation.Y);
+            }
+        }
+    }
+
     /// <summary>Résolution modèle+nom d'un mob par monsterId —
     /// injectée par GameScene (Scene.reborn_monsters → c_monster.ini).
     /// Retourne (stem modèle, nom, niveau) ou null.</summary>
@@ -1054,8 +1170,15 @@ public partial class EntityRegistry : Node3D
     {
         var e = GetOrCreate(m.Handle, m.EntityId, m.Kind);
         e.Revive();
-        e.Hp = m.Hp;
-        e.MaxHp = m.MaxHp;
+        // Statue de hall : les i64 hp/maxHp du 298 ne sont PAS la vie
+        // — NotifyStatue y packe les équipements du clone (paires
+        // u16, BornStatue natif). La barre reste sur la valeur
+        // précédente (0 → masquée) ; les 280 attr la corrigent.
+        if ((m.EntityId & 0xFFFF) is not (>= 54901 and <= 54905))
+        {
+            e.Hp = m.Hp;
+            e.MaxHp = m.MaxHp;
+        }
         e.UpdateHpBar();
         if (m.Kind == 12 && m.EntityId != -2537)
         {
@@ -1091,6 +1214,77 @@ public partial class EntityRegistry : Node3D
                 if (label.Length == 0) label = ei.Name;
             }
             if (label.Length == 0) label = "Familiar";
+        }
+        // Statue de hall de famille (kind 12, EntityId 54901-54905 —
+        // désasm client @0x70ce18) : le DisplayName est le CSV natif
+        // de BornStatue « nom,genre,face,hair,weapon,param,classe,
+        // style,hide » (FamilyHallRules.BuildStatueCsv). Le corps est
+        // le même pipeline joueur que le 263 — le champ « genre » du
+        // CSV EST le body code (gender_id DB = nibble haut d'app[28],
+        // AppearanceBlob.Decode : 0=g fille, 1=b garçon, 2=zumi…) ;
+        // les couleurs ne sont pas sur le fil → défauts du blob.
+        else if ((m.EntityId & 0xFFFF) is >= 54901 and <= 54905)
+        {
+            var f = m.DisplayName.Split(',');
+            if (f.Length > 0) label = f[0];
+            if (f.Length >= 9 &&
+                int.TryParse(f[1], out var gender) &&
+                int.TryParse(f[2], out var face) &&
+                int.TryParse(f[3], out var hair) &&
+                int.TryParse(f[6], out var classId) &&
+                int.TryParse(f[7], out var style))
+            {
+                var app = EdenClient.Protocol.AppearanceCodec.Encode(
+                    new(BodyCode: gender, HairStyle: hair,
+                        FaceStyle: face, HairColor: 0, SkinColor: 0,
+                        EyesColor: 0, EyesColor2: 0));
+                var body = CharVisual.BuildBody(app,
+                    classId: classId, style: style);
+                // Équipements du clone — paires u16 packées dans les
+                // champs optionnels du 298 (NotifyStatue natif) :
+                // hp=tête|torse, maxHp=jambes|gants, +0x34=pieds|dos,
+                // +0x38=droite|gauche, +0x48=distance|action.
+                var worn = new Dictionary<int, int>();
+                void EquipAt(int loc, long packed, int shift)
+                {
+                    var id = (int)(packed >> shift) & 0xFFFF;
+                    if (id != 0) worn[loc] = id;
+                }
+                EquipAt(1, m.Hp, 0); EquipAt(2, m.Hp, 16);
+                EquipAt(3, m.MaxHp, 0); EquipAt(4, m.MaxHp, 16);
+                EquipAt(5, m.Unk34, 0); EquipAt(6, m.Unk34, 16);
+                EquipAt(7, m.Unk38, 0); EquipAt(8, m.Unk38, 16);
+                EquipAt(10, m.Unk48, 0);
+                GD.Print($"[registry] statue #{m.EntityId & 0xFFFF} " +
+                    $"label=«{label}» body={(body != null ? "ok" : "NULL")} " +
+                    $"équip={worn.Count} pos=({m.X:F1},{m.Y:F1})");
+                if (body != null)
+                {
+                    e.SetVisual(body, isPlayer: true);
+                    e.ModelStem = CharModelSpec.BodyStem(app);
+                    if (worn.Count > 0)
+                        CharVisual.ApplyEquipment(body, e.ModelStem, worn,
+                            id => Hud.InventoryWindow.LookupDef(id) is { } d
+                                ? (d.Code, d.ModelCode) : ((string, string)?)null,
+                            classId, style);
+                    // Gestuelle figée du clone — action_id natif (high16
+                    // d'Unk48/Unk44) résolu via motion.ini sur le stem du
+                    // corps ; 0 = idle courant (pas de gel). Le client
+                    // natif active la séquence KF figée (CStatue::Init
+                    // @0x775f00 → FUN_00ad4300/FUN_00ad4060).
+                    var actionId = (int)(m.Unk48 >> 16) & 0xFFFF;
+                    if (actionId != 0 &&
+                        Combat.MotionTable.Shared.Lookup(
+                            e.ModelStem, actionId) is { } pose &&
+                        body.FindChildren("*", "Node", true, false)
+                            .OfType<EntityAnimator>()
+                            .FirstOrDefault() is { } stAnim)
+                        stAnim.Freeze(pose);
+                    if (OS.GetCmdlineUserArgs().Contains("--look-log"))
+                        CharVisual.DumpVisible(body,
+                            $"statue#{m.EntityId & 0xFFFF}");
+                }
+            }
         }
         else if (m.Kind == 12)
         {
@@ -1174,7 +1368,7 @@ public partial class EntityRegistry : Node3D
         // FieldZ = DIRECTION (radians), pas une hauteur : le passer
         // comme z faisait « flotter » les PNJ/mobs partout où le
         // terrain est sous 4 m d'écart (z = facing ∈ [0 ; 6,3]).
-        var (gx, gy, gz) = GroundPos(m.X, m.Y, 0f);
+        var (gx, gy, gz) = GroundPos(m.X, m.Y, 0f, e.Position.Y);
         e.Position = new Vector3(gx, gy, gz);
         // Direction : natif slot3 = dir (NPCs). Pour les mobs C# le
         // facing arrive en slot4 — on prend le premier non nul.
@@ -1182,6 +1376,8 @@ public partial class EntityRegistry : Node3D
         e.Rotation = new Vector3(0f, yaw, 0f);
         e.Interp.Buffer.Push(Now, gx, gy, gz, yaw);
         e.MoveSpeed = m.FieldSpeed; // slot natif +0x18 = GetMovement
+        if ((m.EntityId & 0xFFFF) is >= 54901 and <= 54905)
+            GD.Print($"[registry] statue pos ancrée godot={e.Position}");
 
         if (e.DisplayName != label)
         {
@@ -1212,7 +1408,7 @@ public partial class EntityRegistry : Node3D
         var e = GetOrCreate(c.CharId, 0, 0);
         e.Hp = c.Hp;
         e.MaxHp = c.MaxHp;
-        var (gx, gy, gz) = GroundPos(c.X, c.Y, 0f);
+        var (gx, gy, gz) = GroundPos(c.X, c.Y, 0f, e.Position.Y);
         e.Position = new Vector3(gx, gy, gz);
         var yaw = EdenFacingToYaw(c.Facing);
         e.Rotation = new Vector3(0f, yaw, 0f);
@@ -1246,6 +1442,58 @@ public partial class EntityRegistry : Node3D
     private static readonly bool HitDistDiag =
         System.Environment.GetEnvironmentVariable("EDEN_HIT_DIST") == "1";
 
+    /// <summary>EDEN_MOBMOVE_DIAG=1 : logue <c>[mobmove]</c> — par 326 de
+    /// mob : dt entre arrivées, latence file principale, pas cur→cur,
+    /// écart cur serveur / position rendue (snap), distance dst ; par
+    /// frame : saut de position rendue &gt; 1,2 u (téléport) et mob en
+    /// « moving » immobile &gt; 120 ms (gel). À lancer sur
+    /// <c>//goto 155 56</c> (S717) avec des mobs Lv53.</summary>
+    private static readonly bool MobMoveDiag =
+        System.Environment.GetEnvironmentVariable("EDEN_MOBMOVE_DIAG") == "1";
+
+    private readonly Dictionary<uint, (double At, Vector2 Cur)> _diagPkt = new();
+    private readonly Dictionary<uint, (Vector3 Pos, double StillSince)> _diagFrame = new();
+
+    private void DiagMobMovePacket(RemoteEntity e, ZoneMovePrediction m)
+    {
+        var h = (uint)m.Handle;
+        var at = m.ArrivalSec > 0 ? m.ArrivalSec : Now;
+        var (gx, _, gz) = GroundPos(m.CurPos.X, m.CurPos.Y, 0f, e.Position.Y);
+        var cur = new Vector2(gx, gz);
+        var dt = -1.0; var step = -1f;
+        if (_diagPkt.TryGetValue(h, out var prev))
+        { dt = at - prev.At; step = cur.DistanceTo(prev.Cur); }
+        _diagPkt[h] = (at, cur);
+        var rendered = new Vector2(e.Position.X, e.Position.Z);
+        var dstDist = m.DstPos is { } d
+            ? new Vector2(d.X, d.Y).DistanceTo(
+                new Vector2(m.CurPos.X, m.CurPos.Y)) : 0f;
+        GD.Print($"[mobmove] pkt h=0x{h:x8} dt={dt * 1000:F0}ms " +
+            $"lat={(Now - at) * 1000:F0}ms step={step:F2} " +
+            $"snap={cur.DistanceTo(rendered):F2} dst={dstDist:F2} " +
+            $"spdObs={e.ObsSpeed:F1} spdAnn={e.MoveSpeed:F1} " +
+            $"buf={e.Interp.Buffer.Count}");
+    }
+
+    private void DiagMobMoveFrame(RemoteEntity e, uint h)
+    {
+        var p = e.Position;
+        if (_diagFrame.TryGetValue(h, out var f))
+        {
+            var jump = new Vector2(p.X - f.Pos.X, p.Z - f.Pos.Z).Length();
+            if (jump > 1.2f)
+                GD.Print($"[mobmove] JUMP h=0x{h:x8} {jump:F2}u en 1 frame");
+            var moved = jump > 0.004f;
+            var still = moved ? 0.0 : (f.StillSince > 0 ? f.StillSince : Now);
+            if (!moved && e.Animator is { InputMoving: true } &&
+                Now - still > 0.12 && Now - still < 0.135)
+                GD.Print($"[mobmove] FREEZE h=0x{h:x8} immobile " +
+                    $"{(Now - still) * 1000:F0}ms alors que InputMoving");
+            _diagFrame[h] = (p, still);
+        }
+        else _diagFrame[h] = (p, 0);
+    }
+
     /// <summary>326 MovePrediction — mouvement interpolé d'une entité.
     /// Positions ×16. Sémantique native : le client marche LUI-MÊME
     /// de cur vers dst à la vitesse de l'entité (MobWander n'émet
@@ -1264,14 +1512,20 @@ public partial class EntityRegistry : Node3D
     {
         if (!_entities.TryGetValue((uint)m.Handle, out var e) || e.Dying)
             return;
+        if (MobMoveDiag && e.Kind != 0) DiagMobMovePacket(e, m);
+        // Horodatage = arrivée réseau (pas le passage dans la file
+        // principale) ; garde-fou si le drain a pris > 1 s de retard.
+        var now = m.ArrivalSec > 0 && Now - m.ArrivalSec < 1.0
+            ? m.ArrivalSec : Now;
         var yaw = EdenFacingToYaw(m.FacingFloat);
-        var (gx, gy, gz) = GroundPos(m.CurPos.X, m.CurPos.Y, 0f);
+        var (gx, gy, gz) = GroundPos(m.CurPos.X, m.CurPos.Y, 0f,
+            e.Position.Y);
         var dst = m.DstPos;
         var moving = dst.HasValue &&
             (dst.Value.X != m.CurPos.X || dst.Value.Y != m.CurPos.Y);
         if (moving && dst is { } d)
         {
-            var (dx, dy, dz) = GroundPos(d.X, d.Y, 0f);
+            var (dx, dy, dz) = GroundPos(d.X, d.Y, 0f, e.Position.Y);
             var dist = Mathf.Sqrt((dx - gx) * (dx - gx) +
                 (dz - gz) * (dz - gz));
             var speed = PredictSpeed(e);
@@ -1285,15 +1539,15 @@ public partial class EntityRegistry : Node3D
                 GD.Print($"[facing] h=0x{m.Handle:x8} flag={m.Flag} " +
                     $"ecart={Mathf.RadToDeg(fw.AngleTo(mv)):F1}°");
             }
-            e.Interp.Buffer.PushMovement(Now, gx, gy, gz, yaw,
-                Now + dist / speed, dx, dy, dz);
+            e.Interp.Buffer.PushMovement(now, gx, gy, gz, yaw,
+                now + dist / speed, dx, dy, dz);
         }
         else
         {
-            e.Interp.Buffer.Push(Now, gx, gy, gz, yaw);
+            e.Interp.Buffer.Push(now, gx, gy, gz, yaw);
         }
-        e.LastMoveAt = Now;
-        ObserveSpeed(e, moving, gx, gz);
+        e.LastMoveAt = now;
+        ObserveSpeed(e, moving, gx, gz, now);
         if (e.Animator != null)
         {
             e.Animator.InputMoving = moving;
@@ -1303,6 +1557,7 @@ public partial class EntityRegistry : Node3D
             if (moving)
             {
                 var anim = DirectionalLocomotion.AnimForFlag(m.Flag);
+                if (e.Kind != 0) anim = MobMoveAnim(e, anim, now);
                 e.Animator.MoveAnim = anim;
                 if (e.Animator.RideMount is { } ma &&
                     GodotObject.IsInstanceValid(ma))
@@ -1311,6 +1566,31 @@ public partial class EntityRegistry : Node3D
                         DirectionalLocomotion.RecordFromFlag(m.Flag));
             }
         }
+    }
+
+    /// <summary>Marche (move01) ou course (move02) d'un mob. Natif
+    /// (client_game @0x00781b20, choix de l'action de déplacement) : si
+    /// l'état « combat » de l'entité (+0x84) est posé ET que le .kfm a
+    /// l'action 102 (<c>FUN_00735690(0x66)</c>) → 102 (move02), sinon 101
+    /// (move01). Le serveur ne relaie pas cet état dans le 326 (Flag
+    /// identique) : on le déduit de ce que voit le client — ruée 267
+    /// (flag 0x6a) ou vitesse observée nettement au-dessus de la vitesse
+    /// d'errance annoncée (RoamSpeed au 298, BattleSpeed en
+    /// poursuite). Repli move01 si le modèle n'a pas de move02.</summary>
+    private static string MobMoveAnim(RemoteEntity e, string anim,
+        double now)
+    {
+        if (anim != "move01" || e.Animator is not { } a) return anim;
+        var roam = e.MoveSpeed > 0.5f ? e.MoveSpeed : 2f;
+        var chasing = e.ObsSpeed > 0f
+            ? e.ObsSpeed > roam * 1.4f + 0.3f
+            : now - e.ChaseAt < 1.0;
+        var pick = chasing && a.Has("move02") ? "move02" : anim;
+        if (MobMoveDiag && pick != e.LastMobMoveAnim)
+            GD.Print($"[mobanim] h=0x{e.Handle:x8} {pick} " +
+                $"obs={e.ObsSpeed:F1} roam={roam:F1}");
+        e.LastMobMoveAnim = pick;
+        return pick;
     }
 
     /// <summary>Vitesse utilisée pour l'horizon de prédiction des
@@ -1330,18 +1610,24 @@ public partial class EntityRegistry : Node3D
     /// 326 et règle la vitesse de lecture des anims de marche du joueur
     /// distant (cavalier + monture) comme pour le joueur local : bonus =
     /// (vitesse / vitesse à pied de base − 1) × 100.</summary>
-    private void ObserveSpeed(RemoteEntity e, bool moving, float gx, float gz)
+    private void ObserveSpeed(RemoteEntity e, bool moving, float gx, float gz,
+        double now)
     {
         if (!moving) { e.ObsPrevAt = 0; return; }
         if (e.ObsPrevAt > 0)
         {
-            var dt = Now - e.ObsPrevAt;
+            var dt = now - e.ObsPrevAt;
             var d = new Vector2(gx, gz).DistanceTo(e.ObsPrev);
             if (dt is > 0.02 and < 0.8 && d > 0.02f)
                 e.ObsSpeed = MoveAnimSpeed.Smooth(e.ObsSpeed, (float)(d / dt));
+            else if (dt >= 0.8)
+                // Chaîne rompue (fin de poursuite → errance à RoamSpeed) :
+                // une ObsSpeed périmée (7 u/s) faisait marcher le wander
+                // trop vite puis figer en bout de segment.
+                e.ObsSpeed = 0f;
         }
         e.ObsPrev = new Vector2(gx, gz);
-        e.ObsPrevAt = Now;
+        e.ObsPrevAt = now;
         if (e.ObsSpeed <= 0f || e.Animator == null) return;
         var ma = e.Animator.RideMount is { } m &&
                  GodotObject.IsInstanceValid(m) ? m : null;
@@ -1363,7 +1649,8 @@ public partial class EntityRegistry : Node3D
     {
         if (!_entities.TryGetValue((uint)m.Handle, out var e) || e.Dying)
             return;
-        var (gx, gy, gz) = GroundPos(m.X, m.Y, 0f);
+        var (gx, gy, gz) = GroundPos(m.X, m.Y, 0f, e.Position.Y);
+        if (e.Kind != 0 && m.Flag == 0x6a) e.ChaseAt = Now;
         if (e.Interp.Buffer.SampleAt(Now, out var px, out var py,
                 out var pz, out _))
         {
@@ -1403,7 +1690,7 @@ public partial class EntityRegistry : Node3D
     {
         using var _pt = EdenClient.Perf.PerfTrace.Scope($"seeTreasure#{t.ItemId}");
         var e = GetOrCreate(t.Handle, t.ItemId, 0);
-        var (gx, gy, gz) = GroundPos(t.X, t.Y, 0f);
+        var (gx, gy, gz) = GroundPos(t.X, t.Y, 0f, e.Position.Y);
         e.Position = new Vector3(gx, gy, gz);
         // Plan 03 : libellé = nom d'item résolu (FR/EN via t_item) ;
         // repli « treasure#id » repris par GameScene si la table
@@ -1482,6 +1769,7 @@ public partial class EntityRegistry : Node3D
     /// <summary>Vide le registre (sortie de node / déconnexion).</summary>
     public void Clear()
     {
+        _groundCache.Clear(); _groundQueue.Clear(); _groundPending.Clear();
         _pendingVisuals.Clear();
         foreach (var e in _entities.Values) e.QueueFree();
         _entities.Clear();
@@ -1818,6 +2106,7 @@ public partial class EntityRegistry : Node3D
     /// principal) via la file <see cref="_netPending"/>.</summary>
     public override void _Process(double delta)
     {
+        using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.Registry");
         if (_session == null && SessionCarry.Session is { } s)
             BindSession(s);
         {
@@ -1863,6 +2152,9 @@ public partial class EntityRegistry : Node3D
             foreach (var e in _entities.Values)
             {
                 e.Interp?.Tick(delta);
+                if (MobMoveDiag && e.Kind != 0 && e.Animator != null &&
+                    Now - e.LastMoveAt < 2.0)
+                    DiagMobMoveFrame(e, e.Handle);
                 if (e.Animator != null)
                 {
                     // Pas de trame d'arrêt serveur : passé 0,45 s sans 326
@@ -1972,18 +2264,53 @@ public partial class EntityRegistry : Node3D
     /// absent/nul on snappe le terrain via <see cref="GroundHeight"/>.
     /// Dans tous les cas l'entité ne descend JAMAIS sous le terrain :
     /// le z serveur est parfois périmé (spawn 298 sous la map —
-    /// symptôme H2), on borne Y ≥ hauteur sol.</summary>
+    /// symptôme H2), on borne Y ≥ hauteur sol. <paramref name="refY"/>
+    /// = Y courant de l'entité (continuité d'étage) ; 0 (spawn) →
+    /// Y du joueur local via <see cref="RefGroundY"/>.</summary>
     private (float X, float Y, float Z) GroundPos(float ex, float ey,
-        float ez)
+        float ez, float refY = 0f)
     {
         var g = WorldConv.ToGodot(ex, ey, ez);
         // M10 : le z serveur dérive du heightfield (PNJ flottants ou
         // enterrés) — écart ≤ 4 m = erreur de donnée, on recale ; plus
         // haut = plateforme / pont / volant, on garde le z serveur.
-        if (GroundHeight != null &&
-            GroundHeight(g.X, g.Z) is { } h &&
-            (ez == 0f || g.Y < h || g.Y - h <= 4f))
-            g.Y = h;
+        var terrainH = GroundHeight?.Invoke(g.X, g.Z);
+        if (terrainH is { } h)
+        {
+            if (ez == 0f || g.Y < h || g.Y - h <= 4f) g.Y = h;
+        }
+        if (PhysicsGround != null)
+        {
+            // Sol physique résolu en frame physique, mis en cache par
+            // case : donjons sans heightfield (terrain absent) ET
+            // vérification des sols OBJ au-dessus du terrain (ponts,
+            // dalles — le heightfield seul pose l'entité SOUS la
+            // structure, symptôme « entité sous la map »).
+            var key = GroundKey(g.X, g.Z);
+            if (_groundCache.TryGetValue(key, out var cy)) g.Y = cy;
+            else
+            {
+                // Case pas encore résolue (frame physique à venir), sans
+                // heightfield : g.Y valait 0 (ez=0) → la destination
+                // d'un 326 était poussée au niveau 0 et le mob, qui
+                // interpole Y de cur vers dst, s'ENFONÇAIT sous le sol
+                // pendant tout le trajet (invisible en marche, visible à
+                // l'arrêt une fois cur résolu). Continuité d'étage :
+                // on garde le Y courant de l'entité en attendant.
+                if (terrainH == null && ez == 0f && refY != 0f)
+                    g.Y = refY;
+                if (_groundPending.Add(key))
+                // Référence d'étage : le z wire quand il est réel
+                // (ez≠0 — la zone le résout depuis la scène), sinon le
+                // plancher du joueur local (même salle la plupart du
+                // temps) ; g.Y = terrain-snappé en dernier recours.
+                _groundQueue.Enqueue((key, g.X, g.Z,
+                    refY != 0f ? refY
+                        : ez != 0f ? g.Y
+                        : (RefGroundY?.Invoke() ?? g.Y),
+                    terrainH ?? float.NaN));
+            }
+        }
         return (g.X, g.Y, g.Z);
     }
 

@@ -242,6 +242,17 @@ public sealed partial class ZoneEntryFlow
                     (int)st.CharId, st.CharName ?? "", st.Level,
                     (int)Math.Min(st.AchievementTotalPoint,
                         int.MaxValue), st.AchievementGroups));
+        // Succès famille — SetAchievement natif appelle
+        // CFamily::UpdataAchievement (mission @0x081be030) quand
+        // exec+0xb0 (family_id) résout : upsert family_achievement
+        // (clé GroupKey), compteurs, spell_point (si elfking),
+        // family_log type 4, broadcast 67 flag=0 aux membres.
+        // Chez nous le monde applique via cette commande ZW.
+        if (gained != 0 && _world.Connected
+            && _services.Guilds.GetGuildOf((int)st.CharId) is not null)
+            await _world.SendTextCommandAsync(
+                $"family_achievement {st.CharId} {achId} {def.Type} " +
+                $"{def.GroupKey} {gained}", token);
         // Récompenses au franchissement du seuil col9 (une seule fois
         // par succès : old < seuil <= new).
         if (def.RewardThreshold > 0 && oldPoint < def.RewardThreshold

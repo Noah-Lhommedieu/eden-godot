@@ -286,6 +286,7 @@ Les anciennes bases (`edenfr`, `edenfr_*`, `fn*`) sont **migrées puis supprimé
 - **Chaque ligne se lit seule** : à côté de chaque identifiant de relation, une colonne de **libellé redondante en clair** maintenue par la base (colonne générée/trigger) — ex. `craft_recipe(recipe_id, product_item_id, product_name_fr, plan_item_id, plan_name_fr, work_level, success_percent, …)` ; `monster_drop(monster_id, monster_name_fr, item_id, item_name_fr, drop_percent)`. Les noms de tables et de colonnes sont français-lisibles en anglais technique cohérent (convention unique documentée : `snake_case`, singulier, suffixes `_id`, `_percent`, `_seconds`, `_silver`).
 - **Vues de lecture pour l'humain** : `v_item_obtention`, `v_dungeon_overview`, `v_guild_city_status`… (jointures déjà résolues). Un administrateur qui ouvre `psql` ou un outil SQL **comprend ce qu'il lit** sans suivre trois jointures.
 - **Documentation obligatoire et vérifiée** : `COMMENT ON TABLE` et `COMMENT ON COLUMN` pour **toutes** les tables et colonnes (rôle, unité, source native, valeurs possibles) ; `tools/db/doc-lint` échoue si un commentaire manque, si une table n'est référencée par aucun code **ni** par une vue/une fonction déclarée, ou si un nom n'est pas conforme. Document généré `docs/reference/DB-SCHEMA.md` à chaque release (dictionnaire de données : table, colonne, type, commentaire, source native).
+- **Politique tables mortes / peu utiles (décision 2026-11-07, optimisation technique, éviter l'inutile)** : (1) **morte** (aucun lecteur ni écrivain, vide ou données sans usage) → **supprimée**, sans « au cas où » (sauvegarde `pg_dump` conservée) ; (2) **utile mais peu rentable** (peu de lignes, petit usage, ou doublon d'une autre table) → **optimisée ou migrée** là où elle est rentable : fusion dans une table existante (colonne), déplacement en mémoire/Redis/fichier de configuration, ou transformation en vue/calcul ; (3) **utile** → conservée, renommée clairement, commentée. Aucune table n'est gardée « pour plus tard ». Le lot DB-A produit pour chaque table une ligne `décision ∈ {supprimer, fusionner dans X, migrer vers Redis/config, garder}` avec la justification chiffrée (lignes, lecteurs, écrivains) ; le propriétaire ne tranche que les cas ambigus.
 - **Pas de table morte** : les 71 tables inutilisées sont soit **supprimées** (migration `DROP`, après `pg_dump`), soit **branchées** si la fonctionnalité est voulue (ex. `gm_tool_log` → remplacée par l'audit `admin.audit`). Règle permanente : une table sans lecteur ni écrivain dans le code est refusée par le lint.
 
 **Import et reproductibilité** : `tools/content/seed` lit `corpus/fr-full/data/db` (lecture seule) → `eden_content` ; idempotent ; test « n lignes fichier = n lignes base, hash par table » ; textes en UTF-8 (fin du Big5/CP1252).
@@ -670,7 +671,7 @@ Chaque réponse a été traduite en décision (§1 D11-D17) et en lot. Contradic
 - `ModifierResolver.Resolve(key, ctx) → Resolved { Value, Explain[] }`. **Règles de composition (documentées et testées)** : (a) `Base × Π(multiplicateurs des sources « multiplicateur »)` — config, événement, éphéméride, mode de map, bonus de récompense du donjon multi ×1,5 ; (b) **`× (1 + Σ pourcentages additifs / 100)`** pour les sources « bonus additif » — charmes **et VIP** (cohérent avec le natif : « comme les charmes », les % de charmes se somment) ; (c) `fixer` puis `plafonner` en dernier ; (d) `Explain` liste chaque source et sa contribution (outil admin « pourquoi cette valeur ? » + tests).
 - **Performance** : le résultat est mis en cache **par session et par clé**, invalidé uniquement sur événements (connexion, changement de statut, de map, de `rev` de configuration, minuit/6 h) ; le chemin chaud (kill → EXP) fait une lecture de tableau, **zéro allocation** (contexte struct, pas de LINQ).
 - **VIP dans ce moteur** : `VipSource` renvoie, si `is_vip` : `exp.character +10 %`, `exp.class +10 %`, `exp.awakened_class +10 %` (additifs), `craft.cast_seconds ×0,75`, `craft.duration ×0,75`, `gather.tick_seconds ×0,75`, `gather.durability_cost ×0,75`. Les valeurs viennent de la table `vip.rules` (donnée). Quand le VIP s'arrête, **la source cesse de répondre** : rien à retirer, rien à nettoyer.
-- **Migration des 5 sites** (refonte) : remplacer les formules de `Combat.Rewards.cs`/`ServerConfig.cs` par `Modifiers.Resolve(...)` ; séparer `CpRateBonus` et `WakenCpBonus` (un bonus d'éveil ne s'applique qu'aux classes éveillées, un bonus de classe qu'aux classes normales — **à vérifier dans le natif** `CEC_ItemWakenNpRateUp` avant de changer le comportement) ; supprimer les `case "exppct"` en dur de `ServerConfig` au profit des événements-données.
+- **Migration des 5 sites** (refonte) : remplacer les formules de `Combat.Rewards.cs`/`ServerConfig.cs` par `Modifiers.Resolve(...)` ; séparer `CpRateBonus` et `WakenCpBonus` : **confirmé par le propriétaire (2026-11-07) : le jeu sépare réellement les bonus d'EXP de classe normale (classes 1-20) et de classe éveillée (21-60)** ; un bonus d'éveil ne s'applique qu'aux classes éveillées, un bonus de classe qu'aux classes normales (changement de comportement par rapport à l'addition actuelle `Combat.Rewards.cs:286` : à couvrir par un test et annoncer dans le journal du lot) ; supprimer les `case "exppct"` en dur de `ServerConfig` au profit des événements-données.
 - **Tests (≥ 40)** : composition (multiplicateur seul, additif seul, mixte, plafond), invalidation du cache, VIP actif/inactif/expiré, séparation classe/éveil, charme + VIP additifs, événement + VIP, non-régression : **mêmes résultats qu'avant** pour un joueur sans VIP, sans événement et sans charme (golden sur 10 kills).
 - **Acceptation** : un même kill rapporte l'EXP attendue avec (rien / charme / VIP / charme + VIP / événement + VIP) ; `Explain` imprimé dans le log `[Modifiers]` ; le fichier `Combat.Rewards.cs` n'a plus aucune formule de taux en dur ; retrait du VIP → EXP normale immédiatement au prochain kill.
 
@@ -702,3 +703,74 @@ Chaque réponse a été traduite en décision (§1 D11-D17) et en lot. Contradic
 **Dépendances à traiter AVANT toute suppression** : (1) `tools/graph/graph.sh portage …` indexe `../portage` (garder au moins `portage/eden_godot/godot_project/scripts` et `docs`, ≈ 6 Mo, pour le graphe de référence « équivalent de Y dans l'ancien client ») ; (2) `PlayerController.cs:1566` (captures) ; (3) `tools/legacy-flax/audit/gen_fr_supplements.py:10` et `knowledge/tools/*.py` (chemins en dur, outils d'archive).
 **Autres gisements dans `eden-godot/` (hors demande, à titre d'information)** : `artifacts/corpus-sheets` 7,2 Go, `artifacts/packs` 6,6 Go, `artifacts/corpus-png` 4,1 Go (tous régénérables, ignorés par git) ; `corpus/fr-full-pak-2026-10` 9 Go est le **même contenu** que `portage/corpus/fr-full` (liens physiques) : à ne supprimer qu'avec lui si plus aucun outil ne le cite.
 **Procédure proposée** : (1) sauvegarde externe de `corpus/official` ; (2) corriger les 3 chemins en dur ; (3) lancer un build + `tools/test.sh` ; (4) supprimer dossier par dossier en commençant par `dist`, mesurer `df` après chaque étape ; (5) consigner dans `docs/workflows/`.
+
+---------------------------------------------------------------------------
+## 10. LOT Q — Fondations transverses (qualité de code + possibilités de gameplay)
+---------------------------------------------------------------------------
+**Origine** : proposition validée par le propriétaire (« EXCELLENT pattern de propreté »). **Règle anti-sur-ingénierie** : une abstraction n'existe que si elle a **≥ 2 consommateurs** dans ce plan et un test. Emplacement : `SRV/Eden.Core/Game/Foundation/` (bibliothèque pure, sans Godot ni réseau). Ordre et dépendances : `PLAN-ACTION-3-EXECUTION.md` §2-3 (lots Q-A à Q-E).
+
+### Q1 — `GameClock` : deux systèmes de jours, temps injectable
+- **Problème** : « par jour » = minuit local codé en dur (`DungeonEntryRules.DayIndex(DateTime.Now)`, `ZoneEntryFlow.Dungeon.cs:87,135`) ; aucune horloge injectable → impossible de tester 05:59/06:00.
+- **API** : `interface IGameClock { DateTimeOffset Now; int ResetDay(DateTimeOffset t); int ResetDayNow; DateTimeOffset NextReset(DateTimeOffset t); int RealDaysBetween(a, b); }` ; implémentations `SystemGameClock` (production) et `FakeGameClock` (tests, avance à la demande). Heure de reset = clé `Reset.Hour` (6) du registre (Q4), fuseau = celui du serveur (`Reset.TimeZone`).
+- **Deux notions explicites** : *jour de reset* (06:00 → 06:00 : entrées de donjon, quêtes journalières, éphéméride, compteurs) et *jour réel* (durée écoulée IRL : VIP, `due_date` des contrats, objets à durée).
+- **Consommateurs** : entrées de donjon (F2), quêtes journalières, éphéméride (F5), VIP `vip_until` (F4), contrats PNJ, recyclage de ville (`TownRecycleService`), historique (rétention).
+- **Tests** : bascule 05:59/06:00/06:01, changement d'heure d'été, `NextReset`, jours réels sur 30 jours.
+- **Acceptation** : `grep -rn "DateTime.Now\|DateTime.UtcNow" SRV/Eden.Zone SRV/Eden.World SRV/Eden.Mission` ne reste que dans `SystemGameClock` et les journaux ; tous les « par jour » passent par `IGameClock`.
+
+### Q2 — `IRandom` : graine injectable
+- **Problème** : `Random.Shared` / `new Random()` partout (ex. `ZoneEntryFlow.Items.cs` : jet de récolte `Random.Shared.NextDouble()`), donc tests de loot non reproductibles.
+- **API** : `interface IRandom { double NextDouble(); int Next(int minIncl, int maxExcl); bool Chance(double percent); T Pick<T>(IReadOnlyList<T>, weights?); IRandom Fork(string stream); }` ; `SystemRandom` (production), `SeededRandom(seed)` (tests, éphéméride déterministe : `Fork("almanax:2026-11-07")`).
+- **Consommateurs** : tick de récolte (A3), drops (Q7), réussite de craft, rotation de l'éphéméride (F5), loteries/coffres, déplacement aléatoire des mobs (M1).
+- **Tests** : même graine ⇒ même séquence ; distribution proche des taux sur 10 000 tirages (tolérance documentée).
+- **Acceptation** : plus aucun `Random.Shared` dans le code de jeu (test d'architecture Q9) ; un test de loot rejoue exactement un tirage enregistré.
+
+### Q3 — Erreurs typées : codes → textes FR/EN, fin des refus muets
+- **Problème** : refus silencieux (ex. récolte hors aire : `ZoneEntryFlow.QuestItems.cs:33` « refus silencieux », `ZoneEntryFlow.Items.cs:540` texte natif inexact `0xe1c` = « co-monture »), erreurs en `bool`/`null`.
+- **API** : `readonly record struct GameError(string Code, object? Args)` ; `Result<T>` (`Ok(value)` / `Fail(GameError)`) ; **registre de codes** `content/text/errors.tsv` : `GATHER_OUT_OF_AREA | fr: « Vous devez être dans une zone de récolte adaptée à cet outil. » | en: « You must be inside a gathering area suited to this tool. »`. Un `ErrorPresenter` convertit en message client (paquet de texte existant ou texte serveur) dans la langue du joueur.
+- **Règles** : tout refus visible par le joueur a un code ; un test vérifie que **chaque code est présent en FR** (et en EN pour le périmètre ≤ Lv90) ; les journaux contiennent le code, jamais seulement une phrase.
+- **Consommateurs** : récolte (A3), craft (A2), entrées de donjon (F2), admin (D5), VIP, ville de guilde.
+- **Acceptation** : A3 « hors aire » affiche un message FR (capture) et journalise `GATHER_OUT_OF_AREA` ; test « aucun code sans texte ».
+
+### Q4 — Registre de configuration + moteur de modificateurs
+Spécifié en F1 et F6 (§8). Fondation : `ModifierKey`, `IModifierSource`, `ModifierResolver`, cache par session. Livré au lot Q-D.
+
+### Q5 — Bus d'événements de domaine
+- **Problème** : tout nouveau système (succès, quête, compteur, audit) modifie `ZoneEntryFlow` (42 119 lignes, 97 fichiers) : couplage maximal.
+- **API** : `interface IDomainEventBus { void Publish<T>(in T e) where T : IDomainEvent; IDisposable Subscribe<T>(Action<T> h); }` ; événements = `record struct` immuables : `MobKilled{charId, mobId, mapId, byParty}`, `ItemCrafted{…}`, `GatherTick{…}`, `DungeonEntered{…}`, `PlayerDied{charId, mapKind, killerKind}`, `LevelUp{…}`, `QuestCompleted{…}`, `ContentChanged{rev, table, id}`. Livraison **synchrone et ordonnée** sur la boucle de zone (pas de thread supplémentaire), handlers courts, erreur d'un handler journalisée sans casser les autres.
+- **Consommateurs** : succès, quêtes, compteurs d'éphéméride (« tuer 100 mobs d'Angor »), audit, statistiques, déclencheurs (Q6), hot-reload de contenu (B3), panneau admin.
+- **Gain gameplay** : une nouvelle mécanique (« objectif du jour ») = un abonné + des données, sans toucher au combat.
+- **Tests** : ordre de livraison, isolation d'erreur, désabonnement, zéro allocation sur `Publish` (mesure).
+- **Acceptation** : le compteur de kills par type de map est implémenté **uniquement** par abonnement ; `ZoneEntryFlow` n'augmente pas.
+
+### Q6 — Moteur Déclencheur → Condition → Action (données)
+- **Problème** : mobs cachés/déclenchés, événements de scène et scripts de donjon codés au cas par cas (`RunNodeSceneEventAsync`, lecture de sections de scène), non éditables.
+- **Modèle** : `Trigger { id, on: <événement Q5 ou « proximité(rayon) » ou « timer(s) »> , if: Condition[], then: Action[], once?: bool, scope: map|instance }`. **Conditions** : `monster_killed(id|famille, n)`, `player_near(x,y,r)`, `timer_elapsed(s)`, `flag(name)`, `map_kind(x)`, `is_vip`. **Actions** : `spawn_monster(id, x, y)`, `reveal_monster(spawn_id)`, `set_flag`, `send_text(code)`, `open_gate`, `give_item(pool)`, `apply_modifier(key, op, value, duration)`. Format JSON/TSV dans `eden_content.map` (`map_trigger`) ; **pas de langage de script** (sécurité, éditabilité, diff, hot-reload).
+- **Consommateurs** : M1 (mobs « cachés sous la map » révélés par proximité ou par la mort d'un autre mob, ex. Rage Cap), éphéméride (`quand/alors`, F5), quêtes à conditions, événements de scène existants (à migrer).
+- **Tests** : table de scénarios (kill A ⇒ spawn B ; proximité ⇒ reveal ; once) ; reprise après redémarrage de l'instance.
+- **Acceptation** : le donjon Rage Cap (boss final après un kill précis) fonctionne **par données** ; l'éphéméride utilise le même moteur de conditions.
+
+### Q7 — `WeightedPool` / `LootRule` composables
+- **Problème** : plusieurs tirages différents (`c_familycollect` produits `{id, qté, taux%}`, `c_dropitem` pools, coffres, loteries), chacun avec sa grammaire.
+- **API** : `WeightedPool<T>` (entrées `{item, weight|rate, qty{min,max}, condition?}`) ; `LootRule` = ensemble de pools **composables** (« tous les pools indépendants » vs « un seul parmi », bonus de rareté, garantie après N échecs) ; tirage via `IRandom` (Q2) et modificateurs de taux via Q4 (`drop.rate`, `gather.rate`) ; `Explain` du tirage pour les tests/admin.
+- **Consommateurs** : tick de récolte (A3, qté selon rareté), drops de mobs, coffres/sacs de chance, loteries, récompenses d'éphéméride et de trial.
+- **Tests** : distributions, garantie (pity), conditions, composition.
+- **Acceptation** : A3 et un type de coffre utilisent la même classe ; les taux de `c_familycollect` donnent les mêmes probabilités qu'avant (golden).
+
+### Q8 — Modules `IZoneFeature` (étranglement de `ZoneEntryFlow`)
+- **Constat** : `ZoneEntryFlow` = **97 fichiers partiels, 42 119 lignes** ; plus gros fichiers : `Combat.Spells.Resolution` 1 962, `ZoneEntryFlow.cs` 1 357, `Elf` 1 300, `FamilyInstance` 1 296, `Mission` 1 152.
+- **API** : `interface IZoneFeature { string Name; void Register(IFeatureHost host); }` ; `IFeatureHost` expose uniquement : abonnement aux événements Q5, enregistrement de handlers de paquets (NCID), accès à l'horloge/aléatoire/config/contenu, envoi de paquets. Chaque module = **un dossier** `Eden.Zone/Features/<Nom>/` (≤ 400 lignes/fichier), enregistré par DI.
+- **Règle** : **tout nouveau code de jeu est un module** (Gather, Almanax, Vip, ConfigAdmin, AdminRpc, Modifiers glue…) ; le code ancien est migré **quand on le touche**, jamais en bloc.
+- **Garde-fou** : test d'architecture qui échoue si le nombre de lignes de `ZoneEntryFlow*.cs` **augmente** par rapport à la baseline (42 119 / 97 fichiers, `pre-plan3-baseline`).
+- **Acceptation** : Gather (A3) est un module sans aucune ligne ajoutée à `ZoneEntryFlow` hors un point d'enregistrement.
+
+### Q9 — Tests d'architecture
+- **Règles automatiques** (projet `Eden.ArchTests`, exécuté par `tools/test.sh`) : (1) taille de fichier : **code nouveau ≤ 400 lignes**, anciens fichiers gelés à leur taille actuelle (liste de baseline, ne peut que diminuer) ; (2) **pas de `catch {}` vide ni `catch (Exception) {}`** sans journalisation ; (3) **pas de `Random.Shared` / `new Random()` / `DateTime.Now` / `DateTime.UtcNow`** dans le code de jeu (hors implémentations de Q1/Q2) ; (4) séparation : `Eden.Core` ne référence ni Godot ni réseau Zone ; le client Godot ne contient aucune règle de gameplay listée (formules d'EXP, de craft, de récolte) — vérifié par liste d'espaces de noms interdits ; (5) `ZoneEntryFlow` n'augmente pas (Q8) ; (6) tout nom de table/colonne SQL conforme (DB-C) ; (7) pas de nombre magique de gameplay dans `Eden.Zone` (liste de motifs sur les constantes connues).
+- **Seuils relatifs à la baseline** : jamais absolus au départ (sinon tout échoue) ; la baseline ne peut que se réduire.
+- **Acceptation** : le test échoue sur un fichier de 401 lignes ajouté volontairement, sur un `Random.Shared` ajouté, et sur un `ZoneEntryFlow` agrandi (3 tests de non-régression des règles).
+
+| Lot | Contenu | Dép. | Preuves |
+|---|---|---|---|
+| Q-A | Q1 + Q2 + Q3 | — | tests unitaires + `grep` d'acceptation Q1/Q2 |
+| Q-B | Q9 (+ baseline Q8) | — | 3 tests de déclenchement |
+| Q-D | Q4 (squelette) | Q-A | voir F1/F6 |
+| Q-E | Q5 + Q6 + Q7, branchés sur A3 et M1 ; Q8 appliqué à Gather | Q-A, Q-D | A3 = module + pool + événement |

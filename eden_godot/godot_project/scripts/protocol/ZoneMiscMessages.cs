@@ -1044,9 +1044,11 @@ public sealed class ZoneClientResetSpell : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientModifyItemInfo — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientModifyItemInfo</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientModifyItemInfo (369) — record complet natif
+/// (<c>CNC_CZ_ClientModifyItemInfo::Serialize</c> zone @0x80cb170) :
+/// <c>color</c> est un <c>i64</c>, la queue est <c>[u8][u8]</c>, et
+/// le mode 8 (bind) s'arrête après <c>[u16][s16][u16][u8]</c>.
+/// Champs positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
 public sealed class ZoneClientModifyItemInfo : NetMessage
 {
     public override int Opcode => 369;
@@ -1076,7 +1078,7 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
     public ushort Field22 { get; set; }
     public ushort Field23 { get; set; }
     public ushort Field24 { get; set; }
-    public int Field25 { get; set; }
+    public long Field25 { get; set; }
     public ushort Field26 { get; set; }
     public uint Field27 { get; set; }
     public ushort Field28 { get; set; }
@@ -1097,9 +1099,6 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
     public ushort Field43 { get; set; }
     public byte Field44 { get; set; }
     public byte Field45 { get; set; }
-    public ushort Field46 { get; set; }
-    public short Field47 { get; set; }
-    public ushort Field48 { get; set; }
 
     public override void Serialize(BinWriter s)
     {
@@ -1107,6 +1106,13 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
         s.WriteShort((short)Field2);
         s.WriteShort(Field3);
         s.WriteShort((short)Field4);
+        if (Field1 == 8)
+        {
+            // Mode 8 (bind) : 3 champs + octet de queue, rien d'autre
+            // (Serialize natif @0x80cb170).
+            s.WriteByte(Field45);
+            return;
+        }
         s.WriteByte(Field5);
         s.WriteShort(Field6);
         s.WriteShort(Field7);
@@ -1127,7 +1133,7 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
         s.WriteShort((short)Field22);
         s.WriteShort((short)Field23);
         s.WriteShort((short)Field24);
-        s.WriteInt(Field25);
+        s.WriteLong(Field25);
         s.WriteShort((short)Field26);
         s.WriteInt((int)Field27);
         s.WriteShort((short)Field28);
@@ -1148,9 +1154,6 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
         s.WriteShort((short)Field43);
         s.WriteByte(Field44);
         s.WriteByte(Field45);
-        s.WriteShort((short)Field46);
-        s.WriteShort(Field47);
-        s.WriteShort((short)Field48);
     }
 
     public override void Deserialize(BinReader s)
@@ -1159,6 +1162,11 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
         Field2 = (ushort)s.ReadShort();
         Field3 = s.ReadShort();
         Field4 = (ushort)s.ReadShort();
+        if (Field1 == 8)
+        {
+            Field45 = s.ReadByte();
+            return;
+        }
         Field5 = s.ReadByte();
         Field6 = s.ReadShort();
         Field7 = s.ReadShort();
@@ -1179,7 +1187,7 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
         Field22 = (ushort)s.ReadShort();
         Field23 = (ushort)s.ReadShort();
         Field24 = (ushort)s.ReadShort();
-        Field25 = s.ReadInt();
+        Field25 = s.ReadLong();
         Field26 = (ushort)s.ReadShort();
         Field27 = (uint)s.ReadInt();
         Field28 = (ushort)s.ReadShort();
@@ -1200,9 +1208,6 @@ public sealed class ZoneClientModifyItemInfo : NetMessage
         Field43 = (ushort)s.ReadShort();
         Field44 = s.ReadByte();
         Field45 = s.ReadByte();
-        Field46 = (ushort)s.ReadShort();
-        Field47 = s.ReadShort();
-        Field48 = (ushort)s.ReadShort();
     }
 }
 
@@ -2937,57 +2942,42 @@ public sealed class ZoneClientEnterFamilyBuilding : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientFamilyContainerData — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientFamilyContainerData</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientFamilyContainerData (484, S→C) — contenu
+/// d'un conteneur de hall familial (émis après 483 ou 132, puis après
+/// chaque mutation 130/131). Format prouvé par Serialize @0x81e7b40 +
+/// ctor @0x8578f20, miroir
+/// <c>FamilyPackets.FamilyContainerData</c> :
+/// <code>[s16 type][s16 container_index][u16 n] puis par item :
+///   [s16 loc][i32 item_tid][i32 tid][s16 item_type][s16 durability]
+///   [s16 level][u32 exp][u32 due_date][u32 aux(0)]</code>
+/// La classe générée aplatissait le vecteur — codec dédié.</summary>
 public sealed class ZoneClientFamilyContainerData : NetMessage
 {
     public override int Opcode => 484;
     public override string Name => "CNC_CZ_ClientFamilyContainerData";
 
-    public short Field1 { get; set; }
-    public short Field2 { get; set; }
-    public ushort Field3 { get; set; }
-    public short Field4 { get; set; }
-    public int Field5 { get; set; }
-    public int Field6 { get; set; }
-    public short Field7 { get; set; }
-    public short Field8 { get; set; }
-    public short Field9 { get; set; }
-    public uint Field10 { get; set; }
-    public uint Field11 { get; set; }
-    public uint Field12 { get; set; }
+    /// <summary>Un item/bâtiment du conteneur.</summary>
+    public readonly record struct Item(short Loc, int ItemTid,
+        int Tid, short ItemType, short Durability, short Level,
+        int Exp, int DueDate, int Aux);
 
-    public override void Serialize(BinWriter s)
-    {
-        s.WriteShort(Field1);
-        s.WriteShort(Field2);
-        s.WriteShort((short)Field3);
-        s.WriteShort(Field4);
-        s.WriteInt(Field5);
-        s.WriteInt(Field6);
-        s.WriteShort(Field7);
-        s.WriteShort(Field8);
-        s.WriteShort(Field9);
-        s.WriteInt((int)Field10);
-        s.WriteInt((int)Field11);
-        s.WriteInt((int)Field12);
-    }
+    public short Type { get; private set; }
+    public short Container { get; private set; }
+    public List<Item> Items { get; } = new();
+
+    public override void Serialize(BinWriter s) =>
+        throw new NotSupportedException("S→C");
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadShort();
-        Field2 = s.ReadShort();
-        Field3 = (ushort)s.ReadShort();
-        Field4 = s.ReadShort();
-        Field5 = s.ReadInt();
-        Field6 = s.ReadInt();
-        Field7 = s.ReadShort();
-        Field8 = s.ReadShort();
-        Field9 = s.ReadShort();
-        Field10 = (uint)s.ReadInt();
-        Field11 = (uint)s.ReadInt();
-        Field12 = (uint)s.ReadInt();
+        Type = s.ReadShort();
+        Container = s.ReadShort();
+        Items.Clear();
+        var n = s.ReadUShort();
+        for (var i = 0; i < n; i++)
+            Items.Add(new Item(s.ReadShort(), s.ReadInt(),
+                s.ReadInt(), s.ReadShort(), s.ReadShort(),
+                s.ReadShort(), s.ReadInt(), s.ReadInt(), s.ReadInt()));
     }
 }
 
@@ -3072,60 +3062,49 @@ public sealed class ZoneClientFamilyContainerPutItem : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientFamilyInstanceData — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientFamilyInstanceData</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientFamilyInstanceData (487, S→C) — données du
+/// hall de famille visité (réponse au 132). Format prouvé par
+/// Serialize @0x81e82e0 + construction dans
+/// <c>CNE_CZ_ZoneServerFamilyInstanceGetData::Execute @0x8256ee0</c>,
+/// miroir <c>FamilyPackets.FamilyInstanceData</c> :
+/// <code>[i32 family_id][str nom][s16 level][s16 house_open]
+/// [s16 container_index][u16 n] puis par bâtiment :
+///   [s16 loc][i32 item_tid][i32 tid][s16 item_type]
+///   [s16 durability][s16 level][u32 exp]</code>
+/// La classe générée aplatissait le vecteur — codec dédié.</summary>
 public sealed class ZoneClientFamilyInstanceData : NetMessage
 {
     public override int Opcode => 487;
     public override string Name => "CNC_CZ_ClientFamilyInstanceData";
 
-    public int Field1 { get; set; }
-    public string Field2 { get; set; } = "";
-    public short Field3 { get; set; }
-    public short Field4 { get; set; }
-    public short Field5 { get; set; }
-    public ushort Field6 { get; set; }
-    public short Field7 { get; set; }
-    public int Field8 { get; set; }
-    public int Field9 { get; set; }
-    public short Field10 { get; set; }
-    public short Field11 { get; set; }
-    public short Field12 { get; set; }
-    public uint Field13 { get; set; }
+    /// <summary>Un bâtiment du hall.</summary>
+    public readonly record struct Building(short Loc, int ItemTid,
+        int Tid, short ItemType, short Durability, short Level,
+        int Exp);
 
-    public override void Serialize(BinWriter s)
-    {
-        s.WriteInt(Field1);
-        s.WriteString(Field2);
-        s.WriteShort(Field3);
-        s.WriteShort(Field4);
-        s.WriteShort(Field5);
-        s.WriteShort((short)Field6);
-        s.WriteShort(Field7);
-        s.WriteInt(Field8);
-        s.WriteInt(Field9);
-        s.WriteShort(Field10);
-        s.WriteShort(Field11);
-        s.WriteShort(Field12);
-        s.WriteInt((int)Field13);
-    }
+    public int FamilyId { get; private set; }
+    public string FamilyName { get; private set; } = "";
+    public short Level { get; private set; }
+    public short HouseOpen { get; private set; }
+    public short Container { get; private set; }
+    public List<Building> Buildings { get; } = new();
+
+    public override void Serialize(BinWriter s) =>
+        throw new NotSupportedException("S→C");
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadInt();
-        Field2 = s.ReadString();
-        Field3 = s.ReadShort();
-        Field4 = s.ReadShort();
-        Field5 = s.ReadShort();
-        Field6 = (ushort)s.ReadShort();
-        Field7 = s.ReadShort();
-        Field8 = s.ReadInt();
-        Field9 = s.ReadInt();
-        Field10 = s.ReadShort();
-        Field11 = s.ReadShort();
-        Field12 = s.ReadShort();
-        Field13 = (uint)s.ReadInt();
+        FamilyId = s.ReadInt();
+        FamilyName = s.ReadString();
+        Level = s.ReadShort();
+        HouseOpen = s.ReadShort();
+        Container = s.ReadShort();
+        Buildings.Clear();
+        var n = s.ReadUShort();
+        for (var i = 0; i < n; i++)
+            Buildings.Add(new Building(s.ReadShort(), s.ReadInt(),
+                s.ReadInt(), s.ReadShort(), s.ReadShort(),
+                s.ReadShort(), s.ReadInt()));
     }
 }
 
@@ -3237,174 +3216,144 @@ public sealed class ZoneClientEnterFamilyInstanceCreation : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientFamilyTownQuery — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientFamilyTownQuery</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientFamilyTownQuery (502, S→C) — réponse à la
+/// recherche de villes de guilde (174). <b>17 vecteurs parallèles</b>
+/// <c>[u16 n][elems]</c> — format prouvé par
+/// <c>CNC_CZ_ClientFamilyTownQuery::CNC_ ctor @0x8148b90</c> +
+/// Serialize (zone), miroir
+/// <c>Eden.Core/Game/Family/FamilyPackets.FamilyTownQuery</c> :
+/// <code>
+///  0 i32 famId      1 s16 level       2 str name     3 str leader
+///  4 u32 exp        5 s16 businessTax 6 i32 members  7 s16 houseOpen
+///  8 i32 nb bâtiments/famille
+///  9-16 par bâtiment (total sur toutes les familles) :
+///     s16 loc | i32 itemTid | i32 tid | s16 itemType | s16 durability
+///     | s16 level | u32 exp | u32 dueDate
+/// </code>
+/// La classe générée aplatissait le format — codec dédié.</summary>
 public sealed class ZoneClientFamilyTownQuery : NetMessage
 {
     public override int Opcode => 502;
     public override string Name => "CNC_CZ_ClientFamilyTownQuery";
 
-    public ushort Field1 { get; set; }
-    public int Field2 { get; set; }
-    public ushort Field3 { get; set; }
-    public short Field4 { get; set; }
-    public ushort Field5 { get; set; }
-    public string Field6 { get; set; } = "";
-    public ushort Field7 { get; set; }
-    public string Field8 { get; set; } = "";
-    public ushort Field9 { get; set; }
-    public uint Field10 { get; set; }
-    public ushort Field11 { get; set; }
-    public short Field12 { get; set; }
-    public ushort Field13 { get; set; }
-    public uint Field14 { get; set; }
-    public ushort Field15 { get; set; }
-    public short Field16 { get; set; }
-    public ushort Field17 { get; set; }
-    public uint Field18 { get; set; }
-    public ushort Field19 { get; set; }
-    public short Field20 { get; set; }
-    public ushort Field21 { get; set; }
-    public int Field22 { get; set; }
-    public ushort Field23 { get; set; }
-    public int Field24 { get; set; }
-    public ushort Field25 { get; set; }
-    public short Field26 { get; set; }
-    public ushort Field27 { get; set; }
-    public short Field28 { get; set; }
-    public ushort Field29 { get; set; }
-    public short Field30 { get; set; }
-    public ushort Field31 { get; set; }
-    public uint Field32 { get; set; }
-    public ushort Field33 { get; set; }
+    /// <summary>Bâtiment d'une ville (vecteurs 9-16).</summary>
+    public readonly record struct Building(short Loc, int ItemTid,
+        int Tid, short ItemType, short Durability, short Level,
+        int Exp, int DueDate);
 
-    public override void Serialize(BinWriter s)
-    {
-        s.WriteShort((short)Field1);
-        s.WriteInt(Field2);
-        s.WriteShort((short)Field3);
-        s.WriteShort(Field4);
-        s.WriteShort((short)Field5);
-        s.WriteString(Field6);
-        s.WriteShort((short)Field7);
-        s.WriteString(Field8);
-        s.WriteShort((short)Field9);
-        s.WriteInt((int)Field10);
-        s.WriteShort((short)Field11);
-        s.WriteShort(Field12);
-        s.WriteShort((short)Field13);
-        s.WriteInt((int)Field14);
-        s.WriteShort((short)Field15);
-        s.WriteShort(Field16);
-        s.WriteShort((short)Field17);
-        s.WriteInt((int)Field18);
-        s.WriteShort((short)Field19);
-        s.WriteShort(Field20);
-        s.WriteShort((short)Field21);
-        s.WriteInt(Field22);
-        s.WriteShort((short)Field23);
-        s.WriteInt(Field24);
-        s.WriteShort((short)Field25);
-        s.WriteShort(Field26);
-        s.WriteShort((short)Field27);
-        s.WriteShort(Field28);
-        s.WriteShort((short)Field29);
-        s.WriteShort(Field30);
-        s.WriteShort((short)Field31);
-        s.WriteInt((int)Field32);
-        s.WriteShort((short)Field33);
-    }
+    /// <summary>Une ville de guilde (vecteurs 0-8).</summary>
+    public sealed record Entry(int FamilyId, short Level,
+        string Name, string Leader, int Exp, short BusinessTax,
+        int Members, short HouseOpen, List<Building> Buildings);
+
+    public List<Entry> Entries { get; } = new();
+
+    public override void Serialize(BinWriter s) =>
+        throw new NotSupportedException("S→C");
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = (ushort)s.ReadShort();
-        Field2 = s.ReadInt();
-        Field3 = (ushort)s.ReadShort();
-        Field4 = s.ReadShort();
-        Field5 = (ushort)s.ReadShort();
-        Field6 = s.ReadString();
-        Field7 = (ushort)s.ReadShort();
-        Field8 = s.ReadString();
-        Field9 = (ushort)s.ReadShort();
-        Field10 = (uint)s.ReadInt();
-        Field11 = (ushort)s.ReadShort();
-        Field12 = s.ReadShort();
-        Field13 = (ushort)s.ReadShort();
-        Field14 = (uint)s.ReadInt();
-        Field15 = (ushort)s.ReadShort();
-        Field16 = s.ReadShort();
-        Field17 = (ushort)s.ReadShort();
-        Field18 = (uint)s.ReadInt();
-        Field19 = (ushort)s.ReadShort();
-        Field20 = s.ReadShort();
-        Field21 = (ushort)s.ReadShort();
-        Field22 = s.ReadInt();
-        Field23 = (ushort)s.ReadShort();
-        Field24 = s.ReadInt();
-        Field25 = (ushort)s.ReadShort();
-        Field26 = s.ReadShort();
-        Field27 = (ushort)s.ReadShort();
-        Field28 = s.ReadShort();
-        Field29 = (ushort)s.ReadShort();
-        Field30 = s.ReadShort();
-        Field31 = (ushort)s.ReadShort();
-        Field32 = (uint)s.ReadInt();
-        Field33 = (ushort)s.ReadShort();
+        Entries.Clear();
+        var ids = ReadVec(s, r => r.ReadInt());
+        var levels = ReadVec(s, r => r.ReadShort());
+        var names = ReadVec(s, r => r.ReadString());
+        var leaders = ReadVec(s, r => r.ReadString());
+        var exps = ReadVec(s, r => r.ReadInt());
+        var taxes = ReadVec(s, r => r.ReadShort());
+        var members = ReadVec(s, r => r.ReadInt());
+        var opens = ReadVec(s, r => r.ReadShort());
+        var bcounts = ReadVec(s, r => r.ReadInt());
+        var locs = ReadVec(s, r => r.ReadShort());
+        var itemTids = ReadVec(s, r => r.ReadInt());
+        var tids = ReadVec(s, r => r.ReadInt());
+        var types = ReadVec(s, r => r.ReadShort());
+        var duras = ReadVec(s, r => r.ReadShort());
+        var blevels = ReadVec(s, r => r.ReadShort());
+        var bexps = ReadVec(s, r => r.ReadInt());
+        var dues = ReadVec(s, r => r.ReadInt());
+        var bi = 0;
+        for (var i = 0; i < ids.Count; i++)
+        {
+            var e = new Entry(ids[i],
+                i < levels.Count ? levels[i] : (short)0,
+                i < names.Count ? names[i] : "",
+                i < leaders.Count ? leaders[i] : "",
+                i < exps.Count ? exps[i] : 0,
+                i < taxes.Count ? taxes[i] : (short)0,
+                i < members.Count ? members[i] : 0,
+                i < opens.Count ? opens[i] : (short)0,
+                new List<Building>());
+            var nb = i < bcounts.Count ? bcounts[i] : 0;
+            for (var b = 0; b < nb && bi < locs.Count; b++, bi++)
+                e.Buildings.Add(new Building(locs[bi],
+                    itemTids[bi], tids[bi], types[bi], duras[bi],
+                    blevels[bi], bexps[bi], dues[bi]));
+            Entries.Add(e);
+        }
+    }
+
+    private static List<T> ReadVec<T>(BinReader s,
+        Func<BinReader, T> read)
+    {
+        var n = s.ReadUShort();
+        var v = new List<T>(n);
+        for (var i = 0; i < n; i++) v.Add(read(s));
+        return v;
     }
 }
 
-/// <summary>CNC_CZ_ClientFamilyTownMemberQuery — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientFamilyTownMemberQuery</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientFamilyTownMemberQuery (503, S→C) — membres
+/// d'une ville de famille (réponse 175). <b>6 vecteurs parallèles</b>
+/// <c>[u16 n][elems]</c> — format prouvé par
+/// <c>TC_FamilyTownMemberQuery</c> mission @0x820a670, miroir
+/// <c>FamilyPackets.FamilyTownMemberQuery</c> :
+/// <code>
+/// 0 i32 charId  1 str name  2 s16 level  3 u8 rank
+/// 4 s16 nodeId  5 str titres (niveau réponse, pas par membre)
+/// </code>
+/// La classe générée aplatissait le format — codec dédié.</summary>
 public sealed class ZoneClientFamilyTownMemberQuery : NetMessage
 {
     public override int Opcode => 503;
     public override string Name => "CNC_CZ_ClientFamilyTownMemberQuery";
 
-    public ushort Field1 { get; set; }
-    public int Field2 { get; set; }
-    public ushort Field3 { get; set; }
-    public string Field4 { get; set; } = "";
-    public ushort Field5 { get; set; }
-    public short Field6 { get; set; }
-    public ushort Field7 { get; set; }
-    public byte Field8 { get; set; }
-    public ushort Field9 { get; set; }
-    public short Field10 { get; set; }
-    public ushort Field11 { get; set; }
-    public string Field12 { get; set; } = "";
+    /// <summary>Un membre listé (vecteurs 0-4).</summary>
+    public sealed record Entry(int CharacterId, string Name,
+        short Level, byte Rank, short NodeId);
 
-    public override void Serialize(BinWriter s)
-    {
-        s.WriteShort((short)Field1);
-        s.WriteInt(Field2);
-        s.WriteShort((short)Field3);
-        s.WriteString(Field4);
-        s.WriteShort((short)Field5);
-        s.WriteShort(Field6);
-        s.WriteShort((short)Field7);
-        s.WriteByte(Field8);
-        s.WriteShort((short)Field9);
-        s.WriteShort(Field10);
-        s.WriteShort((short)Field11);
-        s.WriteString(Field12);
-    }
+    public List<Entry> Entries { get; } = new();
+    /// <summary>Titres de la famille (vecteur 5, niveau réponse).</summary>
+    public List<string> Titles { get; } = new();
+
+    public override void Serialize(BinWriter s) =>
+        throw new NotSupportedException("S→C");
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = (ushort)s.ReadShort();
-        Field2 = s.ReadInt();
-        Field3 = (ushort)s.ReadShort();
-        Field4 = s.ReadString();
-        Field5 = (ushort)s.ReadShort();
-        Field6 = s.ReadShort();
-        Field7 = (ushort)s.ReadShort();
-        Field8 = s.ReadByte();
-        Field9 = (ushort)s.ReadShort();
-        Field10 = s.ReadShort();
-        Field11 = (ushort)s.ReadShort();
-        Field12 = s.ReadString();
+        Entries.Clear();
+        Titles.Clear();
+        var ids = ReadVec(s, r => r.ReadInt());
+        var names = ReadVec(s, r => r.ReadString());
+        var levels = ReadVec(s, r => r.ReadShort());
+        var ranks = ReadVec(s, r => r.ReadByte());
+        var nodes = ReadVec(s, r => r.ReadShort());
+        var titles = ReadVec(s, r => r.ReadString());
+        for (var i = 0; i < ids.Count; i++)
+            Entries.Add(new Entry(ids[i],
+                i < names.Count ? names[i] : "",
+                i < levels.Count ? levels[i] : (short)0,
+                i < ranks.Count ? ranks[i] : (byte)0,
+                i < nodes.Count ? nodes[i] : (short)0));
+        Titles.AddRange(titles);
+    }
+
+    private static List<T> ReadVec<T>(BinReader s,
+        Func<BinReader, T> read)
+    {
+        var n = s.ReadUShort();
+        var v = new List<T>(n);
+        for (var i = 0; i < n; i++) v.Add(read(s));
+        return v;
     }
 }
 
@@ -3465,159 +3414,139 @@ public sealed class ZoneClientUpdateLottery : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientBuyBackList — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientBuyBackList</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>NCID 512 CNC_CZ_ClientBuyBackList — file des items
+/// rachetables (vendus au shop PNJ cette session). Wire SoA prouvé par
+/// le codec serveur <c>BuybackPackets.BuildClientBuyBackList</c>
+/// (Serialize natif zone @0x8344xxx + remplissage mission TC_*BuyBackList) :
+/// <c>[u8 flag][u16 n][n×record][s16 terminal]</c>.
+///   flag=3 « ouverture » (corps vide — le natif ne remplit pas) ;
+///   flag=1 « contenu » — APPEND : le client ajoute chaque entrée à
+///     sa file (jamais de clear — renvoyer la liste complète duplique) ;
+///   flag=2 « retrait » — count=0, le s16 terminal = index racheté.
+/// </summary>
 public sealed class ZoneClientBuyBackList : NetMessage
 {
     public override int Opcode => 512;
     public override string Name => "CNC_CZ_ClientBuyBackList";
 
-    public byte Field1 { get; set; }
-    public ushort Field2 { get; set; }
-    public ushort Field3 { get; set; }
-    public short Field4 { get; set; }
-    public short Field5 { get; set; }
-    public short Field6 { get; set; }
-    public short Field7 { get; set; }
-    public byte Field8 { get; set; }
-    public short Field9 { get; set; }
-    public short Field10 { get; set; }
-    public short Field11 { get; set; }
-    public short Field12 { get; set; }
-    public short Field13 { get; set; }
-    public short Field14 { get; set; }
-    public short Field15 { get; set; }
-    public string Field16 { get; set; } = "";
-    public short Field17 { get; set; }
-    public short Field18 { get; set; }
-    public short Field19 { get; set; }
-    public short Field20 { get; set; }
-    public short Field21 { get; set; }
-    public short Field22 { get; set; }
-    public short Field23 { get; set; }
-    public short Field24 { get; set; }
-    public short Field25 { get; set; }
-    public short Field26 { get; set; }
-    public short Field27 { get; set; }
-    public short Field28 { get; set; }
-    public short Field29 { get; set; }
-    public int Field30 { get; set; }
-    public ushort Field31 { get; set; }
-    public uint Field32 { get; set; }
-    public ushort Field33 { get; set; }
-    public ushort Field34 { get; set; }
-    public ushort Field35 { get; set; }
-    public ushort Field36 { get; set; }
-    public ushort Field37 { get; set; }
-    public ushort Field38 { get; set; }
-    public short Field39 { get; set; }
-    public uint Field40 { get; set; }
-    public short Field41 { get; set; }
-    public short Field42 { get; set; }
-    public short Field43 { get; set; }
-    public ushort Field44 { get; set; }
-    public ushort Field45 { get; set; }
-    public short Field46 { get; set; }
+    /// <summary>flag=1 — contenu à ajouter (append).</summary>
+    public const byte ContentFlag = 1;
+    /// <summary>flag=2 — retrait du row à l'index terminal.</summary>
+    public const byte RemoveFlag = 2;
+    /// <summary>flag=3 — ouverture vide (pas de remplissage).</summary>
+    public const byte NativeFlag = 3;
+
+    /// <summary>u8 — 1 contenu (append), 2 retrait (index terminal),
+    /// 3 ouverture vide.</summary>
+    public byte Flag { get; set; }
+    /// <summary>s16 terminal — index du row racheté quand Flag==2.</summary>
+    public short RemovedIndex { get; set; } = -1;
+    /// <summary>Entrées rachetables décodées.</summary>
+    public List<BuybackRecord> Entries { get; } = new();
+
+    /// <summary>Un item de la file buyback — champs utiles à la fenêtre
+    /// (le wire transporte tout l'SItemData SoA ; cf. codec serveur).</summary>
+    public sealed record BuybackRecord(
+        int ItemId, int Count, int Strengthen, long DueDate,
+        uint Price, short[] EmbeddedIds, short Combo,
+        short[] ExtraCombos, string Maker)
+    {
+        /// <summary>Slot synthétique pour les tooltips/icônes —
+        /// pas de loc réel (l'item est chez le vendeur).</summary>
+        public InventorySlot AsSlot(int index) => new(
+            -1, index, ItemId, Count, 0, 0, Count, Strengthen)
+        {
+            Meta = new ItemMeta
+            {
+                Embedded = EmbeddedIds, Combo = Combo,
+                ExtraCombos = ExtraCombos
+                    .Select(x => (ushort)x).ToArray(),
+                DueDate = DueDate,
+            },
+        };
+    }
 
     public override void Serialize(BinWriter s)
     {
-        s.WriteByte(Field1);
-        s.WriteShort((short)Field2);
-        s.WriteShort((short)Field3);
-        s.WriteShort(Field4);
-        s.WriteShort(Field5);
-        s.WriteShort(Field6);
-        s.WriteShort(Field7);
-        s.WriteByte(Field8);
-        s.WriteShort(Field9);
-        s.WriteShort(Field10);
-        s.WriteShort(Field11);
-        s.WriteShort(Field12);
-        s.WriteShort(Field13);
-        s.WriteShort(Field14);
-        s.WriteShort(Field15);
-        s.WriteString(Field16);
-        s.WriteShort(Field17);
-        s.WriteShort(Field18);
-        s.WriteShort(Field19);
-        s.WriteShort(Field20);
-        s.WriteShort(Field21);
-        s.WriteShort(Field22);
-        s.WriteShort(Field23);
-        s.WriteShort(Field24);
-        s.WriteShort(Field25);
-        s.WriteShort(Field26);
-        s.WriteShort(Field27);
-        s.WriteShort(Field28);
-        s.WriteShort(Field29);
-        s.WriteInt(Field30);
-        s.WriteShort((short)Field31);
-        s.WriteInt((int)Field32);
-        s.WriteShort((short)Field33);
-        s.WriteShort((short)Field34);
-        s.WriteShort((short)Field35);
-        s.WriteShort((short)Field36);
-        s.WriteShort((short)Field37);
-        s.WriteShort((short)Field38);
-        s.WriteShort(Field39);
-        s.WriteInt((int)Field40);
-        s.WriteShort(Field41);
-        s.WriteShort(Field42);
-        s.WriteShort(Field43);
-        s.WriteShort((short)Field44);
-        s.WriteShort((short)Field45);
-        s.WriteShort(Field46);
+        s.WriteByte(Flag);
+        s.WriteShort((short)Entries.Count);
+        foreach (var e in Entries) WriteRecord(s, e);
+        s.WriteShort(RemovedIndex);
     }
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadByte();
-        Field2 = (ushort)s.ReadShort();
-        Field3 = (ushort)s.ReadShort();
-        Field4 = s.ReadShort();
-        Field5 = s.ReadShort();
-        Field6 = s.ReadShort();
-        Field7 = s.ReadShort();
-        Field8 = s.ReadByte();
-        Field9 = s.ReadShort();
-        Field10 = s.ReadShort();
-        Field11 = s.ReadShort();
-        Field12 = s.ReadShort();
-        Field13 = s.ReadShort();
-        Field14 = s.ReadShort();
-        Field15 = s.ReadShort();
-        Field16 = s.ReadString();
-        Field17 = s.ReadShort();
-        Field18 = s.ReadShort();
-        Field19 = s.ReadShort();
-        Field20 = s.ReadShort();
-        Field21 = s.ReadShort();
-        Field22 = s.ReadShort();
-        Field23 = s.ReadShort();
-        Field24 = s.ReadShort();
-        Field25 = s.ReadShort();
-        Field26 = s.ReadShort();
-        Field27 = s.ReadShort();
-        Field28 = s.ReadShort();
-        Field29 = s.ReadShort();
-        Field30 = s.ReadInt();
-        Field31 = (ushort)s.ReadShort();
-        Field32 = (uint)s.ReadInt();
-        Field33 = (ushort)s.ReadShort();
-        Field34 = (ushort)s.ReadShort();
-        Field35 = (ushort)s.ReadShort();
-        Field36 = (ushort)s.ReadShort();
-        Field37 = (ushort)s.ReadShort();
-        Field38 = (ushort)s.ReadShort();
-        Field39 = s.ReadShort();
-        Field40 = (uint)s.ReadInt();
-        Field41 = s.ReadShort();
-        Field42 = s.ReadShort();
-        Field43 = s.ReadShort();
-        Field44 = (ushort)s.ReadShort();
-        Field45 = (ushort)s.ReadShort();
-        Field46 = s.ReadShort();
+        Entries.Clear();
+        if (s.Remaining < 3) return;
+        Flag = s.ReadByte();
+        var n = s.ReadUShort();
+        for (var i = 0; i < n; i++)
+        {
+            if (!TryReadRecord(s, out var e)) return;
+            Entries.Add(e);
+        }
+        if (s.Remaining >= 2) RemovedIndex = s.ReadShort();
+    }
+
+    /// <summary>Record SoA du 512 — mêmes champs que l'item-record
+    /// mais aplati (ordre prouvé par BuildClientBuyBackList serveur) :
+    /// id, dur/count, identify, +0x34, bind, embedded_amount u8,
+    /// 6×s16 embedded, witchcraft, str maker, 11×s16 combos,
+    /// strengthen, maxdur, i64 due, 20B train, +0x54, u32 price,
+    /// +0x6c, 2×s16 magicbox, 2×u16 energy/star.</summary>
+    private static bool TryReadRecord(BinReader s, out BuybackRecord e)
+    {
+        e = new BuybackRecord(0, 0, 0, 0, 0,
+            new short[6], 0, new short[11], "");
+        if (s.Remaining < 97) return false;
+        var itemId = s.ReadUShort();
+        var count = s.ReadShort();              // durability/count
+        s.ReadShort();                          // identify
+        s.ReadShort();                          // +0x34
+        s.ReadShort();                          // bind
+        s.ReadByte();                           // embedded_amount
+        var emb = new short[6];
+        for (var i = 0; i < 6; i++) emb[i] = s.ReadShort();
+        var combo = s.ReadShort();              // witchcraft/combo
+        var maker = s.ReadString();
+        var extras = new short[11];
+        for (var i = 0; i < 11; i++) extras[i] = s.ReadShort();
+        var strengthen = s.ReadShort();
+        s.ReadShort();                          // cur_maxdurability
+        var due = s.ReadLong();                 // i64 due_date
+        s.ReadBytes(20);                        // CEquipTrainAttrs
+        s.ReadShort();                          // +0x54
+        var price = (uint)s.ReadInt();          // prix de rachat
+        s.ReadShort();                          // +0x6c
+        s.ReadShort(); s.ReadShort();           // magicbox 1-2
+        s.ReadUShort(); s.ReadUShort();         // energy/star
+        e = new BuybackRecord(itemId, count, strengthen, due, price,
+            emb, combo, extras, maker);
+        return true;
+    }
+
+    /// <summary>Ré-écrit un record — miroir de TryReadRecord (utile
+    /// aux tests goldens).</summary>
+    private static void WriteRecord(BinWriter s, BuybackRecord e)
+    {
+        s.WriteUShort((ushort)e.ItemId);
+        s.WriteShort((short)e.Count);
+        s.WriteShort(0); s.WriteShort(0); s.WriteShort(0);
+        s.WriteByte(0);
+        for (var i = 0; i < 6; i++)
+            s.WriteShort(i < e.EmbeddedIds.Length ? e.EmbeddedIds[i] : (short)0);
+        s.WriteShort(e.Combo);
+        s.WriteString(e.Maker);
+        for (var i = 0; i < 11; i++)
+            s.WriteShort(i < e.ExtraCombos.Length ? e.ExtraCombos[i] : (short)0);
+        s.WriteShort((short)e.Strengthen);
+        s.WriteShort(0);
+        s.WriteLong(e.DueDate);
+        s.WriteBytes(new byte[20]);
+        s.WriteShort(0);
+        s.WriteInt((int)e.Price);
+        s.WriteShort(0); s.WriteShort(0); s.WriteShort(0);
+        s.WriteUShort(0); s.WriteUShort(0);
     }
 }
 
@@ -3645,75 +3574,81 @@ public sealed class ZoneClientEnterFamilyTownList : NetMessage
 /// <summary>CNC_CZ_ClientTerritoryQuery — layout porté verbatim du codec serveur
 /// <c>CNC_CZ_ClientTerritoryQuery</c> (Messages/Generated/*.g.cs). Champs
 /// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientTerritoryQuery (515, S→C) — réponse à la
+/// requête territoires 189. Format prouvé par
+/// <c>FamilyPackets.TerritoryQuery</c> (miroir TC_TerritoryDataQuery
+/// natif) : <c>[s16 pad=0]</c> puis <b>8 vecteurs parallèles</b> :
+/// <code>
+///   [u16 n][i32 territory_id ×n]
+///   [u16 m][i32 sched_type][i32 begin][i32 end] ×m
+///   [u16 n][i32 own_family_id ×n]
+///   [u16 n][str name ×n]
+///   [u16 n][s16 owner_level ×n]
+///   [u16 n][u32 time ×n]
+///   [u16 n][s16 state ×n]
+///   [u16 n][u8 flag ×n]
+/// </code>
+/// La classe générée aplatissait le premier exemplaire de chaque
+/// vecteur — codec dédié.</summary>
 public sealed class ZoneClientTerritoryQuery : NetMessage
 {
     public override int Opcode => 515;
     public override string Name => "CNC_CZ_ClientTerritoryQuery";
 
-    public short Field1 { get; set; }
-    public ushort Field2 { get; set; }
-    public int Field3 { get; set; }
-    public ushort Field4 { get; set; }
-    public int Field5 { get; set; }
-    public int Field6 { get; set; }
-    public int Field7 { get; set; }
-    public ushort Field8 { get; set; }
-    public int Field9 { get; set; }
-    public ushort Field10 { get; set; }
-    public string Field11 { get; set; } = "";
-    public ushort Field12 { get; set; }
-    public short Field13 { get; set; }
-    public ushort Field14 { get; set; }
-    public uint Field15 { get; set; }
-    public ushort Field16 { get; set; }
-    public short Field17 { get; set; }
-    public ushort Field18 { get; set; }
-    public byte Field19 { get; set; }
+    /// <summary>Un territoire (ligne i des vecteurs parallèles).</summary>
+    public readonly record struct Entry(int Id, int OwnFamilyId,
+        string Name, short OwnerLevel, uint Time, short State,
+        byte Flag);
 
-    public override void Serialize(BinWriter s)
-    {
-        s.WriteShort(Field1);
-        s.WriteShort((short)Field2);
-        s.WriteInt(Field3);
-        s.WriteShort((short)Field4);
-        s.WriteInt(Field5);
-        s.WriteInt(Field6);
-        s.WriteInt(Field7);
-        s.WriteShort((short)Field8);
-        s.WriteInt(Field9);
-        s.WriteShort((short)Field10);
-        s.WriteString(Field11);
-        s.WriteShort((short)Field12);
-        s.WriteShort(Field13);
-        s.WriteShort((short)Field14);
-        s.WriteInt((int)Field15);
-        s.WriteShort((short)Field16);
-        s.WriteShort(Field17);
-        s.WriteShort((short)Field18);
-        s.WriteByte(Field19);
-    }
+    /// <summary>Un créneau de guerre (sched_type, fenêtre epoch).</summary>
+    public readonly record struct Schedule(int Type, int Begin,
+        int End);
+
+    public List<Entry> Entries { get; } = new();
+    public List<Schedule> Schedules { get; } = new();
+
+    public override void Serialize(BinWriter s) =>
+        throw new NotSupportedException("S→C");
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadShort();
-        Field2 = (ushort)s.ReadShort();
-        Field3 = s.ReadInt();
-        Field4 = (ushort)s.ReadShort();
-        Field5 = s.ReadInt();
-        Field6 = s.ReadInt();
-        Field7 = s.ReadInt();
-        Field8 = (ushort)s.ReadShort();
-        Field9 = s.ReadInt();
-        Field10 = (ushort)s.ReadShort();
-        Field11 = s.ReadString();
-        Field12 = (ushort)s.ReadShort();
-        Field13 = s.ReadShort();
-        Field14 = (ushort)s.ReadShort();
-        Field15 = (uint)s.ReadInt();
-        Field16 = (ushort)s.ReadShort();
-        Field17 = s.ReadShort();
-        Field18 = (ushort)s.ReadShort();
-        Field19 = s.ReadByte();
+        Entries.Clear();
+        Schedules.Clear();
+        s.ReadShort();                                  // pad (natif : local non init → 0)
+        var ids = new List<int>();
+        var n = s.ReadUShort();                         // vec1 : ids
+        for (var i = 0; i < n; i++) ids.Add(s.ReadInt());
+        var m = s.ReadUShort();                         // vec2 : créneaux
+        for (var i = 0; i < m; i++)
+            Schedules.Add(new Schedule(s.ReadInt(), s.ReadInt(),
+                s.ReadInt()));
+        var own = new List<int>();
+        n = s.ReadUShort();                             // vec3 : familles
+        for (var i = 0; i < n; i++) own.Add(s.ReadInt());
+        var names = new List<string>();
+        n = s.ReadUShort();                             // vec4 : noms
+        for (var i = 0; i < n; i++) names.Add(s.ReadString());
+        var levels = new List<short>();
+        n = s.ReadUShort();                             // vec5 : niveaux
+        for (var i = 0; i < n; i++) levels.Add(s.ReadShort());
+        var times = new List<uint>();
+        n = s.ReadUShort();                             // vec6 : time
+        for (var i = 0; i < n; i++)
+            times.Add((uint)s.ReadInt());
+        var states = new List<short>();
+        n = s.ReadUShort();                             // vec7 : états
+        for (var i = 0; i < n; i++) states.Add(s.ReadShort());
+        var flags = new List<byte>();
+        n = s.ReadUShort();                             // vec8 : flags
+        for (var i = 0; i < n; i++) flags.Add(s.ReadByte());
+        for (var i = 0; i < ids.Count; i++)
+            Entries.Add(new Entry(ids[i],
+                i < own.Count ? own[i] : 0,
+                i < names.Count ? names[i] : "",
+                i < levels.Count ? levels[i] : (short)0,
+                i < times.Count ? times[i] : 0,
+                i < states.Count ? states[i] : (short)0,
+                i < flags.Count ? flags[i] : (byte)0));
     }
 }
 
@@ -5829,120 +5764,65 @@ public sealed class ZoneClientUpdateAttrNewHp : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientEvaluateInfo — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientEvaluateInfo</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientEvaluateInfo — 607 : corps sous-typé
+/// (Serialize natif zone @0x080846b0 — cf. EvaluatePackets serveur ;
+/// la classe générée aplatie lisait 33 champs et jetait sur les corps
+/// réels 12-96 octets) :
+/// type 0 statut <c>[0][status][sec]</c> ; type 1 compteurs
+/// <c>[1][raw][deaths][mon][elite][boss][maxDeaths][maxMon][maxElite]
+/// [maxBoss]</c> ; type 2 résultat <c>[2][elapsed][timeBonus][deaths]
+/// [mon][elite][boss][max×4][dieBonus][monScore][eliteScore]
+/// [bossScore][raw][total][str grade][opens][buys][cost]</c> ;
+/// type 3 loterie <c>[3][opens][itemId][count][index]</c>.</summary>
 public sealed class ZoneClientEvaluateInfo : NetMessage
 {
     public override int Opcode => 607;
     public override string Name => "CNC_CZ_ClientEvaluateInfo";
 
-    public int Field1 { get; set; }
-    public int Field2 { get; set; }
-    public int Field3 { get; set; }
-    public int Field4 { get; set; }
-    public int Field5 { get; set; }
-    public int Field6 { get; set; }
-    public int Field7 { get; set; }
-    public int Field8 { get; set; }
-    public int Field9 { get; set; }
-    public int Field10 { get; set; }
-    public int Field11 { get; set; }
-    public int Field12 { get; set; }
-    public int Field13 { get; set; }
-    public int Field14 { get; set; }
-    public int Field15 { get; set; }
-    public int Field16 { get; set; }
-    public int Field17 { get; set; }
-    public int Field18 { get; set; }
-    public int Field19 { get; set; }
-    public int Field20 { get; set; }
-    public int Field21 { get; set; }
-    public int Field22 { get; set; }
-    public int Field23 { get; set; }
-    public int Field24 { get; set; }
-    public int Field25 { get; set; }
-    public int Field26 { get; set; }
-    public int Field27 { get; set; }
-    public int Field28 { get; set; }
-    public int Field29 { get; set; }
-    public int Field30 { get; set; }
-    public string Field31 { get; set; } = "";
-    public int Field32 { get; set; }
-    public int Field33 { get; set; }
+    /// <summary>Sous-type du corps (0 statut, 1 compteurs,
+    /// 2 résultat, 3 loterie).</summary>
+    public int SubType { get; set; }
+    /// <summary>Entiers après le sous-type, dans l'ordre du fil.</summary>
+    public int[] Values { get; set; } = System.Array.Empty<int>();
+    /// <summary>Grade — type 2 uniquement.</summary>
+    public string Grade { get; set; } = "";
 
     public override void Serialize(BinWriter s)
     {
-        s.WriteInt(Field1);
-        s.WriteInt(Field2);
-        s.WriteInt(Field3);
-        s.WriteInt(Field4);
-        s.WriteInt(Field5);
-        s.WriteInt(Field6);
-        s.WriteInt(Field7);
-        s.WriteInt(Field8);
-        s.WriteInt(Field9);
-        s.WriteInt(Field10);
-        s.WriteInt(Field11);
-        s.WriteInt(Field12);
-        s.WriteInt(Field13);
-        s.WriteInt(Field14);
-        s.WriteInt(Field15);
-        s.WriteInt(Field16);
-        s.WriteInt(Field17);
-        s.WriteInt(Field18);
-        s.WriteInt(Field19);
-        s.WriteInt(Field20);
-        s.WriteInt(Field21);
-        s.WriteInt(Field22);
-        s.WriteInt(Field23);
-        s.WriteInt(Field24);
-        s.WriteInt(Field25);
-        s.WriteInt(Field26);
-        s.WriteInt(Field27);
-        s.WriteInt(Field28);
-        s.WriteInt(Field29);
-        s.WriteInt(Field30);
-        s.WriteString(Field31);
-        s.WriteInt(Field32);
-        s.WriteInt(Field33);
+        s.WriteInt(SubType);
+        if (SubType == 2)
+        {
+            for (var i = 0; i < System.Math.Min(Values.Length, 15); i++)
+                s.WriteInt(Values[i]);
+            for (var i = Values.Length; i < 15; i++) s.WriteInt(0);
+            s.WriteString(Grade);
+            for (var i = 15; i < Values.Length; i++)
+                s.WriteInt(Values[i]);
+            return;
+        }
+        foreach (var v in Values) s.WriteInt(v);
     }
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadInt();
-        Field2 = s.ReadInt();
-        Field3 = s.ReadInt();
-        Field4 = s.ReadInt();
-        Field5 = s.ReadInt();
-        Field6 = s.ReadInt();
-        Field7 = s.ReadInt();
-        Field8 = s.ReadInt();
-        Field9 = s.ReadInt();
-        Field10 = s.ReadInt();
-        Field11 = s.ReadInt();
-        Field12 = s.ReadInt();
-        Field13 = s.ReadInt();
-        Field14 = s.ReadInt();
-        Field15 = s.ReadInt();
-        Field16 = s.ReadInt();
-        Field17 = s.ReadInt();
-        Field18 = s.ReadInt();
-        Field19 = s.ReadInt();
-        Field20 = s.ReadInt();
-        Field21 = s.ReadInt();
-        Field22 = s.ReadInt();
-        Field23 = s.ReadInt();
-        Field24 = s.ReadInt();
-        Field25 = s.ReadInt();
-        Field26 = s.ReadInt();
-        Field27 = s.ReadInt();
-        Field28 = s.ReadInt();
-        Field29 = s.ReadInt();
-        Field30 = s.ReadInt();
-        Field31 = s.ReadString();
-        Field32 = s.ReadInt();
-        Field33 = s.ReadInt();
+        SubType = s.ReadInt();
+        var ints = new System.Collections.Generic.List<int>();
+        switch (SubType)
+        {
+            case 0: for (var i = 0; i < 2; i++) ints.Add(I(s)); break;
+            case 1: for (var i = 0; i < 9; i++) ints.Add(I(s)); break;
+            case 2:
+                for (var i = 0; i < 15; i++) ints.Add(I(s));
+                if (s.Remaining > 0) Grade = s.ReadString();
+                for (var i = 0; i < 3; i++) ints.Add(I(s));
+                break;
+            case 3: for (var i = 0; i < 4; i++) ints.Add(I(s)); break;
+            default:
+                while (s.Remaining >= 4) ints.Add(s.ReadInt());
+                break;
+        }
+        Values = ints.ToArray();
+        static int I(BinReader r) => r.Remaining >= 4 ? r.ReadInt() : 0;
     }
 }
 
@@ -6056,54 +5936,53 @@ public sealed class ZoneClientOpenMagicBoxDialog : NetMessage
     }
 }
 
-/// <summary>CNC_CZ_ClientMagicBoxResult — layout porté verbatim du codec serveur
-/// <c>CNC_CZ_ClientMagicBoxResult</c> (Messages/Generated/*.g.cs). Champs
-/// positionnels <c>FieldN</c> tant que le rôle n'est pas prouvé.</summary>
+/// <summary>CNC_CZ_ClientMagicBoxResult (613, S→C) — résultat
+/// d'une opération boîte magique (257). Format prouvé par
+/// <c>MagicBoxPackets.BuildMagicBoxResult</c> (Serialize natif
+/// @0x80cxxxx) :
+/// <code>[s16 type][u16 n][s16 combos ×n][u16 energy][u16 star]
+/// [u16 n][s16 sacs consommés ×n][u16 n][s16 slots consommés ×n]
+/// [s16 mall_bag][s16 mall_slot]</code>
+/// La classe générée aplatissait les vecteurs — codec dédié.</summary>
 public sealed class ZoneClientMagicBoxResult : NetMessage
 {
     public override int Opcode => 613;
     public override string Name => "CNC_CZ_ClientMagicBoxResult";
 
-    public short Field1 { get; set; }
-    public ushort Field2 { get; set; }
-    public short Field3 { get; set; }
-    public ushort Field4 { get; set; }
-    public ushort Field5 { get; set; }
-    public ushort Field6 { get; set; }
-    public short Field7 { get; set; }
-    public ushort Field8 { get; set; }
-    public short Field9 { get; set; }
-    public short Field10 { get; set; }
-    public short Field11 { get; set; }
+    /// <summary>s16 — type d'op (1 conversion, 2 scouring).</summary>
+    public short Type { get; private set; }
+    /// <summary>Combos magicbox_enchant1-3 courants de l'item.</summary>
+    public List<short> Combos { get; } = new();
+    /// <summary>u16 — énergie courante.</summary>
+    public ushort Energy { get; private set; }
+    /// <summary>u16 — niveau d'étoile.</summary>
+    public ushort StarLevel { get; private set; }
+    /// <summary>Positions (bag,slot) des sacrifices consommés.</summary>
+    public List<(short Bag, short Slot)> Consumed { get; } = new();
+    /// <summary>Position du catalyseur mall consommé (−1 sinon).</summary>
+    public short MallBag { get; private set; }
+    public short MallSlot { get; private set; }
 
-    public override void Serialize(BinWriter s)
-    {
-        s.WriteShort(Field1);
-        s.WriteShort((short)Field2);
-        s.WriteShort(Field3);
-        s.WriteShort((short)Field4);
-        s.WriteShort((short)Field5);
-        s.WriteShort((short)Field6);
-        s.WriteShort(Field7);
-        s.WriteShort((short)Field8);
-        s.WriteShort(Field9);
-        s.WriteShort(Field10);
-        s.WriteShort(Field11);
-    }
+    public override void Serialize(BinWriter s) =>
+        throw new NotSupportedException("S→C");
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadShort();
-        Field2 = (ushort)s.ReadShort();
-        Field3 = s.ReadShort();
-        Field4 = (ushort)s.ReadShort();
-        Field5 = (ushort)s.ReadShort();
-        Field6 = (ushort)s.ReadShort();
-        Field7 = s.ReadShort();
-        Field8 = (ushort)s.ReadShort();
-        Field9 = s.ReadShort();
-        Field10 = s.ReadShort();
-        Field11 = s.ReadShort();
+        Type = s.ReadShort();
+        Combos.Clear();
+        var n = s.ReadUShort();
+        for (var i = 0; i < n; i++) Combos.Add(s.ReadShort());
+        Energy = s.ReadUShort();
+        StarLevel = s.ReadUShort();
+        Consumed.Clear();
+        var bags = new short[s.ReadUShort()];
+        for (var i = 0; i < bags.Length; i++) bags[i] = s.ReadShort();
+        var slots = new short[s.ReadUShort()];
+        for (var i = 0; i < slots.Length; i++) slots[i] = s.ReadShort();
+        for (var i = 0; i < Math.Min(bags.Length, slots.Length); i++)
+            Consumed.Add((bags[i], slots[i]));
+        MallBag = s.ReadShort();
+        MallSlot = s.ReadShort();
     }
 }
 

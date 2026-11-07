@@ -92,6 +92,30 @@ public partial class GameScene : Node3D
     /// <summary>Horodatage du HudReady — le shot attend 1,5 s de HUD
     /// prêt pour laisser --hud-open/--hud-dump s'appliquer.</summary>
     private DateTime _hudReadyAt = DateTime.MaxValue;
+    /// <summary>@talk npcId (canal GmFileProbe) : approche + TalkToNpc
+    /// sur le NPC en vue — même chemin que le clic droit, sans le
+    /// picking 3D qui rate les petits PNJ sous Wayland.</summary>
+    public void TalkToNpcId(int npcId)
+    {
+        var ent = _registry?.Entities.Values.FirstOrDefault(
+            e => e.Kind == 8 && (e.EntityId & 0xFFFF) == npcId);
+        if (ent == null) { GD.Print($"[gmfile] npc {npcId} hors de vue"); return; }
+        _player?.TalkToNpc(ent);
+    }
+
+    /// <summary>@attack [mobId] (canal GmFileProbe) : engage
+    /// l'auto-attack — même chemin que le clic droit sur mob /
+    /// la hotkey « Attack », sans le picking écran qui rate les
+    /// mobs sous un rebord.</summary>
+    public void AttackMobId(int mobId)
+    {
+        if (mobId <= 0) { _player?.AttackTargetOrNearest(); return; }
+        var ent = _registry?.Entities.Values.FirstOrDefault(
+            e => e.Kind == 12 && (e.EntityId & 0xFFFF) == mobId);
+        if (ent == null) { GD.Print($"[gmfile] mob {mobId} hors de vue"); return; }
+        _player?.AutoAttacker?.Engage(ent);
+    }
+
     /// <summary>--talk-test : après l'entrée zone, se téléporte près du
     /// NPC le plus proche et envoie TalkToNpc (preuve live du 285).</summary>
     private bool _talkTest;
@@ -860,6 +884,10 @@ public partial class GameScene : Node3D
             _map != null && GodotObject.IsInstanceValid(_map) &&
             _map.TryGetGodotHeight(new Vector3(gx, 0f, gz), out var y)
                 ? y : (float?)null;
+        _registry.PhysicsGround = (gx, gz, refY, terrainY) =>
+            _map != null && GodotObject.IsInstanceValid(_map)
+                ? _map.SampleEntityGround(gx, gz, refY, terrainY) : null;
+        _registry.RefGroundY = () => _player?.GlobalPosition.Y ?? 0f;
         _registry.ResolveMonster = ResolveMonster;
         _registry.ResolveNpc = ResolveNpc;
         // Les noms envoyés par le serveur (DisplayName) sont en Big5
@@ -1123,6 +1151,70 @@ public partial class GameScene : Node3D
         }
     }
 
+    /// <summary>Sonde de balayage : mobs en vue, mobs sous le sol / sans
+    /// sol (rayon vers le bas, frame physique), minimap.</summary>
+    private async Task ProbeMapAsync()
+    {
+        var tcs = new TaskCompletionSource();
+        _pending.Enqueue(() =>
+        {
+            var tree = GetTree();
+            tree.Connect(SceneTree.SignalName.PhysicsFrame,
+                Callable.From(() =>
+                {
+                    try
+                    {
+                        int mobs = 0, under = 0, noGround = 0, floating = 0; long maxHp = 0; float maxDy = 0f; double posSum = 0;
+                        var space = GetWorld3D().DirectSpaceState;
+                        foreach (var e in _registry!.Entities.Values)
+                        {
+                            if (e.Kind != 12) continue;
+                            mobs++;
+                            maxHp = Math.Max(maxHp, e.MaxHp);
+                            posSum += e.GlobalPosition.X + e.GlobalPosition.Z;
+                            var p = e.GlobalPosition;
+                            if (_player != null)
+                            {
+                                var d = p - _player.GlobalPosition;
+                                if (d.X * d.X + d.Z * d.Z < 900f)
+                                    maxDy = Math.Max(maxDy, Math.Abs(d.Y));
+                            }
+                            // Sol sous le mob (≤ 6 u) → posé. Sinon : sol
+                            // au-dessus (≤ 12 u) → sous la map ; sol plus
+                            // bas → flottant ; rien → sans collider.
+                            var down = space.IntersectRay(
+                                PhysicsRayQueryParameters3D.Create(
+                                    p + Vector3.Up * 2f, p + Vector3.Down * 6f));
+                            if (down.Count > 0) continue;
+                            var up = space.IntersectRay(
+                                PhysicsRayQueryParameters3D.Create(
+                                    p, p + Vector3.Up * 12f));
+                            if (up.Count > 0) { under++; continue; }
+                            var far = space.IntersectRay(
+                                PhysicsRayQueryParameters3D.Create(
+                                    p + Vector3.Up * 2f, p + Vector3.Down * 120f));
+                            if (far.Count > 0) floating++; else noGround++;
+                            if (System.Environment.GetEnvironmentVariable("EDEN_PROBE_DBG") == "1" && mobs <= 3)
+                            {
+                                var all = space.IntersectRay(PhysicsRayQueryParameters3D.Create(
+                                    p + Vector3.Up * 300f, p + Vector3.Down * 300f));
+                                GD.Print($"[probe-dbg] mob y={p.Y:F1} x={p.X:F1} z={p.Z:F1} " +
+                                    (all.Count > 0 ? $"premier hit y={((Vector3)all["position"]).Y:F1}" : "aucun hit"));
+                            }
+                        }
+                        var mm = _hud?.Minimap?.HasMapTexture == true;
+                        GD.Print($"[probe] node={_nodeId} map={_mapCode} " +
+                                 $"mobs={mobs} sousSol={under} " +
+                                 $"sansSol={noGround} flottants={floating} maxHp={maxHp} dyJoueurMax={maxDy:F1} posSum={posSum:F2} " +
+                                 $"minimap={(mm ? "ok" : "absente")}");
+                    }
+                    catch (Exception ex) { GD.PrintErr($"[probe] {ex.Message}"); }
+                    tcs.TrySetResult();
+                }), (uint)GodotObject.ConnectFlags.OneShot);
+        });
+        await tcs.Task;
+    }
+
     private async Task RunZoneCmdAsync(string text)
     {
         try
@@ -1137,6 +1229,59 @@ public partial class GameScene : Node3D
                     int.TryParse(part.TrimStart()[6..], out var sl))
                 {
                     await Task.Delay(sl * 1000);
+                    continue;
+                }
+                // « shot F » : capture viewport (balayage donjons) ;
+                // « probe » : état de la map (mobs / sol / minimap).
+                if (part.TrimStart().StartsWith("shot "))
+                {
+                    var sp = part.TrimStart()[5..].Trim();
+                    var tcsS = new TaskCompletionSource();
+                    _pending.Enqueue(() =>
+                    {
+                        try
+                        {
+                            GetViewport().GetTexture().GetImage()?.SavePng(sp);
+                            GD.Print($"[shot] {sp}");
+                        }
+                        catch (Exception ex) { GD.PrintErr($"[shot] {ex.Message}"); }
+                        tcsS.TrySetResult();
+                    });
+                    await tcsS.Task;
+                    continue;
+                }
+                // « waitnode N » : attend la fin du chargement du node N
+                // (+3 s de dump d'entités) — balayage fiable des donjons.
+                if (part.TrimStart().StartsWith("waitnode ") &&
+                    int.TryParse(part.TrimStart()[9..], out var wn))
+                {
+                    for (var w = 0; w < 80; w++)
+                    {
+                        await Task.Delay(500);
+                        if (_nodeId == wn && !_migratingMap) break;
+                    }
+                    await Task.Delay(3000);
+                    continue;
+                }
+                if (part.TrimStart() == "quit")
+                {
+                    _pending.Enqueue(() => GetTree().Quit());
+                    return;
+                }
+                if (part.TrimStart() == "probe")
+                {
+                    await ProbeMapAsync();
+                    continue;
+                }
+                // « nodeexit K » : émet CheckNodeExit(K) comme l'entrée
+                // dans l'aire (test live des portails sans marcher).
+                if (part.TrimStart().StartsWith("nodeexit ") &&
+                    short.TryParse(part.TrimStart()[9..], out var nk))
+                {
+                    await _session!.SendZoneAsync(new ZoneCheckNodeExit
+                        { NodeId = nk, PortalId = 0 }, _liveCts.Token);
+                    GD.Print($"[zone-cmd] CheckNodeExit {nk}");
+                    await Task.Delay(400);
                     continue;
                 }
                 var t = part.TrimStart().StartsWith("//")
@@ -2836,6 +2981,9 @@ public partial class GameScene : Node3D
                         $"[live] parse {m.Name} : {ex.Message}"));
                     return;
                 }
+                // Instant d'arrivée réseau (326) : voir ArrivalSec.
+                if (m is ZoneMovePrediction mp)
+                    mp.ArrivalSec = Time.GetTicksUsec() / 1_000_000.0;
                 _pending.Enqueue(() =>
                 {
                     using var _pt = Perf.PerfTrace.Scope($"pkt:{m.Name}");
@@ -2983,12 +3131,16 @@ public partial class GameScene : Node3D
         // have learned skill "%s1". ») ; texte brut si index inconnu.
         Bind(new ZoneClientTextOutputIndex(), m =>
         {
+            // 0x534 « %s x %d » : le serveur y glisse le nom c_item brut
+            // (chinois) — on le retraduit par id avant composition.
+            var rawText = m.Index == 0x534 ? TranslateItemQty(m.Text)
+                : m.Text;
             // World boss / mutants (plan 12) : index natifs 6044-6053 +
             // 1647 et extensions 30001-30003 résolus FR/EN côté client.
-            var txt = WorldBossText.Compose(m.Index, m.Text,
+            var txt = WorldBossText.Compose(m.Index, rawText,
                 TextResolver.MonsterNameShort, TextResolver.SpellName,
                 (i, a) => TextResolver.TextIndex(i, a),
-                UiTextEn.Translate) ?? m.Text;
+                UiTextEn.Translate) ?? rawText;
             _hud?.AddChat(7, "", txt);
             if (WorldBossText.IsAnnouncement(m.Index))
                 _hud?.ShowScreenMessage(txt);
@@ -3454,10 +3606,10 @@ public partial class GameScene : Node3D
     {
         if (_player == null) { Hud.PortalArrival.Arrived(); return; }
         var pos = WorldConv.ToGodot(ex, ey, ez);
+        // SnapToGround choisit la surface la plus proche du z serveur
+        // (terrain ou sol OBJ) — le z peut décrire un étage sous le
+        // heightfield (village S002) ou au-dessus (pont, donjon).
         pos = SnapToGround(pos);
-        if (_map?.TryGetGodotHeight(pos, out var gy) == true &&
-            pos.Y < gy)
-            pos.Y = gy;
         _player.GlobalPosition = pos;
         _lastSentPos = pos;
         _haveServerPos = true;
@@ -3547,6 +3699,11 @@ public partial class GameScene : Node3D
         Screens.LoadingScreen.Report(1f, "Entering…");
         Screens.LoadingScreen.Finish();
         GD.Print($"[live] migration {nodeMap} terminée");
+        // C>Z NCID 4 : le natif l'envoie après chaque chargement de
+        // node ; sans lui le serveur ne fait pas le dump d'entrée
+        // (mobs/PNJ de l'instance) et la vue reste vide jusqu'au
+        // premier MoveSelf.
+        if (_live) _ = SendZone(new ZoneMigrationDone());
     }
 
     /// <summary>Résolution mob : scene [reborn_monsters] (col 12 =
@@ -3613,6 +3770,17 @@ public partial class GameScene : Node3D
     /// <summary>Candidats de stem GLB pour un code c_monster —
     /// ordre : ^2 (variante 2 chiffres), ^3 (variante 3 chiffres,
     /// convention npclist/partner), code brut.</summary>
+    /// <summary>« nom x qté » avec nom c_item brut → nom FR/EN du
+    /// client (t_item) ; inchangé si le nom est introuvable.</summary>
+    private static string TranslateItemQty(string text)
+    {
+        var k = text.LastIndexOf(" x ", StringComparison.Ordinal);
+        if (k <= 0) return text;
+        var id = Data.Tables.ItemTable.FindIdByName(text[..k]);
+        var name = id > 0 ? TextResolver.ItemName(id) : null;
+        return name == null ? text : name + text[k..];
+    }
+
     private static IEnumerable<string> StemCandidates(string code)
     {
         if (code.Length > 5) yield return code[..^2];
@@ -3780,21 +3948,26 @@ public partial class GameScene : Node3D
             AssetCatalog.TryGetGlb($"map/model/{stem}/{stem}", out _);
     }
 
-    /// <summary>Recale une position Godot sur le terrain : hauteur
-    /// sous le point si une tuile la couvre, sinon centre de la tuile
-    /// terrain la plus proche (spawns hors grille, ex. S009).</summary>
+    /// <summary>Recale une position Godot sur le terrain : la surface
+    /// la plus proche du z de référence (terrain ET sols OBJ en
+    /// candidats — <see cref="MapLoader.SampleEntityGround"/>) ; sinon
+    /// centre de la tuile terrain la plus proche (spawns hors grille,
+    /// ex. S009). max(z, terrain) posait le joueur sur la canopée du
+    /// heightfield au-dessus du village (S002, fsm=25.8 au-dessus du
+    /// sol OBJ ~10) ; le plancher le plus bas posait sous les maps
+    /// multi-étages.</summary>
     private Vector3 SnapToGround(Vector3 pos)
     {
         if (_map == null) return pos;
-        if (_map.TryGetGodotHeight(pos, out var gy))
-            // max(z serveur, terrain) : le z serveur est résolu depuis
-            // les points de scène — il décrit parfois un sol intérieur
-            // (pont, mine) AU-DESSUS du heightfield ; le rabaisser au
-            // terrain posait le joueur sous ce sol.
-            return new Vector3(pos.X, MathF.Max(pos.Y, gy), pos.Z);
+        var (ex, ey) = WorldConv.ToEdenGround(pos);
+        var hasTerrain = _map.TryGetEdenHeight(ex, ey, out var terrainY);
+        if (_map.SampleEntityGround(pos.X, pos.Z, pos.Y,
+                hasTerrain ? terrainY : float.NaN) is { } g)
+            return new Vector3(pos.X, g, pos.Z);
+        if (hasTerrain)
+            return new Vector3(pos.X, terrainY, pos.Z);
         var fsm = _map.Fsm;
         if (fsm == null || fsm.TileWorldSize <= 0f) return pos;
-        var (ex, ey) = WorldConv.ToEdenGround(pos);
         var tw = fsm.TileWorldSize;
         TerrainTile? best = null;
         var bestD = float.MaxValue;
@@ -3909,6 +4082,7 @@ public partial class GameScene : Node3D
 
     public override void _Process(double delta)
     {
+        using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.GameScene");
         // --hitch : journalise toute image > 40 ms (corrélée aux lignes de log voisines).
         if (s_hitch)
         {

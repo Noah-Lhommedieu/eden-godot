@@ -10,7 +10,7 @@ public enum UiControlKind
     LineEdit, TextEdit, ItemList, Tree, ProgressBar, HSlider, VSlider,
     VScrollBar, HScrollBar, ScrollContainer, TabContainer, OptionButton,
     MenuBar, SpinBox, TextureRect, NinePatchRect, ColorRect,
-    SubViewportContainer,
+    SubViewportContainer, ItemSlot, MultiColumnList,
 }
 
 public enum UiTextAlign { Left, Centre, Right }
@@ -95,7 +95,11 @@ public sealed class UiNodeSpec
 
     public CeguiImageRef? Image, HoverImage, PushedImage, DisabledImage;
 
-    public int Columns { get; set; }              // MultiColumnList
+    public int Columns { get; set; }              // MultiColumnList/Tree
+    /// <summary>Colonnes d'un MultiColumnList, dans l'ordre de
+    /// déclaration des props <c>ColumnHeader</c>
+    /// (<c>text:… width:{scale,offset} id:n</c>).</summary>
+    public List<MclColumn> MclColumns { get; } = new();
     public bool HasTitleBar { get; set; }
     public bool CloseButton { get; set; }
     public bool Secret { get; set; }              // Editbox MaskText
@@ -115,6 +119,14 @@ public sealed class UiNodeSpec
         foreach (var c in SideChildren) yield return c;
     }
 }
+
+/// <summary>Colonne d'un MultiColumnList native (prop
+/// <c>ColumnHeader</c>). <paramref name="WidthScale"/> est la part
+/// proportionnelle de la largeur, <paramref name="WidthOffset"/> la
+/// part fixe en pixels, <paramref name="Id"/> l'identifiant natif de
+/// la colonne (sert de clé de tri côté code).</summary>
+public readonly record struct MclColumn(string Text, float WidthScale,
+    float WidthOffset, int Id);
 
 /// <summary>Rapport agrégé de conversion — types non mappés,
 /// propriétés ignorées, erreurs par layout.</summary>
@@ -340,8 +352,9 @@ public sealed class CeguiBuilder
             case "CEGUI/Listbox":
             case "CEGUI/ComboDropList":
             case "CEGUI/ItemListbox":
-            case "CEGUI/MultiColumnList":
                 return UiControlKind.ItemList;
+            case "CEGUI/MultiColumnList":
+                return UiControlKind.MultiColumnList;
             case "CEGUI/Tree": return UiControlKind.Tree;
             case "CEGUI/Slider": return UiControlKind.HSlider;
             case "CEGUI/Scrollbar":
@@ -365,9 +378,22 @@ public sealed class CeguiBuilder
             case "CEGUI/ListHeader": return UiControlKind.Control;
             case "CEGUI/ListHeaderSegment": return UiControlKind.Button;
             case "CEGUI/SlotImageItem":
+                return UiControlKind.ItemSlot;
             case "CEGUI/RoundImage":
                 return UiControlKind.TextureRect;
         }
+
+        // Slot item natif : DejaVu/SlotImage* est mappé sur
+        // DefaultWindow+Falagard/StaticImage dans le scheme — c'est le
+        // widget « case item » des fenêtres craft (icône + qté +
+        // drag&drop), pas une simple image. Vérifié AVANT le repli
+        // renderer qui le rendrait en TextureRect.
+        if (leaf.StartsWith("SlotImage", StringComparison.OrdinalIgnoreCase) ||
+            leaf.StartsWith("ItemSlot", StringComparison.OrdinalIgnoreCase) ||
+            leaf.Contains("ItemSlotbox", StringComparison.OrdinalIgnoreCase) ||
+            leaf.Contains("dragitem", StringComparison.OrdinalIgnoreCase) ||
+            leaf.Contains("ItemIcon", StringComparison.OrdinalIgnoreCase))
+            return UiControlKind.ItemSlot;
 
         if (m != null)
         {
@@ -382,12 +408,6 @@ public sealed class CeguiBuilder
                 _ => UiControlKind.Control,
             };
         }
-
-        // Types non mappés du tout — heuristiques par nom.
-        if (leaf.Contains("ItemSlotbox", StringComparison.OrdinalIgnoreCase) ||
-            leaf.Contains("dragitem", StringComparison.OrdinalIgnoreCase) ||
-            leaf.Contains("ItemIcon", StringComparison.OrdinalIgnoreCase))
-            return UiControlKind.TextureRect;
         if (leaf.Contains("RenderTarget", StringComparison.OrdinalIgnoreCase) ||
             leaf.Contains("RenderPicture", StringComparison.OrdinalIgnoreCase))
             return UiControlKind.SubViewportContainer;
@@ -485,7 +505,11 @@ public sealed class CeguiBuilder
 
         // MultiColumnList : nb de colonnes = nb de props ColumnHeader.
         if (node.PropLists.TryGetValue("ColumnHeader", out var cols))
+        {
             spec.Columns = cols.Count;
+            foreach (var c in cols)
+                spec.MclColumns.Add(ParseColumnHeader(c));
+        }
 
         // Images explicites
         spec.Image = CeguiImageRef.Parse(node.Get("Image"));
@@ -502,6 +526,45 @@ public sealed class CeguiBuilder
     private static bool BoolOf(string? v, bool fallback) =>
         v == null ? fallback
         : v.Equals("True", StringComparison.OrdinalIgnoreCase) || v == "1";
+
+    /// <summary>Parse une prop <c>ColumnHeader</c> native
+    /// (<c>text:&lt;titre&gt; width:{&lt;scale&gt;,&lt;offset&gt;} id:&lt;n&gt;</c>
+    /// — text/id optionnels, width UDim {scale,offset}).</summary>
+    private static readonly Regex ColumnHeaderRe =
+        new(@"(\w+):(\{[^}]*\}|[^{]*?)(?=\s+\w+:|\s*$)",
+            RegexOptions.Compiled);
+    private static readonly Regex UDimRe =
+        new(@"\{([^,]+),([^}]*)\}", RegexOptions.Compiled);
+
+    private static MclColumn ParseColumnHeader(string value)
+    {
+        string text = "";
+        float scale = 0f, offset = 0f;
+        int id = 0;
+        foreach (Match kv in ColumnHeaderRe.Matches(value))
+        {
+            var key = kv.Groups[1].Value;
+            var val = kv.Groups[2].Value;
+            if (key.Equals("text", StringComparison.OrdinalIgnoreCase))
+                text = UiTextEn.Translate(StripTags(val));
+            else if (key.Equals("id", StringComparison.OrdinalIgnoreCase))
+                int.TryParse(val, out id);
+            else if (key.Equals("width", StringComparison.OrdinalIgnoreCase))
+            {
+                var m = UDimRe.Match(val);
+                if (m.Success)
+                {
+                    float.TryParse(m.Groups[1].Value,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out scale);
+                    float.TryParse(m.Groups[2].Value,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out offset);
+                }
+            }
+        }
+        return new MclColumn(text, scale, offset, id);
+    }
 
     private void CountIgnoredProps(CeguiNode node)
     {

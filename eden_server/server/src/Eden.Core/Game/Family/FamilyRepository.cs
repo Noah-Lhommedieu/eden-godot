@@ -87,11 +87,50 @@ public sealed class FamilyRepository
             if (map.TryGetValue((int)r.family_id, out var fam))
                 fam.Messages[(int)r.message_id] = ToMessage(r);
 
-        var sched = await conn.QueryAsync(
-            "SELECT family_id, message_id, title, content, player_name, create_date FROM family_schedule");
-        foreach (var r in sched)
+        // family_schedule : table morte native (zéro référence dans
+        // zone/mission/world — DeleteAllFamilyScheduleMsg écrit
+        // family_msgboard). Le NCID 51 ClientFamilySchedule ne porte
+        // que les messages du board (fam+0x9c natif = family_msgboard).
+
+        // family_achievement : clé = achievement_type (GroupKey
+        // d'achievement natif), point cumulé.
+        var achs = await conn.QueryAsync(
+            "SELECT family_id, achievement_type, point FROM family_achievement");
+        foreach (var r in achs)
             if (map.TryGetValue((int)r.family_id, out var fam))
-                fam.Schedule[(int)r.message_id] = ToMessage(r);
+                fam.Achievements[(short)r.achievement_type] = (uint)(int)r.point;
+
+        // family_achievement_rank : snapshot périodique natif des
+        // compteurs par catégorie (map dual-key Type+GroupKey) — les
+        // colonnes restaurent le compteur de chaque clé.
+        var ranks = await conn.QueryAsync(
+            "SELECT family_id, total_point, monster_kill, family_instance, " +
+            "lv01_instance_node, lv31_instance_node, lv46_instance_node, " +
+            "lv61_instance_node, lv76_instance_node, lv91_instance_node, " +
+            "family_boss, rare_monster, family_mine, family_plant, " +
+            "family_summon, family_alchemy, family_casting, family_enchant " +
+            "FROM family_achievement_rank");
+        foreach (var r in ranks)
+        {
+            if (!map.TryGetValue((int)r.family_id, out var fam)) continue;
+            fam.AchievementTotal = (uint)(int)r.total_point;
+            fam.Counters[1] = (uint)(int)r.monster_kill;
+            fam.Counters[5] = (uint)(int)r.family_instance;
+            fam.Counters[0x65] = (uint)(int)r.lv01_instance_node;
+            fam.Counters[0x66] = (uint)(int)r.lv31_instance_node;
+            fam.Counters[0x67] = (uint)(int)r.lv46_instance_node;
+            fam.Counters[0x68] = (uint)(int)r.lv61_instance_node;
+            fam.Counters[0x69] = (uint)(int)r.lv76_instance_node;
+            fam.Counters[0x6a] = (uint)(int)r.lv91_instance_node;
+            fam.Counters[0x6b] = (uint)(int)r.family_boss;
+            fam.Counters[0x6c] = (uint)(int)r.rare_monster;
+            fam.Counters[0x1f5] = (uint)(int)r.family_mine;
+            fam.Counters[0x1f6] = (uint)(int)r.family_plant;
+            fam.Counters[0x1f7] = (uint)(int)r.family_summon;
+            fam.Counters[0x1f8] = (uint)(int)r.family_alchemy;
+            fam.Counters[0x1f9] = (uint)(int)r.family_casting;
+            fam.Counters[0x1fa] = (uint)(int)r.family_enchant;
+        }
     }
 
     private static FamilyMessage ToMessage(dynamic r) => new()
@@ -193,6 +232,12 @@ public sealed class FamilyRepository
 
     /// <summary>Dissolution — <c>family.delete_time</c> + sortie de
     /// tous les membres + DROP cadres (TC_DismissFamily natif).</summary>
+    /// <summary>Dissolution — port de <c>CFamily::Disband</c> (mission
+    /// @0x081b3e70) : <c>delete_time</c> posé sur family, reset des
+    /// membres dans <c>player_characters</c>, puis suppression des 10
+    /// tables filles dans l'ordre natif (cadre, msgboard, achievement,
+    /// achievement_log, achievement_rank, storage, storage_log,
+    /// statues_scenes, building_container, family_log).</summary>
     public async Task DisbandAsync(int familyId)
         => await RunAsync(async conn =>
         {
@@ -202,8 +247,25 @@ public sealed class FamilyRepository
         await conn.ExecuteAsync(
             "UPDATE player_characters SET family_id = 0, family_comment = '', family_contribution_point = 0, " +
             "family_msgboard_state = 0 WHERE family_id = @familyId", new { familyId });
+        foreach (var t in new[]
+            {
+                "family_cadre_members",     // DeleteAllFamilyCadre
+                "family_msgboard",          // DeleteAllFamilyScheduleMsg
+                "family_achievement",       // DeleteAllFamilyAchievement
+                "family_achievement_log",   // DeleteAllFamilyAchievementLog
+                "family_achievement_rank",  // DeleteFamilyAchievementRank
+                "family_storage",           // DeleteAllFamilyStorage
+                "family_storage_log",       // DeleteAllFamilyStorageLog
+                "statues_scenes",           // DeleteAllStatues
+                "family_building_container",// DeleteAllFamilyBuildingContainr
+            })
+            await conn.ExecuteAsync(
+                $"DELETE FROM {t} WHERE family_id = @familyId",
+                new { familyId });
+        // family_log : la colonne famille s'appelle « id ».
         await conn.ExecuteAsync(
-            "DELETE FROM family_cadre_members WHERE family_id = @familyId", new { familyId });
+            "DELETE FROM family_log WHERE id = @familyId",
+            new { familyId });
         });
 
     /// <summary>Édition d'info publique — op 0xA (flag/info).</summary>
@@ -387,6 +449,97 @@ public sealed class FamilyRepository
             "UPDATE family SET emblem = @emblem WHERE id = @familyId", new { familyId, emblem });
         });
 
+    /// <summary>Succès famille — port de <c>CFamilyDBO::UpdateAchievement</c>/
+    /// <c>AddAchievement</c> (mission @0x08179790/0x08179830) : la table
+    /// native n'a pas de PK, le natif fait UPDATE puis INSERT si absent.</summary>
+    public async Task UpsertAchievementAsync(int familyId, short achievementType, uint point)
+    {
+        await using var conn = _db.CreateConnection();
+        await conn.OpenAsync();
+        var updated = await conn.ExecuteAsync(
+            "UPDATE family_achievement SET point = @point " +
+            "WHERE family_id = @familyId AND achievement_type = @achievementType",
+            new { familyId, achievementType, point = (int)point });
+        if (updated == 0)
+            await conn.ExecuteAsync(
+                "INSERT INTO family_achievement (family_id, achievement_type, point) " +
+                "VALUES (@familyId, @achievementType, @point)",
+                new { familyId, achievementType, point = (int)point });
+    }
+
+    /// <summary>Points de sort famille — <c>CFamilyDBO::UpdateSpellPoint</c>
+    /// (mission @0x0817f0xx : <c>UPDATE family SET spell_point</c>).</summary>
+    public async Task SetSpellPointAsync(int familyId, short spellPoint)
+        => await RunAsync(async conn =>
+        {
+            await conn.ExecuteAsync(
+            "UPDATE family SET spell_point = @spellPoint WHERE id = @familyId",
+            new { familyId, spellPoint });
+        });
+
+    /// <summary>Snapshot <c>family_achievement_rank</c> — port de
+    /// <c>CFamilyDBO::UpdateAchievementRankData</c> (mission @0x0817e870).
+    /// Le natif flushait via un event ~20 min sur dirty flag ; chez nous
+    /// l'écriture est synchrone à chaque grant (même observable, pas de
+    /// boucle d'événement à porter). UPDATE puis INSERT si absent —
+    /// <c>LoadFamilyAchievementRankData</c> fait de même.</summary>
+    public async Task SaveAchievementRankAsync(Family fam)
+    {
+        await using var conn = _db.CreateConnection();
+        await conn.OpenAsync();
+        long C(int key) => fam.Counters.GetValueOrDefault(key);
+        var p = new
+        {
+            famId = fam.Id,
+            name = fam.Name ?? "",
+            lv = (int)fam.Level,
+            now = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            total = (int)Math.Min(fam.AchievementTotal, int.MaxValue),
+            size = fam.Members.Count,
+            monsterKill = (int)Math.Min(C(1), int.MaxValue),
+            familyInstance = (int)Math.Min(C(5), int.MaxValue),
+            lv01 = (int)Math.Min(C(0x65), int.MaxValue),
+            lv31 = (int)Math.Min(C(0x66), int.MaxValue),
+            lv46 = (int)Math.Min(C(0x67), int.MaxValue),
+            lv61 = (int)Math.Min(C(0x68), int.MaxValue),
+            lv76 = (int)Math.Min(C(0x69), int.MaxValue),
+            lv91 = (int)Math.Min(C(0x6a), int.MaxValue),
+            boss = (int)Math.Min(C(0x6b), int.MaxValue),
+            rare = (int)Math.Min(C(0x6c), int.MaxValue),
+            mine = (int)Math.Min(C(0x1f5), int.MaxValue),
+            plant = (int)Math.Min(C(0x1f6), int.MaxValue),
+            summon = (int)Math.Min(C(0x1f7), int.MaxValue),
+            alchemy = (int)Math.Min(C(0x1f8), int.MaxValue),
+            casting = (int)Math.Min(C(0x1f9), int.MaxValue),
+            enchant = (int)Math.Min(C(0x1fa), int.MaxValue),
+        };
+        var updated = await conn.ExecuteAsync(
+            "UPDATE family_achievement_rank SET family_lv=@lv, " +
+            "family_name=@name, update_time=@now, total_point=@total, " +
+            "memmber_size=@size, monster_kill=@monsterKill, " +
+            "family_instance=@familyInstance, lv01_instance_node=@lv01, " +
+            "lv31_instance_node=@lv31, lv46_instance_node=@lv46, " +
+            "lv61_instance_node=@lv61, lv76_instance_node=@lv76, " +
+            "lv91_instance_node=@lv91, family_boss=@boss, " +
+            "rare_monster=@rare, family_mine=@mine, family_plant=@plant, " +
+            "family_summon=@summon, family_alchemy=@alchemy, " +
+            "family_casting=@casting, family_enchant=@enchant " +
+            "WHERE family_id=@famId", p);
+        if (updated == 0)
+            await conn.ExecuteAsync(
+                "INSERT INTO family_achievement_rank (family_id, family_name, " +
+                "family_lv, update_time, total_point, monster_kill, " +
+                "family_instance, memmber_size, lv01_instance_node, " +
+                "lv31_instance_node, lv46_instance_node, lv61_instance_node, " +
+                "lv76_instance_node, lv91_instance_node, family_boss, " +
+                "rare_monster, family_mine, family_plant, family_summon, " +
+                "family_alchemy, family_casting, family_enchant) VALUES " +
+                "(@famId, @name, @lv, @now, @total, @monsterKill, " +
+                "@familyInstance, @size, @lv01, @lv31, @lv46, @lv61, " +
+                "@lv76, @lv91, @boss, @rare, @mine, @plant, @summon, " +
+                "@alchemy, @casting, @enchant)", p);
+    }
+
     /// <summary>Ouverture du hall de famille — SQL natif exact
     /// <c>CFamilyDBO::UpdateInstanceNodeID</c> (mission @0x8179430) :
     /// <c>UPDATE family SET house_open = %hd WHERE id = %d</c>
@@ -396,6 +549,16 @@ public sealed class FamilyRepository
         {
             await conn.ExecuteAsync(
             "UPDATE family SET house_open = @node WHERE id = @familyId", new { familyId, node });
+        });
+
+    /// <summary><c>CFamilyDBO::UpdateRecycleTime</c> natif — horodatage
+    /// du recyclage de la ville (<c>family.recycled_time</c>).</summary>
+    public async Task SetRecycledTimeAsync(int familyId, int unixTime)
+        => await RunAsync(async conn =>
+        {
+            await conn.ExecuteAsync(
+            "UPDATE family SET recycled_time = @unixTime WHERE id = @familyId",
+            new { familyId, unixTime });
         });
 
     /// <summary>Nombre de villes de famille ouvertes — équivalent du

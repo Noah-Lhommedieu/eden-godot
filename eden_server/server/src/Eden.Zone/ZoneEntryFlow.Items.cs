@@ -537,26 +537,11 @@ public sealed partial class ZoneEntryFlow
                             $"tool={toolId} : pas de S_FamilyCollect");
                         break;
                     }
-                    var toolDef = _services.GameData.Items
-                        .FirstOrDefault(i => i.Id == toolId);
-                    var areaOk = toolDef == null ||
-                        (toolDef.UseAreaNodeIds.Length == 0 ||
-                         toolDef.UseAreaNodeIds.Contains(st.NodeId));
-                    if (areaOk && toolDef?.UseAreaSubType > 0)
-                    {
-                        var sc = _services.Scenes
-                            .GetScene($"S{st.NodeId:D3}");
-                        areaOk = sc != null && sc.Gateways.Any(g =>
-                            g.KeyId == toolDef.UseAreaSubType &&
-                            sc.EventAreas.Any(e => e.Id == g.EventAreaId &&
-                                MathF.Sqrt((e.X - st.PosX) * (e.X - st.PosX)
-                                    + (e.Y - st.PosZ) * (e.Y - st.PosZ))
-                                    <= e.Radius + 2f));
-                    }
+                    var areaOk = IsInCollectArea(st, toolId);
                     if (!areaOk)
                     {
-                        // Rejet natif : texte 0xe1c (hors zone/outil).
-                        await SendTextIndexAsync(session, 0xe1c, token);
+                        // 0xe1c = refus co-monture natif (IsCoRiding), 0x5c0
+                        // = texte d'invocation : aucun texte fidèle connu.
                         break;
                     }
                     var touched =

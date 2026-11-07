@@ -59,6 +59,27 @@ public sealed partial class ZoneEntryFlow
             EdenLog.Write($"[Zone-M] annonce nodes échouée : {ex.Message}");
         }
     }
+    /// <summary>Marque de fraîcheur des sauvegardes par perso : chaque
+    /// demande prend un numéro croissant et l'exécution d'un travail
+    /// enfilé est ignorée si une demande plus récente existe. La file
+    /// ordonnée peut accumuler du retard (chaque save ≈ secondes avec
+    /// les enchants) : sans ça les saves de sessions MORTES drainaient
+    /// des heures plus tard et réécrivaient level/exp/hp périmés par-
+    /// dessus l'état courant (constat live : //level 20 écrit, puis
+    /// écrasé à 9 par un save de la session d'avant).</summary>
+    private readonly ConcurrentDictionary<long, long> _saveMarks = new();
+
+    private long NextSaveMark(long charId) =>
+        _saveMarks.AddOrUpdate(charId, 1, (_, m) => m + 1);
+
+    private async Task SaveIfLatestAsync(EntryState st, long mark,
+        bool caveLogout = false)
+    {
+        if (_saveMarks.TryGetValue(st.CharId, out var cur) && mark < cur)
+            return;
+        await SaveCharacterAsync(st, caveLogout);
+    }
+
     /// <summary>Sauvegarde complète de l'état perso — appelée à la
     /// déconnexion, par l'autosave périodique (regen loop) et avant les
     /// migrations. Persiste node/pos/dir/hp/mp/exp/level/class_id en un
@@ -81,6 +102,7 @@ public sealed partial class ZoneEntryFlow
             var saveNode = st.NodeId;
             var saveX = st.PosX;
             var saveZ = st.PosZ;
+            var saveH = st.PosY;
             var saveDir = st.Facing;
             if (caveLogout && NodeType(st.NodeId) is 2 or 5 or 7
                     or 12 or 14)
@@ -94,11 +116,11 @@ public sealed partial class ZoneEntryFlow
                     EdenLog.Write($"[Zone-Save] logout-in-cave " +
                         $"char=#{st.CharId} node {st.NodeId} " +
                         $"→ save node {a.Node}");
-                    (saveNode, saveX, saveZ, saveDir) = a;
+                    (saveNode, saveX, saveZ, saveH, saveDir) = a;
                 }
             }
             await _characters.SaveFullStateAsync((int)st.CharId,
-                saveNode, saveX, saveZ, 0, saveDir,
+                saveNode, saveX, saveZ, saveH, saveDir,
                 st.PlayerHp, st.PlayerMp, st.Experience,
                 st.Level, st.ClassId, gold: -1, st.ClassLevel,
                 maxHp: st.PlayerMaxHp, maxMp: st.PlayerMaxMp);
@@ -151,8 +173,9 @@ public sealed partial class ZoneEntryFlow
         // LifelongUpdateAllToMission natif (@0x084236e0, sortie de
         // scène/déco) : flush du pending daily avant le save.
         await FlushLifelongPendingAsync(st);
+        var mark = NextSaveMark(st.CharId);
         await _persistence.EnqueueAsync((int)st.CharId,
-            _ => SaveCharacterAsync(st, caveLogout));
+            _ => SaveIfLatestAsync(st, mark, caveLogout));
         await _persistence.FlushAsync((int)st.CharId);
     }
     /// <summary>Arrêt gracieux de la zone (SIGINT/SIGTERM) : sauvegarde
@@ -249,7 +272,7 @@ public sealed partial class ZoneEntryFlow
         // entre l'UPDATE et le SELECT de la mission).
         await _persistence.EnqueueAsync((int)st.CharId,
             _ => _characters.UpdateCoordinatesDurableAsync((int)st.CharId,
-                st.NodeId, st.PosX, st.PosZ, 0, st.Facing));
+                st.NodeId, st.PosX, st.PosZ, st.PosY, st.Facing));
         await _persistence.FlushAsync((int)st.CharId);
         if (_mission.Connected)
         {
@@ -264,9 +287,12 @@ public sealed partial class ZoneEntryFlow
             await _mission.SendNodeCreateAsync(st.NodeId,
                 (short)(nt?.Type ?? 1), (uint)st.CharId, -1);
             await _mission.SendMigrationDoneAsync(
-                (uint)st.CharId, token);
+                (uint)st.CharId, (short)st.NodeId, token);
         }
         EdenLog.Write($"[Zone-Entry] MigrationDone -> dump envoyé char=#{st.CharId} node={st.NodeId}");
+        try { await SendDungeonPortalsAsync(session, st, token); }
+        catch (Exception ex)
+        { EdenLog.Write($"[Dungeon] portails : {ex.Message}"); }
         // Overlay live : le replay transporte les valeurs du
         // perso capturé — on réémet gold/classe/vitals/exp DB
         // pour que le client affiche l'état réel.
@@ -325,6 +351,9 @@ public sealed partial class ZoneEntryFlow
         try { await ApplyDevMoveSpeedBuffAsync(session, st, token); }
         catch (Exception ex)
         { EdenLog.Write($"[Status] dev move buff : {ex.Message}"); }
+        try { await ApplyDevDungeonPassAsync(session, st, token); }
+        catch (Exception ex)
+        { EdenLog.Write($"[Status] dev dungeon pass : {ex.Message}"); }
         // État « pierre de portail gratuite » ≤ lvl 80 — OnMigrationDone
         // natif @0x0843fbxx (EffectToLife -0x25c3 durée -2), posé après
         // la restauration des enchants comme dans le flux natif.

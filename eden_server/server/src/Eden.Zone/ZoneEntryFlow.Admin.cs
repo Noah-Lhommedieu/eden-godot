@@ -111,12 +111,49 @@ public sealed partial class ZoneEntryFlow
                         "usage: //trait <0-8>", token);
                 break;
 
+            case "team":
+                // team — crée une équipe solo (CForceTeam natif) pour
+                // tester les flux exigeant un groupe : consentement
+                // evaluate TeamOperation [4][3], loot partagé…
+                if (_services.Teams.GetTeamOf((int)st.CharId) != null)
+                    _services.Teams.LeaveTeam((int)st.CharId);
+                var gmTeam = _services.Teams.CreateTeam((int)st.CharId,
+                    st.CharName, st.Level, st.ClassId);
+                await SendAdminTextAsync(session,
+                    $"team #{gmTeam.Id} créée (leader {st.CharId})",
+                    token);
+                break;
+
+            case "service" or "svc":
+                // service <type> [ref] [extra] — appelle directement la
+                // table NPC-service → UI (RunNpcServiceAsync) sans
+                // dialogue, pour tester les paquets 579/496/… hors NPC.
+                if (args.Length < 1 || !int.TryParse(args[0], out var svcT))
+                {
+                    await SendAdminTextAsync(session,
+                        "usage: //service <type> [ref] [extra]", token);
+                    break;
+                }
+                {
+                    var sRef = args.Length > 1 && int.TryParse(args[1], out var r)
+                        ? r : 0;
+                    var sExtra = args.Length > 2 && int.TryParse(args[2], out var e)
+                        ? e : 0;
+                    await RunNpcServiceAsync(session, st, svcT, sRef, sExtra,
+                        token);
+                }
+                break;
+
             case "tele" or "tp" or "warp":
                 // tele <x> <z> — déplacement dans le node courant,
                 // même payload que le teleport de position MoveSelf.
                 if (args.Length >= 2 &&
-                    float.TryParse(args[0], out var tx) &&
-                    float.TryParse(args[1], out var tz))
+                    float.TryParse(args[0],
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var tx) &&
+                    float.TryParse(args[1],
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var tz))
                 {
                     st.PosX = tx;
                     st.PosZ = tz;
@@ -158,6 +195,22 @@ public sealed partial class ZoneEntryFlow
                     await SendAttrAsync(session, st.CharId, 2, g, 0,
                         token);
                     await SendAdminTextAsync(session, $"gold={g}", token);
+                }
+                break;
+
+            case "give" or "give_item":
+                // give <itemId> [n] — octroi GM : même chemin que la
+                // remise de quête (AddItemAsync + 274/291 + trésor au
+                // sol si sac plein + notif ItemCollect).
+                if (args.Length >= 1 &&
+                    int.TryParse(args[0], out var gItem))
+                {
+                    var gn = args.Length >= 2 &&
+                        int.TryParse(args[1], out var v) ? v : 1;
+                    await GiveQuestItemAsync(session, st, gItem,
+                        Math.Max(1, gn));
+                    await SendAdminTextAsync(session,
+                        $"give {gItem} x{Math.Max(1, gn)}", token);
                 }
                 break;
 
@@ -280,13 +333,42 @@ public sealed partial class ZoneEntryFlow
                         "usage : clone_monster <mobId> [count]", token);
                 break;
 
+            case "npc":
+                // npc <npcId> — extension Eden (miroir du verbe de
+                // scène BornNpcByTID) : fait naître un NPC template à
+                // la position du GM — nécessaire aux NPC jamais placés
+                // dans les scènes (commissaire-priseur 53003).
+                if (args.Length >= 1 && int.TryParse(args[0], out var npcId)
+                    && _services.Live.NpcSpawnable(npcId))
+                {
+                    var e = _services.Live.SpawnNpc(st.NodeId,
+                        st.InstanceGroup, npcId, st.PosX, st.PosZ,
+                        _services.Live.GroundHeightAt(
+                            _services.Scenes.GetScene(
+                                $"S{st.NodeId:D3}"),
+                            st.PosX, st.PosZ),
+                        st.Facing);
+                    await BroadcastSeeMobAsync(st.NodeId,
+                        st.InstanceGroup, e, token);
+                    await SendAdminTextAsync(session,
+                        $"npc {npcId} né", token);
+                }
+                else
+                    await SendAdminTextAsync(session,
+                        "usage : npc <npcId>", token);
+                break;
+
             case "transport_node" or "goto":
                 // transport_node <nodeId> — commande native de
                 // téléportation de carte ; `goto` natif prend 2
                 // coordonnées → routé vers tele.
                 if (cmd == "goto" && args.Length >= 2 &&
-                    float.TryParse(args[0], out var gx) &&
-                    float.TryParse(args[1], out var gz))
+                    float.TryParse(args[0],
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var gx) &&
+                    float.TryParse(args[1],
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out var gz))
                 {
                     // goto <x> <z> natif = déplacement dans le node —
                     // même corps 313 que //tele.
@@ -420,6 +502,9 @@ public sealed partial class ZoneEntryFlow
                             0, 1);
                         st.Level = 1;
                         st.Experience = 0;
+                        // Même garde que GrantCharExpAsync : l'UPDATE
+                        // est direct — invalide les saves périmés en file.
+                        _ = NextSaveMark(st.CharId);
                     }
                     var need = 0L;
                     for (var l = st.Level; l < lv; l++)
@@ -539,6 +624,17 @@ public sealed partial class ZoneEntryFlow
                             0, m.Hp);
                     await SendAdminTextAsync(session,
                         $"kill x{targets.Count}", token);
+                }
+                break;
+
+            case "suicide":
+                // suicide — tue le GM lui-même par le chemin de mort
+                // joueur normal (outil de validation de la fenêtre de
+                // mort / revive).
+                if (!st.Dead)
+                {
+                    await PlayerDeathAsync(session, st, 0u, token);
+                    await SendAdminTextAsync(session, "suicide", token);
                 }
                 break;
 

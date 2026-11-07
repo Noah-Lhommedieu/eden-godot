@@ -195,4 +195,96 @@ public class FamilyHandlerTests
             await cmd.ExecuteNonQueryAsync();
         }
     }
+
+    // ── GainExp natif (mission @0x081beec0) — seuils c_level
+    // col11 : level<3 auto-level (un seuil), level≥3 clamp
+    // [0, seuil], ligne absente → aucun gain. ─────────────────
+
+    private static GuildService ExpService()
+    {
+        var svc = new GuildService();
+        // c_level EDENFR : lvl2→2000, lvl3→7000, lvl4→24000 …
+        svc.AttachFamilyExpCurve(new Dictionary<int, int>
+        {
+            [2] = 2000, [3] = 7000, [4] = 24000,
+        });
+        return svc;
+    }
+
+    /// <summary>Niveau &lt; 3 : seuil atteint → un seuil soustrait,
+    /// level +1 (SetLevel natif).</summary>
+    [Fact]
+    public async Task GainExp_LevelsUpBelow3()
+    {
+        var svc = ExpService();
+        var g = await svc.CreateGuildAsync(10, "Alpha", 30);
+        svc.AddExperience(g.Id, 1500);
+        Assert.Equal(1500, g.Experience);
+        Assert.Equal(1, g.Level);
+        svc.AddExperience(g.Id, 600); // 2100 ≥ 2000 → level 2
+        Assert.Equal(2, g.Level);
+        Assert.Equal(100, g.Experience); // un seul seuil soustrait
+    }
+
+    /// <summary>EXP bankée == seuil au niveau &lt; 3 : le natif
+    /// rejette tout nouveau gain positif.</summary>
+    [Fact]
+    public async Task GainExp_RejectsAtThresholdBelow3()
+    {
+        var svc = ExpService();
+        var g = await svc.CreateGuildAsync(10, "Alpha", 30);
+        g.Experience = 2000; // parkée exactement au seuil
+        svc.AddExperience(g.Id, 100);
+        Assert.Equal(2000, g.Experience);
+        Assert.Equal(1, g.Level);
+    }
+
+    /// <summary>Niveau ≥ 3 : pas de level-up par GainExp — l'EXP
+    /// est clampée au seuil (montée par quête d'upgrade).</summary>
+    [Fact]
+    public async Task GainExp_ClampsAtLevel3Plus()
+    {
+        var svc = ExpService();
+        var g = await svc.CreateGuildAsync(10, "Alpha", 30);
+        g.Level = 3;
+        svc.AddExperience(g.Id, 25000); // seuil lvl4 = 24000
+        Assert.Equal(24000, g.Experience);
+        Assert.Equal(3, g.Level);
+    }
+
+    /// <summary>Ligne c_level[level+1] absente → CLevelQuery == 0
+    /// natif → aucun gain du tout.</summary>
+    [Fact]
+    public async Task GainExp_NoLevelRowNoGain()
+    {
+        var svc = ExpService();
+        var g = await svc.CreateGuildAsync(10, "Alpha", 30);
+        g.Level = 4; // pas de ligne 5 dans la courbe de test
+        svc.AddExperience(g.Id, 1000);
+        Assert.Equal(0, g.Experience);
+    }
+
+    /// <summary>Courbe non branchée → inerte (boot de test).</summary>
+    [Fact]
+    public async Task GainExp_NoCurveAttached()
+    {
+        var svc = new GuildService();
+        var g = await svc.CreateGuildAsync(10, "Alpha", 30);
+        svc.AddExperience(g.Id, 500);
+        Assert.Equal(0, g.Experience);
+    }
+
+    /// <summary>Gain négatif : le natif ne clampe le négatif qu'au
+    /// niveau ≥ 3 — en dessous, l'EXP peut passer sous zéro
+    /// (comportement natif, fidèlement porté).</summary>
+    [Fact]
+    public async Task GainExp_NegativeClampOnlyAt3Plus()
+    {
+        var svc = ExpService();
+        var g = await svc.CreateGuildAsync(10, "Alpha", 30);
+        g.Level = 3;
+        g.Experience = 100;
+        svc.AddExperience(g.Id, -500);
+        Assert.Equal(0, g.Experience);
+    }
 }

@@ -113,6 +113,8 @@ public partial class AutoAttack : Node
     /// lève le hold post-cast : le joueur a demandé la poursuite.</summary>
     public void Engage(RemoteEntity target)
     {
+        // Un mort n'attaque pas.
+        if (PlayerVitals.IsDead) return;
         // Resynchronise le suivi de cast : un ordre explicite pendant
         // un cast re-donne la poursuite à la fin du cast ; hors cast,
         // aucune retenue post-cast ne doit s'appliquer.
@@ -192,6 +194,7 @@ public partial class AutoAttack : Node
         var t = _target;
         var p = _player;
         if (t == null || p == null) return;
+        if (PlayerVitals.IsDead) { CancelSend(); return; }
         // Cible despawnée / libérée → arrêt.
         if (!GodotObject.IsInstanceValid(t) || t.IsQueuedForDeletion())
         {

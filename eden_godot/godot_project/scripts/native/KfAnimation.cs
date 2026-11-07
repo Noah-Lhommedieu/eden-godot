@@ -243,18 +243,43 @@ public sealed class KfAnimSet
         });
     }
 
-    /// <summary>Thread principal : construit au plus une séquence déjà cuite (coût ~ordre de la ms).</summary>
+    readonly Dictionary<string, Animation> _staged = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Thread principal : construit les séquences déjà cuites (~4 ms/image) dans une zone de
+    /// transit, puis les ajoute à la librairie vivante par lots. Chaque AddAnimation sur une librairie
+    /// attachée invalide le cache de l'AnimationPlayer, reconstruit en O(pistes totales) à l'image
+    /// suivante : une séquence par image pour les ~300 anims du joueur donnait 17→41 ms/image pendant
+    /// ~7 s après l'entrée en jeu. Par lots de 100, une reconstruction par lot.</summary>
     public void PumpWarm()
     {
-        if (!_warmReady.TryDequeue(out var n)) return;
-        System.Threading.Interlocked.Decrement(ref _warmPending);
-        Ensure(n);
+        var t0 = Godot.Time.GetTicksUsec();
+        while (_warmReady.TryDequeue(out var n))
+        {
+            System.Threading.Interlocked.Decrement(ref _warmPending);
+            Ensure(n, stage: true);
+            if (Godot.Time.GetTicksUsec() - t0 >= 4000) break;
+        }
+        if (_staged.Count >= 100 || (_staged.Count > 0 && _warmReady.IsEmpty && !WarmPending))
+            FlushStaged();
+    }
+
+    void FlushStaged()
+    {
+        foreach (var (k, a) in _staged)
+            if (!Lib.HasAnimation(k)) Lib.AddAnimation(k, a);
+        _staged.Clear();
     }
 
     /// <summary>Vrai si l'animation <paramref name="name"/> est (désormais) dans la librairie.</summary>
-    public bool Ensure(string name)
+    public bool Ensure(string name, bool stage = false)
     {
         if (Lib.HasAnimation(name)) return true;
+        if (_staged.ContainsKey(name))
+        {
+            if (stage) return true;
+            FlushStaged();   // demandée avant le lot : on publie tout de suite
+            return Lib.HasAnimation(name);
+        }
         if (!_tried.Add(name)) return false;
         var sw = System.Diagnostics.Stopwatch.StartNew();
         var baked = Source.Baked(name);
@@ -272,7 +297,7 @@ public sealed class KfAnimSet
                     var a0 = (Vector3)anim.TrackGetKeyValue(ti, 0); var a1 = (Vector3)anim.TrackGetKeyValue(ti, anim.TrackGetKeyCount(ti) - 1);
                     if ((a1 - a0).Length() > 0.05f) GD.Print($"[kfanim]   dérive {anim.TrackGetPath(ti)} {a0} → {a1}");
                 }
-        Lib.AddAnimation(name, anim);
+        if (stage) _staged[name] = anim; else Lib.AddAnimation(name, anim);
         return true;
     }
 }

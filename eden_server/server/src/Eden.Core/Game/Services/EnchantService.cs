@@ -51,6 +51,7 @@ public sealed class EnchantService
         }
         all = ApplyClientOverlay(all, decodedDir);
         AddDevMoveSpeedEnchant(all);
+        AddDevDungeonPassEnchant(all);
         return new EnchantService(all);
     }
 
@@ -74,6 +75,33 @@ public sealed class EnchantService
         raw[9] = "2051";
         raw[10] = ServerConfig.DevMoveSpeedBuffPct.ToString(
             System.Globalization.CultureInfo.InvariantCulture);
+        defs.Add(new EnchantParser.EnchantDef
+        {
+            Id = id, GroupCode = raw[1], Level = 1, Name = raw[5],
+            Enabled = true, Raw = raw,
+        });
+    }
+
+    /// <summary>Enchant synthétique « passe donjon dev » : aucun effet de
+    /// stats ; sa présence désactive le décompte des entrées de donjon
+    /// (<see cref="DungeonEntryRules.DevPassBuffId"/>). Dev seulement —
+    /// à retirer avec ApplyDevDungeonPassAsync.</summary>
+    public static void AddDevDungeonPassEnchant(
+        List<EnchantParser.EnchantDef> defs)
+    {
+        var id = DungeonEntryRules.DevPassBuffId;
+        if (defs.Any(d => d.Id == id)) return;
+        var raw = new string[62];
+        Array.Fill(raw, "");
+        raw[0] = id.ToString();
+        raw[1] = "E9998";
+        raw[4] = "1";
+        raw[5] = "DevDungeonPass";
+        raw[7] = "1";
+        // Une commande neutre (vitesse +0) : sans commande, l'enchant
+        // est traité comme instantané et ne crée aucun statut.
+        raw[9] = "2051";
+        raw[10] = "0";
         defs.Add(new EnchantParser.EnchantDef
         {
             Id = id, GroupCode = raw[1], Level = 1, Name = raw[5],

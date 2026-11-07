@@ -253,7 +253,12 @@ public sealed class ZoneSwitchItemLocationOk : NetMessage
 /// l'usage est <see cref="ZonePutItem"/> (ZoneCombatMessages.cs).</summary>
 public sealed record PutItemResult(int ItemId, int Bag, int Slot,
     int Durability, int MaxDurability, byte Flags, int Amount,
-    int Strengthen);
+    int Strengthen)
+{
+    /// <summary>Champs optionnels (sockets/combos/magicbox) lus du
+    /// mask + queue fixe — <see cref="ItemMeta"/>.</summary>
+    public ItemMeta Meta { get; init; } = new();
+}
 
 /// <summary>S→C NCID 303 — ClientItemUse : accusé d'usage.
 /// `[i32 charId][i32 0][u16 itemId][s16 contType][s16 contIdx]

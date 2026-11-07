@@ -867,6 +867,87 @@ public sealed partial class CharacterRepository : ICharacterRepository
             new { Amount = amount, CharacterId = characterId });
     }
 
+    /// <summary>Soldes des monnaies de fame shops portées par
+    /// `player_characters` — `BuyItems` natif @0x080aca40 : colisée
+    /// char+0xbbc, war coin char+0x874 (« Battle Merit »), alpaca
+    /// coin char+0x878 (cf. `CGlobalInfo::GainWarCoin` @0x8081490 /
+    /// `GainAlpacaCoin` @0x8081160 mission).</summary>
+    public async Task<(long ColosseumGold, int WarCoin, int AlpacaCoin)>
+        GetShopCoinBalancesAsync(int characterId)
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        var row = await connection.QuerySingleOrDefaultAsync(
+            "SELECT COALESCE(colosseum_gold,0) AS colosseum_gold, " +
+            "COALESCE(war_coin,0) AS war_coin, " +
+            "COALESCE(alpaca_coin,0) AS alpaca_coin " +
+            "FROM player_characters WHERE id = @Id",
+            new { Id = characterId });
+        if (row == null) return (0, 0, 0);
+        return ((long)row.colosseum_gold, (int)row.war_coin,
+            (int)row.alpaca_coin);
+    }
+
+    /// <summary>« Battle Merit » — natif `CGlobalInfo::GainWarCoin`
+    /// @0x8081160/0x8081490 : `war_coin` borné [0, 9999999],
+    /// retourné pour le 576 ClientUpdateWarCoin émis ensuite.</summary>
+    public async Task<int> AddWarCoinAsync(int characterId, int amount)
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        const string sql = @"
+            UPDATE player_characters
+            SET war_coin =
+                LEAST(9999999, GREATEST(0, COALESCE(war_coin, 0)
+                    + @Amount))
+            WHERE id = @CharacterId
+            RETURNING war_coin;";
+        return await connection.ExecuteScalarAsync<int>(sql,
+            new { Amount = amount, CharacterId = characterId });
+    }
+
+    /// <summary>« Alpaca Coins » — natif `CGlobalInfo::GainAlpacaCoin`
+    /// @0x8081160 : `alpaca_coin` borné [0, 9999999], retourné pour
+    /// le 580 ClientUpdateAlpacaCoin émis ensuite.</summary>
+    public async Task<int> AddAlpacaCoinAsync(int characterId,
+        int amount)
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        const string sql = @"
+            UPDATE player_characters
+            SET alpaca_coin =
+                LEAST(9999999, GREATEST(0, COALESCE(alpaca_coin, 0)
+                    + @Amount))
+            WHERE id = @CharacterId
+            RETURNING alpaca_coin;";
+        return await connection.ExecuteScalarAsync<int>(sql,
+            new { Amount = amount, CharacterId = characterId });
+    }
+
+    /// <summary>GainSpecialCoin natif (`CDBAgent::GainSpecialCoin`
+    /// @0x80863f0 mission) : `special_coins.coinNN` += amount clampé
+    /// [0, 9999999]. <paramref name="coinType"/> = type wire 0..11
+    /// → colonne coin{type+1:D2} (miroir de
+    /// <see cref="GetSpecialCoinsAsync"/>). La ligne est créée si
+    /// absente. Retourne le nouveau total.</summary>
+    public async Task<int> AddSpecialCoinAsync(int characterId,
+        int coinType, int amount)
+    {
+        var idx = Math.Clamp(coinType, 0, 11) + 1;
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        await connection.ExecuteAsync(
+            "INSERT INTO special_coins (player_id) VALUES (@Id) " +
+            "ON CONFLICT (player_id) DO NOTHING",
+            new { Id = characterId });
+        return await connection.ExecuteScalarAsync<int>(
+            $"UPDATE special_coins SET coin{idx:D2} = " +
+            $"GREATEST(0, LEAST(9999999, coin{idx:D2} + @a)) " +
+            $"WHERE player_id = @Id RETURNING coin{idx:D2}",
+            new { Id = characterId, a = amount });
+    }
+
     public async Task UpdateCoordinatesAsync(int characterId, int nodeId, double x, double y, double z, double dir)
     {
         // Garde-fou : une position non finie ou hors carte (|coord| > 20k)

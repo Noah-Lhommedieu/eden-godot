@@ -100,6 +100,82 @@ public sealed class WalkableGround
     /// 0 tombe sous la map) : le rayon balaie la colonne de bas en
     /// haut, la première face rencontrée est le sol le plus bas =
     /// surface marchable. Ne sert que de replis (spawn local.ini).
+    /// <summary>Comme <see cref="SampleUp"/> mais SANS toucher à l'état
+    /// sticky du marcheur — pour le placement des entités distantes.</summary>
+    public bool PeekLowest(Node3D? worldCtx, float x, float z,
+        out float ground)
+    {
+        var space = worldCtx?.GetWorld3D()?.DirectSpaceState;
+        ground = 0f;
+        if (space == null) return false;
+        return ScanFloorsAbove(space, x, z, -4096f, FloorMask,
+                   out ground, float.MaxValue) ||
+               ScanFloorsAbove(space, x, z, -4096f, ShellLayer,
+                   out ground, float.MaxValue);
+    }
+
+    /// <summary>Repli « étage voisin » pour entités distantes : la face
+    /// la plus basse AU-DESSUS de <paramref name="refY"/> (bornée à
+    /// <see cref="MaxDrop"/> — un étage au-dessus, pas le toit), sinon
+    /// la colonne entière (<see cref="PeekLowest"/>) en dernier recours.
+    /// Un <see cref="PeekLowest"/> aveugle choisissait le plancher le
+    /// plus bas d'un donjon multi-niveaux alors que l'entité vivait un
+    /// étage plus haut.</summary>
+    public bool PeekNearest(Node3D? worldCtx, float x, float z,
+        float refY, out float ground)
+    {
+        var space = worldCtx?.GetWorld3D()?.DirectSpaceState;
+        ground = 0f;
+        if (space == null) return false;
+        return ScanFloorsAbove(space, x, z, refY, FloorMask,
+                   out ground, MaxDrop) ||
+               ScanFloorsAbove(space, x, z, refY, ShellLayer,
+                   out ground, MaxDrop) ||
+               PeekLowest(worldCtx, x, z, out ground);
+    }
+
+    /// <summary>Placement « le plus proche du z serveur » : le terrain
+    /// (heightfield) n'est qu'un candidat parmi les sols OBJ — sur les
+    /// maps multi-niveaux (village sous la canopée S002, ponts, donjons)
+    /// le vrai étage est celui le plus proche de <paramref name="refY"/>,
+    /// pas le plus haut (<c>max</c> posait les entités sur le toit) ni le
+    /// plus bas (plafond d'une grotte). Candidats : terrain, plancher le
+    /// plus bas au-dessus de refY (≤ <see cref="MaxDrop"/>), dessus le
+    /// plus haut en dessous ; le plus proche de refY gagne, repli
+    /// <see cref="PeekLowest"/>.</summary>
+    public bool PeekNearestY(Node3D? worldCtx, float x, float z,
+        float refY, bool hasTerrain, float terrainY, out float ground)
+    {
+        ground = terrainY;
+        var best = hasTerrain ? MathF.Abs(terrainY - refY)
+                              : float.MaxValue;
+        var found = hasTerrain;
+        var space = worldCtx?.GetWorld3D()?.DirectSpaceState;
+        if (space != null)
+        {
+            // Scans non bornés : la comparaison |y − refY| écarte
+            // elle-même les surfaces lointaines — borner à MaxDrop
+            // raterait un plancher de donjon empilé >24 u du z reçu.
+            if (ScanFloorsAbove(space, x, z, refY, FloorMask,
+                    out var up, float.MaxValue) ||
+                ScanFloorsAbove(space, x, z, refY, ShellLayer,
+                    out up, float.MaxValue))
+            {
+                if (up - refY < best) { best = up - refY; ground = up; }
+                found = true;
+            }
+            if (ScanDown(space, x, z, refY, FloorMask, out var dn,
+                    512f) ||
+                ScanDown(space, x, z, refY, ShellLayer, out dn, 512f))
+            {
+                if (refY - dn < best) { ground = dn; }
+                found = true;
+            }
+        }
+        if (found) return true;
+        return PeekLowest(worldCtx, x, z, out ground);
+    }
+
     public bool SampleUp(Node3D? worldCtx, float x, float z,
         out float ground)
     {
@@ -171,11 +247,12 @@ public sealed class WalkableGround
     /// : le dessous extérieur d'une coquille (normale bas) ne peut
     /// pas y faire office de sol.</summary>
     private static bool ScanDown(PhysicsDirectSpaceState3D space,
-        float x, float z, float refY, uint mask, out float ground)
+        float x, float z, float refY, uint mask, out float ground,
+        float drop = MaxDrop)
     {
         ground = 0f;
         var fromY = refY + HeadClearance;
-        var stopY = refY - MaxDrop;
+        var stopY = refY - drop;
         for (var i = 0; i < 8; i++)
         {
             var q = PhysicsRayQueryParameters3D.Create(

@@ -160,7 +160,9 @@ public partial class ChatPanel : Control
                 { BgColor = LogBackdrop });
             back.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
             main.AddChild(back);
-            main.MoveChild(back, 0);
+            // main peut être encore en setup (warning move_child) →
+            // différé : back repasse sous _log fin de frame.
+            main.CallDeferred(Node.MethodName.MoveChild, back, 0);
             main.AddChild(_log);
             _log.OffsetLeft = 5;
             _log.OffsetRight = -4;

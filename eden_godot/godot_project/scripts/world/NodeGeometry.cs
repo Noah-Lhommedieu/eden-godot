@@ -34,6 +34,12 @@ public static class NodeGeometry
         }
     }
 
+    /// <summary>Code minimap de la colonne c_node (<c>S101M</c> → <c>S101</c>) ;
+    /// utilisé quand la map n'a pas d'image <c>UI/map/Sxxxs.png</c> propre.</summary>
+    public static string? MinimapCode(int nodeId) =>
+        Load().TryGetValue(nodeId, out var alt) && alt[1].Length > 1
+            ? alt[1].ToUpperInvariant() : null;
+
     /// <summary>Code de géométrie jouable pour <paramref name="nodeId"/>, ou null si aucun dossier n'existe.</summary>
     public static string? Resolve(int nodeId, Func<string, bool> exists)
     {

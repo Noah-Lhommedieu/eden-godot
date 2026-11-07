@@ -417,7 +417,8 @@ public static class AssetCatalog
                 decorScope: norm.Contains("/map/model/") ||
                             norm.Contains("/decorate/model/") ||
                             norm.Contains("/house/model/"),
-                modelName: Path.GetFileNameWithoutExtension(absPath));
+                modelName: Path.GetFileNameWithoutExtension(absPath),
+                monsterScope: norm.Contains("/monster/model/"));
         }
         TallyEmbeddedTextures(proto, absPath);
         Perf.PerfCulling.ApplyGlbProto(proto, absPath);
@@ -661,6 +662,14 @@ public static class AssetCatalog
             var fstem = f0.Contains('.') ? f0[..f0.LastIndexOf('.')] : f0;
             foundExisting = true;
             if (LoadNativeDds(f0, fstem) is { } t0) return t0;
+        }
+        // PNG brut d'origine (imagesets uidata — ToolTips.png…) :
+        // pas un DDS → lecture image directe avant l'échec.
+        if (rel.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+            && ResolveRawAsset(rel) is { } pngPath
+            && Vfs.EdenVfs.LoadImage(pngPath) is { } png)
+        {
+            return ImageTexture.CreateFromImage(png);
         }
         // Échecs cachés dans _texCache → un seul log par chemin.
         GD.PrintErr(foundExisting

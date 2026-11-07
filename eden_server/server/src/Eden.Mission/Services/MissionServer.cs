@@ -304,12 +304,16 @@ public sealed class MissionServer
                 }
                 break;
 
-            case 142: // MigrationDone [i32 charUid]
+            case 142: // MigrationDone [i32 charUid][s16 nodeId?]
                 if (b.Length >= 4)
                 {
                     var charUid = BitConverter.ToInt32(b, 0);
                     lock (_charOwner) _charOwner[charUid] = s;
-                    var node = s.GlobalNodes.FirstOrDefault();
+                    // nodeId en queue (envoyé par la zone — la DB marque
+                    // node_id=0 pendant le transit) ; sinon repli.
+                    var node = b.Length >= 6
+                        ? (ushort)BitConverter.ToInt16(b, 4)
+                        : s.GlobalNodes.FirstOrDefault();
                     await _quests.OnMigrationDoneAsync(s, charUid, node);
                 }
                 break;
@@ -1082,6 +1086,16 @@ public sealed class MissionServer
                 if (w.Length > 1 && w[1] == "Prestige")
                     await _db.AddPrestigeExpAsync(charUid,
                         Arg("Prestige"), Arg("="));
+                break;
+
+            // "TempStrengthenFailTime = N" — TC_TempStrengthenFailTime
+            // natif @0x81eb310 : écrit exec+0x87c (u16). La zone
+            // l'émet à chaque renfort résolu (0 succès, n+1 échec) —
+            // miroir session seule, pas de colonne SQL côté natif
+            // non plus (champ « Temp » du blob exécuteur).
+            case "TempStrengthenFailTime":
+                _quests.ContextFor(charUid).StrengthenFailTime =
+                    Arg("TempStrengthenFailTime");
                 break;
 
             // "FortuneBag Item= %hd Counter= %hd" — compteur

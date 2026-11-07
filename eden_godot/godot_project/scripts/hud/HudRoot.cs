@@ -304,11 +304,19 @@ public partial class HudRoot : CanvasLayer
             .Select(w => w.Trim()).Where(w => w.Length > 0).ToList();
         if (openKeys.Count > 0)
         {
+            // --hud-open-delay=<s> : recule l'ouverture (l'entrée en
+            // zone referme les fenêtres — les captures phase D ont
+            // besoin d'ouvrir après la fin du chargement).
+            var delay = 1.0;
+            foreach (var a in args)
+                if (a.StartsWith("--hud-open-delay=") &&
+                    double.TryParse(a[17..], out var d))
+                    delay = d;
             GD.Print($"[hud] --hud-open planifié " +
                 $"({string.Join(",", openKeys)}) hud={GetPath()}");
             var ot = new Godot.Timer
             {
-                WaitTime = 1.0, OneShot = true, Autostart = true,
+                WaitTime = delay, OneShot = true, Autostart = true,
             };
             AddChild(ot);
             ot.Timeout += () =>
@@ -327,6 +335,11 @@ public partial class HudRoot : CanvasLayer
         // Main Menu sur pile vide — preuve H4).
         if (args.Contains("--esc-test"))
             AddChild(new HudWindows.EscProbe(this));
+        // --cmd-file=<path> : canal GM — chaque nouvelle ligne du
+        // fichier est envoyée en ZoneTextCommand (pilotage live).
+        foreach (var a in args)
+            if (a.StartsWith("--cmd-file="))
+                AddChild(new GmFileProbe(a[11..].Trim()));
         // --inv-test : sonde inventaire (move/split/tri/équipement).
         if (args.Contains("--inv-test"))
             AddChild(new InventoryProbe(this));
@@ -394,7 +407,7 @@ public partial class HudRoot : CanvasLayer
     /// la visibilité (racine + panneau interne éventuel).</summary>
     public void OpenWindow(string key) => ForceOpen(key);
 
-    private void ForceOpen(string key)
+    public void ForceOpen(string key)
     {
         switch (key)
         {
@@ -567,8 +580,10 @@ public partial class HudRoot : CanvasLayer
             // loot/mort — contenu factice EnsureDemo hors session.
             case "territory":
             case "territorywar":
+                // Démo pour la capture hors session + 189 réelle
+                // quand la zone est connectée.
                 ForceOpenExt<TerritoryWindow>("TerritoryWnd",
-                    w => w.EnsureDemo());
+                    w => { w.EnsureDemo(); w.Open(); });
                 return;
             case "colosseum":
             case "arena":
@@ -619,6 +634,49 @@ public partial class HudRoot : CanvasLayer
             case "featdlg":
                 ForceOpenExt<FeatureDialogWindow>("FeatureDialogWnd",
                     w => w.Visible = true);
+                return;
+            // Fenêtres lots C/D montées dans ZoneWindows (capture
+            // --hud-open — montre le layout natif sans paquet).
+            case "magiccube":
+                ForceOpenExt<MagicCubeWindow>("MagicCubeWindow",
+                    w => w.Open());
+                return;
+            case "magicbox":
+                ForceOpenExt<MagicBoxWindow>("MagicBoxWindow",
+                    w => w.Open());
+                return;
+            case "specialcoin":
+            case "coin":
+                ForceOpenExt<SpecialCoinWindow>("SpecialCoinWindow",
+                    w => w.Open());
+                return;
+            case "paysystem":
+                ForceOpenExt<PaySystemWindow>("PaySystemWindow",
+                    w => w.Open(0));
+                return;
+            case "townlist":
+            case "familytown":
+                ForceOpenExt<TownListWindow>("TownListWindow",
+                    w => w.Open());
+                return;
+            case "familybuilding":
+                ForceOpenExt<FamilyBuildingWindow>(
+                    "FamilyBuildingWindow", w => w.Open());
+                return;
+            case "strengthen":
+            case "fortify":
+                ForceOpenExt<StrengthenWindow>("StrengthenWindow",
+                    w => w.ShowDemo());
+                return;
+            case "lifeskill":
+            case "racialcraft":
+                ForceOpenExt<LifeSkillWindow>("LifeSkillWindow",
+                    w => w.ShowDemo());
+                return;
+            case "combine":
+            case "fusion":
+                ForceOpenExt<CombineWindow>("CombineWindow",
+                    w => w.ShowDemo());
                 return;
             case "lottery":
             case "altar":
@@ -1047,6 +1105,7 @@ public partial class HudRoot : CanvasLayer
 
         public override void _Process(double delta)
         {
+            using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.HudRoot");
             _t += delta;
             if (_phase == 0)
             {

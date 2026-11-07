@@ -186,12 +186,14 @@ public sealed partial class ZoneEntryFlow
             a => a.Type == "BORN");
         if (born != null)
         {
-            st.PosX = born.X; st.PosZ = born.Y; st.Facing = born.Facing;
+            st.PosX = born.X; st.PosZ = born.Y; st.PosY = born.Z;
+            st.Facing = born.Facing;
         }
         else if (scene?.Positions.Count > 0)
         {
             st.PosX = scene.Positions[0].X;
             st.PosZ = scene.Positions[0].Y;
+            st.PosY = scene.Positions[0].Z;
         }
     }
 
@@ -201,7 +203,7 @@ public sealed partial class ZoneEntryFlow
     /// ou <see cref="SceneParser.Scene.ReviveLinks"/>), puis point
     /// aléatoire dans l'aire (<c>CEventArea::GetRandomPoint</c>
     /// natif). Null si la clé/l'aire n'existe pas.</summary>
-    private (short Node, float X, float Z, float Facing)?
+    private (short Node, float X, float Z, float H, float Facing)?
         ResolvePackedAreaPoint(int packedId,
             Func<SceneParser.Scene, Dictionary<int, int>> links)
     {
@@ -230,7 +232,8 @@ public sealed partial class ZoneEntryFlow
             dx = (float)((Random.Shared.NextDouble() * 2 - 1) * r);
             dy = (float)((Random.Shared.NextDouble() * 2 - 1) * r);
         }
-        return ((short)node, area.X + dx, area.Y + dy, area.Facing);
+        return ((short)node, area.X + dx, area.Y + dy, area.Z,
+            area.Facing);
     }
 
     /// <summary>Applique la redirection d'aire résolue à l'état —
@@ -247,6 +250,7 @@ public sealed partial class ZoneEntryFlow
         st.NodeId = p.Node;
         st.PosX = p.X;
         st.PosZ = p.Z;
+        st.PosY = p.H;
         st.Facing = p.Facing;
         return true;
     }

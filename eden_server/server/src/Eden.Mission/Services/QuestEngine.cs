@@ -82,6 +82,12 @@ public sealed partial class QuestEngine
         public readonly Dictionary<int, int> DailyCompletions = new();
         /// <summary>Jour du dernier reset — exec+0x4dc natif.</summary>
         public int DailyResetDay;
+        /// <summary>Compteur d'échecs de renfort (exec+0x87c natif) —
+        /// miroir alimenté par la commande DBA
+        /// <c>TempStrengthenFailTime = N</c> émise par la zone à chaque
+        /// succès (0) / échec (n+1). Mémoire seule, durée de vie du
+        /// contexte (login) comme le blob exécuteur natif.</summary>
+        public int StrengthenFailTime;
         /// <summary>selId → action, dernier 56 émis (le client écho selId).</summary>
         public readonly Dictionary<int, DialogAction> DialogMap = new();
         /// <summary>Talks/services du dernier 56 — indexés par
@@ -175,11 +181,11 @@ public sealed partial class QuestEngine
             var (level, gender, dbNode) =
                 await _db.GetLevelGenderNodeAsync(charUid);
             ctx.Level = level; ctx.Gender = gender;
-            // Natif : MigrationDone lit le node en DB (Deserialize
-            // 0x813e1f0) — le 142 ne le porte pas et
-            // GlobalNodes.FirstOrDefault() renvoyait le premier node
-            // global (1) au lieu du node réel du perso.
-            ctx.NodeId = dbNode;
+            // Le 142 porte désormais le node réel de la zone (la DB
+            // marque node_id=0 pendant le transit — lecture native
+            // @0x813e1f0 inapplicable à notre write-behind). Repli DB
+            // pour un lien plus ancien qui n'enverrait que 4B.
+            ctx.NodeId = nodeId != 0 ? nodeId : dbNode;
             ctx.ClassId = await _db.GetClassIdAsync(charUid);
         }
         catch (Exception ex)
@@ -300,7 +306,7 @@ public sealed partial class QuestEngine
             // Quête à limite (col4>0) : le gate est le compteur seul —
             // Completed/FMS ne s'appliquent pas (FMSClear natif à la
             // complétion ; guérit aussi les vieux FMS=1 persistés).
-            var offerable = m.CompleteLimit > 0 && IsRepeatable(m)
+            var offerable = IsRepeatable(m)
                 ? !DoneBlocked(c, m)
                 : !DoneBlocked(c, m) &&
                   // Offerte seulement si FMS vierge ou reprenable —

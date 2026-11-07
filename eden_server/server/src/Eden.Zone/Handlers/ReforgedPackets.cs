@@ -84,3 +84,89 @@ public sealed class CNC_CZ_ClientHeroTrait : NetCommand
     public override void Deserialize(InBinStream stream)
         => Trait = stream.ReadByte();
 }
+
+/// <summary>
+/// Opcode 9060 S→C — offre d'entrée de donjon (custom Reborn, hors
+/// protocole natif) : le joueur est dans l'aire du portail d'un donjon à
+/// deux intensités. Corps `[s16 soloNode][s16 multiNode][u8 soloLeft]
+/// [u8 multiLeft][u8 maxParJour][u8 illimité]` — le choix revient par
+/// <see cref="CNE_CZ_ZoneServerDungeonEnter"/>.
+/// </summary>
+public sealed class CNC_CZ_ClientDungeonOffer : NetCommand
+{
+    public override int Opcode => 9060;
+    public override string Name => "CNC_CZ_ClientDungeonOffer";
+    public short SoloNode { get; set; }
+    public short MultiNode { get; set; }
+    public byte SoloLeft { get; set; }
+    public byte MultiLeft { get; set; }
+    public byte Max { get; set; }
+    public bool Unlimited { get; set; }
+
+    public override void Serialize(OutBinStream stream)
+    {
+        stream.WriteShort(SoloNode);
+        stream.WriteShort(MultiNode);
+        stream.WriteByte(SoloLeft);
+        stream.WriteByte(MultiLeft);
+        stream.WriteByte(Max);
+        stream.WriteBool(Unlimited);
+    }
+
+    public override void Deserialize(InBinStream stream)
+    {
+        SoloNode = stream.ReadShort();
+        MultiNode = stream.ReadShort();
+        SoloLeft = stream.ReadByte();
+        MultiLeft = stream.ReadByte();
+        Max = stream.ReadByte();
+        Unlimited = stream.ReadByte() != 0;
+    }
+}
+
+/// <summary>
+/// Opcode 9061 C→S — choix d'intensité : `[s16 node]` (node solo ou
+/// multi de l'offre reçue). Le serveur revalide tout (position dans le
+/// portail, niveau, entrées du jour).
+/// </summary>
+public sealed class CNE_CZ_ZoneServerDungeonEnter : NetCommand
+{
+    public override int Opcode => 9061;
+    public override string Name => "CNE_CZ_ZoneServerDungeonEnter";
+    public short Node { get; set; }
+    public override void Serialize(OutBinStream stream) =>
+        stream.WriteShort(Node);
+    public override void Deserialize(InBinStream stream) =>
+        Node = stream.ReadShort();
+}
+
+/// <summary>
+/// Opcode 9062 S→C — portails de donjon du node courant (custom Reborn),
+/// envoyé après MigrationDone : `[u8 n]` puis n × `[f32 x][f32 y][f32 z]
+/// [f32 rayon]` (repère scène). Le client y pose l'animation de portail.
+/// </summary>
+public sealed class CNC_CZ_ClientDungeonPortals : NetCommand
+{
+    public override int Opcode => 9062;
+    public override string Name => "CNC_CZ_ClientDungeonPortals";
+    public List<(float X, float Y, float Z, float R)> Portals { get; } = new();
+
+    public override void Serialize(OutBinStream stream)
+    {
+        stream.WriteByte((byte)Portals.Count);
+        foreach (var (x, y, z, r) in Portals)
+        {
+            stream.WriteFloat(x); stream.WriteFloat(y);
+            stream.WriteFloat(z); stream.WriteFloat(r);
+        }
+    }
+
+    public override void Deserialize(InBinStream stream)
+    {
+        Portals.Clear();
+        var n = stream.ReadByte();
+        for (var i = 0; i < n; i++)
+            Portals.Add((stream.ReadFloat(), stream.ReadFloat(),
+                stream.ReadFloat(), stream.ReadFloat()));
+    }
+}

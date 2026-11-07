@@ -311,23 +311,76 @@ public sealed partial class ZoneEntryFlow
                 return;
             case 12: case 13: case 14: case 15: case 16: case 17:
                 // Métiers → 496 ClientEnterWorks
-                // [i32 npc][s16 workType][s16 bldId][s16 ?][u16 0] ;
-                // workType natif = le type de service lui-même
-                // (12 mining, 13 planting, 14 summon, 15 alchemy,
-                // 16 casting, 17 enchanting) ; bldId/? = bâtiment
-                // familial — 0 hors ville de famille. Le type est
-                // mémorisé comme op works (ToWork exige op+4 == type) ;
-                // op unique char+0x670 : l'op shop/station précédente
-                // est détruite.
+                // [i32 npc][s16 workType][s16 taxRate][u16 bldLevel]
+                // [s16 0] ; workType natif = le type de service
+                // lui-même (12 mining, 13 planting, 14 summon,
+                // 15 alchemy, 16 casting, 17 enchanting). taxRate/
+                // bldLevel = le bâtiment familial résolu par
+                // *Shop::OpenShop (op+0x10/+0x18 natifs) — 0 hors
+                // ville de famille. Le type est mémorisé comme op
+                // works (ToWork exige op+4 == workType) ; op unique
+                // char+0x670 : l'op shop/station précédente est
+                // détruite.
                 st.WorkOpType = type;
                 st.ShopOpType = -1;
                 st.ShopOpNpcUid = 0;
                 st.ShopOpNpcHandle = 0;
+                st.WorkOpBuildingItemId = 0;
+                st.WorkOpTaxRate = 0;
                 CancelPendingStrengthen(st);
+                short bldLevel = 0;
+                if (st.VisitedFamilyInstanceId != 0
+                    && IsInFamilyInstanceNode(st)
+                    && _services.Social != null
+                    && st.HallNpcItems.TryGetValue(
+                        (uint)st.DialogNpcHandle, out var npcItem))
+                {
+                    // GetNpcItemByNpcNetID natif : contrat de NPC
+                    // expiré (due_date ≠ 0 écoulée) → refus 0xc56
+                    // sans ouvrir la fenêtre (OpenShop @0x0857a080).
+                    var nowSec = DateTimeOffset.UtcNow
+                        .ToUnixTimeSeconds();
+                    if (Eden.Core.Game.Family.FamilyBuildingWorkRules
+                            .IsNpcExpired(npcItem.DueDate, nowSec))
+                    {
+                        await SendTextIndexAsync(session, 0xc56, token,
+                            _services.GameData.Items.FirstOrDefault(
+                                i => i.Id
+                                    == (npcItem.ItemTid & 0xffff))
+                                ?.Name ?? string.Empty);
+                        return;
+                    }
+                    // GetBuildingItemByNpcNetID natif : l'item 0x29 à
+                    // la base de groupe de la loc du NPC → op+0x10
+                    // (uid DB) ; son niveau part dans le 496.
+                    var c0 = await _services.Social
+                        .GetFamilyBuildingsAsync(
+                            st.VisitedFamilyInstanceId, 0);
+                    var bld = c0.FirstOrDefault(b =>
+                        b.Loc == Eden.Core.Game.Family.FamilyHallRules
+                            .GroupBase(npcItem.Loc)
+                        && b.ItemType == Eden.Core.Game.Family
+                            .FamilyBuildingWorkRules.BuildingItemType);
+                    if (bld != null)
+                    {
+                        st.WorkOpBuildingItemId = bld.Id;
+                        bldLevel = bld.Level;
+                    }
+                    // Taxe op+0x18 : family+0x32 (BusinessTax) quand le
+                    // joueur crafte chez une AUTRE famille
+                    // (char+0x5c != char+0xaac natif).
+                    var ownGuild = _services.Guilds.GetGuildOf(
+                        (int)st.CharId);
+                    if (ownGuild?.Id != st.VisitedFamilyInstanceId
+                        && _services.Guilds.GetGuild(
+                            st.VisitedFamilyInstanceId) is { } town)
+                        st.WorkOpTaxRate = town.BusinessTax;
+                }
                 body = new List<byte>();
                 await session.SendAsync(new CNC_CZ_ClientEnterWorks
                 {
                     Field1 = st.DialogNpcUid, Field2 = (short)type,
+                    Field3 = st.WorkOpTaxRate, Field4 = bldLevel,
                 }, token);
                 return;
             case 18: // "auction" → 430 ClientAuctionHouse [i32 npcUid]
@@ -482,19 +535,24 @@ public sealed partial class ZoneEntryFlow
         int fn, int arg, CancellationToken token) =>
         RunNpcServiceAsync(session, st, fn, arg, 0, token);
 
-    /// <summary>"#:Talk 4620 4621#" -> [(4620,4621)] (paires titre/corps).</summary>
+    /// <summary>"#:Talk 4620 4621#…#:Talk 5000#" -> [(4620,4621),
+    /// (5000,5000)] — toutes les options du script (chaque colonne
+    /// `#:` porte une option ; `Talk L` seul = corps=label).</summary>
     private static List<(int title, int body)> ParseTalkPairs(string? script)
     {
         var res = new List<(int, int)>();
         if (string.IsNullOrEmpty(script)) return res;
-        var m = System.Text.RegularExpressions.Regex.Match(
-            script, @"#:Talk ([0-9 ]+)#");
-        if (!m.Success) return res;
-        var ids = m.Groups[1].Value.Split(' ',
-            StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
-        for (var i = 0; i + 1 < ids.Length; i += 2)
-            res.Add((ids[i], ids[i + 1]));
-        if (ids.Length % 2 == 1) res.Add((ids[^1], ids[^1]));
+        foreach (System.Text.RegularExpressions.Match m in
+            System.Text.RegularExpressions.Regex.Matches(
+                script, @"#:Talk ([0-9 ]+)#"))
+        {
+            var ids = m.Groups[1].Value.Split(' ',
+                StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse).ToArray();
+            for (var i = 0; i + 1 < ids.Length; i += 2)
+                res.Add((ids[i], ids[i + 1]));
+            if (ids.Length % 2 == 1) res.Add((ids[^1], ids[^1]));
+        }
         return res;
     }
 

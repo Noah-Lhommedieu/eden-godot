@@ -29,6 +29,24 @@ public sealed class ShopService
     /// l'Execute ZMis ZoneServerBuyBackList — 10 entrées max.</summary>
     private const int MaxBuybackEntries = 10;
 
+    /// <summary>Port d'accès aux monnaies typées des fame shops —
+    /// `BuyItems` natif @0x080aca40 : quand le priceType de l'item
+    /// (S_Item col30 → GameData::CItemData+0x78) n'est pas 1 (or),
+    /// le débit vise une autre bourse — lifelong gold (5), trésor
+    /// de famille (0xa), or colisée (0xb), special_coins
+    /// (0xc-0x11→types 0-5, 0x15-0x17→types 9-11 via
+    /// `CCharacter::GetCoinTypeByPriceType` @0x8409e40), war coin
+    /// (0x13), alpaca coin (0x14). Le natif relaie la plupart vers
+    /// la mission (TC BuySpecialCoinItem/BuyWarItem/…) ; ici la
+    /// zone possède les bourses et débite directement.
+    /// <c>GetBalance</c>(charId, priceType) → solde, ou null quand
+    /// la monnaie n'est pas gérée (achat refusé — ex. lover 4 sans
+    /// stockage). <c>Debit</c>(charId, priceType, montant) débite
+    /// après octroi de l'item et émet les updates client.</summary>
+    public sealed record ShopCurrencyPort(
+        Func<int, int, Task<long?>> GetBalance,
+        Func<int, int, long, Task> Debit);
+
     /// <summary>Entrée de rachat — snapshot complet de l'item vendu
     /// (sockets/combo/enchant conservés pour le rachat, comme le record
     /// SItemData que la mission native garde en mémoire) + prix payé
@@ -124,7 +142,8 @@ public sealed class ShopService
     public async Task<(bool Success, string Error, int ItemId,
         int? BagId, int? Slot,
         List<(int BagId, int Slot, bool Merged)> Touched)> BuyItemAsync(
-        int characterId, int storeId, int storeSlot, int count)
+        int characterId, int storeId, int storeSlot, int count,
+        ShopCurrencyPort? currency = null)
     {
         List<(int BagId, int Slot, bool Merged)> touched = new();
         var store = GetStore(storeId);
@@ -137,9 +156,38 @@ public sealed class ShopService
             touched);
 
         var price = BuyPriceOf(itemId) * count;
+        // priceType (col30 → +0x78) ≠ 1 → bourse typée
+        // (BuyItems @0x080aca40). priceType 0/absent → refus natif.
+        var priceType = _itemDefs.TryGetValue(itemId, out var pdef)
+            ? pdef.PriceType : (byte)1;
+        if (priceType != 1)
+        {
+            var balance = currency == null ? (long?)null
+                : await currency.GetBalance(characterId, priceType);
+            if (balance == null || currency == null)
+                return (false, $"Currency {priceType} unsupported",
+                    0, null, null, touched);
+            if (balance.Value < price)
+                return (false, "Not enough currency", 0, null, null,
+                    touched);
+            var curAdd = await _inventory.AddItemAsync(characterId,
+                itemId, count, 0, 0, false, touched);
+            if (!curAdd.Success)
+                return (false, "Inventory full", 0, null, null,
+                    touched);
+            await currency.Debit(characterId, priceType, price);
+            return (true, string.Empty, itemId, curAdd.BagId,
+                curAdd.Slot, touched);
+        }
+
         var gold = await _getGold(characterId);
-        if (gold < price) return (false, "Not enough gold", 0, null,
-            null, touched);
+        if (gold < price)
+        {
+            Eden.Core.Logging.EdenLog.Write(
+                $"[Shop] BuyItem diag char={characterId} item={itemId} " +
+                $"price={price} gold={gold} sellPrice={BuyPriceOf(itemId)}");
+            return (false, "Not enough gold", 0, null, null, touched);
+        }
 
         var add = await _inventory.AddItemAsync(characterId, itemId,
             count, 0, 0, false, touched);

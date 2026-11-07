@@ -150,7 +150,7 @@ public sealed partial class ZoneEntryFlow
         // UPDATE par paquet de mouvement saturerait la base
         // (SaveCharacterLocation natif est périodique aussi).
         _writeBehind.MarkCoordinates((int)st.CharId, st.NodeId,
-            st.PosX, st.PosZ, 0, st.Facing);
+            st.PosX, st.PosZ, st.PosY, st.Facing);
 
         await UpdateSightAsync(session, st, token);
     }

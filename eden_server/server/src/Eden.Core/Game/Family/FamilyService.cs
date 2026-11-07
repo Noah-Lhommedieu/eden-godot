@@ -232,4 +232,90 @@ public sealed class FamilyService
             return new InstanceCreateResult(0, node);
         });
     }
+
+    /// <summary>Résultat d'un grant succès famille — assez pour émettre
+    /// le NCID 67 flag=0 (<c>CNC_CW_ClientFamilyAchievementUpdate</c>)
+    /// et le push 68 single-entry (<c>BroadCastMsgToFamilyMember</c>
+    /// natif — une seule entrée SLog).</summary>
+    public readonly record struct FamilyAchievementResult(
+        short GroupKey, uint GroupPoint, short SpellPoint,
+        FamilyLogEntry Log);
+
+    /// <summary>Alimentation du succès de famille — port de
+    /// <c>CFamily::UpdataAchievement</c> (mission @0x081be030), appelé
+    /// par le natif depuis <c>SetAchievement</c> quand le joueur gagne
+    /// des points de succès personnels. Sémantique :
+    /// <list type="number">
+    ///   <item><c>gained &lt;= 0</c> → rien (le natif retourne avant
+    ///     toute écriture).</item>
+    ///   <item><c>family_achievement</c> upsert, clé =
+    ///     <paramref name="groupKey"/> (col6 du succès —
+    ///     <c>achievement_type</c> natif), plafond 999999999.</item>
+    ///   <item>compteurs dual-key : <c>+= gained</c> sous la clé
+    ///     GroupKey <b>et</b> sous la clé Type.</item>
+    ///   <item><c>AchievementTotal</c> (fam+0x4c) += gained, cap.</item>
+    ///   <item><c>spell_point</c> += gained cap 100 <b>seulement si
+    ///     <c>elfking_tid &gt; 0</c></b> — <c>AdoptElfKing</c> n'a aucun
+    ///     caller natif (feature morte : le gate reste vrai mais
+    ///     l'observable est identique).</item>
+    ///   <item><c>family_log</c> type 4 (para1=achId, str1=nom du
+    ///     joueur) — le natif émet aussi le push 68 aux membres.</item>
+    ///   <item><c>family_achievement_rank</c> — snapshot immédiat
+    ///     (le natif diffère via un event ~20 min sur dirty flag).</item>
+    /// </list></summary>
+    /// <returns>Le total du type pour l'émission 67, ou null si le
+    /// grant est refusé (plafond) / hors famille / gained nul.</returns>
+    public async Task<FamilyAchievementResult?> ApplyFamilyAchievementAsync(
+        int charId, int achId, short type, short groupKey, int gained)
+    {
+        return await LockedAsync(async () =>
+        {
+            if (gained <= 0) return (FamilyAchievementResult?)null;
+            var fam = GetFamilyOf(charId);
+            if (fam is null) return null;
+            uint newGroupPoint;
+            if (!fam.Achievements.TryGetValue(groupKey, out var old))
+            {
+                newGroupPoint = (uint)gained;
+                await _repo.UpsertAchievementAsync(fam.Id, groupKey,
+                    newGroupPoint);
+                fam.Achievements[groupKey] = newGroupPoint;
+            }
+            else
+            {
+                if (old + gained > 999999999) return null; // cap natif
+                newGroupPoint = (uint)(old + gained);
+                await _repo.UpsertAchievementAsync(fam.Id, groupKey,
+                    newGroupPoint);
+                fam.Achievements[groupKey] = newGroupPoint;
+            }
+            // Compteurs dual-key fam+0x160 : clé GroupKey ET clé Type.
+            fam.Counters[groupKey] = fam.Counters.GetValueOrDefault(groupKey) + gained;
+            fam.Counters[type] = fam.Counters.GetValueOrDefault(type) + gained;
+            if (fam.AchievementTotal + gained < 999999999)
+                fam.AchievementTotal += (uint)gained;
+            // Spell point : gate elfking_tid > 0 (AdoptElfKing est du
+            // code mort natif — elfking_tid reste 0 en pratique).
+            if (fam.SpellPoint < 100 && fam.ElfkingTid > 0)
+            {
+                fam.SpellPoint = (short)Math.Min(100, fam.SpellPoint + gained);
+                await _repo.SetSpellPointAsync(fam.Id, fam.SpellPoint);
+            }
+            // UpdateLog natif (4, 1, achId, 0, playerName, "") →
+            // family_log + push 68 géré par l'appelant.
+            var name = fam.Members.TryGetValue(charId, out var me)
+                ? me.Name : "";
+            await _repo.AddLogAsync(fam.Id, 4, achId, name, "");
+            var entry = new FamilyLogEntry
+            {
+                Type = 4, Para = achId, Str1 = name, Str2 = "",
+                LogId = fam.Logs.Count == 0 ? 1 : fam.Logs.Max(l => l.LogId) + 1,
+                Date = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            };
+            fam.Logs.Add(entry);
+            await _repo.SaveAchievementRankAsync(fam);
+            return new FamilyAchievementResult(groupKey, newGroupPoint,
+                fam.SpellPoint, entry);
+        });
+    }
 }

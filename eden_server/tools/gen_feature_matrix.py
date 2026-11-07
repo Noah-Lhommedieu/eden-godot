@@ -6,7 +6,9 @@ Sources :
   - classes NetCommand generees (server/src/Eden.Core/Networking/
     Messages/Generated/*.g.cs) : opcode + nom.
   - sites d'emission : `SendAsync(new X` et `SendPacketAsync(n,`
-    dans server/src/.
+    dans server/src/ ; plus, pour les paquets entrants, les
+    enregistrements `Register*(() => new X` et les `case <ncid>:`
+    des switchs (ncid|opcode) — preuve de branchement équivalente.
   - preuve : tests/Eden.Tests/Data/golden/ncid_*.json (captures
     natives) + tests/Eden.Tests/Data/known_incomplete.json.
 
@@ -73,6 +75,31 @@ def collect_emitters(name2op):
     # commandes serveur→client — toute instanciation hors .g.cs est
     # un site d'emission (couvre `var x = new CNC_…; SendAsync(x)`).
     inst_re = re.compile(r'\bnew\s+(CNC_\w+)')
+    # `Register*(() => new CNE_…` : enregistrement d'un handler sur
+    # un paquet entrant (C→Z) — preuve de branchement équivalente à
+    # un site d'emission pour le statut.
+    reg_re = re.compile(r'\bRegister\w*\(\s*\(\)\s*=>\s*new\s+(\w+)')
+    # `switch (ncid|opcode)` manuels : les `case <num>:` sont des
+    # dispatches de paquets entrants sans classe générée utilisée.
+    switch_re = re.compile(r'switch\s*\((?:\(?\s*(?:int\w*\s*\)?\s*)?'
+                           r'(?:ncid|opcode|packetOpcode)\s*)\)')
+    case_re = re.compile(r'\bcase\s+(\d+)\s*:')
+    def manual_dispatches(text):
+        out = []
+        for m in switch_re.finditer(text):
+            depth, i = 0, text.find('{', m.end() - 1)
+            if i < 0:
+                continue
+            depth, j = 1, i + 1
+            while j < len(text) and depth:
+                if text[j] == '{':
+                    depth += 1
+                elif text[j] == '}':
+                    depth -= 1
+                j += 1
+            out += [int(c.group(1)) for c in
+                    case_re.finditer(text[i:j])]
+        return out
     for rel, text in texts:
         for m in send_re.finditer(text):
             if m.group(1) in name2op:
@@ -80,6 +107,12 @@ def collect_emitters(name2op):
         for m in inst_re.finditer(text):
             if m.group(1) in name2op:
                 typed.setdefault(name2op[m.group(1)], set()).add(rel)
+        for m in reg_re.finditer(text):
+            if m.group(1) in name2op:
+                typed.setdefault(name2op[m.group(1)], set()).add(rel)
+        for op in manual_dispatches(text):
+            if op in name2op.values():
+                typed.setdefault(op, set()).add(rel)
         for m in raw_re.finditer(text):
             raw.setdefault(int(m.group(1)), set()).add(rel)
         for m in const_arg_re.finditer(text):

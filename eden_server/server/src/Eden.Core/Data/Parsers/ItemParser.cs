@@ -68,6 +68,16 @@ public static class ItemParser
         /// du même groupe se bloquent mutuellement ; 0 = groupe
         /// global partagé (comportement natif).</summary>
         public int CooldownGroup { get; set; }
+        /// <summary>Durée de canalisation d'usage en décisecondes —
+        /// S_Item col20 → CItemData+0x54 (comptage
+        /// CItemQuery::Deserialize @0x8602cf0, ancres col21→+0x58,
+        /// col23→+0x60). <c>DoUseItem</c> @0x80b8a10 : ≠ 0 → émission
+        /// 407 ClientUseItemTime + CEventUseItemTime planifié à
+        /// +low16×100 ms (ctor @0x819cd10 : p/10 s + reste µs) ; à
+        /// l'échéance l'usage réel (DoUseItemAfterCheck) est exécuté.
+        /// 0 = usage instantané. Data actuelle : 102 items, tous
+        /// UseType 2 (kind 44 outils / 48 boîtes), 3-100 ds.</summary>
+        public int UseTimeDs { get; set; }
         /// <summary>Flags bas 32 bits de col11 (CItemData+0x30) —
         /// le natif lit col11 comme un long long.</summary>
         public int Flags { get; set; }
@@ -88,6 +98,20 @@ public static class ItemParser
         /// l'achat/réparation/identification/revente passent par le
         /// prix système de col 31 (<see cref="SellPrice"/>).</summary>
         public int BuyPrice { get; set; }
+        /// <summary>Type de monnaie (col 30 0-indexée →
+        /// GameData::CItemData+0x78 u8, juste avant le prix +0x7c —
+        /// désasm `BuyItems` @0x080ac890 : branché sur
+        /// `u8(+0x78)` après `GetCoinTypeByPriceType`, mission
+        /// @0x85bd7f0). 1=or, 2=prestige(0x51), 4=lover, 5=CCM
+        /// lifelong, 6=consomme l'item 34928, 0xa=taxe guilde,
+        /// 0xb=or colisée, 0xc..0x11/0x15..0x17=special_coins
+        /// (type=priceType-11), 0x13=war coin, 0x14=alpaca coin —
+        /// `GetCoinTypeByPriceType` @0x8409e40 zone (0xc-0x11→
+        /// types 0-5, 0x15-0x17→types 9-11) et switch de
+        /// `BuyItems` @0x80aca40. Défaut 1 (or) — le parseur pose
+        /// 0 sur col30 vide, ce qui refuse l'achat comme le natif
+        /// (aucun case du switch ne correspond à sVar31=0).</summary>
+        public byte PriceType { get; set; } = 1;
         /// <summary>Cap de stack (col 29 0-indexé) — potions 32631/
         /// 32639 → 100, confirmé par `cur_maxdurability`=100 en DB et
         /// le cap lu en `CItemFactory::CheckAutoStackItem`
@@ -137,7 +161,11 @@ public static class ItemParser
         public int LicenseReplaceId { get; set; }
         /// <summary>Loc d'équipement (col 9, 0-indexé) — épée 31899→7,
         /// armure 31939→2, gants 31940→4, bottes 31941→5. 0/absent =
-        /// non équipable (monture 20051 : pas de col9).</summary>
+        /// non équipable (monture 20051 : pas de col9). Pour les items
+        /// non équipables la même cellule sert de sous-type natif
+        /// (virtual itemdef+0x10) : le gate du hall sacré exige
+        /// subtype 0x16 (items 0x52 et contrats 0x2a concernés —
+        /// CheckPutItemFromInventory @0x82559b0).</summary>
         public int EquipLoc { get; set; }
         /// <summary>Masque des types d'entraînement permis (col 10,
         /// 0-indexé → `CItemData+0x2c` natif) : bit k = type d'attribut
@@ -184,6 +212,14 @@ public static class ItemParser
         /// 0 sinon). Sert au spawn des NPCs du hall et à la résolution
         /// du housekeeper depuis le template de bâtiment.</summary>
         public int FamilyNpcTid { get; set; }
+        /// <summary>Tid S_Buliding du bâtiment posé par ce contrat de
+        /// hall (col35, kind 0x29 uniquement — même cellule
+        /// conditionnelle que <see cref="FamilyNpcTid"/>, proto natif
+        /// CItemData+0x12c → CBuildingItem+0x124 lu par
+        /// <c>FamilyBuildingPutItemFromInventroy</c> @0x808a770 qui
+        /// appelle <c>GetBuildingData</c> ; 0 sinon). Données EDENFR :
+        /// 35071→1 (H00101), 35081→101 (H01001 ferme), 35086→106.</summary>
+        public int FamilyBuildingTid { get; set; }
 
         // --- Bloc statistique d'équipement -------------------------
         // Mapping prouvé par CItemDBO::SetItemAttrData @0x8358200
@@ -327,6 +363,19 @@ public static class ItemParser
         /// Utilisée par PickAColor du cube comme qualité par défaut et
         /// pour initialiser clone+0x2c (qualité d'instance).</summary>
         public int Quality { get; set; }
+        /// <summary>Masque i64 des classes autorisées (col 18 →
+        /// CItemData+0x48 longlong, désasm CItemQuery::Deserialize) —
+        /// dénormalisé dans `auction.class` par SaveAuction
+        /// (@0x0815da30) et filtré `(class &amp; mask) != 0` dans
+        /// QueryAuctionBuy. 0 = aucune restriction de classe.
+        /// Distribution réelle : puissances de 2 et combos.</summary>
+        public long ClassMask { get; set; }
+        /// <summary>Catégorie d'hôtel des ventes (col 33 →
+        /// CItemData+0x84, désasm CItemQuery::Deserialize) —
+        /// dénormalisée dans `auction.item_type` et filtre d'égalité
+        /// de QueryAuctionBuy. 62 valeurs réelles (1..10000) ;
+        /// vide → 0.</summary>
+        public int ItemType { get; set; }
         /// <summary>Capacité en slots d'un item sac (col 28 →
         /// CItemData+0x74 octet → CCloneItem+0xc sur les kind 43,
         /// désasm `CItemDBO::GetAllBagItems` et
@@ -377,11 +426,14 @@ public static class ItemParser
                 Flags = unchecked((int)IniTable.GetLong(row, 11)),
                 FlagsHi = unchecked((int)(IniTable.GetLong(row, 11) >> 32)),
                 BuyPrice = IniTable.GetInt(row, 17),
+                ClassMask = IniTable.GetLong(row, 18),
+                PriceType = (byte)Math.Clamp(IniTable.GetInt(row, 30), 0, 255),
                 MaxStack = IniTable.GetInt(row, 29),
                 // Durabilité d'équipement = col74 seule ; col29 est le
                 // cap de pile (jamais une durabilité).
                 MaxDurability = IniTable.GetInt(row, 74),
                 SellPrice = IniTable.GetInt(row, 31),
+                ItemType = IniTable.GetInt(row, 33),
                 RepairPrice = IniTable.GetInt(row, 76),
                 RestrictFlags69 = IniTable.GetInt(row, 69),
                 RestrictFlags70 = IniTable.GetInt(row, 70),
@@ -399,6 +451,7 @@ public static class ItemParser
                 // 3|6→jour), col27 = nombre de ces unités —
                 // formule native du destructeur "iVar6 × local_30".
                 DurationSeconds = ParseDurationSeconds(row),
+                UseTimeDs = IniTable.GetInt(row, 20),
                 UseBuffSeconds = ParseUseBuffSeconds(row),
                 BonusHp = IniTable.GetInt(row, 37),
                 BonusMp = IniTable.GetInt(row, 38),
@@ -453,6 +506,8 @@ public static class ItemParser
                 // CItemFactory::FamilyBuildingPutItemFromInventroy
                 // @0x808a770).
                 FamilyNpcTid = IniTable.GetInt(row, 8) is 0x2a or 0x52
+                    ? IniTable.GetInt(row, 35) : 0,
+                FamilyBuildingTid = IniTable.GetInt(row, 8) == 0x29
                     ? IniTable.GetInt(row, 35) : 0,
                 Raw = row,
             });

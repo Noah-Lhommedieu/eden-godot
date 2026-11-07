@@ -182,6 +182,9 @@ public sealed class ZoneLiveWorld
         /// <summary>Résolution PatrolId→route déjà tentée (évite un
         /// lookup de scène à chaque tick de wander).</summary>
         public bool PatrolResolved;
+        /// <summary>Mob de donjon sur emplacement fixe : ni errance ni
+        /// patrouille, il attend les joueurs.</summary>
+        public bool Stationary;
         /// <summary>Id de la ligne reborn_monsters (col0) — c'est le
         /// « group » des Event_RebornMonster/MonsterAction/KillMonster
         /// natifs (monster+0x360 = spawn+0x24, désasm zone
@@ -543,6 +546,8 @@ public sealed class ZoneLiveWorld
     /// complet).</summary>
     public void BindGameData(GameDataService gameData)
     {
+        if (_nodeTypes.Count == 0)
+            foreach (var n in gameData.Nodes) _nodeTypes[n.Id] = n.Type;
         if (MonsterDefs.Count == 0 && gameData.Monsters.Count > 0)
             MonsterDefs = gameData.Monsters.ToDictionary(m => m.Id);
         if (AttackKfIds.Count == 0 && gameData.AttackKfIds.Count > 0)
@@ -552,6 +557,31 @@ public sealed class ZoneLiveWorld
         if (NpcLocateMasks.Count == 0 && gameData.Npcs.Count > 0)
             NpcLocateMasks = gameData.Npcs.ToDictionary(n => n.Id,
                 n => n.LocateMask);
+    }
+
+    /// <summary>Test « case de mur invisible » (grille .smp) sur la
+    /// scène — posé au boot (<c>SceneService.IsSceneBlocked</c>) ; null =
+    /// pas de contrôle (tests sans boot).</summary>
+    public Func<SceneParser.Scene, float, float, bool>? WallCheck { get; set; }
+
+    /// <summary>Position d'un mob éparpillé autour de (cx, cy) dans ±10 u
+    /// (native : positions aléatoires autour du point). Dans un donjon
+    /// ~40 % des tirages tombaient dans la roche (cases .smp bloquées) :
+    /// on retire jusqu'à 12 fois, puis on se replie sur le point de
+    /// scène lui-même (jamais bloqué, vérifié sur les 120 donjons).
+    /// </summary>
+    private (float X, float Y) ScatterAround(SceneParser.Scene? scene,
+        float cx, float cy)
+    {
+        for (var t = 0; t < 12; t++)
+        {
+            var x = cx + (float)(Random.Shared.NextDouble() * 20 - 10);
+            var y = cy + (float)(Random.Shared.NextDouble() * 20 - 10);
+            if (scene == null || WallCheck == null ||
+                !WallCheck(scene, x, y))
+                return (x, y);
+        }
+        return (cx, cy);
     }
 
     /// <summary>Entité immobile (aucune attaque ni portée : coffre,
@@ -582,6 +612,14 @@ public sealed class ZoneLiveWorld
     /// scène). Les mobs portent `InstanceKey` pour que les accès
     /// par handle (GetMob) retrouvent leur instance.</summary>
     /// <summary>Nodes sans monstres (villes). À étendre au besoin.</summary>
+    private readonly Dictionary<int, int> _nodeTypes = new();
+
+    /// <summary>Node de donjon : type 5 (donjons, solo/multi), 7 (épreuves
+    /// héroïques), 11 (« profondeurs ») et 18 (毀滅幻境) de c_node — mêmes
+    /// scènes à emplacements fixes ([mob_patrol_mode] tous « fixe »).</summary>
+    public bool IsDungeonNode(int nodeId) =>
+        _nodeTypes.TryGetValue(nodeId, out var t) && t is 5 or 7 or 11 or 18;
+
     private static readonly HashSet<int> PeacefulNodes = new() { 1, 94, 768 };
 
     private List<SeenEntity> PopulateNode(int nodeId, int inst,
@@ -613,8 +651,21 @@ public sealed class ZoneLiveWorld
                     // œuf/cible de quête…) — posée EXACTEMENT au point
                     // [reborn_monsters] avec le facing de la scène.
                     var pinned = IsPinnedSpawn(def, count);
-                    var x = pinned ? m.X : m.X + (float)(Random.Shared.NextDouble() * 20 - 10);
-                    var y = pinned ? m.Y : m.Y + (float)(Random.Shared.NextDouble() * 20 - 10);
+                    var (x, y) = pinned ? (m.X, m.Y)
+                        : ScatterAround(scene, m.X, m.Y);
+                    // Donjon : groupe à emplacements fixes — le mob i
+                    // naît sur le point i de sa route (pas d'éparpillement
+                    // dans la roche) et n'en bouge plus.
+                    var fixedSpot = false;
+                    if (IsDungeonNode(nodeId) &&
+                        scene.Patrols.TryGetValue(m.PatrolId, out var pr) &&
+                        pr.IsStationary && pr.Waypoints.Count > 0)
+                    {
+                        var wp = pr.Waypoints[Math.Min(i,
+                            pr.Waypoints.Count - 1)];
+                        x = wp.X; y = wp.Z;
+                        fixedSpot = true;
+                    }
                     var h = Interlocked.Increment(ref _nextMobHandle) - 1;
                     var mob = new LiveMob
                     {
@@ -640,6 +691,7 @@ public sealed class ZoneLiveWorld
                         RespawnSeconds = m.RespawnSeconds > 0 ? m.RespawnSeconds : 30,
                         RowRespawnSeconds = m.RespawnSeconds,
                         PatrolId = m.PatrolId,
+                        Stationary = fixedSpot,
                         SpawnId = m.AreaId,
                         AnnounceTextId = m.AnnounceTextId,
                         DeathEventId = m.DeathEventId,
@@ -727,7 +779,7 @@ public sealed class ZoneLiveWorld
     /// d'entités visibles du node pour que la sight les voie.
     /// Retourne les entités créées (pour le broadcast ClientSeeMob).</summary>
     public IReadOnlyList<SeenEntity> SpawnGroup(int nodeId, int inst,
-        SceneParser.MonsterSpawn spawn)
+        SceneParser.MonsterSpawn spawn, SceneParser.Scene? scene = null)
     {
         var created = new List<SeenEntity>();
         List<SeenEntity> entities;
@@ -743,8 +795,8 @@ public sealed class ZoneLiveWorld
         for (var i = 0; i < count; i++)
         {
             var pinned = IsPinnedSpawn(def, count);
-            var x = pinned ? spawn.X : spawn.X + (float)(Random.Shared.NextDouble() * 20 - 10);
-            var y = pinned ? spawn.Y : spawn.Y + (float)(Random.Shared.NextDouble() * 20 - 10);
+            var (x, y) = pinned ? (spawn.X, spawn.Y)
+                : ScatterAround(scene, spawn.X, spawn.Y);
             var h = Interlocked.Increment(ref _nextMobHandle) - 1;
             var mob = new LiveMob
             {

@@ -887,6 +887,9 @@ public sealed partial class ZoneEntryFlow
     private async Task BreakCastAsync(NetSession session, EntryState st,
         CancellationToken token)
     {
+        // Moitié +0x90 de CheckCastBreak : canalisation d'usage d'item
+        // en cours → 408 ClientUseItemTimeBreak (corps vide) + release.
+        await CancelItemUseChannelAsync(session, st, token);
         if (st.CastingSpell == 0) return;
         var spell = st.CastingSpell;
         st.CastCts?.Cancel();

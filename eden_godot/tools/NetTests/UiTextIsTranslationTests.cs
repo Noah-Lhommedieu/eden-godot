@@ -6,6 +6,7 @@ namespace EdenClient.NetTests;
 /// <summary><see cref="UiTextEn.IsTranslation"/> : les valeurs FR des
 /// deux TSV (layout + chaînes hardcodées) doivent être reconnues pour
 /// qu'AutoTranslate ne les signale pas en miss.</summary>
+[Collection("SharedResolver")]
 public class UiTextIsTranslationTests
 {
     private static string FindProject()

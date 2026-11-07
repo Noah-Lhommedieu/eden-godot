@@ -87,6 +87,29 @@ public sealed class ItemEntity
     /// </summary>
     public int ExtraComboId10 { get; set; }
     public int ExtraComboId11 { get; set; }
+    /// <summary>Lecture du vecteur natif `extra_combo_id1..11`
+    /// (clone+0x34 u16[11]) : index 0-8 → <see cref="ExtraCombos"/>,
+    /// 9 → <see cref="ExtraComboId10"/>, 10 →
+    /// <see cref="ExtraComboId11"/>. Les paliers de fortif
+    /// (AddComboStrengthen @0x080a2160) écrivent aux index 6-10.</summary>
+    public int GetExtraCombo(int index) => index switch
+    {
+        >= 0 and <= 8 => ExtraCombos[index],
+        9 => ExtraComboId10,
+        10 => ExtraComboId11,
+        _ => 0,
+    };
+    /// <summary>Écriture du même vecteur natif — voir
+    /// <see cref="GetExtraCombo"/>.</summary>
+    public void SetExtraCombo(int index, int value)
+    {
+        switch (index)
+        {
+            case >= 0 and <= 8: ExtraCombos[index] = value; break;
+            case 9: ExtraComboId10 = value; break;
+            case 10: ExtraComboId11 = value; break;
+        }
+    }
     /// <summary>gold_enchant natif (colonne `gold_enchant`, clone
     /// +0x64 de la queue fixe u16 — enchant doré d'instance).</summary>
     public int GoldEnchant { get; set; }

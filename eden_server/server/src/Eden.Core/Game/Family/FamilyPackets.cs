@@ -47,6 +47,10 @@ public static class FamilyPackets
     public const int NcidFamilySchedule = 51;
     /// <summary>NCID du journal.</summary>
     public const int NcidFamilyLogUpdate = 68;
+
+    /// <summary>NCID 67 — <c>CNC_CW_ClientFamilyAchievementUpdate</c>
+    /// (push succès famille aux membres).</summary>
+    public const int NcidFamilyAchievementUpdate = 67;
     /// <summary>NCID du blob d'emblème.</summary>
     public const int NcidFamilyEmblem = 74;
     /// <summary>NCID de la liste de recrutement.</summary>
@@ -225,6 +229,48 @@ public static class FamilyPackets
         return s.ToArray();
     }
 
+    /// <summary><c>CNC_CW_ClientFamilyAchievementUpdate</c> (67) —
+    /// format variable prouvé par <c>::Serialize</c> monde @0x080cdfb0 :
+    /// <code>
+    ///  [u8 flag]
+    ///  flag∈{2,3}  : [u32 total]                 (fam+0x48 — total_point)
+    ///  flag==1    : [i32 0]  (operator<<(param_1, 0) — littéral int)
+    ///  sinon      : [u16 n][n×{s16 type, u32 point, i32 charId, u32 channel}]
+    ///               (flag=3 : charId/channel = 0, _M_fill_assign natif)
+    ///  flag≠0     : [u16 m][m×{i32 pid, i32 date, i32 point, s16 achId}]
+    ///               (log — family_achievement_log, table morte → m=0)
+    /// </code>
+    /// flag=0 = push d'une ligne (<c>CNE_DBA_ClientChangeFamily</c> op
+    /// 0x14 monde) ; flag=3 = synchro complète au login
+    /// (<c>CNE_CW_ServerQueryFamilyInfo::Execute</c> @0x080e6480).</summary>
+    /// <param name="entries">Paires (type, point) de fam+0xb4 ; pour le
+    /// push unitaire, une seule entrée avec charId/channel réels.</param>
+    public static byte[] FamilyAchievementUpdate(byte flag, uint total,
+        IReadOnlyList<(short Type, uint Point, int CharId, uint Channel)> entries)
+    {
+        var s = new OutBinStream();
+        s.WriteByte(flag);                          // u8 — flag
+        if ((byte)(flag - 2) < 2)
+            s.WriteInt((int)total);                 // u32 — total_point (flag 2/3)
+        if (flag == 1)
+            s.WriteInt(0);                          // i32 0 — variante vide
+                                                    // (operator<<(param_1, 0) : littéral int natif)
+        else
+        {
+            s.WriteShort((short)entries.Count);     // u16 — nb entrées
+            foreach (var e in entries)
+            {
+                s.WriteShort(e.Type);               // s16 — achievement_type (GroupKey)
+                s.WriteInt((int)e.Point);           // u32 — points cumulés
+                s.WriteInt(flag == 3 ? 0 : e.CharId);   // i32 — charId (0 en synchro)
+                s.WriteInt((int)(flag == 3 ? 0 : e.Channel)); // u32 — channel (0 idem)
+            }
+        }
+        if (flag != 0)
+            s.WriteShort(0);                        // u16 0 — log (family_achievement_log morte)
+        return s.ToArray();
+    }
+
     /// <summary><c>CNC_CW_ClientFamilyEmblem</c> (74) — réponse à la
     /// requête 73 : [i32 family_id][i32][u16 len][blob].
     /// Le natif vérifie la présence puis envoie le blob
@@ -240,9 +286,19 @@ public static class FamilyPackets
         return s.ToArray();
     }
 
-    /// <summary><c>CNC_CW_ClientFamilySchedule</c> (51) — agenda.
-    /// Format natif (Execute ServerQueryFamilyInfo) : [u8][u16] puis
-    /// contenu agenda ; l'émission de login envoie les champs à vide.</summary>
+    /// <summary><c>CNC_CW_ClientFamilySchedule</c> (51) — msgboard.
+    /// <b>Wire maison Godot-first</b> : `[u8 type][u16 n][n×{s16 msg_id,
+    /// i32 date, str title, str content, str player}][u8 0][s16 état]`.
+    /// Le format natif (<c>::Serialize</c> monde @0x080cd…, décodé lot
+    /// E5) est différent et par type : 1 = `[u8][s16 id][3×str]
+    /// [i32 dest+0x74]` (ajout), 2 = `[u8][s16 id]` (suppression),
+    /// 3 = `[u8][u16 n][n×records]` (refresh, sans queue),
+    /// 0/4 = liste + `[i32 dest+0x74]`, 5 = `[u8]` seul (pas de famille).
+    /// Le client Godot fait un clear+fill sur réception → on émet
+    /// toujours la liste complète (type 0) ; les 3 octets de queue
+    /// (u8 0 + s16 état msgboard_state) sont inertes côté client.
+    /// `dest+0x74` natif (champ par-destinataire, sémantique non
+    /// résolue) ne serait pas portable → divergence assumée.</summary>
     public static byte[] FamilySchedule(byte type, ushort flag, IReadOnlyList<FamilyMessage> schedule)
     {
         var s = new OutBinStream();

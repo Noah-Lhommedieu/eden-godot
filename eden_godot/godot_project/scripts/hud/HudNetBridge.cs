@@ -413,5 +413,9 @@ public partial class HudNetBridge : Node
         _ = send.ContinueWith(t =>
             GD.PrintErr($"[hud-net] ReplyDialog : {t.Exception}"),
             TaskContinuationOptions.OnlyOnFaulted);
+        // Natif : le choix ferme la fenêtre de dialogue (un service
+        // ouvre sa fenêtre ; un nouveau 285 réaffiche si le dialogue
+        // continue).
+        if (_hud.Dialogue != null) _hud.Dialogue.Visible = false;
     }
 }

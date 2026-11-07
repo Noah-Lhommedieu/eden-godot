@@ -284,6 +284,29 @@ public class CeguiTests
         Assert.Equal(UiControlKind.Control, auto!.Kind);
     }
 
+    [Fact]
+    public void BuildSpec_Strengthen_SlotsEtMultiColumnList()
+    {
+        var builder = new CeguiBuilder(Ctx.Value);
+        var spec = builder.BuildSpec(CeguiLayout.ParseFile(
+            Path.Combine(UIData(), "layouts", "strengthenwnd_na.layout")));
+
+        // DejaVu/MultiColumnList → contrôle dédié + colonnes parsées
+        // (text/width/id des props ColumnHeader).
+        var mcl = Flatten(spec).First(
+            n => n.Kind == UiControlKind.MultiColumnList);
+        Assert.Equal(6, mcl.Columns);
+        Assert.Equal(6, mcl.MclColumns.Count);
+        Assert.Equal(0.12f, mcl.MclColumns[0].WidthScale, 3);
+        Assert.Equal(0, mcl.MclColumns[0].Id);
+        Assert.Equal(5, mcl.MclColumns[5].Id);
+
+        // DejaVu/SlotImage* → slot item interactif (pas TextureRect).
+        var slots = Flatten(spec)
+            .Where(n => n.Kind == UiControlKind.ItemSlot).ToList();
+        Assert.Equal(3, slots.Count);
+    }
+
     private static IEnumerable<UiNodeSpec> Flatten(UiNodeSpec n)
     {
         yield return n;

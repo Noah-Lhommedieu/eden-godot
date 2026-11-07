@@ -128,6 +128,38 @@ public sealed class EvaluateRepository
             new { characterId, nodeId, times });
     }
 
+    /// <summary>Entrées de donjon du jour pour un node (0 si le compteur
+    /// date d'un autre jour).</summary>
+    public async Task<int> GetDungeonEntriesAsync(int characterId,
+        int nodeId, int today)
+    {
+        await using var c = _db.CreateConnection();
+        return await c.ExecuteScalarAsync<int>(
+            @"SELECT COALESCE(MAX(times), 0) FROM player_dungeon_entries
+              WHERE player_id = @characterId AND node_id = @nodeId
+                AND day = @today",
+            new { characterId, nodeId, today });
+    }
+
+    /// <summary>+1 entrée du jour ; remet à 1 si le compteur est d'un
+    /// jour passé. Retourne le nouveau total du jour.</summary>
+    public async Task<int> AddDungeonEntryAsync(int characterId,
+        int nodeId, int today)
+    {
+        await using var c = _db.CreateConnection();
+        return await c.ExecuteScalarAsync<int>(
+            @"INSERT INTO player_dungeon_entries
+                (player_id, node_id, day, times)
+              VALUES (@characterId, @nodeId, @today, 1)
+              ON CONFLICT (player_id, node_id) DO UPDATE SET
+                times = CASE WHEN player_dungeon_entries.day = @today
+                             THEN player_dungeon_entries.times + 1
+                             ELSE 1 END,
+                day = @today
+              RETURNING times",
+            new { characterId, nodeId, today });
+    }
+
     /// <summary>Devises colosseum du perso — execData+0x68c/+0x690
     /// natifs poussés dans le 525 ClientGladiatorTeamInfo à
     /// l'assignation d'un evalId.</summary>

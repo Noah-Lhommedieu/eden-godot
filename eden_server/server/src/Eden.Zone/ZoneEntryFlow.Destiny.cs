@@ -532,6 +532,9 @@ public sealed partial class ZoneEntryFlow
                                     mob.Handle, ct),
                                 st.LoopCts?.Token ?? default);
                         }
+                        // Annonce immédiate (298) des mobs invoqués.
+                        await UpdateSightAsync(session, st, token,
+                            force: true);
                     }
                     break;
                 }

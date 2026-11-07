@@ -72,8 +72,18 @@ public partial class FamilyStorageWindow : Control
             if (close != null) close.Pressed += Close;
         }
         BuildContent();
-        DragHelper.EnsureTitleBar(_window ?? this, "Family Storage");
+        DragHelper.EnsureTitleBar(_window ?? this,
+            UiTextEn.Translate("Family Storage"));
         DragHelper.Persist(_window ?? this, "familystorage");
+        // La croix de la barre de titre masque seulement la fenêtre :
+        // on referme aussi l'état coffre (sinon la réouverture par le
+        // PNJ remontrait un conteneur déjà masqué).
+        if (_window != null)
+            _window.VisibilityChanged += () =>
+            {
+                if (!_window.Visible && FamilyStorageState.IsOpen)
+                    Close();
+            };
         Visible = false;
         FamilyStorageState.Changed += OnStorageChanged;
         PlayerBag.Changed += OnBagChanged;
@@ -164,6 +174,7 @@ public partial class FamilyStorageWindow : Control
         RefreshChests();
         RefreshBag();
         RefreshLog();
+        if (_window != null) { _window.Visible = true; HudWindows.Front(_window); }
         Visible = true;
     }
 
@@ -190,7 +201,7 @@ public partial class FamilyStorageWindow : Control
     {
         var scroll = new ScrollContainer
         {
-            Name = $"Chest {index + 1}",
+            Name = $"Coffre {index + 1}",
         };
         var grid = new GridContainer { Columns = Columns };
         grid.SizeFlagsHorizontal = SizeFlags.ExpandFill;
@@ -365,6 +376,7 @@ public partial class FamilyStorageWindow : Control
                 new Dictionary<int, InventorySlot>()));
         }
         RefreshBag();
+        if (_window != null) { _window.Visible = true; HudWindows.Front(_window); }
         Visible = true;
     }
 
@@ -373,6 +385,7 @@ public partial class FamilyStorageWindow : Control
         _demo = false;
         FamilyStorageState.Close();
         Visible = false;
+        if (_window != null) _window.Visible = false;
     }
 
     private void Send(NetMessage msg)
@@ -403,7 +416,7 @@ public partial class FamilyStorageWindow : Control
             BorderWidthLeft = 1, BorderWidthRight = 1,
         });
         AddChild(p);
-        DragHelper.EnsureTitleBar(p, "Family Storage");
+        DragHelper.EnsureTitleBar(p, UiTextEn.Translate("Family Storage"));
         _window = p;
     }
 }

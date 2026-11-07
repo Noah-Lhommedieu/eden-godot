@@ -275,7 +275,8 @@ internal static class MorphDriver
             shapes.Add(a);
         }
         mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays, shapes);
-        mesh.SurfaceSetMaterial(0, src.SurfaceGetMaterial(0));
+        if (src.SurfaceGetMaterial(0) is { } morphMat)
+            mesh.SurfaceSetMaterial(0, morphMat);
         mi.Mesh = mesh;
 
         var chans = new KfFloatChan?[nm];

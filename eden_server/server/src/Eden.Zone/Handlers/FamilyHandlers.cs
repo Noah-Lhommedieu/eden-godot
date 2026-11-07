@@ -236,10 +236,25 @@ public static class FamilyHandlers
                 var cost = await ItemActionHandlers.RepairAllAsync(
                     s, charId);
                 if (cost <= 0) return;
+                // canfix=0 natif → texte 0x8f0 (trésorerie < coût,
+                // Mission_TC_FamilyFixEquip zone @0x083ad450).
                 if (!await s.Guilds.TrySpendTreasuryAsync(
-                        guild.Id, cost)) return;
+                        guild.Id, cost))
+                {
+                    await session.SendAsync(
+                        new CNC_CZ_ClientTextOutputIndex
+                        { Field1 = 0x8f0, Field2 = string.Empty },
+                        token);
+                    return;
+                }
                 await ItemActionHandlers.RepairAllAsync(
                     s, charId, apply: true);
+                // Succès natif → texte 0x5fd (0x5fe si la réparation
+                // échoue — notre apply ne peut pas échouer ici).
+                await session.SendAsync(
+                    new CNC_CZ_ClientTextOutputIndex
+                    { Field1 = 0x5fd, Field2 = string.Empty },
+                    token);
                 EdenLog.Write($"[Zone] FixEquipByFamily char={charId} " +
                     $"guild={guild.Id} cost={cost} (trésorerie)");
             });

@@ -21,9 +21,10 @@
 5. **Qualité (§0.4 du plan)** : fichier ≤ 400 lignes pour tout code **nouveau** ; aucune valeur de gameplay en dur (registre de config) ; une seule implémentation par règle ; commentaire du *pourquoi* ; revue du diff (`ponytail-review`) avant clôture ; graphe régénéré (`tools/graph/graph.sh`).
 6. **Journal** : `docs/temp-plans/2026-11-DD-<lot>.md` (constats, preuves, écarts) + case cochée dans le tableau §3 ci-dessous.
 7. **Arrêt et question** si : une hypothèse du plan est fausse, un test existant doit être modifié pour passer, ou une opération est irréversible (suppression de données, migration de base). Sauvegarde `pg_dump` obligatoire avant toute migration SQL.
-8. **Interdits** : modifier `corpus/`, `re/`, `archive/` ; réintroduire une donnée non EDENFR ; écrire « absent des données FR » sans avoir lu la chaîne FR complète (D7).
+8. **Fichiers temporaires** : captures d'agents, comparatifs et scripts jetables vont dans des dossiers ignorés (`.gitignore` : `godot-shots/`, `screenshots/`, `web-shots/`, `shots/`, `captures/`, `scratch/`, `_tmp/`, `tmp_*`) ; les références voulues restent dans `ref-shots/`.
+9. **Interdits** : modifier `corpus/`, `re/`, `archive/` ; réintroduire une donnée non EDENFR ; écrire « absent des données FR » sans avoir lu la chaîne FR complète (D7).
 
-## 2. Fondations transverses (lot Q) — améliorer la qualité ET ouvrir des possibilités de gameplay
+## 2. Fondations transverses (lot Q) — spécifications complètes : `PLAN-ACTION-3.md` §10 — améliorer la qualité ET ouvrir des possibilités de gameplay
 **Règle anti-sur-ingénierie** : une abstraction n'est créée que si elle a **au moins 2 consommateurs dans ce plan** et un test. Chaque ligne ci-dessous indique ses consommateurs et ce qu'elle débloque.
 | # | Abstraction | Consommateurs dans le plan | Ce que ça débloque (gameplay / maintenance) |
 |---|---|---|---|
@@ -126,8 +127,8 @@ Un lot qui doit sortir de sa zone s'arrête et demande.
 | Lot | Question |
 |---|---|
 | A3 | L'association pioche/gants/boule ↔ `collect01`/`collect02` n'est pas prouvée : validation par captures montrées au propriétaire si le décompilé ne tranche pas (déjà accepté en principe) |
-| F6 | Le natif sépare-t-il vraiment bonus de classe et d'éveil (`CEC_ItemWakenNpRateUp`) ? Si oui, changement de comportement à annoncer |
-| DB-A | Pour chaque table morte *potentiellement voulue* (`gm_tool_log`, `farm_*`, `exchange_*`) : supprimer ou brancher ? (liste fournie par `tools/db/inventory`) |
+| F6 | **Tranché (propriétaire, 2026-11-07)** : le jeu sépare bien les bonus d'EXP de classe normale et de classe éveillée → à appliquer tel quel (changement de comportement noté dans le journal du lot) |
+| DB-A | **Tranché** : une table morte est supprimée ; une table utile mais peu rentable est optimisée/migrée (fusion, Redis/config, vue) ; plus de question au propriétaire sauf cas ambigu |
 | DB-B | Fenêtre de coupure pour migrer `edenfr` → `eden_live` (le serveur doit être arrêté quelques minutes) |
 | D1 | Aucun : copie déjà en dépôt |
 | E3 | Relecture humaine d'un échantillon d'anglais par vague (qui relit ?) |

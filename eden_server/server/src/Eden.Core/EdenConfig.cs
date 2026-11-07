@@ -115,6 +115,13 @@ public static class EdenConfig
     /// sont toujours préchauffées, cette liste ne fait qu'ajouter
     /// (ex. la ville S001, 431 mobs + 256 NPC).</summary>
     public static string? ZonePrewarmMaps => Env("EDEN_ZONE_PREWARM_MAPS");
+    /// <summary><c>EDEN_DEV_WORK_CAP</c> — plafond optionnel des durées
+    /// d'ordres de travail en unités de 100 ms (100 = 10 s). 0/absent =
+    /// durées natives des tables (col min × 600 — mine 30 min, etc.) ;
+    /// une valeur &gt;0 borne les ordres pour itérer vite en dev. Le cap
+    /// s'applique à l'armement ET au rechargement des ordres encore en
+    /// cours à la reconnexion.</summary>
+    public static int DevWorkCapUnits => EnvInt("EDEN_DEV_WORK_CAP", 0);
     /// <summary><c>MISSION_HOST</c> — hôte du MissionServer.</summary>
     public static string MissionHost => Env("MISSION_HOST") ?? "127.0.0.1";
     /// <summary><c>MISSION_PORT</c> — port du MissionServer (7654).</summary>

@@ -4,6 +4,7 @@ using Eden.Core.Data;
 using Eden.Core.Data.Parsers;
 using Eden.Core.Database.Repositories;
 using Eden.Core.Game;
+using Eden.Core.Game.Inventory;
 using Eden.Core.Game.Party;
 using Eden.Core.Game.Services;
 using Eden.Core.Networking;
@@ -349,10 +350,33 @@ public sealed partial class ZoneEntryFlow
         byte[] payload, CancellationToken token)
     {
         if (st.CharId == 0 || !st.Migrated) return;
-        // i32 ReviveType — 5 = item revive in place (Phoenix stone) ;
-        // toute autre valeur = retour au revive_area_id (type natif 1).
+        // i32 ReviveType — 0 point de sauvegarde, 1 sur place (avec
+        // pénalité d'exp), 5 item de revive sur place (sans pénalité).
         var reviveType = payload.Length >= 4
             ? BitConverter.ToInt32(payload, 0) : 0;
+        // Serveur autoritaire : un vivant ne se « réanime » pas (sinon
+        // pénalité d'exp / téléport gratuit), un type inconnu est refusé.
+        if (!st.Dead || !ReviveRules.IsKnownType(reviveType))
+        {
+            EdenLog.Write($"[Combat] REVIVE refusé char=#{st.CharId} " +
+                $"dead={st.Dead} type={reviveType}");
+            return;
+        }
+        ItemEntity? leaf = null;
+        if (ReviveRules.UsesLeaf(reviveType))
+        {
+            leaf = await FindReviveItemAsync(st, reviveType);
+            if (leaf == null)
+            {
+                // Aucun item de revive en sac : refus natif 0x5ef, on
+                // reste mort (la fenêtre de mort reste ouverte).
+                await session.SendAsync(new CNC_CZ_ClientTextOutputIndex
+                    { Field1 = 0x5ef, Field2 = "" }, token);
+                EdenLog.Write($"[Combat] REVIVE item refusé " +
+                    $"char=#{st.CharId} : pas d'item de revive");
+                return;
+            }
+        }
         st.Dead = false;
         // Restauration native : 10 % du max (CPlayerFactory::Revive
         // (char,5,10,10,Para348,type,true) → CCharacter::Revive
@@ -375,29 +399,39 @@ public sealed partial class ZoneEntryFlow
         // DecExpForDead natif (@0x83f4310 : loss = param ×
         // expRequisNiveau / 100) avec param = 10 — le natif passe 5
         // via Revive(…,Para348,…) ; la valeur demandée en jeu est 10.
-        if (st.Level > 0)
+        var expLoss = ReviveRules.AppliesExpLoss(reviveType)
+            && !IsDungeonNode(st.NodeId);
+        if (expLoss && st.Level > 0)
         {
             var lvlRow = _services.GameData.Levels
                 .FirstOrDefault(l => l.Level == st.Level);
             if (lvlRow?.ExpNeeded > 0)
             {
-                var loss = lvlRow.ExpNeeded * 10 / 100;
-                if (loss > 0 && st.Experience > 0)
+                var loss = ReviveRules.ExpLoss(st.Experience,
+                    lvlRow.ExpNeeded);
+                if (loss > 0)
                 {
-                    st.Experience = Math.Max(0, st.Experience - loss);
+                    st.Experience -= loss;
                     // 316 TextIndex 0xba "%lld" — "Vous avez perdu X
                     // exp" natif (CCharacter::Revive erreur 0xba).
                     await session.SendAsync(
                         new CNC_CZ_ClientTextOutputIndex
                         { Field1 = 0xba, Field2 = loss.ToString() },
                         token);
+                    // 600 : la barre d'exp client suit la perte.
+                    await session.SendAsync(
+                        new CNC_CZ_ClientUpdateAttrNewExp
+                        {
+                            Field1 = (int)st.CharId,
+                            Field2 = st.Experience,
+                        }, token);
                 }
             }
         }
         // Exp de CLASSE — la pénalité s'applique aussi à la barre de
         // la classe active : même règle (10 % du palier courant,
         // plancher 0, jamais de class_level perdu).
-        if (st.ClassId > 0)
+        if (expLoss && st.ClassId > 0)
         {
             var cp = await _services.Classes
                 .GetClassProgressAsync((int)st.CharId, st.ClassId);
@@ -409,7 +443,7 @@ public sealed partial class ZoneEntryFlow
                     ?.ClassExpNeeded ?? 0L;
                 if (cpNeed > 0)
                 {
-                    var closs = cpNeed * 10 / 100;
+                    var closs = ReviveRules.ExpLoss(cp.ClassExp, cpNeed);
                     if (closs > 0)
                         await _services.Classes.SetClassProgressAsync(
                             (int)st.CharId, st.ClassId, clv,
@@ -422,7 +456,8 @@ public sealed partial class ZoneEntryFlow
         // event-areas (Ins+0x244). La valeur DB peut aussi être une
         // clé [revive_area] col1 : ReviveMap[eaComp]=reviveComp → on
         // cherche dans les DEUX sens (données héritées).
-        if (reviveType != 5 && st.ReviveAreaId > 0)
+        var migrated = ReviveRules.Teleports(reviveType) &&
+            st.ReviveAreaId > 0 &&
             await TeleportToReviveAreaAsync(session, st, token);
         // Désaggro : les mobs qui ciblaient le mort repartent à l'état
         // passif (natif : la mort purge la cible — sinon le respawn est
@@ -445,15 +480,54 @@ public sealed partial class ZoneEntryFlow
         // Refresh position : 313 spawn + 267 déplacement à la position
         // (déjà mise à jour par le téléport si revive_area résolu) —
         // le client replace le perso.
-        await session.SendAsync(new CNC_CZ_ClientEnterNodeNodeData
-        {
-            Field1 = st.NodeId, Field2 = 1, Field3 = st.PosX,
-            Field4 = st.PosZ, Field5 = st.Facing,
-        }, token);
+        // Même node uniquement : une migration a déjà envoyé son 313
+        // (node + position + hauteur) ; un second 313 portant le cap en
+        // guise de hauteur écrasait l'ancre d'arrivée du client (carte
+        // et entités décalées sous le sol).
+        if (!migrated)
+            await session.SendAsync(new CNC_CZ_ClientEnterNodeNodeData
+            {
+                Field1 = st.NodeId, Field2 = 1, Field3 = st.PosX,
+                Field4 = st.PosZ,
+                Field5 = _services.Scenes.GetScene($"S{st.NodeId:D3}")
+                    ?.FloorZ(st.PosX, st.PosZ) ?? 0f,
+            }, token);
+        // Item de revive : consommé seulement une fois la revive faite.
+        if (leaf != null)
+            await ConsumeReviveItemAsync(session, st, leaf, token);
+        await SaveIfLatestAsync(st, NextSaveMark(st.CharId));
         EdenLog.Write($"[Combat] REVIVE char=#{st.CharId} " +
             $"hp={st.PlayerHp}/{st.PlayerMaxHp} node={st.NodeId} " +
             $"type={reviveType}");
     }
+    /// <summary>Premier item de revive du sac (Leaf verte/violette…).</summary>
+    private async Task<ItemEntity?> FindReviveItemAsync(EntryState st,
+        int reviveType)
+    {
+        var ids = ReviveRules.LeafIdsFor(reviveType);
+        if (ids == null) return null;
+        var items = await _services.InventoryRepo
+            .GetLiveItemsAsync((int)st.CharId);
+        foreach (var it in items)
+        {
+            if (it.Quantity > 0 && ids.Contains(it.ItemId)) return it;
+        }
+        return null;
+    }
+
+    /// <summary>Consomme 1 exemplaire (même queue que l'usage normal :
+    /// 291/303/275).</summary>
+    private async Task ConsumeReviveItemAsync(NetSession session,
+        EntryState st, ItemEntity leaf, CancellationToken token)
+    {
+        var def = _services.GameData.Items.FirstOrDefault(
+            d => d.Id == leaf.ItemId);
+        if (def == null) return;
+        await Handlers.ItemActionHandlers.ConsumeUsedItemAsync(session,
+            _services, (int)st.CharId, leaf, def, 0, (short)leaf.BagId,
+            (short)leaf.Slot, token);
+    }
+
     /// <summary>`TransportCharacterToArea(char, revive_area_id, -1,
     /// true)` natif : résout le composite `(node<<16)|eventAreaId`
     /// dans la table des event-areas — le low16 est directement
@@ -461,7 +535,7 @@ public sealed partial class ZoneEntryFlow
     /// area 11 « 湖畔森林 » bindée en traversant l'aire REVIVE 5 par
     /// la map [aireTraversée→clé] de LoadReviveArea @0x83504b0).
     /// Même node → reposition + 267/313 ; autre node → migration.</summary>
-    private async Task TeleportToReviveAreaAsync(NetSession session,
+    private async Task<bool> TeleportToReviveAreaAsync(NetSession session,
         EntryState st, CancellationToken token)
     {
         var stored = st.ReviveAreaId;
@@ -481,10 +555,11 @@ public sealed partial class ZoneEntryFlow
             // fallback : renaître sur place.
             EdenLog.Write($"[Combat] revive_area_id={stored} " +
                 "invalide — revive sur place");
-            return;
+            return false;
         }
         st.Facing = area.Facing;
-        if (node != st.NodeId)
+        var crossNode = node != st.NodeId;
+        if (crossNode)
         {
             await MigrateToNodeAsync(session, st, node,
                 area.X, area.Y, area.Z, token);
@@ -493,10 +568,12 @@ public sealed partial class ZoneEntryFlow
         {
             st.PosX = area.X;
             st.PosZ = area.Y;
+            st.PosY = area.Z;
         }
         EdenLog.Write($"[Combat] revive teleport char=#{st.CharId} " +
             $"→ node={node} area={area.Id} ({area.X:F1},{area.Y:F1}) " +
             $"type={area.Type}");
+        return crossNode;
     }
     /// <summary>Respawn d'un mob après son délai — renvoie SeeMob aux
     /// sessions présentes sur le même node.</summary>

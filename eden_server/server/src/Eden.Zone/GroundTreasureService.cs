@@ -69,6 +69,11 @@ public sealed class GroundTreasureService
         /// trésor — `CTreasure::SetRoll(true)` natif : le pickup
         /// direct est alors refusé jusqu'à la résolution.</summary>
         public bool IsRolled;
+        /// <summary>Mission ayant produit ce trésor de quête
+        /// (MonsterTreasureGot posé au sol sur inventaire plein) —
+        /// 0 = loot ordinaire. Au pickup : op 145 zone→mission pour
+        /// créditer l'objectif, comme un drop direct en sac.</summary>
+        public int QuestMissionId;
     }
 
     private readonly ConcurrentDictionary<uint, Treasure> _treasures =
@@ -90,7 +95,8 @@ public sealed class GroundTreasureService
     /// position du joueur ; on tire directement un point de l'anneau,
     /// le sol n'étant pas testé par IsBlock côté C#).</summary>
     public Treasure Spawn(int nodeId, int inst, int ownerCharId,
-        float x, float z, int itemId, int count, DateTime now)
+        float x, float z, int itemId, int count, DateTime now,
+        int questMissionId = 0)
     {
         var angle = Random.Shared.NextDouble() * Math.PI * 2.0;
         var radius = 1.5f + (float)Random.Shared.NextDouble() * 1.5f;
@@ -102,6 +108,7 @@ public sealed class GroundTreasureService
             ItemId = itemId,
             Count = count,
             OwnerCharId = ownerCharId,
+            QuestMissionId = questMissionId,
             X = x + (float)Math.Cos(angle) * radius,
             Z = z + (float)Math.Sin(angle) * radius,
             SpawnedAt = now,

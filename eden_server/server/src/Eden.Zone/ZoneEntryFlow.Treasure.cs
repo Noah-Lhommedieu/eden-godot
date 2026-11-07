@@ -26,10 +26,11 @@ public sealed partial class ZoneEntryFlow
     /// Le trésor n'est d'abord visible que du propriétaire (329 u8=0,
     /// comme CTreasure::OnSeen pendant la fenêtre +0x74).</summary>
     private async Task SpawnGroundTreasureAsync(EntryState st,
-        int itemId, int count)
+        int itemId, int count, int questMissionId = 0)
     {
         var t = _services.GroundTreasure.Spawn(st.NodeId, st.InstanceGroup, (int)st.CharId,
-            st.PosX, st.PosZ, itemId, count, DateTime.UtcNow);
+            st.PosX, st.PosZ, itemId, count, DateTime.UtcNow,
+            questMissionId);
         if (st.Session is { } s)
             await s.SendAsync(new CNC_CZ_ClientSeeTreasure
             {
@@ -138,6 +139,12 @@ public sealed partial class ZoneEntryFlow
         await BroadcastToNodeAsync(st.NodeId, st.InstanceGroup, 330,
             Codecs.TreasureCodec.BuildTreasureDisappear(id));
         _services.NotifyItemChanged((int)st.CharId, t.ItemId);
+        // Trésor de quête (MonsterTreasureGot déposé au sol sur sac
+        // plein) : la progression avance à l'obtention — même op 145
+        // que le drop direct en sac (DistributeQuestDropsAsync).
+        if (t.QuestMissionId != 0 && _mission.Connected)
+            _ = _mission.SendQuestItemGotAsync(st.CharId,
+                t.QuestMissionId, t.ItemId);
         EdenLog.Write($"[Zone] treasure {id} ramassé " +
             (byPet ? "par le familier de " : "par ") +
             $"char={st.CharId} item={t.ItemId} x{t.Count}");

@@ -152,6 +152,39 @@ public static class FamilyHallRules
         return false;
     }
 
+    /// <summary>Tid S_Buliding posé par un contrat 0x29 — walk natif
+    /// de <c>CItemFactory::FamilyBuildingPutItemFromInventroy</c>
+    /// @0x808a770 : <c>GetBuildingData(item+0x124)</c> donne l'échelon
+    /// de base ; pour les types dont <c>type-4 (unsigned) &gt; 5</c>
+    /// (types {1,2,10} en EDENFR), le natif remonte les <c>next</c>
+    /// (lien construit par inversion des col5 prev) jusqu'à trouver
+    /// l'échelon dont le niveau égale le niveau de la famille —
+    /// « PutBuildingItem - No Data » si la chaîne s'épuise. Les types
+    /// 4-9 posent l'échelon du contrat tel quel (la montée se fait
+    /// ensuite par l'EXP de bâtiment). <paramref name="nextTid"/>
+    /// = <c>GetBuildingData(def+0x30)</c> natif.</summary>
+    /// <returns>null si le contrat ne résout pas un bâtiment posable
+    /// (rejet muet natif).</returns>
+    public static (int Tid, GameDataService.BuildingDef Def)?
+        ResolveBuildingPut(int buildingTid, int familyLevel,
+            IReadOnlyDictionary<int, GameDataService.BuildingDef>
+                buildings,
+            Func<int, int> nextTid)
+    {
+        if (!buildings.TryGetValue(buildingTid, out var def))
+            return null;
+        if ((uint)(def.Type - 4) <= 5)     // types 4-9 : échelon direct
+            return (buildingTid, def);
+        for (var guard = 0; def.Level != familyLevel;)
+        {
+            buildingTid = nextTid(buildingTid);
+            if (buildingTid == 0 || ++guard > 16
+                || !buildings.TryGetValue(buildingTid, out def))
+                return null;
+        }
+        return (buildingTid, def);
+    }
+
     /// <summary>Aire de position d'une loc — mapping natif de
     /// <c>SFamily::GetNpcPositionByNpcLoc</c> @0x84662b0 : loc 100 →
     /// 0x32, 0x33/≥50 → 0x38, sinon 0x33 + loc/10.</summary>

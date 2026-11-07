@@ -230,6 +230,19 @@ public static class ItemActionHandlers
                     return;
                 }
 
+                // Garde mort/vie : mort = aucun usage hors item de
+                // revive ; vivant = un item de revive n'est pas gaspillé.
+                if (s.ItemUseLifeGate != null &&
+                    !await s.ItemUseLifeGate(session, charId, item.ItemId,
+                        def.UseEnchantId, token))
+                {
+                    await SendItemUseAckAsync(session, charId,
+                        item.ItemId, 0, msg.Field2, msg.Field3, token);
+                    EdenLog.Write($"[Zone] ItemUse char={charId} " +
+                        $"item={item.ItemId} refusé par la garde mort/vie");
+                    return;
+                }
+
                 // Cooldown d'usage natif : CheckIsCoolDowning (refus +
                 // texte 0x5ef) puis AddCoolDownItem — armé AVANT
                 // l'exécution comme DoUseItem @0x80b8a10.
@@ -543,6 +556,21 @@ public static class ItemActionHandlers
                     return;
                 }
 
+                // Canalisation d'usage (CItemData+0x54 = S_Item col20
+                // ≠ 0 — DoUseItem @0x80b8a10) : le natif émet 407
+                // ClientUseItemTime et retarde DoUseItemAfterCheck à
+                // +N décisecondes (CEventUseItemTime) au lieu d'user
+                // l'item immédiatement. Les items temporisés sont tous
+                // UseType 2 → ils arrivent tous ici. char+0x90 occupé
+                // → silence natif (l'item reste).
+                if (def.UseTimeDs > 0 && s.ItemUseChannel != null &&
+                    await s.ItemUseChannel(session, charId, item.ItemId,
+                        item.Id, msg.Field2, msg.Field3, def.UseTimeDs,
+                        (used, ct) => UseItemFinalAsync(session, s,
+                            charId, used, def, 0, msg.Field2,
+                            msg.Field3, ct), token))
+                    return;
+
                 // Les items « à cible » (UseType 3/5) sont déjà
                 // sortis plus haut → HandleItemOnItemAsync ; le reste
                 // suit le pipeline consommable natif.
@@ -610,6 +638,15 @@ public static class ItemActionHandlers
                         Field4 = (uint)item.DueDate,
                     }, token);
                 }
+                // Canalisation d'usage — même gate que l'ItemUse 19
+                // (le natif passe aussi par UseItemParam → DoUseItem).
+                if (def.UseTimeDs > 0 && s.ItemUseChannel != null &&
+                    await s.ItemUseChannel(session, charId, item.ItemId,
+                        item.Id, msg.Field2, msg.Field3, def.UseTimeDs,
+                        (used, ct) => UseItemFinalAsync(session, s,
+                            charId, used, def, msg.Field1, msg.Field2,
+                            msg.Field3, ct), token))
+                    return;
                 await UseItemFinalAsync(session, s, charId, item, def,
                     msg.Field1, msg.Field2, msg.Field3, token);
             });
@@ -722,6 +759,21 @@ public static class ItemActionHandlers
         if (s.ItemUseApply != null && def.UseEnchantId > 0)
             await s.ItemUseApply(session, charId, def.UseEnchantId,
                 def.UseBuffSeconds, token);
+        //   ①ter kind 48 AVEC enchant : le dispatch type 0xc natif
+        // (UseItemToLifeControl::UseItem @0x84ec180) roule AUSSI
+        // S_DropItem[itemId] après InvokeItemEffect — ex. la clé de
+        // quête 32811 (enchant 53009 invoque le coffre visuel, le roll
+        // donne l'« instrument usé » 32812 = l'ItemCollect de 1104).
+        // OpenItemBoxAsync gère don + consommation ; sac plein →
+        // boîte conservée comme le chemin sans enchant.
+        if (def.Kind == 48 && def.UseEnchantId > 0 &&
+            s.Loot.GetDropTable(item.ItemId) is { } enchantedBox &&
+            enchantedBox.Entries.Any(e => e.ItemId > 0))
+        {
+            await OpenItemBoxAsync(session, s, charId, item, def,
+                enchantedBox, contType, contIdx, slot, token);
+            return;
+        }
         //   ①bis dispatch type 0xc natif — ChanceLuckyBagStart pose
         // l'état (char+0xc70..), émet 432 EnterStrengthen et roule le
         // premier dé ; OpenFortuneBag tire un lot par set (sur la
@@ -937,7 +989,7 @@ public static class ItemActionHandlers
     /// ② ModifyItemDurability -1 → 291, ③ ack 303 ClientItemUse,
     /// ④ stack épuisé → 275 ClientDropItem + notification mission
     /// (objectif ItemCollect cassé — 146 zone→mission).</summary>
-    private static async Task ConsumeUsedItemAsync(NetSession session,
+    internal static async Task ConsumeUsedItemAsync(NetSession session,
         ZoneServices s, int charId, ItemEntity item,
         ItemParser.ItemDef def, short contType,
         short contIdx, short slot, CancellationToken token)
@@ -945,12 +997,29 @@ public static class ItemActionHandlers
         // Conteneur équipement (NCID 83 sel=1) : l'item porté n'est
         // jamais stackable → DELETE equipment*, pas touche au sac à
         // la même (bag,slot).
-        var removed = contType == 1
-            ? await s.InventoryRepo.RemoveEquippedItemAsync(
-                charId, contIdx, slot)
-            : await s.Inventory.RemoveItemAsync(
-                charId, contIdx, slot, 1);
-        var left = item.Quantity - 1;
+        // Outil à usure (pioche/gants/boule, kind 44 non empilable) :
+        // l'usage retire 1 de durabilité, la ligne reste (natif
+        // ModifyItemDurability -1) ; RemoveItemAsync supprimerait
+        // la ligne entière d'un item non empilable.
+        var wearTool = contType == 0 && def.Kind == 44 &&
+            !s.Inventory.IsStackable(item.ItemId) && item.Durability > 1;
+        bool removed;
+        int left;
+        if (wearTool)
+        {
+            item.Durability -= 1;
+            removed = await s.InventoryRepo.UpdateItemAsync(item);
+            left = item.Durability;
+        }
+        else
+        {
+            removed = contType == 1
+                ? await s.InventoryRepo.RemoveEquippedItemAsync(
+                    charId, contIdx, slot)
+                : await s.Inventory.RemoveItemAsync(
+                    charId, contIdx, slot, 1);
+            left = item.Quantity - 1;
+        }
         // Bind à l'usage — natif DoUseItem/DoUseItemAfterCheck →
         // BindItem @0x08116870 : Flags & 0x80 && clone non lié →
         // |=0x10 + SetItemBind. Le stack résiduel (potions…) devient

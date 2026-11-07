@@ -74,8 +74,14 @@ internal sealed class InMemoryInventoryRepository : IInventoryRepository
 
     public Task<IReadOnlyDictionary<int, int>> GetAllBagCapacitiesAsync(
         int characterId)
-        => Task.FromResult<IReadOnlyDictionary<int, int>>(
-            BagCapacities.ToDictionary(kv => kv.Key, kv => kv.Value));
+    {
+        // Miroir du fallback du vrai repo : sac 0 toujours ouvert.
+        var caps = BagCapacities.ToDictionary(kv => kv.Key,
+            kv => kv.Value);
+        if (!caps.ContainsKey(0) || caps[0] <= 0)
+            caps[0] = BagCapacity;
+        return Task.FromResult<IReadOnlyDictionary<int, int>>(caps);
+    }
 
     public Task SetBagCapacityAsync(int characterId, int bagId, int slots)
     {
@@ -339,5 +345,45 @@ public class InventoryServiceTests
         var svc = CreateService(repo);
         await svc.AddItemAsync(1, 1001, 10);
         Assert.False(await svc.SplitItemAsync(1, 0, 0, 10, 0, 5));
+    }
+
+    [Fact]
+    public async Task AddItems_MergesAndPlacesLikeSingleAdds()
+    {
+        var repo = new InMemoryInventoryRepository();
+        var svc = CreateService(repo);
+        await svc.AddItemAsync(1, 1001, 8);          // stack 8/10 slot 0
+
+        var results = await svc.AddItemsAsync(1, new[]
+        {
+            (1001, 5, 0, false),   // 2 → merge slot 0, 3 → nouveau slot
+            (1002, 1, 0, false),   // non stackable → nouveau slot
+        });
+
+        Assert.All(results, r => Assert.True(r.Ok));
+        Assert.Equal(10, repo.Items[0].Quantity);        // merge
+        Assert.Equal(3, repo.Items[1].Quantity);         // reste stack
+        Assert.Equal(1002, repo.Items[2].ItemId);        // nouveau
+        Assert.Contains(results[0].Touched, t => t.Merged);
+        Assert.Equal(2, results[0].Touched.Count);
+        Assert.Single(results[1].Touched);
+    }
+
+    [Fact]
+    public async Task AddItems_SecondRequestSeesFirstInsert()
+    {
+        var repo = new InMemoryInventoryRepository { BagCapacity = 2 };
+        var svc = CreateService(repo);
+
+        var results = await svc.AddItemsAsync(1, new[]
+        {
+            (1001, 20, 0, false),  // remplit les 2 slots (10+10)
+            (1002, 1, 0, false),   // plus de place → refus all-or-nothing
+        });
+
+        Assert.True(results[0].Ok);
+        Assert.False(results[1].Ok);
+        Assert.Equal(2, repo.Items.Count);               // rien d'inséré pour le 2e
+        Assert.Empty(results[1].Touched);
     }
 }

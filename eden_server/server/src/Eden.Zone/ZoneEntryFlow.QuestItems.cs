@@ -28,6 +28,9 @@ public sealed partial class ZoneEntryFlow
         {
             var name = EnchantCommands.Names.TryGetValue(c.CommandId,
                 out var n) ? n : "";
+            if (name == "AttrGainCollectItem" && c.Args.Count() > 0 &&
+                !IsInCollectArea(st, (int)c.Args[0]))
+                return false; // texte natif inconnu : refus silencieux
             if (!QuestItemRules.IsSummonCommand(name)) continue;
             var spec = QuestItemRules.ParseSummon(
                 c.Args.Select(v => (int)v).ToArray());

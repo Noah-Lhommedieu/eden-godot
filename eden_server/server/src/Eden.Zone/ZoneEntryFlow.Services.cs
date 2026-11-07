@@ -567,6 +567,15 @@ public sealed partial class ZoneEntryFlow
                 (int)st.CharId, st.ClassId);
         await SendAttrAsync(session, st.CharId, 0x31,
             Math.Clamp(aaRow?.AaPoint ?? 0, 0, 255), 0, token);
+        // Relog en état mort : le client rouvre sa fenêtre de mort
+        // (305 victime=soi + 531 aire de réapparition).
+        if (st.Dead)
+        {
+            await session.SendAsync(new CNC_CZ_ClientDie
+                { Field1 = st.CharId, Field2 = 0, Field3 = 0 }, token);
+            await session.SendAsync(new CNC_CZ_ClientReviveInfo
+                { Value = st.ReviveAreaId }, token);
+        }
     }
 
     /// <summary>283 ClientModelModify — désasm ctor @0x813f2c0 +

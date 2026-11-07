@@ -142,7 +142,7 @@ public partial class ItemMallWindow : Control
         {
             var names = new[] { "Item Mall", "Loyalty Shop", "Special" };
             for (var i = 0; i < _tabs.GetTabCount(); i++)
-                _tabs.SetTabTitle(i, names[Math.Min(i, names.Length - 1)]);
+                _tabs.SetTabTitle(i, UiTextEn.Translate(names[Math.Min(i, names.Length - 1)]));
         }
         if (_tabs != null)
             _tabs.TabChanged += t =>
@@ -162,7 +162,15 @@ public partial class ItemMallWindow : Control
                 0.01626f, 0.09292f, 0.176152f, 0.4469f);
             content.AddChild(_categories);
         }
+        _categories.AddThemeFontSizeOverride("font_size", 10);
         _categories.ItemSelected += OnCategorySelected;
+        // Libellés de colonne native « Global/Team/forever » parasites.
+        foreach (var n0 in host.FindChildren("*", "Label", true, false))
+            if (n0 is Label l0 && (l0.Text is "Global" or "Team" or "forever"
+                    || l0.Text == UiTextEn.Translate("Global")
+                    || l0.Text == UiTextEn.Translate("Team")
+                    || l0.Text == UiTextEn.Translate("forever")))
+                l0.Visible = false;
 
         // ---- réclamables : la Listbox native panel/itembox ----
         _receivables = TopLeftVitals.Find<ItemList>(host, "panel_itembox");
@@ -177,6 +185,9 @@ public partial class ItemMallWindow : Control
                 0.0162602f, 0.473451f, 0.176152f, 0.893805f);
             content.AddChild(_receivables);
         }
+        _receivables.IconMode = ItemList.IconModeEnum.Left;
+        _receivables.MaxColumns = 1;
+        _receivables.AddThemeFontSizeOverride("font_size", 9);
         _receivables.ItemSelected += OnReceiptSelected;
         _receivables.TooltipText =
             UiTextEn.Translate("Purchased items waiting — click to claim.");
@@ -226,6 +237,11 @@ public partial class ItemMallWindow : Control
             if (getall is Button gb) gb.Text = UiTextEn.Translate("Claim All");
             getall.Pressed += ClaimAll;
         }
+        // passBtn (mot de passe boutique) / saveBtn (recharge) : aucun
+        // paquet serveur câblé → masqués plutôt que des boutons morts.
+        foreach (var dead in new[] { "passBtn", "saveBtn" })
+            if (TopLeftVitals.Find<Control>(host, dead) is { } db0)
+                db0.Visible = false;
         // getBtn natif = réclame le reçu sélectionné dans itembox.
         var get = TopLeftVitals.Find<BaseButton>(host, "getBtn");
         if (get != null)
@@ -372,7 +388,7 @@ public partial class ItemMallWindow : Control
         _categories.Clear();
         _categories.AddItem(UiTextEn.Translate("All"));
         foreach (var g in groups)
-            _categories.AddItem(CategoryName(g));
+            _categories.AddItem(UiTextEn.Translate(CategoryName(g)));
         // Sélection courante → index (0 = All).
         var sel = _group < 0 ? 0 : groups.IndexOf(_group) + 1;
         if (sel >= 0 && sel < _categories.ItemCount)
@@ -452,7 +468,7 @@ public partial class ItemMallWindow : Control
             if (tex != null) slot.Texture = tex;
         }
         SetRowText(row, "ItemDeatilText",
-            TextResolver.ItemName(e.ItemId) ?? $"#{e.ItemId}");
+            MallName(e.ItemId));
         // Prix : plein (barré si promo) + promo.
         var hasPromo = e.SpecialPrice != 0 &&
             e.SpecialPrice < e.Point;
@@ -465,9 +481,18 @@ public partial class ItemMallWindow : Control
         if (spec != null) spec.Visible = hasPromo;
         SetRowText(row, "SpecilPointext",
             hasPromo ? $"{e.SpecialPrice}" : "");
+        // Tag promo natif (rouge, sur le slot) : texte statique
+        // table UI +0x14 — visible seulement si prix promo.
+        SetRowText(row, "specilText",
+            hasPromo ? UiTextEn.Translate("Promo") : "");
         var sell = TopLeftVitals.Find<Label>(row, "SellDateText");
         if (sell != null)
-            sell.Text = SellText(e);
+        {
+            // « en vente » (cas normal) chevauchait le nom : on ne
+            // montre que les états exceptionnels (début/fin de vente).
+            var st = SellText(e);
+            sell.Text = st == UiTextEn.Translate("on sale") ? "" : st;
+        }
 
         var buy = TopLeftVitals.Find<BaseButton>(row, "buyBtn");
         if (buy != null)
@@ -511,7 +536,7 @@ public partial class ItemMallWindow : Control
         var tex = ItemTexture(e.ItemId);
         if (tex != null) icon.Texture = tex;
         row.AddChild(icon);
-        var name = TextResolver.ItemName(e.ItemId) ?? $"#{e.ItemId}";
+        var name = MallName(e.ItemId);
         var qty = e.ItemNum > 1 ? $" ×{e.ItemNum}" : "";
         var lbl = new Label
         {
@@ -550,7 +575,7 @@ public partial class ItemMallWindow : Control
         _receivables.Clear();
         foreach (var r in ItemMallState.Receipts)
         {
-            var name = TextResolver.ItemName(r.ItemId) ?? $"#{r.ItemId}";
+            var name = MallName(r.ItemId);
             var i = _receivables.AddItem(
                 $"  {name} ×{r.Quantity} — {r.PurchaseTime}");
             _receivables.SetItemTooltip(i,
@@ -574,14 +599,29 @@ public partial class ItemMallWindow : Control
             e.SpecialPrice < e.Point).Take(6).ToList();
         foreach (var e in hot)
         {
-            var name = TextResolver.ItemName(e.ItemId) ?? $"#{e.ItemId}";
+            var name = MallName(e.ItemId);
             var b = new Button
             {
-                Text = UiTextEn.Translate($"{name}\n{e.SpecialPrice} pts"),
+                Text = $"{name}\n{e.SpecialPrice} " + UiTextEn.Translate("pts"),
                 Alignment = HorizontalAlignment.Left,
                 CustomMinimumSize = new Vector2(0, 44),
             };
             b.AddThemeFontSizeOverride("font_size", 10);
+            b.ClipText = true;
+            var dark = new Color(0.16f, 0.1f, 0.05f);
+            foreach (var c0 in new[] { "font_color", "font_hover_color",
+                         "font_pressed_color", "font_focus_color" })
+                b.AddThemeColorOverride(c0, dark);
+            var sb = new StyleBoxFlat
+            {
+                BgColor = new Color(0.93f, 0.9f, 0.84f),
+                BorderColor = new Color(0.55f, 0.45f, 0.3f),
+                BorderWidthBottom = 1, BorderWidthTop = 1,
+                BorderWidthLeft = 1, BorderWidthRight = 1,
+            };
+            b.AddThemeStyleboxOverride("normal", sb);
+            b.AddThemeStyleboxOverride("hover", sb);
+            b.AddThemeStyleboxOverride("pressed", sb);
             var entry = e;
             b.Pressed += () =>
             {
@@ -610,7 +650,7 @@ public partial class ItemMallWindow : Control
         var receipt = ItemMallState.Receipts[(int)index];
         SendWorld(new WorldItemMallReceiveAttempt
         { ReceiptId = receipt.Id });
-        ItemMallState.SetStatus(UiTextEn.Translate($"Claiming #{receipt.Id}…"));
+        ItemMallState.SetStatus(UiTextEn.Translate("Claiming #%s1…").Replace("%s1", receipt.Id.ToString()));
     }
 
     private void ClaimAll()
@@ -620,7 +660,7 @@ public partial class ItemMallWindow : Control
             { ReceiptId = r.Id });
         if (ItemMallState.Receipts.Count > 0)
             ItemMallState.SetStatus(
-                UiTextEn.Translate($"Claiming {ItemMallState.Receipts.Count} item(s)…"));
+                UiTextEn.Translate("Claiming %s1 item(s)…").Replace("%s1", ItemMallState.Receipts.Count.ToString()));
     }
 
     /// <summary>NCID 23 — achat. gift=true → Field6 = nom du
@@ -653,23 +693,22 @@ public partial class ItemMallWindow : Control
             Recipient = recipient,
         });
         ItemMallState.SetStatus(
-            UiTextEn.Translate($"Buying {TextResolver.ItemName(e.ItemId) ?? $"#{e.ItemId}"}…"));
+            UiTextEn.Translate("Buying %s1…").Replace("%s1", MallName(e.ItemId)));
     }
 
     private void ShowDetail(ItemMallEntry e)
     {
         var parts = new List<string>
         {
-            $"{TextResolver.ItemName(e.ItemId) ?? $"#{e.ItemId}"} — " +
-            $"group {e.Group} idx {e.Index} mu {e.MoneyUnit}",
-            $"price {e.Point} promo {e.SpecialPrice} " +
-            $"qty/pack {e.ItemNum} lvl≥{e.LevelLimit}",
+            $"{MallName(e.ItemId)} — " +
+            UiTextEn.Translate("group %s1 idx %s2 mu %s3").Replace("%s1", e.Group.ToString()).Replace("%s2", e.Index.ToString()).Replace("%s3", e.MoneyUnit.ToString()),
+            UiTextEn.Translate("price %s1 promo %s2 qty/pack %s3 lvl≥%s4").Replace("%s1", e.Point.ToString()).Replace("%s2", e.SpecialPrice.ToString()).Replace("%s3", e.ItemNum.ToString()).Replace("%s4", e.LevelLimit.ToString()),
         };
         if (e.NumLimit > 0)
-            parts.Add($"limit {e.NumLimit}/account — bought {e.Sold}");
-        if (e.Note.Length > 0) parts.Add($"note: {e.Note}");
+            parts.Add(UiTextEn.Translate("limit %s1/account — bought %s2").Replace("%s1", e.NumLimit.ToString()).Replace("%s2", e.Sold.ToString()));
+        if (e.Note.Length > 0) parts.Add(UiTextEn.Translate("note: %s1").Replace("%s1", e.Note));
         if (e.FortuneBag.Length > 0)
-            parts.Add($"fortune bag: {e.FortuneBag}");
+            parts.Add(UiTextEn.Translate("fortune bag: %s1").Replace("%s1", e.FortuneBag));
         var d = TextResolver.ItemDescription(e.ItemId);
         if (d != null) parts.Add(d);
         ItemMallState.SetStatus(string.Join(" | ", parts));
@@ -678,8 +717,8 @@ public partial class ItemMallWindow : Control
     private string BuyTooltip(ItemMallEntry e)
     {
         var lim = e.NumLimit > 0
-            ? $" — limit {e.NumLimit} (bought {e.Sold})" : "";
-        var lvl = e.LevelLimit > 0 ? $" — lvl {e.LevelLimit}+" : "";
+            ? " " + UiTextEn.Translate("— limit %s1 (bought %s2)").Replace("%s1", e.NumLimit.ToString()).Replace("%s2", e.Sold.ToString()) : "";
+        var lvl = e.LevelLimit > 0 ? " " + UiTextEn.Translate("— lvl %s1+").Replace("%s1", e.LevelLimit.ToString()) : "";
         var d = TextResolver.ItemDescription(e.ItemId);
         return $"{SellText(e)}{lim}{lvl}" +
             (d != null ? $"\n{d}" : "");
@@ -691,11 +730,24 @@ public partial class ItemMallWindow : Control
         // ItemMallPackets) — 0 = toujours en vente.
         if (e.SellDate != 0 &&
             DateTimeOffset.UtcNow.ToUnixTimeSeconds() < e.SellDate)
-            return "not yet on sale";
+            return UiTextEn.Translate("not yet on sale");
         if (e.NotSellDate != 0)
-            return $"sale ends {DateTimeOffset.FromUnixTimeSeconds(
-                e.NotSellDate):yyyy-MM-dd}";
-        return "on sale";
+            return UiTextEn.Translate("sale ends %s1").Replace("%s1",
+                DateTimeOffset.FromUnixTimeSeconds(e.NotSellDate).ToString("yyyy-MM-dd"));
+        return UiTextEn.Translate("on sale");
+    }
+
+    /// <summary>Nom d'article : table texte (t_itemmall/t_item), sinon
+    /// la définition c_item/c_itemmall, sinon « Objet #id » ; passé par
+    /// la table EN→FR (la table FR garde quelques noms anglais).</summary>
+    private static string MallName(int itemId)
+    {
+        var n = TextResolver.ItemName(itemId);
+        if (string.IsNullOrWhiteSpace(n))
+            n = InventoryWindow.LookupDef(itemId)?.Name;
+        if (string.IsNullOrWhiteSpace(n))
+            return UiTextEn.Translate("Item") + $" #{itemId}";
+        return UiTextEn.Translate(n);
     }
 
     private static Texture2D? ItemTexture(int itemId)

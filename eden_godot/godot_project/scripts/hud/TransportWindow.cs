@@ -92,8 +92,8 @@ public partial class TransportWindow : EdenWindow
             close.Pressed += () => Visible = false;
         }
         var title = window
-            .FindChildren("*", "CeguiTitleBar", true, false)
-            .Cast<Ui.CeguiTitleBar>().FirstOrDefault();
+            .FindChildren("*", "Control", true, false)
+            .OfType<Ui.CeguiTitleBar>().FirstOrDefault();
         var lbl = title?.FindChildren("*", "Label", true, false)
             .Cast<Label>().FirstOrDefault();
         if (lbl != null) lbl.Text = UiTextEn.Translate("Portal");
@@ -192,18 +192,16 @@ public partial class TransportWindow : EdenWindow
         _confirm.PopupCentered();
     }
 
-    /// <summary>Cuivre → « 1 Gold 20 Silver 5 Copper » (100 cuivre =
-    /// 1 Silver ; 10 000 = 1 Gold), « Free » si 0.</summary>
+    /// <summary>Monnaie brute → « 1 Gold 20 Silver » (1000 Silver =
+    /// 1 Gold, FAQ wiki ; statue 500 po = 500000), « Free » si 0.</summary>
     public static string FormatMoney(int copper)
     {
         if (copper <= 0) return UiTextEn.Translate("Free");
-        var g = copper / 10000;
-        var s = copper / 100 % 100;
-        var c = copper % 100;
+        var g = copper / 1000;
+        var s = copper % 1000;
         var parts = new List<string>();
         if (g > 0) parts.Add($"{g} {UiTextEn.Translate("Gold")}");
         if (s > 0) parts.Add($"{s} {UiTextEn.Translate("Silver")}");
-        if (c > 0) parts.Add($"{c} {UiTextEn.Translate("Copper")}");
         return string.Join(" ", parts);
     }
 

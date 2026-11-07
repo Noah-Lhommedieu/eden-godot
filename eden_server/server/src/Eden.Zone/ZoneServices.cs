@@ -52,7 +52,6 @@ public sealed record ZoneServices
     public required DungeonService Dungeons { get; init; }
     public required TalentService Talents { get; init; }
     public required AchievementService Achievements { get; init; }
-    public required ItemMallService ItemMall { get; init; }
     public required TerritoryWarService Territory { get; init; }
     /// <summary>Arène Colosseum — mode/schedId courant, files par
     /// catégorie et matchs runtime (miroir CColosseumFactory zone +
@@ -146,6 +145,28 @@ public sealed record ZoneServices
     /// token ; retourne false = usage refusé.</summary>
     public Func<Eden.Core.Networking.Session.NetSession, int, int,
         CancellationToken, Task<bool>>? ItemUseCanExecute { get; set; }
+
+    /// <summary>Callback enregistré par ZoneEntryFlow : garde mort/vie
+    /// de l'usage d'item. Mort : seuls les items de revive passent ;
+    /// vivant : un item de revive est refusé (non gaspillé). Arguments :
+    /// session, charId, itemId, enchantId d'usage ; false = refus.</summary>
+    public Func<Eden.Core.Networking.Session.NetSession, int, int, int,
+        CancellationToken, Task<bool>>? ItemUseLifeGate { get; set; }
+
+    /// <summary>Callback enregistré par ZoneEntryFlow : canalisation
+    /// d'usage d'un item temporisé (S_Item col20 → CItemData+0x54 ≠ 0 —
+    /// `DoUseItem` @0x80b8a10 : émet 407 ClientUseItemTime, mémorise le
+    /// control en char+0x90 et planifie CEventUseItemTime à +N
+    /// décisecondes ; à l'échéance l'usage réel s'exécute). Arguments :
+    /// session, charId, itemId (template), serial, bag, slot, useTimeDs,
+    /// complete (l'usage à exécuter sur l'item re-lu à l'échéance),
+    /// token. Retour : true = canalisation démarrée ou déjà en cours —
+    /// le handler s'arrête sans ack (char+0x90 ≠ 0 → return 0 natif).</summary>
+    public Func<Eden.Core.Networking.Session.NetSession, int, int, long,
+        short, short, int,
+        Func<Eden.Core.Game.Inventory.ItemEntity, CancellationToken,
+            Task>,
+        CancellationToken, Task<bool>>? ItemUseChannel { get; set; }
 
     /// <summary>Callback enregistré par ZoneEntryFlow : ops de partage
     /// de quête du C→S 87 (op 6/7 + garde des ops &lt; 6). Arguments :
@@ -295,6 +316,14 @@ public sealed record ZoneServices
     /// token → vrai si le sort a été appris (item consommé).</summary>
     public Func<Eden.Core.Networking.Session.NetSession, int, int, int,
         CancellationToken, Task<bool>>? ElfBookApply { get; set; }
+    /// <summary>Callback enregistré par ZoneEntryFlow : delta atomique
+    /// sur <c>player_characters.lifelong_gold</c> + miroir live
+    /// <c>EntryState.LifelongGold</c> (boucle) — utilisé par les
+    /// achats de fame shop priceType 5 (ShopHandlers stateless).
+    /// Arguments : session, charId, delta, token → nouveau total.</summary>
+    public Func<Eden.Core.Networking.Session.NetSession, int, int,
+        CancellationToken, Task<int>>? LifelongGoldDelta { get; set; }
+
     /// <summary>Callback enregistré par ZoneEntryFlow : item déplacé
     /// → <c>CItemFactory::UpdateFastDressFromInfo</c> natif — met à
     /// jour la position source des records fast_dress qui pointent le

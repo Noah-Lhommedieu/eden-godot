@@ -243,3 +243,76 @@ public class FamilyHallRulesTests
         Assert.Equal(0, r.ReadInt());            // item+0xa0
     }
 }
+
+public class ResolveBuildingPutTests
+{
+    private static Dictionary<int, GameDataService.BuildingDef> Chain(
+        string code, short type, int root, int levels)
+    {
+        // Chaîne linéaire EDENFR : root (lv3) → root+1 (lv4) → …
+        var d = new Dictionary<int, GameDataService.BuildingDef>();
+        for (var i = 0; i < levels; i++)
+            d[root + i] = new GameDataService.BuildingDef(type, 0, 200,
+                code, 3 + i, i == 0 ? 0 : root + i - 1, 0);
+        return d;
+    }
+    private static Func<int, int> Next(
+        Dictionary<int, GameDataService.BuildingDef> d) =>
+        tid => d.Values.FirstOrDefault(b => b.PrevTid == tid) is { } n
+            ? d.First(kv => kv.Value == n).Key : 0;
+
+    [Fact]
+    public void Production_DirectTid()
+    {
+        // Type 4 (ferme H01001) : pas de walk — l'échelon du contrat.
+        var d = Chain("H01001", 4, 101, 8);
+        var r = FamilyHallRules.ResolveBuildingPut(101, 7, d, Next(d));
+        Assert.NotNull(r);
+        Assert.Equal(101, r.Value.Tid);
+    }
+
+    [Fact]
+    public void House_WalksToFamilyLevel()
+    {
+        // Type 2 (maison H00401, chaîne 107+lv) : le natif remonte les
+        // next jusqu'à bld.level == family.level.
+        var d = Chain("H00401", 2, 107, 8);
+        var r = FamilyHallRules.ResolveBuildingPut(107, 5, d, Next(d));
+        Assert.NotNull(r);
+        Assert.Equal(109, r.Value.Tid);      // lv5 = 107 + (5-3)
+        Assert.Equal(5, r.Value.Def.Level);
+    }
+
+    [Fact]
+    public void Walk_FailsPastChainEnd()
+    {
+        // Famille niveau > chaîne → « No Data » natif → rejet.
+        var d = Chain("H00401", 2, 107, 8);  // lv3..10
+        Assert.Null(FamilyHallRules.ResolveBuildingPut(
+            107, 12, d, Next(d)));
+    }
+
+    [Fact]
+    public void UnknownContract_Rejected()
+    {
+        var d = Chain("H01001", 4, 101, 8);
+        Assert.Null(FamilyHallRules.ResolveBuildingPut(
+            99999, 5, d, Next(d)));
+    }
+
+    [Fact]
+    public void RealData_ContractsResolve()
+    {
+        // Données EDENFR réelles : 35081 → 101 (H01001 racine).
+        var items = ItemParser.Parse(
+            Path.Combine(TestPaths.RepoRoot, "..", "corpus", "fr-full",
+                "data", "db", "c_item.ini"));
+        var c81 = items.First(i => i.Id == 35081);
+        Assert.Equal(101, c81.FamilyBuildingTid);
+        var c71 = items.First(i => i.Id == 35071);
+        Assert.Equal(1, c71.FamilyBuildingTid);
+        // Les items 0x2a gardent leur tid NPC dans la même colonne.
+        var n01 = items.First(i => i.Id == 35001);
+        Assert.Equal(53007, n01.FamilyNpcTid);
+    }
+}

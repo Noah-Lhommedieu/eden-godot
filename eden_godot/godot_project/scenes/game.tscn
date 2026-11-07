@@ -1,8 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://edenreborngame"]
+[gd_scene load_steps=8 format=3 uid="uid://edenreborngame"]
 
 [ext_resource type="Script" path="res://scripts/GameScene.cs" id="1_game"]
 [ext_resource type="Script" path="res://scripts/hud/CraftWindow.cs" id="2_craft"]
 [ext_resource type="Script" path="res://scripts/hud/ClassChangeDialog.cs" id="3_class"]
+[ext_resource type="Script" path="res://scripts/hud/StrengthenWindow.cs" id="4_strengthen"]
+[ext_resource type="Script" path="res://scripts/hud/LifeSkillWindow.cs" id="5_lifeskill"]
+[ext_resource type="Script" path="res://scripts/hud/TownListWindow.cs" id="6_townlist"]
+[ext_resource type="Script" path="res://scripts/hud/FamilyBuildingWindow.cs" id="7_fambld"]
+[ext_resource type="Script" path="res://scripts/hud/MagicCubeWindow.cs" id="8_cube"]
+[ext_resource type="Script" path="res://scripts/hud/MagicBoxWindow.cs" id="9_mbox"]
+[ext_resource type="Script" path="res://scripts/hud/SpecialCoinWindow.cs" id="10_scoin"]
+[ext_resource type="Script" path="res://scripts/hud/PaySystemWindow.cs" id="10_paysys"]
+[ext_resource type="Script" path="res://scripts/hud/CombineWindow.cs" id="11_combine"]
 
 [node name="GameScene" type="Node3D"]
 script = ExtResource("1_game")
@@ -16,6 +25,69 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("2_craft")
+
+[node name="StrengthenWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("4_strengthen")
+
+[node name="LifeSkillWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("5_lifeskill")
+
+[node name="CombineWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("11_combine")
+
+[node name="TownListWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("6_townlist")
+
+[node name="FamilyBuildingWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("7_fambld")
+
+[node name="MagicCubeWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("8_cube")
+
+[node name="MagicBoxWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("9_mbox")
+
+[node name="SpecialCoinWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("10_scoin")
+
+[node name="PaySystemWindow" type="Control" parent="ZoneWindows"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("10_paysys")
 
 [node name="ClassChangeDialog" type="Control" parent="ZoneWindows"]
 anchors_preset = 15

@@ -70,11 +70,11 @@ public static partial class ItemTooltip
     /// <see cref="ItemTipFormat.KindLabel"/>) ; repli générique.</summary>
     public static string TypeLabel(ItemTable.ItemDef? d)
     {
-        if (d == null) return "Item";
+        if (d == null) return UiTextEn.Translate("Item");
         var k = ItemTipFormat.KindLabel(d.Kind);
         if (k.Length > 0) return UiTextEn.Translate(k);
         if (d.EquipLoc > 0) return UiTextEn.Translate("Equipment");
-        return "Item";
+        return UiTextEn.Translate("Item");
     }
 
     /// <summary>Lignes (texte, couleur) de la description brute
@@ -327,8 +327,39 @@ public static partial class ItemTooltip
                     d.Defence.ToString(), 6, White, White));
         }
         if (d.MaxSocket > 0)
-            g.AddChild(IconRow(UiTextEn.Translate("Sockets"), "EmbedNone",
-                d.MaxSocket));
+        {
+            var row = new HBoxContainer
+            {
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+                CustomMinimumSize = new Vector2(TextWidth, 0),
+            };
+            row.AddThemeConstantOverride("separation", 2);
+            var l = Label(UiTextEn.Translate("Sockets"), Dim);
+            l.SizeFlagsHorizontal = Control.SizeFlags.ExpandFill;
+            row.AddChild(l);
+            var sheet = AssetCatalog.GetTexture(
+                "uidata/imagesets/ToolTips.png");
+            for (var i = 0; i < d.MaxSocket && sheet != null; i++)
+            {
+                // Châsse remplie (Meta.Embedded) → icône gemme pleine,
+                // vide → EmbedNone — les ids 2/18 de la grille 12×12.
+                var filled = i < it.Meta.Embedded.Length &&
+                    it.Meta.Embedded[i] > 0;
+                row.AddChild(new TextureRect
+                {
+                    Texture = new AtlasTexture
+                    {
+                        Atlas = sheet,
+                        Region = new Rect2(filled ? 18 : 2, 50, 12, 12),
+                        FilterClip = true,
+                    },
+                    CustomMinimumSize = new Vector2(12, 12),
+                    SizeFlagsVertical = Control.SizeFlags.ShrinkCenter,
+                    MouseFilter = Control.MouseFilterEnum.Ignore,
+                });
+            }
+            g.AddChild(row);
+        }
         if (it.Strengthen > 0)
             g.AddChild(IconRow(UiTextEn.Translate("Enhance"), "StarJewelry",
                 Math.Min(it.Strengthen, 15)));

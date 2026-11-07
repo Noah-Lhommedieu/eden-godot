@@ -15,9 +15,12 @@ namespace EdenClient.Hud;
 public partial class HotelWindow : Control
 {
     private Control? _panel;
+    private Control? _storage;
     private ItemList? _list;
     private Label? _info;
     private readonly List<int> _roomIds = new();
+    private readonly List<(int Id, string Text)> _rooms = new();
+    private LineEdit? _searchBox;
 
     public override void _Ready()
     {
@@ -58,14 +61,51 @@ public partial class HotelWindow : Control
         }
 
         _list = new ItemList();
-        _list.Position = new Vector2(14, 42);
-        _list.Size = new Vector2(sz.X - 28, sz.Y - 140);
-        _panel.AddChild(_list);
+        // Layout natif : la liste prend le rect de MemberList
+        // (0.018..0.606 x 0.127..0.855), le statut la bande basse.
+        var member = built != null
+            ? TopLeftVitals.Find<Control>(_panel, "MemberList") : null;
+        if (member != null)
+        {
+            _list.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+            member.AddChild(_list);
+        }
+        else
+        {
+            _list.Position = new Vector2(14, 42);
+            _list.Size = new Vector2(sz.X - 28, sz.Y - 140);
+            _panel.AddChild(_list);
+        }
 
         _info = new Label { Text = "" };
-        _info.Position = new Vector2(14, sz.Y - 92);
-        _info.Size = new Vector2(sz.X - 28, 40);
-        _panel.AddChild(_info);
+        var bg = built != null
+            ? TopLeftVitals.Find<Control>(_panel, "Background") : null;
+        if (bg != null)
+        {
+            _info.AnchorLeft = 0.018f; _info.AnchorRight = 0.606f;
+            _info.AnchorTop = 0.865f; _info.AnchorBottom = 0.99f;
+            _info.OffsetLeft = _info.OffsetRight = 0;
+            _info.OffsetTop = _info.OffsetBottom = 0;
+            bg.AddChild(_info);
+        }
+        else
+        {
+            _info.Position = new Vector2(14, sz.Y - 92);
+            _info.Size = new Vector2(sz.X - 28, 40);
+            _panel.AddChild(_info);
+        }
+
+        // Recherche de résident : aucun paquet de recherche câblé côté
+        // client → filtre local sur la liste reçue (537).
+        if (built != null)
+        {
+            _searchBox = TopLeftVitals.Find<LineEdit>(_panel, "SearchBox");
+            if (_searchBox != null)
+                _searchBox.TextSubmitted += _ => RebuildList();
+            if (TopLeftVitals.Find<BaseButton>(_panel, "SearchBtn")
+                    is { } sb)
+                sb.Pressed += RebuildList;
+        }
 
         if (built == null)
         {
@@ -85,10 +125,10 @@ public partial class HotelWindow : Control
     /// session).</summary>
     public void EnsureDemo()
     {
-        _roomIds.Clear(); _roomIds.AddRange(new[] { 7, 12 });
-        _list?.Clear();
-        _list?.AddItem(UiTextEn.Translate("Sunny Room — 3/8"));
-        _list?.AddItem(UiTextEn.Translate("Guild Hall — 12/20"));
+        _rooms.Clear();
+        _rooms.Add((7, UiTextEn.Translate("Sunny Room — 3/8")));
+        _rooms.Add((12, UiTextEn.Translate("Guild Hall — 12/20")));
+        RebuildList();
         if (_info != null)
             _info.Text = UiTextEn.Translate(
                 "Pick a room and press Enter.");
@@ -105,24 +145,63 @@ public partial class HotelWindow : Control
     {
         switch (m)
         {
-            case ZoneClientOpenHotel:
-                Visible = true;
-                _list?.Clear(); _roomIds.Clear();
+            case ZoneClientOpenHotel o:
+                // hotelType 0 = "room_storage" : fenêtre native
+                // hotelstoragewnd (TabControl+listbox des items de
+                // chambre — contenu non implémenté serveur, vide).
+                if (o.Field1 == 0) OpenStorage(); else Visible = true;
+                _list?.Clear(); _roomIds.Clear(); _rooms.Clear();
                 break;
             case ZoneClientSearchRoomResult r:
                 Visible = true;
                 foreach (var e in r.Entries)
                 {
-                    _roomIds.Add(e.RoomId);
-                    _list?.AddItem(
-                        $"{e.RoomName} — {e.MemberCount}/{e.MaxMembers}");
+                    _rooms.Add((e.RoomId,
+                        $"{e.RoomName} — {e.MemberCount}/{e.MaxMembers}"));
                 }
+                RebuildList();
                 break;
             case ZoneClientRoomData d:
                 if (_info != null) _info.Text =
                     $"Chambre {d.Field1} — {d.Field2}…";
                 break;
         }
+    }
+
+    private void RebuildList()
+    {
+        _list?.Clear(); _roomIds.Clear();
+        var q = _searchBox?.Text.Trim() ?? "";
+        foreach (var (id, text) in _rooms)
+        {
+            if (q.Length > 0 && !text.Contains(q,
+                    System.StringComparison.OrdinalIgnoreCase)) continue;
+            _roomIds.Add(id);
+            _list?.AddItem(text);
+        }
+    }
+
+    /// <summary>Ouvre le panneau de stockage de chambre natif
+    /// (<c>hotelstoragewnd.layout</c> — Root/HotelStorage). Monté
+    /// paresseusement ; pas de contenu serveur pour l'instant.</summary>
+    private void OpenStorage()
+    {
+        if (_storage == null)
+        {
+            _storage = HudExtensions.FindHud()
+                ?.Build("hotelstoragewnd.layout");
+            if (_storage != null)
+            {
+                AddChild(_storage);
+                HudExtensions.CenterNative(_storage,
+                    new Vector2(420, 380));
+                DragHelper.EnsureTitleBar(_storage,
+                    UiTextEn.Translate("Room storage"));
+                DragHelper.Persist(_storage, "hotelstorage");
+            }
+        }
+        if (_storage != null) _storage.Visible = true;
+        else Visible = true; // layout absent → hall en repli
     }
 
     private void OnEnter()

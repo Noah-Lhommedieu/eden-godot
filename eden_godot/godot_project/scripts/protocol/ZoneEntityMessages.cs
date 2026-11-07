@@ -591,6 +591,12 @@ public sealed class ZoneMovePrediction : NetMessage
     public ushort? DstX { get; set; }
     /// <summary>Destination y ×16 — voir <see cref="DstX"/>.</summary>
     public ushort? DstY { get; set; }
+    /// <summary>Instant d'ARRIVÉE réseau (s, horloge TicksUsec), posé sur
+    /// le thread de réception : l'horodatage d'interpolation ne dépend
+    /// plus de la gigue de la file principale (drain borné 8 ms +
+    /// frames lentes regroupaient les 326 → mob figé puis rattrapage).
+    /// 0 = non renseigné (paquet construit localement).</summary>
+    public double ArrivalSec { get; set; }
     public override void Serialize(BinWriter s)
     {
         s.WriteInt(Handle);

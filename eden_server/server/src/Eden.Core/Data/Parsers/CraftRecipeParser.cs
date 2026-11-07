@@ -100,8 +100,19 @@ public static class CraftRecipeParser
         public int AttrType { get; set; }
         public int MinLevel { get; set; }       // col 5 (1, 3, 5, 7)
         public int MaxLevel { get; set; }       // col 6 (2, 4, 6, 8)
-        public int Tier { get; set; }           // col 7
-        public int Value { get; set; }          // col 8 (20)
+        /// <summary>Col 7 (CItemCombo+0x18, s16) : **groupe** d'exclusion
+        /// pour AddComboStrengthen (un seul combo du groupe par item,
+        /// désasm @0x080a2160) ; niveau d'étoile 1-5 pour les combos
+        /// magicbox (AttrType 4-6).</summary>
+        public int Tier { get; set; }
+        /// <summary>Col 8 (CItemCombo+0x1a, s8) : **poids** du tirage
+        /// pondéré (20/5/2…) dans AddComboStrengthen et
+        /// GetRandMagicBoxItemCombo.</summary>
+        public int Value { get; set; }
+        /// <summary>Col 9 (CItemCombo+0x1b, u8) : flag natif — quand ≠0,
+        /// AddComboStrengthen saute TOUTES les exclusions (id déjà posé,
+        /// groupe, tier&gt;3). 0 sur toutes les lignes EDENFR.</summary>
+        public int Flag { get; set; }
         public int Rank { get; set; }           // col 11 (2,3,4,5)
         /// <summary>col 10 — id S_Enchant porté par les combos de la
         /// boîte magique (AttrType 4-6, ids ≥ 3904 : « Durabilité I »,
@@ -216,6 +227,7 @@ public static class CraftRecipeParser
                 MaxLevel = IniTable.GetInt(row, 6),
                 Tier = IniTable.GetInt(row, 7),
                 Value = IniTable.GetInt(row, 8),
+                Flag = IniTable.GetInt(row, 9),
                 Rank = IniTable.GetInt(row, 11),
                 EnchantId = IniTable.GetInt(row, 10),
                 Raw = row,

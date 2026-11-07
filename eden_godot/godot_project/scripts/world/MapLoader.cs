@@ -229,6 +229,28 @@ public partial class MapLoader : Node3D
                TerrainSampler.TryGetHeight(Fsm, x, y, out z);
     }
 
+    /// <summary>Sol sous (x, z) pour une entité distante — frame
+    /// physique obligatoire (appelé depuis le _PhysicsProcess du
+    /// registre). <paramref name="terrainY"/> = NaN sur une map sans
+    /// heightfield (modèle unique : rayon depuis refY, sinon la
+    /// surface la plus basse) ; sinon plancher minimum — un sol OBJ
+    /// (pont/dalle, <see cref="WalkableGround.FloorLayer"/>) au-dessus
+    /// du terrain l'emporte, jamais en dessous. null si aucun
+    /// collider.</summary>
+    public float? SampleEntityGround(float gx, float gz, float refY,
+        float terrainY)
+    {
+        if (WorldRoot == null || !WorldRoot.IsInsideTree()) return null;
+        var hasTerrain = !float.IsNaN(terrainY);
+        // hasTerrain → SampleAt retourne toujours vrai (terrain en
+        // plancher minimum, sol OBJ au-dessus gagnant).
+        if (_walk.PeekNearestY(WorldRoot, gx, gz, refY, hasTerrain,
+                terrainY, out var g))
+            return g;
+        return _walk.PeekNearest(WorldRoot, gx, gz, refY, out g)
+            ? g : null;
+    }
+
     /// <summary>Sol marchable sous la position Godot : heightfield
     /// terrain + raycast sur la layer
     /// <see cref="WalkableGround.FloorLayer"/> (dalles/ponts helpers —
@@ -717,6 +739,12 @@ public partial class MapLoader : Node3D
             DirectionalLight3D.ShadowMode.Parallel2Splits;
         sun.DirectionalShadowMaxDistance = 100f;
         sun.DirectionalShadowBlendSplits = true;
+        // Pancake 20 u (défaut) : les casters plus hauts que l'extension
+        // vers le soleil sont écrasés sur le plan proche de la cascade →
+        // leur ombre change de forme/place selon la caméra (la cascade
+        // suit le frustum). Large pancake = ombres stables (hypothèse,
+        // à confirmer en jeu : comparer //goto avec caméra tournée).
+        sun.DirectionalShadowPancakeSize = 200f;
         // Diag : --no-shadows mesure le coût de la passe d'ombres.
         if (OS.GetCmdlineArgs().Concat(OS.GetCmdlineUserArgs())
                 .Contains("--no-shadows"))
@@ -742,7 +770,7 @@ public partial class MapLoader : Node3D
                     fb / 255f);
             if (fp.FogSightRange > 0f)
                 e.FogDepthEnd = fp.FogSightRange /
-                    Math.Max(fp.FogMax, 0.05f);
+                    Math.Max(fp.FogOpacityCap, 0.05f);
             else
                 e.FogDepthEnd = 500f;
             var (ar, ag, ab) = fp.LitColor;

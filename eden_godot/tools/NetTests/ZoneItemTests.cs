@@ -180,6 +180,80 @@ public class ZoneItemTests
         Assert.Equal(33, it.Amount);
     }
 
+    [Fact]
+    public void PutItem_Parse274_MetaSocketsCombosMagicBox()
+    {
+        // mask = bit0 (socket0) + bit6 (amount) + bit7 (combo) +
+        // bit10 (extraCombo0) + bit19 (strengthen) + queue 34B avec
+        // ec10/ec11/gold/magicbox/energy/star.
+        var w = new BinWriter();
+        w.WriteUShort(42); w.WriteShort(0); w.WriteShort(3);
+        w.WriteShort(1); w.WriteShort(50);
+        w.WriteShort(0); w.WriteByte(0x09);
+        w.WriteBytes([0xC1, 0x04, 0x08]);  // mask bits 0|6|7|10|19
+        w.WriteShort(7001);                // bit0 : embedded_id0
+        w.WriteShort(2);                   // bit6 : amount
+        w.WriteShort(888);                 // bit7 : combo
+        w.WriteShort(123);                 // bit10 : extraCombo0
+        w.WriteShort(9);                   // bit19 : strengthen +9
+        var tail = new BinWriter();
+        tail.WriteBytes(new byte[18]);     // train attrs (34B tail)
+        tail.WriteUShort(555);             // ec10
+        tail.WriteUShort(666);             // ec11
+        tail.WriteUShort(777);             // gold_enchant
+        tail.WriteShort(31); tail.WriteShort(32); tail.WriteShort(33);
+        tail.WriteUShort(88);              // energy
+        tail.WriteUShort(7);               // star_level
+        w.WriteBytes(tail.ToArray());
+        var r = new BinReader(w.ToArray());
+        Assert.True(NativeItemRecord.TryReadPutItem(r, out var it));
+        Assert.Equal(9, it.Strengthen);
+        Assert.Equal((short)7001, it.Meta.Embedded[0]);
+        Assert.Equal((short)-1, it.Meta.Embedded[1]);
+        Assert.Equal((short)888, it.Meta.Combo);
+        Assert.Equal((ushort)123, it.Meta.ExtraCombos[0]);
+        Assert.Equal((ushort)555, it.Meta.ExtraCombos[9]);
+        Assert.Equal((ushort)666, it.Meta.ExtraCombos[10]);
+        Assert.Equal((ushort)777, it.Meta.GoldEnchant);
+        Assert.Equal(new short[] { 31, 32, 33 }, it.Meta.MagicBoxEnchants);
+        Assert.Equal((ushort)88, it.Meta.MagicBoxEnergy);
+        Assert.Equal((ushort)7, it.Meta.MagicBoxStarLevel);
+    }
+
+    [Fact]
+    public void UpdateEquip_Train18B_Groupe_AlignementRecordSuivant()
+    {
+        // Record 1 : itemId 100, mask bit21 → bloc CEquipTrainAttrs
+        // 18B en ordre GROUPÉ [t1][t2][t3][l1][l2][l3] (mémoire, 282
+        // natif) puis queue fixe 16B. Record 2 : itemId 200, mask 0.
+        // Régression : un comptage 16B au lieu de 18 désalignait le
+        // record suivant de 2 octets.
+        var w = new BinWriter();
+        w.WriteUShort(100); w.WriteByte(0); w.WriteUShort(0);
+        w.WriteBytes([0x00, 0x00, 0x20]);  // mask : bit21 seul
+        w.WriteUShort(12);                 // train_level
+        w.WriteUInt(3456);                 // train_exp
+        w.WriteUShort(11); w.WriteUShort(22); w.WriteUShort(33); // t1 t2 t3
+        w.WriteUShort(1); w.WriteUShort(2); w.WriteUShort(3);    // l1 l2 l3
+        var tail1 = new BinWriter();
+        tail1.WriteBytes(new byte[16]);    // queue fixe 16B
+        w.WriteBytes(tail1.ToArray());
+        w.WriteUShort(200); w.WriteByte(0); w.WriteUShort(0);
+        w.WriteBytes([0x00, 0x00, 0x00]);  // mask : aucun cond.
+        var tail2 = new BinWriter();
+        tail2.WriteBytes(new byte[16]);
+        w.WriteBytes(tail2.ToArray());
+        var r = new BinReader(w.ToArray());
+        Assert.True(NativeItemRecord.TryReadUpdateEquip(r, out var a));
+        Assert.Equal(100, a.ItemId);
+        Assert.Equal((ushort)12, a.Meta.TrainLevel);
+        Assert.Equal(3456u, a.Meta.TrainExp);
+        Assert.Equal(new ushort[] { 11, 22, 33 }, a.Meta.TrainSlotType);
+        Assert.Equal(new ushort[] { 1, 2, 3 }, a.Meta.TrainSlotLevel);
+        Assert.True(NativeItemRecord.TryReadUpdateEquip(r, out var b));
+        Assert.Equal(200, b.ItemId);       // alignement préservé
+    }
+
     // ---------- sémantique des locs (miroir NativeEquipmentSlots) ---
 
     [Theory]

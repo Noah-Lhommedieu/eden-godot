@@ -110,11 +110,18 @@ public sealed partial class QuestEngine
                 continue;
             var opt = Eden.Core.Data.Parsers.WorldParsers
                 .ParseDialogOption(seg);
-            if (opt.Head.Length >= 3 && opt.Head[0] == "Talk" &&
-                int.TryParse(opt.Head[1], out var label) &&
-                int.TryParse(opt.Head[2], out var body))
+            // `#:Talk L B` (label+corps) ET `#:Talk L` (le corps est
+            // le label — tous les NPC téléport/classe : `Talk 4752
+            // #:If_CharLevel…#:TPA 14 24`). L'exiger ≥3 tokens rendait
+            // talks=0 → gossip local muet → TPA jamais exécuté.
+            if (opt.Head.Length >= 2 && opt.Head[0] == "Talk" &&
+                int.TryParse(opt.Head[1], out var label))
+            {
+                var body = opt.Head.Length >= 3 &&
+                    int.TryParse(opt.Head[2], out var b2) ? b2 : label;
                 talks.Add(new TalkEntry(label, body, opt.Conds,
                     opt.Actions, opt.FailBody));
+            }
         }
         return (ctx, talks);
     }
@@ -522,7 +529,13 @@ public sealed partial class QuestEngine
                     }
                     break;
                 case "If_Gender":
-                    if (t.Length >= 2 && c.Gender != Num(1)) return false;
+                    // Liste de genres acceptés (natif : boucle sur
+                    // tous les args, `1<<arg & 1<<(genderByte>>4)` ≠ 0
+                    // — le gender_id vit en high nibble du byte).
+                    if (t.Length >= 2 &&
+                        !t.Skip(1).Any(x =>
+                            int.TryParse(x, out var g) && g == c.Gender))
+                        return false;
                     break;
                 case "If_Class":
                     if (t.Length >= 2 && c.ClassId != Num(1)) return false;
@@ -714,29 +727,21 @@ public sealed partial class QuestEngine
                 int.TryParse(obj.Args[0], out var tgt) &&
                 tgt == npcUid)
             {
-                // Livraison : item arg2 × arg3 remis au NPC — le natif
-                // exige l'item en inventaire (CheckItem) puis le
-                // consomme à l'achèvement (TakeItem). Sans l'item la
-                // quête reste « on-going ».
-                int.TryParse(obj.Args[2], out var itemId);
-                int.TryParse(obj.Args[3], out var need);
-                need = Math.Max(1, need);
-                var have = await _db.CountItemAsync(charUid, itemId,
-                    Stackable(itemId));
-                if (have >= need)
+                // ItemGiven <npc> <dlg> <item> <n> — MC_FinishItemGiven
+                // natif @0x080e3ce0 : compile « InventoryItem id + n »,
+                // c.-à-d. que le NPC arg0 REMET l'item arg2 × arg3 au
+                // joueur (lettre de réponse, colis…) puis PMS
+                // mid×1e6+40000+(npc−50000). Livré à l'envers avant
+                // (exigeait l'item en inventaire puis le consommait).
+                int.TryParse(obj.Args[2], out var gitem);
+                int.TryParse(obj.Args[3], out var gnum);
+                var key = mid + 40000u + (uint)(npcUid - 50000);
+                if (gitem > 0 && q.Pms.GetValueOrDefault(key) < 1)
                 {
-                    var key = mid + 40000u + (uint)(npcUid - 50000);
-                    if (q.Pms.GetValueOrDefault(key) < need)
-                    {
-                        await CreditPmsAsync(s, c, q, m, key, need);
-                        await SendTransitionAsync(s, nodeId, charUid,
-                            $"eden-take-item {itemId} {need}");
-                    }
+                    await SendTransitionAsync(s, nodeId, charUid,
+                        $"eden-give-item {gitem} {Math.Max(1, gnum)}");
+                    await CreditPmsAsync(s, c, q, m, key, 1);
                 }
-                else
-                    EdenLog.Write($"[Mission] char={charUid} " +
-                        $"{m.Id} livraison {itemId}×{need} : " +
-                        $"détenu={have}");
             }
         }
     }

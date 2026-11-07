@@ -6,6 +6,7 @@ namespace EdenClient.NetTests;
 
 /// <summary>Sonde L-items : item équipement → enchant de proc → texte
 /// affiché par le tooltip (corpus/fr-full). Sortie : /tmp/claude-1000/proc-dump.txt.</summary>
+[Collection("SharedResolver")]
 public class ItemProcDumpTests
 {
     [Fact]
@@ -16,7 +17,7 @@ public class ItemProcDumpTests
             dir = dir.Parent;
         if (dir == null) return;
         var fr = Path.Combine(dir.FullName, "corpus", "fr-full");
-        TextResolver.ResolveFile = rel => { var p = Path.Combine(fr, rel.ToLowerInvariant()); return File.Exists(p) ? p : null; };
+        TextResolver.ResolveFile = IniTableTests.CaseInsensitiveResolver(fr);
         TextResolver.SetLanguage("fr");
         var items = ItemTable.Load(Path.Combine(fr, "data/db/c_item.ini"));
         var names = TextTable.Load(Path.Combine(fr, "data/db/t_item.ini"));
@@ -39,6 +40,9 @@ public class ItemProcDumpTests
         File.WriteAllText("/tmp/claude-1000/bag-dump.txt", bs.ToString());
         sb.Insert(0, $"{n} items equip+enchant\n");
         File.WriteAllText("/tmp/claude-1000/proc-dump.txt", sb.ToString());
+        // Le résolveur lowercase casse les tables au nom mixte
+        // (4PHouse.ini) des tests suivants — restauration.
+        TextResolver.ResolveFile = null;
     }
 
     private static readonly int[] ProcItems =
@@ -59,7 +63,7 @@ public class ItemProcDumpTests
             dir = dir.Parent;
         if (dir == null) return;
         var fr = Path.Combine(dir.FullName, "corpus", "fr-full");
-        TextResolver.ResolveFile = rel => { var p = Path.Combine(fr, rel.ToLowerInvariant()); return File.Exists(p) ? p : null; };
+        TextResolver.ResolveFile = IniTableTests.CaseInsensitiveResolver(fr);
         TextResolver.SetLanguage("fr");
         var items = ItemTable.Load(Path.Combine(fr, "data/db/c_item.ini"));
         var names = TextTable.Load(Path.Combine(fr, "data/db/t_item.ini"));
@@ -82,5 +86,6 @@ public class ItemProcDumpTests
         Assert.Contains("1%", chances); Assert.Contains("5%", chances); Assert.Contains("12%", chances);
         Assert.Contains("8214", EnchantTable.DescriptionOf(items[23891].UseEnchantId));
         Assert.Contains("174", EnchantTable.DescriptionOf(items[23892].UseEnchantId));
+        TextResolver.ResolveFile = null;
     }
 }

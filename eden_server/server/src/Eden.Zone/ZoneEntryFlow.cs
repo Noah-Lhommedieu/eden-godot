@@ -91,7 +91,8 @@ public sealed partial class ZoneEntryFlow
                  {
                      "gain_exp", "gain_class_point", "self_use_effect",
                      "remove_enchant", "clone_monster",
-                     "clone_monster_locate", "transport_node", "goto",
+                     "clone_monster_locate", "npc",
+                     "transport_node", "goto",
                      "restore", "get_license", "set_class_level",
                      "set_money", "level", "clevel", "add_class",
                      "change_class", "kill", "heal", "invincible",
@@ -122,6 +123,20 @@ public sealed partial class ZoneEntryFlow
                     out var cst)
                 ? CanUseEnchantAsync(s, cst, enh, ct)
                 : Task.FromResult(true), tok);
+        _services.ItemUseLifeGate = (s, charId, itemId, enh, tok) =>
+            RunOnLoopAsync(ct => Task.FromResult(
+                !_states.TryGetValue(s.SessionId, out var lgs) ||
+                lgs.Dead == ReviveRules.IsReviveItem(_services.Enchants,
+                    itemId, enh)), tok);
+        // Canalisation d'usage (407) — char+0x90 natif : pending +
+        // échéance planifiée sur la boucle (CEventUseItemTime).
+        _services.ItemUseChannel = (s, charId, itemId, serial, bag,
+            slot, ds, complete, tok) =>
+            RunOnLoopAsync(ct => _states.TryGetValue(s.SessionId,
+                    out var ust)
+                ? StartItemUseChannelAsync(s, ust, itemId, serial, bag,
+                    slot, ds, complete, ct)
+                : Task.FromResult(false), tok);
         // Ouverture de sac chanceux : le handler ItemUse (stateless)
         // délègue — l'état char+0xc70.. vit dans l'EntryState (boucle).
         _services.LuckyBagUse = (s, charId, bagId, tok) =>
@@ -236,6 +251,18 @@ public sealed partial class ZoneEntryFlow
                     out var est)
                 ? SendTeamMemberPositionsAsync(s, est, ct)
                 : Task.CompletedTask, token);
+        // Delta lifelong gold (achats fame shop priceType 5 —
+        // ShopHandlers stateless) : AddGoldAsync + miroir
+        // st.LifelongGold, sur la boucle.
+        _services.LifelongGoldDelta = (s, charId, delta, tok) =>
+            RunOnLoopAsync(async ct =>
+            {
+                var total = await _services.LifelongRepo.AddGoldAsync(
+                    charId, delta);
+                if (_states.TryGetValue(s.SessionId, out var lls))
+                    lls.LifelongGold = total;
+                return total;
+            }, tok);
         // Livre de sorts pet (UseType 6 → UseItemToElfControl natif) :
         // le handler ItemUse délègue — LearnSpell/LearnSpellFromGroup
         // mutent les vecteurs de l'ElfSlot + émettent le 588.
@@ -340,6 +367,7 @@ public sealed partial class ZoneEntryFlow
             st.PendingMagicBox?.Cts?.Cancel();  // cast boîte magique en vol
             st.PendingLifeSkill?.Cts?.Cancel(); // cast métier en vol
             st.PendingCombine?.Cts?.Cancel();   // cast station combine
+            st.PendingItemUse?.Cts?.Cancel();   // canalisation d'usage
             foreach (var c in st.WorkCts) c?.Cancel(); // timers works
             // Nettoyage + despawn des pets sur le fil de la boucle —
             // mutations d'EntryState/registry, jamais sur le thread
@@ -455,6 +483,12 @@ public sealed partial class ZoneEntryFlow
             st, opcode, payload, ct), token);
     }
 
+    /// <summary>NCID client ignorés tant que le joueur est mort :
+    /// 1 MoveSelf, 5 MeleeAttack, 9/16/17/59 sorts, 15 portail,
+    /// 107-109/187/188/227 familiers.</summary>
+    private static readonly HashSet<ushort> DeadBlockedOpcodes =
+        new() { 1, 5, 9, 15, 16, 17, 59, 107, 108, 109, 187, 188, 227 };
+
     /// <summary>Dispatch NCID → handler — s'exécute sur le fil de la
     /// boucle (<see cref="RunOnLoopAsync"/>), jamais sur le thread de
     /// lecture de session.</summary>
@@ -472,6 +506,13 @@ public sealed partial class ZoneEntryFlow
                     Math.Min(payload.Length, 32))));
         if (NetDebug.Enabled)
             EdenLog.Write($"[PKT-IN] NCID={opcode} {Convert.ToHexString(payload.AsSpan(0, Math.Min(payload.Length, 48)))}");
+        // Mort : ni déplacement, ni attaque, ni sort, ni familier.
+        if (st.Dead && DeadBlockedOpcodes.Contains(opcode))
+        {
+            EdenLog.Write($"[Combat] char=#{st.CharId} mort — NCID " +
+                $"{opcode} ignoré");
+            return true;
+        }
         switch (opcode)
         {
             case 0: // ReceiveTicket — la commande ne fait QUE poster
@@ -591,6 +632,10 @@ public sealed partial class ZoneEntryFlow
                       // de renommage 40056/40156 requis (natif).
                 await HandleElfChangeNameAsync(session, st, payload,
                     token);
+                return true;
+
+            case 9061: // DungeonEnter [s16 node] — choix Solo/Multi (custom)
+                await HandleDungeonEnterAsync(session, st, payload, token);
                 return true;
 
             case 15: // CheckNodeExit [i32 portalKey] — portail / transition de node

@@ -107,6 +107,11 @@ public sealed class WorkProduct
     /// <summary>Nombre d'extra_combos persistés (extra_comboN_1..9).</summary>
     public const int ExtraComboCount = 9;
 
+    /// <summary>Slots extra_combo du SWorkItem en mémoire — le natif
+    /// copie jusqu'à 11 u16 depuis le vecteur RandItemCombo
+    /// (AddWrokItem @0x084d17f0, +0x44) mais n'en persiste que 9.</summary>
+    public const int ExtraComboCapacity = 11;
+
     public int ItemId { get; set; }
     public int Amount { get; set; }
     /// <summary>Sockets ouvertes sur le produit (EndCombine : roll
@@ -117,8 +122,9 @@ public sealed class WorkProduct
     public bool Curse { get; set; }
     /// <summary>combo_id principal (SelectWorkItemCombo).</summary>
     public int Combo { get; set; }
-    /// <summary>extra_combo_id1..9 (SelectWorkItemCombo).</summary>
-    public int[] ExtraCombos { get; } = new int[ExtraComboCount];
+    /// <summary>extra_combo_id1..11 (SelectWorkItemCombo) — seuls les
+    /// <see cref="ExtraComboCount"/> premiers sont persistés.</summary>
+    public int[] ExtraCombos { get; } = new int[ExtraComboCapacity];
 
     public bool IsEmpty => ItemId == 0;
 

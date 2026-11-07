@@ -305,6 +305,46 @@ public class WorkOrderTests
         Assert.True(w2.Products[0].IsEmpty);
     }
 
+    [Fact]
+    public void RollCombine_Equipement_RecoitCombos()
+    {
+        // SelectWorkItemCombo : produit équipement → combo + extras
+        // roulés sur la vraie table (pools 0/1 non vides pour un
+        // kind arme bas niveau).
+        var item = Data.Items.First(i =>
+            ItemComboRollService.IsWorkComboEligible(i.Kind)
+            && i.RequiredLevel is > 0 and <= 5);
+        var def = new WorkOrderParser.WorkCombineDef
+        {
+            Id = 1, ProductItemId = item.Id,
+            ProductQuantity = 1, SuccessRate = 100,
+        };
+        var work = new WorkSlot { WorkId = 1, WorkType = 15 };
+        Svc(new SeqRandom(0, 0, 0, 0)).RollCombineProduct(def, work);
+        var p = work.Products[0];
+        Assert.False(p.IsEmpty);
+        Assert.Contains(p.ExtraCombos, e => e != 0);
+        Assert.True(p.Combo > 0);
+    }
+
+    [Fact]
+    public void RollCombine_Consommable_SansCombos()
+    {
+        // Produit non-équipement → SelectWorkItemCombo non appelé :
+        // Combo/ExtraCombos restent 0.
+        var def = new WorkOrderParser.WorkCombineDef
+        {
+            Id = 1, ProductItemId = 30937, // gemme (kind hors 1..0x22)
+            ProductQuantity = 1, SuccessRate = 100,
+        };
+        var work = new WorkSlot { WorkId = 1, WorkType = 15 };
+        Svc(new SeqRandom(0)).RollCombineProduct(def, work);
+        var p = work.Products[0];
+        Assert.False(p.IsEmpty);
+        Assert.Equal(0, p.Combo);
+        Assert.All(p.ExtraCombos, e => Assert.Equal(0, e));
+    }
+
     // ---------------- Capacité claim ----------------
 
     [Fact]
@@ -466,5 +506,27 @@ public class WorkOrderTests
                 "DELETE FROM player_works WHERE player_id=@pid",
                 new { pid });
         }
+    }
+
+    /// <summary>Overlay EDENFR : c_familycollect prime sur l'oracle US
+    /// (durée col10 : 50 US → 25 FR pour work_id 111, mesuré sur les
+    /// fichiers) et c_familycombine remplace la catégorie (2131 : 5 US
+    /// → 3 FR).</summary>
+    [Fact]
+    public void OverlayFrWorkOrders_FrTablesWin()
+    {
+        var fr = Path.GetFullPath(Path.Combine(TestPaths.RepoRoot,
+            "..", "corpus", "fr-full", "data", "db"));
+        if (!Directory.Exists(fr)) return;   // corpus absent (CI)
+        var gd = new GameDataService(DbDir);
+        gd.LoadAll();
+        var usDur = gd.WorkCollectById.Values
+            .First(d => d.Id == 111).Duration;
+        var n = gd.OverlayFrWorkOrders(fr);
+        Assert.True(n > 0);
+        var frDef = gd.WorkCollectById.Values.First(d => d.Id == 111);
+        Assert.Equal(25, frDef.Duration);
+        Assert.NotEqual(usDur, frDef.Duration);
+        Assert.Equal(3, gd.WorkCombineById[2131].Category);
     }
 }

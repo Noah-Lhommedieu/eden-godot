@@ -54,6 +54,10 @@ public static class ItemTable
         public int CooldownGroup { get; init; }
         /// <summary>Durée du cooldown d'usage en 1/10 s (col21 ; 0 = aucun).</summary>
         public int CooldownDs { get; init; }
+        /// <summary>Col 20 — durée de canalisation d'usage en 1/10 s
+        /// (CItemData+0x54 natif ; ≠0 → usage différé via 407
+        /// ClientUseItemTime + barre de cast, annulé par 408).</summary>
+        public int UseTimeDs { get; init; }
         /// <summary>Col 14 — niveau requis.</summary>
         public int RequiredLevel { get; init; }
         /// <summary>Col 28 — capacité offerte quand l'item est un sac
@@ -177,6 +181,7 @@ public static class ItemTable
                 UseType = IniTable.GetInt(row, 12),
                 CooldownGroup = IniTable.GetInt(row, 22),
                 CooldownDs = IniTable.GetInt(row, 21),
+                UseTimeDs = IniTable.GetInt(row, 20),
                 RequiredLevel = IniTable.GetInt(row, 14),
                 BagCapacity = IniTable.GetInt(row, 28),
                 MaxLevel = IniTable.GetInt(row, 15),
@@ -244,5 +249,23 @@ public static class ItemTable
                 }
             }
         return _cache.TryGetValue(itemId, out var d) ? d : null;
+    }
+
+    private static Dictionary<string, int>? _byName;
+
+    /// <summary>Id d'un item par son nom c_item (Big5), premier
+    /// trouvé ; -1 si inconnu. Sert à retraduire les noms bruts que le
+    /// serveur glisse dans les messages système.</summary>
+    public static int FindIdByName(string name)
+    {
+        if (_byName == null)
+        {
+            Lookup(0);
+            var d = new Dictionary<string, int>();
+            foreach (var (id, def) in _cache!)
+                if (def.Name.Length > 0) d.TryAdd(def.Name, id);
+            _byName = d;
+        }
+        return _byName.TryGetValue(name, out var v) ? v : -1;
     }
 }

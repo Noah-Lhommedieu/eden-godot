@@ -1,4 +1,5 @@
 using Godot;
+using EdenClient.World;
 using EdenClient.Data;
 using EdenClient.Data.Tables;
 
@@ -150,31 +151,50 @@ public partial class RegionMapWindow : Control
         return p;
     }
 
-    /// <summary>« City Features » : légende + filtres des calques.</summary>
+    /// <summary>Icône native <c>UI/uiicon/{file}.png</c> (16×16), repli
+    /// carré coloré si absente.</summary>
+    private static Control IconRect(string file, Color fallback, int size)
+    {
+        var tex = AssetCatalog.GetTexture($"UI/uiicon/{file}.png");
+        if (tex == null)
+            return new ColorRect { Color = fallback, Size = new Vector2(size, size) };
+        return new TextureRect
+        {
+            Texture = tex, Size = new Vector2(size, size),
+            CustomMinimumSize = new Vector2(size, size),
+            ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+            MouseFilter = MouseFilterEnum.Ignore,
+        };
+    }
+
+    /// <summary>« City Features » : légende native (ref carte.png : icônes
+    /// <c>FUN_00a5f640</c> @0xa5f640 — map005/006/007/004/009/010/012/011/
+    /// 022/024 + cube map055) et filtres des calques.</summary>
     private void BuildLegend(HudRoot hud)
     {
-        _legend = EeSkin.MakeWindow(hud, "City Features", 712, 40, 220, 220);
+        _legend = EeSkin.MakeWindow(hud, "City Features", 712, 40, 220, 420);
         AddChild(_legend);
-        var parch = Box(_legend, 8, 24, 212, 212, EeSkin.ParchmentBox());
-        var rows = new (string Key, string Label, Color Col)[]
+        var parch = Box(_legend, 8, 24, 212, 412, EeSkin.ParchmentBox());
+        var rows = new (string Key, string Label, string Icon, Color Col)[]
         {
-            ("npc", UiTextEn.Translate("NPC"), Color.Color8(60, 200, 80)),
-            ("quest", UiTextEn.Translate("Quest objective"), Color.Color8(220, 60, 50)),
-            ("portal", UiTextEn.Translate("Portal"), Color.Color8(60, 200, 235)),
-            ("player", UiTextEn.Translate("You"), Color.Color8(40, 110, 230)),
+            ("npc", UiTextEn.Translate("NPC"), "map005", Color.Color8(60, 200, 80)),
+            ("quest", UiTextEn.Translate("Quest objective"), "map053", Color.Color8(220, 60, 50)),
+            ("portal", UiTextEn.Translate("Portal"), "map011", Color.Color8(60, 200, 235)),
+            ("player", UiTextEn.Translate("You"), "map014", Color.Color8(40, 110, 230)),
         };
         for (var i = 0; i < rows.Length; i++)
         {
-            var (key, label, col) = rows[i];
-            var dot = new ColorRect { Color = col };
-            HudRoot.Pin(dot, 0, 0, 0, 0, 12, 14 + i * 28, 22, 24 + i * 28);
+            var (key, label, icon, col) = rows[i];
+            var dot = IconRect(icon, col, 16);
+            HudRoot.Pin(dot, 0, 0, 0, 0, 10, 12 + i * 26, 26, 28 + i * 26);
             parch.AddChild(dot);
             var cb = new CheckBox
             {
                 Text = label, ButtonPressed = true,
                 FocusMode = FocusModeEnum.None,
             };
-            HudRoot.Pin(cb, 0, 0, 0, 0, 30, 8 + i * 28, 196, 30 + i * 28);
+            HudRoot.Pin(cb, 0, 0, 0, 0, 30, 8 + i * 26, 196, 30 + i * 26);
             cb.AddThemeColorOverride("font_color", Color.Color8(30, 30, 28));
             cb.AddThemeColorOverride("font_pressed_color", Color.Color8(30, 30, 28));
             cb.AddThemeColorOverride("font_hover_color", Color.Color8(30, 30, 28));
@@ -185,6 +205,28 @@ public partial class RegionMapWindow : Control
                 ApplyFilters();
             };
             parch.AddChild(cb);
+        }
+        // Légende des icônes (ordre du ref carte.png).
+        var legend = new (string Icon, string Label)[]
+        {
+            ("map005", "General Merchant"), ("map006", "Weapon Merchant"),
+            ("map007", "Armor Merchant"), ("map004", "Fame Shop"),
+            ("map009", "Auction"), ("map010", UiTextEn.Translate("Revival Point")),
+            ("map012", "Warp Portal"), ("map055", "Required Supplies"),
+            ("map011", UiTextEn.Translate("Portal")), ("map022", "New Quest"),
+            ("map024", "Quest NPC"),
+        };
+        for (var i = 0; i < legend.Length; i++)
+        {
+            var y = 124 + i * 24;
+            var ic = IconRect(legend[i].Icon, Colors.Gray, 16);
+            HudRoot.Pin(ic, 0, 0, 0, 0, 12, y, 28, y + 16);
+            parch.AddChild(ic);
+            var l = new Label { Text = legend[i].Label };
+            l.AddThemeColorOverride("font_color", Color.Color8(30, 30, 28));
+            l.AddThemeFontSizeOverride("font_size", 12);
+            HudRoot.Pin(l, 0, 0, 0, 0, 36, y - 3, 196, y + 19);
+            parch.AddChild(l);
         }
         _legend.Visible = false;
     }
@@ -246,8 +288,11 @@ public partial class RegionMapWindow : Control
                     var label = AutoRoute.NpcLabel(n);
                     var it = _list.CreateItem(folder);
                     it.SetText(0, "› " + label);
+                    // Zone map native : map000 (bulle) quand le PNJ n'a
+                    // pas de type de service (FUN_008194b0, index 0).
                     it.SetMetadata(0, AddMarker("npc", n.X, n.Y, label,
-                        col, 6));
+                        col, 6, NpcCategoryTable.IconOrNull(n.NpcId)
+                            ?? "map000"));
                 }
             }
             foreach (var gw in scene.Gateways)
@@ -255,15 +300,53 @@ public partial class RegionMapWindow : Control
                 var a = scene.EventAreas.FirstOrDefault(e => e.Id == gw.EventAreaId);
                 if (a != null)
                     AddMarker("portal", a.X, a.Y, UiTextEn.Translate("Portal"),
-                        Color.Color8(60, 200, 235), 7);
+                        Color.Color8(60, 200, 235), 7, "map011");
             }
+            foreach (var a in scene.EventAreas.Where(e =>
+                string.Equals(e.Type, "REVIVE", StringComparison.OrdinalIgnoreCase)))
+                AddMarker("portal", a.X, a.Y, a.Description.Length > 0
+                    ? a.Description : UiTextEn.Translate("Revival Point"),
+                    Color.Color8(60, 200, 235), 7, "map010");
         }
-        _player ??= MakeDot(Color.Color8(40, 110, 230), 9, UiTextEn.Translate("You"));
+        _player ??= MakeDot(Color.Color8(40, 110, 230), 9, UiTextEn.Translate("You"), "map014");
         _questVer = -1;   // repères de quête à reposer sur la nouvelle map
         ApplyFilters();
     }
 
     private int _questVer = -1;
+    private int _hallVer = -1;
+
+    /// <summary>Ville de guilde : bâtiments (nom + niveau) et PNJ de
+    /// service posés dynamiquement (absents de la scène).</summary>
+    private void RebuildHallMarks()
+    {
+        var mini = Mini;
+        if (mini == null || _map == null) return;
+        _hallVer = HallMapInfo.Version;
+        var layer = _layers["npc"];
+        foreach (var c in layer.Where(c => c.HasMeta("hall")).ToList())
+        {
+            if (GodotObject.IsInstanceValid(c)) c.QueueFree();
+            layer.Remove(c);
+        }
+        if (mini.NodeId is not (501 or 502) ||
+            HallMapInfo.NodeId != mini.NodeId) return;
+        foreach (var (name, lvl, x, y) in HallMapInfo.Buildings)
+            AddMarker("npc", x, y, $"{name} Niv. {lvl}",
+                Color.Color8(220, 170, 20), 10, "map000").SetMeta("hall", true);
+        if (GetTree().Root.FindChild("NetEntities", true, false)
+                is EntityRegistry reg)
+            foreach (var (_, e) in reg.Entities)
+            {
+                if (!GodotObject.IsInstanceValid(e) || e.Kind != 8) continue;
+                var (ex, ey) = WorldConv.ToEdenGround(e.GlobalPosition);
+                AddMarker("npc", ex, ey, e.DisplayName,
+                    Color.Color8(20, 130, 40), 6,
+                    NpcCategoryTable.IconOrNull(e.EntityId & 0xFFFF)
+                        ?? "map000").SetMeta("hall", true);
+            }
+        ApplyFilters();
+    }
 
     /// <summary>Repères d'objectif de quête (clic droit tracker) du
     /// node courant : mobs ROUGES, PNJ jaunes. Seul usage du rouge.</summary>
@@ -281,7 +364,8 @@ public partial class RegionMapWindow : Control
             if (mk.NodeId != mini.NodeId) continue;
             AddMarker("quest", mk.X, mk.Y, mk.Label,
                 mk.Mob ? Color.Color8(235, 40, 30)
-                       : Color.Color8(250, 215, 50), 7);
+                       : Color.Color8(250, 215, 50), 7,
+                mk.Mob ? "map053" : "map024");
         }
         ApplyFilters();
     }
@@ -296,21 +380,34 @@ public partial class RegionMapWindow : Control
         }
     }
 
-    private Control MakeDot(Color col, int size, string tip)
+    private Control MakeDot(Color col, int size, string tip,
+        string? icon = null)
     {
-        var d = new ColorRect
+        Control d;
+        var tex = icon == null ? null
+            : AssetCatalog.GetTexture($"UI/uiicon/{icon}.png");
+        if (tex != null)
         {
-            Color = col, Size = new Vector2(size, size),
-            TooltipText = tip, MouseFilter = MouseFilterEnum.Pass,
-        };
+            // Icône native 16×16 (jamais de point coloré quand le natif
+            // a une icône).
+            d = new TextureRect
+            {
+                Texture = tex, Size = new Vector2(16, 16),
+                StretchMode = TextureRect.StretchModeEnum.KeepAspectCentered,
+                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+            };
+        }
+        else d = new ColorRect { Color = col, Size = new Vector2(size, size) };
+        d.TooltipText = tip;
+        d.MouseFilter = MouseFilterEnum.Pass;
         _map!.AddChild(d);
         return d;
     }
 
     private Control AddMarker(string layer, float ex, float ey, string tip,
-        Color col, int size)
+        Color col, int size, string? icon = null)
     {
-        var d = MakeDot(col, size, tip);
+        var d = MakeDot(col, size, tip, icon);
         d.SetMeta("ex", ex);
         d.SetMeta("ey", ey);
         Place(d, ex, ey);
@@ -385,6 +482,7 @@ public partial class RegionMapWindow : Control
         Rebuild();
         var mini = Mini;
         if (_questVer != QuestObjectiveMarks.Version) RebuildQuestMarks();
+        if (_hallVer != HallMapInfo.Version) RebuildHallMarks();
         if (mini != null && _player != null)
             Place(_player, mini.SelfPos.X, mini.SelfPos.Y);
         var c = _hover ?? mini?.SelfPos ?? Vector2.Zero;

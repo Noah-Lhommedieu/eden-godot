@@ -34,6 +34,7 @@ public class VfsReadGuardTests
         ["scripts/debug/TexBake.cs"] = 5,
         ["scripts/hud/ChatPanel.cs"] = 1,
         ["scripts/hud/DragHelper.cs"] = 1,
+        ["scripts/hud/GmFileProbe.cs"] = 1, // sonde GM : lit /tmp/gm-cmds.txt (fichier hôte, pas une donnée corpus)
         ["scripts/hud/HotbarPanel.cs"] = 2,
         ["scripts/hud/HudWindows.cs"] = 1,
         ["scripts/hud/MinimapPanel.cs"] = 1,

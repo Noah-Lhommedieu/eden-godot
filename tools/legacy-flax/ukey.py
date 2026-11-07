@@ -7,14 +7,15 @@ from evdev import UInput, AbsInfo, ecodes as E
 KEYCODES = list(set([E.KEY_W, E.KEY_Z, E.KEY_Q, E.KEY_S, E.KEY_D,
     E.KEY_A, E.KEY_J, E.KEY_L, E.KEY_T, E.KEY_R, E.KEY_F, E.KEY_I,
     E.KEY_M, E.KEY_C, E.KEY_K, E.KEY_X, E.KEY_ENTER, E.KEY_ESC,
-    E.KEY_LEFTCTRL, E.KEY_B, E.KEY_E, E.KEY_G, E.KEY_H, E.KEY_N,
+    E.KEY_LEFTCTRL, E.KEY_LEFTSHIFT, E.KEY_BACKSPACE,
+    E.KEY_B, E.KEY_E, E.KEY_G, E.KEY_H, E.KEY_N,
     E.KEY_O, E.KEY_P, E.KEY_U, E.KEY_V, E.KEY_Y, E.KEY_SLASH,
     E.KEY_MINUS, E.KEY_DOT, E.KEY_SEMICOLON, E.KEY_APOSTROPHE,
     E.KEY_1, E.KEY_2, E.KEY_3, E.KEY_4, E.KEY_5, E.KEY_6, E.KEY_7,
     E.KEY_8, E.KEY_9, E.KEY_0, E.KEY_SPACE, E.KEY_TAB]))
 PTR_BTNS = [E.BTN_LEFT, E.BTN_RIGHT, E.BTN_MIDDLE]
 mode = sys.argv[1]
-if mode == 'key':
+if mode in ('key', 'type', 'atype', 'combo'):
     cap = {E.EV_KEY: KEYCODES + [E.KEY_RESERVED],
         E.EV_LED: [E.LED_NUML, E.LED_CAPSL]}
 else:
@@ -43,6 +44,51 @@ if mode == 'key':
     dur = float(sys.argv[3]) if len(sys.argv) > 3 else 0.06
     ui.write(E.EV_KEY, code, 1); ui.syn(); time.sleep(dur)
     ui.write(E.EV_KEY, code, 0); ui.syn()
+elif mode == 'type':
+    for ch in sys.argv[2].lower():
+        code = TYPEMAP.get(ch)
+        if code is None: continue
+        ui.write(E.EV_KEY, code, 1); ui.syn(); time.sleep(0.04)
+        ui.write(E.EV_KEY, code, 0); ui.syn(); time.sleep(0.04)
+elif mode == 'atype':
+    # AZERTY : caractère voulu → (shift, keycode physique).
+    AZ = {}
+    for c, k in {'a':'Q','q':'A','z':'W','w':'Z','m':'SEMICOLON',
+                 ',':'M',';':'COMMA',':':'DOT','!':'SLASH',
+                 'ù':'APOSTROPHE'}.items():
+        AZ[c] = (0, getattr(E, 'KEY_' + k))
+    for c in 'bcdefghijklnoprstuvxy':
+        AZ[c] = (0, getattr(E, 'KEY_' + c.upper()))
+    for i in range(10):
+        AZ[str(i)] = (1, getattr(E, 'KEY_' + str(i)))
+    AZ.update({' ': (0, E.KEY_SPACE), '/': (1, E.KEY_DOT),
+        '.': (1, E.KEY_SEMICOLON), '?': (1, E.KEY_COMMA),
+        '-': (0, E.KEY_6), '_': (0, E.KEY_8), '(': (0, E.KEY_5),
+        ')': (0, E.KEY_MINUS)})
+    for ch in sys.argv[2].lower():
+        ent = AZ.get(ch)
+        if ent is None: continue
+        sh, code = ent
+        if sh:
+            ui.write(E.EV_KEY, E.KEY_LEFTSHIFT, 1); ui.syn()
+        ui.write(E.EV_KEY, code, 1); ui.syn(); time.sleep(0.04)
+        ui.write(E.EV_KEY, code, 0); ui.syn()
+        if sh:
+            ui.write(E.EV_KEY, E.KEY_LEFTSHIFT, 0); ui.syn()
+        time.sleep(0.04)
+elif mode == 'combo':
+    # 'combo ctrl+a' — touches simultanées (sélection tout).
+    parts = sys.argv[2].lower().split('+')
+    codes = []
+    for p in parts:
+        if p == 'ctrl': codes.append(E.KEY_LEFTCTRL)
+        elif p == 'shift': codes.append(E.KEY_LEFTSHIFT)
+        elif p == 'backspace': codes.append(E.KEY_BACKSPACE)
+        else: codes.append(getattr(E, 'KEY_' + p.upper()))
+    for c in codes: ui.write(E.EV_KEY, c, 1)
+    ui.syn(); time.sleep(0.08)
+    for c in reversed(codes): ui.write(E.EV_KEY, c, 0)
+    ui.syn()
 elif mode == 'click':
     x, y = int(sys.argv[2]), int(sys.argv[3])
     btn = E.BTN_RIGHT if len(sys.argv) > 4 and sys.argv[4] == 'right' else E.BTN_LEFT
@@ -63,6 +109,14 @@ elif mode == 'absdrag':
         ui.syn(); time.sleep(0.02)
     time.sleep(0.1)
     ui.write(E.EV_KEY, btn, 0); ui.syn()
+elif mode == 'wheel':
+    # wheel x y n — déplace le curseur en (x,y) puis n crans
+    x, y, n = int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4])
+    ui.write(E.EV_ABS, E.ABS_X, x); ui.write(E.EV_ABS, E.ABS_Y, y)
+    ui.syn(); time.sleep(0.15)
+    for _ in range(abs(n)):
+        ui.write(E.EV_REL, E.REL_WHEEL, 1 if n > 0 else -1)
+        ui.syn(); time.sleep(0.08)
 elif mode == 'move':
     ui.write(E.EV_REL, E.REL_X, int(sys.argv[2]))
     ui.write(E.EV_REL, E.REL_Y, int(sys.argv[3])); ui.syn()

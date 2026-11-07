@@ -62,8 +62,20 @@ public sealed class Family
     /// (map&lt;message_id, SMessageBoard&gt; natif).</summary>
     public SortedDictionary<int, FamilyMessage> Messages { get; } = new();
 
-    /// <summary>Agenda <c>family_schedule</c>.</summary>
-    public SortedDictionary<int, FamilyMessage> Schedule { get; } = new();
+    /// <summary>Succès famille <c>family_achievement</c> : clé =
+    /// achievement_type natif (GroupKey du succès), valeur = points
+    /// cumulés. Map <c>fam+0xb4</c> (monde) / <c>fam+0x14c</c> (mission).</summary>
+    public SortedDictionary<short, uint> Achievements { get; } = new();
+
+    /// <summary>Compteurs dual-key <c>fam+0x160</c> : chaque point
+    /// gagné s'ajoute sous la clé GroupKey <b>et</b> sous la clé Type —
+    /// les colonnes de <c>family_achievement_rank</c> en sont un
+    /// snapshot (1, 5, 0x65-0x6c, 0x1f5-0x1fa).</summary>
+    public Dictionary<int, long> Counters { get; } = new();
+
+    /// <summary>Total succès famille — <c>fam+0x4c</c> natif
+    /// (cap 999999999), snapshot <c>family_achievement_rank.total_point</c>.</summary>
+    public uint AchievementTotal { get; set; }
 
     /// <summary>Journal <c>family_log</c>.</summary>
     public List<FamilyLogEntry> Logs { get; } = new();
@@ -114,8 +126,10 @@ public sealed class FamilyMemberSummary
     public short Rank { get; set; }
 }
 
-/// <summary>Entrée <c>family_msgboard</c> / <c>family_schedule</c>
-/// (même schéma natif).</summary>
+/// <summary>Entrée <c>family_msgboard</c> — le NCID 51
+/// <c>ClientFamilySchedule</c> natif porte ces messages
+/// (<c>family_schedule</c> est une table morte : aucun écrivain dans
+/// les binaires).</summary>
 public sealed class FamilyMessage
 {
     public int MessageId { get; set; }

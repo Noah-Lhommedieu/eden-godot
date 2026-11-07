@@ -167,10 +167,10 @@ public class NifParticleMapperTests
                     .ToArray()).ToArray();
             var pts = (Vector3[])m.Def.Emitter.MeshPoints!.Clone();
             var nrm = m.Def.Emitter.MeshNormals is { } n ? (Vector3[])n.Clone() : null;
-            const int batch = 500;
+            const int batch = 50;
             double best = double.MaxValue;
             for (var i = 0; i < 200; i++) es.Reskin(bw, pts, nrm);   // chauffe JIT/allocs
-            for (var rep = 0; rep < 5; rep++)
+            for (var rep = 0; rep < 50; rep++)
             {
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 for (var i = 0; i < batch; i++) es.Reskin(bw, pts, nrm);

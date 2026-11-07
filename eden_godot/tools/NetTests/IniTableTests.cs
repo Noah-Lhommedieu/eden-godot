@@ -5,11 +5,20 @@ using Xunit;
 
 namespace EdenClient.NetTests;
 
+/// <summary>Les classes qui mutent l'état statique partagé
+/// (<c>TextResolver.ResolveFile</c>, <c>SetLanguage</c>, caches de
+/// tables, <c>UiTextEn</c>) courent dans une même collection : xUnit
+/// sérialise une collection, sinon les mutations croisées rendent
+/// les tests RealFile flaky.</summary>
+[CollectionDefinition("SharedResolver")]
+public class SharedResolverCollection { }
+
 /// <summary>
 /// Tests des parseurs de tables .ini (scripts/data) : formats synthétiques
 /// (pipe/comma/Count), MyCrypt sur vecteur natif, puis vrais fichiers du
 /// corpus officiel via le symlink <c>raw_assets/</c> (→ corpus/official).
 /// </summary>
+[Collection("SharedResolver")]
 public class IniTableTests
 {
     // ---------- localisation raw_assets ----------

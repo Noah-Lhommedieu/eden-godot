@@ -39,12 +39,21 @@ public sealed partial class ZoneEntryFlow
         new() { 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 16, 17, 18, 19 };
 
     /// <summary>Consentement en cours par teamId —
-    /// <c>map&lt;s16,set&lt;u32&gt;&gt; team+0x5c</c> natif : set[0] =
-    /// membres en attente, réponse 1 = refus (EndCheck exige set[1]
-    /// vide), autre réponse (≥2) = accept.</summary>
+    /// <c>map&lt;s16,set&lt;u32&gt;&gt; team+0x5c</c> natif
+    /// (CForceTeam::SetCheckState mission @0x81ca540) : set[0] =
+    /// membres en attente, réponse <b>0</b> → set[3] « State[Yes] »
+    /// (accept), réponse <b>≠0</b> → set[1] « State[No] » (refus —
+    /// EndCheck exige set[0] et set[1] vides).</summary>
     private sealed class PendingEvalCheck
     {
+        /// <summary>Type de check — 2 = tour du ciel (EndCheck branche
+        /// tower), 3 = épreuve évaluée.</summary>
+        public int Kind;
         public int NodeTid;
+        /// <summary>Le nœud a une def S_RewardScore (655-667 en FR) —
+        /// sinon l'entrée transporte dans le donjon sans instance
+        /// scorée (service 59 refIds 107-113, donjons « MP »).</summary>
+        public bool Scored;
         /// <summary>charIds n'ayant pas encore répondu (set[0]).</summary>
         public readonly HashSet<int> Pending = new();
         public bool Done;
@@ -78,9 +87,14 @@ public sealed partial class ZoneEntryFlow
             await HandleEvaluateCheckAsync(session, st, p2, token);
             return true;
         }
+        if (op == 4 && p1 == 2)
+        {
+            await HandleTowerCheckAsync(session, st, token);
+            return true;
+        }
         if (op == 5)
         {
-            await HandleEvaluateAnswerAsync(session, st, p1, token);
+            await HandleTeamCheckAnswerAsync(session, st, p1, token);
             return true;
         }
         return false;
@@ -165,12 +179,18 @@ public sealed partial class ZoneEntryFlow
         EntryState st, int nodeTid, CancellationToken token)
     {
         if (st.CharId == 0 || !st.Migrated) return;
-        if (!_services.GameData.Evaluates.TryGetValue(nodeTid, out _))
+        var scored = _services.GameData.Evaluates.ContainsKey(nodeTid);
+        if (!scored &&
+            !_services.GameData.Nodes.Any(n => n.Id == nodeTid))
         {
             EdenLog.Write($"[Evaluate] char={st.CharId} node={nodeTid} " +
-                "sans def S_RewardScore — ignoré");
+                "inconnu — ignoré");
             return;
         }
+        // Nœud sans def S_RewardScore (107-113, donjons « MP » du
+        // service 59) : le natif fait consentement + EnterEvaluate
+        // quand même — l'instance scorée n'existe que pour les nœuds
+        // couverts par c_rewardscore (655-667).
         var team = _services.Teams.GetTeamOf((int)st.CharId);
         if (team == null) return;
         // Natif : membre déjà sur un nœud type 18 ≠ nodeTid → 0x230b.
@@ -208,7 +228,8 @@ public sealed partial class ZoneEntryFlow
             await SendTextIndexAsync(session, 0x166e, token);
             return;
         }
-        var check = new PendingEvalCheck { NodeTid = nodeTid };
+        var check = new PendingEvalCheck
+            { Kind = 3, NodeTid = nodeTid, Scored = scored };
         foreach (var m in team.Members)
             if (m.IsOnline && FindStateByChar(m.CharacterId) != null)
                 check.Pending.Add(m.CharacterId);
@@ -232,20 +253,38 @@ public sealed partial class ZoneEntryFlow
     }
 
     /// <summary><c>TeamOperation [5][answer]</c> — TeamCheckAnswer
-    /// natif : sort le membre de la file d'attente (set[0]) ; la
-    /// réponse 1 refuse tout le check (<c>EndCheck</c> exige set[1]
-    /// vide), la réponse 0 laisse en attente, ≥2 accepte.</summary>
-    private async Task HandleEvaluateAnswerAsync(NetSession session,
+    /// natif (mission CTeamManager::TeamCheckAnswer @0x80c6520 →
+    /// SetCheckState @0x81ca540) : <b>0 = Oui</b> (sort de set[0],
+    /// joint set[3]), <b>≠0 = Non</b> (joint set[1] → EndCheck
+    /// échoue). Le client natif n'émet que 0/1 (DragMsgDlgUI,
+    /// client FUN_007df8c0).</summary>
+    private async Task HandleTeamCheckAnswerAsync(NetSession session,
         EntryState st, int answer, CancellationToken token)
     {
         if (st.CharId == 0) return;
+        // Check solo (pas d'équipe — tour du ciel, branche native
+        // « no team » de TeamOperation) : 0 → EnterTower, ≠0 →
+        // annulation silencieuse ; le pending est levé dans les
+        // deux cas (zone @0x82937b0, char+0xd7a).
         var team = _services.Teams.GetTeamOf((int)st.CharId);
-        if (team == null ||
-            !_evalChecks.TryGetValue(team.Id, out var check) ||
+        if (team == null)
+        {
+            if (st.PendingCheck == 2 && answer == 0)
+            {
+                st.PendingCheck = 0;
+                await EnterTowerAsync(session, st, token);
+                return;
+            }
+            st.PendingCheck = 0;
+            return;
+        }
+        if (!_evalChecks.TryGetValue(team.Id, out var check) ||
             check.Done)
             return;
-        if (answer == 0) return;            // natif : reste en attente
-        if (answer == 1)
+        // Sémantique native SetCheckState : 0 = « State[Yes] »
+        // (set[3], accept) ; ≠0 = « State[No] » (set[1] — un refus
+        // fait échouer tout le check).
+        if (answer != 0)
         {
             await FailEvalCheckAsync(team.Id, token);
             return;
@@ -253,6 +292,107 @@ public sealed partial class ZoneEntryFlow
         check.Pending.Remove((int)st.CharId);
         if (check.Pending.Count == 0)
             await FinishEvalCheckAsync(team.Id, token);
+    }
+
+    /// <summary><c>TeamOperation [4][2][0]</c> — TeamCheck tour du
+    /// ciel (EnterBtn de towerwnd → zone @0x82937b0). Sans équipe :
+    /// 577 [2][étage] au seul requérant + pending char+0xd7a=2.
+    /// Avec équipe : même mécanique de consentement que l'épreuve —
+    /// 577 [2][étage] à tous les membres en ligne (leader seul
+    /// initie). L'étage = le record du perso (char+0xd76 natif, non
+    /// persisté ici — entrée = étage 1).</summary>
+    private async Task HandleTowerCheckAsync(NetSession session,
+        EntryState st, CancellationToken token)
+    {
+        if (st.CharId == 0 || !st.Migrated) return;
+        const short floor = 1;
+        var team = _services.Teams.GetTeamOf((int)st.CharId);
+        var (chkOp, chkPayload) = PreparePacket(
+            new CNC_CZ_ClientTeamCheckNotify
+            {
+                Field1 = 2,        // s16 : check tour du ciel
+                Field2 = floor,    // s16 : étage proposé
+            });
+        if (team == null)
+        {
+            st.PendingCheck = 2;
+            await SendPreparedToAsync(session, chkOp, chkPayload,
+                token);
+            return;
+        }
+        if ((int)st.CharId != team.LeaderCharacterId) return;
+        if (_evalChecks.ContainsKey(team.Id))
+        {
+            await SendTextIndexAsync(session, 0x166e, token);
+            return;
+        }
+        var check = new PendingEvalCheck { Kind = 2 };
+        foreach (var m in team.Members)
+            if (m.IsOnline && FindStateByChar(m.CharacterId) != null)
+                check.Pending.Add(m.CharacterId);
+        if (check.Pending.Count == 0) return;
+        _evalChecks[team.Id] = check;
+        foreach (var cid in check.Pending)
+            if (FindSessionByChar(cid) is { } ms)
+                await SendPreparedToAsync(ms, chkOp, chkPayload, token);
+        ScheduleOnLoop(EvalCheckTimeout,
+            _ => EvalCheckTimeoutAsync(team.Id));
+        EdenLog.Write($"[Tower] check team={team.Id} " +
+            $"members={check.Pending.Count}");
+    }
+
+    /// <summary><c>EnterTower</c> natif (zone @0x80f9080) pour UN
+    /// membre : gates (mort → 0x115a, nœud type interdit → 0x17a6,
+    /// CheckNodeTimes nœud 280 → 0x146c), puis tirage d'une scène
+    /// tour parmi les nœuds type 14 (GetTowerNodeID @0x8171800 —
+    /// AllSkyTowerParamMap[étage] = {280-283} en FR, toutes les
+    /// variantes valent pour chaque étage) hors nœud courant, et
+    /// transport vers <c>node&lt;&lt;16|0x15</c>.</summary>
+    private async Task EnterTowerAsync(NetSession session,
+        EntryState st, CancellationToken token)
+    {
+        if (st.Dead)
+        {
+            await SendTextIndexAsync(session, 0x115a, token);
+            return;
+        }
+        if (EvalForbiddenNodeTypes.Contains(NodeType(st.NodeId)))
+        {
+            await SendTextIndexAsync(session, 0x17a6, token);
+            return;
+        }
+        var towerMax = _services.GameData.Nodes
+            .FirstOrDefault(n => n.Id == 280)?.MaxEntryTimes ?? 0;
+        if (towerMax > 0 &&
+            !await CheckNodeTimesAsync(st, 280, towerMax))
+        {
+            await SendTextIndexAsync(session, 0x146c, token);
+            return;
+        }
+        // GetTowerNodeID natif — tirage uniforme dans le set des
+        // nœuds type 14, hors nœud courant.
+        var pool = _services.GameData.Nodes
+            .Where(n => n.Type == 14 && n.Id != st.NodeId)
+            .Select(n => n.Id).ToList();
+        if (pool.Count == 0)
+        {
+            EdenLog.Write("[Tower] aucun nœud type 14 dans t_node");
+            return;
+        }
+        var nodeTid = pool[_evalRng.Next(pool.Count)];
+        var area = ResolveEvaluateEntryArea(nodeTid);
+        if (area == null)
+        {
+            EdenLog.Write($"[Tower] node={nodeTid} aire " +
+                $"{EvalEntryAreaKey} introuvable");
+            return;
+        }
+        await AddNodeTimesAsync(session, st, nodeTid, token);
+        st.Facing = area.Facing;
+        await MigrateToNodeAsync(session, st, nodeTid,
+            area.X, area.Y, area.Z, token);
+        EdenLog.Write($"[Tower] char={st.CharId} → S{nodeTid:D3} " +
+            $"({area.X:0.#},{area.Y:0.#})");
     }
 
     /// <summary>Timeout 60 s du check — <c>CEventTeamCheck::Execute</c>
@@ -307,10 +447,26 @@ public sealed partial class ZoneEntryFlow
         foreach (var cid in memberIds)
             if (FindSessionByChar(cid) is { } ms)
                 await SendPreparedToAsync(ms, endOp, endPayload, token);
-        var ev = _services.Evaluates.Create(check.NodeTid, memberIds,
-            _services.GameData.Evaluates);
-        if (ev == null) return;
-        team.EvalId = ev.Id;
+        // Branche EndCheck type 2 — tour du ciel : pas d'instance
+        // scorée, chaque membre entre via EnterTower (gates
+        // individuels identiques au natif).
+        if (check.Kind == 2)
+        {
+            foreach (var cid in memberIds)
+            {
+                var mst = FindStateByChar(cid);
+                var ms = FindSessionByChar(cid);
+                if (mst == null || ms == null) continue;
+                await EnterTowerAsync(ms, mst, token);
+            }
+            return;
+        }
+        var ev = check.Scored
+            ? _services.Evaluates.Create(check.NodeTid, memberIds,
+                _services.GameData.Evaluates)
+            : null;
+        if (check.Scored && ev == null) return;
+        team.EvalId = ev?.Id ?? 0;
         team.EvalNodeId = check.NodeTid;
         var entered = 0;
         foreach (var cid in memberIds)
@@ -321,6 +477,12 @@ public sealed partial class ZoneEntryFlow
             if (await EnterEvaluateMemberAsync(ms, mst, ev,
                     check.NodeTid, token))
                 entered++;
+        }
+        if (ev == null)
+        {
+            EdenLog.Write($"[Evaluate] team={teamId} node={check.NodeTid} " +
+                $"sans scoring — {entered} membre(s) transporté(s)");
+            return;
         }
         if (entered == 0)
         {
@@ -344,7 +506,7 @@ public sealed partial class ZoneEntryFlow
     /// CheckNodeTimes → 0x146c) puis AddNodeTimes + transport vers
     /// l'aire <c>nodeTid&lt;&lt;16|0x15</c> + EvalId + 525.</summary>
     private async Task<bool> EnterEvaluateMemberAsync(
-        NetSession session, EntryState st, EvaluateInstance ev,
+        NetSession session, EntryState st, EvaluateInstance? ev,
         int nodeTid, CancellationToken token)
     {
         if (st.EvalId != 0) return false;        // déjà en instance
@@ -373,8 +535,8 @@ public sealed partial class ZoneEntryFlow
                 $"{EvalEntryAreaKey} introuvable");
             return false;
         }
-        st.EvalId = ev.Id;
-        if (!ev.MemberCharIds.Contains((int)st.CharId))
+        st.EvalId = ev?.Id ?? 0;
+        if (ev != null && !ev.MemberCharIds.Contains((int)st.CharId))
             ev.MemberCharIds.Add((int)st.CharId);
         await AddNodeTimesAsync(session, st, nodeTid, token);
         // TransportCharacterToArea natif — même node (l'aire est dans
@@ -382,21 +544,23 @@ public sealed partial class ZoneEntryFlow
         st.Facing = area.Facing;
         await MigrateToNodeAsync(session, st, nodeTid,
             area.X, area.Y, area.Z, token);
-        // 525 ClientGladiatorTeamInfo [evalId][point][gold][1] —
+        // 525 ClientGladiatorTeamInfo [evalId][point][gold][flag] —
         // assignation de l'evalId (CNE_DBA_ClientGladiatorTeamInfo
-        // natif → NotifyClient si flag).
+        // natif → NotifyClient si flag) ; evalId 0 + flag 0 pour un
+        // nœud sans instance scorée.
         var (point, gold) = await _services.EvaluateRepo
             .GetGladiatorCurrenciesAsync((int)st.CharId);
         await session.SendAsync(new CNC_CZ_ClientGladiatorTeamInfo
         {
-            Field1 = ev.Id,       // i32 : evalId assigné
+            Field1 = ev?.Id ?? 0, // i32 : evalId assigné (0 = non scoré)
             Field2 = point,       // i32 : colosseum_point
             Field3 = (uint)gold,  // u32 : colosseum_gold
-            Field4 = 1,           // u8  : flag en-trial
+            Field4 = (byte)(ev != null ? 1 : 0), // u8 : flag en-trial
         }, token);
         // Push statut + compteurs courants — un membre qui rejoint en
         // cours de run voit le même HUD que les autres.
-        await SendEvalStatusAsync(session, ev, token);
+        if (ev != null)
+            await SendEvalStatusAsync(session, ev, token);
         return true;
     }
 

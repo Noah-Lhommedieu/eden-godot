@@ -60,6 +60,9 @@ var familyService = new Eden.Core.Game.Family.FamilyService(
     new Eden.Core.Game.Family.FamilyRepository(db));
 await familyService.LoadAsync();
 Eden.World.ZoneLinkServer.Families = familyService;
+// Maintenance des villes de guilde (recyclage à 72 h < 10 membres en ligne).
+_ = Task.Run(() => Eden.World.TownRecycleService.RunAsync(familyService,
+    Eden.World.ZoneLinkServer.PushHouseOpenAsync, CancellationToken.None));
 
 // Item mall natif : catalogue/receivables/limits sur edenfr_account
 // (CAccountDBO), points sur edenfr_member.tb_user (billing externe natif

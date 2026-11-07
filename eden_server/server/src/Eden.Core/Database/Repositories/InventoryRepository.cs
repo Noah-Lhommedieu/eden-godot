@@ -623,6 +623,38 @@ public sealed partial class InventoryRepository : IInventoryRepository
                 return;
     }
 
+    /// <summary>Persiste le vecteur de combos d'un item — équivalent
+    /// `CItemDBO::ModifyItemCombo` natif (AddComboStrengthen @0x080a2160 :
+    /// les 11 u16 `extra_combo_id1..11` du clone+0x34). Cherche la ligne
+    /// dans inventory1 puis inventory2 (ping-pong DBA natif).</summary>
+    public async Task UpdateItemCombosAsync(ItemEntity item)
+    {
+        using var connection = _db.CreateConnection();
+        await connection.OpenAsync();
+        foreach (var table in new[] { "inventory1", "inventory2" })
+        {
+            var n = await connection.ExecuteAsync(
+                $"UPDATE {table} SET extra_combo_id1=@E1, " +
+                "extra_combo_id2=@E2, extra_combo_id3=@E3, " +
+                "extra_combo_id4=@E4, extra_combo_id5=@E5, " +
+                "extra_combo_id6=@E6, extra_combo_id7=@E7, " +
+                "extra_combo_id8=@E8, extra_combo_id9=@E9, " +
+                "extra_combo_id10=@E10, extra_combo_id11=@E11 " +
+                "WHERE id=@Id",
+                new
+                {
+                    E1 = item.ExtraCombos[0], E2 = item.ExtraCombos[1],
+                    E3 = item.ExtraCombos[2], E4 = item.ExtraCombos[3],
+                    E5 = item.ExtraCombos[4], E6 = item.ExtraCombos[5],
+                    E7 = item.ExtraCombos[6], E8 = item.ExtraCombos[7],
+                    E9 = item.ExtraCombos[8],
+                    E10 = item.ExtraComboId10, E11 = item.ExtraComboId11,
+                    item.Id,
+                });
+            if (n > 0) return;
+        }
+    }
+
     /// <summary>Persiste les champs boîte magique d'un item —
     /// équivalent `CItemDBO::UpdateMagicBoxData` natif (DoMagicBox
     /// @0x80a8b90 : UPDATE magicbox_enchant1-3, magicbox_energy,

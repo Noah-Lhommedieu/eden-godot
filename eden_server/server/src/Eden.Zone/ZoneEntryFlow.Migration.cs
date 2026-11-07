@@ -96,6 +96,19 @@ public sealed partial class ZoneEntryFlow
             return;
         }
 
+        // Villes de guilde (501/502) : keyId 60-64 = aires de récolte
+        // (pioche/gants/cristal), pas des portails — aucun node cible,
+        // l'outil s'utilise par clic droit dans l'aire (voir
+        // ZoneEntryFlow.FamilyCity.cs). Pas de rejet 1499 bruyant.
+        if (st.NodeId is 501 or 502
+            && Eden.Core.Game.Family.FamilyCityRules.IsGatherKey(key))
+        {
+            EdenLog.Write($"[VDG-Gather] char={st.CharId} entre dans " +
+                $"l'aire de récolte key={key} node={st.NodeId} " +
+                $"({st.PosX:F0},{st.PosZ:F0})");
+            return;
+        }
+
         // Clé de trigger native (CheckNodeExit @0x82419f0) :
         // uVar18 = node<<16 | (col2 == -1 ? keyId(col4) : col2).
         // col2 = -1 → le script d'événement vient de la keyId (col4) ;
@@ -183,6 +196,9 @@ public sealed partial class ZoneEntryFlow
             var levelBlocked = ev.Branches.All(b =>
                 b.Conds.Any(c => c.Name == "Event_If_Level" &&
                     !EvalSceneCondSync(st, c)));
+            if (await TryOfferDungeonAsync(session, st, scene, ev,
+                    gw.EventAreaId, token))
+                return;
             var moved = await RunSceneEventAsync(session, st, scene,
                 eventId, token);
             if (moved) return;
@@ -368,8 +384,12 @@ public sealed partial class ZoneEntryFlow
         if (dz == 0)
             dz = _services.Scenes.GetScene($"S{target:D3}")
                 ?.FloorZ(dx, dy) ?? 0f;
+        st.PosY = dz;
         st.Sent.Clear(); st.EntityPos.Clear();
         st.Replayed.Clear(); st.HandleToEntity.Clear();
+        st.HallNpcItems.Clear();
+        st.WorkOpBuildingItemId = 0;
+        st.WorkOpTaxRate = 0;
         st.FamilyNpcsLoaded = false;
         st.Generated.Clear();
         st.NodeChanged = true;

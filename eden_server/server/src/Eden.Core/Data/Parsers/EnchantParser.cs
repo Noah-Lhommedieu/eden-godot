@@ -67,6 +67,18 @@ public static class EnchantParser
         public int TriggerChance { get; set; }                  // col 42
         public int TriggerDuration { get; set; }                // col 43
         public string Description { get; set; } = string.Empty; // col 56
+        /// <summary>Champs « pierre de chance » (enchant cmd 8002
+        /// porté par un item mall — ex. 55168 derrière 41469) lus par
+        /// <c>CGameData::Integration</c> : bonus de taux (col10),
+        /// « safe level » (col12 — &gt;0 → bornes ignorées), flag
+        /// « lie l'item » (col13) et fenêtre d'usage basse/haute
+        /// (cols 14/15, bornes égales X/X → fenêtre 1..X côté
+        /// natif).</summary>
+        public int ChanceBonus { get; set; }
+        public int ChanceSafeLevel { get; set; }
+        public int ChanceBind { get; set; }
+        public int ChanceLower { get; set; }
+        public int ChanceUpper { get; set; }
         public string[] Raw { get; set; } = System.Array.Empty<string>();
     }
 
@@ -130,6 +142,32 @@ public static class EnchantParser
                 e.TriggerParams[i] = IniTable.GetInt(row, 9 + i);
             for (var i = 0; i < 5; i++)
                 e.SecondaryBlock[i] = IniTable.GetInt(row, 16 + i);
+
+            // Kind 8002 « pierre de chance » (CGameData::Integration
+            // @0x85995b0) : param[0] = cmd 0x1f42 (col9) ; param[1]
+            // (col10) = bonus % ; param[5] (col14) > 0 → safe-level
+            // (niveau ≤ → succès garanti) et la fenêtre n'est pas lue ;
+            // sinon param[9]/[11] (cols 18/20) = fenêtre lower/upper
+            // validée 1-15 qui borne l'usage (bornes égales X/X →
+            // fenêtre 1..X, bizarrerie native) ; param[7] (col16) =
+            // flag « lie la cible ».
+            if (e.TriggerParams[0] == 0x1f42)
+            {
+                e.ChanceBonus = IniTable.GetInt(row, 10);
+                e.ChanceSafeLevel = IniTable.GetInt(row, 14);
+                e.ChanceBind = IniTable.GetInt(row, 16);
+                if (e.ChanceSafeLevel == 0)
+                {
+                    var lo = IniTable.GetInt(row, 18);
+                    var up = IniTable.GetInt(row, 20);
+                    if (lo is >= 1 and <= 15 && up is >= 1 and <= 15
+                        && lo <= up)
+                    {
+                        e.ChanceLower = lo == up ? 1 : lo;
+                        e.ChanceUpper = up;
+                    }
+                }
+            }
 
             enchants.Add(e);
         }

@@ -420,7 +420,14 @@ public sealed partial class ZoneEntryFlow
         public required ZoneLiveWorld.LiveMob Mob { get; init; }
         public required int Generation { get; init; }
         public required bool InstanceNoLeash { get; init; }
+        /// <summary>Horodatage du dernier pas de poursuite — le pas
+        /// est proportionnel au temps réel écoulé (vitesse constante
+        /// 7,2 u/s quelle que soit la gigue du tick), pas fixe par tick.</summary>
+        public long LastChaseStepTs { get; set; }
     }
+    private const double ChaseSpeed = 7.2;
+    private static readonly bool MobMoveDiag =
+        Environment.GetEnvironmentVariable("EDEN_MOBMOVE_DIAG") == "1";
     private readonly ConcurrentDictionary<uint, ActiveMobCombat>
         _mobCombats = new();
 
@@ -618,13 +625,27 @@ public sealed partial class ZoneEntryFlow
 
             if (d2 > 36 && !moveLocked) // >6u : approche
             {
-                // ~0,72 u par tick de 100 ms ≈ 7,2 u/s — la vitesse
-                // annoncée par le 326 (0x4725 ≈ 7,16 u/s). Un step
-                // plus lent faisait sur-interpoler le client puis
-                // corriger à chaque tick = poursuite saccadée ; le
-                // mob ne rattrapait jamais un joueur en course.
+                // Vitesse constante 7,2 u/s = celle que le client
+                // suppose pour le 326 (0x4725 ≈ 7,16 u/s). Le pas suit
+                // le temps réel écoulé depuis le dernier pas (borné
+                // 40-250 ms) : un tick de zone retardé (tâche
+                // schedulée lente, commandes) ne ralentit plus le mob
+                // — avant, 0,72 u fixe par tick = 5-6 u/s réels, le
+                // client (qui marche à 7,2) atteignait sa destination
+                // avant le paquet suivant : arrêt-départ saccadé.
                 var d = Math.Sqrt(d2);
-                var step = Math.Min(0.72f, (float)d);
+                var tsNow = System.Diagnostics.Stopwatch.GetTimestamp();
+                var dtS = c.LastChaseStepTs == 0 ? 0.1 : System.Diagnostics
+                    .Stopwatch.GetElapsedTime(c.LastChaseStepTs, tsNow)
+                    .TotalSeconds;
+                c.LastChaseStepTs = tsNow;
+                if (MobMoveDiag)
+                    EdenLog.Write($"[mobmove] srv h=0x{mob.Handle:x8} " +
+                        $"dt={dtS * 1000:F0}ms d={d:F1}");
+                // Reprise après arrêt (stun, portée, wind-up) : dt
+                // périmé → pas nominal, pas de saut.
+                dtS = dtS > 0.35 ? 0.1 : Math.Clamp(dtS, 0.04, 0.25);
+                var step = Math.Min((float)(ChaseSpeed * dtS), (float)d);
                 var nx = mob.X - (float)(dx / d) * step;
                 var ny = mob.Y - (float)(dy / d) * step;
                 // Mur invisible : même grille NodeMap que le joueur
@@ -644,14 +665,19 @@ public sealed partial class ZoneEntryFlow
                 // + destination = le client joue l'anim de course
                 // du mob pour TOUS les témoins (avant : la cible
                 // seule le voyait bouger, les autres un mob figé).
-                // dst = la position au PROCHAIN step (0,72 u ≈ un
-                // tick), bornée au cercle d'arrêt mêlée (~6 u) :
-                // un dst ancré sur la position joueur devenait
-                // intérieur au perso dès que celui-ci avançait —
-                // le mob rendu marchait DANS le modèle du perso
-                // (distance rendue 0 u pendant les coups).
+                // dst = ~3 pas devant (≈ 300 ms de marche), borné au
+                // cercle d'arrêt mêlée (~6 u). Le client marche seul
+                // de cur vers dst (prédiction horodatée) : un dst à
+                // UN pas (100 ms) était atteint avant le paquet
+                // suivant dès que celui-ci avait 10 ms de retard →
+                // mob figé en anim de course puis rattrapage en
+                // quelques ms (téléport). Avec 300 ms d'avance chaque
+                // paquet remplace une prédiction encore en vol : la
+                // marche reste continue malgré la gigue. Le dst
+                // s'arrête sur le cercle d'arrêt (pas de dst
+                // intérieur au perso).
                 var reach = 6.0;
-                var ahead = Math.Min(0.72,
+                var ahead = Math.Min(ChaseSpeed * 0.3,
                     Math.Max(0, d - step - reach));
                 var dstX = mob.X - (float)(dx / d * ahead);
                 var dstY = mob.Y - (float)(dy / d * ahead);

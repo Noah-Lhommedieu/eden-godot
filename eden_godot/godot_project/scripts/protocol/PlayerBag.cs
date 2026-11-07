@@ -101,6 +101,20 @@ public static class PlayerBag
         }
     }
 
+    /// <summary>436 — niveau de fortification d'un slot (réussite de
+    /// renfort), données seules, thread-safe.</summary>
+    public static void ApplyStrengthenData(int containerIndex, int slot,
+        int level)
+    {
+        lock (_gate)
+        {
+            var idx = _items.FindIndex(i =>
+                i.Bag == containerIndex && i.Slot == slot);
+            if (idx < 0) return;
+            _items[idx] = _items[idx] with { Strengthen = level };
+        }
+    }
+
     // ---------------- mutation + notification (thread principal) ----
 
     /// <summary>312 — recharge complète + notification (appelant déjà

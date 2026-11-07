@@ -187,16 +187,7 @@ public sealed partial class QuestEngine
         // Abandonnée : le marqueur 0xFE persiste pour que les quêtes
         // auto-grant (tutoriel sans donneur) ne reviennent pas au
         // prochain login — DeleteActive le purgerait sinon.
-        aq.Status = 0xFE;
-        // FMS → 0 (abandon natif) + retrait du tracker HUD + purge des
-        // compteurs PMS (RemovePMS natif).
-        c.FMS.Remove(mid);
-        await _db.SetFMSAsync(charUid, mid, 0);
-        await _db.ClearTraceAsync(charUid, mid);
-        await _db.DeletePmsAsync(charUid, mid);
-        await _db.SaveActiveAsync(charUid, mid, aq.Packed);
-        await SendStateAsync(s, charUid, mid, 0);
-        await PushNpcSymbolsAsync(s, c);
+        await CloseActiveAsync(s, c, mid, aq);
         EdenLog.Write($"[Mission] char={charUid} abandon {mid}");
     }
     /// <summary>144 MobDieReport [u16 mobId][s16][s16][f32 x][f32 z]

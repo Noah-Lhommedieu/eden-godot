@@ -28,6 +28,8 @@ public sealed class AuctionService
                 Id = r.Id, SellerId = r.SellerId, ItemId = r.ItemId,
                 Quantity = r.Quantity, Price = r.Price,
                 ExpiresAt = r.ExpiresAt,
+                ItemType = r.ItemType, Level = r.Level, Class = r.Class,
+                QualityFilter = r.QualityFilter, ItemName = r.ItemName,
             });
             if (r.Id >= _nextId) _nextId = r.Id + 1;
         }
@@ -49,14 +51,41 @@ public sealed class AuctionService
         public DateTime ExpiresAt { get; set; }
         public int? BuyerId { get; set; }
         public bool Sold { get; set; }
+        // Champs dénormalisés (miroir natif `auction`, migration 026) —
+        // renseignés à la mise en vente depuis l'ItemDef + l'instance.
+        /// <summary>Catégorie HV (ItemDef.ItemType, col33→+0x84).</summary>
+        public int ItemType { get; set; }
+        /// <summary>Niveau requis (ItemDef.RequiredLevel, col14→+0x3e).</summary>
+        public int Level { get; set; }
+        /// <summary>Masque i64 classes (ItemDef.ClassMask, col18→+0x48).</summary>
+        public long Class { get; set; }
+        /// <summary><c>1 &lt;&lt; quality</c> d'instance (SaveAuction).</summary>
+        public int QualityFilter { get; set; } = 1;
+        /// <summary>Nom natif : maker + nom + "+N" (filtre LIKE).</summary>
+        public string ItemName { get; set; } = "";
     }
+
+    /// <summary>Champs dénormalisés calculés une fois à la mise en
+    /// vente (ItemDef + qualité d'instance) — mêmes colonnes que
+    /// l'INSERT natif SaveAuction.</summary>
+    public readonly record struct AuctionDenorm(int ItemType, int Level,
+        long Class, int QualityFilter, string ItemName);
+
+    /// <summary>Filtre du catalogue (wire 114 = ordre natif des pops
+    /// de TC_AuctionBuyQuery, mission). Adaptation client Godot : tout
+    /// champ à 0/vide = « pas de filtre » (le client natif envoie
+    /// toujours des bornes pleines ; le nôtre envoie des défauts).</summary>
+    public readonly record struct AuctionQuery(
+        short LevelMin, short LevelMax, int PriceMin, int PriceMax,
+        int ClassMask, short QualityMask, short ItemType,
+        short Sort, short Desc, string Keyword, short Page);
 
     /// <summary>
     /// Met un objet en vente. Retourne les frais de depot a payer.
     /// </summary>
     public async Task<AuctionListing> ListAsync(int sellerId, int itemId,
         int quantity, long price, TimeSpan duration,
-        long? buyoutPrice = null)
+        long? buyoutPrice = null, AuctionDenorm denorm = default)
     {
         var listing = new AuctionListing
         {
@@ -67,6 +96,11 @@ public sealed class AuctionService
             Price = price,
             BuyoutPrice = buyoutPrice,
             ExpiresAt = DateTime.UtcNow + duration,
+            ItemType = denorm.ItemType, Level = denorm.Level,
+            Class = denorm.Class,
+            QualityFilter = denorm.QualityFilter == 0 ? 1
+                : denorm.QualityFilter,
+            ItemName = denorm.ItemName ?? "",
         };
         _listings.Add(listing);
         if (_repo != null)
@@ -76,6 +110,10 @@ public sealed class AuctionService
                 Price = (int)price,
                 DurationHours = (int)duration.TotalHours,
                 ExpiresAt = listing.ExpiresAt, Status = "active",
+                ItemType = denorm.ItemType, Level = denorm.Level,
+                Class = denorm.Class,
+                QualityFilter = listing.QualityFilter,
+                ItemName = listing.ItemName,
             });
         return listing;
     }
@@ -94,12 +132,13 @@ public sealed class AuctionService
     public async Task<(AuctionListing? Listing, bool Atomic)>
         ListPersistedAsync(int sellerId, int itemId, int quantity,
             long price, TimeSpan duration, long? buyoutPrice,
-            int bagId, int slot, long depositFee)
+            int bagId, int slot, long depositFee,
+            AuctionDenorm denorm = default)
     {
         if (_repo is not AuctionRepository sql)
         {
             var legacy = await ListAsync(sellerId, itemId, quantity,
-                price, duration, buyoutPrice);
+                price, duration, buyoutPrice, denorm);
             return (legacy, false);
         }
         var entity = new AuctionEntity
@@ -108,6 +147,11 @@ public sealed class AuctionService
             Price = (int)price, DurationHours = (int)duration.TotalHours,
             CreatedAt = DateTime.UtcNow,
             ExpiresAt = DateTime.UtcNow + duration, Status = "active",
+            ItemType = denorm.ItemType, Level = denorm.Level,
+            Class = denorm.Class,
+            QualityFilter = denorm.QualityFilter == 0 ? 1
+                : denorm.QualityFilter,
+            ItemName = denorm.ItemName ?? "",
         };
         var id = await sql.CreateListingAsync(entity, bagId, slot,
             depositFee);
@@ -117,6 +161,9 @@ public sealed class AuctionService
             Id = id.Value, SellerId = sellerId, ItemId = itemId,
             Quantity = quantity, Price = price,
             BuyoutPrice = buyoutPrice, ExpiresAt = entity.ExpiresAt,
+            ItemType = entity.ItemType, Level = entity.Level,
+            Class = entity.Class, QualityFilter = entity.QualityFilter,
+            ItemName = entity.ItemName,
         };
         _listings.Add(listing);
         if (listing.Id >= _nextId) _nextId = listing.Id + 1;
@@ -135,6 +182,57 @@ public sealed class AuctionService
                 && (excludeSellerId == null || l.SellerId != excludeSellerId))
             .OrderBy(l => l.Price)
             .ToList();
+
+    /// <summary>
+    /// Catalogue filtré — port de
+    /// <c>CExecutionerDBO::QueryAuctionBuy</c> (mission @0x08160710) :
+    /// même WHERE sur les champs dénormalisés, tri natif par vue
+    /// (0=level, 1=quality, 2=duedate, 3=price — tout autre code →
+    /// level asc comme le fallback natif `auction_view_by_level_up`),
+    /// pagination 20/page, et le COUNT renvoyé à côté.
+    /// Adaptation wire : notre client envoie 0/vide = « pas de
+    /// filtre » (levelMax/priceMax ≤ 0 = sans borne haute, masques 0
+    /// = passe-tout — la sentinelle native classe-0 est déjà
+    /// équivalente ; itemType 0 = toutes catégories ; keyword vide).
+    /// </summary>
+    public (IReadOnlyList<AuctionListing> Entries, int Total)
+        Search(AuctionQuery q)
+    {
+        var now = DateTime.UtcNow;
+        var kw = q.Keyword ?? "";
+        var rows = _listings.Where(l =>
+            !l.Sold && l.ExpiresAt > now
+            && (q.ItemType == 0 || l.ItemType == q.ItemType)
+            && l.Price >= q.PriceMin
+            && (q.PriceMax <= 0 || l.Price <= q.PriceMax)
+            && l.Level >= q.LevelMin
+            && (q.LevelMax <= 0 || l.Level <= q.LevelMax)
+            && (q.QualityMask == 0
+                || (l.QualityFilter & q.QualityMask) != 0)
+            && (q.ClassMask == 0
+                || (l.Class & q.ClassMask) != 0)
+            && (kw.Length == 0
+                || l.ItemName.Contains(kw,
+                    StringComparison.OrdinalIgnoreCase)));
+        rows = q.Sort switch
+        {
+            1 => q.Desc != 0
+                ? rows.OrderByDescending(l => l.QualityFilter)
+                : rows.OrderBy(l => l.QualityFilter),
+            2 => q.Desc != 0
+                ? rows.OrderByDescending(l => l.ExpiresAt)
+                : rows.OrderBy(l => l.ExpiresAt),
+            3 => q.Desc != 0
+                ? rows.OrderByDescending(l => l.Price)
+                : rows.OrderBy(l => l.Price),
+            _ => q.Desc != 0
+                ? rows.OrderByDescending(l => l.Level)
+                : rows.OrderBy(l => l.Level),
+        };
+        var list = rows.ToList();
+        var page = Math.Max(0, (int)q.Page);
+        return (list.Skip(page * 20).Take(20).ToList(), list.Count);
+    }
 
     /// <summary>
     /// Achat — retourne (goldPourVendeur, commission).

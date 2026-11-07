@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Godot;
+using EdenClient.Combat;
 using EdenClient.Data;
 using EdenClient.Data.Tables;
 using EdenClient.Net;
@@ -110,6 +111,8 @@ public partial class InventoryWindow : Control
     });
 
     private EdenSession? _session;
+    private int _channelItem;
+    private ulong _channelUntilMs;
     private readonly ConcurrentQueue<Action> _pending = new();
 
     public void Build(HudRoot hud)
@@ -203,7 +206,7 @@ public partial class InventoryWindow : Control
             var slot = new Panel
             {
                 Visible = i != 5,
-                TooltipText = i == 0 ? UiTextEn.Translate("Backpack") : UiTextEn.Translate($"Bag {i}"),
+                TooltipText = i == 0 ? UiTextEn.Translate("Backpack") : UiTextEn.Translate("Bag %s1").Replace("%s1", i.ToString()),
             };
             if (empty != null) slot.AddThemeStyleboxOverride("panel", empty);
             var bag = i;
@@ -246,20 +249,38 @@ public partial class InventoryWindow : Control
         var funcs = new (string Icon, string Tip, Action Act)[]
         {
             ("Collect", UiTextEn.Translate("Archive"), () => OpenArchive()),
-            ("SF", UiTextEn.Translate("Fortify"), () => Notice(UiTextEn.Translate("Fortify: via NPC"))),
-            ("Combo", UiTextEn.Translate("Fusion"), () => Notice(UiTextEn.Translate("Fusion: via NPC"))),
-            ("LS", UiTextEn.Translate("Racial Craft"), () => _hud?.OpenWindow("craft")),
+            ("SF", UiTextEn.Translate("Fortify"), () =>
+                Send(new ZonePlayerAction
+                    { Action = 13, Param1 = -1, Param2 = -1,
+                      Param3 = -1 })),
+            ("Combo", UiTextEn.Translate("Fusion"), () =>
+                Send(new ZonePlayerAction
+                    { Action = 14, Param1 = -1, Param2 = -1,
+                      Param3 = -1 })),
+            ("LS", UiTextEn.Translate("Racial Craft"), () =>
+                Send(new ZonePlayerAction
+                    { Action = 16, Param1 = -1, Param2 = -1,
+                      Param3 = -1 })),
+            ("MagicCube", UiTextEn.Translate("Magic Cube"), () =>
+                Send(new ZonePlayerAction
+                    { Action = 101, Param1 = -1, Param2 = -1,
+                      Param3 = -1 })),
             ("Option", UiTextEn.Translate("Backpack manager"), () => ShowBagManager()),
             ("Shop", UiTextEn.Translate("Stall (become a merchant)"), ToggleStall),
-            ("SpecialCoin", UiTextEn.Translate("Special currency"), () => Notice(
-                UiTextEn.Translate($"Special currency: {PlayerCoins.WarCoin} war coins, ") +
-                UiTextEn.Translate($"{PlayerCoins.AlpacaCoin} alpaca coins"))),
+            ("SpecialCoin", UiTextEn.Translate("Special currency"), () =>
+            {
+                if (GetTree().CurrentScene.FindChild(
+                        "SpecialCoinWindow", true, false)
+                        is SpecialCoinWindow sc)
+                    sc.Open();
+            }),
             ("BO", UiTextEn.Translate("Sort items"), SortBag),
         };
         foreach (var (icon, tip, act) in funcs)
         {
             var b = new TextureButton
             {
+                Name = "BagFunc" + icon,
                 TooltipText = tip,
                 StretchMode = TextureButton.StretchModeEnum.KeepAspectCentered,
                 IgnoreTextureSize = true,
@@ -487,14 +508,14 @@ public partial class InventoryWindow : Control
         _ => UiTextEn.Translate("All"),
     };
 
-    /// <summary>Monnaie : or en entier + argent (reste /100) +
+    /// <summary>Monnaie : or en entier + argent (reste %1000) +
     /// points mall en « gift » (le « 550 🪙  6 💎 » du ref) —
     /// scrap laissé à 0 faute de compteur dédié.</summary>
     private void RefreshMoney()
     {
         var money = PlayerVitals.Gold;
-        if (_goldText != null) _goldText.Text = $"{money / 100:#,0}";
-        if (_silverText != null) _silverText.Text = $"{money % 100}";
+        if (_goldText != null) _goldText.Text = $"{money / 1000:#,0}";
+        if (_silverText != null) _silverText.Text = $"{money % 1000}";
         if (_giftText != null)
             _giftText.Text = $"{ItemMallState.Points}";
         if (_scrapText != null) _scrapText.Text = "0";
@@ -669,7 +690,7 @@ public partial class InventoryWindow : Control
                 tr?.QueueFree();
                 slot.TooltipText = i == 0
                     ? UiTextEn.Translate("Backpack")
-                    : UiTextEn.Translate($"Bag {i}");
+                    : UiTextEn.Translate("Bag %s1").Replace("%s1", i.ToString());
                 continue;
             }
             if (tr == null)
@@ -800,6 +821,21 @@ public partial class InventoryWindow : Control
                 GD.PrintErr($"[inv] dispatch : {ex}");
             }
         }
+        if (_channelItem != 0 &&
+            Time.GetTicksMsec() >= _channelUntilMs)
+            _channelItem = 0;
+        if (_channelItem != 0 &&
+            InputMap.HasAction("eden_cancel_cast") &&
+            Input.IsActionJustPressed("eden_cancel_cast") &&
+            GetViewport().GuiGetFocusOwner() is not
+                (LineEdit or TextEdit))
+        {
+            // SpellBreak natif brise les DEUX canaux (sort +0x94,
+            // item +0x90) — même paquet 13 pour le canal d'item.
+            _channelItem = 0;
+            Send(new ZoneSpellBreak());
+            CastBar.Instance?.CancelCast();
+        }
     }
 
     /// <summary>Abonnements NCID — handlers sur le thread réseau,
@@ -898,7 +934,32 @@ public partial class InventoryWindow : Control
                          $"result={m.Result} ({name})");
             });
         });
-        GD.Print("[inv] binds 274/275/277/291/303 posés");
+        // 407 ClientUseItemTime — canalisation d'usage armée par le
+        // serveur (S_Item col20 ≠0) : barre de cast avec la durée de la
+        // table item. 408 → interruption (barre annulée, item conservé).
+        s.OnZone(407, r =>
+        {
+            var m = new ZoneClientUseItemTime();
+            m.Deserialize(r);
+            _pending.Enqueue(() =>
+            {
+                var def = LookupDef((int)m.Field1);
+                var name = TextResolver.ItemName((int)m.Field1)
+                    ?? def?.Name ?? $"#{m.Field1}";
+                var secs = Math.Max(0.1f, (def?.UseTimeDs ?? 10) / 10f);
+                _channelItem = (int)m.Field1;
+                _channelUntilMs = Time.GetTicksMsec() +
+                    (ulong)(secs * 1000) + 500;
+                CastBar.Instance?.BeginCast(secs, name);
+            });
+        });
+        s.OnZone(408, _ =>
+            _pending.Enqueue(() =>
+            {
+                _channelItem = 0;
+                CastBar.Instance?.CancelCast();
+            }));
+        GD.Print("[inv] binds 274/275/277/291/303/407/408 posés");
     }
 
     /// <summary>Application locale d'un move confirmé (277 ok).
@@ -1178,6 +1239,16 @@ public partial class InventoryWindow : Control
             if (c.Slot == slot && c.Bag == bag && c.Visible) c.Shake();
         var def = LookupDef(it.ItemId);
         if (def == null) return;
+        // Parchemin/pierre de fortification (kind 46) : « 右鍵使用可開啟
+        // 強化介面 » natif — PlayerAction(13) ouvre l'enclume (432 op 9)
+        // sans consommer la pierre, qui se place ensuite dans la
+        // fenêtre. Sans ce routage le scroll tombait dans ItemUse.
+        if (def.Kind == 46 || def.EquipLoc == 46)
+        {
+            Send(new ZonePlayerAction
+                { Action = 13, Param1 = -1, Param2 = -1, Param3 = -1 });
+            return;
+        }
         // Équipable joueur : kinds 1-34/37-40 + loc résolue —
         // flux natif : SwitchItemLocation puis UpdateEquipment.
         if (ZoneItemActions.IsPlayerEquippableKind(def.Kind) &&
@@ -1227,6 +1298,19 @@ public partial class InventoryWindow : Control
                      $"-> porte-sacs {holder} (+{def.BagCapacity} cases)");
             return;
         }
+        // Item-sur-item natif (use-type 3/5 — gemmes kind 45, scrolls
+        // d'enchant 56/79) : un usage sans cible est un ack neutre
+        // serveur. Le natif prend l'item en « mode cible » (curseur
+        // baguette) ; chez nous il devient l'item en main — le clic
+        // suivant sur un équipement déclenche l'item-on-item via
+        // OnCellDrop.
+        if (def.UseType is 3 or 5)
+        {
+            Held = (bag, slot);
+            Notice(UiTextEn.Translate(
+                "Click on an equipment to apply the item."));
+            return;
+        }
         // Consommable (types d'usage 1/2 — potions, nourriture) ou
         // tout item avec type d'usage non nul : ItemUse natif.
         if (def.UseType != 0)
@@ -1261,6 +1345,26 @@ public partial class InventoryWindow : Control
     {
         if (srcSlot == dstSlot && srcBag == dstBag) return;
         if (!_slots.TryGetValue((srcBag, srcSlot), out var it)) return;
+        // Item-sur-item (use-type 3/5) posé sur une case occupée :
+        // ItemUse avec cible (contType 0 = sac) — UseItemToItemControl
+        // natif, la validation (gemme→socket, scroll→équipement) est
+        // serveur.
+        var srcDef = LookupDef(it.ItemId);
+        if (srcDef?.UseType is 3 or 5
+            && _slots.TryGetValue((dstBag, dstSlot), out var tgt))
+        {
+            Send(new ZoneItemUse
+            {
+                ContainerType = 0, ContainerIndex = (short)srcBag,
+                Slot = (short)srcSlot,
+                TargetContainerType = 0,
+                TargetContainerIndex = (short)dstBag,
+                TargetLoc = (short)dstSlot,
+            });
+            GD.Print($"[inv] item-on-item {it.ItemId} → {tgt.ItemId} " +
+                     $"(sac{dstBag},slot{dstSlot})");
+            return;
+        }
         var amount = it.Amount > 0 ? it.Amount : 1;
         if (split && amount > 1)
         {
@@ -1335,10 +1439,19 @@ public partial class InventoryWindow : Control
     {
         if (Held != null) { Held = null; return; }
         if (cell.Item is not { } it || it.ItemId == 0) return;
+        var def = LookupDef(it.ItemId);
+        // Boutique PNJ ouverte : clic droit = vendre l'item au
+        // marchand (flow natif — la file buyback le conserve pour
+        // rachat). Confirmation par item (action irréversible
+        // immédiate : NCID 23).
+        if (ShopState.IsOpen)
+        {
+            AskSellToShop(it, def);
+            return;
+        }
         // Clic droit natif = utiliser / équiper directement (Ctrl+clic
         // reste le chemin de prévisualisation). Un équipement
         // « Bind on Equip » non lié demande confirmation d'abord.
-        var def = LookupDef(it.ItemId);
         if (def != null && ItemTipFormat.BindsOnEquip(def.Flags) &&
             !ItemTipFormat.IsBound(it.Flags))
             AskBind(it.Bag, it.Slot, it.ItemId);
@@ -1347,6 +1460,49 @@ public partial class InventoryWindow : Control
     }
 
     private ConfirmationDialog? _bindDlg;
+    private ConfirmationDialog? _sellDlg;
+
+    /// <summary>Vente au marchand ouvert (clic droit sac pendant
+    /// shop) — NCID 23 SellItems du stack complet, au prix
+    /// c_item.SellPrice × qté ; l'item rejoint la file buyback
+    /// (onglet 買回 de la boutique).</summary>
+    private void AskSellToShop(InventorySlot it, ItemTable.ItemDef? def)
+    {
+        var price = def?.SellPrice ?? 0;
+        if (price <= 0)
+        {
+            Notice(UiTextEn.Translate("This item can't be sold"));
+            return;
+        }
+        var name = def?.Name is { Length: > 0 } n ? n
+            : TextResolver.ItemName(it.ItemId) ?? $"#{it.ItemId}";
+        var qty = Math.Max(it.Amount, 1);
+        var total = (long)price * qty;
+        _sellDlg?.QueueFree();
+        var dlg = new ConfirmationDialog
+        {
+            Title = UiTextEn.Translate("Sell"),
+            DialogText = UiTextEn.Translate("Sell %s1 for %s2?")
+                .Replace("%s1", qty > 1 ? $"{name} ×{qty}" : name)
+                .Replace("%s2", TransportWindow.FormatMoney(
+                    (int)Math.Min(total, int.MaxValue))),
+            OkButtonText = UiTextEn.Translate("Sell"),
+            CancelButtonText = UiTextEn.Translate("Cancel"),
+            Exclusive = true,
+        };
+        dlg.Confirmed += () =>
+        {
+            var m = new ZoneSellItems();
+            m.Items.Add(((ushort)it.Slot, (ushort)qty,
+                (ushort)it.Bag));
+            Send(m);
+            dlg.QueueFree();
+        };
+        dlg.Canceled += () => dlg.QueueFree();
+        _sellDlg = dlg;
+        AddChild(dlg);
+        dlg.PopupCentered();
+    }
 
     private void AskBind(int bag, int slot, int itemId)
     {

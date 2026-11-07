@@ -165,7 +165,7 @@ public static class GmGuildHandlers
         if (nameEnd > 0 && int.TryParse(args[nameEnd - 1], out var lv)
             && lv is >= 1 and <= 10) { level = lv; nameEnd--; }
         if (nameEnd < 1)
-            return "usage: //create_guild <nom> [niveau 1-10] [node 501|502]";
+            return "usage: //create_guild <nom> [niveau 1-12] [node 501|502]";
         var name = string.Join(' ', args[..nameEnd]);
         if (s.Guilds.GetGuildOf(ctx.CharId) is { } cur)
             return $"[GM] déjà dans la guilde #{cur.Id} '{cur.Name}'";
@@ -230,8 +230,8 @@ public static class GmGuildHandlers
         else if (args.Length >= 1 && int.TryParse(args[0], out level))
             familyId = 0;
         else
-            return "usage: //guild_level [familyId] <niveau 1-10>";
-        level = Math.Clamp(level, 1, 10);
+            return "usage: //guild_level [familyId] <niveau 1-12>";
+        level = Math.Clamp(level, 1, 12);
         var t = await ResolveTargetGuildAsync(ctx, s,
             familyId > 0 ? [familyId.ToString()] : [], 0);
         if (t.guild is null) return t.error;

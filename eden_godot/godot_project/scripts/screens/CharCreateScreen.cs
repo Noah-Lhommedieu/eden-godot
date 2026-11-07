@@ -69,9 +69,9 @@ public partial class CharCreateScreen : Control
         panel.AnchorLeft = 1f;
         panel.AnchorRight = 1f;
         panel.AnchorTop = 0f;
-        panel.AnchorBottom = 0f;
+        panel.AnchorBottom = 1f;
         panel.OffsetLeft = -312; panel.OffsetRight = -12;
-        panel.OffsetTop = 12; panel.OffsetBottom = 536;
+        panel.OffsetTop = 12; panel.OffsetBottom = -12;
         panel.CustomMinimumSize = new Vector2(300, 524);
         // Chrome natif + fond sombre — le panneau flottait transparent
         // sur le temple (« trous » entre les contrôles).
@@ -82,12 +82,27 @@ public partial class CharCreateScreen : Control
                 new Color(0.05f, 0.055f, 0.08f, 0.94f));
         }
         AddChild(panel);
-        var vb = new VBoxContainer();
-        vb.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-        vb.OffsetLeft = 16; vb.OffsetRight = -16;
-        vb.OffsetTop = 12; vb.OffsetBottom = -12;
+        // Le contenu (cyclers + traits + statut + boutons) dépasse
+        // ~524 px : panneau étiré sur la hauteur fenêtre + scroll de
+        // secours pour les petites résolutions — sinon les boutons
+        // Create/Back étaient tronqués en 1600×900.
+        var scroll = new ScrollContainer
+        {
+            HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
+        };
+        scroll.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
+        scroll.OffsetLeft = 8; scroll.OffsetRight = -8;
+        scroll.OffsetTop = 8; scroll.OffsetBottom = -8;
+        panel.AddChild(scroll);
+        var vb = new VBoxContainer
+        {
+            SizeFlagsHorizontal = SizeFlags.ExpandFill,
+        };
+        vb.SetAnchorsPreset(LayoutPreset.TopWide);
+        vb.OffsetLeft = 8; vb.OffsetRight = -8;
+        vb.OffsetTop = 4; vb.OffsetBottom = -4;
         vb.AddThemeConstantOverride("separation", 6);
-        panel.AddChild(vb);
+        scroll.AddChild(vb);
 
         vb.AddChild(new Label { Text = UiTextEn.Translate("New character"),
             HorizontalAlignment = HorizontalAlignment.Center });
@@ -96,7 +111,8 @@ public partial class CharCreateScreen : Control
         vb.AddChild(_name);
         vb.AddChild(new HSeparator());
         _race = new OptionButton();
-        foreach (var r in Races) _race.AddItem($"{r.Id} — {r.Name}");
+        foreach (var r in Races)
+            _race.AddItem($"{r.Id} — {UiTextEn.Translate(r.Name)}");
         vb.AddChild(_race);
         _gender = new OptionButton();
         _gender.AddItem(UiTextEn.Translate("Girl"), 0); _gender.AddItem(UiTextEn.Translate("Boy"), 1);
@@ -183,6 +199,12 @@ public partial class CharCreateScreen : Control
             else if (a.StartsWith("--create-eyes=") &&
                      int.TryParse(a["--create-eyes=".Length..], out var ei))
                 _eyes = ei;
+            else if (a.StartsWith("--create-class=") &&
+                     int.TryParse(a["--create-class=".Length..], out var ci))
+            {
+                var cidx = Array.IndexOf(StartClasses, ci);
+                if (cidx >= 0) _class.Selected = cidx;
+            }
         }
         RefreshModel();
     }
@@ -199,7 +221,7 @@ public partial class CharCreateScreen : Control
     {
         _bounds[title] = max;
         var hr = new HBoxContainer();
-        var name = new Label { Text = title,
+        var name = new Label { Text = UiTextEn.Translate(title),
             CustomMinimumSize = new Vector2(130, 0) };
         var minus = new Button { Text = "←" };
         var value = new Label { Text = "0",

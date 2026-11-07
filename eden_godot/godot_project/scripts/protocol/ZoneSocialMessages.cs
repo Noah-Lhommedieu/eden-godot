@@ -1365,9 +1365,12 @@ public sealed record GuildBoardMessage(
     string PlayerName);
 
 /// <summary>S→C monde NCID 51 — ClientFamilySchedule : agenda +
-/// message-board de guilde. Format (FamilyPackets.FamilySchedule,
-/// Execute ServerQueryFamilyInfo) :
-/// `[u8 type][u16 n][n×record][u8 flag][s16 état]`.</summary>
+/// message-board de guilde. <b>Wire maison</b>
+/// (FamilyPackets.FamilySchedule) : `[u8 type][u16 n][n×record]
+/// [u8 flag][s16 état]` — le format natif (Serialize monde
+/// @0x080cd…) est par type (1=ajout 1 record+i32, 2=del s16,
+/// 3=liste, 5=solo) ; on émet toujours la liste complète, Type/Flag
+/// sont désérialisés mais non consommés (ApplySchedule = clear+fill).</summary>
 public sealed class WorldFamilySchedule : NetMessage
 {
     public override int Opcode => 51;
@@ -1791,7 +1794,7 @@ public static class GuildState
     public static int Honor;
     /// <summary>Titres des 9 rangs (member/leader/cadre_2..8 —
     /// 50 type 0/3).</summary>
-    public static readonly string[] Titles = new string[9];
+    public static readonly string[] Titles = Enumerable.Repeat("", 9).ToArray();
     /// <summary>14 privilèges (1=channel…14=storage03 — 50 type 0/4).</summary>
     public static readonly int[] Privileges = new int[14];
 
@@ -1966,8 +1969,12 @@ public static class GuildState
         SelfRevision = m.Revision;
         if (m.FamilyId == 0 && FamilyId != 0)
             ClearGuild();
-        else if (m.FamilyId != 0 && FamilyName(m) != Name)
-            Name = FamilyName(m);
+        else if (m.FamilyId != 0)
+        {
+            FamilyId = m.FamilyId;
+            var n = FamilyName(m);
+            if (n.Length > 0) Name = n;
+        }
         Changed?.Invoke();
         static string FamilyName(ZoneClientChangeFamily mm) =>
             mm.FamilyName.Length > 0 ? mm.FamilyName : "";

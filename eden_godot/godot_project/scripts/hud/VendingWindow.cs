@@ -51,6 +51,7 @@ public partial class VendingWindow : Control
     // --- panneau achat (StallBuy) ---
     private Control? _buyWnd;
     private ItemList? _buyList;
+    private MclList? _buyMcl;      // Listbox natif = MultiColumnList2
     private Label? _buyTitle, _buyGold;
     private BaseButton? _buyBtn, _buyCloseBtn;
     private int _buySel = -1;
@@ -62,6 +63,7 @@ public partial class VendingWindow : Control
     private LineEdit? _titleEdit;
     private TextEdit? _titleEditMulti;
     private ItemList? _sellList;
+    private MclList? _sellMcl;
     private Label? _sellGold, _sellStatus;
     private BaseButton? _stageBtn, _unstageBtn, _stallBtn;
     private InventorySlot? _pendingItem;   // item droppé en attente de prix
@@ -158,13 +160,13 @@ public partial class VendingWindow : Control
         if (m.Action == 1) return null;      // [1][2] succès — rien
         return m.Detail switch
         {
-            0x11 => "Stall: invalid state (dead/busy/already vending).",
-            0x12 => "Stall: too soon — wait ~1.5 s.",
-            0x13 => "Stall: stalls are only allowed on map S001.",
-            0x14 => "Stall: title must not be empty.",
-            0x15 => "Stall: duplicate item in the list.",
-            0x16 => "Stall: too many free (price 0) goods.",
-            _ => $"Stall: refused (0x{m.Detail:x2}).",
+            0x11 => UiTextEn.Translate("Stall: invalid state (dead/busy/already vending)."),
+            0x12 => UiTextEn.Translate("Stall: too soon — wait ~1.5 s."),
+            0x13 => UiTextEn.Translate("Stall: stalls are only allowed on map S001."),
+            0x14 => UiTextEn.Translate("Stall: title must not be empty."),
+            0x15 => UiTextEn.Translate("Stall: duplicate item in the list."),
+            0x16 => UiTextEn.Translate("Stall: too many free (price 0) goods."),
+            _ => UiTextEn.Translate("Stall: refused (0x%s1).").Replace("%s1", m.Detail.ToString("x2")),
         };
     }
 
@@ -265,12 +267,18 @@ public partial class VendingWindow : Control
         _buyCloseBtn =
             TopLeftVitals.Find<BaseButton>(_buyWnd, "CloseBtn");
         _buyList = FindItemList(_buyWnd);
+        _buyMcl = FindMcl(_buyWnd);
         if (_buyBtn != null) _buyBtn.Pressed += DoBuy;
         if (_buyCloseBtn != null) _buyCloseBtn.Pressed += DoCloseView;
         if (_buyList != null)
         {
             _buyList.ItemSelected += i => _buySel = (int)i;
             _buyList.ItemActivated += i => { _buySel = (int)i; DoBuy(); };
+        }
+        if (_buyMcl != null)
+        {
+            _buyMcl.RowSelected += r => _buySel = r;
+            _buyMcl.RowActivated += r => { _buySel = r; DoBuy(); };
         }
         DragHelper.EnsureTitleBar(_buyWnd, UiTextEn.Translate("Stall"));
         DragHelper.Persist(_buyWnd, "stallbuy");
@@ -288,6 +296,12 @@ public partial class VendingWindow : Control
     private static ItemList? FindItemList(Control? root) =>
         root?.FindChildren("*", "ItemList", true, false)
             .Cast<ItemList>().FirstOrDefault();
+
+    /// <summary>Première MclList du panneau (Listbox natif des
+    /// layouts étal = MultiColumnList2).</summary>
+    private static MclList? FindMcl(Control? root) =>
+        root?.FindChildren("*", nameof(MclList), true, false)
+            .Cast<MclList>().FirstOrDefault();
 
     private Control BuildBuyFallback()
     {
@@ -374,6 +388,7 @@ public partial class VendingWindow : Control
             .FindChildren("*", "TextEdit", true, false)
             .Cast<TextEdit>().FirstOrDefault();
         _sellList = FindItemList(_sellWnd);
+        _sellMcl = FindMcl(_sellWnd);
         _sellGold = TopLeftVitals.Find<Label>(_sellWnd, "goldText");
         var silverTxt =
             TopLeftVitals.Find<Label>(_sellWnd, "silverText");
@@ -702,10 +717,11 @@ public partial class VendingWindow : Control
     /// <summary>Remplit la liste des marchandises de l'étal regardé.</summary>
     private void RefreshBuyList()
     {
-        if (_buyList == null) return;
-        _buyList.Clear();
         if (_buyTitle != null)
             _buyTitle.Text = VendingState.Title;
+        if (_buyMcl != null) { RefreshBuyMcl(); return; }
+        if (_buyList == null) return;
+        _buyList.Clear();
         foreach (var g in VendingState.Goods)
         {
             var name = TextResolver.ItemName((int)g.ItemId)
@@ -721,15 +737,59 @@ public partial class VendingWindow : Control
                 icon: tex);
             _buyList.SetItemTooltipEnabled(idx, true);
             _buyList.SetItemTooltip(idx,
-                $"{name}{qty}\nPrice: {g.Price:N0} g (whole lot)");
+                $"{name}{qty}\n" + UiTextEn.Translate("Price: %s1 g (whole lot)").Replace("%s1", g.Price.ToString("N0")));
         }
         if (VendingState.Goods.Count == 0)
             _buyList.AddItem(UiTextEn.Translate("(stall empty)"));
     }
 
+    /// <summary>Variante MCL native : colonnes [icône][nom][niv][prix]
+    /// (樣式/名稱/等級/賣價 du layout).</summary>
+    private void RefreshBuyMcl()
+    {
+        _buyMcl!.ClearRows();
+        foreach (var g in VendingState.Goods)
+        {
+            var name = TextResolver.ItemName((int)g.ItemId)
+                ?? $"#{g.ItemId}";
+            var qty = g.LotQuantity > 1 ? $" ×{g.LotQuantity}" : "";
+            var def = InventoryWindow.LookupDef((int)g.ItemId);
+            Texture2D? tex = null;
+            if (def != null && def.Code.Length > 0)
+                tex = AssetCatalog.GetTexture(
+                    $"UI/itemicon/{def.Code}.png");
+            _buyMcl.AddRow(["", $"{name}{qty}", "",
+                $"{g.Price:N0}"], icon: tex);
+        }
+        if (VendingState.Goods.Count == 0)
+            _buyMcl.AddRow([UiTextEn.Translate("(stall empty)")]);
+    }
+
     /// <summary>Remplit la liste de staging / mes marchandises.</summary>
     private void RefreshSellList()
     {
+        if (_sellMcl != null)
+        {
+            _sellMcl.ClearRows();
+            foreach (var e in VendingState.StagedItems)
+            {
+                var name = TextResolver.ItemName(e.ItemId)
+                    ?? $"#{e.ItemId}";
+                var qty = e.Quantity > 1 ? $" ×{e.Quantity}" : "";
+                var def = InventoryWindow.LookupDef(e.ItemId);
+                Texture2D? tex = null;
+                if (def != null && def.Code.Length > 0)
+                    tex = AssetCatalog.GetTexture(
+                        $"UI/itemicon/{def.Code}.png");
+                _sellMcl.AddRow(["", $"{name}{qty}", "",
+                    $"{e.Price:N0}"], icon: tex);
+            }
+            if (VendingState.StagedItems.Count == 0)
+                _sellMcl.AddRow([UiTextEn.Translate(
+                    "(drop items from your bag)")]);
+        }
+        else
+        {
         if (_sellList == null) return;
         _sellList.Clear();
         var rows = VendingState.StagedItems;
@@ -745,10 +805,11 @@ public partial class VendingWindow : Control
             var idx = _sellList.AddItem(
                 $"  {name}{qty}   —   {e.Price:N0} g", icon: tex);
             _sellList.SetItemTooltip(idx,
-                $"{name}{qty}\nPrice: {e.Price:N0} g (whole lot)");
+                $"{name}{qty}\n" + UiTextEn.Translate("Price: %s1 g (whole lot)").Replace("%s1", e.Price.ToString("N0")));
         }
         if (rows.Count == 0)
             _sellList.AddItem(UiTextEn.Translate("(drop items from your bag)"));
+        }
         // Bouton principal : Open ↔ Close selon l'état serveur.
         if (_stallBtn is Button b)
             b.Text = VendingState.Selling ? UiTextEn.Translate("Close stall") : UiTextEn.Translate("Open stall");
@@ -756,7 +817,7 @@ public partial class VendingWindow : Control
         if (VendingState.Selling)
             SetSellStatus(UiTextEn.Translate("Stall open — items stay in your bag."));
         else if (VendingState.LastStatus is { Action: 0 } st)
-            SetSellStatus($"Refused (0x{st.Detail:x2}).");
+            SetSellStatus(UiTextEn.Translate("Refused (0x%s1).").Replace("%s1", st.Detail.ToString("x2")));
     }
 
     private void RefreshGold()

@@ -429,6 +429,7 @@ public sealed partial class ZoneEntryFlow
         sc.NodeId = (short)chr.NodeId;
         sc.PosX = (float)chr.PositionX;
         sc.PosZ = (float)chr.PositionY; // (x,y) = plan au sol
+        sc.PosY = (float)chr.PositionZ; // hauteur persistée
         var savedType = _services.GameData.Nodes
             .FirstOrDefault(n => n.Id == sc.NodeId)?.Type ?? 0;
         if (InstanceNodeTypes.Contains(savedType))
@@ -442,13 +443,13 @@ public sealed partial class ZoneEntryFlow
                 .FirstOrDefault(a => a.Type == "BORN");
             if (born != null)
             {
-                sc.PosX = born.X; sc.PosZ = born.Y;
+                sc.PosX = born.X; sc.PosZ = born.Y; sc.PosY = born.Z;
                 sc.Facing = born.Facing;
             }
             else if (scene?.Positions.Count > 0)
             {
                 var sp = scene.Positions[0];
-                sc.PosX = sp.X; sc.PosZ = sp.Y;
+                sc.PosX = sp.X; sc.PosZ = sp.Y; sc.PosY = sp.Z;
             }
             else
             {
@@ -519,7 +520,7 @@ public sealed partial class ZoneEntryFlow
             EdenLog.Write($"[Zone-Entry] node {sc.NodeId} sans " +
                 "scène — fallback node 2");
             sc.NodeId = 2;
-            sc.PosX = 0; sc.PosZ = 0;
+            sc.PosX = 0; sc.PosZ = 0; sc.PosY = 0;
         }
         sc.InstanceGroup = ResolveInstanceGroup(sc, sc.NodeId);
         // Vitals — agrégat équipement porté BRUT (avant

@@ -309,6 +309,12 @@ public static class SocialHandlers
                 }
                 await s.Characters.AddGoldAsync(charId, -msg.Value);
                 await s.Guilds.DonateAsync(charId, msg.Value);
+                // Le monde est l'autorité trésorerie (InstanceCreate
+                // la lit) — sans ce relais le gate 0x6ae refuse à tort.
+                if (s.World is { Connected: true } w
+                    && s.Guilds.GetGuildOf(charId) is { } gd)
+                    await w.SendTextCommandAsync(
+                        $"family_donate {gd.Id} {msg.Value}", token);
                 EdenLog.Write($"[Zone] char={charId} donne {msg.Value} à la famille");
             });
 

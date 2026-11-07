@@ -356,8 +356,11 @@ public static class PlayerSkills
         // (hotbar + fenêtre Classe se reconstruisaient 70 fois).
         if (_changedQueued) return;
         _changedQueued = true;
-        Godot.Callable.From(() => { _changedQueued = false; Changed?.Invoke(); }).CallDeferred();
+        Defer(() => { _changedQueued = false; Changed?.Invoke(); });
     }
 
     private static bool _changedQueued;
+
+    /// <summary>Planifie à l'image suivante (posé par le client Godot) ; immédiat par défaut (tests purs).</summary>
+    public static Action<Action> Defer { get; set; } = a => a();
 }

@@ -35,14 +35,12 @@ namespace Eden.Zone;
 /// </summary>
 public sealed partial class ZoneEntryFlow
 {
-    /// <summary>DEV — plafond de durée des ordres de travail en
-    /// unités de 100 ms (100 = 10 s). Le natif chronomètre les
-    /// ordres non-instantanés en minutes (col durée × 600, ex. plan
-    /// de mine = 30 min) ; pendant le dev on borne à 10 s pour
-    /// itérer vite. <b>dev : remettre 30 min natif plus tard</b>
-    /// (supprimer ce plafond — il est appliqué à l'armement et au
-    /// rechargement des ordres encore en cours).</summary>
-    private const int DevWorkDurationUnits = 100;
+    /// <summary>Cap optionnel des durées de travail — 0 = durées
+    /// natives des tables (col min × 600 : mine 30 min, ferme 20,
+    /// autel 25). Un plafond de dev s'active via
+    /// <c>EDEN_DEV_WORK_CAP</c> (unités de 100 ms, ex. 100 = 10 s) —
+    /// voir <see cref="EdenConfig.DevWorkCapUnits"/>.</summary>
+    private static int DevWorkCap => Eden.Core.EdenConfig.DevWorkCapUnits;
 
     // ========================================================
     //  170 — CNE_CZ_ZoneServerPlayerWork (démarrage d'ordre)
@@ -88,6 +86,74 @@ public sealed partial class ZoneEntryFlow
             if (err.TextId > 0)
                 await SendTextIndexAsync(session, err.TextId, token);
             return;
+        }
+
+        // Gates famille natifs (CheckToCombine/CheckToCollect) — la
+        // station de hall exige un bâtiment lié à l'op works :
+        // absent → 0x251, niveau insuffisant → 0x392, durabilité
+        // < 1 → 0xa09 ; sinon fm_name/fm_id/building_item_id armés.
+        Eden.Core.Game.Family.FamilyBuildingItem? bld = null;
+        // Hors hall de famille (Aven, zone industrielle) : param_2 ==
+        // null dans CheckToCollect/CheckToCombine → toute recette dont
+        // le niveau de bâtiment requis > 2 est refusée (0x9f1) —
+        // « les niveaux 3 et plus nécessitent une visite en ville de
+        // guilde » (guide le-craft.md). Natif CheckToCombine
+        // @0x08163cd0 (`2 < (byte)param_4[8]`), CheckToCollect
+        // @0x08162a00 (`2 < param_4+0x14`).
+        var inHall = st.VisitedFamilyInstanceId != 0
+            && IsInFamilyInstanceNode(st);
+        if (!inHall)
+        {
+            var needed = plan.IsCollect
+                ? plan.Collect!.BuildingLevel : plan.Combine!.BuildingLevel;
+            if (needed > 2)
+            {
+                EdenLog.Write($"[VDG-Work] refus 0x9f1 char={st.CharId} " +
+                    $"type={workType} id={workId} bldLvReq={needed} " +
+                    "(hors ville de guilde)");
+                await SendTextIndexAsync(session, 0x9f1, token);
+                return;
+            }
+        }
+        else if (st.WorkOpBuildingItemId == 0)
+        {
+            // Dans un hall : GetBuildingItemByItemNetID(0) → null →
+            // 0x251 « No BuildingItem » (natif).
+            EdenLog.Write($"[VDG-Work] refus 0x251 char={st.CharId} " +
+                $"type={workType} id={workId} : aucun bâtiment lié " +
+                $"à l'op works visit_fm={st.VisitedFamilyInstanceId}");
+            await SendTextIndexAsync(session, 0x251, token);
+            return;
+        }
+        if (st.WorkOpBuildingItemId != 0
+            && st.VisitedFamilyInstanceId != 0)
+        {
+            bld = await ResolveWorksBuildingAsync(st);
+            if (bld == null)
+            {
+                EdenLog.Write($"[Zone] Work refusé char={st.CharId} " +
+                    $"No BuildingItem[{st.WorkOpBuildingItemId}] " +
+                    $"visit_fm={st.VisitedFamilyInstanceId}");
+                await SendTextIndexAsync(session, 0x251, token);
+                return;
+            }
+            var reqLevel = plan.IsCollect
+                ? plan.Collect!.BuildingLevel : plan.Combine!.BuildingLevel;
+            if (bld.Level < reqLevel)
+            {
+                await SendTextIndexAsync(session, 0x392, token);
+                return;
+            }
+            if (bld.Durability < 1)
+            {
+                await SendTextIndexAsync(session, 0xa09, token);
+                return;
+            }
+            // Coût taxé (op+0x18 natif) : tax = round(rate×gold/100).
+            if (st.WorkOpTaxRate != 0)
+                plan.GoldCost = Eden.Core.Game.Family
+                    .FamilyBuildingWorkRules.TaxedGold(plan.GoldCost,
+                        st.WorkOpTaxRate);
         }
 
         // Booster optionnel — kinds natifs CChanceItem 0x1f43..0x1f48
@@ -158,6 +224,7 @@ public sealed partial class ZoneEntryFlow
             BoosterBag = booster?.BagId ?? -1,
             BoosterSlot = booster?.Slot ?? -1,
             BoosterItemId = booster?.ItemId ?? 0,
+            TaxRate = st.WorkOpTaxRate,
         };
         // Consommation immédiate (recette chronométrée) — l'instantané
         // consomme à la matérialisation (SetAllItemLoc natif).
@@ -178,8 +245,18 @@ public sealed partial class ZoneEntryFlow
         work.WorkEvent = 0;
         work.FailureRateOfDecline = 0;
         work.BonusItemAmount = 0;
-        work.FmName = plan.IsCollect
-            ? plan.Collect!.Name : plan.Combine!.ProductName;
+        work.FmName = bld != null
+            ? (_services.Guilds.GetGuild(st.VisitedFamilyInstanceId)
+                ?.Name ?? string.Empty)
+            : plan.IsCollect
+                ? plan.Collect!.Name : plan.Combine!.ProductName;
+        if (bld != null)
+        {
+            // fm_id (+0x28) = famille propriétaire de la ville,
+            // building_item_id (+0x2c) = uid DB de la station.
+            work.FmId = st.VisitedFamilyInstanceId;
+            work.BuildingItemId = bld.Id;
+        }
         work.ExtSuccessRate = plan.ExtSuccessRate;
         work.ExtBuildingRate = plan.ExtBuildingRate;
         work.Running = true;
@@ -194,16 +271,32 @@ public sealed partial class ZoneEntryFlow
                 durUnits = Math.Max(0,
                     (int)(durUnits * (1 + craftPct)));
         }
-        // DEV — durée plafonnée à <see cref="DevWorkDurationUnits"/>
-        // (10 s) ; la durée native est col(min)×600 = 30 min pour la
-        // mine. dev : remettre 30 min natif plus tard.
-        durUnits = Math.Min(durUnits, DevWorkDurationUnits);
+        // Durées natives des tables ; le cap optionnel
+        // EDEN_DEV_WORK_CAP ne borne que si > 0 (dev rapide).
+        if (DevWorkCap > 0)
+            durUnits = Math.Min(durUnits, DevWorkCap);
         work.FinishAtMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
             + (long)durUnits * WorkOrderService.UnitMs;
         st.WorkDeferredLocs[workNum] = locs;
         await _services.WorksRepo.EnsureAndSaveAsync(
             (int)st.CharId, work);
         st.WorkOpStarted = true;
+        // Usure au démarrage (recettes non instantanées) —
+        // ToCombine/ToCollect natif : rand%100 < chance → -amount.
+        if (bld != null && !plan.Deferred)
+        {
+            var (wearChance, wearAmount) = plan.IsCollect
+                ? (plan.Collect!.BuildingDamageChance,
+                   plan.Collect!.BuildingDamage)
+                : (plan.Combine!.BuildingDamageChance,
+                   plan.Combine!.BuildingDamage);
+            if (wearAmount > 0
+                && Eden.Core.Game.Family.FamilyBuildingWorkRules
+                    .RollWear(Random.Shared, wearChance,
+                        inclusive: false))
+                await WearBuildingAsync(session, st, work.FmId, bld,
+                    -wearAmount, token);
+        }
 
         // 433 ClientStrengthenCasting [s16 workType][s16 durée×100ms]
         // [s16 0] — combine : toujours ; collect : instant/type-14.
@@ -323,6 +416,9 @@ public sealed partial class ZoneEntryFlow
                 for (var n = Math.Max(p.Amount, 1); n > 0; n--)
                     await CreateWorkItemAsync(session, st, p, token);
             }
+            // SetItemAchievement natif — AddItemFromWork
+            // (@0x080b1750) l'appelle sur chaque produit réclamé.
+            await TryGrantItemAchievementAsync(session, st, p.ItemId);
         }
 
         // EXP joueur — EndCollect/WorkResultOK ajoute col8 de la
@@ -334,21 +430,10 @@ public sealed partial class ZoneEntryFlow
             await GrantCharExpAsync(session, st, collect.Exp);
 
         // EXP de famille — S_FamilyCollect col6 / S_FamilyCombine
-        // col3 : le natif envoie « gain_family_exp N » au
-        // MissionServer (TC_GainFamilyExp → CFamily::GainExp).
-        if (work.WorkId > 0
-            && _services.Guilds.GetGuildOf((int)st.CharId) is { } fg)
-        {
-            var famExp = work.WorkType is >= 12 and <= 14
-                ? (_services.GameData.WorkCollectById
-                    .TryGetValue(work.WorkId, out var cw)
-                    ? cw?.FamilyExp ?? 0 : 0)
-                : (_services.GameData.WorkCombineById
-                    .TryGetValue(work.WorkId, out var comb)
-                    ? comb?.FamilyExp ?? 0 : 0);
-            if (famExp > 0)
-                await _services.Guilds.AddExperienceAsync(fg.Id, famExp);
-        }
+        // col3 : le natif l'envoie à la FIN de l'ordre (EndCombine/
+        // EndCollect → SFamily::GainExp de la famille de la ville,
+        // work+0x28), pas au claim ni à la guilde du joueur —
+        // voir CompleteFamilyWorkAsync.
 
         // ResetWork + 500 ClientPlayerWorkResultEnd [s16 workNum].
         st.WorkDeferredLocs.Remove(work.WorkNum);
@@ -397,7 +482,7 @@ public sealed partial class ZoneEntryFlow
             entity.SetEmbeddedId(i, i < p.SocketAmount ? 0 : -1);
         entity.EmbeddedAmount = p.SocketAmount;
         for (var i = 0; i < p.ExtraCombos.Length; i++)
-            entity.ExtraCombos[i] = p.ExtraCombos[i];
+            entity.SetExtraCombo(i, p.ExtraCombos[i]);
         await _services.InventoryRepo.AddItemAsync(entity);
         // 274 natif [id][bag][slot][dur][maxdur] — entité directe.
         await session.SendPacketAsync(274,
@@ -473,13 +558,12 @@ public sealed partial class ZoneEntryFlow
                         emitResult: false, token);
                 else if (work.Running)
                 {
-                    // DEV — même plafond qu'à l'armement : un ordre
-                    // armé avant le cap repart à 10 s à la
-                    // reconnexion. dev : remettre 30 min natif plus
-                    // tard (voir DevWorkDurationUnits).
-                    var devCapMs = (long)DevWorkDurationUnits
+                    // Cap optionnel (EDEN_DEV_WORK_CAP) — identique
+                    // à l'armement : borne aussi les ordres armés
+                    // avant la déco.
+                    var devCapMs = (long)DevWorkCap
                         * WorkOrderService.UnitMs;
-                    if (work.FinishAtMs - now > devCapMs)
+                    if (DevWorkCap > 0 && work.FinishAtMs - now > devCapMs)
                     {
                         work.FinishAtMs = now + devCapMs;
                         await _services.WorksRepo.EnsureAndSaveAsync(
@@ -608,6 +692,10 @@ public sealed partial class ZoneEntryFlow
             if (work.Products.All(p => p.IsEmpty))
                 work.WorkId = -Math.Abs(work.WorkId);
         }
+        // Bloc famille natif — exécuté même sur échec (EndCombine :
+        // le GainBuildingExp/GainExp/usure est hors du test de succès
+        // et conditionné seulement par fm_id ≠ 0).
+        await CompleteFamilyWorkAsync(session, st, work, token);
         work.Running = false;
         work.FinishAtMs = 0;
         st.WorkCts[work.WorkNum]?.Cancel();
@@ -667,11 +755,17 @@ public sealed partial class ZoneEntryFlow
                     $"num={work.WorkNum} → mob {pick.ItemId} " +
                     $"handle={mob.Handle:X8}");
             }
+            // Annonce immédiate (298) : sans ça le mob reste invisible
+            // jusqu'au prochain déplacement du joueur.
+            await UpdateSightAsync(session, st, token, force: true);
         }
         else
             EdenLog.Write($"[Zone] Summon work char={st.CharId} " +
                 $"num={work.WorkNum} : dice sans entrée " +
                 $"(workId={work.WorkId})");
+        // Bloc famille natif d'EndSummon (EXP bâtiment/famille/usure)
+        // — avant ResetWork qui efface fm_id.
+        await CompleteFamilyWorkAsync(session, st, work, token);
         // ResetWork natif — le slot se libère directement (aucune
         // remise d'items : les produits du plan sont le mob).
         st.WorkDeferredLocs.Remove(work.WorkNum);
@@ -741,10 +835,11 @@ public sealed partial class ZoneEntryFlow
         WorkDeferredLocs locs)
     {
         var id = Math.Abs(work.WorkId);
+        WorkOrderService.StartPlan? plan = null;
         if (WorkTypes.IsCollect(work.WorkType)
             && _services.GameData.WorkCollectById
                 .TryGetValue(id, out var collect) && collect != null)
-            return new WorkOrderService.StartPlan
+            plan = new WorkOrderService.StartPlan
             {
                 IsCollect = true, Collect = collect,
                 CatalystQty = Math.Max(collect.CatalystAmount, 1),
@@ -752,11 +847,11 @@ public sealed partial class ZoneEntryFlow
                 Deferred = collect.Instant
                     || work.WorkType == WorkTypes.Summon,
             };
-        if (WorkTypes.IsCombine(work.WorkType)
+        else if (WorkTypes.IsCombine(work.WorkType)
             && _services.GameData.WorkCombineById
                 .TryGetValue(id, out var combine) && combine != null)
         {
-            var plan = new WorkOrderService.StartPlan
+            plan = new WorkOrderService.StartPlan
             {
                 IsCollect = false, Combine = combine,
                 CatalystQty = Math.Max(combine.Materials
@@ -768,9 +863,13 @@ public sealed partial class ZoneEntryFlow
             foreach (var m in combine.Materials)
                 if (m.ItemId != locs.CatalystItemId)
                     plan.Materials.Add((m.ItemId, Math.Max(m.Quantity, 1)));
-            return plan;
         }
-        return null;
+        // Taxe figée à l'armement (op+0x18) — même coût taxé à la
+        // consommation différée qu'au démarrage.
+        if (plan != null && locs.TaxRate != 0)
+            plan.GoldCost = Eden.Core.Game.Family.FamilyBuildingWorkRules
+                .TaxedGold(plan.GoldCost, locs.TaxRate);
+        return plan;
     }
 
     // ========================================================
@@ -805,9 +904,25 @@ public sealed partial class ZoneEntryFlow
             if (!await DropItemsByItemIdAsync(session, st, matId, qty,
                     token))
                 return false;
-        // Or — pris par UpdateFamilyRevenue natif (taxe famille = 0).
+        // Or — ToCombine/ToCollect natifs : FamilyLevyBusinessTaxes(tax)
+        // crédite la taxe à la ville visitée (texte 0xd15) PUIS
+        // GainGold(−total). Taxe = coût taxé − coût de la recette.
         if (plan.GoldCost > 0)
         {
+            var baseGold = plan.Combine?.Gold ?? plan.Collect?.Gold ?? 0;
+            var tax = locs.TaxRate != 0
+                ? Math.Max(0, plan.GoldCost - baseGold) : 0;
+            if (tax > 0 && st.VisitedFamilyInstanceId != 0
+                && IsInFamilyInstanceNode(st)
+                && await _services.Guilds.CreditBusinessTaxAsync(
+                    st.VisitedFamilyInstanceId, tax) is { } townName)
+            {
+                EdenLog.Write($"[VDG-Work] taxe {tax} → trésorerie de " +
+                    $"<{townName}> (fm={st.VisitedFamilyInstanceId}, " +
+                    $"taux={locs.TaxRate} %)");
+                await SendTextIndexAsync(session, 0xd15, token,
+                    $"{townName},{tax}");
+            }
             st.Gold = (int)await _services.Characters.AddGoldAsync(
                 charId, -plan.GoldCost);
             await SendAttrAsync(session, st.CharId, 0x02, st.Gold, 0,
@@ -900,11 +1015,11 @@ public sealed partial class ZoneEntryFlow
     private async Task<int> CountFreeBagSlotsAsync(int charId,
         IReadOnlyList<ItemEntity> items)
     {
+        var caps = await _services.InventoryRepo
+            .GetAllBagCapacitiesAsync(charId);
         var free = 0;
-        for (var bag = 0; bag <= 4; bag++)
+        foreach (var (bag, cap) in caps)
         {
-            var cap = await _services.InventoryRepo
-                .GetBagCapacity(charId, bag) ?? 0;
             if (cap <= 0) continue;
             free += cap - items.Count(
                 i => i.BagId == bag && !i.IsEquipped

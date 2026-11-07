@@ -61,6 +61,23 @@ if (gameData.MissingFiles.Count > 0)
     EdenLog.Write($"[Zone] {gameData.MissingFiles.Count} .ini absents " +
         $"de '{dataDir}' : {string.Join(", ", gameData.MissingFiles.Take(8))}…");
 gameData.RequireLoaded();
+// Boutiques : c_store.ini du client EDENFR prime sur S_Store (oracle
+// US) — le client résout les articles via SA table, indexer l'oracle
+// désynchronisait les slots (clic potion = parchemin 100 000 or).
+if (gameData.OverlayFrStores(Eden.Core.Data.ReforgedDataLocator
+        .FindDbDir(dataDir, AppContext.BaseDirectory)) is { } nStores
+    && nStores > 0)
+    EdenLog.Write($"[Zone] boutiques : {nStores} stores c_store EDENFR");
+// Ordres de travail (métiers 12-17) : c_familycollect/c_familycombine
+// EDENFR priment sur S_FamilyCollect/Combine (durées, catégories).
+{
+    var nWork = gameData.OverlayFrWorkOrders(
+        Eden.Core.Data.ReforgedDataLocator
+            .FindDbDir(dataDir, AppContext.BaseDirectory));
+    EdenLog.Write($"[VDG-Work] overlay c_familycollect/combine EDENFR : " +
+        $"{nWork} recettes modifiées vs S_* (collect={gameData.WorkCollectById.Count}, " +
+        $"combine={gameData.WorkCombineById.Count})");
+}
 EdenLog.Write($"[Zone] Données: {gameData.Items.Count} items, " +
     $"{gameData.Monsters.Count} monstres, {gameData.Spells.Count} sorts");
 
@@ -188,7 +205,6 @@ var services = new ZoneServices
     Dungeons = DungeonService.LoadFromDataDir(dataDir),
     Talents = TalentService.LoadFromDataDir(dataDir),
     Achievements = AchievementService.LoadFromDataDir(dataDir),
-    ItemMall = new ItemMallService(),
     Territory = new TerritoryWarService(),
     Colosseum = new ColosseumService(),
     Versus = new VersusService(),
@@ -649,6 +665,8 @@ GmHandlers.Register(services.Gm, services);
 // Commandes GM de guilde/hall (create_guild, guild_level,
 // give_building, place_npc…) — même registre.
 Eden.Zone.Handlers.GmGuildHandlers.Register(services.Gm, services);
+// hall_setup : housekeepers + PNJ de service des bâtiments de la ville.
+Eden.Zone.Handlers.GmHallSetupHandlers.Register(services.Gm, services);
 
 // --- Scènes de maps : spawn monstres/PNJ depuis Data/scene/S*.ini ---
 // DATA_DIR peut être un symlink (bin/Release/data -> db_decoded) :
@@ -678,7 +696,21 @@ if (Directory.Exists(sceneDir))
     // acteur. Tables S_Monster/Motion/S_Npc bindées au boot puis
     // populate des maps « chaudes » (inst 0 = scène partagée) AVANT
     // l'ouverture du listener.
+    {
+        // Monstres de donjon : stats EDENFR (c_monster) plutôt que l'oracle
+        // US S_Monster — voir GameDataService.OverlayFrDungeonMonsters.
+        var dungeonMobIds = new HashSet<int>();
+        foreach (var n in gameData.Nodes.Where(n => n.Type == 5))
+            if (sceneSvc.GetScene($"S{n.Id:D3}") is { } dsc)
+                foreach (var m in dsc.Monsters) dungeonMobIds.Add(m.MonsterId);
+        var frDb = Eden.Core.Data.ReforgedDataLocator.FindDbDir(dataDir,
+            AppContext.BaseDirectory);
+        EdenLog.Write("[Zone] monstres de donjon EDENFR : " +
+            gameData.OverlayFrDungeonMonsters(frDb, dungeonMobIds) +
+            $" ligne(s) corrigée(s) sur {dungeonMobIds.Count} ids");
+    }
     services.Live.BindGameData(gameData);
+    services.Live.WallCheck = sceneSvc.IsSceneBlocked;
     var warmed = PrewarmLiveNodes(services, sceneSvc);
     if (warmed.Count > 0)
         EdenLog.Write($"[Zone] Préchauffage monde vivant : " +
@@ -694,6 +726,13 @@ Eden.Zone.ZoneEntryFlow? zoneEntryFlow = null;
 if (services.Social != null)
 {
     services.Guilds.Attach(services.Social);
+    // Courbe d'XP famille — c_level col11 (CLevelData+0x30 natif) ;
+    // requise par GuildService.AddExperience (GainExp mission natif).
+    services.Guilds.AttachFamilyExpCurve(
+        services.GameData.Levels
+            .GroupBy(l => l.Level)
+            .ToDictionary(grp => grp.Key,
+                grp => grp.First().FamilyExpNeeded));
     services.Friends.Attach(services.Social);
     services.Lovers.Attach(services.Social);
     // Fire-and-forget MAIS loggé : un échec du chargement initial

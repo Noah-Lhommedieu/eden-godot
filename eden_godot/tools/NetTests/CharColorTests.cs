@@ -7,6 +7,7 @@ namespace NetTests;
 /// désasm client_game (FUN_0073e970/8d0/a60) : sélecteur blob +
 /// base de section par code corps → id de ligne C_CharColor.ini.
 /// La table réelle est lue via raw_assets/ (skip si absent).</summary>
+[Collection("SharedResolver")]
 public class CharColorTests
 {
     private static string? FindRawAssets()

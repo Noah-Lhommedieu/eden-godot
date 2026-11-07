@@ -124,6 +124,21 @@ public class ItemParserTests
         Assert.Equal(7500, item1.BuyPrice);
         Assert.Equal(2250000, item1.SellPrice);
     }
+
+    [Fact]
+    public void ParseItems_PriceType_Col30()
+    {
+        // col30 → GameData::CItemData+0x78, lu par BuyItems natif
+        // @0x080aca40 : items 19→5 (lifelong), 57→0xb (colisée),
+        // 304→0x13 (war), 34216→4 (lover), item 1→or.
+        var items = ItemParser.Parse(DbDir + "/S_Item.ini")
+            .ToDictionary(i => i.Id);
+        Assert.Equal((byte)1, items[1].PriceType);
+        Assert.Equal((byte)5, items[19].PriceType);
+        Assert.Equal((byte)0xb, items[57].PriceType);
+        Assert.Equal((byte)0x13, items[304].PriceType);
+        Assert.Equal((byte)4, items[34216].PriceType);
+    }
 }
 
 public class MonsterParserTests

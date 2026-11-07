@@ -19,8 +19,10 @@ public sealed class AuctionRepository : IAuctionRepository
         await connection.OpenAsync();
         
         const string sql = @"
-            INSERT INTO active_auctions (seller_id, item_id, quantity, price, duration_hours, created_at, expires_at, status)
-            VALUES (@SellerId, @ItemId, @Quantity, @Price, @DurationHours, @CreatedAt, @ExpiresAt, @Status)
+            INSERT INTO active_auctions (seller_id, item_id, quantity, price, duration_hours, created_at, expires_at, status,
+                                       item_type, level, class, quality_filter, item_name)
+            VALUES (@SellerId, @ItemId, @Quantity, @Price, @DurationHours, @CreatedAt, @ExpiresAt, @Status,
+                    @ItemType, @Level, @Class, @QualityFilter, @ItemName)
             RETURNING id";
         
         return await connection.ExecuteScalarAsync<int>(sql, auction);
@@ -87,9 +89,11 @@ public sealed class AuctionRepository : IAuctionRepository
             var id = await connection.ExecuteScalarAsync<int>(@"
                 INSERT INTO active_auctions
                     (seller_id, item_id, quantity, price, duration_hours,
-                     created_at, expires_at, status)
+                     created_at, expires_at, status,
+                     item_type, level, class, quality_filter, item_name)
                 VALUES (@SellerId, @ItemId, @Quantity, @Price,
-                        @DurationHours, @CreatedAt, @ExpiresAt, @Status)
+                        @DurationHours, @CreatedAt, @ExpiresAt, @Status,
+                        @ItemType, @Level, @Class, @QualityFilter, @ItemName)
                 RETURNING id", auction, tx);
             await tx.CommitAsync();
             return id;
@@ -107,7 +111,8 @@ public sealed class AuctionRepository : IAuctionRepository
         await connection.OpenAsync();
         
         const string sql = @"
-            SELECT id, seller_id, item_id, quantity, price, duration_hours, created_at, expires_at, status
+            SELECT id, seller_id, item_id, quantity, price, duration_hours, created_at, expires_at, status,
+                   item_type, level, class, quality_filter, item_name
             FROM active_auctions
             WHERE id = @AuctionId
             LIMIT 1";
@@ -121,7 +126,8 @@ public sealed class AuctionRepository : IAuctionRepository
         await connection.OpenAsync();
         
         const string sql = @"
-            SELECT id, seller_id, item_id, quantity, price, duration_hours, created_at, expires_at, status
+            SELECT id, seller_id, item_id, quantity, price, duration_hours, created_at, expires_at, status,
+                   item_type, level, class, quality_filter, item_name
             FROM active_auctions
             WHERE status = 'active' AND expires_at > NOW()
             ORDER BY created_at DESC";

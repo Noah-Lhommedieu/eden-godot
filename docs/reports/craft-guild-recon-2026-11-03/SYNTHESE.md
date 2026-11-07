@@ -39,13 +39,13 @@
 | Bâtiments VDG | K2 §4 | `c_buliding` 136 (12 types), `4PHouse`/`decorate` 232 | R1 `CFamilyItem`+0x86, loc 5×10 | ✅ containers put/get/repair/refresh ; ❌ lifecycle (décroissance/upgrade/due_date) hors GM | ❌ `familybuilding{,_forest,_mountain}` ABS | layouts ABS ; aucun ref-shot |
 | NPCs VDG (vendeurs/crafteurs) | K2 §5 | `c_npc`→`c_store`→items : chaîne complète | R1 `InitFamilyNpc`/`CTalkOp` | ◐ spawns `InitFamilyNpc` côté natif — état C# à vérifier ; shops génériques OK | ❌ pas de VDG → pas de NPC VDG rendus | `npc talk*.png` ; layouts shop OK |
 | Stockage guilde | K2 §10 | 3 coffres ×40, lv 3/5/6 | R1 op 0x44 | ✅ atomique + logs + priv | ◐ `FamilyStorageWindow` fonctionnelle custom | `familystorage*` layouts |
-| Reliques/statues | K2 §5d | items 23817-23842, `statues_scenes` | R1 `FamilyStatue @0x08257f10` (500 k, guilde≥4) | ✅ statue posée/renommée | ❌ aucune UI statue | aucune capture |
+| Reliques/statues | K2 §5d | items 23817-23842, `statues_scenes` | R1 `FamilyStatue @0x08257f10` (500 k, guilde≥4) | ✅ cycle complet prouvé headless (pose/persist/retrait 2026-11-06) | ✅ menu membre chef (Erect Statue) | aucune capture |
 | Shops NPC | K5 §7/11 | `c_store` 659 boutiques, `S_Store` serveur | R2 `BuyItems @0x080aca40`, devises ×6 | ✅ buy/sell/buyback (deque 10) | ◐ `ShopWindow` custom (colonnes perdues vs `shopitem`) | `shopwnd`/`shopitem` ; ref-shot marchand |
 | Hôtel des ventes | K5 §6 | `active_auctions`/`auction_history` | — | ✅ 114-118 (dépôt 5 % + commission 8 %, 48 h, mail) | ◐ `AuctionWindow` custom | `Auction*.png` (colonnes) |
 | Étals joueurs | K5 §6 | zones 600-609 | R2 `VendorSellItem @0x081145e0` | ✅ `ZoneEntryFlow.Vending.cs` | ◐ `VendingWindow` custom | `stallui`/`stallbuy` ABS |
 | Trade J↔J | — | `trade_items` | — | ✅ `TradeHandlers` + settle atomique | ◐ `TradeWindow` custom | `tradewnd` |
 | Item mall / Loyalty | K5 §8 | `c_itemmall` 7 461 + `t_itemmall` | — | ◐ flow CW complet ; `ItemMallService` AP/EP non câblé | ◐ `ItemMallWindow` ? | `ItemMallPanel*.png` (3 colonnes + stock hebdo) |
-| Fame shop / special coin | K5 §2 | `c_store` + monnaies natives (devise 2=prestige, 0xb=colisée…) | R2 devises `itemData+0x78` | ❌ fn 23/24 routés sans monnaie ; special coins jamais dépensés | ❌ `specialcoin*` ABS | `specialcoinui*` |
+| Fame shop / special coin | K5 §2 | `c_store` + monnaies natives (devise 2=prestige, 0xb=colisée…) | R2 devises `itemData+0x78` | ✅ débit typé (5/0xa/0xb/0xc-0x17/0x13/0x14) + refresh client ; lover (4) refusé = gap G32 | ◐ `specialcoinwnd` affichage seul (soldes à relier) | `specialcoinui*` |
 | Outils récolte (pioche/gant/boule) | K3 §4 | ids 36819-37123 blancs, verts, bleus mall ; durabilité 180/540/1440 | R2 outils CChanceItem (kinds 8003-8008) | ◐ use-item générique ; `UseAreaNodes` S501/502 | ◐ use-item OK ; pas de cast-récolte dédié VDG | tooltips outils |
 | Accélérateurs (−95 %, −50 %, +8 %, +2 rendement) | K3 | 40414/15 (−95 %), 43315/16 (−50 %), 40078/96 (+8 %), 22418 fert. | R2 booster slot NCID 170 | ◐ slot booster lu ; substitution +30 documentée | ❌ pas d'UI slot booster | — |
 | Collection (archive) | K4/D1 | `c_collection` 7 970 + `S_CollectionPoint` | R2 Query/Save/Get | ✅ complet + awards | ◐ `ArchiveWindow` custom | `collectionwnd` IMPL |
@@ -159,31 +159,99 @@ Ordre croissant de complexité, chacune = [IMPLEMENTED→TESTED→VISUALLY_VALID
   work level, magicbox combos, champs `ZoneItemUse` Target*.
 
 ### Phase E — Serveur : trous à combler
-- **E1** Retirer le plafond DEV 10 s → durées natives `c_familycollect`
+- **E1** ✅ Retirer le plafond DEV 10 s → durées natives `c_familycollect`
   (20/25/30 min) + flag DEV optionnel.
-- **E2** Strengthen : modéliser `AddComboStrengthen` paliers 6/8/10/12/14 ;
-  vérifier items kind 8002 (safety stones 40173/41469/42227-29 dans
-  `c_itemmall` — D1) branchés sur le slot chance.
-- **E3** Fame shop : devises natives (2=prestige, 4=love, 6=item 34928,
-  10=trésor famille, 0xb=colisée) — handler fn 23/24 + tables monnaies.
-- **E4** Bâtiments : lifecycle (usure/décroissance, upgrade via item 35001-05,
-  due_date) + level formules unifiées (2 placeholders distincts — S2).
-- **E5** Family achievements (NCID 67), `family_schedule`, ops monde
-  0x09/0x0d/0x10, `FixEquipByFamily` débit (GAP R1).
-- **E6** `auction_history` (morte), filtres `AuctionBuyQuery`, `BuySpell` 52
-  (spéculatif), `ItemMallService` AP/EP.
-- **E7** `RandItemCombo` (roll qualité sur produits work/loot) non porté.
+- **E2** ✅ (code, live +14 à valider) Strengthen : `AddComboStrengthen`
+  paliers 6/8/10/12/14 porté (`StrengthenComboService`, 11 tests).
+  Safety stones kind 8002 : non modélisé (items c_itemmall sont kind
+  44/49 — slot chance natif exige 0x1f42, absent des données).
+- **E3** ✅ (code, live à valider) Fame shop : devises natives —
+  priceType col30 routé (`ShopCurrencyPort`) : 5=lifelong, 0xa=trésor
+  famille, 0xb=colisée, 0xc-0x17=special coins, 0x13=war, 0x14=alpaca
+  ; lover 4 refusé (pas de stockage, gap G32) ; prestige 2/item-34928
+  6/crystal : aucun item vendu EDENFR → refus natif-fidèle. Plan
+  `docs/temp-plans/2026-11-05-e3-shop-currencies.md`.
+- **E4** ✅ (code, live à valider) Bâtiments : lifecycle complet porté —
+  résolution station par NPC (net-id → 0x2a → group base → 0x29),
+  due_date contrats (0xc56), gates 0x251/0x392/0xa09, taxe de ville
+  (op+0x18), usure start (non-instantané) / fin (instantané),
+  EXP bâtiment `End*` (même sur échec), level-up chaîne S_Buliding +
+  `CheckBuildingLevelUp`, `GainExp` famille natif (col11, remplace le
+  placeholder). 28 tests. Plan
+  `docs/temp-plans/2026-11-05-e4-building-lifecycle.md`.
+- **E5** ✅ (code, live à valider) : succès de famille portés depuis
+  `CFamily::UpdataAchievement` (mission @0x081be030, appelé par
+  `SetAchievement`) — `ApplyFamilyAchievementAsync` monde (upsert
+  `family_achievement` clé GroupKey, caps 999999999, compteurs
+  dual-key Type+GroupKey, `spell_point` cap 100 gaté `elfking_tid>0`,
+  `family_log` type 4, `family_achievement_rank` synchrone), ZW
+  `family_achievement` zone→monde, broadcast **NCID 67** flag=0 +
+  push 68 single-entry aux membres, synchro login flag=3. Codec
+  variable prouvé (monde @0x080cdfb0 — flag=1 = i32 0, flag=3 =
+  charId/channel à 0) côté serveur ET client (`WorldClientFamily
+  AchievementUpdate` réécrit — le généré aplati lisait 33 o fixes et
+  aurait throw sur chaque push). Bug msgboard corrigé : NCID 51 émet
+  `fam.Messages` (`family_msgboard` vivante) — `family_schedule`
+  retirée (table morte, zéro réf binaire). `DisbandAsync` supprime
+  les 10 tables filles comme `CFamily::Disband`. Ops monde vérifiées
+  couvertes (9=emblème, 0xc/0xd→0x0f msgboard, 0x10→0x13 memo,
+  0x14=achievement, 0x22/0x23 recruit). `FixEquipByFamily` audité —
+  gate privilège client-side natif, textes 0x621/0x8f0/0x5fd déjà
+  émis. 11 tests + suite 1773/1774. Plan
+  `docs/temp-plans/2026-11-05-e5-family-achievement.md`.
+- **E6** ✅ (code, live à valider) : `auction_history` = table maison
+  morte — le natif n'en a pas (déjà archivée migration 016).
+  `BuySpell` 52 neutralisé (`Execute` natif vide) ; `ItemMallService`
+  zone retiré (code mort — vrai item mall en monde `tb_user`).
+  Filtres `AuctionBuyQuery` portés (`QueryAuctionBuy` mission
+  @0x08160710) : `ItemDef.ItemType` (col33→+0x84) + `ClassMask`
+  (col18→+0x48 i64), colonnes dénorm `active_auctions` (migration
+  026 : item_type/level/class/quality_filter=1<<quality/item_name),
+  tri natif level/quality/duedate/price asc+desc, pagination 20,
+  adaptation wire « 0/vide = pas de filtre » documentée. 10 tests +
+  suite verte. Plan `docs/temp-plans/2026-11-05-e6-auction-filters.md`.
+- **E7** ✅ `RandItemCombo` porté (zone @0x080a5480) :
+  `ItemComboRollService` + hook `RollCombineProduct` (kind 1..0x22≠0x10)
+  ; 22 tests verts.
 
 ### Phase F — VDG monde réel
-- **F1** Instanciation map VDG (S501 forêt/S502 montagne — confirmer ids via
-  `UseAreaNodes` K3 + nodeTID `SFamily+0x3c` R1) : charger la scène + ancrages
-  `4PHouse`/`decorate` + grille loc 5×10.
-- **F2** Spawn `InitFamilyNpc` : items-PNJ 35001-35080 → `c_npc` modèles
-  (npclist n#####) + services `Service <text> 24 <store>` → `c_store` +
-  `c_familycollect/combine` pour les commissions.
-- **F3** Zones de récolte (mine/potager/énergie dans la VDG) : use-item outil
-  → enchant canalisé → produits `c_familycollect` type outil.
-- **F4** Reliques/statues : pose `FamilyStatue` (déjà serveur) + UI ; buffs 3 h.
+- **F1** ✅ Instanciation map VDG (S501/S502) : `family.house_open` →
+  migration dans le hall (`ZoneEntryFlow.FamilyInstance.cs`,
+  `EnsureFamilyInstanceNodes`).
+- **F2** ✅ Spawn `InitFamilyNpc` : `InjectHallNpc` rejoue les NPCs du
+  conteneur 0 (tid = proto NPC), housekeeper auto à loc+1 (F5).
+- **F3** ✅ Zones de récolte : `AttrGainCollectItem` + restrictions de
+  zone VDG (pioche/gant/boule).
+- **F4** ✅ Statues : `FamilyStatue` 161 serveur complet (pose/retrait,
+  gates natifs, CSV `BornStatue`, EntityId 54901-5 côté client) —
+  décoratif pur (aucun buff natif). **Test live headless PROUVÉ**
+  (2026-11-06) : pose pos=1 → trésorerie -500k, `statues_scenes`
+  persisté (snapshot équipements), entité 298 eid=54901, textes
+  natifs 0xb4e/0x38a ; réentrée → statue ré-injectée ; retrait pos=0 →
+  nom vidé + 269 + 0x38b. UI client ajoutée (menu membre chef,
+  « Erect Statue »). **Équipements du clone** (2026-11-06) : packing
+  natif `NotifyStatue` reproduit — paires u16 dans les champs
+  optionnels du 298 (`Hp`=tête|torse … `Unk48`=distance|action),
+  décodées client → `CharVisual.ApplyEquipment` ; arme attachée
+  prouvée (mesh-dump `w40101` sur statue équipée). Reste : gel
+  action/frame (Unk44/Unk5C) non implémenté.
+- **F5** ✅ Pose de bâtiment fidèle (2026-11-05) :
+  `ItemDef.FamilyBuildingTid` (col35 kind 0x29), walk `PrevTid→next`
+  jusqu'au niveau famille (types {1,2,10}), tid S_Buliding persisté,
+  durabilité/niveau natifs, housekeeper auto (due_date incluse),
+  position NPC via scène+4PHouse (0,0,0 pour le bâtiment), gate holy
+  corrigé (subtype `EquipLoc`+0x10==0x16), refresh 484 aux membres du
+  hall. 18 tests verts, suite 1778/1779. Plan
+  `docs/temp-plans/2026-11-05-f5-building-put.md`. **Test live headless
+  PROUVÉ** (2026-11-05) : housekeeper 53007 injecté, marche réelle
+  (chemin BFS sur S501.smp — mur nodemap), dialog 285 option 4521,
+  NCID 130 → 484, contrat 35081 consommé, `tid=101` persisté +
+  housekeeper auto 53008 à loc 1, les deux NPCs respawnent à la
+  réentrée. **Rendu 3D client validé en capture** (2026-11-05) :
+  `HouseTable` (c_buliding+4PHouse) + `FamilyHallBuildings` spawnent
+  `house/model/*.nif` aux ancres scène+offsets ; le manoir h001 rendu
+  à son ancre réelle (capture `artifacts/shots/20261105-122714-
+  S501-halltest.png`). Reste : validation en session réelle (reporté G).
 
 ### Phase G — Validation globale
 - `tools/capture.sh` par fenêtre (clés `--hud-open` à ajouter :

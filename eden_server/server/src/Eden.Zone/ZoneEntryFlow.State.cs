@@ -81,6 +81,12 @@ public sealed partial class ZoneEntryFlow
         public bool EntryDirty;
         public short NodeId;
         public float PosX, PosZ;
+        /// <summary>Hauteur (z eden) — posée aux repositionnements
+        /// serveur (migration, téléport event-area, revive, spawn) ;
+        /// le wire MoveSelf est 2D donc elle garde la dernière valeur
+        /// résolue (fidèle au natif : SMZ absent → GetTerrainZ=0, le z
+        /// du perso natif reste celui du dernier spawn/téléport).</summary>
+        public float PosY;
         public int PlayerHp = 400, PlayerMaxHp = 400;
         /// <summary>Blob d'apparence 32B persisté (player_characters.appearance_data)
         /// — patché dans le corps du 310 (ClientEnterNodePlayerData).</summary>
@@ -127,6 +133,12 @@ public sealed partial class ZoneEntryFlow
         /// <summary>Le client vient de changer de node (portail) — le prochain
         /// D4 rejoue le burst sans les entités de l'ancien node.</summary>
         public bool NodeChanged;
+
+        /// <summary>Offre de donjon en cours (clé du <c>DungeonCatalog</c>,
+        /// 0 = aucune), clé d'aire d'arrivée du Event_Transport et point
+        /// du portail où l'offre a été faite.</summary>
+        public int OfferDungeonKey, OfferArrivalKey;
+        public float OfferX, OfferZ;
 
         // --- État de combat / cible ---
         /// <summary>Dernière cible sélectionnée (TargetUpdate 124).</summary>
@@ -522,6 +534,11 @@ public sealed partial class ZoneEntryFlow
         /// DoCombineItem à l'expiration (0x28×100 ms), annulé par
         /// StrengthenClose 10.</summary>
         public PendingCombine? PendingCombine;
+        /// <summary>Canalisation d'usage d'item en cours (char+0x90
+        /// natif — pointeur UseItemControl posé par DoUseItem quand
+        /// CItemData+0x54 ≠ 0) — résolu par le UseItemTimeEvent à
+        /// +N décisecondes, annulé par CheckCastBreak → 408.</summary>
+        public PendingItemUse? PendingItemUse;
         /// <summary>Octets de visibilité d'équipement natifs
         /// (char+0x4ab/+0x4ac) — togglés par PlayerAction
         /// EquipAction (codes 7/8) et renvoyés via ModelModify 283.</summary>
@@ -592,6 +609,23 @@ public sealed partial class ZoneEntryFlow
         /// réussi ; la consommation différée des ordres instantanés
         /// (EndCollect/EndCombine instant) l'exige.</summary>
         public bool WorkOpStarted;
+        /// <summary>Uid DB (colonne id) du bâtiment de famille lié à
+        /// l'op works ouverte — op+0x10 natif, résolu par
+        /// <c>SFamily::GetBuildingItemByNpcNetID</c> à l'ouverture du
+        /// dialogue 12-17 dans un hall (0 hors ville de famille).</summary>
+        public int WorkOpBuildingItemId;
+        /// <summary>Taux de taxe de la ville visitée — op+0x18 natif
+        /// (<c>family+0x32</c> BusinessTax) quand le joueur crafte dans
+        /// le hall d'une AUTRE famille ; 0 dans son propre hall.</summary>
+        public short WorkOpTaxRate;
+        /// <summary>Items de hall 0x2a/0x52 par handle de NPC spawné —
+        /// le lien <c>item+0x9c</c> natif (net id du NPC) permettant de
+        /// remonter du dialogue à l'item (due_date) puis au bâtiment
+        /// (base de groupe de la loc). Peuplé par
+        /// <c>InjectHallNpc</c>, purgé à la migration.</summary>
+        public readonly ConcurrentDictionary<uint,
+            Eden.Core.Game.Family.FamilyBuildingItem> HallNpcItems =
+                new();
         /// <summary>Emplacements enregistrés pour la consommation
         /// différée (SetAllItemLoc natif) par work_num — catalyseur,
         /// booster et matériaux figés à l'armement.</summary>
@@ -678,6 +712,11 @@ public sealed partial class ZoneEntryFlow
         /// map native char+0xcd4 chargée depuis player_node_times à
         /// la première utilisation (CheckNodeTimes zone @0x8409fe0).</summary>
         public Dictionary<int, int>? NodeTimes;
+        /// <summary>Type de team-check en attente de réponse —
+        /// char+0xd7a natif (zone TeamOperation @0x82937b0) : 2 =
+        /// tour du ciel, 3 = épreuve. Posé par le check solo (pas
+        /// d'équipe) et remis à 0 à la réponse.</summary>
+        public short PendingCheck;
 
         // --- Tableau de recrutement d'instance (NCID 220 — champs
         // natifs char+0xc40/+0xc42/+0xc44, désasm zone @0x08100c40) ---
@@ -827,6 +866,10 @@ public sealed partial class ZoneEntryFlow
     {
         public int CatalystBag = -1, CatalystSlot = -1, CatalystItemId;
         public int BoosterBag = -1, BoosterSlot = -1, BoosterItemId;
+        /// <summary>Taux de taxe figé à l'armement (op+0x18 natif) —
+        /// la consommation différée applique le même coût taxé que le
+        /// démarrage, même si l'op works a fermé entre-temps.</summary>
+        public short TaxRate;
     }
 
     /// <summary>Cast lottery en vol — posé par le Go (choix du

@@ -72,7 +72,9 @@ public static partial class DragHelper
             // garde au sommet du z-order (recouverte sinon par un
             // contenu injecté après coup — cf. ClassWindow).
             if (found.GetIndex() < window.GetChildCount() - 1)
+            {
                 window.MoveChild(found, window.GetChildCount() - 1);
+            }
             // Défensif : les Labels de la barre doivent être
             // MouseFilter.Ignore sinon ils avalent le clic du drag.
             foreach (var lc in found

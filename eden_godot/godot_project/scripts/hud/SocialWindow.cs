@@ -48,6 +48,10 @@ public partial class SocialWindow : Control
     private Label? _guildLabel;
     private ItemList? _friendList;
     private ItemList? _blockList;
+    // communitywnd utilise des MultiColumnList natives (MclList) —
+    // mêmes données, remplies en colonnes quand le layout est monté.
+    private MclList? _friendMcl;
+    private MclList? _blockMcl;
     private LineEdit? _addEdit;
     private HBoxContainer? _whisperRow;
     private HBoxContainer? _inviteRow;
@@ -88,16 +92,26 @@ public partial class SocialWindow : Control
         _panel!.Visible = false;
         _friendList = TopLeftVitals.Find<ItemList>(_panel, "FriendList");
         _blockList = TopLeftVitals.Find<ItemList>(_panel, "BlockList");
+        _friendMcl = TopLeftVitals.Find<MclList>(_panel, "FriendList");
+        _blockMcl = TopLeftVitals.Find<MclList>(_panel, "BlockList");
         _guildLabel = TopLeftVitals.Find<Label>(_panel,
             "FriendListText");
         if (_friendList != null)
             _friendList.ItemSelected += _ => RefreshWhisperTarget();
+        if (_friendMcl != null)
+            _friendMcl.RowSelected += _ => RefreshWhisperTarget();
         if (_blockList != null)
             _blockList.ItemActivated += idx =>
             {
                 var id = (int)_blockList
                     .GetItemMetadata((int)idx).AsInt64();
                 RemoveFriend(id);          // déblocage (monde 22)
+            };
+        if (_blockMcl != null)
+            _blockMcl.RowActivated += row =>
+            {
+                if (_blockMcl.RowTag(row) is long lid)
+                    RemoveFriend((int)lid);
             };
 
         var addBtn = TopLeftVitals.Find<Button>(_panel,
@@ -212,9 +226,20 @@ public partial class SocialWindow : Control
     /// <summary>Ami sélectionné dans la liste (charId en métadonnée).</summary>
     private FriendEntry? SelectedFriend()
     {
-        var sel = _friendList?.GetSelectedItems();
-        if (sel == null || sel.Length == 0) return null;
-        var id = (int)(_friendList!.GetItemMetadata(sel[0]).AsInt64());
+        int id;
+        if (_friendMcl != null)
+        {
+            if (_friendMcl.RowTag(_friendMcl.SelectedRow) is long lid)
+                id = (int)lid;
+            else
+                return null;
+        }
+        else
+        {
+            var sel = _friendList?.GetSelectedItems();
+            if (sel == null || sel.Length == 0) return null;
+            id = (int)(_friendList!.GetItemMetadata(sel[0]).AsInt64());
+        }
         return SocialState.Friends.TryGetValue(id, out var e) ? e : null;
     }
 
@@ -225,7 +250,7 @@ public partial class SocialWindow : Control
         if (e != null) _whisperTarget = e.Name;
         if (_whisperRow != null) _whisperRow.Visible = e != null;
         if (_whisperEdit != null && e != null)
-            _whisperEdit.PlaceholderText = UiTextEn.Translate($"to {e.Name}…");
+            _whisperEdit.PlaceholderText = UiTextEn.Translate("to %s1…").Replace("%s1", e.Name);
     }
 
     private void RemoveSelected()
@@ -441,7 +466,7 @@ public partial class SocialWindow : Control
                 SocialState.PendingFriendInvite =
                     (m.F1, m.InviterName);
                 _hud?.Chat?.AddSystem(
-                    UiTextEn.Translate($"{m.InviterName} invites you as friend."));
+                    UiTextEn.Translate("%s1 invites you as friend.").Replace("%s1", m.InviterName));
             });
         });
         // --- Famille/guilde → GuildState (GuildWindow) ---
@@ -459,7 +484,7 @@ public partial class SocialWindow : Control
             {
                 GuildState.ApplyOpError(m);
                 _hud?.Chat?.AddSystem(
-                    $"Guild operation 0x{m.Op:x2} refused.");
+                    UiTextEn.Translate("Guild operation 0x%s1 refused.").Replace("%s1", m.Op.ToString("x2")));
             });
         });
         s.OnWorld(48, r =>
@@ -470,7 +495,7 @@ public partial class SocialWindow : Control
             {
                 GuildState.ApplyInvitation(m);
                 _hud?.Chat?.AddSystem(
-                    UiTextEn.Translate($"{m.InviterName} invites you to join ") +
+                    UiTextEn.Translate("%s1 invites you to join").Replace("%s1", m.InviterName) + " " +
                     $"<{m.FamilyName}>.");
             });
         });
@@ -540,8 +565,8 @@ public partial class SocialWindow : Control
         _addEdit?.Clear();
         FireWorld(new WorldAddFriend { TargetName = name, FriendType = type });
         _hud?.Chat?.AddSystem(type == 0
-            ? UiTextEn.Translate($"Blocked «{name}».")
-            : UiTextEn.Translate($"Friend request: «{name}»."));
+            ? UiTextEn.Translate("Blocked «%s1».").Replace("%s1", name)
+            : UiTextEn.Translate("Friend request: «%s1».").Replace("%s1", name));
     }
 
     private void RemoveFriend(int charId)
@@ -557,9 +582,9 @@ public partial class SocialWindow : Control
     {
         if (_guildLabel != null)
             _guildLabel.Text = SocialState.GuildName.Length > 0
-                ? UiTextEn.Translate($"Friend List — <{SocialState.GuildName}>") +
+                ? UiTextEn.Translate("Friend List — <%s1>").Replace("%s1", SocialState.GuildName) +
                   (SocialState.GuildLevel > 0
-                      ? UiTextEn.Translate($"  Lv{SocialState.GuildLevel}") : "")
+                      ? "  " + UiTextEn.Translate("Lv%s1").Replace("%s1", SocialState.GuildLevel.ToString()) : "")
                 : UiTextEn.Translate("Friend List");
 
         // Invitation d'ami pendante (53) → ligne ✓/× en bandeau.
@@ -570,7 +595,7 @@ public partial class SocialWindow : Control
             {
                 _inviteRow.AddChild(new Label
                 {
-                    Text = UiTextEn.Translate($"{inv.Name} invites you"),
+                    Text = UiTextEn.Translate("%s1 invites you").Replace("%s1", inv.Name),
                     Modulate = new Color(0.85f, 0.5f, 0.9f),
                 });
                 var ok = new Button { Text = "✓", TooltipText = UiTextEn.Translate("Accept") };
@@ -597,6 +622,22 @@ public partial class SocialWindow : Control
                     : new Color(0.55f, 0.55f, 0.6f));
             }
         }
+        if (_friendMcl != null)
+        {
+            _friendMcl.ClearRows();
+            foreach (var e in SocialState.Friends.Values
+                         .OrderByDescending(f => f.Online)
+                         .ThenBy(f => f.Name))
+            {
+                var row = _friendMcl.AddRow(FriendCols(e), tag:
+                    (long)e.CharId);
+                var ink = e.Online != 0
+                    ? new Color(0.55f, 1f, 0.6f)
+                    : new Color(0.55f, 0.55f, 0.6f);
+                for (var c = 0; c < 6; c++)
+                    _friendMcl.SetCellColor(row, c, ink);
+            }
+        }
         if (_blockList != null)
         {
             _blockList.Clear();
@@ -607,6 +648,16 @@ public partial class SocialWindow : Control
                 _blockList.SetItemTooltip(i, "Double-click to unblock");
                 _blockList.SetItemCustomFgColor(i,
                     new Color(1f, 0.6f, 0.6f));
+            }
+        }
+        if (_blockMcl != null)
+        {
+            _blockMcl.ClearRows();
+            foreach (var (id, name) in SocialState.BlackList)
+            {
+                var row = _blockMcl.AddRow([name],
+                    tag: (long)id);
+                _blockMcl.SetCellColor(row, 0, new Color(1f, 0.6f, 0.6f));
             }
         }
     }
@@ -623,14 +674,27 @@ public partial class SocialWindow : Control
         var rel = e.FriendType switch
         {
             3 => "",
-            1 => " (invited)",
-            2 => " (invites you)",
+            1 => " " + UiTextEn.Translate("(invited)"),
+            2 => " " + UiTextEn.Translate("(invites you)"),
             _ => "",
         };
         return $"{(e.Name.Length > 0 ? e.Name : $"#{e.CharId}")}" +
                (e.Level > 0 ? $"  Lv{e.Level}" : "") +
                (cls.Length > 0 ? $"  {cls}" : "") +
                (zone.Length > 0 ? $"  {zone}" : "") + rel;
+    }
+
+    /// <summary>Cellules MCL natives d'un ami : 分流/角色名稱/等級/
+    /// 職業/所在地點/名片 (canal, nom, niveau, classe, lieu, carte).</summary>
+    private static string[] FriendCols(FriendEntry e)
+    {
+        var zone = e.NodeId > 0
+            ? TextResolver.NodeName(e.NodeId) ?? $"S{e.NodeId:D3}" : "";
+        var cls = e.ClassId > 0
+            ? TextResolver.ClassName(e.ClassId) ?? "" : "";
+        var chan = e.ServerId != 0xffff ? $"{e.ServerId}" : "";
+        return [chan, e.Name.Length > 0 ? e.Name : $"#{e.CharId}",
+            e.Level > 0 ? $"{e.Level}" : "", cls, zone, ""];
     }
 
     /// <summary>Envoie le whisper saisi (zone 34, canal 1 peer) à la
@@ -650,7 +714,7 @@ public partial class SocialWindow : Control
         _ = send.ContinueWith(t =>
             GD.PrintErr($"[social] whisper : {t.Exception}"),
             TaskContinuationOptions.OnlyOnFaulted);
-        _hud?.Chat?.AddLocalEcho(1, $"to {_whisperTarget}: {text}");
+        _hud?.Chat?.AddLocalEcho(1, UiTextEn.Translate("to %s1: %s2").Replace("%s1", _whisperTarget).Replace("%s2", text));
         _whisperEdit?.Clear();
         if (_whisperRow != null) _whisperRow.Visible = false;
     }
@@ -665,8 +729,8 @@ public partial class SocialWindow : Control
         });
         SocialState.PendingFriendInvite = null;
         _hud?.Chat?.AddSystem(accept != 0
-            ? UiTextEn.Translate($"Friend «{inv.Name}» accepted.")
-            : UiTextEn.Translate($"Friend invite declined."));
+            ? UiTextEn.Translate("Friend «%s1» accepted.").Replace("%s1", inv.Name)
+            : UiTextEn.Translate("Friend invite declined."));
         Refresh();
     }
 }

@@ -8,7 +8,8 @@ namespace EdenClient.Data.Tables;
 /// comparaison cellule-à-cellule, mêmes offsets que
 /// <c>WorkOrderParser</c> $EDEN) :
 /// - <c>C_FamilyCollect.ini</c> (|V.2|47) : col0 id, col1 catégorie
-///   (0/1/2 — HYPOTHESIS : workType-12 → mining/planting/summon),
+///   (0/1/2 — prouvé données 2026-11-06 : cat = kind catalyseur-0x32,
+///   soit 0→type13 planting, 1→type12 mining, 2→type14 summon),
 ///   col2 item catalyseur, col3 nom, col4 qté catalyseur, col8 exp,
 ///   col9 instantané, col10 durée (min), col13 or, puis produits par
 ///   groupes de 4 {id,nom,qté,taux%} depuis col14.
@@ -42,6 +43,7 @@ public static class CraftTable
     {
         public int Id { get; set; }                // col0 — workId wire
         public int Category { get; set; }          // col1
+        public int BuildingLevel { get; set; }     // col2 — niveau de travail
         public bool Instant { get; set; }          // col5 == 1
         public int DurationMin { get; set; }       // col6
         public int Gold { get; set; }              // col9
@@ -103,6 +105,7 @@ public static class CraftTable
             {
                 Id = id,
                 Category = IniTable.GetInt(row, 1),
+                BuildingLevel = IniTable.GetInt(row, 2),
                 Instant = IniTable.GetInt(row, 5) == 1,
                 DurationMin = IniTable.GetInt(row, 6),
                 Gold = IniTable.GetInt(row, 9),

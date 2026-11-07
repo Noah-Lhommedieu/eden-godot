@@ -186,6 +186,27 @@ public sealed class GameDataService
             kv => kv.Key, kv => kv.Value.Type);
     private Dictionary<int, short>? _buildingTypes;
 
+    /// <summary>Lien « niveau suivant » de la chaîne S_Buliding —
+    /// inverse de <c>PrevTid</c> (col5). Équivaut au champ +0x30 du
+    /// CBuildingData natif remonté par le walk de
+    /// <c>FamilyBuildingPutItemFromInventroy</c> @0x808a770 : pour les
+    /// types 1/2/10 la pose sélectionne l'échelon de la chaîne dont le
+    /// niveau égale le niveau de la famille. Chaînes linéaires en
+    /// EDENFR → un seul next par tid.</summary>
+    public int NextBuildingTid(int tid)
+    {
+        _buildingNext ??= BuildBuildingNext();
+        return _buildingNext.TryGetValue(tid, out var n) ? n : 0;
+    }
+    private Dictionary<int, int>? _buildingNext;
+    private Dictionary<int, int> BuildBuildingNext()
+    {
+        var next = new Dictionary<int, int>();
+        foreach (var (tid, def) in Buildings)
+            if (def.PrevTid != 0) next[def.PrevTid] = tid;
+        return next;
+    }
+
     /// <summary>Définition d'un territoire issue de
     /// <c>S_Territory.ini</c> (<c>CTerritoryData</c> natif) —
     /// <c>Type</c> = col4 → +0x10 : 1-15 = guerres de territoire (→
@@ -738,6 +759,106 @@ public sealed class GameDataService
     /// (Kitsune de l'Aube 1290, Renard blanc 48813…) n'existent pas côté
     /// serveur et ne peuvent pas se monter. Les ids déjà présents ne sont
     /// jamais remplacés. Sans db client : no-op.</summary>
+    /// <summary>Stats des monstres de donjon depuis le db EDENFR
+    /// (<c>c_monster.ini</c>) : S_Monster (oracle US) diverge sur 126 des
+    /// 2 062 ids posés dans les scènes de donjon (ex. boss S804 58543 HP
+    /// 28 915 US contre 57 830 FR). Remplace la ligne S_Monster des ids
+    /// donnés ; retourne le nombre de lignes changées.</summary>
+    public int OverlayFrDungeonMonsters(string? frDbDir,
+        IReadOnlySet<int> dungeonMonsterIds)
+    {
+        if (frDbDir == null) return 0;
+        var file = Directory.EnumerateFiles(frDbDir).FirstOrDefault(f =>
+            string.Equals(Path.GetFileName(f), "c_monster.ini",
+                StringComparison.OrdinalIgnoreCase));
+        if (file == null) return 0;
+        var fr = MonsterParser.Parse(file)
+            .Where(m => dungeonMonsterIds.Contains(m.Id))
+            .ToDictionary(m => m.Id);
+        var changed = 0;
+        for (var i = 0; i < Monsters.Count; i++)
+            if (fr.TryGetValue(Monsters[i].Id, out var f) &&
+                (Monsters[i].HP != f.HP ||
+                 Monsters[i].AttackPower != f.AttackPower ||
+                 Monsters[i].ExpReward != f.ExpReward ||
+                 Monsters[i].Level != f.Level))
+            {
+                Monsters[i] = f;
+                changed++;
+            }
+        return changed;
+    }
+
+    /// <summary>Ordres de travail (métiers 12-17) depuis le db client
+    /// EDENFR (<c>c_familycollect.ini</c> / <c>c_familycombine.ini</c>) :
+    /// le client affiche et planifie avec SES tables, l'oracle US
+    /// S_FamilyCollect diverge sur 100 durées (col10 : 50 US contre 25
+    /// FR, ex. work_id 111-118) et S_FamilyCombine sur 130 catégories
+    /// (col1 5 US / 3 FR). Les lignes FR remplacent celles de même clé
+    /// (collect : id du catalyseur, combine : work_id) ; les lignes
+    /// US-only restent (aucun plan FR ne les référence). Sans db
+    /// client : no-op. Retourne le nombre de recettes dont un champ de
+    /// logique (niveau bâtiment, durée, or, usure, instantané) change.
+    /// </summary>
+    public int OverlayFrWorkOrders(string? frDbDir)
+    {
+        if (frDbDir == null) return 0;
+        string? Find(string name) => Directory.EnumerateFiles(frDbDir)
+            .FirstOrDefault(f => string.Equals(Path.GetFileName(f), name,
+                StringComparison.OrdinalIgnoreCase));
+        var changed = 0;
+        if (Find("c_familycollect.ini") is { } cc)
+            foreach (var d in WorkOrderParser.ParseCollect(cc)
+                         .GroupBy(x => x.CatalystItemId)
+                         .Select(g => g.First()))
+            {
+                if (WorkCollectById.TryGetValue(d.CatalystItemId, out var o)
+                    && (o.BuildingLevel != d.BuildingLevel
+                        || o.Duration != d.Duration
+                        || o.Gold != d.Gold || o.Instant != d.Instant
+                        || o.BuildingDamage != d.BuildingDamage
+                        || o.BuildingDamageChance != d.BuildingDamageChance))
+                    changed++;
+                WorkCollectById[d.CatalystItemId] = d;
+            }
+        if (Find("c_familycombine.ini") is { } cb)
+            foreach (var d in WorkOrderParser.ParseCombine(cb)
+                         .GroupBy(x => x.Id).Select(g => g.First()))
+            {
+                if (WorkCombineById.TryGetValue(d.Id, out var o)
+                    && (o.BuildingLevel != d.BuildingLevel
+                        || o.Duration != d.Duration
+                        || o.Gold != d.Gold || o.Instant != d.Instant
+                        || o.Category != d.Category
+                        || o.BuildingDamage != d.BuildingDamage
+                        || o.BuildingDamageChance != d.BuildingDamageChance))
+                    changed++;
+                WorkCombineById[d.Id] = d;
+            }
+        return changed;
+    }
+
+    /// <summary>Boutiques PNJ depuis le db client EDENFR
+    /// (<c>c_store.ini</c>) : le client résout les articles via SA
+    /// table (le 304 ne porte que le storeId) — indexer S_Store (oracle
+    /// US, qui préfixe deux scrolls itemmall au store 3) désynchronisait
+    /// les slots : clic sur la potion = achat d'un parchemin à 100 000
+    /// or (bug live). Sans db client : no-op, S_Store reste la
+    /// référence. Retourne le nombre de stores chargés (0 = pas
+    /// d'overlay).</summary>
+    public int OverlayFrStores(string? frDbDir)
+    {
+        if (frDbDir == null) return 0;
+        var file = Directory.EnumerateFiles(frDbDir).FirstOrDefault(f =>
+            string.Equals(Path.GetFileName(f), "c_store.ini",
+                StringComparison.OrdinalIgnoreCase));
+        if (file == null) return 0;
+        var fr = ShopAndMiscParsers.ParseStores(file);
+        if (fr.Count == 0) return 0;
+        Stores = fr;
+        return fr.Count;
+    }
+
     internal void MergeFrMounts(string? frDbDir)
     {
         if (frDbDir == null) return;
@@ -757,6 +878,14 @@ public sealed class GameDataService
                 // (ex. 58996 Tank de Combat) : le ride EDENFR l'emporte.
                 var cur = Enchants.First(x => x.Id == e.Id);
                 if (e.Raw.Contains("2134") && !cur.Raw.Contains("2134"))
+                {
+                    Enchants[Enchants.IndexOf(cur)] = e;
+                    continue;
+                }
+                // Kind 8002 « pierre de chance » : les lignes US de
+                // S_ItemMallEnchant sont tronquées (pas de borne ni de
+                // flag bind) — la ligne EDENFR est la référence.
+                if (e.TriggerParams[0] == 0x1f42)
                     Enchants[Enchants.IndexOf(cur)] = e;
             }
         }

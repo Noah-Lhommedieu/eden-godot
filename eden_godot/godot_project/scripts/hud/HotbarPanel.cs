@@ -761,6 +761,7 @@ public partial class HotbarPanel : Control
 
     public override void _Process(double delta)
     {
+        using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.Hotbar762");
         if (_heldIcon is { Visible: true })
             _heldIcon.GlobalPosition = GetGlobalMousePosition()
                 + new Vector2(6, 6);
@@ -885,6 +886,7 @@ public partial class HotbarPanel : Control
 
         public override void _Process(double delta)
         {
+            using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.Hotbar886");
             _frame++;
             // Retenter tant que le menu n'est pas ouvert (loading).
             if (_frame >= 80 && _frame <= 160 && _frame % 10 == 0 &&
@@ -970,6 +972,7 @@ public partial class HotbarPanel : Control
 
         public override void _Process(double delta)
         {
+            using var _procScope = EdenClient.Perf.PerfTrace.Scope("proc.Hotbar971");
             if (Screens.LoadingScreen.Active != null) return;
             _frame++;
             var bars = Protocol.PlayerProfileState.ShortcutBars;

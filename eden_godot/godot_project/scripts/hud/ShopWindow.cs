@@ -9,19 +9,22 @@ using EdenClient.Session;
 namespace EdenClient.Hud;
 
 /// <summary>
-/// Fenêtre boutique PNJ (lot S4) — layout natif <c>ShopWnd.layout</c>
-/// (FrameWindow « Root/shop » + TabControl : onglet « 商品 » = acheter,
-/// onglet « 買回 » = rachat natif, réutilisé ici pour la vente).
+/// Fenêtre boutique PNJ — layout natif <c>ShopWnd.layout</c>
+/// (FrameWindow « Root/shop » + TabControl : « Tabsell » 商品 = articles
+/// du marchand, « TabBuy » 買回 = file buyback) + template de ligne
+/// <c>ShopItem.layout</c> (slot icône + ItemDeatilText + GlodText/si1 +
+/// SilverText/si2) instancié par article.
 ///
-/// Ouverture : <see cref="ShopState.Changed"/> (304 EnterShop →
-/// catalogue C_Store parsé). Contenu :
-///   - <b>Acheter</b> : liste des <see cref="ShopState.Entries"/>
-///     (icône <c>UI/itemicon/&lt;code&gt;.png</c>, nom EN t_item, prix
-///     c_item.SellPrice) + or du joueur (<see cref="PlayerVitals.Gold"/>)
-///     — bouton Acheter → NCID 22 <see cref="ZoneBuyItems"/> ;
-///   - <b>Vendre</b> : items du sac (<see cref="PlayerBag"/>) →
-///     bouton Vendre → NCID 23 <see cref="ZoneSellItems"/> ;
-///   - fermeture → NCID 63 LeaveShop + <see cref="ShopState.Close"/>.
+/// Wire :
+///   - 304 EnterShop → <see cref="ShopState"/> (catalogue C_Store) ;
+///   - 22 <see cref="ZoneBuyItems"/> (achat, BuyBack=0) et rachat
+///     (BuyBack=1, ShopIndex = index dans la file) ;
+///   - 23 <see cref="ZoneSellItems"/> (vente — clic droit dans le sac
+///     pendant que la boutique est ouverte, ou SellAllBtn = lot) ;
+///   - 185 <see cref="ZoneBuyBackOpen"/> envoyé au changement d'onglet ;
+///   - 512 <see cref="ZoneClientBuyBackList"/> →
+///     <see cref="ShopState.Buyback"/> (append flag=1, retrait flag=2) ;
+///   - 63 LeaveShop à la fermeture ; 45/47/342/343/46/48 réparations.
 ///
 /// Session : <see cref="SessionCarry.Session"/> (envoi direct — même
 /// octets que les helpers GameScene BuyShopItemAsync/SellItemAsync/
@@ -31,11 +34,12 @@ public partial class ShopWindow : Control
 {
     private Control? _window;
     private TabContainer? _tabs;
-    private VBoxContainer? _buyList;
-    private VBoxContainer? _sellList;
+    private VBoxContainer? _buyRows;      // articles (Tabsell/border)
+    private VBoxContainer? _bbRows;       // buyback (TabBuy/scrollpanel)
+    private Control? _rowProto;           // clone de ShopItem.layout
     private Label? _gold;
     private int _selBuy = -1;
-    private InventorySlot? _selSell;
+    private int _selBb = -1;
 
     public override void _Ready()
     {
@@ -51,33 +55,25 @@ public partial class ShopWindow : Control
             var close = TopLeftVitals.Find<BaseButton>(_window,
                 "closeBtn");
             if (close != null) close.Pressed += Close;
+            _rowProto = hud?.Build("shopitem.layout");
         }
         BuildContent();
         DragHelper.EnsureTitleBar(_window ?? this, UiTextEn.Translate("Shop"));
         DragHelper.Persist(_window ?? this, "shop");
         Visible = false;
         ShopState.Changed += OnShopChanged;
+        ShopState.BuybackChanged += OnBuybackChanged;
         PlayerVitals.GoldChanged += RefreshGold;
-        PlayerBag.Changed += OnBagChanged;
         MiscPackets.Received += OnMiscPacket;
     }
 
     public override void _ExitTree()
     {
         ShopState.Changed -= OnShopChanged;
+        ShopState.BuybackChanged -= OnBuybackChanged;
         PlayerVitals.GoldChanged -= RefreshGold;
-        PlayerBag.Changed -= OnBagChanged;
         MiscPackets.Received -= OnMiscPacket;
         base._ExitTree();
-    }
-
-    /// <summary>Sac muté : la liste de vente n'est reconstruite que si
-    /// la fenêtre est visible — à l'ouverture,
-    /// <see cref="OnShopChanged"/> appelle <see cref="RefreshSell"/>
-    /// qui relit <see cref="PlayerBag.Items"/>.</summary>
-    private void OnBagChanged()
-    {
-        if (IsVisibleInTree()) RefreshSell();
     }
 
     // ------------------------------------------------------------------
@@ -87,38 +83,53 @@ public partial class ShopWindow : Control
         var host = _window;
         if (host == null) return;
 
-        // Onglets natifs : « Tabsell » = marchandise (achat),
-        // « TabBuy » = rachat natif — on le détourne pour la vente.
         _tabs = host.FindChildren("*", "TabContainer", true, false)
             .Cast<TabContainer>().FirstOrDefault();
         var buyPane = TopLeftVitals.Find<Control>(host, "Tabsell");
-        var sellPane = TopLeftVitals.Find<Control>(host, "TabBuy");
-        if (buyPane != null) buyPane.Name = UiTextEn.Translate("Buy");
-        if (sellPane != null)
+        var bbPane = TopLeftVitals.Find<Control>(host, "TabBuy");
+        // Ne PAS forcer bbPane.Visible : le TabContainer gère la
+        // visibilité des panes — un true permanent recouvrait la
+        // liste d'articles du volet vente.
+        // Bascule d'onglet → 185 : le serveur répond 304 (articles)
+        // ou 512 flag=3 (rachat — les rows persistent côté client).
+        if (_tabs != null && bbPane != null)
         {
-            sellPane.Name = UiTextEn.Translate("Sell");
-            sellPane.Visible = true;   // natif : Visible=False
+            var bbIdx = bbPane.GetIndex();
+            _tabs.TabChanged += t =>
+            {
+                if (!ShopState.IsOpen) return;
+                Send(new ZoneBuyBackOpen
+                    { Value = (byte)(t == bbIdx ? 1 : 0) });
+            };
         }
-        _buyList = MakeList(buyPane ?? host);
-        _sellList = MakeList(sellPane ?? host);
 
-        // Or du joueur : le label « Coin » natif est remplacé.
+        // Articles : host = « border » du Tabsell + scrollbar natif
+        // (la barre Godot interne est masquée — look natif conservé).
+        if (buyPane != null)
+            _buyRows = MakeRowHost(buyPane);
+        // Rachat : « scrollpanel » est déjà un ScrollContainer natif.
+        if (bbPane != null)
+        {
+            var scroll = TopLeftVitals
+                .Find<ScrollContainer>(bbPane, "scrollpanel");
+            _bbRows = new VBoxContainer { Name = "__bbrows" };
+            _bbRows.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+            (scroll ?? (Control)bbPane).AddChild(_bbRows);
+        }
+
+        // Or du joueur : label « Coin » natif.
         _gold = TopLeftVitals.Find<Label>(host, "Coin");
         if (_gold != null)
             _gold.Text = "";
         var coinText = TopLeftVitals.Find<Label>(host, "CoinText");
         if (coinText != null) coinText.Text = UiTextEn.Translate("Gold");
 
-        // Bouton acheter sur le panneau achat, vendre sur l'autre.
-        var buyBtn = MakeButton(buyPane ?? host, UiTextEn.Translate("Buy"));
-        buyBtn.Pressed += DoBuy;
-        var sellBtn = MakeButton(sellPane ?? host, UiTextEn.Translate("Sell"));
-        sellBtn.Pressed += DoSell;
-        // Le bouton natif « buy » du TabBuy s'il existe → idem.
+        // Boutons natifs : « buy » (TabBuy) = rachat ; « SellAllBtn »
+        // (Tabsell) = vendre tout le vendable (confirmation).
         var nativeBuy = TopLeftVitals.Find<BaseButton>(host, "buy");
-        if (nativeBuy != null) nativeBuy.Pressed += DoBuy;
+        if (nativeBuy != null) nativeBuy.Pressed += DoBuyBack;
         var nativeSell = TopLeftVitals.Find<BaseButton>(host, "SellAllBtn");
-        if (nativeSell != null) nativeSell.Pressed += DoSell;
+        if (nativeSell != null) nativeSell.Pressed += AskSellAll;
 
         // Boutons natifs de réparation (onglet Tabsell — forgeron) :
         // fixAll → 45 (coût total) → 342 → confirme → 46 ;
@@ -158,31 +169,100 @@ public partial class ShopWindow : Control
         RefreshGold();
     }
 
-    private VBoxContainer MakeList(Control pane)
+    /// <summary>Host de lignes « ShopItem » dans le volet « border »
+    /// d'un onglet : ScrollContainer qui laisse la place à la
+    /// scrollbar native (pilotée en miroir — look natif conservé).</summary>
+    private static VBoxContainer? MakeRowHost(Control pane)
     {
+        var border = TopLeftVitals.Find<Control>(pane, "border");
+        if (border == null) return null;
         var scroll = new ScrollContainer { Name = "__scroll" };
         scroll.SetAnchorsAndOffsetsPreset(LayoutPreset.FullRect);
-        scroll.OffsetTop = 30;
-        scroll.OffsetBottom = -46;
-        scroll.OffsetLeft = 8;
-        scroll.OffsetRight = -8;
+        var nbar = TopLeftVitals.Find<VScrollBar>(border, "scrollbar");
+        scroll.OffsetRight = nbar != null
+            ? -nbar.Size.X - 2 : -4;
+        scroll.OffsetLeft = 4;
+        scroll.OffsetTop = 4;
+        scroll.OffsetBottom = -4;
         scroll.MouseFilter = MouseFilterEnum.Stop;
-        pane.AddChild(scroll);
-        var list = new VBoxContainer { Name = "__list" };
-        list.SizeFlagsHorizontal = SizeFlags.ExpandFill;
-        list.AddThemeConstantOverride("separation", 2);
-        scroll.AddChild(list);
-        return list;
+        border.AddChild(scroll);
+        if (nbar != null)
+        {
+            scroll.VerticalScrollMode =
+                ScrollContainer.ScrollMode.ShowNever;
+            nbar.ValueChanged += v =>
+                scroll.ScrollVertical = (int)v;
+            var inner = scroll.GetVScrollBar();
+            inner.ValueChanged += v =>
+                nbar.SetValueNoSignal(v);
+        }
+        var rows = new VBoxContainer { Name = "__rows" };
+        rows.SizeFlagsHorizontal = SizeFlags.ExpandFill;
+        scroll.AddChild(rows);
+        if (nbar != null)
+            rows.Resized += () =>
+            {
+                var over = Math.Max(0, (int)(rows.Size.Y -
+                    scroll.Size.Y));
+                nbar.MaxValue = over;
+                nbar.Page = scroll.Size.Y;
+            };
+        return rows;
     }
 
-    private Button MakeButton(Control pane, string label)
+    /// <summary>Clone du template ShopItem (icon slot + nom +
+    /// GlodText/SilverText + pièces si1/si2).</summary>
+    private Control MakeShopRow(int itemId, int amount, string name,
+        int priceCopper)
     {
-        var b = new Button { Name = "__action", Text = label };
-        b.SetAnchorsAndOffsetsPreset(LayoutPreset.BottomRight);
-        b.Position = new Vector2(-110, -38);
-        b.Size = new Vector2(100, 30);
-        pane.AddChild(b);
-        return b;
+        Control row;
+        if (_rowProto != null)
+        {
+            row = (Control)_rowProto.Duplicate();
+            row.CustomMinimumSize = new Vector2(0, 40);
+            var slot = ItemSlotCell.Find(row, "Root/ShopItem/itemslot");
+            slot?.SetItemId(itemId, amount);
+            if (TopLeftVitals.Find<Label>(row, "ItemDeatilText")
+                    is { } lab)
+                lab.Text = name;
+            var gold = priceCopper / 1000;
+            var silver = priceCopper % 1000;
+            if (TopLeftVitals.Find<Label>(row, "GlodText") is { } g)
+                g.Text = gold > 0 ? $"{gold}" : "";
+            if (TopLeftVitals.Find<Label>(row, "SilverText") is { } s)
+                s.Text = gold > 0 || silver > 0 ? $"{silver}" : "0";
+        }
+        else
+        {
+            // Repli si shopitem.layout indisponible.
+            row = new HBoxContainer
+            {
+                CustomMinimumSize = new Vector2(0, 30),
+            };
+            var def = ItemTableCache.Get(itemId);
+            if (def is { Code.Length: > 0 })
+            {
+                var tex = AssetCatalog.GetTexture(
+                    $"UI/itemicon/{def.Code}.png");
+                if (tex != null)
+                    row.AddChild(new TextureRect
+                    {
+                        Texture = tex,
+                        CustomMinimumSize = new Vector2(28, 28),
+                        ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                    });
+            }
+            row.AddChild(new Label
+            {
+                Text = amount > 1 ? $"{name} ×{amount}" : name,
+                SizeFlagsHorizontal = SizeFlags.ExpandFill,
+            });
+            row.AddChild(new Label
+            {
+                Text = TransportWindow.FormatMoney(priceCopper),
+            });
+        }
+        return row;
     }
 
     /// <summary>304 reçu/fermeture → montre ou remplit la fenêtre.</summary>
@@ -194,46 +274,48 @@ public partial class ShopWindow : Control
             return;
         }
         RefreshBuy();
-        RefreshSell();
+        RefreshBuyback();
         RefreshGold();
         Visible = true;
     }
 
+    private void OnBuybackChanged()
+    {
+        if (IsVisibleInTree()) RefreshBuyback();
+    }
+
     // ------------------------------------------------------------------
-    // Acheter
+    // Acheter (articles du marchand)
     // ------------------------------------------------------------------
 
     private void RefreshBuy()
     {
-        if (_buyList == null) return;
-        foreach (var c in _buyList.GetChildren()) c.QueueFree();
+        if (_buyRows == null) return;
+        foreach (var c in _buyRows.GetChildren()) c.QueueFree();
         _selBuy = -1;
         foreach (var e in ShopState.Entries)
         {
-            var row = new Button
-            {
-                Text = $"  {e.Name}   —   {e.Price} " + UiTextEn.Translate("g"),
-                Alignment = HorizontalAlignment.Left,
-                CustomMinimumSize = new Vector2(0, 26),
-            };
-            row.AddThemeFontSizeOverride("font_size", 11);
             var idx = e.Index;
-            var itemId = e.ItemId;
-            row.Pressed += () => { _selBuy = idx; };
-            var def = ItemTableCache.Get(itemId);
-            if (def != null && def.Code.Length > 0)
+            var row = MakeShopRow(e.ItemId, e.Count, e.Name, e.Price);
+            row.MouseFilter = MouseFilterEnum.Stop;
+            row.GuiInput += ev =>
             {
-                var tex = AssetCatalog.GetTexture(
-                    $"UI/itemicon/{def.Code}.png");
-                if (tex != null) row.Icon = tex;
-            }
-            _buyList.AddChild(row);
+                if (ev is InputEventMouseButton { Pressed: true,
+                    ButtonIndex: MouseButton.Left } mb)
+                {
+                    _selBuy = idx;
+                    if (mb.DoubleClick) DoBuy();
+                    row.AcceptEvent();
+                }
+            };
+            _buyRows.AddChild(row);
         }
         if (ShopState.Entries.Count == 0)
-            _buyList.AddChild(new Label { Text = UiTextEn.Translate("(empty)") });
+            _buyRows.AddChild(new Label
+                { Text = UiTextEn.Translate("(empty)") });
     }
 
-    /// <summary>NCID 22 BuyItems [u16 storeSlot][u16 count][u8 buyback].</summary>
+    /// <summary>NCID 22 BuyItems [u16 storeSlot][u16 count][u8 0].</summary>
     private void DoBuy()
     {
         if (_selBuy < 0 || !ShopState.IsOpen) return;
@@ -246,45 +328,96 @@ public partial class ShopWindow : Control
     }
 
     // ------------------------------------------------------------------
-    // Vendre
+    // Rachat (file buyback 512)
     // ------------------------------------------------------------------
 
-    private void RefreshSell()
+    private void RefreshBuyback()
     {
-        if (_sellList == null) return;
-        foreach (var c in _sellList.GetChildren()) c.QueueFree();
-        _selSell = null;
-        foreach (var it in PlayerBag.Items)
+        if (_bbRows == null) return;
+        foreach (var c in _bbRows.GetChildren()) c.QueueFree();
+        _selBb = -1;
+        var list = ShopState.Buyback;
+        for (var i = 0; i < list.Count; i++)
         {
-            var name = TextResolver.ItemName(it.ItemId)
-                ?? $"#{it.ItemId}";
-            var def = ItemTableCache.Get(it.ItemId);
-            var price = def?.SellPrice ?? 0;
-            var qty = it.Amount > 1 ? $" ×{it.Amount}" : "";
-            var row = new Button
+            var e = list[i];
+            var name = TextResolver.ItemName(e.ItemId)
+                ?? $"#{e.ItemId}";
+            var idx = i;
+            var row = MakeShopRow(e.ItemId, Math.Max(e.Count, 1),
+                name, (int)e.Price);
+            row.MouseFilter = MouseFilterEnum.Stop;
+            row.GuiInput += ev =>
             {
-                Text = $"  {name}{qty}   —   {price} " + UiTextEn.Translate("g"),
-                Alignment = HorizontalAlignment.Left,
-                CustomMinimumSize = new Vector2(0, 26),
+                if (ev is InputEventMouseButton { Pressed: true,
+                    ButtonIndex: MouseButton.Left } mb)
+                {
+                    _selBb = idx;
+                    if (mb.DoubleClick) DoBuyBack();
+                    row.AcceptEvent();
+                }
             };
-            row.AddThemeFontSizeOverride("font_size", 11);
-            var slot = it;
-            row.Pressed += () => { _selSell = slot; };
-            _sellList.AddChild(row);
+            _bbRows.AddChild(row);
         }
-        if (PlayerBag.Items.Count == 0)
-            _sellList.AddChild(new Label { Text = UiTextEn.Translate("(empty bag)") });
+        if (list.Count == 0)
+            _bbRows.AddChild(new Label
+                { Text = UiTextEn.Translate("(nothing to buy back)") });
     }
 
-    /// <summary>NCID 23 SellItems [i32 1][u16 slot][u16 count]
-    /// [u16 container].</summary>
-    private void DoSell()
+    /// <summary>Rachat : NCID 22 BuyItems, BuyBack=1 et ShopIndex =
+    /// index dans la file buyback (serveur : index de la deque).</summary>
+    private void DoBuyBack()
     {
-        if (_selSell is not { } it || !ShopState.IsOpen) return;
-        var m = new ZoneSellItems();
-        m.Items.Add(((ushort)it.Slot,
-            (ushort)Math.Max(it.Amount, 1), (ushort)it.Bag));
-        Send(m);
+        if (_selBb < 0 || _selBb >= ShopState.Buyback.Count
+            || !ShopState.IsOpen) return;
+        Send(new ZoneBuyItems
+        {
+            ShopIndex = (ushort)_selBb,
+            ItemIndex = 1,
+            BuyBack = 1,
+        });
+    }
+
+    // ------------------------------------------------------------------
+    // Vente (SellAllBtn = lot ; le par-item se fait clic droit sac)
+    // ------------------------------------------------------------------
+
+    /// <summary>SellAllBtn natif : vend TOUS les items vendables du
+    /// sac en un seul NCID 23 (confirmation d'abord — irréversible).</summary>
+    private void AskSellAll()
+    {
+        if (!ShopState.IsOpen) return;
+        var sellable = PlayerBag.Items
+            .Where(it => (ItemTableCache.Get(it.ItemId)?.SellPrice ?? 0)
+                > 0)
+            .ToList();
+        if (sellable.Count == 0) return;
+        long total = 0;
+        foreach (var it in sellable)
+            total += (long)(ItemTableCache.Get(it.ItemId)!.SellPrice)
+                * Math.Max(it.Amount, 1);
+        var dlg = new ConfirmationDialog
+        {
+            DialogText = UiTextEn.Translate(
+                "Sell ALL %s1 sellable items for ~%s2?")
+                .Replace("%s1", sellable.Count.ToString())
+                .Replace("%s2",
+                    TransportWindow.FormatMoney((int)Math.Min(
+                        total, int.MaxValue))),
+            OkButtonText = UiTextEn.Translate("Sell"),
+            CancelButtonText = UiTextEn.Translate("Cancel"),
+        };
+        dlg.Confirmed += () =>
+        {
+            var m = new ZoneSellItems();
+            foreach (var it in sellable)
+                m.Items.Add(((ushort)it.Slot,
+                    (ushort)Math.Max(it.Amount, 1), (ushort)it.Bag));
+            Send(m);
+            dlg.QueueFree();
+        };
+        dlg.Canceled += () => dlg.QueueFree();
+        AddChild(dlg);
+        dlg.PopupCentered();
     }
 
     // ------------------------------------------------------------------
@@ -298,36 +431,28 @@ public partial class ShopWindow : Control
     private void AskRepairAll() =>
         Send(new ZoneServerAskRepairEquipGold());
 
-    /// <summary>« Fix one » répare l'item sélectionné dans la liste
-    /// de vente (le curseur-marteau natif choisit l'item — chez nous
-    /// la sélection existante fait office). Sans sélection, on
-    /// demande quand même le coût total pour ne pas laisser le
-    /// bouton muet.</summary>
-    private void AskRepairOne()
-    {
-        if (_selSell is { } it)
-            Send(new ZoneServerAskRepairOneItemGold
-            {
-                Field1 = (byte)it.Bag, Field3 = (short)it.Slot,
-            });
-        else
-            AskRepairAll();
-    }
+    /// <summary>« Fix one » demande le coût total — le curseur-marteau
+    /// natif choisit l'item ; sans sélection courante on garde le
+    /// comportement « coût global » pour ne pas laisser le bouton muet.</summary>
+    private void AskRepairOne() => AskRepairAll();
 
     /// <summary>342/343 = coûts de réparation → popup de
-    /// confirmation avant d'envoyer 46/48.</summary>
+    /// confirmation avant d'envoyer 46/48 ; 512 = file buyback.</summary>
     private void OnMiscPacket(NetMessage m)
     {
         switch (m)
         {
             case ZoneClientAskRepairEquipGold q:
                 _repairItem = null;
-                ConfirmRepair($"Repair ALL equipment for {q.Value:N0} g ?");
+                ConfirmRepair(UiTextEn.Translate("Repair ALL equipment for %s1 g ?").Replace("%s1", q.Value.ToString("N0")));
                 break;
             case ZoneClientAskRepairOneItemGold q:
-                _repairItem = _selSell;
+                _repairItem = null;
                 ConfirmRepair(
-                    $"Repair this item for {q.Field3:N0} g ?");
+                    UiTextEn.Translate("Repair for %s1 g ?").Replace("%s1", q.Field3.ToString("N0")));
+                break;
+            case ZoneClientBuyBackList bb:
+                ShopState.OnBuyBackList(bb);
                 break;
         }
     }
@@ -405,20 +530,18 @@ public partial class ShopWindow : Control
         _tabs.OffsetTop = 26;
         p.AddChild(_tabs);
         var buy = new Control { Name = UiTextEn.Translate("Buy") };
-        var sell = new Control { Name = UiTextEn.Translate("Sell") };
+        var bb = new Control { Name = UiTextEn.Translate("Buyback") };
         _tabs.AddChild(buy);
-        _tabs.AddChild(sell);
-        _buyList = MakeList(buy);
-        _sellList = MakeList(sell);
+        _tabs.AddChild(bb);
+        _buyRows = new VBoxContainer();
+        buy.AddChild(_buyRows);
+        _bbRows = new VBoxContainer();
+        bb.AddChild(_bbRows);
         var gold = new Label { Name = "__gold" };
         gold.SetAnchorsAndOffsetsPreset(LayoutPreset.BottomLeft);
         gold.Position = new Vector2(10, -30);
         p.AddChild(gold);
         _gold = gold;
-        var bb = MakeButton(buy, UiTextEn.Translate("Buy"));
-        bb.Pressed += DoBuy;
-        var sb = MakeButton(sell, UiTextEn.Translate("Sell"));
-        sb.Pressed += DoSell;
         var x = new Button { Text = "×" };
         x.SetAnchorsAndOffsetsPreset(LayoutPreset.TopRight);
         x.Position = new Vector2(-26, 2);

@@ -134,10 +134,10 @@ public sealed partial class ZoneEntryFlow
                     new CNC_CZ_ClientUpdateAlpacaCoin
                     { Value = ArgVal("coin") }, CancellationToken.None);
                 break;
-            case "tpa": // tpa <posGroupId> <areaId> — point de sauvegarde
-                // TC_TPA natif (mission @0x80f0910) → zone `tpa a b` :
-                // téléporte le perso au groupe de positions a de sa
-                // scène + mémorise last_normal_area_id = node<<16|b.
+            case "tpa": // tpa <nodeId> <normalKey> — TC_TPA natif
+                // (mission @0x80f0910) → zone `tpa a b` → TC_TransportArea
+                // @0x83db340 : a = node cible (cross-node possible), b =
+                // clé [normal_area] → event-area de la scène cible.
                 await RunTpaAsync(session, st, Arg(ai), Arg(ai + 1),
                     CancellationToken.None);
                 break;
@@ -457,38 +457,61 @@ public sealed partial class ZoneEntryFlow
         "evaluate" => 59, "battle_crusade" => 60,
         _ => null,
     };
-    /// <summary>`tpa &lt;posGroupId&gt; &lt;areaId&gt;` — TC_TPA natif
-    /// (mission @0x80f0910) : téléporte le perso au groupe de positions
-    /// `posGroupId` de sa scène (point de sauvegarde) et mémorise
-    /// `last_normal_area_id = node&lt;&lt;16|areaId` — le « TPA » des
-    /// dialogues NPC (`TPA 177 21` dans S_Npc : retour au point
-    /// d'enregistrement). Émission 313 comme le refresh revive.</summary>
+    /// <summary>`tpa &lt;nodeId&gt; &lt;normalKey&gt;` — TC_TPA natif
+    /// (mission @0x80f0910) → zone `tpa a b` → `TC_TransportArea`
+    /// (zone @0x83db340) : `TransportCharacterToArea(char,
+    /// b&amp;0xffff | a&lt;&lt;16)` — la clé composée
+    /// `node&lt;&lt;16|normalKey` résout l'event-area pointée par
+    /// `[normal_area]` (col1=clé, col2=event-area ; LoadNormalArea
+    /// @0x8350930). `a` est le NODE cible, pas un groupe de positions :
+    /// `AcceptTPA 179 21` alors que S179 n'a pas d'event-area 21 —
+    /// mais normal_area `1,21,2` (clé 21 → ea 2). Node différent →
+    /// migration complète ; même node → 313 local. Le natif ne
+    /// persiste la clé dans last_normal_area_id (char+0x79c) que si
+    /// normalKey ∈ [21,50]. Clé absente → no-op silencieux.</summary>
     private async Task RunTpaAsync(NetSession session, EntryState st,
-        int posGroupId, int areaId, CancellationToken token)
+        int nodeId, int normalKey, CancellationToken token)
     {
-        var sc = _services.Scenes.GetScene($"S{st.NodeId:D3}");
-        if (sc != null &&
-            sc.PositionGroups.TryGetValue(posGroupId, out var ps) &&
-            ps.Count > 0)
+        var sc = _services.Scenes.GetScene($"S{nodeId:D3}");
+        var eaId = sc?.NormalLinks
+            .Where(kv => kv.Value == normalKey)
+            .Select(kv => kv.Key).FirstOrDefault() ?? 0;
+        var ea = sc?.EventAreas.FirstOrDefault(a => a.Id == eaId);
+        if (ea == null)
         {
-            var p = ps[0];
-            st.PosX = p.X; st.PosZ = p.Y; st.Facing = p.Facing;
+            EdenLog.Write($"[Zone-M] tpa char={st.CharId} " +
+                $"node={nodeId} key={normalKey} : clé inconnue");
+            return;
+        }
+        if (nodeId == st.NodeId)
+        {
+            // Téléport local dans le node — même corps 313 que //tele.
+            st.PosX = ea.X; st.PosZ = ea.Y; st.PosY = ea.Z;
+            st.Facing = ea.Facing;
             _writeBehind.MarkCoordinates((int)st.CharId,
-                st.NodeId, p.X, p.Y, p.Z, p.Facing);
+                st.NodeId, ea.X, ea.Y, ea.Z, ea.Facing);
             await session.SendAsync(new CNC_CZ_ClientEnterNodeNodeData
             {
                 Field1 = st.NodeId, Field2 = 1, Field3 = st.PosX,
                 Field4 = st.PosZ, Field5 = st.Facing,
             }, token);
+            // Saut intra-node possiblement longue distance — refresh
+            // du voisinage comme //tele.
+            await UpdateSightAsync(session, st, token, force: true);
         }
-        if (areaId > 0)
+        else
+            await MigrateToNodeAsync(session, st, nodeId,
+                ea.X, ea.Y, ea.Z, token);
+        // Natif : la clé n'est enregistrée comme point de sauvegarde
+        // que pour les normal-area « joueur » (plage 21-50).
+        if (normalKey is >= 21 and <= 50)
         {
-            var comp = st.NodeId << 16 | areaId;
+            var comp = nodeId << 16 | normalKey;
             st.LastNormalAreaId = comp;
             _writeBehind.MarkLastNormalAreaId((int)st.CharId, comp);
         }
         EdenLog.Write($"[Zone-M] tpa char={st.CharId} " +
-            $"pos={posGroupId} area={areaId}");
+            $"node={nodeId} key={normalKey} -> ea {ea.Id}");
     }
     /// <summary>Donne `count` exemplaires d'un item de quête
     /// (objectif NPCItem — le NPC remet l'item au joueur, natif

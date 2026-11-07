@@ -48,6 +48,10 @@ public sealed class InventoryService
     public int MaxDurabilityOf(int itemId) =>
         _itemDefs.TryGetValue(itemId, out var def) ? def.MaxDurability : 0;
 
+    /// <summary>Définition S_Item d'un template — null si absente.</summary>
+    public ItemParser.ItemDef? DefOf(int itemId) =>
+        _itemDefs.TryGetValue(itemId, out var def) ? def : null;
+
     /// <summary>
     /// Ajoute un item à l'inventaire — auto-stack sur les stacks existants
     /// non pleins du même itemId, puis place le reste dans un slot libre.
@@ -77,12 +81,38 @@ public sealed class InventoryService
         // ne fusionne jamais).
         var stackable = maxStack > 1 && (def?.EquipLoc ?? 0) <= 0;
         var remaining = quantity;
+        var items = await _inventoryRepository.GetItemsByCharacterIdAsync(characterId);
+
+        // Pré-validation atomique : `ok=false` signifie « RIEN
+        // d'inséré » — les appelants reposent l'intégralité au sol en
+        // trésor (GiveQuestItem/loot). Sans ça un sac presque plein
+        // produisait insertion partielle + trésor de la TOTALITÉ =
+        // duplication silencieuse (prouvé live : 2 items en DB, 0
+        // paquet 274, trésor x4 au sol).
+        var mergeRoom = stackable
+            ? items.Where(i => i.ItemId == itemId && !i.IsEquipped
+                    && i.EnchantLevel == enchantLevel
+                    && i.IsBound == isBound && i.Quantity < maxStack)
+                .Sum(i => maxStack - i.Quantity)
+            : 0;
+        var rest = Math.Max(0, quantity - mergeRoom);
+        var slotsNeeded = stackable
+            ? (rest + maxStack - 1) / maxStack : rest;
+        if (slotsNeeded > 0)
+        {
+            var caps = await _inventoryRepository
+                .GetAllBagCapacitiesAsync(characterId);
+            var free = caps.Sum(kv => kv.Value - items.Count(
+                i => i.BagId == kv.Key && !i.IsEquipped
+                    && i.Slot >= 0 && i.Slot < kv.Value));
+            if (free < slotsNeeded)
+                return (false, "Inventory full", null, null);
+        }
 
         // 1. Auto-stack : compléter les stacks existants du même item
         //    (même enchant/binding — un enchanté ne stack pas sur un
         //    normal) — dans TOUS les sacs ouverts, pas seulement le
         //    préféré (natif CheckAutoStackItem itère les conteneurs).
-        var items = await _inventoryRepository.GetItemsByCharacterIdAsync(characterId);
         foreach (var stack in items.Where(i =>
                      i.ItemId == itemId &&
                      stackable &&
@@ -190,6 +220,160 @@ public sealed class InventoryService
         }
 
         return (true, string.Empty, lastBag, lastSlot);
+    }
+
+    /// <summary>Résultat d'une requête <see cref="AddItemsAsync"/> :
+    /// les entités touchées sont celles mutées/créées — leurs champs
+    /// sont à jour, pas besoin de re-SELECT pour la notification.</summary>
+    public sealed class BulkAddResult
+    {
+        public bool Ok;
+        public readonly List<(int BagId, int Slot, bool Merged,
+            ItemEntity Item)> Touched = new();
+    }
+
+    /// <summary>
+    /// Ajoute plusieurs items d'un coup (loot de kill) — même
+    /// sémantique qu'<see cref="AddItemAsync"/> mais l'inventaire et
+    /// les capacités sont lus UNE fois : le suivi des slots est fait
+    /// en mémoire. N SELECTs par item → 2 SELECTs par lot ; les
+    /// UPDATE/INSERT des mutations réelles restent par item.
+    /// </summary>
+    public async Task<List<BulkAddResult>> AddItemsAsync(int characterId,
+        IReadOnlyList<(int ItemId, int Quantity, int EnchantLevel,
+            bool IsBound)> requests)
+    {
+        var results = new List<BulkAddResult>(requests.Count);
+        if (requests.Count == 0) return results;
+        var items = (await _inventoryRepository
+            .GetItemsByCharacterIdAsync(characterId)).ToList();
+        var caps = await _inventoryRepository
+            .GetAllBagCapacitiesAsync(characterId);
+        foreach (var req in requests)
+            results.Add(await AddOneBulkAsync(req));
+        return results;
+
+        // Slot libre d'un sac = premier loc < capacité sans item —
+        // réplique GetAvailableSlotAsync sur l'état en mémoire.
+        int? FreeSlotOf(int bagId)
+        {
+            if (!caps.TryGetValue(bagId, out var cap) || cap <= 0)
+                return null;
+            for (var s = 0; s < cap; s++)
+                if (!items.Any(i => i.BagId == bagId && !i.IsEquipped
+                        && i.Slot == s))
+                    return s;
+            return null;
+        }
+
+        async Task<BulkAddResult> AddOneBulkAsync(
+            (int ItemId, int Quantity, int EnchantLevel, bool IsBound) req)
+        {
+            var res = new BulkAddResult();
+            var (itemId, quantity, enchantLevel, isBound) = req;
+            var def = _itemDefs.TryGetValue(itemId, out var idef)
+                ? idef : null;
+            if (def?.Kind == 40) return res; // certificat → player_license
+            var maxStack = MaxStackOf(itemId);
+            var stackable = maxStack > 1 && (def?.EquipLoc ?? 0) <= 0;
+            var remaining = quantity;
+
+            // Pré-validation all-or-nothing par item (même règle que
+            // AddItemAsync : rien d'inséré si le sac est plein).
+            var mergeRoom = stackable
+                ? items.Where(i => i.ItemId == itemId && !i.IsEquipped
+                        && i.EnchantLevel == enchantLevel
+                        && i.IsBound == isBound && i.Quantity < maxStack)
+                    .Sum(i => maxStack - i.Quantity)
+                : 0;
+            var rest = Math.Max(0, quantity - mergeRoom);
+            var slotsNeeded = stackable
+                ? (rest + maxStack - 1) / maxStack : rest;
+            if (slotsNeeded > 0)
+            {
+                var free = caps.Sum(kv => kv.Value - items.Count(
+                    i => i.BagId == kv.Key && !i.IsEquipped
+                        && i.Slot >= 0 && i.Slot < kv.Value));
+                if (free < slotsNeeded) return res;
+            }
+
+            // 1. Auto-stack sur les piles existantes.
+            foreach (var stack in items.Where(i =>
+                         i.ItemId == itemId && stackable &&
+                         !i.IsEquipped &&
+                         i.EnchantLevel == enchantLevel &&
+                         i.IsBound == isBound && i.Quantity < maxStack))
+            {
+                var toAdd = Math.Min(remaining, maxStack - stack.Quantity);
+                stack.Quantity += toAdd;
+                stack.Durability = stack.Quantity;
+                remaining -= toAdd;
+                await _inventoryRepository.UpdateItemAsync(stack);
+                res.Touched.Add((stack.BagId, stack.Slot, true, stack));
+                if (remaining == 0) { res.Ok = true; return res; }
+            }
+
+            // 2. Slots libres — sac 0 puis les autres, en mémoire.
+            var firstPass = true;
+            while (remaining > 0)
+            {
+                (int BagId, int Slot)? found = null;
+                if (firstPass && FreeSlotOf(0) is { } s0)
+                    found = (0, s0);
+                firstPass = false;
+                if (found == null)
+                    for (var b = 0; b <= 4 && found == null; b++)
+                        if (FreeSlotOf(b) is { } s)
+                            found = (b, s);
+                if (found == null) return res;
+                var (bag, slot) = found.Value;
+
+                var stackSize = stackable
+                    ? Math.Min(remaining, maxStack) : 1;
+                var now = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                var durSec = (def?.DurationUnit ?? 0) is >= 4 and <= 6
+                    ? def!.DurationSeconds : 0;
+                var initDur = stackable ? stackSize
+                    : Math.Max(def?.MaxDurability ?? 0, 1);
+                var initMax = stackable ? maxStack
+                    : Math.Max(def?.MaxDurability ?? 0, 1);
+                var newItem = new ItemEntity
+                {
+                    CharacterId = characterId,
+                    BagId = bag,
+                    Slot = slot,
+                    ItemId = itemId,
+                    Quantity = stackable ? stackSize : 1,
+                    Durability = initDur,
+                    MaxDurability = initMax,
+                    IsEquipped = false,
+                    EnchantLevel = enchantLevel,
+                    IsBound = isBound,
+                    CreateTime = now,
+                    DueDate = durSec > 0 ? now + durSec : 0,
+                };
+                if (!stackable && def != null)
+                {
+                    var (sockCount, sockIds) = _inlay.RollSockets(def);
+                    if (sockCount > 0)
+                    {
+                        newItem.EmbeddedAmount = sockCount;
+                        newItem.EmbeddedId1 = sockIds[0];
+                        newItem.EmbeddedId2 = sockIds[1];
+                        newItem.EmbeddedId3 = sockIds[2];
+                        newItem.EmbeddedId4 = sockIds[3];
+                        newItem.EmbeddedId5 = sockIds[4];
+                        newItem.EmbeddedId6 = sockIds[5];
+                    }
+                }
+                await _inventoryRepository.AddItemAsync(newItem);
+                items.Add(newItem);   // visible des requêtes suivantes
+                res.Touched.Add((bag, slot, false, newItem));
+                remaining -= stackSize;
+            }
+            res.Ok = true;
+            return res;
+        }
     }
 
     /// <summary>

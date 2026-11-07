@@ -8435,3 +8435,182 @@ State	État
 permanent	permanent
 left	restant
 can't cancel	non annulable
+Dungeon Portal	Portail de donjon
+Solo	Solo
+Multiplayer	Multijoueur
+Dungeon	Donjon
+Entries: unlimited (dev pass)	Entrées : illimitées (passe dev)
+Difficulty scaled for a solo player. 	Difficulté adaptée à un joueur seul. 
+Strengthened monsters, increased exp and gold. 	Monstres renforcés, exp et or accrus. 
+Entries left today: {0}/{1}	Entrées restantes aujourd'hui : {0}/{1}
+Hairstyle	Coiffure
+Hair color	Couleur de cheveux
+Anuran	Anura
+ATK Bonus	Bonus d'Attaque
+MATK Bonus	Bonus d'Att. magique
+Total ATK	Attaque totale
+Total MATK	Att. magique totale
+Extra Ability	Capacité bonus
+Success Rate:	Taux de réussite :
+Performing other actions while a fail bonus is active will lose it	Toute autre action annule le bonus d'échec
+Strengthen	Amélioration
+Strengthen workshop	Atelier d'amélioration
+Racial craft	Artisanat racial
+Magic Cube	Cube magique
+Cube recipes	Recettes du cube
+Fusing…	Fusion en cours…
+Failed.	Échec.
+Success!	Succès !
+War Coins	Pièces de guerre
+Lifelong Gold	Or éternel
+Lifelong Points	Points éternels
+PaySystem	Échange
+Exchange list	Liste des échanges
+Required items	Objets requis
+Choice	Choix
+Magic Box	Boîte magique
+Maximum level reached.	Niveau maximal atteint.
+This scroll cannot be used on this item.	Ce parchemin est inutilisable sur cet objet.
+Fortification succeeded.	Amélioration réussie.
+{0} min	{0} min
+{0} order(s)	{0} commande(s)
+Commission	Commande
+Commission failed	Commande échouée
+FAILED	ÉCHEC
+instant	instantané
+done — 	terminé — 
+(no recipe learned)	(aucune recette apprise)
+Buyback	Rachat
+(nothing to buy back)	(rien à racheter)
+Sell ALL %s1 sellable items for ~%s2?	Vendre les %s1 objets vendables pour ~%s2 ?
+Repair ALL equipment for %s1 g ?	Réparer tout l'équipement pour %s1 g ?
+Repair for %s1 g ?	Réparer pour %s1 g ?
+Room storage	Débarras
+Promo	Promo
+slots	emplacements
+Discard	Jeter
+Discard %s1? The item will be destroyed.	Jeter %s1 ? L'objet sera détruit.
+Click on an equipment to apply the item.	Cliquez sur un équipement pour y appliquer l'objet.
+This item can't be sold	Cet objet ne peut pas être vendu.
+Sell %s1 for %s2?	Vendre %s1 pour %s2 ?
+Bind Equipment	Lier l'équipement
+Equip %s1? It will be bound to you.	Équiper %s1 ? L'objet sera lié à vous.
+Equip	Équiper
+Cast	Lancer
+Next level:	Niveau suivant :
+Class Requirement: Reach the required class level to unlock this class.	Exigence de classe : atteignez le niveau de classe requis pour débloquer cette classe.
+Hotel — rooms	Hôtel — chambres
+Claiming #%s1…	Récupération de #%s1…
+Claiming %s1 item(s)…	Récupération de %s1 objet(s)…
+Buying %s1…	Achat de %s1…
+group %s1 idx %s2 mu %s3	groupe %s1 idx %s2 mu %s3
+price %s1 promo %s2 qty/pack %s3 lvl≥%s4	prix %s1 promo %s2 qté/lot %s3 niv≥%s4
+limit %s1/account — bought %s2	limite %s1/compte — acheté %s2
+note: %s1	note : %s1
+fortune bag: %s1	sac de fortune : %s1
+— limit %s1 (bought %s2)	— limite %s1 (acheté %s2)
+— lvl %s1+	— niv. %s1+
+not yet on sale	pas encore en vente
+sale ends %s1	fin de vente le %s1
+%s1 listing(s) on sale —	%s1 annonce(s) en vente —
+%s1 — %s2 g	%s1 — %s2 g
+Buy %s1 —	Acheter %s1 —
+Listing… (response 429)	Mise en vente… (réponse 429)
+to %s1…	à %s1…
+%s1 invites you as friend.	%s1 vous invite comme ami.
+Guild operation 0x%s1 refused.	Opération de guilde 0x%s1 refusée.
+%s1 invites you to join	%s1 vous invite à rejoindre
+Blocked «%s1».	«%s1» bloqué.
+Friend request: «%s1».	Demande d'ami : «%s1».
+Friend List — <%s1>	Liste d'amis — <%s1>
+Lv%s1	Niv%s1
+%s1 invites you	%s1 vous invite
+Friend «%s1» accepted.	Ami «%s1» accepté.
+(invited)	(invité)
+(invites you)	(vous invite)
+to %s1: %s2	à %s1 : %s2
+Stall: invalid state (dead/busy/already vending).	Étal : état invalide (mort/occupé/déjà en vente).
+Stall: too soon — wait ~1.5 s.	Étal : trop tôt — attendez ~1,5 s.
+Stall: stalls are only allowed on map S001.	Étal : les étals ne sont autorisés que sur la carte S001.
+Stall: title must not be empty.	Étal : le titre ne doit pas être vide.
+Stall: duplicate item in the list.	Étal : objet en double dans la liste.
+Stall: too many free (price 0) goods.	Étal : trop d'articles gratuits (prix 0).
+Stall: refused (0x%s1).	Étal : refusé (0x%s1).
+Refused (0x%s1).	Refusé (0x%s1).
+Price: %s1 g (whole lot)	Prix : %s1 g (lot entier)
+Bag %s1	Sac %s1
+Auction House	Hôtel des ventes
+Send Request	Envoyer la commande
+Requires {0}× {1}	Nécessite {0}× {1}
+Area dialog {0}/{1}.	Dialogue de zone {0}/{1}.
+Shop event {0}/{1}.	Événement boutique {0}/{1}.
+Shop {0}/{1}.	Boutique {0}/{1}.
+Contrib.	Contrib.
+Leave the guild?	Quitter la guilde ?
+Disband the guild? This cannot be undone.	Dissoudre la guilde ? Cette action est irréversible.
+Guild level up	Monter la guilde de niveau
+Preview emblem	Aperçu de l'emblème
+Set emblem	Définir l'emblème
+Date	Date
+Author	Auteur
+Loc	Empl.
+Forest sanctuary	Sanctuaire de la forêt
+Mountain sanctuary	Sanctuaire de la montagne
+Forest sanctuary (VIP)	Sanctuaire de la forêt (VIP)
+Mountain sanctuary (VIP)	Sanctuaire de la montagne (VIP)
+Cost: 50 gold from the guild treasury (VIP: 1,000 gold).	Coût : 50 po prélevés sur la trésorerie de la guilde (VIP : 1 000 po).
+The guild treasury must hold the amount.	La trésorerie de la guilde doit couvrir ce montant.
+Business tax (%)	Taxe commerciale (%)
+Find a guild	Trouver une guilde
+Guilds	Guildes
+guild name… (5 gold)	nom de la guilde… (5 po)
+Find guild	Chercher une guilde
+Member	Membre
+Guild town buildings	Bâtiments de la ville de guilde
+Guild towns	Villes de guilde
+Territory war	Guerre de territoire
+Crystal Utopia	Utopie de cristal
+Leave queue	Quitter la file
+Team info	Infos de l'équipe
+Crusade battle	Bataille des croisades
+No crusade available	Aucune croisade disponible
+NPC name	Nom du PNJ
+mats	mat.
+Auction listings	Annonces
+Search items	Recherche d'objets
+Minimum	Minimum
+Maximum	Maximum
+Level requirement	Niveau requis
+Item name	Nom de l'objet
+Consumables	Consommables
+expired	expiré
+Items on auction	Objets en vente
+Selling price	Prix de vente
+Deposit fee	Frais de dépôt
+Buy item	Acheter
+Sell item	Vendre
+%s1 listing(s) on sale — 	%s1 annonce(s) en vente — 
+Building Collection	Bâtiments
+Character Contract Collection	Contrats de PNJ
+Town events	Événements de la ville
+Work result	Résultat de la commande
+Commission complete!	Commande terminée !
+Claim your commission.	Récupérez votre commande.
+Claim	Récupérer
+Donate to the guild	Donation à la guilde
+Amount to donate (gold / silver)	Montant du don (or / argent) :
+Guild notice	Annonce de guilde
+Guild message board	Tableau d'affichage de la guilde
+Guild notice text	Texte de l'annonce de guilde :
+Title and content of the message	Titre et contenu du message :
+Member comment	Commentaire de membre
+Enter a comment	Saisissez un commentaire :
+Rank names	Noms des rangs
+Name of each rank	Nom de chaque rang :
+Rank privileges	Privilèges des rangs
+Privilege number (1-14), then click the ranks allowed	Numéro du privilège (1-14), puis cliquez sur les rangs autorisés :
+Guild emblem	Emblème de guilde
+Emblem rules: 1. The image must be a 32x32 bmp file. 2. The emblem cannot be set again within 60 minutes, but it can be previewed. 3. A preview only checks that the image is valid; it does not set the emblem.	Règles de l'emblème : 1. L'image doit être un fichier bmp de 32x32. 2. L'emblème ne peut pas être redéfini pendant 60 minutes, mais il peut être prévisualisé. 3. L'aperçu vérifie seulement que l'image est valide ; il ne définit pas l'emblème.
+Town founding application	Candidature à la Fondation d'une Ville
+Guild application	Candidature de guilde
+Confirmation	Confirmation

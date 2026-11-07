@@ -371,7 +371,13 @@ public sealed class ZoneEnterMissionList : NetMessage
 /// (+N de renforçage).</summary>
 public sealed record InventorySlot(int Bag, int Slot, int ItemId,
     int Durability, int MaxDurability, byte Flags, int Amount = 0,
-    int Strengthen = 0);
+    int Strengthen = 0)
+{
+    /// <summary>Champs optionnels du record (sockets incrustées,
+    /// combos, enchants magic-box, due_date) — <see cref="ItemMeta"/>,
+    /// rempli par les parseurs de records natifs.</summary>
+    public ItemMeta Meta { get; init; } = new();
+}
 
 /// <summary>
 /// Parseur du corps NCID 312 <c>ClientEnterNodeInventory</c> — port
@@ -485,7 +491,8 @@ public static class NativeInventoryParser
         if (NativeItemRecord.TryReadInventory(r, out var rec))
         {
             item = new InventorySlot(0, 0, rec.ItemId, rec.Durability,
-                rec.MaxDurability, rec.Flags, rec.Amount, rec.Strengthen);
+                rec.MaxDurability, rec.Flags, rec.Amount,
+                rec.Strengthen) { Meta = rec.Meta };
             return true;
         }
         item = new InventorySlot(0, 0, 0, 0, 0, 0);

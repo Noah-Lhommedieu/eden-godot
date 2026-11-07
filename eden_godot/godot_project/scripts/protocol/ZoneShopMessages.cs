@@ -71,6 +71,21 @@ public sealed class ZoneSellItems : NetMessage
     }
 }
 
+/// <summary>C→S NCID 185 — BuyBackOpen [u8 flag] : bascule d'onglet
+/// de la fenêtre shop (Execute natif @0x823eaf0, ShopHandlers.cs) :
+/// flag!=0 → onglet « rachat » (réponse : 512 flag=3 puis rows déjà
+/// accumulées côté client) ; flag==0 → retour onglet « articles »
+/// (réponse : 304 re-émis). CNE_CZ_ZoneServerBuyBackOpen.</summary>
+public sealed class ZoneBuyBackOpen : NetMessage
+{
+    public override int Opcode => 185;
+    public override string Name => "Zone.ZoneServerBuyBackOpen";
+    /// <summary>u8 — 0 onglet articles, !=0 onglet rachat.</summary>
+    public byte Value { get; set; }
+    public override void Serialize(BinWriter s) => s.WriteByte(Value);
+    public override void Deserialize(BinReader s) => Value = s.ReadByte();
+}
+
 /// <summary>C→S NCID 71 — AskVendor [i32 npcId] : demande la boutique
 /// du NPC (réponse = 304). CNE_CZ_ZoneServerAskVendor.</summary>
 public sealed class ZoneAskVendor : NetMessage
@@ -356,6 +371,39 @@ public static class ShopState
     private static readonly List<ShopEntry> _entries = new();
     /// <summary>Articles du store (nom EN résolu + prix c_item).</summary>
     public static IReadOnlyList<ShopEntry> Entries => _entries;
+
+    /// <summary>Émis quand la file buyback change (512 flag 1/2/3).</summary>
+    public static event Action? BuybackChanged;
+
+    private static readonly List<ZoneClientBuyBackList.BuybackRecord>
+        _buyback = new();
+    /// <summary>Items rachetables (plus ancien → plus récent) —
+    /// persiste pendant la session, comme la deque native
+    /// (char+0x5d0) : PAS de clear à la fermeture de boutique.</summary>
+    public static IReadOnlyList<ZoneClientBuyBackList.BuybackRecord>
+        Buyback => _buyback;
+
+    /// <summary>512 : met à jour la file buyback selon le flag
+    /// (1 append, 2 retrait à l'index terminal, 3 ouverture — signal
+    /// simple, aucun changement de contenu).</summary>
+    public static void OnBuyBackList(ZoneClientBuyBackList m)
+    {
+        switch (m.Flag)
+        {
+            case ZoneClientBuyBackList.ContentFlag:
+                _buyback.AddRange(m.Entries);
+                break;
+            case ZoneClientBuyBackList.RemoveFlag:
+                if (m.RemovedIndex >= 0 &&
+                    m.RemovedIndex < _buyback.Count)
+                    _buyback.RemoveAt(m.RemovedIndex);
+                break;
+            // flag 3 = ouverture — le contenu client persiste (le
+            // serveur n'envoie que le signal ; les rows arrivent par
+            // les deltas flag=1 émis à chaque vente).
+        }
+        BuybackChanged?.Invoke();
+    }
 
     /// <summary>304 : ouvre la boutique et charge le catalogue.</summary>
     public static void OnEnterShop(ZoneEnterShop m)

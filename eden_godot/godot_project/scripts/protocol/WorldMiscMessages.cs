@@ -178,61 +178,91 @@ public sealed class WorldClientReceiveTicketToWorld : NetMessage
     }
 }
 
-/// <summary>CNC_CW_ClientFamilyAchievementUpdate — layout porté verbatim du codec serveur.</summary>
+/// <summary>CNC_CW_ClientFamilyAchievementUpdate — format <b>variable</b>
+/// prouvé par <c>::Serialize</c> monde @0x080cdfb0 :
+/// <code>
+///  [u8 flag]
+///  flag∈{2,3}  : [u32 total]                 (fam+0x48 — total_point)
+///  flag==1    : [i32 0]  (operator<<(param_1, 0) — littéral int natif)
+///  sinon      : [u16 n][n×{s16 type, u32 point, i32 charId, u32 channel}]
+///               (flag=3 : charId/channel = 0 — _M_fill_assign natif)
+///  flag≠0     : [u16 m][m×{i32 pid, i32 date, i32 point, s16 achId}]
+///               (log — family_achievement_log, table morte native)
+/// </code>
+/// flag=0 = push d'une ligne (op monde 0x14) ; flag=3 = synchro
+/// complète au login. Pas de consommateur HUD actuellement.</summary>
 public sealed class WorldClientFamilyAchievementUpdate : NetMessage
 {
     public override int Opcode => 67;
     public override string Name => "CNC_CW_ClientFamilyAchievementUpdate";
 
-    public byte Field1  { get; set; }
-    public ushort Field2  { get; set; }
-    public short Field3  { get; set; }
-    public uint Field4  { get; set; }
-    public int Field5  { get; set; }
-    public uint Field6  { get; set; }
-    public ushort Field7  { get; set; }
-    public int Field8  { get; set; }
-    public int Field9  { get; set; }
-    public int Field10  { get; set; }
-    public short Field11  { get; set; }
-    public ushort Field12  { get; set; }
-    public ushort Field13  { get; set; }
-    public uint Field14  { get; set; }
+    /// <summary>Entrée catégorie : type=GroupKey, point cumulé.</summary>
+    public sealed record Entry(short Type, uint Point, int CharId,
+        uint Channel);
+    /// <summary>Entrée log (vecteur +0x3c..0x60 natif — mort en pratique).</summary>
+    public sealed record LogEntry(int PlayerId, int Date, int Point,
+        short AchievementId);
+
+    public byte Flag { get; set; }
+    public uint Total { get; set; }
+    public List<Entry> Entries { get; } = new();
+    public List<LogEntry> Logs { get; } = new();
 
     public override void Serialize(BinWriter s)
     {
-        s.WriteByte(Field1);
-        s.WriteShort((short)Field2);
-        s.WriteShort(Field3);
-        s.WriteInt((int)Field4);
-        s.WriteInt(Field5);
-        s.WriteInt((int)Field6);
-        s.WriteShort((short)Field7);
-        s.WriteInt(Field8);
-        s.WriteInt(Field9);
-        s.WriteInt(Field10);
-        s.WriteShort(Field11);
-        s.WriteShort((short)Field12);
-        s.WriteShort((short)Field13);
-        s.WriteInt((int)Field14);
+        s.WriteByte(Flag);                          // u8 — flag
+        if ((byte)(Flag - 2) < 2)
+            s.WriteInt((int)Total);                 // u32 — total_point
+        if (Flag == 1)
+            s.WriteInt(0);                          // i32 — variante vide
+        else
+        {
+            s.WriteShort((short)Entries.Count);     // u16 — nb entrées
+            foreach (var e in Entries)
+            {
+                s.WriteShort(e.Type);               // s16 — achievement_type
+                s.WriteInt((int)e.Point);           // u32 — points
+                s.WriteInt(Flag == 3 ? 0 : e.CharId);   // i32 — charId
+                s.WriteInt((int)(Flag == 3 ? 0 : e.Channel)); // u32 — channel
+            }
+        }
+        if (Flag != 0)
+        {
+            s.WriteShort((short)Logs.Count);        // u16 — nb entrées log
+            foreach (var l in Logs)
+            {
+                s.WriteInt(l.PlayerId);             // i32 — player_id
+                s.WriteInt(l.Date);                 // i32 — date
+                s.WriteInt(l.Point);                // i32 — point
+                s.WriteShort(l.AchievementId);      // s16 — achievement_id
+            }
+        }
     }
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadByte();
-        Field2 = (ushort)s.ReadShort();
-        Field3 = s.ReadShort();
-        Field4 = (uint)s.ReadInt();
-        Field5 = s.ReadInt();
-        Field6 = (uint)s.ReadInt();
-        Field7 = (ushort)s.ReadShort();
-        Field8 = s.ReadInt();
-        Field9 = s.ReadInt();
-        Field10 = s.ReadInt();
-        Field11 = s.ReadShort();
-        Field12 = (ushort)s.ReadShort();
-        Field13 = (ushort)s.ReadShort();
-        Field14 = (uint)s.ReadInt();
+        Flag = s.ReadByte();                        // u8 — flag
+        if ((byte)(Flag - 2) < 2)
+            Total = (uint)s.ReadInt();              // u32 — total_point
+        Entries.Clear();
+        Logs.Clear();
+        if (Flag == 1)
+            s.ReadInt();                            // i32 — variante vide
+        else
+        {
+            var n = s.ReadUShort();                 // u16 — nb entrées
+            for (var i = 0; i < n; i++)
+                Entries.Add(new Entry(s.ReadShort(),
+                    (uint)s.ReadInt(), s.ReadInt(),
+                    (uint)s.ReadInt()));
+        }
+        if (Flag != 0)
+        {
+            var m = s.ReadUShort();                 // u16 — nb entrées log
+            for (var i = 0; i < m; i++)
+                Logs.Add(new LogEntry(s.ReadInt(), s.ReadInt(),
+                    s.ReadInt(), s.ReadShort()));
+        }
     }
 }
 

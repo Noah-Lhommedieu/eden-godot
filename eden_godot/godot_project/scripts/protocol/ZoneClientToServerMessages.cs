@@ -1218,30 +1218,38 @@ public sealed class ZoneServerColosseumModeQuery : NetMessage
     }
 }
 
-/// <summary>CNE_CZ_ZoneServerRecruitInstance — 220 : layout verbatim codec serveur (C→S).</summary>
+/// <summary>CNE_CZ_ZoneServerRecruitInstance — 220 : format variable
+/// <c>[s16 count][count×s16 nodeIds][s16 role][u8 flag]</c> (flag 0 =
+/// inscription, 1 = retrait) — désasm Deserialize zone @0x0827c210.
+/// </summary>
 public sealed class ZoneServerRecruitInstance : NetMessage
 {
     public override int Opcode => 220;
     public override string Name => "CNE_CZ_ZoneServerRecruitInstance";
 
-    public short Field1  { get; set; }
-    public short Field2  { get; set; }
-    public short Field3  { get; set; }
-    public byte Field4  { get; set; }
+    /// <summary>NodeIds de donjon demandés (≤4).</summary>
+    public short[] Nodes { get; set; } = [];
+    /// <summary>s16 — rôle.</summary>
+    public short Role { get; set; }
+    /// <summary>u8 — 0 = inscription, 1 = retrait.</summary>
+    public byte Flag { get; set; }
 
     public override void Serialize(BinWriter s)
     {
-        s.WriteShort(Field1);
-        s.WriteShort(Field2);
-        s.WriteShort(Field3);
-        s.WriteByte(Field4);    }
+        s.WriteShort((short)Nodes.Length);
+        foreach (var n in Nodes) s.WriteShort(n);
+        s.WriteShort(Role);
+        s.WriteByte(Flag);
+    }
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = s.ReadShort();
-        Field2 = s.ReadShort();
-        Field3 = s.ReadShort();
-        Field4 = s.ReadByte();
+        var count = s.ReadShort();
+        var nodes = new short[Math.Max((short)0, count)];
+        for (var i = 0; i < nodes.Length; i++) nodes[i] = s.ReadShort();
+        Nodes = nodes;
+        Role = s.ReadShort();
+        Flag = s.ReadByte();
     }
 }
 
@@ -1344,39 +1352,47 @@ public sealed class ZoneServerPVPRankLookEquip : NetMessage
     }
 }
 
-/// <summary>CNE_CZ_ZoneServerVerifyCubeCosts — 232 : layout verbatim codec serveur (C→S).</summary>
+/// <summary>CNE_CZ_ZoneServerVerifyCubeCosts — 232 (C→S) : lancer
+/// une recette de cube. Format prouvé par
+/// <c>HandleVerifyCubeCostsAsync</c> (Execute natif @0x829f0d0) :
+/// <code>[u32 recipe_id][u16 n][s16 bags ×n][u16 n][s16 slots ×n]
+/// [s16 lucky_bag][s16 lucky_slot]</code> — n bags/slots = les items
+/// placés dans la grille (n1 == n2 obligatoire côté serveur), lucky =
+/// sac/slot du sac de chance (−1 si absent). La classe générée
+/// aplatissait le format — codec dédié.</summary>
 public sealed class ZoneServerVerifyCubeCosts : NetMessage
 {
     public override int Opcode => 232;
     public override string Name => "CNE_CZ_ZoneServerVerifyCubeCosts";
 
-    public uint Field1  { get; set; }
-    public ushort Field2  { get; set; }
-    public short Field3  { get; set; }
-    public ushort Field4  { get; set; }
-    public short Field5  { get; set; }
-    public short Field6  { get; set; }
-    public short Field7  { get; set; }
+    public int RecipeId { get; set; }
+    public short[] Bags { get; set; } = Array.Empty<short>();
+    public short[] Slots { get; set; } = Array.Empty<short>();
+    public short LuckyBag { get; set; } = -1;
+    public short LuckySlot { get; set; } = -1;
 
     public override void Serialize(BinWriter s)
     {
-        s.WriteInt((int)Field1);
-        s.WriteShort((short)Field2);
-        s.WriteShort(Field3);
-        s.WriteShort((short)Field4);
-        s.WriteShort(Field5);
-        s.WriteShort(Field6);
-        s.WriteShort(Field7);    }
+        s.WriteInt(RecipeId);                       // u32 : id recette
+        s.WriteShort((short)Bags.Length);           // u16 : nb sacs
+        foreach (var b in Bags) s.WriteShort(b);    // s16 : sac
+        s.WriteShort((short)Slots.Length);          // u16 : nb slots
+        foreach (var sl in Slots) s.WriteShort(sl); // s16 : slot
+        s.WriteShort(LuckyBag);                     // s16 : sac chance
+        s.WriteShort(LuckySlot);                    // s16 : slot chance
+    }
 
     public override void Deserialize(BinReader s)
     {
-        Field1 = (uint)s.ReadInt();
-        Field2 = (ushort)s.ReadShort();
-        Field3 = s.ReadShort();
-        Field4 = (ushort)s.ReadShort();
-        Field5 = s.ReadShort();
-        Field6 = s.ReadShort();
-        Field7 = s.ReadShort();
+        RecipeId = s.ReadInt();
+        var n = s.ReadUShort();
+        Bags = new short[n];
+        for (var i = 0; i < n; i++) Bags[i] = s.ReadShort();
+        n = s.ReadUShort();
+        Slots = new short[n];
+        for (var i = 0; i < n; i++) Slots[i] = s.ReadShort();
+        LuckyBag = s.ReadShort();
+        LuckySlot = s.ReadShort();
     }
 }
 
@@ -1721,4 +1737,37 @@ public sealed class ZoneArrangeItem : NetMessage
         Bag = s.ReadShort();
         Reserved = s.ReadShort();
     }
+}
+
+/// <summary>CNE_CZ_ZoneServerFamilyBuildingRepair — 180 : réparation
+/// d'un bâtiment du hall [s16 loc][u8 repairAll] — réponse 487 +
+/// éventuel refus 43 (texte 900 si privilège 10 absent).</summary>
+public sealed class ZoneServerFamilyBuildingRepair : NetMessage
+{
+    public override int Opcode => 180;
+    public override string Name => "CNE_CZ_ZoneServerFamilyBuildingRepair";
+    public short Loc { get; set; }
+    public byte RepairAll { get; set; }
+    public override void Serialize(BinWriter s)
+    {
+        s.WriteShort(Loc);
+        s.WriteByte(RepairAll);
+    }
+    public override void Deserialize(BinReader s)
+    {
+        Loc = s.ReadShort();
+        RepairAll = s.ReadByte();
+    }
+}
+
+/// <summary>CNE_CZ_ZoneServerBattleCrusadeJoin — 259 : demande de
+/// participation à une croisade [i32 crusadeId] — relais mission
+/// « CrusadeJoin crusade_id= » côté zone.</summary>
+public sealed class ZoneServerBattleCrusadeJoin : NetMessage
+{
+    public override int Opcode => 259;
+    public override string Name => "CNE_CZ_ZoneServerBattleCrusadeJoin";
+    public int Value { get; set; }
+    public override void Serialize(BinWriter s) => s.WriteInt(Value);
+    public override void Deserialize(BinReader s) => Value = s.ReadInt();
 }

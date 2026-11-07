@@ -20,40 +20,74 @@ namespace EdenClient.Hud;
 /// </summary>
 public partial class DeathWindow : Control
 {
+    /// <summary>Types du NCID 20 (serveur : <c>ReviveRules</c>).</summary>
+    private static class ReviveRequest
+    {
+        public const int SavePoint = 0, InPlace = 1, Item = 5, LifeLeaf = 6;
+    }
+
+    // Feuille de Vie de Locus (violette, sur place) / Feuille de Vie
+    // (verte, point de sauvegarde) — ids c_item/t_itemmall.
+    private static readonly int[] LocusLeafIds = { 40036, 41468 };
+    private static readonly int[] LifeLeafIds = { 40035, 40157 };
+
+    private BaseButton? _itemBtn;
+
+    /// <summary>Type de revive par feuille que le sac contient
+    /// (Locus d'abord), -1 si aucune.</summary>
+    private static int LeafRequestType()
+    {
+        var items = PlayerBag.Items;
+        if (items.Any(i => LocusLeafIds.Contains(i.ItemId)))
+            return ReviveRequest.Item;
+        if (items.Any(i => LifeLeafIds.Contains(i.ItemId)))
+            return ReviveRequest.LifeLeaf;
+        return -1;
+    }
+
+    /// <summary>Grise « Utiliser un item » sans feuille en sac.</summary>
+    private void RefreshItemChoice()
+    {
+        if (_itemBtn == null) return;
+        _itemBtn.Disabled = LeafRequestType() < 0;
+    }
+
+    internal const string Banner = "Vous êtes mort";
+    internal const string ChoiceHere = "Revenir ici";
+    internal const string ChoiceSavePoint = "Revenir au point de sauvegarde";
+    internal const string ChoiceItem = "Utiliser un item";
+
     private Control? _panel;
     private Label? _area;
 
     public override void _Ready()
     {
-        // Layout natif ReviveMenuUI : NearbyBtn = retour au point
-        // de rez (type 0), DirectBtn = sur place (type 1, cash),
-        // ItemmallBtn = objet Phoenix (type 5), RefuseBtn = ferme.
+        // Layout natif ReviveMenuUI : 3 boutons de choix (haut → bas),
+        // libellés français ; le décompte / accepter / refuser du revive
+        // par un autre joueur ne servent pas ici.
         _panel = HudExtensions.BuildNativeWindow(this,
-            "ReviveMenuUI.layout", "death", new Vector2(320, 200));
+            "ReviveMenuUI.layout", "death", new Vector2(300, 170));
         if (_panel != null)
         {
             _panel.Name = "__death";
-            _area = new Label { Text = UiTextEn.Translate("You died") };
-            _area.SetAnchorsAndOffsetsPreset(LayoutPreset.TopWide);
-            _area.HorizontalAlignment = HorizontalAlignment.Center;
-            _area.OffsetTop = 40;
-            _area.AddThemeFontSizeOverride("font_size", 12);
-            _area.AddThemeColorOverride("font_color",
-                new Color(0.95f, 0.5f, 0.45f));
-            _panel.AddChild(_area);
-
-            Wire("NearbyBtn", 0);
-            Wire("DirectBtn", 1);
-            Wire("ItemmallBtn", 5);
-            if (TopLeftVitals.Find<BaseButton>(_panel, "RefuseBtn")
-                    is { } refuse)
-                refuse.Pressed += () => Visible = false;
-            if (TopLeftVitals.Find<BaseButton>(_panel, "AcceptBtn")
-                    is { } accept)
-                accept.Pressed += () => SendRevive(0);
-            if (TopLeftVitals.Find<BaseButton>(_panel, "HelpBtn")
-                    is { } help)
-                help.Visible = false;
+            _panel.OffsetLeft = -150; _panel.OffsetRight = 150;
+            _panel.OffsetTop = -85; _panel.OffsetBottom = 85;
+            _panel.CustomMinimumSize = new Vector2(300, 170);
+            SetTitle(_panel, Banner);
+            // Fond sous la barre de titre : sinon le 1er bouton est rogné.
+            if (TopLeftVitals.Find<Control>(_panel, "Background")
+                    is { } bg)
+                bg.OffsetTop = 22;
+            Choice("NearbyBtn", ChoiceHere, ReviveRequest.InPlace);
+            Choice("DirectBtn", ChoiceSavePoint, ReviveRequest.SavePoint);
+            Choice("ItemmallBtn", ChoiceItem, -1);
+            _itemBtn = TopLeftVitals.Find<BaseButton>(_panel, "ItemmallBtn");
+            RefreshItemChoice();
+            foreach (var hidden in new[] { "AcceptBtn", "RefuseBtn",
+                         "HelpBtn", "CountDownText" })
+                if (TopLeftVitals.Find<CanvasItem>(_panel, hidden)
+                        is { } h)
+                    h.Visible = false;
         }
         else
         {
@@ -75,7 +109,7 @@ public partial class DeathWindow : Control
         DragHelper.EnableBackgroundDrag(p);
         DragHelper.Persist(p, "death");
 
-        var title = new Label { Text = UiTextEn.Translate("You died") };
+        var title = new Label { Text = Banner };
         title.SetAnchorsAndOffsetsPreset(LayoutPreset.TopWide);
         title.HorizontalAlignment = HorizontalAlignment.Center;
         title.OffsetTop = 18;
@@ -93,7 +127,7 @@ public partial class DeathWindow : Control
             new Color(0.8f, 0.8f, 0.85f));
         p.AddChild(_area);
 
-        var revive = new Button { Text = UiTextEn.Translate("Respawn") };
+        var revive = new Button { Text = ChoiceSavePoint };
         revive.SetAnchorsAndOffsetsPreset(LayoutPreset.CenterBottom);
         revive.Position = new Vector2(-70, -46);
         revive.Size = new Vector2(140, 34);
@@ -104,17 +138,38 @@ public partial class DeathWindow : Control
         Visible = false;
         PlayerVitals.Died += OnDied;
         PlayerVitals.Revived += OnRevived;
+        PlayerBag.Changed += RefreshItemChoice;
     }
 
-    private void Wire(string node, int reviveType)
+    private void Choice(string node, string label, int reviveType)
     {
-        if (TopLeftVitals.Find<BaseButton>(_panel!, node)
-                is { } b)
-            b.Pressed += () => SendRevive(reviveType);
+        if (TopLeftVitals.Find<BaseButton>(_panel!, node) is not { } b)
+            return;
+        if (b is Button btn)
+        {
+            btn.Text = label;
+            btn.AddThemeColorOverride("font_color", Colors.White);
+            btn.AddThemeColorOverride("font_hover_color", Colors.White);
+            btn.AddThemeFontSizeOverride("font_size", 12);
+        }
+        b.Pressed += () =>
+            SendRevive(reviveType >= 0 ? reviveType : LeafRequestType());
+    }
+
+    /// <summary>Remplace le texte de barre de titre du layout natif.</summary>
+    private static void SetTitle(Node root, string text)
+    {
+        foreach (var n in root.GetChildren())
+        {
+            if (n is Label l && l.Text.Contains("Revive"))
+                l.Text = text;
+            SetTitle(n, text);
+        }
     }
 
     private void SendRevive(int reviveType)
     {
+        if (reviveType < 0) return;
         var s = SessionCarry.Session;
         if (s?.Zone?.IsConnected == true)
         {
@@ -135,6 +190,7 @@ public partial class DeathWindow : Control
     {
         PlayerVitals.Died -= OnDied;
         PlayerVitals.Revived -= OnRevived;
+        PlayerBag.Changed -= RefreshItemChoice;
         base._ExitTree();
     }
 
@@ -147,6 +203,7 @@ public partial class DeathWindow : Control
     private void OnDied(uint killer)
     {
         if (_area != null) _area.Text = "";
+        RefreshItemChoice();
         Visible = true;
     }
 

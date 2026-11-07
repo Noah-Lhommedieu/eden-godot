@@ -71,7 +71,11 @@ public sealed partial class ZoneEntryFlow
     private async Task HandleLifeSkillAsync(NetSession session,
         EntryState st, byte[] payload, CancellationToken token)
     {
-        if (st.ShopOpType != 22 || payload.Length < 7) return;
+        if (st.ShopOpType != 22 || payload.Length < 7)
+        {
+            EdenLog.Write($"[Zone] LifeSkill rejeté : shopOp={st.ShopOpType} len={payload.Length}");
+            return;
+        }
         var op = payload[0];                              // u8 : opération
         var recipeId = BitConverter.ToUInt16(payload, 1); // u16 : id recette
         var bag = BitConverter.ToInt16(payload, 3);       // s16 : sac (analyse)
@@ -137,15 +141,15 @@ public sealed partial class ZoneEntryFlow
         EntryState st, short bag, short slot, CancellationToken token)
     {
         var recipe = await AnalysisCheckAsync(session, st, bag, slot, token);
-        if (recipe == null) return;
-        if (!CheckLifeSkillType(st, recipe.Group)) return;
+        if (recipe == null) { EdenLog.Write($"[Zone] analyse : item introuvable bag={bag} slot={slot}"); return; }
+        if (!CheckLifeSkillType(st, recipe.Group)) { EdenLog.Write($"[Zone] analyse : type grp={recipe.Group} ls={st.LifeSkill}"); return; }
         // La recette d'analyse doit être apprise ET non maîtrisée
         // (+0x1c cap ≤ exp → texte via jumptable irrécupérable —
         // retour silencieux comme les autres refus du natif).
         if (!st.LifeSkillLearned.TryGetValue(recipe.Id, out var learned))
-            return;
-        if (recipe.ExpCap <= learned.Exp) return;
-        if (st.PendingLifeSkill != null) return;
+        { EdenLog.Write($"[Zone] analyse : recette {recipe.Id} non apprise"); return; }
+        if (recipe.ExpCap <= learned.Exp) { EdenLog.Write($"[Zone] analyse : recette {recipe.Id} maîtrisée"); return; }
+        if (st.PendingLifeSkill != null) { EdenLog.Write("[Zone] analyse : cast en cours"); return; }
 
         st.PendingLifeSkill = new PendingLifeSkill
         { RecipeId = recipe.Id, OpType = 0, SrcBag = bag, SrcSlot = slot };
@@ -407,12 +411,15 @@ public sealed partial class ZoneEntryFlow
             gain = recipe.ExpBase - recipe.ExpVar
                  + Random.Shared.Next(recipe.ExpVar * 2 + 1);
 
-        int newExp;
-        if (cur.Exp + gain < recipe.ExpCap)
-            newExp = cur.Exp + gain;
-        else
+        // Natif @0x80d1f30 : *puVar3 = nouvel exp (clampé au cap)
+        // commit AVANT ApperceptionLifeSKill/LevelUpLifeSkill — sinon
+        // leur garde `exp < cap` lit l'ancienne valeur et abandonne.
+        var mastered = cur.Exp + gain >= recipe.ExpCap;
+        var newExp = mastered ? recipe.ExpCap : cur.Exp + gain;
+        var gained = newExp - cur.Exp;
+        st.LifeSkillLearned[recipe.Id] = (newExp, cur.Due);
+        if (mastered)
         {
-            newExp = recipe.ExpCap;
             if (recipe.Group == 1)
                 await ApperceptionLifeSkillAsync(session, st,
                     (ushort)recipe.Id, manual: false, token);
@@ -420,8 +427,6 @@ public sealed partial class ZoneEntryFlow
                 await LevelUpLifeSkillAsync(session, st,
                     (ushort)recipe.Id, apperceptionOnly: false, token);
         }
-        var gained = newExp - cur.Exp;
-        st.LifeSkillLearned[recipe.Id] = (newExp, cur.Due);
         // UpdateLifeSkillExp — natif via mission, direct DB ici.
         await _services.LifeSkills.UpdateExpAsync(
             (int)st.CharId, recipe.Id, newExp, cur.Due);

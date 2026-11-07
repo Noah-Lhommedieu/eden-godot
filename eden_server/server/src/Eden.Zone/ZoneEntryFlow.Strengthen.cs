@@ -1,3 +1,4 @@
+using Eden.Core.Data.Parsers;
 using Eden.Core.Networking;
 using Eden.Core.Networking.Messages.Generated;
 using Eden.Core.Networking.Session;
@@ -356,10 +357,28 @@ public sealed partial class ZoneEntryFlow
         else
             pity = 0;
 
-        // Item de chance (kind 8002 — absent des données de cette
-        // version ; champs CChanceItem non modélisés) : bonus 0, pas
-        // de garantie, pas de protection. Niveau 0 → 100 (natif).
-        double total = level == 0 ? 100.0 : pity + rate;
+        // Item de chance (CChanceItem natif) : l'item mall (ex. 41469
+        // « Cristal d'amplification parfaite ») porte un enchant kind
+        // 8002 → bonus de taux + borne de garantie (niveau ≤ borne →
+        // 100 %) + flag « lie la cible ». Niveau 0 → 100 (natif).
+        EnchantParser.EnchantDef? chanceEnch = null;
+        if (p.ChanceBag != -1 && p.ChanceSlot != -1)
+        {
+            var ch0 = await _services.InventoryRepo.GetItemAsync(
+                (int)st.CharId, p.ChanceBag, p.ChanceSlot);
+            var chDef = ch0 == null ? null : _services.GameData.Items
+                .FirstOrDefault(i => i.Id == ch0.ItemId);
+            chanceEnch = chDef == null ? null : _services.GameData
+                .Enchants.FirstOrDefault(
+                    e => e.Id == chDef.UseEnchantId);
+        }
+        // DoStrengthenItem @0x80a2b00 : garantie tant que niveau ≤
+        // borne (safe-level p5, ou borne haute de la fenêtre p9/p11) ;
+        // au-delà → taux + bonus p1.
+        var guarantee = chanceEnch?.ChanceSafeLevel ?? 0;
+        if (guarantee == 0) guarantee = chanceEnch?.ChanceUpper ?? 0;
+        double total = guarantee >= level ? 100.0
+            : pity + (chanceEnch?.ChanceBonus ?? 0) + rate;
 
         // Consommation (or + pierre + chance ×1 — après validation).
         st.Gold = (int)await _services.Characters.AddGoldAsync(
@@ -367,9 +386,29 @@ public sealed partial class ZoneEntryFlow
         await SendAttrAsync(session, st.CharId, 0x02, st.Gold, 0, token);
         await _services.Inventory.RemoveItemAsync(
             (int)st.CharId, p.MatBag, p.MatSlot, 1);
-        // 146 — matériau consommé → ItemCollect.
+        // Wire natif ItemConsume : pile résiduelle → 291, pile
+        // vidée → 275 (comme le chemin DeductItem du cube).
         if (material != null)
+        {
+            var matLeft = material.Quantity - 1;
+            var matDef2 = _services.GameData.Items
+                .FirstOrDefault(i => i.Id == material.ItemId);
+            if (matLeft > 0)
+                await session.SendAsync(
+                    new CNC_CZ_ClientModifyItemDurability
+                    {
+                        Field1 = 0, Field2 = p.MatSlot,
+                        Field3 = (short)matLeft,
+                        Field4 = (short)(matDef2?.MaxDurability ?? 0),
+                        Field5 = p.MatBag, Field6 = 0,
+                    }, token);
+            else
+                await session.SendAsync(new CNC_CZ_ClientDropItem
+                { Field1 = 0, Field2 = p.MatSlot,
+                  Field3 = p.MatBag }, token);
+            // 146 — matériau consommé → ItemCollect.
             _services.NotifyItemChanged((int)st.CharId, material.ItemId);
+        }
         if (p.ChanceBag != -1 && p.ChanceSlot != -1)
         {
             // 146 — item de chance consommé (ItemId lu avant retrait).
@@ -378,7 +417,33 @@ public sealed partial class ZoneEntryFlow
             await _services.Inventory.RemoveItemAsync(
                 (int)st.CharId, p.ChanceBag, p.ChanceSlot, 1);
             if (ch != null)
+            {
+                var chLeft = ch.Quantity - 1;
+                var chDef2 = _services.GameData.Items
+                    .FirstOrDefault(i => i.Id == ch.ItemId);
+                if (chLeft > 0)
+                    await session.SendAsync(
+                        new CNC_CZ_ClientModifyItemDurability
+                        {
+                            Field1 = 0, Field2 = p.ChanceSlot,
+                            Field3 = (short)chLeft,
+                            Field4 = (short)(chDef2?.MaxDurability ?? 0),
+                            Field5 = p.ChanceBag, Field6 = 0,
+                        }, token);
+                else
+                    await session.SendAsync(new CNC_CZ_ClientDropItem
+                    { Field1 = 0, Field2 = p.ChanceSlot,
+                      Field3 = p.ChanceBag }, token);
                 _services.NotifyItemChanged((int)st.CharId, ch.ItemId);
+            }
+        }
+        // Flag bind de la pierre (chance+0x129 natif) → la cible
+        // devient liée (CItemDBO::SetItemBind + bit 0x10 avant le
+        // tirage ; le 436 de succès renvoie l'état réel).
+        if (chanceEnch?.ChanceBind != 0 && !target.IsBound)
+        {
+            await _services.InventoryRepo.SetItemBindAsync(target.Id);
+            target.IsBound = true;
         }
 
         var roll = Random.Shared.NextDouble() * 100.0;
@@ -386,14 +451,40 @@ public sealed partial class ZoneEntryFlow
         {
             // SUCCÈS — niveau+1, anim 0x2b aux voyeurs, 436+435,
             // persistence. Les paliers 6/8/10/12/14 appellent
-            // AddComboStrengthen (combos incrustés — pas encore
-            // modélisés dans ItemEntity).
+            // AddComboStrengthen (kind ≠ 0x51).
             st.StrengthenFailCount = 0;
             if (_mission.Connected)
                 await _mission.SendAgentDbaCommandAsync(st.CharId,
                     "TempStrengthenFailTime = 0", token);
             target.EnchantLevel = level + 1;
+            var comboId = 0;
+            if (def.Kind != 0x51 &&
+                target.EnchantLevel is 6 or 8 or 10 or 12 or 14)
+            {
+                // AddComboStrengthen @0x080a2160 — roll natif sur les
+                // slots extra_combo 6..10, groupe/poids col7/8.
+                comboId = Eden.Core.Game.Services.StrengthenComboService
+                    .Roll(target, def.Kind, def.RequiredLevel,
+                        _services.GameData.ItemCombos);
+            }
             await _services.InventoryRepo.UpdateItemAsync(target);
+            if (comboId > 0)
+            {
+                // CItemDBO::ModifyItemCombo — 11 u16 extra_combo_id.
+                await _services.InventoryRepo.UpdateItemCombosAsync(target);
+                // 369 ClientModifyItemInfo — record complet (natif émet
+                // le record au possesseur quand les combos changent).
+                var row = await _services.InventoryRepo
+                    .GetItemFullRowAsync(target.Id);
+                if (row != null)
+                    await session.SendPacketAsync(369,
+                        Eden.Zone.Codecs.MagicBoxPackets
+                            .BuildModifyItemInfo(row, 0, p.TargetBag,
+                                p.TargetSlot,
+                                (byte)(Eden.Core.Game.Inlay.InlayService
+                                    .IsSocketCapable(def) ? 1 : 0)),
+                        token);
+            }
 
             // 290 PlayerAction 0x2b — anim de réussite aux voyeurs
             // (BroadCastToCanSee natif).
@@ -420,7 +511,7 @@ public sealed partial class ZoneEntryFlow
                 Field2 = p.TargetSlot,           // s16 : slot
                 Field3 = (short)target.EnchantLevel, // s16 : nouveau niveau
                 Field4 = p.TargetBag,            // s16 : index conteneur
-                Field5 = 0,                      // s16 : flag protection
+                Field5 = (short)(target.IsBound ? 1 : 0), // s16 : bind
             }, token);
             // 435 [9][1][0×4] — succès
             await session.SendAsync(new CNC_CZ_ClientStrengthenItemResult
@@ -442,10 +533,14 @@ public sealed partial class ZoneEntryFlow
         }
         else
         {
-            // ÉCHEC — sans protection : l'item est détruit
-            // (EradicateItem) + 435[9][0] + 275. Avec item de chance
-            // protecteur (inexistant dans les données) → 435[9][2] +
-            // failCount++ (pitié).
+            // ÉCHEC — l'item est détruit (EradicateItem) +
+            // 435[9][0] + 275 ; le compteur de pitié natif
+            // (+0xd80) monte quand même d'un cran.
+            st.StrengthenFailCount++;
+            if (_mission.Connected)
+                await _mission.SendAgentDbaCommandAsync(st.CharId,
+                    $"TempStrengthenFailTime = {st.StrengthenFailCount}",
+                    token);
             await session.SendAsync(new CNC_CZ_ClientStrengthenItemResult
             {
                 Field1 = 9, Field2 = 0,
@@ -513,17 +608,25 @@ public sealed partial class ZoneEntryFlow
             target.EnchantLevel <= 9)
             return false;
 
-        // Item de chance : -1/-1 = absent ; sinon CChanceItem kind
-        // 8002 (0x1f42) — aucun n'existe dans cette version des
-        // données → tout autre item est rejeté (le natif envoie le
-        // texte 0x151c avant le cancel global).
+        // Item de chance : -1/-1 = absent ; sinon item dont l'enchant
+        // d'usage est kind 8002 (0x1f42 — les « pierres de chance »
+        // mall 40174/40471/41469… → enchant 55168 & co.). Bornes
+        // non nulles → fenêtre lower ≤ niveau ≤ upper requise (le
+        // natif envoie le texte 0x151c puis refuse).
         if (cc == -1 && cs == -1) return true;
         if (cc < 0 || cs < 0) return false;
         var chance = await _services.InventoryRepo.GetItemAsync(
             (int)st.CharId, cc, cs);
         var chanceDef = chance == null ? null : _services.GameData.Items
             .FirstOrDefault(i => i.Id == chance.ItemId);
-        return chanceDef?.Kind == 0x1f42;
+        var chanceEnch = chanceDef == null ? null : _services.GameData
+            .Enchants.FirstOrDefault(e => e.Id == chanceDef.UseEnchantId);
+        if (chanceEnch?.TriggerParams[0] != 0x1f42) return false;
+        // Gate natif (chance+0x12a/+0x12c) : borne nulle → libre ;
+        // sinon le niveau doit être dans la fenêtre.
+        return chanceEnch.ChanceUpper == 0 || chanceEnch.ChanceLower == 0 ||
+            (chanceEnch.ChanceLower <= target.EnchantLevel &&
+             target.EnchantLevel <= chanceEnch.ChanceUpper);
     }
 
     /// <summary>NCID 120 CNE_CZ_ZoneServerStrengthenClose — ferme une

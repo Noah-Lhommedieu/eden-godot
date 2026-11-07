@@ -23,3 +23,23 @@ knowledge/graphify-out/graph.json
 __pycache__/
 
 /archive/
+
+# Fichiers temporaires : captures d'agents IA, comparatifs, sorties de sondes, scripts jetables.
+# `ref-shots/` (références visuelles voulues) reste versionné ; tout le reste ci-dessous est jetable.
+**/godot-shots/
+**/screenshots/
+**/web-shots/
+**/shots/
+**/captures/
+**/compare/
+**/diff-shots/
+/tmp/
+**/scratch/
+**/_tmp/
+*.tmp
+*.bak
+*.swp
+*.dump
+/tools/scratch/
+tmp_*
+_tmp_*

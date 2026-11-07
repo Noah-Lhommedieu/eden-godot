@@ -96,14 +96,15 @@ public partial class FogCeiling : Node3D
                 new Vector3(r / 255f, g / 255f, b / 255f));
             _mat.SetShaderParameter("fog_begin", 0f);
             _mat.SetShaderParameter("fog_full", p.FogSightRange);
-            _mat.SetShaderParameter("fog_max",
-                Mathf.Clamp(p.FogMax, 0f, 1f));
+            _mat.SetShaderParameter("fog_max", p.FogOpacityCap);
             _configured = true;
             // Respecte le réglage « Fog » (SettingsApplier peut
             // appliquer avant cette configuration différée —
             // SettingsApplier.cs:Visible = S.Fog).
             Visible = Settings.SettingsApplier.Instance?.S.Fog ?? true;
-            GD.Print($"[fog] {code}: plafond FogMax={p.FogMax} " +
+            GD.Print($"[fog] {code}: plafond FogMax={p.FogMax} → " +
+                     $"opacité {p.FogOpacityCap} (avant " +
+                     $"{Mathf.Clamp(p.FogMax, 0f, 1f)}) " +
                      $"à {p.FogSightRange} u (post-process)");
             DisableBuiltinFog(n);
             return;

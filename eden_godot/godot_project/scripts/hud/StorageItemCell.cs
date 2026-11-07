@@ -57,7 +57,12 @@ public sealed partial class StorageItemCell : Panel
         CustomMinimumSize = new Vector2(CellSize, CellSize);
         AddThemeStyleboxOverride("panel", new StyleBoxFlat
         {
-            BgColor = new Color(0.116f, 0.112f, 0.1f, 0.5f),
+            // Case lisible même sans texture « FunctionSlot » : fond violet
+            // sombre + liseré clair (cases vides repérables).
+            BgColor = new Color(0.18f, 0.12f, 0.27f, 0.9f),
+            BorderColor = new Color(0.62f, 0.52f, 0.82f, 0.9f),
+            BorderWidthLeft = 1, BorderWidthRight = 1,
+            BorderWidthTop = 1, BorderWidthBottom = 1,
         });
         if (slotTex != null)
         {

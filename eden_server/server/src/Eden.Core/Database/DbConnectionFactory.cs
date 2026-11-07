@@ -3,7 +3,7 @@ using Npgsql;
 namespace Eden.Core.Database;
 
 /// <summary>Rôle logique d'une connexion : chaque rôle voit « sa »
-/// partie de la base unique <c>edenfr</c> via le <c>search_path</c>.</summary>
+/// partie de la base unique <c>eden_live</c> (ex-<c>edenfr</c>) via le <c>search_path</c>.</summary>
 public enum DbRole
 {
     /// <summary>Données de jeu — schéma <c>game</c> (ex-<c>edenfr_db</c>).</summary>
@@ -31,12 +31,12 @@ public static class DbConnectionFactory
 {
     /// <summary>Chaîne par défaut (stack locale PG17 :5433, base unique).</summary>
     public const string DefaultConn =
-        "Host=localhost;Port=5433;Database=edenfr;Username=postgres;Password=postgres";
+        "Host=localhost;Port=5433;Database=eden_live;Username=postgres;Password=postgres";
 
     /// <summary>Valeur de <c>SearchPath</c> par rôle.</summary>
     public static string SearchPath(DbRole role) => role switch
     {
-        DbRole.Game => "game,public",
+        DbRole.Game => "character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public",
         DbRole.Account => "account,public",
         DbRole.Member => "member,public",
         _ => throw new ArgumentOutOfRangeException(nameof(role)),
@@ -72,7 +72,7 @@ public static class DbConnectionFactory
     public static NpgsqlDataSource Create(DbRole role)
         => NpgsqlDataSource.Create(ConnectionString(role));
 
-    /// <summary>Description loggable (sans mot de passe) : <c>edenfr[game,public]</c>.</summary>
+    /// <summary>Description loggable (sans mot de passe) : <c>eden_live[character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public]</c>.</summary>
     public static string Describe(DbRole role)
     {
         var b = new NpgsqlConnectionStringBuilder(ConnectionString(role));

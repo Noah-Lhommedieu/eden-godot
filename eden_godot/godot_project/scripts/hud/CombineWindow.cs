@@ -102,7 +102,7 @@ public partial class CombineWindow : Control
     public void ShowDemo()
     {
         EnsureWindow();
-        if (_window != null) { _window.Visible = true; HudWindows.Front(_window); }
+        if (_window != null) HudWindows.Open(_window);
         Visible = true;
     }
 
@@ -116,7 +116,7 @@ public partial class CombineWindow : Control
                 _opOpen = true;
                 EnsureWindow();
                 EnsureTables();
-                if (_window != null) { _window.Visible = true; HudWindows.Front(_window); }
+                if (_window != null) HudWindows.Open(_window);
                 Visible = true;
                 GD.Print("[verify] combine : 432 op=10 — station");
                 break;

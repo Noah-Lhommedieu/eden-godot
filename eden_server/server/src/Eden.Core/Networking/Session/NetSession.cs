@@ -24,7 +24,7 @@ namespace Eden.Core.Networking.Session;
 ///   (handshake RSA blob → clé RC4 5 octets : LegacyLapisTransport).
 /// </code>
 /// </summary>
-public sealed class NetSession : IAsyncDisposable
+public sealed partial class NetSession : IAsyncDisposable
 {
     private readonly ITransport _transport;
     // File d'envoi bornée — UN seul writer par session : le drain

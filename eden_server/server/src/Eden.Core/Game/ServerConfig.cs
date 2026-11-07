@@ -41,13 +41,23 @@ public static class ServerConfig
         public double BpGaugePct = 15;
         public double MultiStrokeChanceMult = 1, MultiStrokeDamageMult = 1;
         public int MultiStrokeMaxHits = 2;
+        /// <summary>Règles génériques <c>Set./Mul./AddPct./AddFlat./Cap.&lt;clé&gt;</c> (clé = registre des modificateurs).</summary>
+        public List<Modifiers.ConfigModifierRule> ModifierRules = new();
         public Dictionary<string, EventDef> Events = new(
             StringComparer.OrdinalIgnoreCase);
     }
 
     public sealed class EventDef
     {
-        public bool Active;
+        /// <summary>Interrupteur <c>Event.&lt;nom&gt; = on/off</c>.</summary>
+        public bool Enabled;
+        /// <summary>Fenêtre optionnelle <c>Event.&lt;nom&gt;.Start/.End</c> (heure locale du serveur) ; absente = toujours.</summary>
+        public DateTime? Start, End;
+        /// <summary>Actif = allumé ET dans sa fenêtre de dates (horloge de jeu partagée).</summary>
+        public bool Active => Enabled && InWindow(Foundation.GameTime.Clock.Now.LocalDateTime);
+        public bool InWindow(DateTime local) => (Start == null || local >= Start) && (End == null || local < End);
+        /// <summary>Règles de modificateurs de l'événement : <c>Event.&lt;nom&gt;.Mul./AddFlat./AddPct./Set./Cap.&lt;clé&gt;</c>.</summary>
+        public List<Modifiers.ConfigModifierRule> Rules = new();
         public double ExpPct, DropPct, GoldPct;
         public List<(int ItemId, double ChancePct, int Qty)> Drops = new();
     }
@@ -216,10 +226,16 @@ public static class ServerConfig
             {
                 var rest = k[6..];
                 var dot = rest.IndexOf('.');
-                if (dot < 0) { Ev(rest).Active = On(v); continue; }
+                if (dot < 0) { Ev(rest).Enabled = On(v); continue; }
                 var ev = Ev(rest[..dot]);
                 var sub = rest[(dot + 1)..].ToLowerInvariant();
-                if (sub == "dropitem")
+                if (sub is "start" or "end")
+                {
+                    if (DateTime.TryParse(v, CultureInfo.InvariantCulture, DateTimeStyles.None, out var when))
+                    { if (sub == "start") ev.Start = when; else ev.End = when; }
+                }
+                else if (TryModifierRule(rest[(dot + 1)..], v, out var evRule)) ev.Rules.Add(evRule);
+                else if (sub == "dropitem")
                 {
                     var p = v.Split(':');
                     if (p.Length >= 2 && int.TryParse(p[0], out var id) &&
@@ -237,6 +253,7 @@ public static class ServerConfig
                     }
                 continue;
             }
+            if (TryModifierRule(k, v, out var rule)) { s.ModifierRules.Add(rule); continue; }
             if (!D(v, out var x)) continue;
             switch (k.ToLowerInvariant())
             {
@@ -257,5 +274,29 @@ public static class ServerConfig
             }
         }
         return s;
+    }
+
+    private static readonly (string Prefix, Modifiers.ModifierMode Mode)[] RulePrefixes =
+    {
+        ("Set.", Modifiers.ModifierMode.Set), ("Mul.", Modifiers.ModifierMode.Multiply),
+        ("AddPct.", Modifiers.ModifierMode.AddPercent), ("AddFlat.", Modifiers.ModifierMode.AddFlat),
+        ("Cap.", Modifiers.ModifierMode.Cap),
+    };
+
+    /// <summary>Ligne <c>Mul.craft.duration = 0.5</c> → règle ; clé inconnue ou valeur invalide → false
+    /// (la ligne est alors traitée comme inconnue et ignorée).</summary>
+    internal static bool TryModifierRule(string key, string value, out Modifiers.ConfigModifierRule rule)
+    {
+        rule = null!;
+        foreach (var (prefix, mode) in RulePrefixes)
+        {
+            if (!key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) continue;
+            var id = key[prefix.Length..].Trim().ToLowerInvariant();
+            if (Modifiers.ModifierKeys.Find(id) == null) return false;
+            if (!double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var v)) return false;
+            rule = new Modifiers.ConfigModifierRule(id, mode, v);
+            return true;
+        }
+        return false;
     }
 }

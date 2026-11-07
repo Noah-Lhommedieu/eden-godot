@@ -368,10 +368,10 @@ public sealed partial class ZoneEntryFlow
             st.PendingLifeSkill?.Cts?.Cancel(); // cast métier en vol
             st.PendingCombine?.Cts?.Cancel();   // cast station combine
             st.PendingItemUse?.Cts?.Cancel();   // canalisation d'usage
+            await Gather.StopAsync((int)st.CharId, Eden.Core.Game.Gather.GatherStopReason.Disconnected);
             foreach (var c in st.WorkCts) c?.Cancel(); // timers works
-            // Nettoyage + despawn des pets sur le fil de la boucle —
-            // mutations d'EntryState/registry, jamais sur le thread
-            // de déconnexion.
+            // Nettoyage + despawn des pets sur le fil de la boucle (mutations
+            // d'EntryState/registry, jamais sur le thread de déconnexion).
             await RunOnLoopAsync(async _ =>
             {
                 CleanupStallOnDisconnect(st);     // étal ouvert / vue

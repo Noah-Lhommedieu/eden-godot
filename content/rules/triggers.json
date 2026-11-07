@@ -1,0 +1,8 @@
+[
+  {"id": "demo-kill-counter", "on": "MobKilled",
+   "if": [{"field": "NodeId", "op": "eq", "value": "2"}],
+   "then": [{"action": "counter", "args": {"name": "mobs-monts-calcaires", "by": "1"}}]},
+  {"id": "demo-dungeon-log", "on": "DungeonEntered",
+   "if": [{"field": "Multi", "op": "eq", "value": "0"}],
+   "then": [{"action": "log", "args": {"text": "entrée solo en donjon"}}]}
+]

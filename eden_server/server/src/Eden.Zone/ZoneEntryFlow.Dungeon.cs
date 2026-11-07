@@ -1,3 +1,7 @@
+using Eden.Core.Game.Events;
+using Eden.Core.Game.Foundation;
+using Eden.Core.Game.Modifiers;
+using Eden.Zone.Features.Modifiers;
 using Eden.Core.Data.Parsers;
 using Eden.Core.Game.Services;
 using Eden.Core.Logging;
@@ -22,12 +26,11 @@ public sealed partial class ZoneEntryFlow
     private static bool HasDungeonPass(EntryState st) =>
         st.Statuses.ContainsKey(DungeonEntryRules.DevPassBuffId);
 
-    /// <summary>Node de donjon (catalogue Solo/Multi, ou node de type 5 :
-    /// héroïque, épreuve…). Sert la règle « pas de perte d'exp à la
-    /// mort en donjon » : le revive fait
-    /// <c>expLoss = AppliesExpLoss(type) &amp;&amp; !IsDungeonNode(st.NodeId)</c>.</summary>
-    internal bool IsDungeonNode(int nodeId) =>
-        Dungeons.ByNode(nodeId) != null || NodeType(nodeId) == 5;
+    private MapKindResolver? _mapKinds;
+    /// <summary>Type de map de chaque node (source unique, PLAN-ACTION-3 §4.4).</summary>
+    internal MapKindResolver MapKinds => _mapKinds ??= new MapKindResolver(
+        _services.GameData.Nodes,
+        id => _services.Scenes.GetScene($"S{id:D3}"));
 
     /// <summary>Coefficient exp/or du node (mode multijoueur).</summary>
     private double DungeonRewardMult(int nodeId) =>
@@ -62,8 +65,12 @@ public sealed partial class ZoneEntryFlow
             : scene.EventAreas.FirstOrDefault(a => a.Id == eaId);
     }
 
-    private int EntriesLeft(int used) =>
-        Math.Max(0, DungeonEntryRules.MaxDailyEntries - used);
+    /// <summary>Plafond d'entrées/jour (moteur : défaut 10, VIP/config/événements) selon solo ou multi.</summary>
+    private int MaxEntries(EntryState st, int node) => (int)_services.Modifiers().Resolve(
+        Dungeons.IsMulti(node) ? ModifierKeys.DungeonEntriesMulti : ModifierKeys.DungeonEntriesSolo,
+        PlayerModifierContext.For(st, MapKinds));
+
+    private static int EntriesLeft(int max, int used) => Math.Max(0, max - used);
 
     /// <summary>Portail d'un donjon (event dont le Event_Transport vise un
     /// node du catalogue) : envoie l'offre Solo/Multi. Retourne vrai si
@@ -84,7 +91,7 @@ public sealed partial class ZoneEntryFlow
             await SendTextIndexAsync(session, 5259, token);
             return true;
         }
-        var today = DungeonEntryRules.DayIndex(DateTime.Now);
+        var today = ZoneModifierExtensions.Clock.ResetDayNow();
         var unlimited = HasDungeonPass(st);
         var solo = await _services.EvaluateRepo.GetDungeonEntriesAsync(
             (int)st.CharId, d.SoloNode, today);
@@ -98,14 +105,14 @@ public sealed partial class ZoneEntryFlow
         {
             SoloNode = (short)d.SoloNode,
             MultiNode = (short)d.MultiNode,
-            SoloLeft = (byte)EntriesLeft(solo),
-            MultiLeft = (byte)EntriesLeft(multi),
-            Max = DungeonEntryRules.MaxDailyEntries,
+            SoloLeft = (byte)Math.Min(byte.MaxValue, EntriesLeft(MaxEntries(st, d.SoloNode), solo)),
+            MultiLeft = (byte)Math.Min(byte.MaxValue, EntriesLeft(MaxEntries(st, d.MultiNode), multi)),
+            Max = (byte)Math.Min(byte.MaxValue, MaxEntries(st, d.SoloNode)),
             Unlimited = unlimited,
         }, token);
         EdenLog.Write($"[Dungeon] offre char={st.CharId} " +
-            $"{d.Name} solo={d.SoloNode}({EntriesLeft(solo)}) " +
-            $"multi={d.MultiNode}({EntriesLeft(multi)}) " +
+            $"{d.Name} solo={d.SoloNode}({EntriesLeft(MaxEntries(st, d.SoloNode), solo)}) " +
+            $"multi={d.MultiNode}({EntriesLeft(MaxEntries(st, d.MultiNode), multi)}) " +
             $"illimité={unlimited}");
         return true;
     }
@@ -132,12 +139,12 @@ public sealed partial class ZoneEntryFlow
         }
         var dest = _services.Scenes.GetScene($"S{node:D3}");
         if (dest == null) return;
-        var today = DungeonEntryRules.DayIndex(DateTime.Now);
+        var today = ZoneModifierExtensions.Clock.ResetDayNow();
         if (!HasDungeonPass(st))
         {
             var used = await _services.EvaluateRepo.GetDungeonEntriesAsync(
                 (int)st.CharId, node, today);
-            if (EntriesLeft(used) <= 0)
+            if (EntriesLeft(MaxEntries(st, node), used) <= 0)
             {
                 EdenLog.Write($"[Dungeon] refus char={st.CharId} " +
                     $"node={node} : 0 entrée");
@@ -152,7 +159,7 @@ public sealed partial class ZoneEntryFlow
             }, token);
         }
         var entry = ResolveArrivalArea(dest, st.OfferArrivalKey);
-        float x = 100, y = 100, z = 0;
+        float x = 100, y = 100, z = 0; DomainEventBus.Shared.Publish(new DungeonEntered((int)st.CharId, node, Dungeons.IsMulti(node)));
         if (entry != null) (x, y, z) = (entry.X, entry.Y, entry.Z);
         else if (dest.Positions.Count > 0) (x, y, z) = dest.Positions[0];
         EdenLog.Write($"[Dungeon] entrée char={st.CharId} node={node} " +
@@ -181,6 +188,6 @@ public sealed partial class ZoneEntryFlow
         }
         await session.SendAsync(msg, token);
         EdenLog.Write($"[Dungeon] {msg.Portals.Count} portail(s) " +
-            $"envoyés node={st.NodeId}");
+            $"envoyés node={st.NodeId} {string.Join(' ', msg.Portals.Select(q => q.X.ToString("0") + "," + q.Y.ToString("0") + "," + q.Z.ToString("0")))}");
     }
 }

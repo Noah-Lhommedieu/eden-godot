@@ -897,6 +897,12 @@ public partial class PlayerController : CharacterBody3D
         }
     }
 
+    /// <summary>Position écran d'un point monde (sondes de clic réel) ; null si
+    /// derrière la caméra.</summary>
+    public Vector2? ProjectToScreen(Vector3 world) =>
+        _camera == null || _camera.IsPositionBehind(world) ? null
+            : _camera.UnprojectPosition(world);
+
     /// <summary>Parle à <paramref name="npc"/> : même chemin que le
     /// clic droit (approche puis TalkToNpc à portée) — canal diag
     /// GmFileProbe quand le picking 3D rate les petits PNJ.</summary>

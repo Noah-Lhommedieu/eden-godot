@@ -44,11 +44,11 @@ public sealed partial class ZoneEntryFlow
 
         var parts = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (parts.Length == 0) return;
-        var cmd = parts[0].TrimStart('/', '!', '.').ToLowerInvariant();
-        var args = parts.Skip(1).ToArray();
+        var cmd = parts[0].TrimStart('/', '!', '.').ToLowerInvariant(); var args = parts.Skip(1).ToArray();
         EdenLog.Write($"[Zone-Entry] TextCommand char={st.CharId} " +
             $"priv={st.Privilege} : '{text}'");
 
+        if (cmd == "vip") { await SendAdminTextAsync(session, await Features.Admin.AdminBridge.RunVipTextAsync(session.SessionId, args), token); return; }
         switch (cmd)
         {
             case "help":
@@ -802,7 +802,7 @@ public sealed partial class ZoneEntryFlow
         yield return "go <nodeId> — change de carte | tele <x> <z> — " +
             "déplace dans la carte | pos — position";
         yield return "heal — soin complet | god — invincible on/off " +
-            "| trait <0-8> — trait héroïque";
+            "| trait <0-8> — trait héroïque | vip <compte> [jours|off]";
         yield return "clone_item <itemId> [qty] — donne un item " +
             "| find_item <nom|id> — cherche l'id d'un item";
         yield return "learn_spell <spellId> — apprend un sort " +

@@ -103,6 +103,17 @@ public partial class GameScene : Node3D
         _player?.TalkToNpc(ent);
     }
 
+    /// <summary>Position écran du PNJ <paramref name="npcId"/> (centre du corps) —
+    /// sonde <c>@npcclick</c> : permet un VRAI clic droit au pixel (picking 3D
+    /// compris) au lieu du raccourci <c>@talk</c>.</summary>
+    public Vector2? NpcScreenPos(int npcId)
+    {
+        var ent = _registry?.Entities.Values.FirstOrDefault(
+            e => e.Kind == 8 && (e.EntityId & 0xFFFF) == npcId);
+        return ent == null ? null
+            : _player?.ProjectToScreen(ent.GlobalPosition + Vector3.Up * 1.0f);
+    }
+
     /// <summary>@attack [mobId] (canal GmFileProbe) : engage
     /// l'auto-attack — même chemin que le clic droit sur mob /
     /// la hotkey « Attack », sans le picking écran qui rate les
@@ -214,6 +225,14 @@ public partial class GameScene : Node3D
     /// <summary>Captures PNG de fin de pilote (vides = pas de
     /// capture).</summary>
     private string _tradeShot = "", _vendingShot = "";
+
+    /// <summary>Fenêtres de « ZoneWindows » détachées avant leur _Ready
+    /// (PLAN-ACTION-3 A1) puis rattachées au HUD : une seule couche, donc un
+    /// seul ordre d'affichage (<see cref="Hud.HudWindows"/>).</summary>
+    private List<Control> _zoneWindows = new();
+
+    public override void _EnterTree() =>
+        _zoneWindows = Hud.ZoneWindowHost.Detach(this);
 
     public override void _Ready()
     {
@@ -597,6 +616,8 @@ public partial class GameScene : Node3D
         t = EdenClient.Perf.PerfTrace.Mark();
         if (!_noHud)
             MountHud();
+        Hud.ZoneWindowHost.Attach(_zoneWindows,
+            _hud != null ? _hud : Hud.ZoneWindowHost.CreateFallbackLayer(this));
         EdenClient.Perf.PerfTrace.Report("hud mount", t);
 
         if (_live)

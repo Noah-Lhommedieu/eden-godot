@@ -104,7 +104,7 @@ public sealed partial class ZoneEntryFlow
                         // la map en file). Les mobs normaux gardent
                         // l'errance ±rayon du home (roam mode 0
                         // natif, SetNewGoalNormal).
-                        var inDungeon = _services.Live.IsDungeonNode(nodeId);
+                        var inDungeon = _services.Live.HasFixedMobLayout(nodeId);
                         if (mob.Kind != Eden.Core.Game.WorldBoss
                                 .BossKind.None || mob.EventSpawned ||
                             inDungeon)
@@ -296,7 +296,7 @@ public sealed partial class ZoneEntryFlow
             if (dd < bestD) { bestD = dd; best = i; }
         }
         if (bestD > 40.0 * 40.0) return;
-        if (route.IsStationary && _services.Live.IsDungeonNode(nodeId))
+        if (route.IsStationary && _services.Live.HasFixedMobLayout(nodeId))
         {
             mob.Stationary = true;
             return;

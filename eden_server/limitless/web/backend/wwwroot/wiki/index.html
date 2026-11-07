@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wiki d'Eden</title>
+<style>
+  :root { --bg:#14121f; --panel:#1f1b33; --line:#34304f; --text:#ece9f7; --dim:#a29cc0; --accent:#e6b84a; --ok:#6ac48c; --bad:#e0645c; }
+  @media (prefers-color-scheme: light) { :root { --bg:#f4f2fb; --panel:#fff; --line:#d8d3ec; --text:#231f38; --dim:#6b6586; --accent:#a8741a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.45 system-ui,sans-serif; }
+  header { display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:12px 16px; border-bottom:1px solid var(--line); background:var(--panel); }
+  header h1 { font-size:18px; margin:0 12px 0 0; color:var(--accent); }
+  nav { display:flex; gap:6px; flex-wrap:wrap; }
+  nav button, .btn { background:transparent; color:var(--text); border:1px solid var(--line); border-radius:6px; padding:5px 10px; cursor:pointer; font:inherit; }
+  nav button.on { background:var(--accent); color:#1b1426; border-color:var(--accent); }
+  main { display:grid; grid-template-columns:minmax(280px,420px) 1fr; gap:16px; padding:16px; max-width:1300px; margin:auto; }
+  @media (max-width:800px) { main { grid-template-columns:1fr; } }
+  section { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px; min-width:0; }
+  input[type=search], input[type=text], input[type=password] { width:100%; padding:7px 9px; background:var(--bg); color:var(--text); border:1px solid var(--line); border-radius:6px; font:inherit; }
+  ul { list-style:none; margin:8px 0; padding:0; max-height:62vh; overflow:auto; }
+  li { padding:6px 8px; border-radius:6px; cursor:pointer; display:flex; justify-content:space-between; gap:8px; }
+  li:hover, li.on { background:var(--line); }
+  .dim { color:var(--dim); font-size:13px; }
+  table { border-collapse:collapse; width:100%; margin:8px 0; }
+  td, th { text-align:left; padding:4px 8px; border-bottom:1px solid var(--line); vertical-align:top; word-break:break-word; }
+  th { color:var(--dim); font-weight:500; }
+  h2 { margin:0 0 4px; font-size:20px; } h3 { margin:16px 0 4px; font-size:15px; color:var(--accent); }
+  a { color:var(--accent); cursor:pointer; }
+  .tag { font-size:12px; padding:1px 6px; border-radius:10px; border:1px solid var(--line); color:var(--dim); }
+  .ok { color:var(--ok); } .bad { color:var(--bad); }
+  #adm { display:flex; gap:6px; align-items:center; margin-left:auto; }
+  #adm input { width:130px; }
+  .edit { display:flex; gap:6px; flex-wrap:wrap; margin:6px 0; } .edit input { width:auto; flex:1; min-width:120px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Wiki d'Eden</h1>
+  <nav id="kinds"></nav>
+  <label class="dim"><input type="checkbox" id="all"> tout le contenu (hors périmètre ≤ Lv90 inclus)</label>
+  <label class="dim" id="draftbox" style="display:none"><input type="checkbox" id="draft" checked> brouillon (publier plus tard)</label>
+  <button class="btn" id="adminpanel" style="display:none">Brouillons / releases</button>
+  <div id="adm"></div>
+</header>
+<main>
+  <section>
+    <input type="search" id="q" placeholder="Rechercher un nom ou un identifiant…" autocomplete="off">
+    <ul id="list"></ul>
+    <div class="dim" id="count"></div>
+  </section>
+  <section id="detail"><span class="dim">Choisissez une entrée.</span></section>
+</main>
+<script>
+const KINDS = { items:'Objets', monsters:'Monstres', npcs:'PNJ', quests:'Quêtes', maps:'Cartes', recipes:'Recettes' };
+const LINKS = { drop:'monsters', shop:'npcs', recipe:'recipes', material:'recipes' };
+let kind = 'items', token = localStorage.getItem('wiki-token') || '', role = localStorage.getItem('wiki-role') || '';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(path, opt = {}) {
+  opt.headers = { ...(opt.headers||{}), ...(token ? { Authorization: 'Bearer ' + token } : {}), 'Content-Type':'application/json' };
+  const r = await fetch('/api/content/' + path, opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || r.status);
+  return j;
+}
+function nav() {
+  $('#kinds').innerHTML = Object.entries(KINDS).map(([k, n]) => `<button class="${k===kind?'on':''}" data-k="${k}">${n}</button>`).join('');
+  $('#kinds').querySelectorAll('button').forEach(b => b.onclick = () => { kind = b.dataset.k; nav(); load(); });
+}
+async function load() {
+  const q = $('#q').value.trim(), all = $('#all').checked;
+  const r = await api(`${kind}?size=60${all ? '&all=true' : ''}${q ? '&q=' + encodeURIComponent(q) : ''}`);
+  $('#count').textContent = `${r.total} résultat(s)`;
+  $('#list').innerHTML = r.items.map(it => {
+    const id = Object.values(it)[0], name = it.name_fr ?? it.product_name_fr;
+    const extra = it.level ?? it.required_level ?? it.min_level ?? it.building_level ?? '';
+    return `<li data-id="${id}"><span>${esc(name)}</span><span class="dim">#${id}${extra !== '' ? ' · niv. ' + extra : ''}</span></li>`;
+  }).join('');
+  $('#list').querySelectorAll('li').forEach(li => li.onclick = () => show(kind, +li.dataset.id, li));
+}
+async function show(k, id, li) {
+  if (li) { document.querySelectorAll('li.on').forEach(x => x.classList.remove('on')); li.classList.add('on'); }
+  const d = await api(`${k}/${id}`), row = d.row, isAdmin = role === 'Admin';
+  const name = row.name_fr ?? row.product_name_fr;
+  let h = `<h2>${esc(name)} <span class="tag">${KINDS[k]} #${id}</span> ${row.in_scope === true ? '<span class="tag ok">en jeu ≤ Lv90</span>' : row.in_scope === false ? '<span class="tag bad">hors périmètre</span>' : ''}</h2><table>`;
+  for (const [c, v] of Object.entries(row)) h += `<tr><th>${esc(c)}</th><td>${esc(v)}${isAdmin && d.editable.includes(c) ? ` <a data-edit="${c}">modifier</a>` : ''}</td></tr>`;
+  h += '</table>';
+  if (d.obtention) {
+    h += '<h3>Comment l\'obtenir / l\'utiliser</h3>';
+    const by = {}; d.obtention.forEach(o => (by[o.source_kind] ||= []).push(o));
+    const T = { drop:'Tombe sur', shop:'Vendu par', recipe:'Fabriqué par', material:'Matériau de' };
+    for (const [sk, list] of Object.entries(by)) h += `<div class="dim">${T[sk]}</div><table>` + list.slice(0, 40).map(o => `<tr><td><a data-go="${LINKS[sk]}:${o.source_id}">${esc(o.source_name_fr)}</a></td><td class="dim">${esc(o.detail)}</td></tr>`).join('') + '</table>';
+  }
+  if (d.materials) h += '<h3>Matériaux</h3><table>' + d.materials.map(m => `<tr><td><a data-go="items:${m.item_id}">${esc(m.item_name_fr)}</a></td><td>× ${m.quantity}</td></tr>`).join('') + '</table>';
+  if (d.drops) h += '<h3>Butin</h3><table>' + d.drops.map(m => `<tr><td><a data-go="items:${m.item_id}">${esc(m.item_name_fr)}</a></td><td>${esc(m.pool)}</td><td>${m.chance_percent} %</td></tr>`).join('') + '</table>';
+  if (d.shop) h += '<h3>Boutique</h3><table>' + d.shop.map(m => `<tr><td><a data-go="items:${m.item_id}">${esc(m.item_name_fr)}</a></td></tr>`).join('') + '</table>';
+  if (d.history?.length) {
+    h += '<h3>Modifications</h3><table>' + d.history.map(c => `<tr><td>#${c.change_id}</td><td>${esc(c.field)}: ${esc(c.old_value)} → ${esc(c.new_value)}</td><td class="dim">${esc(c.edited_by_account)}${c.reverted_by ? ' · annulée' : ''}</td><td>${isAdmin && !c.reverted_by ? `<a data-revert="${c.change_id}">annuler</a>` : ''}</td></tr>`).join('') + '</table>';
+  }
+  const box = $('#detail'); box.innerHTML = h;
+  box.querySelectorAll('[data-go]').forEach(a => a.onclick = () => { const [kk, ii] = a.dataset.go.split(':'); kind = kk; nav(); show(kk, +ii); });
+  box.querySelectorAll('[data-edit]').forEach(a => a.onclick = async () => {
+    const f = a.dataset.edit, v = prompt(`Nouvelle valeur de ${f} :`, row[f]); if (v === null) return;
+    const reason = prompt('Motif (facultatif) :') || '';
+    try {
+      if ($('#draft').checked) { await api('drafts', { method:'POST', body: JSON.stringify({ kind:k, id, field:f, value:v, reason }) }); alert('Brouillon enregistré : publiez-le depuis « Brouillons / releases ».'); }
+      else { await api(`${k}/${id}`, { method:'PUT', body: JSON.stringify({ field:f, value:v, reason }) }); show(k, id); load(); }
+    } catch (e) { alert(e.message); }
+  });
+  box.querySelectorAll('[data-revert]').forEach(a => a.onclick = async () => {
+    try { await api(`history/${a.dataset.revert}/revert`, { method:'POST' }); show(k, id); load(); } catch (e) { alert(e.message); }
+  });
+}
+async function adminPanel() {
+  const [drafts, rels] = await Promise.all([api('drafts'), api('releases')]);
+  let h = '<h2>Brouillons en attente</h2>';
+  h += drafts.length ? '<table><tr><th>#</th><th>Entité</th><th>Champ</th><th>Diff</th><th></th></tr>' + drafts.map(d => `<tr><td>${d.draftId}</td><td>${esc(d.entityType)} #${d.entityId}</td><td>${esc(d.field)}</td><td><span class="bad">${esc(d.current)}</span> → <span class="ok">${esc(d.proposed)}</span></td><td><a data-deldraft="${d.draftId}">retirer</a></td></tr>`).join('') + '</table><button class="btn" id="pub">Publier tout en une release</button>' : '<div class="dim">Aucun brouillon.</div>';
+  h += '<h3>Releases</h3>' + (rels.length ? '<table>' + rels.map(r => `<tr><td>${esc(r.release_id)}</td><td>${r.changes} modification(s)</td><td>${r.reverted ? '<span class="dim">annulée</span>' : `<a data-revrel="${esc(r.release_id)}">annuler la release</a>`}</td></tr>`).join('') + '</table>' : '<div class="dim">Aucune release.</div>');
+  const box = $('#detail'); box.innerHTML = h;
+  box.querySelectorAll('[data-deldraft]').forEach(a => a.onclick = async () => { await api('drafts/' + a.dataset.deldraft, { method:'DELETE' }); adminPanel(); });
+  box.querySelectorAll('[data-revrel]').forEach(a => a.onclick = async () => { try { await api(`releases/${a.dataset.revrel}/revert`, { method:'POST' }); adminPanel(); } catch (e) { alert(e.message); } });
+  const pub = $('#pub'); if (pub) pub.onclick = async () => { try { const r = await api('releases', { method:'POST', body: JSON.stringify({ note:'publication depuis le wiki' }) }); alert(`Release ${r.releaseId} : ${r.changes} modification(s)`); adminPanel(); } catch (e) { alert(e.message); } };
+}
+function admin() {
+  $('#draftbox').style.display = $('#adminpanel').style.display = role === 'Admin' ? '' : 'none';
+  $('#adminpanel').onclick = adminPanel;
+  $('#adm').innerHTML = token
+    ? `<span class="dim">connecté (${esc(role)})</span><button class="btn" id="out">Quitter</button>`
+    : `<input type="text" id="u" placeholder="compte"><input type="password" id="p" placeholder="mot de passe"><button class="btn" id="in">Admin</button>`;
+  if (token) $('#out').onclick = () => { token = role = ''; localStorage.removeItem('wiki-token'); localStorage.removeItem('wiki-role'); admin(); };
+  else $('#in').onclick = async () => {
+    const r = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username: $('#u').value, password: $('#p').value }) });
+    const j = await r.json().catch(() => ({})); if (!r.ok) return alert(j.error || 'connexion refusée');
+    token = j.token; role = j.role; localStorage.setItem('wiki-token', token); localStorage.setItem('wiki-role', role); admin();
+  };
+}
+let t; $('#q').oninput = () => { clearTimeout(t); t = setTimeout(load, 250); };
+$('#all').onchange = load;
+nav(); admin(); load();
+</script>
+</body>
+</html>

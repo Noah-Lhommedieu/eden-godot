@@ -9,7 +9,7 @@ namespace Eden.Tests;
 public class DbConnectionFactoryTests
 {
     [Theory]
-    [InlineData(DbRole.Game, "game,public")]
+    [InlineData(DbRole.Game, "character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public")]
     [InlineData(DbRole.Account, "account,public")]
     [InlineData(DbRole.Member, "member,public")]
     public void WithSearchPath_AppliesRoleSchema(DbRole role, string expected)

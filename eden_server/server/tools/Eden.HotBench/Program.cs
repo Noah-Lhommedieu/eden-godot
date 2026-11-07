@@ -3,7 +3,7 @@
 // Chaque « joueur » (worker) enchaîne des opérations ; on mesure la latence
 // client de chaque appel et on rapporte p50/p95/p99/max + débit.
 //
-// Usage : eden-hotbench --db="<conn Npgsql, SearchPath=game,public>" --redis=localhost:6380,defaultDatabase=15
+// Usage : eden-hotbench --db="<conn Npgsql, SearchPath=character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public>" --redis=localhost:6380,defaultDatabase=15
 //                       [--players=300] [--ops=200] [--first-char=800000001] [--json=out.json]
 // Pré-requis : base clonée avec les personnages botchar* (voir tools/load-test.sh).
 using System.Diagnostics;

@@ -92,7 +92,7 @@ public partial class GmFileProbe : Node
         var s = SessionCarry.Session;
         if (s == null) return;
         var p = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        if (p.Length < 2 && p[0] is not ("@inv" or "@closeall" or "@auctq"
+        if (p.Length < 2 && p[0] is not ("@inv" or "@closeall" or "@auctq" or "@wins" or "@optclick"
                 or "@mallcheapest")) return;
         switch (p[0])
         {
@@ -191,6 +191,65 @@ public partial class GmFileProbe : Node
                 // que clic droit mob / hotkey Attack, sans picking).
                 if (GetTree().CurrentScene is EdenClient.GameScene ga)
                     ga.AttackMobId(p.Length > 1 ? int.Parse(p[1]) : 0);
+                break;
+            case "@uiat":
+                // @uiat x y — déplace la souris et imprime le Control survolé
+                // (diagnostic : qui reçoit réellement le clic ?).
+                if (p.Length >= 3)
+                {
+                    var hp = new Vector2(float.Parse(p[1], CI), float.Parse(p[2], CI));
+                    Input.ParseInputEvent(new InputEventMouseMotion { Position = hp });
+                    GetTree().CreateTimer(0.2).Timeout += () =>
+                    {
+                        var hc = GetViewport().GuiGetHoveredControl();
+                        GD.Print($"[gmfile] @uiat {hp} → {(hc == null ? "(aucun)" : hc.GetPath() + " filtre=" + hc.MouseFilter)}");
+                    };
+                }
+                break;
+            case "@tree":
+                // @tree <fragment> [profondeur] — arbre des Controls (rect global, filtre souris)
+                // sous le premier Control visible dont le chemin contient le fragment.
+                if (p.Length >= 2)
+                {
+                    var depth = p.Length > 2 ? int.Parse(p[2]) : 4;
+                    var rootC = GetTree().Root.FindChildren("*", "Control", true, false)
+                        .OfType<Control>().FirstOrDefault(c => c.IsVisibleInTree() &&
+                            c.GetPath().ToString().Contains(p[1]));
+                    if (rootC == null) { GD.Print($"[gmfile] @tree {p[1]} : introuvable"); break; }
+                    void Dump(Node n, int d)
+                    {
+                        if (n is Control c)
+                            GD.Print($"[tree] {new string(' ', d * 2)}{n.Name} {n.GetType().Name} " +
+                                     $"rect={c.GetGlobalRect()} filtre={c.MouseFilter} vis={c.Visible}");
+                        if (d < depth) foreach (var ch in n.GetChildren()) Dump(ch, d + 1);
+                    }
+                    Dump(rootC, 0);
+                }
+                break;
+            case "@optclick":
+                // @optclick <n> — VRAI clic au centre de la n-ième option (0 = 1ʳᵉ) du dialogue
+                // PNJ ouvert (leur position dépend de la longueur du texte).
+                {
+                    var idx = p.Length > 1 ? int.Parse(p[1]) : 0;
+                    var opts = GetTree().Root.FindChildren("__options", "Control", true, false)
+                        .OfType<Control>().FirstOrDefault(c => c.IsVisibleInTree());
+                    var row = opts != null && idx < opts.GetChildCount() ? opts.GetChild(idx) as Control : null;
+                    if (row == null) { GD.Print($"[gmfile] @optclick {idx} : option introuvable"); break; }
+                    var c0 = row.GetGlobalRect().GetCenter();
+                    GD.Print($"[gmfile] @optclick {idx} « {row.GetChildren().OfType<Label>().FirstOrDefault()?.Text} » ({c0.X:0},{c0.Y:0})");
+                    InjectInput($"@click {c0.X.ToString(CI)} {c0.Y.ToString(CI)}");
+                }
+                break;
+            case "@npcclick":
+                // @npcclick <npcId> — VRAI clic droit au pixel sur le PNJ (picking 3D,
+                // approche, dialogue) : le parcours joueur réel, sans raccourci @talk.
+                if (GetTree().CurrentScene is EdenClient.GameScene gsc &&
+                    gsc.NpcScreenPos(int.Parse(p[1])) is { } sp)
+                {
+                    GD.Print($"[gmfile] @npcclick {p[1]} écran=({sp.X:0},{sp.Y:0})");
+                    InjectInput($"@rclick {sp.X.ToString(CI)} {sp.Y.ToString(CI)}");
+                }
+                else GD.Print($"[gmfile] @npcclick {p[1]} : PNJ hors de vue ou derrière la caméra");
                 break;
             case "@talk":
                 if (GetTree().CurrentScene is EdenClient.GameScene gs)
@@ -1003,6 +1062,10 @@ public partial class GmFileProbe : Node
                         w.GetType().Name != "InventoryWindow")
                         w.Visible = false;
                 GD.Print("[gmfile] @closeall");
+                break;
+            case "@wins":
+                // @wins — état objectif des fenêtres visibles (couche, rang, recouvrement).
+                WindowProbe.Dump();
                 break;
             case "@closewin":
                 // @closewin <frag> — masque la première fenêtre Control

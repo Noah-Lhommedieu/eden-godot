@@ -140,10 +140,15 @@ public partial class HudRoot : CanvasLayer
         if (Target != null) Target.TargetTemplateId = templateId;
     }
 
+    private bool _built;
+
     /// <summary>Instancie tous les panneaux (thread principal).</summary>
     private void BuildAll()
     {
-        if (_sharedCtx == null || GetChildCount() > 0) return;
+        // Drapeau explicite (et non « GetChildCount() > 0 ») : les fenêtres
+        // de ZoneWindowHost sont rattachées au HUD avant la fin du chargement.
+        if (_sharedCtx == null || _built) return;
+        _built = true;
         _tex = new UiTextureCache(_sharedCtx.Imagesets);
         // Thème sauvegardé posé AVANT la construction des fenêtres :
         // atlas + palette chromée (EeSkin) cohérents dès le 1er frame.

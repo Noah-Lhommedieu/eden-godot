@@ -260,17 +260,10 @@ public sealed partial class ZoneEntryFlow
         work.ExtSuccessRate = plan.ExtSuccessRate;
         work.ExtBuildingRate = plan.ExtBuildingRate;
         work.Running = true;
-        // Perk Limitless « craft_time » (percent, ex. -0.2 = -20%
-        // temps) — réduit la durée des travaux de combinaison.
-        var durUnits = plan.DurationUnits;
-        if (!plan.IsCollect && _services.Limitless != null)
-        {
-            var craftPct = await _services.Limitless
-                .GetPerkValueAsync((int)st.CharId, "craft_time");
-            if (craftPct != 0)
-                durUnits = Math.Max(0,
-                    (int)(durUnits * (1 + craftPct)));
-        }
+        // Moteur de modificateurs (VIP, config) puis perk Limitless « craft_time » (ex. -0.2 = -20 %).
+        var durUnits = Features.Craft.CraftTimes.WorkUnits(_services, st, plan.DurationUnits,
+            !plan.IsCollect && _services.Limitless != null
+                ? await _services.Limitless.GetPerkValueAsync((int)st.CharId, "craft_time") : 0);
         // Durées natives des tables ; le cap optionnel
         // EDEN_DEV_WORK_CAP ne borne que si > 0 (dev rapide).
         if (DevWorkCap > 0)
@@ -393,7 +386,7 @@ public sealed partial class ZoneEntryFlow
         // du SWorkItem (sockets/combo/curse propagées).
         foreach (var p in work.Products)
         {
-            if (p.IsEmpty) continue;
+            if (p.IsEmpty) continue; Eden.Core.Game.Events.DomainEventBus.Shared.Publish(new Eden.Core.Game.Events.ItemCrafted((int)st.CharId, p.ItemId, Math.Max(p.Amount, 1)));
             var def = _services.GameData.Items
                 .FirstOrDefault(i => i.Id == p.ItemId);
             var stackable = (def?.MaxStack ?? 1) > 1

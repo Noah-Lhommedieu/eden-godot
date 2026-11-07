@@ -17,6 +17,21 @@ namespace EdenClient.Hud;
 public static partial class HudWindows
 {
     private static readonly List<Control> _wins = new();
+
+    /// <summary>Fenêtres inscrites (lecture seule) — sonde <c>@wins</c>.</summary>
+    public static IReadOnlyList<Control> Registered => _wins;
+
+    /// <summary>Fenêtre ouverte/cliquée le plus récemment (celle qui DOIT être
+    /// dessinée au-dessus) — null si aucune.</summary>
+    public static Control? LastFronted()
+    {
+        Control? best = null; long stamp = -1;
+        foreach (var w in _wins)
+            if (Valid(w) && w.IsVisibleInTree() &&
+                _front.TryGetValue(w.GetInstanceId(), out var s) && s > stamp)
+            { best = w; stamp = s; }
+        return best;
+    }
     private static readonly Dictionary<ulong, long> _front = new();
     private static long _stamp;
 
@@ -24,6 +39,10 @@ public static partial class HudWindows
     {
         if (_wins.Contains(win)) return;
         _wins.Add(win);
+        // Une fenêtre déjà visible à l'inscription (construite puis affichée sans
+        // changement de visibilité) doit aussi passer au premier plan : sinon elle
+        // reste au rang où elle a été créée, derrière les panneaux postérieurs.
+        if (win.Visible && win.IsInsideTree()) Front(win);
         win.TreeExiting += () =>
         {
             _wins.Remove(win);

@@ -1,3 +1,4 @@
+using Eden.Core.Game.Maps;
 using System.Collections.Concurrent;
 using System.Text;
 using Eden.Core.Data;
@@ -280,20 +281,22 @@ public sealed partial class ZoneEntryFlow
         // dernier effet (ex. buff posthume, riposte sur le tueur).
         await RunItemProcsAsync(session, st, killer, ProcHitEvent.BeKill,
             0, token);
-        await PlayerDeathAsync(session, st, killer.Handle, token);
+        await PlayerDeathAsync(session, st, killer.Handle, token, KillerKind.Monster);
     }
 
     /// <summary>Variante handle brut — kills joueur→joueur (territory
     /// war : le tueur est un char, pas un mob).</summary>
     private async Task PlayerDeathAsync(NetSession session, EntryState st,
-        uint killerHandle, CancellationToken token)
+        uint killerHandle, CancellationToken token,
+        KillerKind killerKind = KillerKind.Player)
     {
         // Cast en vol à la mort : CastCts.Cancel + 287 + release du
         // flag (CheckCastBreak natif) — sans ça le ResolveCastAsync
         // schedulé résolvait le sort post-mortem et la barre client
         // restait ouverte indéfiniment.
         await BreakCastAsync(session, st, token);
-        st.Dead = true;
+        st.Dead = true; Eden.Core.Game.Events.DomainEventBus.Shared.Publish(new Eden.Core.Game.Events.PlayerDied((int)st.CharId, st.NodeId, killerKind == KillerKind.Player));
+        st.LastDeathKiller = killerKind;
         st.PlayerHp = 0;
         st.InCombat = false;
         st.AutoAttacking = false;
@@ -393,14 +396,11 @@ public sealed partial class ZoneEntryFlow
         // PK_MIGRATION_EFFECT armé par CCharacter::Revive).
         st.MigrationInvincibleUntil = DateTime.UtcNow.AddSeconds(
             _services.GameData.Parameters.Get(349, 100f) / 10f);
-        // Malus de mort — spec joueur : −10 % de l'exp du niveau
-        // courant, perso ET classe, plancher 0 (jamais de level perdu
-        // ni d'exp négative : à 0 % → reste à 0 %). Même moule que le
-        // DecExpForDead natif (@0x83f4310 : loss = param ×
-        // expRequisNiveau / 100) avec param = 10 — le natif passe 5
-        // via Revive(…,Para348,…) ; la valeur demandée en jeu est 10.
-        var expLoss = ReviveRules.AppliesExpLoss(reviveType)
-            && !IsDungeonNode(st.NodeId);
+        // Malus de mort : −10 % de l'exp du niveau (perso ET classe, plancher 0,
+        // jamais de niveau perdu ; natif DecExpForDead @0x83f4310 avec param 10
+        // au lieu de 5). Map normale ET mort PvE uniquement (DeathRules).
+        var expLoss = ReviveRules.AppliesExpLoss(reviveType) &&
+            DeathRules.LosesExp(MapKinds.KindOf(st.NodeId), st.LastDeathKiller);
         if (expLoss && st.Level > 0)
         {
             var lvlRow = _services.GameData.Levels

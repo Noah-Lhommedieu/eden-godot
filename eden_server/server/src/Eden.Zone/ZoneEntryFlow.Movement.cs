@@ -76,7 +76,7 @@ public sealed partial class ZoneEntryFlow
             var dx = f[0] - st.PosX; var dz = f[1] - st.PosZ;
             if (Math.Sqrt(dx * dx + dz * dz) > allowed)
             {
-                EdenLog.Write($"[Move] char={st.CharId} vitesse refusée " +
+                if (Eden.Core.Logging.LogThrottle.Allow($"move-{st.CharId}", 5)) EdenLog.Write($"[Move] char={st.CharId} vitesse refusée " +
                     $"d={Math.Sqrt(dx * dx + dz * dz):F1} max={allowed:F1}");
                 st.LastMoveTicks = nowTicks;
                 await session.SendAsync(new CNC_CZ_ClientResetCoord
@@ -112,6 +112,7 @@ public sealed partial class ZoneEntryFlow
             }
         }
         st.PosX = f[0]; st.PosZ = f[1];
+        await Gather.OnMovedAsync((int)st.CharId, st.PosX, st.PosZ);
         st.Facing = f[4];
         // Tout déplacement lève la position assise (état 0xf natif
         // retiré par le mouvement) — sinon la regen resterait ×4.
@@ -183,7 +184,7 @@ public sealed partial class ZoneEntryFlow
                 // sinon le client instancierait un modèle fantôme
                 // sans données de présentation.
                 !ost.Sent.ContainsKey((uint)st.CharId)) continue;
-            await SendPreparedToAsync(s, op, payload, token);
+            SendCosmeticTo(s, op, payload, MathF.Abs(ost.PosX - st.PosX) + MathF.Abs(ost.PosZ - st.PosZ));
         }
     }
 
@@ -215,7 +216,7 @@ public sealed partial class ZoneEntryFlow
                 // BroadCastToCanSee natif : uniquement les watchers
                 // qui ont ce handle en vue (sinon modèle fantôme).
                 !ost.Sent.ContainsKey(handle)) continue;
-            await SendPreparedToAsync(s, op, payload, token);
+            SendCosmeticTo(s, op, payload, MathF.Abs(ost.PosX - curX) + MathF.Abs(ost.PosZ - curZ));
         }
     }
 

@@ -170,7 +170,7 @@ public sealed partial class CharacterRepository : ICharacterRepository
             "SELECT role FROM accounts WHERE id = @A",
             new { A = c.AccountId });
         var privilege = string.Equals(role, "Admin",
-            StringComparison.OrdinalIgnoreCase) ? 5 : 0;
+            StringComparison.OrdinalIgnoreCase) ? 5 : 0;   // repli : le privilège effectif vient de accounts.admin_level (D0)
 
         const string insert = @"
             INSERT INTO player_characters(
@@ -339,7 +339,7 @@ public sealed partial class CharacterRepository : ICharacterRepository
                    bind_gold AS BindGold,
                    account_id AS AccountId,
                    account_name AS AccountName,
-                   privilege AS Privilege,
+                   COALESCE((SELECT a.admin_level FROM account.accounts a WHERE a.id = player_characters.account_id), privilege) AS Privilege,
                    family_id AS FamilyId,
                    revive_area_id AS ReviveAreaId,
                    COALESCE(last_normal_area_id, 0) AS LastNormalAreaId,
@@ -455,7 +455,7 @@ public sealed partial class CharacterRepository : ICharacterRepository
                    bind_gold AS BindGold,
                    account_id AS AccountId,
                    account_name AS AccountName,
-                   privilege AS Privilege,
+                   COALESCE((SELECT a.admin_level FROM account.accounts a WHERE a.id = player_characters.account_id), privilege) AS Privilege,
                    family_id AS FamilyId,
                    revive_area_id AS ReviveAreaId,
                    COALESCE(last_normal_area_id, 0) AS LastNormalAreaId,

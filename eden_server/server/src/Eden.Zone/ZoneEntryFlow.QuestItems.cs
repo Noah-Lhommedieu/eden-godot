@@ -30,7 +30,7 @@ public sealed partial class ZoneEntryFlow
                 out var n) ? n : "";
             if (name == "AttrGainCollectItem" && c.Args.Count() > 0 &&
                 !IsInCollectArea(st, (int)c.Args[0]))
-                return false; // texte natif inconnu : refus silencieux
+                return await Gather.RefuseAsync(session, Eden.Core.Game.Foundation.GameErrors.GatherOutOfArea);
             if (!QuestItemRules.IsSummonCommand(name)) continue;
             var spec = QuestItemRules.ParseSummon(
                 c.Args.Select(v => (int)v).ToArray());

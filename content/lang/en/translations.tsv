@@ -1,0 +1,317 @@
+entity_type	entity_id	field	value	status
+map	1	name	Aven	auto
+map	2	name	Limestone Mountains	auto
+map	3	name	Quiet Hill	auto
+map	4	name	Rainbow Forest	auto
+map	5	name	Arid Mountains	auto
+map	6	name	Beluga Bay	auto
+map	7	name	The Mire	auto
+map	8	name	Valley of Kings	auto
+map	9	name	Avila Volcano	auto
+map	10	name	Golden Plains	auto
+map	11	name	Eternal Dunes	auto
+map	12	name	Delphi Forest	auto
+map	13	name	Blackflame Peak	auto
+map	14	name	Decrepit Marshes	auto
+map	15	name	Highlands	auto
+map	16	name	Misty Fangs	auto
+map	18	name	Mayor's Office	auto
+map	19	name	Feregal Valley	auto
+map	20	name	Sunset Desert	auto
+map	21	name	Celestial Jungle	auto
+map	22	name	Bewitched Forest	auto
+map	23	name	Diamond Ridge	auto
+map	24	name	Maelstrom Peak	auto
+map	25	name	Death Valley	auto
+map	26	name	Flowering Plains	auto
+map	27	name	Great Winds Cliff	auto
+map	28	name	Enchanted Lagoon	auto
+map	29	name	Howlwind Coast	auto
+map	30	name	Serpent God Jungle	auto
+map	31	name	Sakura Island	auto
+map	32	name	Vulcan Valley	auto
+map	33	name	Eastern Plains	auto
+map	34	name	Devastated Kingdom	auto
+map	35	name	Heldentod Palace	auto
+map	36	name	Elos Plains	auto
+map	37	name	Edouard Marina	auto
+map	38	name	Durango Kingdom	auto
+map	39	name	Meteor's Landing	auto
+map	40	name	Scenic Aurapoint	auto
+map	41	name	Eternity Fortress	auto
+map	42	name	Bill's Training Facility	auto
+map	43	name	Braider Army Base	auto
+map	44	name	Tent 2	auto
+map	45	name	Valence Union Tunnel	auto
+map	46	name	Depths of Mount Gowen	auto
+map	47	name	Edouard Marina Commoners' District	auto
+map	48	name	Edouard Marina Nobles' Quarter	auto
+map	49	name	Braider Congress	auto
+map	50	name	Kahlo Tower	auto
+map	51	name	Celestial Dome	auto
+map	52	name	Frostfire Heights	auto
+map	53	name	Meeryasha	auto
+map	54	name	Mayland Jungle	auto
+map	55	name	Shaxia Basin	auto
+map	94	name	Dreamed Aven	auto
+map	95	name	Old Warehouse	auto
+map	96	name	Cherry Blossom Island	auto
+map	97	name	Wedding Island	auto
+map	99	name	Character Creation	auto
+map	100	name	Andrew Mine	auto
+map	101	name	Angor Quarry	auto
+map	102	name	Fort Verdure	auto
+map	103	name	Tassos Canal	auto
+map	104	name	Shale Cavern	auto
+map	105	name	Eroda	auto
+map	106	name	Morticora	auto
+map	107	name	Branda Root	auto
+map	108	name	Palace of Mischief	auto
+map	109	name	Rot	auto
+map	110	name	Baram Abyss	auto
+map	111	name	Baltaroi Heart	auto
+map	112	name	Mayor's Dream	auto
+map	113	name	Scourge	auto
+map	114	name	Baira's Chamber	auto
+map	115	name	Crypticone	auto
+map	116	name	Delphi Temple	auto
+map	117	name	Twisted Vein	auto
+map	118	name	Altar of the Mara Cult	auto
+map	119	name	Lost Souls Falls	auto
+map	120	name	Vortek	auto
+map	121	name	Federal Arsenal	auto
+map	122	name	Sturmfrau	auto
+map	123	name	Skleros Frozen Abyss	auto
+map	124	name	Giants' Crater	auto
+map	125	name	Echo Lair	auto
+map	126	name	Sanctuary of Pure Evil	auto
+map	127	name	Shadow Tide Grotto	auto
+map	129	name	Ritual Site (Lv. 80 - Truth and Illusion IV)	auto
+map	130	name	Orphidea	auto
+map	131	name	Meeryasha Bank	auto
+map	132	name	Marjorie's House	auto
+map	133	name	Land of Memories	auto
+map	134	name	Collapsed Tunnel	auto
+map	135	name	Mystic Jungle	auto
+map	136	name	Heldentod Palace	auto
+map	137	name	Shaxia Basin	auto
+map	176	name	Tower of Trials	auto
+map	177	name	Shale Cavern	auto
+map	178	name	Palace of Mischief	auto
+map	179	name	Fort Loselle	auto
+map	180	name	Scarlet	auto
+map	181	name	Empty Kingdom	auto
+map	182	name	Lost Temple	auto
+map	183	name	Seraphic Plains	auto
+map	184	name	Inner Demon Domain	auto
+map	185	name	Samurai Tomb	auto
+map	186	name	Crimson Devil Wonderland	auto
+map	187	name	Mire Palace	auto
+map	188	name	Sacrifice Valley	auto
+map	189	name	Class Awakening Dungeon - Illusionist	auto
+map	201	name	Crankshaft Base	auto
+map	202	name	Ulta Hall	auto
+map	203	name	Venomfang	auto
+map	204	name	Scarlet	auto
+map	205	name	Century	auto
+map	206	name	Manor	auto
+map	207	name	Basel Frontier	auto
+map	208	name	Ossuary Prison	auto
+map	209	name	Guillotine	auto
+map	210	name	Hellspire Temple	auto
+map	211	name	Rose Temple	auto
+map	212	name	Vingot Lab	auto
+map	213	name	Howling Cape	auto
+map	214	name	Century Abyss	auto
+map	215	name	Uncharted Cave	auto
+map	216	name	Devastated Dimension	auto
+map	217	name	Meteor Crater <Multiplayer Mode>	auto
+map	218	name	Kahlo Tower <Multiplayer Mode>	auto
+map	219	name	Iyernafalo <Multiplayer>	auto
+map	220	name	Kamodo Sacred Land (Multiplayer)	auto
+map	221	name	Water Temple <Multiplayer>	auto
+map	222	name	Antigravity Lab <Multiplayer>	auto
+map	223	name	Grey Lynn <Multiplayer>	auto
+map	224	name	Spacetime Battle	auto
+map	225	name	Batelo Valley (Party)	auto
+map	226	name	Allolans (Multiplayer Dungeon)	auto
+map	227	name	Enchanted Temple (Multiplayer Dungeon)	auto
+map	280	name	Heaven Tower: Purgatory Hall	auto
+map	281	name	Heaven Tower: Sinister Altar	auto
+map	282	name	Heaven Tower: Thornflower Hall	auto
+map	283	name	Heaven Tower: Sacred Melody Zone	auto
+map	284	name	Reno Laboratory	auto
+map	301	name	Forest Battle	auto
+map	302	name	Desert Battle	auto
+map	303	name	Ocean Battle	auto
+map	304	name	Battlefield T.4	auto
+map	305	name	Ezur War Zone	auto
+map	306	name	Buccaneer Island	auto
+map	307	name	Hostile Tundra	auto
+map	308	name	Sacred Arena: The Crucifix	auto
+map	309	name	Desert Island Survival	auto
+map	401	name	Phoenix Arena	auto
+map	402	name	Boss Arena	auto
+map	404	name	Flaming Ghost Prison	auto
+map	406	name	Ancient Temple of Chaos	auto
+map	501	name	Eden Forest	auto
+map	502	name	Mount Eden	auto
+map	599	name	Personal Villa	auto
+map	601	name	Crankshaft Base Heroic	auto
+map	602	name	Ulta Hall Heroic	auto
+map	603	name	Angor Quarry Heroic	auto
+map	604	name	Fort Verdure Heroic	auto
+map	605	name	Baltaroi Heart Heroic	auto
+map	606	name	Venomfang Heroic	auto
+map	607	name	Tassos Canal Heroic	auto
+map	608	name	Shale Quarry Heroic	auto
+map	609	name	Trial: Scarlet	auto
+map	610	name	Trial: Century	auto
+map	611	name	Trial: Manor	auto
+map	612	name	Trial: Eroda	auto
+map	613	name	Trial: Morticora	auto
+map	614	name	Trial: Palace of Mischief	auto
+map	615	name	Trial: Scourge	auto
+map	616	name	Trial: Branda Root	auto
+map	617	name	Trial: Mayor's Dream	auto
+map	619	name	Anti-Dragon Expedition - Volcanic Altar	auto
+map	624	name	Trial: Basel Frontier	auto
+map	625	name	Trial: Federal Arsenal	auto
+map	626	name	Trial: Sturmfrau	auto
+map	627	name	Trial: Skleros Frozen Abyss	auto
+map	628	name	Trial: Crankshaft Base S	auto
+map	629	name	Trial: Ulta Hall S	auto
+map	630	name	Trial: Angor S	auto
+map	631	name	Trial: Fort Verdure S	auto
+map	632	name	Trial: Baltaroi Heart S	auto
+map	633	name	Trial: Venomfang S	auto
+map	634	name	Trial: Tassos Canal S	auto
+map	635	name	Trial: Shale Cavern S	auto
+map	636	name	Trial: Scarlet S	auto
+map	637	name	Trial: Century S	auto
+map	638	name	Trial: Manor S	auto
+map	639	name	Trial: Eroda S	auto
+map	640	name	Trial: Morticora S	auto
+map	641	name	Trial: Echo Lair	auto
+map	642	name	Trial: Ossuary Prison	auto
+map	643	name	Trial: Giants' Crater	auto
+map	644	name	Trial: Old Century	auto
+map	645	name	Trial: Giants' Crater	auto
+map	646	name	Trial: Century Abyss	auto
+map	647	name	Trial: Hellspire Temple	auto
+map	648	name	Trial: Rose Temple	auto
+map	649	name	Heroes' Trial of the Occultus Path	auto
+map	650	name	Heroes' Trial of the Quiet Hill	auto
+map	655	name	Destructive Illusion: Angor Quarry (Multiplayer Dungeon)	auto
+map	656	name	Destructive Illusion: Fort Verdure (Multiplayer Dungeon)	auto
+map	657	name	Destructive Illusion: Tassos Canal (Multiplayer Dungeon)	auto
+map	658	name	Destructive Illusion: Shale Cavern (Multiplayer Dungeon)	auto
+map	659	name	Destructive Illusion: Eroda (Multiplayer Dungeon)	auto
+map	660	name	Destructive Illusion: Morticora (Multiplayer Dungeon)	auto
+map	661	name	Destructive Illusion: Crankshaft Base (Multiplayer Dungeon)	auto
+map	662	name	Destructive Illusion: Branda Root (Multiplayer Dungeon)	auto
+map	663	name	Destructive Illusion: Palace of Mischief (Multiplayer Dungeon)	auto
+map	664	name	Destructive Illusion: Ulta Hall (Multiplayer Dungeon)	auto
+map	665	name	Destructive Illusion: Baltaroi Heart (Multiplayer Dungeon)	auto
+map	666	name	Destructive Illusion: Mayor's Dream (Multiplayer Dungeon)	auto
+map	667	name	Destructive Illusion: Venomfang (Multiplayer Dungeon)	auto
+map	668	name	Destructive Illusion: Scourge (Multiplayer Dungeon)	auto
+map	701	name	Angor Quarry	auto
+map	702	name	Fort Verdure	auto
+map	703	name	Tassos Canal	auto
+map	704	name	Shale Cavern	auto
+map	705	name	Eroda	auto
+map	706	name	Morticora	auto
+map	707	name	Branda Root	auto
+map	708	name	Palace of Mischief	auto
+map	709	name	Rot	auto
+map	710	name	Baram Abyss	auto
+map	711	name	Baltaroi Heart	auto
+map	712	name	Mayor's Dream	auto
+map	713	name	Scourge	auto
+map	714	name	Baira's Chamber	auto
+map	715	name	Crypticone	auto
+map	716	name	Delphi Temple	auto
+map	717	name	Twisted Vein	auto
+map	718	name	Altar of the Mara Cult	auto
+map	719	name	Lost Souls Falls	auto
+map	720	name	Vortek	auto
+map	721	name	Federal Arsenal	auto
+map	764	name	Battle of Helios [Party]	auto
+map	765	name	Escape the Fort's Maze (Solo)	auto
+map	766	name	Spacetime Passage	auto
+map	767	name	A cellar where beer is stored.	auto
+map	768	name	Aven Canal	auto
+map	769	name	Hell Demon Arena - Assembly	auto
+map	770	name	Run! Cows! Run!	auto
+map	771	name	Chaos Dimension <Party>	auto
+map	772	name	Purgatory: Templar Knights' Arena	auto
+map	773	name	Alpaca Race	auto
+map	774	name	Guild Town: Guardian Spirit Corridor	auto
+map	775	name	Fabulous Adventure: Dragon Heart	auto
+map	776	name	Training Grounds	auto
+map	777	name	Camouflage Forest	auto
+map	778	name	Tree of Life Guardian <1 player>	auto
+map	779	name	Cemetery Guard <Party Event>	auto
+map	783	name	Legend Tale: the Treasure Thieves and the Legendary Imp.	auto
+map	784	name	The 5 Animals: The Legend of Bonka <1-Player Event>	auto
+map	785	name	The 5 Animals: The Legend of Yula <1-Player Event>	auto
+map	786	name	The 5 Animals: The Legend of Barlilu <1-Player Event>	auto
+map	787	name	The 5 Animals: The Legend of Ron <1-Player Event>	auto
+map	788	name	The 5 Animals: The Legend of Maschatta <1-Player Event>	auto
+map	789	name	Boss Challenge <Party>	auto
+map	790	name	The Power of the Eternal Crystal <Party>	auto
+map	791	name	Future Generation <Party>	auto
+map	792	name	Depths of the Tassos Canal	auto
+map	793	name	Baram Abyss	auto
+map	794	name	Andrew Village Mine	auto
+map	795	name	Delphi Temple	auto
+map	796	name	Depths of the Skleros Frozen Abyss	auto
+map	797	name	Ancient Altar	auto
+map	798	name	Blackblood Refuge	auto
+map	799	name	Ulta Hall	auto
+map	801	name	Crankshaft Base	auto
+map	802	name	Ulta Hall	auto
+map	803	name	Venomfang	auto
+map	804	name	Scarlet	auto
+map	805	name	Century	auto
+map	806	name	Manor	auto
+map	807	name	Basel Frontier	auto
+map	808	name	Sturmfrau	auto
+map	809	name	Skleros Frozen Abyss	auto
+map	810	name	Giants' Crater	auto
+map	811	name	Echo Lair	auto
+map	812	name	Ossuary Prison	auto
+map	813	name	Guillotine	auto
+map	814	name	Howling Cape	auto
+map	815	name	Century Abyss	auto
+map	816	name	Hellspire Temple	auto
+map	817	name	Rose Temple	auto
+map	818	name	Uncharted Cave	auto
+map	819	name	Meteor Crater <Solo>	auto
+map	820	name	Shadow Tide Grotto <Solo>	auto
+map	821	name	Kahlo Tower <Solo>	auto
+map	822	name	Iyernafalo <Solo>	auto
+map	823	name	Kamodo Sacred Land <Solo>	auto
+map	824	name	Water Temple <Solo>	auto
+map	825	name	Antigravity Lab <Solo>	auto
+map	826	name	Grey Lynn <Solo>	auto
+map	827	name	Batelo Valley (Solo)	auto
+map	828	name	Allolans (Solo)	auto
+map	829	name	Destructive Illusion: Angor Quarry (Solo)	auto
+map	830	name	Destructive Illusion: Fort Verdure (Solo)	auto
+map	831	name	Destructive Illusion: Tassos Canal (Solo)	auto
+map	832	name	Destructive Illusion: Shale Cavern (Solo)	auto
+map	833	name	Destructive Illusion: Eroda (Solo)	auto
+map	834	name	Destructive Illusion: Morticora (Solo)	auto
+map	835	name	Destructive Illusion: Crankshaft Base (Solo)	auto
+map	836	name	Destructive Illusion: Branda Root (Solo)	auto
+map	837	name	Destructive Illusion: Palace of Mischief (Solo)	auto
+map	838	name	Destructive Illusion: Ulta Hall (Solo)	auto
+map	839	name	Destructive Illusion: Baltaroi Heart (Solo)	auto
+map	840	name	Destructive Illusion: Mayor's Dream (Solo)	auto
+map	841	name	Destructive Illusion: Venomfang (Solo)	auto
+map	842	name	Destructive Illusion: Scourge (Solo)	auto
+map	997	name	Event Site	auto
+map	998	name	Event Site	auto
+map	999	name	Grid Plan	auto

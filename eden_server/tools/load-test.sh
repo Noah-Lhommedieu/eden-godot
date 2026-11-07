@@ -2,8 +2,8 @@
 # DB-4 — test de charge ~300 CCU contre une pile LOCALE ISOLÉE.
 #
 # N'interfère pas avec la pile `edenflax-*` en cours : PG17 jetable dédié
-# (conteneur `edenflax-loadpg` :5434, max_connections=300, copie pg_dump de
-# `edenfr`), ports services décalés (+10000), Redis base logique 15. Deux modes comparables :
+# (conteneur `edengodot-loadpg` :5434, max_connections=300, copie pg_dump de
+# `eden_live`), ports services décalés (+10000), Redis base logique 15. Deux modes comparables :
 #   redis  : EDEN_REDIS_CONN défini (DB-3 actif)
 #   pg     : tout PostgreSQL (état avant DB-3)
 #
@@ -14,15 +14,13 @@ MODE="${1:?redis|pg}"; N="${2:-300}"; DUR="${3:-60}"; APS="${4:-2}"; SCEN="${5:-
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT/server"
 PGPASS="$(sed -n 's/^POSTGRES_PASSWORD=//p' "$ROOT/.env" | tail -n1)"
-LOADDB="edenfr"
-LPG=edenflax-loadpg; LPORT=5434
+LOADDB="eden_live"
+LPG=edengodot-loadpg; LPORT=5434
 OUT="${LOAD_OUT:-/tmp/eden-load-$MODE}"; mkdir -p "$OUT"
 PSQL="docker exec -i $LPG psql -U postgres -v ON_ERROR_STOP=1 -q"
 BIN="bin/Debug/net10.0"
 DATA="$(realpath "$ROOT/server_us/Data/db_decoded")"
-# corpus/ est ignoré par git : en worktree on le cherche dans le dépôt principal.
-MAIN="$(cd "$(git -C "$ROOT" rev-parse --git-common-dir)/.." && pwd)"
-CORPUS="$MAIN/corpus/fr-full/data"
+CORPUS="$(realpath "$ROOT/../corpus/fr-full/data")"
 CLIENT_DB="${EDEN_CLIENT_DB:-$CORPUS/db}"
 SCENE_LINKS="$OUT/scene_links"; rm -rf "$SCENE_LINKS"; mkdir -p "$SCENE_LINKS"
 for f in "$CORPUS"/scene/*.ini; do b="$(basename "$f")"; b="${b%.*}"; ln -sf "$f" "$SCENE_LINKS/${b^^}.ini"; done
@@ -34,13 +32,13 @@ docker run -d --name $LPG -e POSTGRES_PASSWORD="$PGPASS" -p $LPORT:5432 postgres
   -c max_connections=300 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all >/dev/null
 for i in $(seq 1 60); do docker exec $LPG pg_isready -U postgres -q && break; sleep 1; done
 sleep 2
-docker exec edenflax-postgres pg_dump -U postgres -Fc edenfr | docker exec -i $LPG pg_restore -U postgres -d postgres --create --no-owner
+docker exec edengodot-postgres pg_dump -U postgres -Fc eden_live | docker exec -i $LPG pg_restore -U postgres -d postgres --create --no-owner
 $PSQL -d "$LOADDB" <<SQL
-CREATE TEMP TABLE t AS SELECT * FROM game.player_characters WHERE id = 200000001;
+CREATE TEMP TABLE t AS SELECT * FROM character.player_characters WHERE id = 200000001;
 DO \$\$ BEGIN
   FOR i IN 1..$N LOOP
     UPDATE t SET id = 800000000 + i, given_name = 'botchar' || lpad(i::text, 4, '0'), gold = 100000, node_id = 5;
-    INSERT INTO game.player_characters SELECT * FROM t;
+    INSERT INTO character.player_characters SELECT * FROM t;
   END LOOP;
 END \$\$;
 SQL
@@ -53,14 +51,15 @@ export EDEN_DB_CONN="Host=localhost;Port=$LPORT;Database=$LOADDB;Username=postgr
 export EDEN_DB_POOL_MAX="${EDEN_DB_POOL_MAX:-30}"
 export EDEN_REDIS_CONN=""
 if [ "$MODE" = "redis" ]; then export EDEN_REDIS_CONN="localhost:6380,defaultDatabase=15"; fi
-[ "$MODE" = redis ] && docker exec edenflax-redis redis-cli -n 15 FLUSHDB >/dev/null
+[ "$MODE" = redis ] && docker exec edengodot-redis redis-cli -n 15 FLUSHDB >/dev/null
 P=10000
 export TICKET_PORT=$((2067+P)) MISSION_PORT=$((7654+P)) WORLD_PORT=$((5200+P)) ZONE_PORT=$((5201+P)) ZW_PORT=$((5301+P)) WORLD_LINK_PORT=$((5301+P))
 export EDEN_REFORGED_DB="$CLIENT_DB" EDEN_DATA="$DATA" DATA_DIR="$DATA" MISSION_HOST=127.0.0.1 TICKET_IP=127.0.0.1
 export SCENE_DIR="$SCENE_LINKS" NODEMAP_DIR="$(realpath "$ROOT/server_us/Data/NodeMap")"
 export EDEN_PERSIST_FLUSH_MS="${EDEN_PERSIST_FLUSH_MS:-15000}"
 for s in Ticket Mission World Zone; do
-  setsid nohup "src/Eden.$s/$BIN/Eden.$s" </dev/null >"$OUT/$s.log" 2>&1 &
+  OBS=0; [ "$s" = Zone ] && OBS=19100
+  EDEN_OBSERVABILITY_PORT=$OBS setsid nohup "src/Eden.$s/$BIN/Eden.$s" </dev/null >"$OUT/$s.log" 2>&1 &
   echo $! >"$OUT/$s.pid"
 done
 for i in $(seq 1 60); do ss -tln | grep -q ":$ZONE_PORT " && ss -tln | grep -q ":$MISSION_PORT " && break; sleep 1; done
@@ -69,11 +68,18 @@ docker exec $LPG psql -U postgres -d "$LOADDB" -qc "SELECT pg_stat_statements_re
 
 ( while true; do docker exec $LPG psql -U postgres -Atc "SELECT count(*) FROM pg_stat_activity WHERE datname='$LOADDB'" >>"$OUT/pgconn.txt" 2>/dev/null; sleep 2; done ) &
 SAMPLER=$!
-trap 'kill $SAMPLER $(cat "$OUT"/*.pid) 2>/dev/null || true; docker rm -f $LPG >/dev/null 2>&1 || true' EXIT
+# N : CPU / mémoire du process Zone et métriques Prometheus (boucle de zone, file de commandes, GC) toutes les 5 s.
+( while true; do
+    ZP=$(cat "$OUT/Zone.pid" 2>/dev/null); ps -o %cpu=,rss= -p "$ZP" 2>/dev/null | awk -v t=$(date +%s) '{print t, $1, $2}' >>"$OUT/zone-proc.txt"
+    curl -s http://127.0.0.1:19100/metrics -o "$OUT/zone-metrics-last.txt" || true
+    sleep 5
+  done ) &
+METRICS=$!
+trap 'kill $SAMPLER $METRICS $(cat "$OUT"/*.pid) 2>/dev/null || true; docker rm -f $LPG >/dev/null 2>&1 || true' EXIT
 echo "== bots : $N sessions, ${DUR}s, mode=$MODE"
 dotnet run --no-build --project tools/Eden.Bots -- --scenario="$SCEN" --sessions="$N" --duration="$DUR" --aps="$APS" \
   --spawn-wait=5 --stagger-ms=40 --ticket-port=$((TICKET_PORT)) --zone-port=$ZONE_PORT \
-  --db="Host=localhost;Port=$LPORT;Database=$LOADDB;Username=postgres;Password=$PGPASS;SearchPath=game,public" \
+  --db="Host=localhost;Port=$LPORT;Database=$LOADDB;Username=postgres;Password=$PGPASS;SearchPath=character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public" \
   --capture="$CAPTURE" --tls-insecure --json="$OUT/bots.json" > "$OUT/bots.out" || true
 python3 - "$OUT/bots.json" <<'PY'
 import json,sys
@@ -90,6 +96,6 @@ echo "calls total: $(docker exec $LPG psql -U postgres -d "$LOADDB" -Atc "SELECT
 echo "== services arrêtés, micro-bench des opérations chaudes (300 joueurs × 200 ops)"
 kill $(cat "$OUT"/*.pid) 2>/dev/null || true; sleep 3
 dotnet run --no-build --project tools/Eden.HotBench -- \
-  --db="Host=localhost;Port=$LPORT;Database=$LOADDB;Username=postgres;Password=$PGPASS;SearchPath=game,public" \
+  --db="Host=localhost;Port=$LPORT;Database=$LOADDB;Username=postgres;Password=$PGPASS;SearchPath=character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public" \
   --redis="localhost:6380,defaultDatabase=15" --players="$N" --ops=200 --first-char=800000001 \
   --json="$OUT/hotbench.json" | tee "$OUT/hotbench.txt"

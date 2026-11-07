@@ -1,0 +1,22 @@
+fr_term	term	strict	note
+Illusion Destructrice	Destructive Illusion	yes	mode de donjon scoré (type 18)
+Épreuve	Trial	yes	donjon d'épreuve / épreuve des héros
+Héroïque	Heroic	yes	variante difficile d'un donjon
+DJN multijoueur	Multiplayer Dungeon	yes	suffixe de nom de carte
+multijoueur	Multiplayer	no	
+Groupe	Party	no	
+Solo	Solo	no	
+Temple	Temple	no	
+Carrière	Quarry	no	
+Forêt	Forest	no	
+Mont	Mount	no	
+Monts	Mountains	no	
+Vallée	Valley	no	
+Plaines	Plains	no	
+Île	Island	no	
+Tour	Tower	no	
+Labo	Lab	no	
+Laboratoire	Laboratory	no	
+Ville de Guilde	Guild Town	yes	
+Chemin d'Occultus	Occultus Path	no	
+Cristal d'Eternal	Eternal Crystal	no	

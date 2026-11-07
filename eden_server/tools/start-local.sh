@@ -10,15 +10,15 @@ if [ -f "$ROOT/.env" ]; then
   PGPASS="$(sed -n 's/^POSTGRES_PASSWORD=//p' "$ROOT/.env" | tail -n1)"
 fi
 PGPASS="${PGPASS:-postgres}"
-DB="Host=127.0.0.1;Port=5433;Database=edenfr_db;Username=postgres;Password=$PGPASS"
-ACC="Host=127.0.0.1;Port=5433;Database=edenfr_account;Username=postgres;Password=$PGPASS"
-MEM="Host=127.0.0.1;Port=5433;Database=edenfr_member;Username=postgres;Password=$PGPASS"
+DB="Host=127.0.0.1;Port=5433;Database=eden_live;Username=postgres;Password=$PGPASS"
+ACC="Host=127.0.0.1;Port=5433;Database=eden_live;Username=postgres;Password=$PGPASS"
+MEM="Host=127.0.0.1;Port=5433;Database=eden_live;Username=postgres;Password=$PGPASS"
 
 # DB-2 : base unique `edenfr` (schémas game/account/member, search_path par
 # rôle via DbConnectionFactory). EDEN_DB_CONN prime sur DB_CONN/ACCOUNT_DB_CONN/
 # MEMBER_DB_CONN ci-dessus ; EDEN_LEGACY_DB=1 = rollback vers les 3 anciennes bases.
 if [ "${EDEN_LEGACY_DB:-0}" != "1" ]; then
-    export EDEN_DB_CONN="Host=127.0.0.1;Port=5433;Database=edenfr;Username=postgres;Password=$PGPASS"
+    export EDEN_DB_CONN="Host=127.0.0.1;Port=5433;Database=eden_live;Username=postgres;Password=$PGPASS"
 fi
 # DB-3 : tickets + mutations chaudes (or/position/vitals) sur Redis 7 (port 6380),
 # flush Redis→PG ~15 s. EDEN_REDIS=off ou EDEN_LEGACY_DB=1 = tout PostgreSQL.

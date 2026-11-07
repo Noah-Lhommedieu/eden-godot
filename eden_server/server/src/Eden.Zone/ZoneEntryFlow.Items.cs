@@ -1,3 +1,7 @@
+using Eden.Zone.Features.Modifiers;
+using Eden.Zone.Features.Gather;
+using Eden.Core.Game.Foundation;
+using Eden.Core.Game.Modifiers;
 using Eden.Core.Networking;
 using Eden.Core.Data;
 using Eden.Core.Networking.Messages.Generated;
@@ -514,59 +518,12 @@ public sealed partial class ZoneEntryFlow
                         token);
                     break;
 
-                // --- AttrGainCollectItem <toolItemId> <chance%> —
-                // outils de récolte kind 44 (pioche/gants/cristal) :
-                // CEC_AttrGainCollectItem @0x085061a0 — pour chaque
-                // produit de S_FamilyCollect (clé = CatalystItemId
-                // col2 = l'item outil) un jet < taux octroie la
-                // quantité (GainCollectItem @0x08505930). Restriction
-                // = S_Item col32 (nodes;areaType) + rejet texte 0xe1c
-                // (CanExecute @0x085056b0, vfunc+300). La consommation
-                // du ticket/outil est déjà faite par le pipeline
-                // d'usage (arg2 = chance de consommer l'outil natif,
-                // 100 partout dans les données → équivalent).
+                // --- AttrGainCollectItem <toolItemId> — outils de récolte kind 44
+                // (CEC_AttrGainCollectItem @0x085061a0). Récolte CONTINUE depuis
+                // PLAN-ACTION-3 A3 : voir Features/Gather/GatherService.
                 case "AttrGainCollectItem":
-                {
-                    var toolId = a[0];
-                    var collect = _services.GameData.WorkCollectById
-                        .Values.FirstOrDefault(w =>
-                            w.CatalystItemId == toolId);
-                    if (collect == null)
-                    {
-                        EdenLog.Write($"[Zone] CollectItem char={charId} " +
-                            $"tool={toolId} : pas de S_FamilyCollect");
-                        break;
-                    }
-                    var areaOk = IsInCollectArea(st, toolId);
-                    if (!areaOk)
-                    {
-                        // 0xe1c = refus co-monture natif (IsCoRiding), 0x5c0
-                        // = texte d'invocation : aucun texte fidèle connu.
-                        break;
-                    }
-                    var touched =
-                        new List<(int BagId, int Slot, bool Merged)>();
-                    foreach (var p in collect.Products)
-                    {
-                        if (p.ItemId <= 0 || p.Quantity <= 0 ||
-                            !(Random.Shared.NextDouble() * 100 < p.Rate))
-                            continue;
-                        var add = await _services.Inventory.AddItemAsync(
-                            charId, p.ItemId, p.Quantity, 0, 0, false,
-                            touched);
-                        if (!add.Success)
-                            EdenLog.Write($"[Zone] CollectItem char=" +
-                                $"{charId} item={p.ItemId} inventaire plein");
-                    }
-                    if (touched.Count > 0)
-                        await Codecs.NativeItemCodec.EmitItemSlotsAsync(
-                            session, _services.InventoryRepo, charId,
-                            touched, token);
-                    EdenLog.Write($"[Zone] CollectItem char={charId} " +
-                        $"tool={toolId} node={st.NodeId} " +
-                        $"slots={touched.Count}");
+                    await StartGatherAsync(session, st, charId, a[0], token);
                     break;
-                }
 
                 // --- AttrGainPrestigeExp <id> <exp> <chance> <x> ---
                 // CEC_AttrGainPrestigeExp natif (Init @0x08506260 :
@@ -635,6 +592,25 @@ public sealed partial class ZoneEntryFlow
             or "Weak" or "EnchantIncrease" or "PetAttackGiveBuff"
             or "EnchantKills" or "EnchantKillRandom"
             or "EnchantKillRandomForce";
+
+    private GatherService? _gather;
+    private GatherService Gather => _gather ??= new GatherService(_services,
+        GameTime.Clock, new SystemRandom(), _services.Modifiers(),
+        (delay, work) => ScheduleOnLoop(delay, work));
+
+    /// <summary>Démarre la récolte continue de l'outil utilisé (pioche, gants,
+    /// boule de cristal) : la zone fournit position et validité de l'aire.</summary>
+    private async Task StartGatherAsync(NetSession session, EntryState st,
+        int charId, int toolId, CancellationToken token)
+    {
+        var def = _services.GameData.Items.FirstOrDefault(i => i.Id == toolId);
+        var tool = (await _services.InventoryRepo.GetItemsByCharacterIdAsync(charId))
+            .FirstOrDefault(i => i.ItemId == toolId && !i.IsEquipped);
+        if (def == null || tool == null) return;
+        await Gather.StartAsync(new GatherStart(session, charId, tool, def,
+            st.PosX, st.PosZ, IsInCollectArea(st, toolId),
+            PlayerModifierContext.For(st, MapKinds).IsVip), token);
+    }
 
     /// <summary>Gain de « Crystal Cross Medal » par consommable —
     /// équivalent zone-side de la chaîne native CEC_GainLLG → DBA

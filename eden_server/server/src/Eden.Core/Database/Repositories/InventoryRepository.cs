@@ -28,8 +28,7 @@ public sealed partial class InventoryRepository : IInventoryRepository
     {
         "inventory1", "inventory2", "equipment1", "equipment2",
         "storage1", "storage2", "mailitem", "family_storage",
-        "player_room_container", "farm_container", "bags",
-        "elf_container", "item_mall_items", "player_bank",
+        "player_room_container", "bags", "elf_container",
         "collection", "family_building_container",
     };
 

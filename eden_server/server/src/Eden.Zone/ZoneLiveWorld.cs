@@ -614,10 +614,9 @@ public sealed class ZoneLiveWorld
     /// <summary>Nodes sans monstres (villes). À étendre au besoin.</summary>
     private readonly Dictionary<int, int> _nodeTypes = new();
 
-    /// <summary>Node de donjon : type 5 (donjons, solo/multi), 7 (épreuves
-    /// héroïques), 11 (« profondeurs ») et 18 (毀滅幻境) de c_node — mêmes
-    /// scènes à emplacements fixes ([mob_patrol_mode] tous « fixe »).</summary>
-    public bool IsDungeonNode(int nodeId) =>
+    /// <summary>Scène à emplacements de mobs FIXES (comportement d'IA, PAS la notion de « donjon » :
+    /// celle-ci est <c>MapKind</c>) : c_node type 5, 7, 11 et 18 — [mob_patrol_mode] tous « fixe ».</summary>
+    public bool HasFixedMobLayout(int nodeId) =>
         _nodeTypes.TryGetValue(nodeId, out var t) && t is 5 or 7 or 11 or 18;
 
     private static readonly HashSet<int> PeacefulNodes = new() { 1, 94, 768 };
@@ -657,7 +656,7 @@ public sealed class ZoneLiveWorld
                     // naît sur le point i de sa route (pas d'éparpillement
                     // dans la roche) et n'en bouge plus.
                     var fixedSpot = false;
-                    if (IsDungeonNode(nodeId) &&
+                    if (HasFixedMobLayout(nodeId) &&
                         scene.Patrols.TryGetValue(m.PatrolId, out var pr) &&
                         pr.IsStationary && pr.Waypoints.Count > 0)
                     {

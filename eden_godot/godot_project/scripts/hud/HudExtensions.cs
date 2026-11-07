@@ -199,6 +199,9 @@ public partial class HudExtensions : Node
 
         // Fenêtres 2D sur le canvas HUD.
         Mount(new CastBar { Name = "CastBar" });
+        Mount(new VipBadge { Name = "VipBadge" });
+        Mount(new AlmanaxPanel { Name = "AlmanaxPanel" });
+        Mount(new AdminPanel { Name = "AdminPanel" });
         Mount(new SkillBarWindow { Name = "SkillBar" });
         Mount(new ShopWindow { Name = "ShopWnd" });
         Mount(new BankWindow { Name = "BankWnd" });
@@ -311,6 +314,8 @@ public partial class HudExtensions : Node
         MiscPackets.BindZone(s, _pending.Enqueue);
         MiscPackets.BindWorld(s, _pending.Enqueue);
         DungeonUi.Bind(s, _pending.Enqueue);
+        GatherUi.Bind(s, _pending.Enqueue);
+        TownDetailUi.Bind(s, _pending.Enqueue);
         // Classes existantes jusque-là non bindées — même traitement.
         foreach (var proto in new NetMessage[]
         {

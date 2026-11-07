@@ -1,3 +1,6 @@
+using Eden.Core.Game.Events;
+using Eden.Zone.Features.Modifiers;
+using Eden.Core.Game.Modifiers;
 using System.Collections.Concurrent;
 using System.Text;
 using Eden.Core.Data;
@@ -278,14 +281,9 @@ public sealed partial class ZoneEntryFlow
         EntryState st, long amount)
     {
         if (amount <= 0 || st.ClassId <= 0) return;
-        // Charmes CP actifs — 2911 var4 (paires chance|taux, var3/4 =
-        // NP) + ItemWakenNpRateUp (2912/2914 var2) : même cumul sur
-        // les statuts actifs que le bonus EXP.
-        var charmPct = 0;
-        foreach (var s in st.Statuses.Values)
-            charmPct += s.CpRateBonus + s.WakenCpBonus;
-        if (charmPct != 0)
-            amount += amount * charmPct / 100;
+        // Charmes de classe / d'éveil séparés + VIP : moteur de modificateurs.
+        var cctx = PlayerModifierContext.For(st, MapKinds);
+        amount = (long)(amount * _services.Modifiers().Resolve(ModifierKeys.ExpFor(cctx.ClassKind), cctx));
         var cp = await _services.Classes
             .GetClassProgressAsync((int)st.CharId, st.ClassId);
         if (cp == null) return;
@@ -472,22 +470,16 @@ public sealed partial class ZoneEntryFlow
     {
         try
         {
-            // Rates configurables (EXP_RATE/CLASS_EXP_RATE, défaut
-            // ×100 pour les tests) — appliquées aux gains de mobs
-            // uniquement, comme demandé.
+            // Taux serveur (config + événements) via le moteur de modificateurs ; gains de mobs seulement.
+            var ctx = PlayerModifierContext.For(st, MapKinds);
+            var mods = _services.Modifiers(); DomainEventBus.Shared.Publish(new MobKilled((int)st.CharId, mob.MobId, st.NodeId));
             var exp = (long)((_services.Live.MonsterDefs
                 .TryGetValue(mob.MobId, out var md) ? md.ExpReward : 0)
-                * Eden.Core.Game.ServerConfig.EffectiveExpRate(
-                    _services.ExpRate) * DungeonRewardMult(st.NodeId));
-            // Class EXP — le kill nourrit aussi la classe active avec
-            // le NP du mob (S_Monster col55 = CMonsterData+0xa4), PAS
-            // l'exp perso (natif GiveNp : iVar6 = template+0x88 ×
-            // rate → GainClassPoint). Jamais pour les quêtes.
+                * mods.Resolve(ModifierKeys.ExpKillCharacter, ctx) * DungeonRewardMult(st.NodeId));
+            // EXP de CLASSE : le kill nourrit la classe active avec le NP du mob (pas l'exp perso).
             var classExp = (long)((_services.Live.MonsterDefs
                 .TryGetValue(mob.MobId, out var mdef) ? mdef.ClassExp : 0)
-                * Eden.Core.Game.ServerConfig.EffectiveClassExpRate(
-                    _services.ClassExpRate, st.ClassId is >= 21 and <= 60)
-                * DungeonRewardMult(st.NodeId));
+                * mods.Resolve(ModifierKeys.ExpKillFor(ctx.ClassKind), ctx) * DungeonRewardMult(st.NodeId));
             if (classExp > 0)
                 await GrantClassPointAsync(session, st, classExp);
             // GiveDp/GiveTeamDp natif (@0x8491850/@0x8493fxx) : la
@@ -741,10 +733,10 @@ public sealed partial class ZoneEntryFlow
         var gained = await GrantCharExpAsync(session, ost, share);
         await GrantElfExpAsync(session, ost, share,
             CancellationToken.None);
-        if (gained > 0)
+        if (gained > 0) { DomainEventBus.Shared.Publish(new LevelUp((int)ost.CharId, ost.Level));
             EdenLog.Write(
                 $"[Combat] char={ost.CharId} LEVEL UP -> {ost.Level} " +
-                $"(+{gained}) exp={ost.Experience}");
+                $"(+{gained}) exp={ost.Experience}"); }
     }
 
     /// <summary>EXP de Mana Infusion au kill — pipeline natif
@@ -815,14 +807,8 @@ public sealed partial class ZoneEntryFlow
     private async Task<int> GrantCharExpAsync(NetSession session,
         EntryState st, long exp)
     {
-        // Charmes EXP actifs — ItemExpRateUp (2911 var2) : le CEC
-        // natif cumule le taux sur le perso ; bonus sommé sur les
-        // statuts actifs (retombe à l'expiration, RollBack natif).
-        var charmPct = 0;
-        foreach (var s in st.Statuses.Values)
-            charmPct += s.ExpRateBonus;
-        if (charmPct != 0)
-            exp += exp * charmPct / 100;
+        // Charmes + VIP : moteur de modificateurs (bonus % additifs ; retombent à l'expiration).
+        exp = (long)(exp * _services.Modifiers().Resolve(ModifierKeys.ExpCharacter, PlayerModifierContext.For(st, MapKinds)));
         var (newLevel, gained) = await _services.Progression
             .GrantExpAsync((int)st.CharId, exp, st.Level,
                 st.Experience);

@@ -17,15 +17,17 @@ cd "$EDEN_ROOT/server"
 PGPASS="$(sed -n 's/^POSTGRES_PASSWORD=//p' "$EDEN_ROOT/.env" 2>/dev/null | tail -n1)"
 PGPASS="${PGPASS:?POSTGRES_PASSWORD absent — renseigner .env (voir .env.example)}"
 PGPORT="${EDEN_PG_PORT:-5433}"
-DBC="Host=localhost;Port=$PGPORT;Database=edenfr_db;Username=postgres;Password=$PGPASS"
-ACC="Host=localhost;Port=$PGPORT;Database=edenfr_account;Username=postgres;Password=$PGPASS"
-MEM="Host=localhost;Port=$PGPORT;Database=edenfr_member;Username=postgres;Password=$PGPASS"
+# Test local : les villes de guilde de fixture ne sont jamais recyclées (lot A5).
+export EDEN_TOWN_RECYCLE="${EDEN_TOWN_RECYCLE:-off}"
+DBC="Host=localhost;Port=$PGPORT;Database=eden_live;Username=postgres;Password=$PGPASS"
+ACC="Host=localhost;Port=$PGPORT;Database=eden_live;Username=postgres;Password=$PGPASS"
+MEM="Host=localhost;Port=$PGPORT;Database=eden_live;Username=postgres;Password=$PGPASS"
 
-# DB-2 : base unique `edenfr` (schémas game/account/member, search_path par
+# DB-B : les anciennes bases edenfr_db/account/member/load sont supprimées (sauvegardes dans Database/backups/db-b-2026-11-07). Base unique `eden_live` (schémas game/account/member, search_path par
 # rôle via DbConnectionFactory). EDEN_DB_CONN prime sur DB_CONN/ACCOUNT_DB_CONN/
 # MEMBER_DB_CONN ci-dessus ; EDEN_LEGACY_DB=1 = rollback vers les 3 anciennes bases.
 if [ "${EDEN_LEGACY_DB:-0}" != "1" ]; then
-    export EDEN_DB_CONN="Host=localhost;Port=$PGPORT;Database=edenfr;Username=postgres;Password=$PGPASS"
+    export EDEN_DB_CONN="Host=localhost;Port=$PGPORT;Database=eden_live;Username=postgres;Password=$PGPASS"
 fi
 # DB-3 : tickets + mutations chaudes (or/position/vitals) sur Redis 7 (port 6380),
 # flush Redis→PG ~15 s. EDEN_REDIS=off ou EDEN_LEGACY_DB=1 = tout PostgreSQL.

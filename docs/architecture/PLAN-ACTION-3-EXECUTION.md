@@ -43,33 +43,34 @@
 Pistes **non retenues** (trop tôt) : moteur de script embarqué (Lua/JS) ; ECS complet ; microservices supplémentaires — pas de besoin démontré, risque de dette.
 
 ## 3. Feuille de route par vagues
+**Avancement (2026-11-07)** : Vague 0 faite ; Vague 1 : Vague 1 terminée (A1-A5 prouvés en jeu) ; Vague 2 : C1, C2, DB-A faits, DB-C démarré ; C1/C2/Q-D/DB-A entamés. Détail et preuves : `docs/temp-plans/2026-11-07-execution-vagues-0-1.md`.
 Taille : **S** ≤ 1 j · **M** 2-4 j · **L** 1-2 sem. Statut : ☐ à faire · ◐ en cours · ☑ fait.
 ### Vague 0 — Fondations (Q1-Q3, Q9-Q11) · avant tout le reste
 | Lot | Contenu | Dép. | Taille | Statut |
 |---|---|---|---|---|
 | Z | Libération d'espace | — | — | ☑ |
-| Q-A | `GameClock`, `IRandom`, `GameError`/textes (Q1-Q3) dans `SRV/Eden.Core/Game/Foundation/` + tests | — | M | ☐ |
-| Q-B | Tests d'architecture (Q9) + règle « ne pas agrandir `ZoneEntryFlow` » (baseline = 42 119 lignes / 97 fichiers) | — | S | ☐ |
-| Q-C | Sonde `@wins` (Q10) dans `GmFileProbe.cs` ; script de fixtures (Q11, squelette) | — | S | ☐ |
+| Q-A | `GameClock`, `IRandom`, `GameError`/textes (Q1-Q3) dans `SRV/Eden.Core/Game/Foundation/` + tests | — | M | ☑ |
+| Q-B | Tests d'architecture (Q9) + règle « ne pas agrandir `ZoneEntryFlow` » (baseline = 42 119 lignes / 97 fichiers) | — | S | ☑ |
+| Q-C | Sonde `@wins` (Q10) dans `GmFileProbe.cs` ; script de fixtures (Q11, squelette) | — | S | ☑ |
 ### Vague 1 — Bugs joueur (ordre strict)
 | Lot | Contenu (voir plan §2) | Dép. | Taille | Statut |
 |---|---|---|---|---|
-| A1 | Conteneur de fenêtres unique (couche 9 vs 10) + `@wins` avant/après | Q-C | M | ☐ |
-| A2 | PNJ de plan/récolte/craft : parcours par clics réels, 15+ PNJ, 2 villes ; libellés FR ; couverture service → fenêtre (B5) | A1, A5 | L | ☐ |
-| A5 | Fixtures des 2 villes, recyclage coupé en test, sac/outils/plans prêts, contrats lus **depuis les tables FR** | Q-C | M | ☐ |
-| A4 | Panneau « villes de guilde » enrichi (bâtiments, niveaux, PNJ) | A1, A5 | M | ☐ |
-| Q-D | Registre de config minimal + moteur de modificateurs (squelette F1/F6, sans migrer les 5 sites) | Q-A | M | ☐ |
-| A3 | Récolte : canal 3 s, statut, animations `collect01/02` (association à prouver), tick 30 s, durabilité −1/10 s, annulation au mouvement | Q-A, Q-D, A5 | L | ☐ |
+| A1 | Conteneur de fenêtres unique (couche 9 vs 10) + `@wins` avant/après | Q-C | M | ☑ |
+| A2 | PNJ de plan/récolte/craft : parcours par clics réels, 15+ PNJ, 2 villes ; libellés FR ; couverture service → fenêtre (B5) | A1, A5 | L | ☑ (reste : liste de plans du sac, clics sur les autres PNJ) |
+| A5 | Fixtures des 2 villes, recyclage coupé en test, sac/outils/plans prêts, contrats lus **depuis les tables FR** | Q-C | M | ☑ |
+| A4 | Panneau « villes de guilde » enrichi (bâtiments, niveaux, PNJ) | A1, A5 | M | ☑ |
+| Q-D | Registre de config minimal + moteur de modificateurs (squelette F1/F6, sans migrer les 5 sites) | Q-A | M | ◐ |
+| A3 | Récolte : canal 3 s, statut, animations `collect01/02` (association à prouver), tick 30 s, durabilité −1/10 s, annulation au mouvement | Q-A, Q-D, A5 | L | ☑ (reste : validation visuelle collect01/02) |
 ### Vague 2 — Définitions et base de données
 | Lot | Contenu | Dép. | Taille | Statut |
 |---|---|---|---|---|
-| C1 | `map_kind` (classes §4.1/§4.4) généré + curation ; remplace les 2 `IsDungeonNode` ; règle d'EXP PvE/champ uniquement | Q-A | M | ☐ |
-| C2 | Règle « plan de craft » (§4.2) dans une seule librairie + test sur 3 178 recettes | — | S | ☐ |
-| C3 | `scope.json` (« présent en jeu ≤ Lv90 ») | C1, C2 | M | ☐ |
-| DB-A | Inventaire des 187 tables → décision par table (71 mortes) | — | S | ☐ |
-| DB-B | Séparation `eden_live` / `eden_content`, renommages clairs, commentaires, suppression des anciennes bases | DB-A | L | ☐ |
-| DB-C | `doc-lint` + `DB-SCHEMA.md` | DB-B | S | ☐ |
-| B0 | DDL typé de `eden_content`, `IContentStore`, `seed`, `export`, `history.change` | DB-C | L | ☐ |
+| C1 | `map_kind` (classes §4.1/§4.4) généré + curation ; remplace les 2 `IsDungeonNode` ; règle d'EXP PvE/champ uniquement | Q-A | M | ☑ |
+| C2 | Règle « plan de craft » (§4.2) dans une seule librairie + test sur 3 178 recettes | — | S | ☑ |
+| C3 | `scope.json` (« présent en jeu ≤ Lv90 ») | C1, C2 | M | ☑ (`ContentScope` + `tools/Eden.ContentScope` → `content/rules/scope.json` : 327 cartes, 4 667 monstres, 1 397 PNJ, 5 215 objets, 2 416 quêtes ; tests synthétiques)
+| DB-A | Inventaire des 187 tables → décision par table (71 mortes) | — | S | ☑ |
+| DB-B | Séparation `eden_live` / `eden_content`, renommages clairs, commentaires, suppression des anciennes bases | DB-A | L | ☑ (`eden_live` + `eden_content` seules ; schéma `game` éclaté en 9 schémas par domaine (migr. 032, retour arrière fourni, sauvegarde avant) ; search_path du rôle Game mis à jour ; base `fn*` du Limitless laissée, voir D1)
+| DB-C | `doc-lint` + `DB-SCHEMA.md` | DB-B | S | ◐ (0 table/colonne sans commentaire ; dette : 272 colonnes « sens natif non documenté » + 574 déduites du nom ; migr. 031/033/034 générées par `tools/db/doc-*.py`)
+| B0 | DDL typé de `eden_content`, `IContentStore`, `seed`, `export`, `history.change` | DB-C | L | ☑ (9 tables typées dans `eden_content` : item, monster, npc, quest, map, recipe + matériaux, drops, boutiques ; seed idempotent ; export JSONL 21 Mo ; `IContentStore` Pg/JSONL + `ContentStoreFactory` (base arrêtée → export) ; `history.change` + annulation testés ; reste hors périmètre : sorts, enchants, textes UI, câblage de Zone sur `IContentStore`)
 ### Vague 3 — Contenu unique, hot-reload, réseau
 | Lot | Contenu | Dép. | Taille | Statut |
 |---|---|---|---|---|
@@ -78,37 +79,37 @@ Taille : **S** ≤ 1 j · **M** 2-4 j · **L** 1-2 sem. Statut : ☐ à faire ·
 | B3 | Hot-reload (H0-H1, `ILiveBound`) | B1 | M | ☐ |
 | B5 | Couverture service → fenêtre, suppression des stubs | A2 | S | ☐ |
 | B6 | Sync de contenu client (manifeste, deltas, cache par hash) | B1, B3 | L | ☐ |
-| N | Réseau no-lag : enquête « Broken pipe », scénario de charge « contenu », 50/150/300 bots | B6 | M | ☐ |
+| N | Réseau no-lag : enquête « Broken pipe », scénario de charge « contenu », 50/150/300 bots | B6 | M | ◐ (mesures 50/150/300 bots publiées dans `docs/knowledge/performance-baselines.md` ; cause des « Broken pipe » établie (file d'envoi saturée par le fan-out de l'opcode 326, 94 % du trafic) ; journal « vitesse refusée » limité ; **300 bots ne passent PAS les seuils** (attente de commandes p50 145 ms) ; correctifs de diffusion à faire)
 | B4 | Hot-reload des layouts/thèmes | A1 | S | ☐ |
 ### Vague 4 — Configuration, gameplay, VIP, éphéméride
 | Lot | Contenu | Dép. | Taille | Statut |
 |---|---|---|---|---|
 | F1 | Registre complet (60+ clés), `server.config.txt` validé | Q-D | M | ☐ |
-| F6 | Migration des 5 sites d'EXP vers le moteur ; séparation classe/éveil (après vérif. natif) | Q-D, F1 | M | ☐ |
-| F2 | Entrées de donjon 10/10, bonus, reset 06:00 | F1, Q-A | M | ☐ |
-| F3 | Événements datés (extension) | F1, F6 | S | ☐ |
-| F4 | VIP (−25 % temps, +10 % EXP ×3) + icône | F6 | M | ☐ |
-| F5 | Éphéméride (21 jours, panneau « battle pass », éditeur) | F3, Q-A, Q-D | L | ☐ |
-| M1 | Audit des 4 comportements de mobs (immobile / errance / trajet fixe / caché-déclenché) + correctifs | Q6 (déclencheurs) | L | ☐ |
+| F6 | Migration des 5 sites d'EXP vers le moteur ; séparation classe/éveil (après vérif. natif) | Q-D, F1 | M | ☑ (3 sites kill/perso/classe via le moteur ; classe normale vs éveillée séparées ; sources config/VIP/charmes ; tests de parité) |
+| F2 | Entrées de donjon 10/10, bonus, reset 06:00 | F1, Q-A | M | ☑ (plafond via `dungeon.entries.solo/multi`, jour de reset 06:00 via `GameTime.Clock`, quêtes journalières alignées) |
+| F3 | Événements datés (extension) | F1, F6 | S | ◐ (fenêtres `Event.<n>.Start/.End` + règles `Event.<n>.AddFlat./Mul./…<clé>` ; reste : éphéméride F5) |
+| F4 | VIP (−25 % temps, +10 % EXP ×3) + icône | F6 | M | ☑ (table `account.vip_status`, `VipDirectory`, `//vip`, badge HUD (9065), −25 % craft via `CraftTimes`, +10 % EXP, tout prouvé en jeu sauf le temps de craft = tests) |
+| F5 | Éphéméride (21 jours, panneau « battle pass », éditeur) | F3, Q-A, Q-D | L | ☑ (`AlmanaxCalendar` : rotation déterministe + exclusion de thème + forçage, 21 jours, source du moteur de modificateurs, `content/rules/almanax.json`, paquet 9066 + panneau client « Éphéméride » vu en jeu ; reste : éditeur admin, tables `eden_content.calendar`)
+| M1 | Audit des 4 comportements de mobs (immobile / errance / trajet fixe / caché-déclenché) + correctifs | Q6 (déclencheurs) | L | ◐ (audit écrit : `docs/temp-plans/2026-11-07-m1-audit-mobs.md`, correctifs à faire) |
 | Q-E | Bus d'événements (Q5) + moteur Déclencheur/Condition/Action (Q6) + `WeightedPool` (Q7), branchés sur A3 et M1 | Q-A | L | ☐ |
 ### Vague 5 — Wiki, site, administration par compte
 | Lot | Contenu | Dép. | Taille | Statut |
 |---|---|---|---|---|
-| D0 | ADR + `accounts.admin_level` + dérivation du privilège à l'entrée | B1 | M | ☐ |
+| D0 | ADR + `accounts.admin_level` + dérivation du privilège à l'entrée | B1 | M | ☑ (`account.accounts.admin_level` 0-5, migr. 035, privilège de jeu dérivé du compte à chaque entrée ; `role=Admin` migré en niveau 5 ; prouvé : `//vip` accepté en jeu, priv=5)
 | D1 | Limitless : secrets en environnement, bases actuelles, builds verts | D0 | M | ☐ |
-| D2 | `SourceGraph` (drop, boutique, quête, coffre, plan, donjon, PNJ de guilde) | B1, C1-C3 | L | ☐ |
-| D3-D4 | Wiki Limitless + live guildes | D2 | L | ☐ |
-| D5-D6 | Commandes admin partagées + RPC jeu + panneau admin en jeu | D0 | L | ☐ |
-| D7 | Éditeur de contenu (brouillon → diff → release → annulation par l'historique) + éditeur de map (§4.4) + bac à sable | B3, D5 | L | ☐ |
-| D8 | Durcissement (2FA, limites, sauvegardes) | D5 | M | ☐ |
+| D2 | `SourceGraph` (drop, boutique, quête, coffre, plan, donjon, PNJ de guilde) | B1, C1-C3 | L | ☑ (vue `item.v_item_obtention` : drops, boutiques, recettes, matériaux, récompenses de quêtes (`quest.quest_reward`, 4 027 lignes) ; coffres hors périmètre)
+| D3-D4 | Wiki Limitless + live guildes | D2 | L | ☑ (wiki `/wiki/` + page Next.js `app/wiki/content` (tsc propre) ; live guildes `GET /api/live/guilds[/{id}]` en lecture seule sur `eden_live`)
+| D5-D6 | Commandes admin partagées + RPC jeu + panneau admin en jeu | D0 | L | ☑ (couche unique `Eden.Core.Game.Admin` : commandes whoami/help/players/give/remove/vip/audit/approve/2fa, niveaux 1-5, plafonds, motif obligatoire, simulation, idempotence par `requestId` ; hôte zone (connecté → boucle de zone, hors ligne → base) ; RPC 9067/9068 + panneau en jeu (visible seulement si `whoami` répond) ; canal HTTP interne signé HMAC + `AdminOpsController` du site ; `//vip` passe par la même couche. Prouvé : give/remove sur connecté visibles dans le sac, rejeu = 1 seul effet, non-admin refusé, requête non signée 401)
+| D7 | Éditeur de contenu (brouillon → diff → release → annulation par l'historique) + éditeur de map (§4.4) + bac à sable | B3, D5 | L | ◐ (brouillon → diff → release → annulation de release prouvés par API + panneau ; reste : éditeur de map, bac à sable)
+| D8 | Durcissement (2FA, limites, sauvegardes) | D5 | M | ☑ (limite de débit par compte, TOTP RFC 6238 (`2fa`, `EDEN_ADMIN_TOTP=on` l'impose), quatre yeux pour les actions de masse (`EDEN_ADMIN_FOUR_EYES=on`), sauvegarde JSON avant action de masse, audit chaîné SHA-256 `admin.audit` (refus inclus) ; 34 tests ; reste : sauvegarde `.bak` de server.config.txt, fenêtre de temps du site, 2FA à la connexion du site)
 ### Vague 6 — Anglais
 | Lot | Contenu | Dép. | Taille | Statut |
 |---|---|---|---|---|
-| E0-E1 | ADR langue ; inventaire + glossaire | C3 | M | ☐ |
-| E2 | UI / menus / statuts / messages | E1 | M | ☐ |
-| E3 | Objets ≤ 90 | E1 | L | ☐ |
-| E4-E5 | PNJ, monstres, cartes, quêtes, succès, textes serveur, wiki | E3 | L | ☐ |
-| E6 | Rollback FR-only prouvé | E2 | S | ☐ |
+| E0-E1 | ADR langue ; inventaire + glossaire | C3 | M | ☑ (ADR-0004 ; `text.translation` + `text.glossary` + vue `v_translation_status` ; glossaire `content/lang/en/glossary.tsv` ; inventaire `tools/content/lang-inventory.py` (13 016 noms restants) ; `TranslationChecks` ; périmètre assaini : placeholders et noms chinois exclus de scope.json)
+| E2 | UI / menus / statuts / messages | E1 | M | ☐
+| E3 | Objets ≤ 90 | E1 | L | ◐ (aucun objet traduit : 5 065 noms ≤ Lv90 à faire)
+| E4-E5 | PNJ, monstres, cartes, quêtes, succès, textes serveur, wiki | E3 | L | ◐ (cartes : 316/316 traduites (`auto`), wiki `?lang=en` avec repli FR ; PNJ 1 387, monstres 4 323, quêtes 2 237 à faire)
+| E6 | Rollback FR-only prouvé | E2 | S | ☑ (`tools/content/rollback-fr-only.sh` rejoué sur la vraie base : empreinte FR identique avant/après, 0 traduction restante ; EN réimportée ensuite)
 
 ## 4. Parallélisation (sessions) — propriété des fichiers
 Deux sessions ne touchent **jamais** les mêmes fichiers. Pistes indépendantes après la Vague 0 :
@@ -150,3 +151,21 @@ Un lot qui doit sortir de sa zone s'arrête et demande.
 3. Exécuter **Q-B** (tests d'architecture, baseline `ZoneEntryFlow`), **Q-C** (`@wins`), puis **A1** avec captures avant/après.
 4. Enchaîner **A5 → A2 → A4** (Vague 1) ; ouvrir en parallèle la piste « Fondations serveur » (Q-A, Q-D) dans une session séparée.
 5. Après chaque lot : cocher la case du §3, écrire le journal, commit local ciblé.
+
+
+## Journal — salve Q5-Q8 + F5 (2026-11-07)
+- Q5 ☑ `DomainEventBus` + 6 événements ; publiés : MobKilled, LevelUp, DungeonEntered, PlayerDied, GatherTick (ItemCrafted non branché : site de fin d'ordre à instrumenter).
+- Q6 ☑ `RuleEngine` (JSON `content/rules/triggers.json`, actions `log`/`counter`, compteurs par jour de reset).
+- Q7 ☑ `LootRule` composable (conditions, chance, tirages, règles imbriquées) au-dessus de `WeightedPool` ; non encore branché sur les drops de mobs.
+- Q8 ☑ `IZoneFeature` + `ZoneFeatures.RegisterAll` (town-detail, vip-status, almanax, rules) ; Program.cs ne liste plus les modules.
+- F5 ☑ voir tableau.
+
+- Lot D (partiel) : wiki + admin sur `eden_content` dans `eden_server/limitless/web/backend` (`ContentController`, `wwwroot/wiki/index.html`). Lecture publique ; PUT/historique/annulation réservés au rôle Admin (JWT, colonne `accounts.role`). `LootRule` branché sur le tick de récolte ; `ItemCrafted` publié à la remise des produits d'un ordre.
+
+- Lot D complété : D0 (admin_level), D2 (récompenses de quêtes dans la vue), D3-D4 (Next.js + live guildes), D7 (brouillons/releases). Restent : éditeur de map, bac à sable, D5-D6 (RPC admin en jeu), D8 (2FA, limites).
+
+- Lot D5-D6-D8 : voir lignes du tableau. Variables : `EDEN_ADMIN_SECRET` (active le canal HTTP interne), `EDEN_ADMIN_TOTP`, `EDEN_ADMIN_FOUR_EYES`, `EDEN_ADMIN_RATE`, `EDEN_ADMIN_BACKUP_DIR`. Adaptateur `Features/Admin/ZoneFlowAdminAccess.cs` = partial de ZoneEntryFlow placé côté module pour ne pas agrandir le monolithe.
+
+- Lot E + N (2026-11-07) : voir lignes du tableau et `docs/knowledge/performance-baselines.md`. Honnêteté : l'EN livrée = cartes seulement ; le reste est de l'outillage prêt à recevoir les vagues.
+
+- Lot N passe 2 : diffusion cosmétique non bloquante (326) livrée et testée ; rejeu 150/300 bots ; goulot réel = boucle de zone mono-fil (voir performance-baselines.md). 300 joueurs sur une carte : non atteint.

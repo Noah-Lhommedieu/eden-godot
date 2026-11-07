@@ -9,7 +9,7 @@ public sealed class BotOptions
     public int ZonePort { get; private set; } = 5201;
     public string DbConnection { get; private set; } =
         Environment.GetEnvironmentVariable("DB_CONN") ??
-        "Host=localhost;Port=5433;Database=edenfr;SearchPath=game,public;Username=eden;Password=postgres";
+        "Host=localhost;Port=5433;Database=eden_live;SearchPath=character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public;Username=eden;Password=postgres";
     public string CapturePath { get; private set; } =
         ResolveCapturePath();
     public string NamePrefix { get; private set; } = "botchar";
@@ -107,7 +107,7 @@ Usage : eden-bots [options]
   --scenario=entry|move|combat|spell|loot|mixed
   --sessions=N --duration=S --aps=N --spawn-wait=S
   --host=127.0.0.1 --ticket-port=2067 --zone-port=5201
-  --db='Host=...;Database=edenfr;SearchPath=game,public;Username=eden;Password=...'
+  --db='Host=...;Database=eden_live;SearchPath=character,inventory,market,guild,social,progress,ranking,lottery,system,admin,public;Username=eden;Password=...'
   --name-prefix=botchar --capture=... --stagger-ms=25 --no-entry
   --transport=modern|legacy  (TLS 1.3 par défaut ; legacy = RSA/RC4)
   --tls-thumbprint=<sha256>  (pinning ; repli EDEN_TLS_THUMBPRINT)

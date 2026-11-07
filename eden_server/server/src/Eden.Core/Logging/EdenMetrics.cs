@@ -114,6 +114,8 @@ public static class EdenMetrics
 
     /// <summary>Trames perdues par file d'envoi pleine en mode
     /// non bloquant (client lent → session fermée ensuite).</summary>
+    /// <summary>Mises à jour cosmétiques (déplacements) abandonnées pour un destinataire chargé : <c>reason</c> = far | backlog | full.</summary>
+    public static readonly Counter<long> CosmeticDrops = Meter.CreateCounter<long>("eden.cosmetic_drops");
     public static readonly Counter<long> SendQueueDrops =
         Meter.CreateCounter<long>("eden_send_queue_drops",
             description: "Trames abandonnées sur file d'envoi pleine");

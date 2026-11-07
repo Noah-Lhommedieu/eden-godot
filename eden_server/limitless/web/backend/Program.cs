@@ -21,7 +21,11 @@ var accountCs = builder.Configuration.GetConnectionString("Account")
 var gameCs = builder.Configuration.GetConnectionString("Game")
     ?? "Host=127.0.0.1;Port=5432;Database=fndb1;Username=postgres;Password=CHANGE_ME_USE_ENV";
 
-builder.Services.AddSingleton(new Db(accountCs, gameCs));
+var contentCs = builder.Configuration.GetConnectionString("Content")
+    ?? "Host=127.0.0.1;Port=5433;Database=eden_content;Username=postgres;Password=CHANGE_ME_USE_ENV";
+var liveCs = builder.Configuration.GetConnectionString("Live")
+    ?? "Host=127.0.0.1;Port=5433;Database=eden_live;Username=postgres;Password=CHANGE_ME_USE_ENV;SearchPath=guild,character,public";
+builder.Services.AddSingleton(new Db(accountCs, gameCs, contentCs, liveCs));
 builder.Services.AddSingleton<AuthService>();
 builder.Services.AddSingleton<GameDataStore>();
 builder.Services.AddSingleton<RankingsService>();
@@ -99,6 +103,8 @@ var app = builder.Build();
     }
 }
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();

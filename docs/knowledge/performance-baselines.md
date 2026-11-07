@@ -1,123 +1,56 @@
-# Baselines de performance
+# Performances réseau / boucle de zone — lot N (2026-11-07)
 
-Protocole : `tools/benchmark.sh <map> 3 35`. Mode solo, `--nohud`,
-1280x720, VSync coupée (`gamedata/settings.cfg`), régime établi à
-t ≥ 15 s, 3 runs. Les centiles portent sur les moyennes par seconde. GPU =
-`--gpu-profile` (2e moitié des échantillons). Machine : i5-12450H, RTX 4060
-Laptop (pilote 595.99.02), Nobara KDE Wayland via XWayland.
+Mesures sur la machine de développement (client, serveurs, PostgreSQL et Redis cohabitent : valeurs **relatives**). Méthode : `eden_server/tools/load-test.sh redis <N> <durée> 2 mixed`
+(PG17 jetable + Redis, bots `Eden.Bots` serveur-side, scénario `mixed`, 2 actions/s/bot), résumé par `tools/perf/summarize-load.py`.
+Percentiles estimés depuis les histogrammes Prometheus de la zone (`eden_zone_tick_ms`, `eden_zone_command_delay_ms`).
 
-## S001 (Aven) — 2026-11-02 — statut **verified**
+| Run | Entrées | Sessions coupées | Entrée zone ms (moy / max) | Tick de zone ms (p50 / p95 / p99) | Attente file de commandes ms (p50 / p95 / p99) | Pause GC cumulée | CPU zone % (moy / max) | RSS max Mo | Sortie Ko/s/session |
+|---|---|---|---|---|---|---|---|---|---|
+| 50 bots (45 s) | 50/50 | 0 | 608 / 1187 | 2.56 / 4.86 / 8.42 | 3.1 / 24.16 / 859.29 | 1.112 s (20 gen2) | 74.0 / 111.0 | 1012 | 2.4 |
+| 150 bots (60 s) | 150/150 | 0 | 2238 / 5009 | 4.0 / 9.91 / 34.5 | 7.26 / 128.7 / 1977.65 | 2.309 s (40 gen2) | 121.2 / 150.0 | 1191 | 5.8 |
+| 300 bots (60 s) | 300/300 | 3 | 1533 / 5008 | 8.51 / 24.15 / 41.12 | 145.26 / 469.31 / 4686.78 | 5.555 s (67 gen2) | 152.4 / 234.0 | 1425 | 7.6 |
+| 300 bots, journal limité | 300/300 | 1 | 908 / 2688 | 8.63 / 24.42 / 42.93 | 158.3 / 683.06 / 5245.77 | 5.678 s (68 gen2) | 149.8 / 234.0 | 1383 | 7.8 |
 
-| | Godot 4.7.2 (portage, corpus official) | Godot 4.8-beta2 (eden-godot, EDENFR) | Écart |
+## Verdict par rapport aux seuils du plan (§3.8)
+
+| Seuil | 50 | 150 | 300 |
 |---|---|---|---|
-| frame P50 | 18,80 ms (53 fps) | **12,00 ms (83 fps)** | **−36,2 %** |
-| frame P95 | 20,50 ms | **12,80 ms** | −37,6 % |
-| GPU P50 | 5,14 ms | **3,70 ms** | −28,0 % |
-| RSS P50 | 1 980 Mo | 2 064 Mo | +4,3 % |
-| draws / prims / nœuds | 1561 / 1 355 527 / 7631 | 1561 / 1 355 527 / 7629 | scène identique |
+| Boucle de zone p99 < 50 ms | ✅ 8,4 | ✅ 34,5 | ✅ 41–43 |
+| Aucun paquet de gameplay retardé > 100 ms | ❌ p99 859 ms (rafale d'entrées) | ❌ p95 129 ms | ❌ p50 145–158 ms, p95 469–683 ms |
+| 0 déconnexion | ✅ | ✅ | ❌ 1 à 3 sessions |
+| Budget ≤ 30 Ko/s/joueur | ✅ 2,4 | ✅ 5,8 | ✅ 7,6–7,8 |
 
-Dossiers : `artifacts/benchmarks/20261102-baseline-4.7.2-portage-S001/`,
-`artifacts/benchmarks/20261102-011202-S001/`.
+**Conclusion honnête : 50 joueurs passent presque tout (hors pointe d'entrée), 150 est limite, 300 NE passe PAS** sur les délais et les déconnexions. Le tick de zone lui-même reste sain.
 
-Lecture :
-- La scène rendue est la même (draws et prims identiques ; à 2 nœuds
-  près, des entités). L'écart vient donc du moteur, pas du contenu
-  EDENFR.
-- Les deux versions sont **limitées par le CPU** : en 4.8, 12 ms de frame
-  pour 3,7 ms de GPU. La marge suivante est côté scripts et SceneTree
-  (skill `godot-rendering-performance`).
-- Le `proc=` de PerfProbe (> frame) n'est pas fiable : la sonde parcourt
-  la scène chaque seconde.
-- N = 3 runs, une seule machine, une seule scène. Avant d'étendre la
-  conclusion, ajouter S002 et une scène de combat avec HUD.
+## Enquête « Broken pipe » (cause établie)
 
-## Freeze post-kill (loot 274) — 2026-11-03 — statut **verified**
+- Les 1 à 3 sessions en erreur sont **fermées par le serveur** : `NetSession` coupe un client dont la file d'envoi (256 trames) déborde (`CloseReason = backlog d'envoi…`, compteur `eden_send_queue_drops_total` = 13 323 à 300 bots, 30 197 à la 2ᵉ passe). Le bot voit ensuite « Broken pipe » à l'écriture.
+- Origine du débordement : **l'opcode 326 (`ClientMovePrediction`) représente 94 % des messages reçus** (9,5 M sur 10,1 M en 60 s, soit ≈ 560 messages/s/session). Les 300 bots sont au même endroit : chaque déplacement est rediffusé aux 299 autres (`BroadcastMoveAsync`, O(N) sessions × témoins). Les mobs ajoutent la même diffusion (`BroadcastMobMoveAsync`).
+- C'est un cas pire (foule immobile au même point), mais c'est exactement le scénario d'un événement de guilde ou d'une place de ville.
 
-Scénario : `tools/run.sh -- --login=test123:test123 --channel --char
---kill-loop=6,79` (serveur natif, drop 100 %). La fenêtre « post-kill »
-agrège les 2 s suivant chaque mort.
+## Correctif appliqué
 
-Cause mesurée : un NCID 274 déclenchait **deux** `PlayerBag.RaiseChanged`
-(bind `HudExtensions` + bind `InventoryWindow`), chacun notifiant 7-8
-abonnés ; les fenêtres cachées reconstruisaient quand même leur grille
-(`QueueFree` + cellules + textures + `ItemTooltip.Bind`), et le premier
-loot payait le parse paresseux `c_item.ini`/`c_itemmall.ini` (~9 Mo,
-~1 s).
+- `LogThrottle` : le journal « vitesse refusée » écrivait 33 415 lignes en 60 s (E/S sur le chemin chaud, bots qui se téléportent) ; limité à 1 ligne / 5 s / joueur → 1 511 lignes. Effet sur les délais : nul (la cause est ailleurs), effet sur les coupures : 3 → 1 (une seule passe, non concluant).
 
-Correctifs (`PlayerBag.cs`, `InventoryWindow.cs`, `Bank/Shop/Vending/
-FamilyStorage/Neobank/ArchiveWindow.cs`, hook `SlotsChanged` de
-`QuestTracker.cs`) :
+## Passe 2 : diffusion non bloquante + profilage (2026-11-07, soir)
 
-- `RaiseChanged` coalescé à une levée `Changed` par frame (CallDeferred ;
-  synchrone hors moteur pour NetTests) ;
-- repaint ignoré fenêtre cachée : les abonnés gardent leurs dicts à jour
-  (`PlayerBag.Items` relu) mais ne reconstruisent pas les cellules ; la
-  grille est repeinte à la réouverture (`VisibilityChanged` +
-  `_repaintPending`) ;
-- parse `c_item` pré-chauffé en `Task.Run` au montage du HUD (équivalent
-  de `DataWarmup`, hors frame de loot).
+**Appliqué** : `NetSession.TrySendCosmeticPacket` (jamais d'attente, jamais de fermeture, abandon compté dans `eden_cosmetic_drops_total{reason}`) et `SendCosmeticTo`
+(témoins LOINS > 24 unités servis en priorité basse dès 25 % de file, tout le monde abandonné au-delà de 50 %) pour les 326 de joueurs ET de mobs. Un témoin lent ne
+bloque plus l'émetteur. Testé : `CosmeticSendTests` (témoin qui ne lit plus : 0 attente, abandons, session intacte).
 
-Mesures (même machine, même scénario, run propre — sans build/test en
-parallèle) :
+**Rejeu** (même méthode) : 150 bots → 0 coupure, tick p99 37,6 ms, attente de commandes p50 8 / p95 179 ms ; 300 bots → 1 coupure (3 avant), tick p99 44 ms, attente p50 137 / p95 620 ms.
+Les `eden_send_queue_drops` tombent de 13–30 k à 1,3 k ; 32 k mises à jour cosmétiques sont abandonnées à la place (raison `full`).
 
-| | pire image par kill | fenêtre post-kill |
-|---|---|---|
-| Avant | 150, 129, 140, 131, 84 ms (5 kills) | p99 ≈ 84-150 ms |
-| Après | 19, 22, 21, 14, 15, 26 ms (6 kills) | n=1340, p50=8,5, p95=11,1, **p99=14,3**, max=25,7 ms |
+**Profilage (instrumentation temporaire retirée)** : par déplacement, la diffusion coûte en moyenne 0,30 ms et la mise à jour de vue 0,22 ms ; le reste d'un déplacement et les
+commandes de combat portent le total à ≈ 0,8 ms par commande. La boucle de zone est MONO-fil : à 300 bots (≈ 1 400 commandes/s) elle est saturée (somme des drains ≈ 67 s sur 60 s).
 
-Limites :
+**Conclusion** : le 326 n'est pas LE goulot ; il pèse ≈ 40 % du coût d'un déplacement. Le plafond réel est la boucle unique (~1 250 commandes/s). 50 joueurs actifs ≈ 15 % de charge :
+confortable ; 300 dans UNE même carte : non. Le cas « 300 sur un seul point » reste un pire cas artificiel (bots sans pathfinding).
 
-- Un run intermédiaire sous charge (builds/tests parallèles) affichait
-  p99=34 ms / max=119 ms — bruit de machine, pas du scénario ;
-- kill #1 de ce même run chargeait encore un proto natif paresseux
-  (`g00004.nif`, FX de mort — hors scope, côté `scripts/native`/fx) ;
-- `TradeWindow` reste abonné à `Changed` sans garde de visibilité
-  (hors périmètre de la tâche ; coalescing le borne à 1×/frame).
+## À faire (non fait, décisions de conception)
 
-## Lag kill mobs — 2e vague (drains réseau, GLB froids, callbacks fantômes) — 2026-11-04 — statut **verified**
-
-Après le fix loot-274 ci-dessus, il restait des pics. Scénario :
-`tools/run.sh -- --login=test123:test123 --channel --char --hitch --perf
-"--kill-loop=20863,20864,20865"` (S005, serveur C# live).
-
-Causes mesurées et correctifs :
-
-1. **Drains réseau non bornés.** `GameScene._Process` vidait toute la
-   file `_pending` en une frame (dispatch maître : SeeMob, inventaire,
-   trésors, HUD) — pic `proc=1204 ms` à l'entrée de zone (263 entités ×
-   ~4 ms de création). Idem `_deferredDuringMigration` (drain inline en
-   fin de migration) et `EntityRegistry._netPending` (burst kill :
-   `reg.net 37,7 ms`). → budgets 8 ms (`_pending` + reliquat migration,
-   priorité au reliquat pour préserver l'ordre 298→326) et 6 ms
-   (`reg.net`) ; scope `gs.pending` ajouté pour l'attribution.
-2. **GLB mobs à froid.** Chaque nouveau stem payait 18-37 ms de parse
-   dans `SetVisual` en pleine frame (`reg.visual`). → warm asynchrone
-   (`s_mobWarm` : proto GLB + texture skin + .kf via `PreloadAnimFiles`,
-   thread-safe) lancé dès le 298 ; `DrainPendingVisuals` repousse les
-   stems froids (filet 1,5 s). `MapLoader` précharge les 10 familles
-   G00001-10 en plus des NPC.
-3. **256 callbacks fantômes.** `e.Interp.SetProcess(false)` était posé
-   **avant** l'entrée dans l'arbre et ne tenait pas : `proc-dump`
-   comptait `NetworkInterpolator×256` en process (~256 callbacks
-   natifs→C#/frame en plus du tick mutualisé). → appel déplacé après
-   `AddChild(e)` ; proc-dump suivant : `NetworkInterpolator` absent.
-
-Mesures (même machine, même scénario kill-loop) :
-
-| | pire image par kill | entrée de zone |
-|---|---|---|
-| Avant | 11-41 ms (15 kills) | `proc=1204 ms` en une frame |
-| Après | 8-26 ms (17 kills), p50 fenêtre ~6 ms | pic ~140 ms étalé, plus de seconde entière figée |
-
-Restes mesurés (hors fenêtre kill — pistes pour plus tard) :
-
-- actions unitaires du burst login ~40-100 ms (1re construction
-  inventaire 47 items / 214 sorts / fenêtres) — un budget de drain ne
-  peut pas couper une action, il faut étaler la construction elle-même ;
-- `CooldownOverlay×450` en process (pull `Source?.Invoke`/frame sur
-  toutes les cellules) ;
-- `reg.tick` ~11 ms occasionnel (probable GC, non corrélé au nombre
-  d'entités) ;
-- trésors au sol : TTL serveur 300 s (270 proprio + 30 public) → en
-  grind sans ramassage, draws/labels/nœuds croissent en continu
-  (mesuré +580 draws / +230 Label3D / +2800 nœuds sur 4 min).
+1. **Boucles de zone par carte/instance** (aujourd'hui une seule pour tout) : seule vraie réponse à 300 joueurs ; gros chantier d'architecture (état partagé de `ZoneEntryFlow`).
+2. **Cadence de la vue adaptative** : l'intervalle de 350 ms passe à 700–1 000 ms quand la carte dépasse ~100 joueurs (0,22 ms × 3/s × N aujourd'hui).
+3. **Plafond de joueurs visibles** par témoin (ex. 120 plus proches) : décision de jeu.
+4. Instrumenter durablement le temps par type de commande (`eden_zone_command_ms{ncid}` hors attente) pour cibler les gros postes sans profiler.
+5. Rejouer ce tableau après chaque changement : `tools/perf/summarize-load.py <dossier>`.

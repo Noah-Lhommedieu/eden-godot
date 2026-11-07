@@ -35,4 +35,26 @@ public sealed partial class ZoneEntryFlow
         try { await s.SendPacketAsync(op, payload, token); }
         catch { /* session morte */ }
     }
+
+    /// <summary>Distance au-delà de laquelle un témoin est « loin » : sous charge, il reçoit moins de mises à jour de déplacement.</summary>
+    private const float FarWitnessDistance = 24f;
+
+    /// <summary>File d'envoi à partir de laquelle un témoin LOIN est dégradé (un déplacement sur deux perdu, rattrapé au suivant).</summary>
+    private const double FarWitnessPressure = 0.25;
+
+    /// <summary>
+    /// Diffusion cosmétique d'un déplacement (PLAN-ACTION-3 lot N) : non bloquante, jamais d'attente d'un témoin lent. Sous charge
+    /// les témoins éloignés sont servis en priorité basse ; au-delà de <see cref="NetSession.CosmeticBacklogLimit"/> tout le monde l'est.
+    /// </summary>
+    private static void SendCosmeticTo(NetSession s, ushort opcode, byte[] payload, float distance)
+    {
+        if (distance > FarWitnessDistance && s.QueuePressure >= FarWitnessPressure)
+        {
+            Eden.Core.Logging.EdenMetrics.CosmeticDrops.Add(1, new KeyValuePair<string, object?>("reason", "far"));
+            return;
+        }
+        var op = opcode;
+        if (op >= s.OutboundNcidShiftAbove && op <= 83) op++;
+        s.TrySendCosmeticPacket(op, payload);
+    }
 }

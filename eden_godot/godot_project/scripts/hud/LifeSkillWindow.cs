@@ -250,7 +250,7 @@ public partial class LifeSkillWindow : Control
                                       : "";
         };
         ResetPlaceholders();
-        _window.Visible = true;
+        HudWindows.Open(_window);
         HudWindows.Front(_window);
         Visible = true;
         FillRows();

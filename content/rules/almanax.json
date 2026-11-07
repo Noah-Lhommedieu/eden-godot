@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "Journée du donjon",
+    "theme": "donjon",
+    "weight": 3,
+    "rules": [
+      {
+        "key": "dungeon.entries.solo",
+        "mode": "AddFlat",
+        "value": 1
+      },
+      {
+        "key": "dungeon.entries.multi",
+        "mode": "AddFlat",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Journée d'EXP",
+    "theme": "exp",
+    "weight": 3,
+    "rules": [
+      {
+        "key": "exp.kill.character",
+        "mode": "AddPercent",
+        "value": 25,
+        "when": "Field"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Journée du bâtiment",
+    "theme": "ville",
+    "weight": 2,
+    "rules": [
+      {
+        "key": "craft.duration",
+        "mode": "Multiply",
+        "value": 0.8
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Journée de récolte",
+    "theme": "recolte",
+    "weight": 2,
+    "rules": [
+      {
+        "key": "gather.tick_seconds",
+        "mode": "Multiply",
+        "value": 0.75
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Journée de butin",
+    "theme": "butin",
+    "weight": 2,
+    "rules": [
+      {
+        "key": "exp.kill.class",
+        "mode": "AddPercent",
+        "value": 25
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Journée d'entrées bonus",
+    "theme": "donjon",
+    "weight": 1,
+    "rules": [
+      {
+        "key": "dungeon.entries.multi",
+        "mode": "AddFlat",
+        "value": 2
+      }
+    ]
+  }
+]

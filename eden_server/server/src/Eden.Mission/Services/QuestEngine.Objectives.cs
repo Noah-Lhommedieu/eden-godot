@@ -342,10 +342,10 @@ public sealed partial class QuestEngine
 
     /// <summary>Compteur journalier : ResetDailyMission natif vide la
     /// map exec+0x474 quand localtime()-&gt;tm_mday != exec+0x4dc —
-    /// équivalent paresseux à la lecture.</summary>
+    /// équivalent paresseux à la lecture ; jour = jour de reset 06:00 (IGameClock).</summary>
     private static int DailyCount(CharContext c, int mid)
     {
-        var day = DateTime.Now.Day;
+        var day = Eden.Core.Game.Foundation.GameClockExtensions.ResetDayNow(Eden.Core.Game.Foundation.GameTime.Clock);
         if (c.DailyResetDay != day)
         {
             c.DailyCompletions.Clear();

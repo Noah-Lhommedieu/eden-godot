@@ -134,7 +134,7 @@ public partial class StrengthenWindow : Control
     public void ShowDemo()
     {
         EnsureWindow();
-        if (_window != null) { _window.Visible = true; HudWindows.Front(_window); }
+        if (_window != null) HudWindows.Open(_window);
         Visible = true;
     }
 
@@ -149,7 +149,7 @@ public partial class StrengthenWindow : Control
                 EnsureWindow();
                 EnsureTables();
                 FillLevels();
-                if (_window != null) { _window.Visible = true; HudWindows.Front(_window); }
+                if (_window != null) HudWindows.Open(_window);
                 Visible = true;
                 GD.Print("[verify] strengthen : 432 op=9 — enclume");
                 break;

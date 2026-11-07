@@ -186,7 +186,7 @@ public partial class CraftWindow : Control
         RefreshOrders();
         // Natif (FUN_0070ff50) : le 497 ouvre WorkListWnd.
         if (m.Orders.Count > 0 && _workWnd != null)
-            _workWnd.Visible = true;
+            HudWindows.Open(_workWnd);
     }
 
     /// <summary>498 : ordre terminé → popup workresultwnd natif.</summary>
@@ -587,7 +587,9 @@ public partial class CraftWindow : Control
                 else if (recipe is CraftTable.CombineRecipe cb)
                 { _detailWorkId = cb.Id; FillCombineDetail(_detailWnd!, cb); }
             };
-        _detailWnd.Visible = true;
+        // Open() rend aussi visibles les ancêtres (enveloppe) : la fenêtre s'ouvre même
+        // si le conteneur a été masqué par une fermeture groupée précédente.
+        HudWindows.Open(_detailWnd);
     }
 
     /// <summary>Slot par nom CEGUI complet, repli par feuille (le
@@ -779,7 +781,7 @@ public partial class CraftWindow : Control
                     $"Root/WorkResult/Static/Border/ResultItem{i}")
                 is { } rs)
                 rs.CustomMinimumSize = new Vector2(34, 34);
-        _resultWnd.Visible = true;
+        HudWindows.Open(_resultWnd);
     }
 
     /// <summary>Slot natif → id d'item (0 = masqué/vide).</summary>

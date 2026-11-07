@@ -72,10 +72,11 @@ public sealed partial class ZoneEntryFlow
         };
         // 433 [s16 10][s16 0x28][s16 0] — cast bar de la fenêtre
         // combine ; l'enchant CombineItemID vit 0x28×100 ms.
+        var castUnits = Features.Craft.CraftTimes.CastUnits(_services, st, CombineStationService.CastUnits);
         await session.SendAsync(new CNC_CZ_ClientStrengthenCasting
         {
             Field1 = 10,
-            Field2 = CombineStationService.CastUnits,
+            Field2 = (short)castUnits,
             Field3 = 0,
         }, token);
         var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
@@ -83,7 +84,7 @@ public sealed partial class ZoneEntryFlow
         // Résolution à l'échéance du cast schedulée sur la boucle —
         // un Task.Delay dans le corps suspendrait le fil de jeu.
         ScheduleOnLoop(TimeSpan.FromMilliseconds(
-                CombineStationService.CastUnits * WorkOrderService.UnitMs),
+                castUnits * WorkOrderService.UnitMs),
             _ => ResolveCombineAfterCastAsync(session.SessionId),
             cts.Token);
     }

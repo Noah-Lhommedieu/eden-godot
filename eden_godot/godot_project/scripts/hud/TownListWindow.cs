@@ -45,11 +45,13 @@ public partial class TownListWindow : Control
         MouseFilter = MouseFilterEnum.Ignore;
         Visible = false;
         MiscPackets.Received += OnPacket;
+        TownDetailUi.Received += OnTownDetail;
     }
 
     public override void _ExitTree()
     {
         MiscPackets.Received -= OnPacket;
+        TownDetailUi.Received -= OnTownDetail;
         base._ExitTree();
     }
 
@@ -225,7 +227,7 @@ public partial class TownListWindow : Control
         };
         SetText("InstanceType", "Type de ville : " + kind);
         FillBuildings(t);
-        _members?.ClearRows();
+        TownDetailUi.Request(t.FamilyId);
     }
 
     /// <summary>Panneau de détails vide (aucune ville choisie) : les
@@ -261,14 +263,84 @@ public partial class TownListWindow : Control
         };
         if (_buildingBox.GetParent() == null) pane.AddChild(_buildingBox);
         foreach (var c in _buildingBox.GetChildren()) c.QueueFree();
-        foreach (var b in t.Buildings)
-            _buildingBox.AddChild(new Label
-            {
-                Text = $"Niv. {b.Level} " +
-                    (TextResolver.ItemName(b.ItemTid) ?? $"#{b.ItemTid}"),
-            });
+        var buildings = t.Buildings.Where(b => b.ItemType == 0x29).ToList();   // 0x2a/0x52 = PNJ (liste de droite)
+        _buildingBox.AddChild(Dark($"Bâtiments actifs : {buildings.Count} — niveau de ville {t.Level}"));
+        foreach (var b in buildings.OrderBy(x => x.Loc))
+            _buildingBox.AddChild(Dark(DescribeBuilding(b)));
+        FillNpcs(t);
+    }
+
+    /// <summary>Label lisible : la zone des bâtiments est claire (le thème met du texte blanc).</summary>
+    private static Label Dark(string text)
+    {
+        var l = new Label { Text = text };
+        l.AddThemeColorOverride("font_color", new Color(0.1f, 0.1f, 0.12f));
+        l.AddThemeFontSizeOverride("font_size", 12);
+        return l;
+    }
+
+    /// <summary>Grande liste du panneau (« NPCList » natif) : les PNJ réellement posés de la ville.</summary>
+    private void FillNpcs(ZoneClientFamilyTownQuery.Entry t)
+    {
+        if (_members == null) return;
+        _members.ClearRows();
+                if (!_npcs.TryGetValue(t.FamilyId, out var npcs))
+        {
+            _members.AddRow(new[] { "Chargement…", "", "" });
+            return;
+        }
+        foreach (var n in npcs.OrderBy(n => n.Role == TownDetailUi.Role.ToolVendor).ThenBy(n => n.Loc))
+        {
+            var row = _members.AddRow(NpcCells(n, t));
+            _members.SetCellColor(row, 0, new Color(0.1f, 0.1f, 0.12f));   // fond clair du layout : texte sombre
+        }
+    }
+
+    /// <summary>Type de bâtiment (c_buliding col 3) → libellé FR.</summary>
+    private static string BuildingTypeName(int type) => type switch
+    {
+        1 => "Manoir", 2 => "Hôtel", 4 => "Ferme", 5 => "Mine", 6 => "Autel",
+        7 => "Alchimie", 8 => "Fonderie", 9 => "Mare magique", 10 => "Marché",
+        _ => "Bâtiment",
+    };
+
+    /// <summary>« Mine — niv. 12 — durabilité 100 » : nom du TYPE de bâtiment (et
+    /// non son identifiant), niveau et état.</summary>
+    private static string DescribeBuilding(ZoneClientFamilyTownQuery.Building b)
+    {
+        var def = Data.Tables.HouseTable.GetBuilding(b.Tid);
+        var name = def != null ? BuildingTypeName(def.Type)
+            : TextResolver.ItemName(b.ItemTid) ?? $"#{b.ItemTid}";
+        var due = b.DueDate > 0 ? " — contrat limité" : "";
+        return $"{name} — niv. {b.Level} — durabilité {b.Durability}{due}";
     }
     private VBoxContainer? _buildingBox;
+    private readonly Dictionary<int, IReadOnlyList<TownDetailUi.Npc>> _npcs = new();
+
+    /// <summary>Réponse 9064 : PNJ posés de la ville → section « PNJ actifs » du panneau.</summary>
+    private void OnTownDetail(int familyId, IReadOnlyList<TownDetailUi.Npc> npcs)
+    {
+        _npcs[familyId] = npcs;
+        if (_sel >= 0 && _sel < _towns.Count && _towns[_sel].FamilyId == familyId)
+            FillBuildings(_towns[_sel]);
+    }
+
+    private static string[] NpcCells(TownDetailUi.Npc n, ZoneClientFamilyTownQuery.Entry t)
+    {
+        var name = TextResolver.NpcName(n.Tid) ?? $"PNJ #{n.Tid}";
+        var title = TextResolver.NpcTitle(n.Tid);
+        var label = string.IsNullOrEmpty(title) ? name : $"{title} {name}";
+        var role = n.Role switch
+        {
+            TownDetailUi.Role.Housekeeper => "responsable",
+            TownDetailUi.Role.ToolVendor => "vendeur d'outils",
+            _ => "service",
+        };
+        var home = t.Buildings.FirstOrDefault(b => b.Loc == n.Loc / 10 * 10);
+        var where = n.Role == TownDetailUi.Role.ToolVendor || home.Tid == 0 && home.ItemTid == 0
+            ? "zones de récolte" : BuildingTypeName(Data.Tables.HouseTable.GetBuilding(home.Tid)?.Type ?? 0);
+        return new[] { $"{label} — {role} — {where}" };   // le layout natif n'a qu'une colonne
+    }
 
     private void FillTowns()
     {
@@ -296,13 +368,16 @@ public partial class TownListWindow : Control
         return int.TryParse(t, out var v) ? v : def;
     }
 
+    /// <summary>Premier descendant de type <typeparamref name="T"/> dont le nom finit par
+    /// <paramref name="leaf"/>. Filtre par type C# (<c>is T</c>) : <c>FindChildren</c> ne reconnaît
+    /// pas les classes de script (<c>MclList</c>…) par leur nom — la liste des PNJ/membres restait
+    /// donc nulle et vide.</summary>
     private static T? FindLeaf<T>(Node root, string leaf)
         where T : class
     {
-        foreach (var n in root.FindChildren("*", typeof(T).Name,
-                     true, false))
-            if (n.Name.ToString().EndsWith(leaf))
-                return n as T;
+        foreach (var n in root.FindChildren("*", "", true, false))
+            if (n is T t && n.Name.ToString().EndsWith(leaf))
+                return t;
         return null;
     }
 

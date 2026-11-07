@@ -248,6 +248,15 @@ public partial class NpcDialogueWindow : Control
         return row;
     }
 
+    /// <summary>Ouvre le dialogue : conteneur ET fenêtre interne. Une fermeture groupée
+    /// (Échap, <c>CloseAll</c>) masque la fenêtre interne ; sans ceci le dialogue de
+    /// tous les PNJ suivants n'apparaissait plus jamais (PLAN-ACTION-3 A2).</summary>
+    private void OpenDialogue()
+    {
+        Visible = true;
+        if (_window != null) HudWindows.Open(_window);
+    }
+
     private static bool LooksLikeQuest(string label) =>
         System.Text.RegularExpressions.Regex.IsMatch(label,
             @"^\s*(L|Lv|Nv|Niv|Lvl)\.?\s*\d+\s*[\.:]");
@@ -266,7 +275,7 @@ public partial class NpcDialogueWindow : Control
         if (_body != null)
             _body.Text = body.Length > 0 ? body : "[i]…[/i]";
         FillOptions(options);
-        Visible = true;
+        OpenDialogue();
     }
 
     /// <summary>Mock de démo (mode solo / captures) — présente le
@@ -291,7 +300,7 @@ public partial class NpcDialogueWindow : Control
             new DialogOption(0, "29931", 0),
             new DialogOption(4, UiTextEn.Translate("Farewell"), 0),
         });
-        Visible = true;
+        OpenDialogue();
     }
 
     /// <summary>Fiche quête (S→C 388 EnterMissionList, routé par le
@@ -342,7 +351,7 @@ public partial class NpcDialogueWindow : Control
             return;
         }
         if (_body != null) _body.Text = sb.ToString();
-        if (_options == null) { Visible = true; return; }
+        if (_options == null) { OpenDialogue(); return; }
         foreach (var c in _options.GetChildren()) c.QueueFree();
         void Act(string label, short missionOp, int? arg = null)
         {
@@ -381,7 +390,7 @@ public partial class NpcDialogueWindow : Control
                 Dismiss(UiTextEn.Translate("Close"));
                 break;
         }
-        Visible = true;
+        OpenDialogue();
     }
 
     private void FillOptions(IReadOnlyList<DialogOption> options)

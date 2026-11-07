@@ -42,6 +42,14 @@ public static class TownRecycleService
     public static async Task RunAsync(FamilyService families,
         Func<Family, Task> onRecycled, CancellationToken token)
     {
+        // EDEN_TOWN_RECYCLE=off : aucun recyclage (environnement de test : les
+        // villes de guilde de fixture ne doivent jamais disparaître).
+        if (string.Equals(Environment.GetEnvironmentVariable("EDEN_TOWN_RECYCLE"),
+                "off", StringComparison.OrdinalIgnoreCase))
+        {
+            EdenLog.Write("[TownRecycle] désactivé (EDEN_TOWN_RECYCLE=off)");
+            return;
+        }
         var first = Env("EDEN_TOWN_RECYCLE_FIRST_SEC", 60);
         var tick = Env("EDEN_TOWN_RECYCLE_TICK_SEC", 3600);
         var maxTicks = Env("EDEN_TOWN_RECYCLE_TICKS", 72);

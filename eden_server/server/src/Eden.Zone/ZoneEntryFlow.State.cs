@@ -274,10 +274,10 @@ public sealed partial class ZoneEntryFlow
         /// <summary>Dernier trigger d'événement pay — rate-limit natif
         /// 1 s de TriggerPayEvent (horodatage µs char+0x650/0x654).</summary>
         public DateTime LastPayEventAt = DateTime.MinValue;
-        // --- Calendrier de connexion (char+0xdd0..0xdf4 natifs —
-        // table daily_awards, NCID 258) ---
+        // --- Calendrier de connexion (char+0xdd0..0xdf4, daily_awards, NCID 258) ---
         /// <summary>Index du jour courant (0..27, char+0xdd0).</summary>
         public short DailyDayIndex;
+        public Eden.Core.Game.Maps.KillerKind LastDeathKiller; // cause de la dernière mort
         /// <summary>Unix time du dernier login (char+0xdd4).</summary>
         public int DailyLoginTime;
         /// <summary>Secondes en ligne cumulées du jour (char+0xdd8).</summary>

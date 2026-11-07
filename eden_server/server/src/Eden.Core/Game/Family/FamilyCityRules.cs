@@ -31,6 +31,10 @@ public static class FamilyCityRules
     public const int TypeFarm = 4, TypeMine = 5, TypeAltar = 6,
         TypeAlchemy = 7, TypeFoundry = 8, TypePool = 9;
 
+    /// <summary>Hôtel de brique (type 2, aucun PNJ dans les données FR : pas de contrat)
+    /// et marché de brique (type 10).</summary>
+    public const int TypeHotel = 2, TypeMarket = 10;
+
     /// <summary>Les 5 bases de groupe du conteneur 0 (loc 0/10/…/40)
     /// ↔ aires [position] 0x33..0x37.</summary>
     public static readonly short[] BuildingBases = { 0, 10, 20, 30, 40 };
@@ -61,16 +65,26 @@ public static class FamilyCityRules
         [TypeAlchemy] = new[] { 53037, 53038, 53039, 53040 },
         [TypeFoundry] = new[] { 53046, 53047, 53048, 53049 },
         [TypePool] = new[] { 53075, 53076, 53077, 53078 },
+        // Marché : les contrats FR de kind 42 qui portent un PNJ marchand (c_item col35) —
+        // 34678 commissaire-priseur sanglier (53003, hôtel des ventes : comble le gap G36),
+        // 34679 banquier (53004), 27332 marchand agricole célèbre (53625). Hôtel : aucun
+        // contrat FR → aucun PNJ (PLAN-ACTION-3 A5).
+        [TypeMarket] = new[] { 53003, 53004, 53625 },
     };
 
     /// <summary>Cap NPC natif d'un bâtiment de production selon son
     /// niveau (<c>ProduceNpcLimit[level-1]</c>, 0 hors table).</summary>
     public static int NpcCap(int buildingType, int buildingLevel)
     {
-        if (buildingType is < 4 or > 9) return 0;
+        var table = buildingType switch
+        {
+            >= 4 and <= 9 => FamilyHallRules.ProduceNpcLimit,
+            TypeMarket => FamilyHallRules.MallNpcLimit,
+            _ => null,
+        };
         var i = buildingLevel - 1;
-        if (i < 0 || i >= FamilyHallRules.ProduceNpcLimit.Length) return 0;
-        return FamilyHallRules.ProduceNpcLimit[i];
+        if (table == null || i < 0 || i >= table.Length) return 0;
+        return table[i];
     }
 
     /// <summary>PNJ de service à poser dans un bâtiment (housekeeper

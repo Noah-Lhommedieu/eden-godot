@@ -28,6 +28,8 @@ MultiStrokeDamageMult = 1   # x sur le dégât des frappes extra
 MultiStrokeMaxHits = 2      # 0 = aucun proc, 1 = double hit max, 2 = triple hit max
 
 # --- Événements (on/off + bonus) ---
+# Fenêtre de dates facultative : Event.<nom>.Start / .End = 2026-12-20 06:00 (heure locale serveur).
+# Règles génériques d événement : Event.<nom>.AddFlat.dungeon.entries.solo = 2 (Set./Mul./AddPct./AddFlat./Cap.).
 Event.Christmas = off
 Event.Christmas.ExpPct = 20
 Event.Christmas.DropPct = 20

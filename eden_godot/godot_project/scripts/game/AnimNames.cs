@@ -12,7 +12,7 @@ public static class AnimNames
     {
         "stand01", "stand02", "move01", "move02", "move03", "move04",
         "hurt01", "death01",
-        "jump01", "sit01", "collect01",
+        "jump01", "sit01", "collect01", "collect02",
     }.Concat(Enumerable.Range(1, 27).Select(i => $"attack{i:D2}"))
      // Casts/actions de sorts à pied : kf → shootNN/magicNN/battleNN
      // (motion.ini, stem b) — absents → PlayOnce sautait en silence.

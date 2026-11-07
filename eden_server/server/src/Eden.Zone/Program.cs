@@ -35,7 +35,7 @@ var worldLinkIp = EdenConfig.WorldLinkIp;
 var worldLinkPort = EdenConfig.WorldLinkPort;
 // NpgsqlDataSource par rôle (DB-2 : base unique edenfr, un search_path par
 // rôle game/account/member) — pools propriétaires partagés par tous les repos.
-var db = DbConnectionFactory.Create(DbRole.Game);
+var db = DbConnectionFactory.Create(DbRole.Game); Eden.Zone.Features.Modifiers.VipDirectory.Start(db);
 var accountDb = DbConnectionFactory.Create(DbRole.Account);
 var memberDb = DbConnectionFactory.Create(DbRole.Member);
 await EdenObservability.StartAsync("zone", db);
@@ -803,7 +803,7 @@ services.Mission = missionLink;
 services.World = worldLink;
 
 zoneEntryFlow = new Eden.Zone.ZoneEntryFlow(ticketClient, worldLink,
-    missionLink, characterRepository, services, dataDir);
+    missionLink, characterRepository, services, dataDir); Eden.Zone.Features.Admin.AdminBridge.Init(zoneEntryFlow, services, db);
 
 // Boucle acteur de zone (PeriodicTimer 100 ms + file de commandes) —
 // remplace le System.Timers.Timer 1 s : respawn des mobs et cycle des
@@ -859,8 +859,8 @@ ElfHandlers.Register(dispatcher, services);
 InstanceHandlers.Register(dispatcher, services);
 PlayerHandlers.Register(dispatcher, services);
 ItemActionHandlers.Register(dispatcher, services);
-// Vendor* (étal joueur) : interceptés par ZoneEntryFlow.Vending.cs
-// avant le dispatcher — l'ancien VendorHandlers était spéculatif.
+Eden.Zone.Features.ZoneFeatures.RegisterAll(dispatcher, services);
+// Vendor* (étal joueur) : interceptés par ZoneEntryFlow.Vending.cs avant le dispatcher.
 FamilyHandlers.Register(dispatcher, services);
 HousingHandlers.Register(dispatcher, services);
 EquipTrainHandlers.Register(dispatcher, services);

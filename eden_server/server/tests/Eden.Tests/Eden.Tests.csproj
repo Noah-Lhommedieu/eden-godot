@@ -25,6 +25,7 @@
   <ItemGroup>
     <Content Include="Data\golden\*.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Data\known_incomplete.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Data\architecture-baseline.tsv" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- Classifieur de status partagé avec le client (code pur, sans Godot) :

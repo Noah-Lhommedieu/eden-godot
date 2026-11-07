@@ -1,0 +1,379 @@
+{"in_scope": true, "map_code": "S001", "map_kind": "field", "min_level": 0, "name_fr": "Aven", "node_id": 1, "node_type": 3}
+{"in_scope": true, "map_code": "S002", "map_kind": "field", "min_level": 1, "name_fr": "Monts Calcaires", "node_id": 2, "node_type": 1}
+{"in_scope": true, "map_code": "S003", "map_kind": "field", "min_level": 9, "name_fr": "Colline Tranquille", "node_id": 3, "node_type": 1}
+{"in_scope": true, "map_code": "S004", "map_kind": "field", "min_level": 15, "name_fr": "Forêt Arc-en-Ciel", "node_id": 4, "node_type": 1}
+{"in_scope": true, "map_code": "S005", "map_kind": "field", "min_level": 20, "name_fr": "Monts Arides", "node_id": 5, "node_type": 1}
+{"in_scope": true, "map_code": "S006", "map_kind": "field", "min_level": 25, "name_fr": "Baie Bélouga", "node_id": 6, "node_type": 1}
+{"in_scope": true, "map_code": "S007", "map_kind": "field", "min_level": 30, "name_fr": "Bourbes", "node_id": 7, "node_type": 1}
+{"in_scope": true, "map_code": "S008", "map_kind": "field", "min_level": 34, "name_fr": "Vallée des Rois", "node_id": 8, "node_type": 1}
+{"in_scope": true, "map_code": "S009", "map_kind": "field", "min_level": 38, "name_fr": "Volcan Avila", "node_id": 9, "node_type": 1}
+{"in_scope": true, "map_code": "S010", "map_kind": "field", "min_level": 42, "name_fr": "Plaines Dorées", "node_id": 10, "node_type": 1}
+{"in_scope": true, "map_code": "S011", "map_kind": "field", "min_level": 46, "name_fr": "Terres des Dunes Éternelles", "node_id": 11, "node_type": 1}
+{"in_scope": true, "map_code": "S012", "map_kind": "field", "min_level": 49, "name_fr": "Forêt de Delphes", "node_id": 12, "node_type": 1}
+{"in_scope": true, "map_code": "S013", "map_kind": "field", "min_level": 52, "name_fr": "Pic de Noireflamme", "node_id": 13, "node_type": 1}
+{"in_scope": true, "map_code": "S014", "map_kind": "field", "min_level": 55, "name_fr": "Marais Décrépits", "node_id": 14, "node_type": 1}
+{"in_scope": true, "map_code": "S015", "map_kind": "field", "min_level": 58, "name_fr": "Hautes-terres", "node_id": 15, "node_type": 1}
+{"in_scope": true, "map_code": "S016", "map_kind": "field", "min_level": 1, "name_fr": "Crocs Brumeux", "node_id": 16, "node_type": 1}
+{"in_scope": true, "map_code": "S018", "map_kind": "field", "min_level": 0, "name_fr": "Cabinet du Maire", "node_id": 18, "node_type": 1}
+{"in_scope": true, "map_code": "S019", "map_kind": "field", "min_level": 1, "name_fr": "Vallée Feregal", "node_id": 19, "node_type": 1}
+{"in_scope": true, "map_code": "S020", "map_kind": "field", "min_level": 52, "name_fr": "Désert du Couchant", "node_id": 20, "node_type": 1}
+{"in_scope": true, "map_code": "S021", "map_kind": "field", "min_level": 53, "name_fr": "Jungle Céleste", "node_id": 21, "node_type": 1}
+{"in_scope": true, "map_code": "S022", "map_kind": "field", "min_level": 61, "name_fr": "Forêt Ensorcelée", "node_id": 22, "node_type": 1}
+{"in_scope": true, "map_code": "S023", "map_kind": "field", "min_level": 62, "name_fr": "Crête Diamantée", "node_id": 23, "node_type": 1}
+{"in_scope": true, "map_code": "S024", "map_kind": "field", "min_level": 63, "name_fr": "Pic du Maëlstrom", "node_id": 24, "node_type": 1}
+{"in_scope": true, "map_code": "S025", "map_kind": "field", "min_level": 64, "name_fr": "Vallée de la Mort", "node_id": 25, "node_type": 1}
+{"in_scope": true, "map_code": "S026", "map_kind": "field", "min_level": 66, "name_fr": "Plaines Fleuries", "node_id": 26, "node_type": 1}
+{"in_scope": true, "map_code": "S027", "map_kind": "field", "min_level": 68, "name_fr": "Falaise des Grands Vents", "node_id": 27, "node_type": 1}
+{"in_scope": true, "map_code": "S028", "map_kind": "field", "min_level": 1, "name_fr": "Lagune Enchantée", "node_id": 28, "node_type": 1}
+{"in_scope": true, "map_code": "S029", "map_kind": "field", "min_level": 55, "name_fr": "Côte de Hurlevent", "node_id": 29, "node_type": 1}
+{"in_scope": true, "map_code": "S030", "map_kind": "field", "min_level": 58, "name_fr": "Jungle du Dieu Serpent", "node_id": 30, "node_type": 1}
+{"in_scope": true, "map_code": "S031", "map_kind": "field", "min_level": 0, "name_fr": "Île de Sakura", "node_id": 31, "node_type": 1}
+{"in_scope": true, "map_code": "S032", "map_kind": "field", "min_level": 69, "name_fr": "Vallée de Vulcain", "node_id": 32, "node_type": 1}
+{"in_scope": true, "map_code": "S033", "map_kind": "field", "min_level": 71, "name_fr": "Plaines du Levant", "node_id": 33, "node_type": 1}
+{"in_scope": true, "map_code": "S034", "map_kind": "field", "min_level": 73, "name_fr": "Royaume Dévasté", "node_id": 34, "node_type": 1}
+{"in_scope": true, "map_code": "S035", "map_kind": "dungeon", "min_level": 0, "name_fr": "Palais Heldentod", "node_id": 35, "node_type": 5}
+{"in_scope": true, "map_code": "S036", "map_kind": "field", "min_level": 74, "name_fr": "Plaines d'Elos", "node_id": 36, "node_type": 1}
+{"in_scope": true, "map_code": "S037", "map_kind": "field", "min_level": 76, "name_fr": "Marina d'Edouard", "node_id": 37, "node_type": 1}
+{"in_scope": true, "map_code": "S038", "map_kind": "field", "min_level": 78, "name_fr": "Royaume Durango", "node_id": 38, "node_type": 1}
+{"in_scope": true, "map_code": "S039", "map_kind": "dungeon", "min_level": 0, "name_fr": "Meteor's Landing", "node_id": 39, "node_type": 5}
+{"in_scope": true, "map_code": "S040", "map_kind": "dungeon", "min_level": 0, "name_fr": "Scenic Aurapoint", "node_id": 40, "node_type": 5}
+{"in_scope": true, "map_code": "S041", "map_kind": "dungeon", "min_level": 0, "name_fr": "Forteresse d'Éternité", "node_id": 41, "node_type": 5}
+{"in_scope": true, "map_code": "S042", "map_kind": "field", "min_level": 0, "name_fr": "Bill's Training Facility", "node_id": 42, "node_type": 1}
+{"in_scope": true, "map_code": "S043", "map_kind": "dungeon", "min_level": 0, "name_fr": "Braider Army Base", "node_id": 43, "node_type": 5}
+{"in_scope": true, "map_code": "S044", "map_kind": "field", "min_level": 0, "name_fr": "Tente 2", "node_id": 44, "node_type": 1}
+{"in_scope": true, "map_code": "S045", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tunnel de l'Union de Valence", "node_id": 45, "node_type": 5}
+{"in_scope": true, "map_code": "S046", "map_kind": "dungeon", "min_level": 0, "name_fr": "Profondeurs du Mont Gowen", "node_id": 46, "node_type": 5}
+{"in_scope": true, "map_code": "S047", "map_kind": "dungeon", "min_level": 0, "name_fr": "Faubourg Populaire de la Marina d'Edouard", "node_id": 47, "node_type": 5}
+{"in_scope": true, "map_code": "S048", "map_kind": "dungeon", "min_level": 0, "name_fr": "Domaine de la Noblesse de la Marina d'Edouard", "node_id": 48, "node_type": 5}
+{"in_scope": true, "map_code": "S049", "map_kind": "dungeon", "min_level": 0, "name_fr": "Congrès de Braider", "node_id": 49, "node_type": 5}
+{"in_scope": true, "map_code": "S050", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tour Kahlo", "node_id": 50, "node_type": 5}
+{"in_scope": true, "map_code": "S051", "map_kind": "field", "min_level": 79, "name_fr": "Dôme Céleste", "node_id": 51, "node_type": 1}
+{"in_scope": true, "map_code": "S052", "map_kind": "field", "min_level": 81, "name_fr": "Hauteurs Feudegivre", "node_id": 52, "node_type": 1}
+{"in_scope": true, "map_code": "S053", "map_kind": "field", "min_level": 83, "name_fr": "Meeryasha", "node_id": 53, "node_type": 1}
+{"in_scope": true, "map_code": "S054", "map_kind": "field", "min_level": 84, "name_fr": "Jungle Mayland", "node_id": 54, "node_type": 1}
+{"in_scope": true, "map_code": "S055", "map_kind": "field", "min_level": 87, "name_fr": "Bassin Shaxia", "node_id": 55, "node_type": 1}
+{"in_scope": false, "map_code": "S057", "map_kind": "field", "min_level": 91, "name_fr": "羅克沙古地", "node_id": 57, "node_type": 1}
+{"in_scope": true, "map_code": "S094", "map_kind": "field", "min_level": 0, "name_fr": "Aven rêvée", "node_id": 94, "node_type": 1}
+{"in_scope": true, "map_code": "S095", "map_kind": "field", "min_level": 0, "name_fr": "Vieil Entrepôt", "node_id": 95, "node_type": 1}
+{"in_scope": true, "map_code": "S096", "map_kind": "special_mode", "min_level": 0, "name_fr": "Île aux Cerisiers", "node_id": 96, "node_type": 1}
+{"in_scope": true, "map_code": "S097", "map_kind": "special_mode", "min_level": 0, "name_fr": "Île du Mariage", "node_id": 97, "node_type": 16}
+{"in_scope": true, "map_code": "S099", "map_kind": "field", "min_level": 0, "name_fr": "Création de Personnage", "node_id": 99, "node_type": 1}
+{"in_scope": true, "map_code": "S100", "map_kind": "dungeon", "min_level": 0, "name_fr": "Mine Andrew", "node_id": 100, "node_type": 5}
+{"in_scope": true, "map_code": "S101", "map_kind": "dungeon", "min_level": 0, "name_fr": "Carrière Angor", "node_id": 101, "node_type": 5}
+{"in_scope": true, "map_code": "S102", "map_kind": "dungeon", "min_level": 0, "name_fr": "Fort Verdure", "node_id": 102, "node_type": 5}
+{"in_scope": true, "map_code": "S103", "map_kind": "dungeon", "min_level": 0, "name_fr": "Canal Tassos", "node_id": 103, "node_type": 5}
+{"in_scope": true, "map_code": "S104", "map_kind": "dungeon", "min_level": 0, "name_fr": "Caverne de Schiste", "node_id": 104, "node_type": 5}
+{"in_scope": true, "map_code": "S105", "map_kind": "dungeon", "min_level": 0, "name_fr": "Éroda", "node_id": 105, "node_type": 5}
+{"in_scope": true, "map_code": "S106", "map_kind": "dungeon", "min_level": 0, "name_fr": "Morticora", "node_id": 106, "node_type": 5}
+{"in_scope": true, "map_code": "S107", "map_kind": "dungeon", "min_level": 0, "name_fr": "Racine Branda", "node_id": 107, "node_type": 5}
+{"in_scope": true, "map_code": "S108", "map_kind": "dungeon", "min_level": 0, "name_fr": "Palais des Malices", "node_id": 108, "node_type": 5}
+{"in_scope": true, "map_code": "S109", "map_kind": "dungeon", "min_level": 0, "name_fr": "Pourriture", "node_id": 109, "node_type": 5}
+{"in_scope": true, "map_code": "S110", "map_kind": "dungeon", "min_level": 0, "name_fr": "Abîme de Baram", "node_id": 110, "node_type": 5}
+{"in_scope": true, "map_code": "S111", "map_kind": "dungeon", "min_level": 0, "name_fr": "Coeur Baltaroï", "node_id": 111, "node_type": 5}
+{"in_scope": true, "map_code": "S112", "map_kind": "dungeon", "min_level": 0, "name_fr": "Rêve du Maire", "node_id": 112, "node_type": 5}
+{"in_scope": true, "map_code": "S113", "map_kind": "dungeon", "min_level": 0, "name_fr": "Fléau", "node_id": 113, "node_type": 5}
+{"in_scope": true, "map_code": "S114", "map_kind": "dungeon", "min_level": 0, "name_fr": "Chambre de Baïra", "node_id": 114, "node_type": 5}
+{"in_scope": true, "map_code": "S115", "map_kind": "dungeon", "min_level": 0, "name_fr": "Crypticône", "node_id": 115, "node_type": 5}
+{"in_scope": true, "map_code": "S116", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple de Delphes", "node_id": 116, "node_type": 5}
+{"in_scope": true, "map_code": "S117", "map_kind": "dungeon", "min_level": 0, "name_fr": "Veine Tordue", "node_id": 117, "node_type": 5}
+{"in_scope": true, "map_code": "S118", "map_kind": "dungeon", "min_level": 0, "name_fr": "Autel du Culte de Mara", "node_id": 118, "node_type": 5}
+{"in_scope": true, "map_code": "S119", "map_kind": "dungeon", "min_level": 0, "name_fr": "Chutes des Âmes en Peine", "node_id": 119, "node_type": 5}
+{"in_scope": true, "map_code": "S120", "map_kind": "dungeon", "min_level": 0, "name_fr": "Vortek", "node_id": 120, "node_type": 5}
+{"in_scope": true, "map_code": "S121", "map_kind": "dungeon", "min_level": 0, "name_fr": "Arsenal Fédéral", "node_id": 121, "node_type": 5}
+{"in_scope": true, "map_code": "S122", "map_kind": "dungeon", "min_level": 0, "name_fr": "Sturmfrau", "node_id": 122, "node_type": 5}
+{"in_scope": true, "map_code": "S123", "map_kind": "dungeon", "min_level": 0, "name_fr": "Abysse Glacée de Skleros", "node_id": 123, "node_type": 5}
+{"in_scope": true, "map_code": "S124", "map_kind": "dungeon", "min_level": 0, "name_fr": "Cratère des Géants", "node_id": 124, "node_type": 5}
+{"in_scope": true, "map_code": "S125", "map_kind": "dungeon", "min_level": 0, "name_fr": "Antre des Échos", "node_id": 125, "node_type": 5}
+{"in_scope": true, "map_code": "S126", "map_kind": "dungeon", "min_level": 0, "name_fr": "Sanctuaire du Mal à l'État Pur", "node_id": 126, "node_type": 5}
+{"in_scope": true, "map_code": "S127", "map_kind": "dungeon", "min_level": 0, "name_fr": "Grotte de la Marée des Ombres", "node_id": 127, "node_type": 5}
+{"in_scope": true, "map_code": "S129", "map_kind": "dungeon", "min_level": 0, "name_fr": "Lieu du rituel (niv. 80 - Vérité et Illusion IV)", "node_id": 129, "node_type": 5}
+{"in_scope": true, "map_code": "S130", "map_kind": "dungeon", "min_level": 0, "name_fr": "Orphidée", "node_id": 130, "node_type": 5}
+{"in_scope": true, "map_code": "S131", "map_kind": "dungeon", "min_level": 0, "name_fr": "Banque Meeryasha", "node_id": 131, "node_type": 5}
+{"in_scope": true, "map_code": "S132", "map_kind": "dungeon", "min_level": 0, "name_fr": "Maison de Marjorie", "node_id": 132, "node_type": 5}
+{"in_scope": true, "map_code": "S133", "map_kind": "dungeon", "min_level": 0, "name_fr": "Pays des souvenirs", "node_id": 133, "node_type": 5}
+{"in_scope": true, "map_code": "S134", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tunnel éboulé", "node_id": 134, "node_type": 5}
+{"in_scope": true, "map_code": "S135", "map_kind": "dungeon", "min_level": 0, "name_fr": "Jungle Mystique", "node_id": 135, "node_type": 5}
+{"in_scope": true, "map_code": "S136", "map_kind": "dungeon", "min_level": 0, "name_fr": "Palais Heldentod", "node_id": 136, "node_type": 5}
+{"in_scope": true, "map_code": "S137", "map_kind": "dungeon", "min_level": 0, "name_fr": "Bassin Shaxia", "node_id": 137, "node_type": 5}
+{"in_scope": true, "map_code": "S176", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tour des Épreuves", "node_id": 176, "node_type": 5}
+{"in_scope": true, "map_code": "S177", "map_kind": "dungeon", "min_level": 0, "name_fr": "Caverne de Schiste", "node_id": 177, "node_type": 5}
+{"in_scope": true, "map_code": "S178", "map_kind": "dungeon", "min_level": 0, "name_fr": "Palais des Malices", "node_id": 178, "node_type": 5}
+{"in_scope": true, "map_code": "S179", "map_kind": "dungeon", "min_level": 0, "name_fr": "Fort Loselle", "node_id": 179, "node_type": 5}
+{"in_scope": true, "map_code": "S180", "map_kind": "dungeon", "min_level": 0, "name_fr": "Écarlate", "node_id": 180, "node_type": 5}
+{"in_scope": true, "map_code": "S181", "map_kind": "dungeon", "min_level": 0, "name_fr": "Royaume Vide", "node_id": 181, "node_type": 5}
+{"in_scope": true, "map_code": "S182", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple Perdu", "node_id": 182, "node_type": 5}
+{"in_scope": true, "map_code": "S183", "map_kind": "dungeon", "min_level": 0, "name_fr": "Plaines Séraphines", "node_id": 183, "node_type": 5}
+{"in_scope": true, "map_code": "S184", "map_kind": "dungeon", "min_level": 0, "name_fr": "Domaine Démoniaque Intérieur", "node_id": 184, "node_type": 5}
+{"in_scope": true, "map_code": "S185", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tombe du Samouraï", "node_id": 185, "node_type": 5}
+{"in_scope": true, "map_code": "S186", "map_kind": "dungeon", "min_level": 0, "name_fr": "Pays des Merveilles Diablepourpre", "node_id": 186, "node_type": 5}
+{"in_scope": true, "map_code": "S187", "map_kind": "dungeon", "min_level": 0, "name_fr": "Palais des Bourbes", "node_id": 187, "node_type": 5}
+{"in_scope": true, "map_code": "S188", "map_kind": "dungeon", "min_level": 0, "name_fr": "Vallée du Sacrifice", "node_id": 188, "node_type": 5}
+{"in_scope": true, "map_code": "S189", "map_kind": "dungeon", "min_level": 0, "name_fr": "Donjon d'Éveil de Classe - Illusionniste", "node_id": 189, "node_type": 5}
+{"in_scope": false, "map_code": "S190", "map_kind": "dungeon", "min_level": 0, "name_fr": "Class Awakening Dungeon (Place Holder)", "node_id": 190, "node_type": 5}
+{"in_scope": false, "map_code": "S191", "map_kind": "dungeon", "min_level": 0, "name_fr": "Class Awakening Dungeon (Place Holder)", "node_id": 191, "node_type": 5}
+{"in_scope": false, "map_code": "S192", "map_kind": "dungeon", "min_level": 0, "name_fr": "Class Awakening Dungeon (Place Holder)", "node_id": 192, "node_type": 5}
+{"in_scope": false, "map_code": "S193", "map_kind": "dungeon", "min_level": 0, "name_fr": "Class Awakening Dungeon (Place Holder)", "node_id": 193, "node_type": 5}
+{"in_scope": false, "map_code": "S198", "map_kind": "field", "min_level": 0, "name_fr": "Test Cottage : Océan", "node_id": 198, "node_type": 1}
+{"in_scope": false, "map_code": "S199", "map_kind": "field", "min_level": 0, "name_fr": "Test Cottage : Chaleur", "node_id": 199, "node_type": 1}
+{"in_scope": true, "map_code": "S201", "map_kind": "dungeon", "min_level": 0, "name_fr": "Base des Vilrequins", "node_id": 201, "node_type": 5}
+{"in_scope": true, "map_code": "S202", "map_kind": "dungeon", "min_level": 0, "name_fr": "Salle Ulta", "node_id": 202, "node_type": 5}
+{"in_scope": true, "map_code": "S203", "map_kind": "dungeon", "min_level": 0, "name_fr": "Crocvenin", "node_id": 203, "node_type": 5}
+{"in_scope": true, "map_code": "S204", "map_kind": "dungeon", "min_level": 0, "name_fr": "Écarlate", "node_id": 204, "node_type": 5}
+{"in_scope": true, "map_code": "S205", "map_kind": "dungeon", "min_level": 0, "name_fr": "Siècle", "node_id": 205, "node_type": 5}
+{"in_scope": true, "map_code": "S206", "map_kind": "dungeon", "min_level": 0, "name_fr": "Manoir", "node_id": 206, "node_type": 5}
+{"in_scope": true, "map_code": "S207", "map_kind": "dungeon", "min_level": 0, "name_fr": "Frontière de Basel", "node_id": 207, "node_type": 5}
+{"in_scope": true, "map_code": "S208", "map_kind": "dungeon", "min_level": 0, "name_fr": "Prison Ossuaire", "node_id": 208, "node_type": 5}
+{"in_scope": true, "map_code": "S209", "map_kind": "dungeon", "min_level": 0, "name_fr": "Guillotine", "node_id": 209, "node_type": 5}
+{"in_scope": true, "map_code": "S210", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple Spirenfer", "node_id": 210, "node_type": 5}
+{"in_scope": true, "map_code": "S211", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple de la Rose", "node_id": 211, "node_type": 5}
+{"in_scope": true, "map_code": "S212", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Labo Vingot", "node_id": 212, "node_type": 1}
+{"in_scope": true, "map_code": "S213", "map_kind": "dungeon", "min_level": 0, "name_fr": "Cap Hurlant", "node_id": 213, "node_type": 5}
+{"in_scope": true, "map_code": "S214", "map_kind": "dungeon", "min_level": 0, "name_fr": "Abysse de Siècle", "node_id": 214, "node_type": 5}
+{"in_scope": true, "map_code": "S215", "map_kind": "dungeon", "min_level": 0, "name_fr": "Grotte Non Répertoriée", "node_id": 215, "node_type": 5}
+{"in_scope": true, "map_code": "S216", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Dimension Dévastée", "node_id": 216, "node_type": 1}
+{"in_scope": true, "map_code": "S217", "map_kind": "dungeon", "min_level": 0, "name_fr": "Cratère Météoritique <Mode Multijoueur>", "node_id": 217, "node_type": 5}
+{"in_scope": true, "map_code": "S218", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tour Kahlo <Mode Multijoueur>", "node_id": 218, "node_type": 5}
+{"in_scope": true, "map_code": "S219", "map_kind": "dungeon", "min_level": 0, "name_fr": "Iyernafalo <Multijoueur>", "node_id": 219, "node_type": 5}
+{"in_scope": true, "map_code": "S220", "map_kind": "dungeon", "min_level": 0, "name_fr": "Terre sacrée de Kamodo (multijoueur)", "node_id": 220, "node_type": 5}
+{"in_scope": true, "map_code": "S221", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple aquatique <multijoueur>", "node_id": 221, "node_type": 5}
+{"in_scope": true, "map_code": "S222", "map_kind": "dungeon", "min_level": 0, "name_fr": "Labo Antigravité <multijoueur>", "node_id": 222, "node_type": 5}
+{"in_scope": true, "map_code": "S223", "map_kind": "dungeon", "min_level": 0, "name_fr": "Grey Lynn <multijoueur>", "node_id": 223, "node_type": 5}
+{"in_scope": true, "map_code": "S224", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Bataille Spatiotemporelle", "node_id": 224, "node_type": 1}
+{"in_scope": true, "map_code": "S225", "map_kind": "dungeon", "min_level": 0, "name_fr": "Vallée Batelo (Groupe)", "node_id": 225, "node_type": 5}
+{"in_scope": true, "map_code": "S226", "map_kind": "dungeon", "min_level": 0, "name_fr": "Allolans (DJN multijoueur)", "node_id": 226, "node_type": 5}
+{"in_scope": true, "map_code": "S227", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple enchanté (DJN multijoueur)", "node_id": 227, "node_type": 5}
+{"in_scope": false, "map_code": "S232", "map_kind": "dungeon", "min_level": 0, "name_fr": "Morticora <Mode Multijoueur> <Évaluation>", "node_id": 232, "node_type": 5}
+{"in_scope": true, "map_code": "S280", "map_kind": "special_mode", "min_level": 0, "name_fr": "Tour des Cieux Hall du Purgatoire", "node_id": 280, "node_type": 14}
+{"in_scope": true, "map_code": "S281", "map_kind": "special_mode", "min_level": 0, "name_fr": "Tour des Cieux Autel Sinistre", "node_id": 281, "node_type": 14}
+{"in_scope": true, "map_code": "S282", "map_kind": "special_mode", "min_level": 0, "name_fr": "Tour des Cieux Salle Fleurépine", "node_id": 282, "node_type": 14}
+{"in_scope": true, "map_code": "S283", "map_kind": "special_mode", "min_level": 0, "name_fr": "Tour des Cieux Zone de la Mélodie Sacrée", "node_id": 283, "node_type": 14}
+{"in_scope": true, "map_code": "S284", "map_kind": "dungeon", "min_level": 0, "name_fr": "Laboratoire de Réno", "node_id": 284, "node_type": 7}
+{"in_scope": false, "map_code": "S285", "map_kind": "dungeon", "min_level": 0, "name_fr": "帕妃研究棟", "node_id": 285, "node_type": 5}
+{"in_scope": true, "map_code": "S301", "map_kind": "special_mode", "min_level": 0, "name_fr": "Bataille de la Forêt", "node_id": 301, "node_type": 8}
+{"in_scope": true, "map_code": "S302", "map_kind": "special_mode", "min_level": 0, "name_fr": "Bataille du Désert", "node_id": 302, "node_type": 8}
+{"in_scope": true, "map_code": "S303", "map_kind": "special_mode", "min_level": 0, "name_fr": "Bataille de l'Océan", "node_id": 303, "node_type": 8}
+{"in_scope": true, "map_code": "S304", "map_kind": "special_mode", "min_level": 0, "name_fr": "Champ de Bataille T.4", "node_id": 304, "node_type": 13}
+{"in_scope": true, "map_code": "S305", "map_kind": "special_mode", "min_level": 0, "name_fr": "Zone de Guerre d'Ezur", "node_id": 305, "node_type": 8}
+{"in_scope": true, "map_code": "S306", "map_kind": "special_mode", "min_level": 0, "name_fr": "Île du Boucanier", "node_id": 306, "node_type": 8}
+{"in_scope": true, "map_code": "S307", "map_kind": "special_mode", "min_level": 0, "name_fr": "Toundra Hostile", "node_id": 307, "node_type": 8}
+{"in_scope": true, "map_code": "S308", "map_kind": "special_mode", "min_level": 0, "name_fr": "Arène Sacrée : Le Crucifix", "node_id": 308, "node_type": 8}
+{"in_scope": true, "map_code": "S309", "map_kind": "special_mode", "min_level": 0, "name_fr": "Survie sur l'Île Déserte", "node_id": 309, "node_type": 15}
+{"in_scope": false, "map_code": "S310", "map_kind": "unknown", "min_level": 0, "name_fr": "時空裂縫‧異域灰岩山", "node_id": 310, "node_type": 19}
+{"in_scope": false, "map_code": "S311", "map_kind": "unknown", "min_level": 0, "name_fr": "時空裂縫‧異域榮譽高地", "node_id": 311, "node_type": 19}
+{"in_scope": false, "map_code": "S312", "map_kind": "unknown", "min_level": 0, "name_fr": "時空裂縫‧異域寧靜之丘", "node_id": 312, "node_type": 19}
+{"in_scope": false, "map_code": "S313", "map_kind": "unknown", "min_level": 0, "name_fr": "時空裂縫‧異域腐朽沼澤", "node_id": 313, "node_type": 19}
+{"in_scope": false, "map_code": "", "map_kind": "field", "min_level": 0, "name_fr": "伺服器遠征佔位", "node_id": 314, "node_type": 1}
+{"in_scope": false, "map_code": "", "map_kind": "field", "min_level": 0, "name_fr": "伺服器遠征佔位", "node_id": 315, "node_type": 1}
+{"in_scope": false, "map_code": "", "map_kind": "field", "min_level": 0, "name_fr": "伺服器遠征佔位", "node_id": 316, "node_type": 1}
+{"in_scope": false, "map_code": "", "map_kind": "field", "min_level": 0, "name_fr": "伺服器遠征佔位", "node_id": 317, "node_type": 1}
+{"in_scope": false, "map_code": "", "map_kind": "field", "min_level": 0, "name_fr": "伺服器遠征佔位", "node_id": 318, "node_type": 1}
+{"in_scope": false, "map_code": "", "map_kind": "field", "min_level": 0, "name_fr": "伺服器遠征佔位", "node_id": 319, "node_type": 1}
+{"in_scope": true, "map_code": "S401", "map_kind": "special_mode", "min_level": 0, "name_fr": "Arène Phénix", "node_id": 401, "node_type": 10}
+{"in_scope": true, "map_code": "S402", "map_kind": "special_mode", "min_level": 0, "name_fr": "Arène des Boss", "node_id": 402, "node_type": 10}
+{"in_scope": false, "map_code": "S403", "map_kind": "special_mode", "min_level": 0, "name_fr": "職業聖殿", "node_id": 403, "node_type": 10}
+{"in_scope": true, "map_code": "S404", "map_kind": "special_mode", "min_level": 0, "name_fr": "Prison du Fantôme Enflammé", "node_id": 404, "node_type": 10}
+{"in_scope": true, "map_code": "S406", "map_kind": "special_mode", "min_level": 0, "name_fr": "Temple Antique du Chaos", "node_id": 406, "node_type": 17}
+{"in_scope": false, "map_code": "S407", "map_kind": "special_mode", "min_level": 0, "name_fr": "古墓盜寶戰場", "node_id": 407, "node_type": 17}
+{"in_scope": true, "map_code": "S501", "map_kind": "guild_city", "min_level": 0, "name_fr": "Forêt d'Eden", "node_id": 501, "node_type": 4}
+{"in_scope": true, "map_code": "S502", "map_kind": "guild_city", "min_level": 0, "name_fr": "Mont Eden", "node_id": 502, "node_type": 4}
+{"in_scope": true, "map_code": "S599", "map_kind": "special_mode", "min_level": 0, "name_fr": "Villa Personnelle", "node_id": 599, "node_type": 9}
+{"in_scope": true, "map_code": "S601", "map_kind": "dungeon", "min_level": 0, "name_fr": "Base des Vilrequins Héroïque", "node_id": 601, "node_type": 7}
+{"in_scope": true, "map_code": "S602", "map_kind": "dungeon", "min_level": 0, "name_fr": "Salle Ulta Héroïque", "node_id": 602, "node_type": 7}
+{"in_scope": true, "map_code": "S603", "map_kind": "dungeon", "min_level": 0, "name_fr": "Carrière Angor Héroïque", "node_id": 603, "node_type": 5}
+{"in_scope": true, "map_code": "S604", "map_kind": "dungeon", "min_level": 0, "name_fr": "Fort Verdure Héroïque", "node_id": 604, "node_type": 5}
+{"in_scope": true, "map_code": "S605", "map_kind": "dungeon", "min_level": 0, "name_fr": "Coeur Baltaroï Héroïque", "node_id": 605, "node_type": 7}
+{"in_scope": true, "map_code": "S606", "map_kind": "dungeon", "min_level": 0, "name_fr": "Crocvenin Héroïque", "node_id": 606, "node_type": 7}
+{"in_scope": true, "map_code": "S607", "map_kind": "dungeon", "min_level": 0, "name_fr": "Canal Tassos Héroïque", "node_id": 607, "node_type": 5}
+{"in_scope": true, "map_code": "S608", "map_kind": "dungeon", "min_level": 0, "name_fr": "Carrière de Schiste Héroïque", "node_id": 608, "node_type": 5}
+{"in_scope": true, "map_code": "S609", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Écarlate", "node_id": 609, "node_type": 7}
+{"in_scope": true, "map_code": "S610", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Siècle", "node_id": 610, "node_type": 7}
+{"in_scope": true, "map_code": "S611", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Manoir", "node_id": 611, "node_type": 7}
+{"in_scope": true, "map_code": "S612", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Éroda", "node_id": 612, "node_type": 5}
+{"in_scope": true, "map_code": "S613", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Morticora", "node_id": 613, "node_type": 5}
+{"in_scope": true, "map_code": "S614", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Palais des Malices", "node_id": 614, "node_type": 7}
+{"in_scope": true, "map_code": "S615", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Fléau", "node_id": 615, "node_type": 7}
+{"in_scope": true, "map_code": "S616", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Racine Branda", "node_id": 616, "node_type": 5}
+{"in_scope": true, "map_code": "S617", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Rêve du Maire", "node_id": 617, "node_type": 5}
+{"in_scope": true, "map_code": "S619", "map_kind": "special_mode", "min_level": 0, "name_fr": "Expédition Anti Dragon - Autel Volcanique", "node_id": 619, "node_type": 12}
+{"in_scope": true, "map_code": "S624", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Frontière de Basel", "node_id": 624, "node_type": 7}
+{"in_scope": true, "map_code": "S625", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Arsenal Fédéral", "node_id": 625, "node_type": 7}
+{"in_scope": true, "map_code": "S626", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Sturmfrau", "node_id": 626, "node_type": 7}
+{"in_scope": true, "map_code": "S627", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Abysse Glacée de Skleros", "node_id": 627, "node_type": 7}
+{"in_scope": true, "map_code": "S628", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Base des Vilrequins S", "node_id": 628, "node_type": 7}
+{"in_scope": true, "map_code": "S629", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Salle Ulta S", "node_id": 629, "node_type": 7}
+{"in_scope": true, "map_code": "S630", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Angor S", "node_id": 630, "node_type": 5}
+{"in_scope": true, "map_code": "S631", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Fort Verdure S", "node_id": 631, "node_type": 5}
+{"in_scope": true, "map_code": "S632", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Cœur Baltaroï S", "node_id": 632, "node_type": 7}
+{"in_scope": true, "map_code": "S633", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Crocvenin S", "node_id": 633, "node_type": 7}
+{"in_scope": true, "map_code": "S634", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Canal Tassos S", "node_id": 634, "node_type": 5}
+{"in_scope": true, "map_code": "S635", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Caverne de Schiste S", "node_id": 635, "node_type": 5}
+{"in_scope": true, "map_code": "S636", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Écarlate S", "node_id": 636, "node_type": 7}
+{"in_scope": true, "map_code": "S637", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Siècle S", "node_id": 637, "node_type": 7}
+{"in_scope": true, "map_code": "S638", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Manoir S", "node_id": 638, "node_type": 7}
+{"in_scope": true, "map_code": "S639", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Éroda S", "node_id": 639, "node_type": 5}
+{"in_scope": true, "map_code": "S640", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve: Morticora S", "node_id": 640, "node_type": 5}
+{"in_scope": true, "map_code": "S641", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Antre des Échos", "node_id": 641, "node_type": 7}
+{"in_scope": true, "map_code": "S642", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Prison Ossuaire", "node_id": 642, "node_type": 7}
+{"in_scope": true, "map_code": "S643", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Cratère des Géants", "node_id": 643, "node_type": 7}
+{"in_scope": true, "map_code": "S644", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Vieux Siècle", "node_id": 644, "node_type": 7}
+{"in_scope": true, "map_code": "S645", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Cratère des Géants", "node_id": 645, "node_type": 7}
+{"in_scope": true, "map_code": "S646", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Abysse de Siècle", "node_id": 646, "node_type": 7}
+{"in_scope": true, "map_code": "S647", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Temple Spirenfer", "node_id": 647, "node_type": 7}
+{"in_scope": true, "map_code": "S648", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve : Temple de la Rose", "node_id": 648, "node_type": 7}
+{"in_scope": true, "map_code": "S649", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve des Héros du Chemin d'Occultus", "node_id": 649, "node_type": 5}
+{"in_scope": true, "map_code": "S650", "map_kind": "dungeon", "min_level": 0, "name_fr": "Épreuve des Héros de la Colline Tranquille", "node_id": 650, "node_type": 5}
+{"in_scope": true, "map_code": "S655", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Carrière Angor (DJN multijoueur)", "node_id": 655, "node_type": 18}
+{"in_scope": true, "map_code": "S656", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Fort Verdure (DJN multijoueur)", "node_id": 656, "node_type": 18}
+{"in_scope": true, "map_code": "S657", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Canal Tassos (DJN multijoueur)", "node_id": 657, "node_type": 18}
+{"in_scope": true, "map_code": "S658", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Caverne de Schiste (DJN multijoueur)", "node_id": 658, "node_type": 18}
+{"in_scope": true, "map_code": "S659", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Éroda (DJN multijoueur)", "node_id": 659, "node_type": 18}
+{"in_scope": true, "map_code": "S660", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Morticora (DJN multijoueur)", "node_id": 660, "node_type": 18}
+{"in_scope": true, "map_code": "S661", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Base des Vilrequins (DJN multijoueur)", "node_id": 661, "node_type": 18}
+{"in_scope": true, "map_code": "S662", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Racine Branda (DJN multijoueur)", "node_id": 662, "node_type": 18}
+{"in_scope": true, "map_code": "S663", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Palais des Malices (DJN multijoueur)", "node_id": 663, "node_type": 18}
+{"in_scope": true, "map_code": "S664", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Salle Ulta (DJN multijoueur)", "node_id": 664, "node_type": 18}
+{"in_scope": true, "map_code": "S665", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Cœur Baltaroï (DJN multijoueur)", "node_id": 665, "node_type": 18}
+{"in_scope": true, "map_code": "S666", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Rêve du Maire (DJN multijoueur)", "node_id": 666, "node_type": 18}
+{"in_scope": true, "map_code": "S667", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Crocvenin (DJN multijoueur)", "node_id": 667, "node_type": 18}
+{"in_scope": true, "map_code": "S668", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Fléau (DJN multijoueur)", "node_id": 668, "node_type": 18}
+{"in_scope": false, "map_code": "S669", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Écarlate (DJN multijoueur)", "node_id": 669, "node_type": 18}
+{"in_scope": false, "map_code": "S670", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Siècle (DJN multijoueur)", "node_id": 670, "node_type": 18}
+{"in_scope": false, "map_code": "S671", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Frontière de Basel (DJN multijoueur)", "node_id": 671, "node_type": 18}
+{"in_scope": false, "map_code": "S672", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Arsenal Fédéral (DJN multijoueur)", "node_id": 672, "node_type": 18}
+{"in_scope": false, "map_code": "S673", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Manoir (DJN multijoueur)", "node_id": 673, "node_type": 18}
+{"in_scope": false, "map_code": "S674", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Cratère des Géants (DJN multijoueur)", "node_id": 674, "node_type": 18}
+{"in_scope": false, "map_code": "S675", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Sturmfrau (DJN multijoueur)", "node_id": 675, "node_type": 18}
+{"in_scope": true, "map_code": "S701", "map_kind": "dungeon", "min_level": 0, "name_fr": "Carrière Angor", "node_id": 701, "node_type": 5}
+{"in_scope": true, "map_code": "S702", "map_kind": "dungeon", "min_level": 0, "name_fr": "Fort Verdure", "node_id": 702, "node_type": 5}
+{"in_scope": true, "map_code": "S703", "map_kind": "dungeon", "min_level": 0, "name_fr": "Canal Tassos", "node_id": 703, "node_type": 5}
+{"in_scope": true, "map_code": "S704", "map_kind": "dungeon", "min_level": 0, "name_fr": "Caverne de Schiste", "node_id": 704, "node_type": 5}
+{"in_scope": true, "map_code": "S705", "map_kind": "dungeon", "min_level": 0, "name_fr": "Éroda", "node_id": 705, "node_type": 5}
+{"in_scope": true, "map_code": "S706", "map_kind": "dungeon", "min_level": 0, "name_fr": "Morticora", "node_id": 706, "node_type": 5}
+{"in_scope": true, "map_code": "S707", "map_kind": "dungeon", "min_level": 0, "name_fr": "Racine Branda", "node_id": 707, "node_type": 5}
+{"in_scope": true, "map_code": "S708", "map_kind": "dungeon", "min_level": 0, "name_fr": "Palais des Malices", "node_id": 708, "node_type": 5}
+{"in_scope": true, "map_code": "S709", "map_kind": "dungeon", "min_level": 0, "name_fr": "Pourriture", "node_id": 709, "node_type": 5}
+{"in_scope": true, "map_code": "S710", "map_kind": "dungeon", "min_level": 0, "name_fr": "Abîme de Baram", "node_id": 710, "node_type": 5}
+{"in_scope": true, "map_code": "S711", "map_kind": "dungeon", "min_level": 0, "name_fr": "Coeur Baltaroï", "node_id": 711, "node_type": 5}
+{"in_scope": true, "map_code": "S712", "map_kind": "dungeon", "min_level": 0, "name_fr": "Rêve du Maire", "node_id": 712, "node_type": 5}
+{"in_scope": true, "map_code": "S713", "map_kind": "dungeon", "min_level": 0, "name_fr": "Fléau", "node_id": 713, "node_type": 5}
+{"in_scope": true, "map_code": "S714", "map_kind": "dungeon", "min_level": 0, "name_fr": "Chambre de Baïra", "node_id": 714, "node_type": 5}
+{"in_scope": true, "map_code": "S715", "map_kind": "dungeon", "min_level": 0, "name_fr": "Crypticône", "node_id": 715, "node_type": 5}
+{"in_scope": true, "map_code": "S716", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple de Delphes", "node_id": 716, "node_type": 5}
+{"in_scope": true, "map_code": "S717", "map_kind": "dungeon", "min_level": 0, "name_fr": "Veine Tordue", "node_id": 717, "node_type": 5}
+{"in_scope": true, "map_code": "S718", "map_kind": "dungeon", "min_level": 0, "name_fr": "Autel du Culte de Mara", "node_id": 718, "node_type": 5}
+{"in_scope": true, "map_code": "S719", "map_kind": "dungeon", "min_level": 0, "name_fr": "Chutes des Âmes en Peine", "node_id": 719, "node_type": 5}
+{"in_scope": true, "map_code": "S720", "map_kind": "dungeon", "min_level": 0, "name_fr": "Vortek", "node_id": 720, "node_type": 5}
+{"in_scope": true, "map_code": "S721", "map_kind": "dungeon", "min_level": 0, "name_fr": "Arsenal Fédéral", "node_id": 721, "node_type": 5}
+{"in_scope": false, "map_code": "S722", "map_kind": "dungeon", "min_level": 0, "name_fr": "怒心魔殿【單人強度】", "node_id": 722, "node_type": 5}
+{"in_scope": false, "map_code": "S744", "map_kind": "dungeon", "min_level": 0, "name_fr": "時空戰役所", "node_id": 744, "node_type": 5}
+{"in_scope": false, "map_code": "S745", "map_kind": "dungeon", "min_level": 0, "name_fr": "進階時空訓練所", "node_id": 745, "node_type": 5}
+{"in_scope": false, "map_code": "S746", "map_kind": "dungeon", "min_level": 0, "name_fr": "艾瓦隆的研究神殿【隊伍活動】", "node_id": 746, "node_type": 5}
+{"in_scope": false, "map_code": "S747", "map_kind": "dungeon", "min_level": 0, "name_fr": "廢棄古魂廟", "node_id": 747, "node_type": 5}
+{"in_scope": false, "map_code": "S748", "map_kind": "dungeon", "min_level": 0, "name_fr": "廢棄古魂廟", "node_id": 748, "node_type": 5}
+{"in_scope": false, "map_code": "S749", "map_kind": "field", "min_level": 0, "name_fr": "週年慶宴會場地", "node_id": 749, "node_type": 1}
+{"in_scope": false, "map_code": "S750", "map_kind": "dungeon", "min_level": 0, "name_fr": "機關城的祕寶【隊伍】", "node_id": 750, "node_type": 5}
+{"in_scope": false, "map_code": "S751", "map_kind": "dungeon", "min_level": 0, "name_fr": "夏季慶典活動場地", "node_id": 751, "node_type": 5}
+{"in_scope": false, "map_code": "S752", "map_kind": "dungeon", "min_level": 0, "name_fr": "奇幻故事‧凱亞王子的逆襲", "node_id": 752, "node_type": 5}
+{"in_scope": false, "map_code": "", "map_kind": "dungeon", "min_level": 0, "name_fr": "毀滅與神殿", "node_id": 753, "node_type": 5}
+{"in_scope": false, "map_code": "S754", "map_kind": "dungeon", "min_level": 0, "name_fr": "黑輪的秘密基地【單人活動】", "node_id": 754, "node_type": 5}
+{"in_scope": false, "map_code": "S755", "map_kind": "dungeon", "min_level": 0, "name_fr": "奇幻故事‧神秘莊園", "node_id": 755, "node_type": 5}
+{"in_scope": false, "map_code": "S756", "map_kind": "dungeon", "min_level": 0, "name_fr": "瘋狂仙人掌密室【單人活動】", "node_id": 756, "node_type": 5}
+{"in_scope": false, "map_code": "S757", "map_kind": "dungeon", "min_level": 0, "name_fr": "奇幻故事‧大地之花", "node_id": 757, "node_type": 5}
+{"in_scope": false, "map_code": "S758", "map_kind": "field", "min_level": 0, "name_fr": "週年慶歡樂宴會場地", "node_id": 758, "node_type": 1}
+{"in_scope": false, "map_code": "S759", "map_kind": "dungeon", "min_level": 0, "name_fr": "魔王殿 - 荒城之間【隊伍活動】", "node_id": 759, "node_type": 5}
+{"in_scope": false, "map_code": "S760", "map_kind": "dungeon", "min_level": 0, "name_fr": "魔王殿 - 薔薇之間【隊伍活動】", "node_id": 760, "node_type": 5}
+{"in_scope": false, "map_code": "S761", "map_kind": "dungeon", "min_level": 0, "name_fr": "魔王殿 - 幽冥之間【單人活動】", "node_id": 761, "node_type": 5}
+{"in_scope": false, "map_code": "S762", "map_kind": "dungeon", "min_level": 0, "name_fr": "寶寶過街【單人活動】", "node_id": 762, "node_type": 5}
+{"in_scope": false, "map_code": "S763", "map_kind": "dungeon", "min_level": 0, "name_fr": "佳餚保衛戰【單人活動】", "node_id": 763, "node_type": 5}
+{"in_scope": true, "map_code": "S764", "map_kind": "dungeon", "min_level": 0, "name_fr": "Bataille d'Hélios [Groupe]", "node_id": 764, "node_type": 5}
+{"in_scope": true, "map_code": "S765", "map_kind": "dungeon", "min_level": 0, "name_fr": "Sortir des méandres du Fort (Solo)", "node_id": 765, "node_type": 5}
+{"in_scope": true, "map_code": "S766", "map_kind": "dungeon", "min_level": 0, "name_fr": "Passage spatiotemporel", "node_id": 766, "node_type": 5}
+{"in_scope": true, "map_code": "S767", "map_kind": "dungeon", "min_level": 0, "name_fr": "Une cave où l'on entrepose de la bière.", "node_id": 767, "node_type": 5}
+{"in_scope": true, "map_code": "S768", "map_kind": "field", "min_level": 0, "name_fr": "Canal d'Aven", "node_id": 768, "node_type": 1}
+{"in_scope": true, "map_code": "S769", "map_kind": "dungeon", "min_level": 0, "name_fr": "Arène du Démon des Enfers - Assemblée", "node_id": 769, "node_type": 5}
+{"in_scope": true, "map_code": "S770", "map_kind": "dungeon", "min_level": 0, "name_fr": "Courez ! Des vaches ! Courez !", "node_id": 770, "node_type": 5}
+{"in_scope": true, "map_code": "S771", "map_kind": "dungeon", "min_level": 0, "name_fr": "Dimension du chaos <Groupe>", "node_id": 771, "node_type": 5}
+{"in_scope": true, "map_code": "S772", "map_kind": "dungeon", "min_level": 0, "name_fr": "Purgatoire : Arène des Chevaliers Templiers", "node_id": 772, "node_type": 5}
+{"in_scope": true, "map_code": "S773", "map_kind": "dungeon", "min_level": 0, "name_fr": "Course d'Alpagas", "node_id": 773, "node_type": 5}
+{"in_scope": true, "map_code": "S774", "map_kind": "dungeon", "min_level": 0, "name_fr": "Ville de Guilde : Couloir de l'Esprit Gardien", "node_id": 774, "node_type": 7}
+{"in_scope": true, "map_code": "S775", "map_kind": "dungeon", "min_level": 0, "name_fr": "Aventure fabuleuse : Cœur de Dragon", "node_id": 775, "node_type": 5}
+{"in_scope": true, "map_code": "S776", "map_kind": "dungeon", "min_level": 0, "name_fr": "Terrains d'Entraînement", "node_id": 776, "node_type": 5}
+{"in_scope": true, "map_code": "S777", "map_kind": "dungeon", "min_level": 0, "name_fr": "Forêt Camoufle", "node_id": 777, "node_type": 5}
+{"in_scope": true, "map_code": "S778", "map_kind": "dungeon", "min_level": 0, "name_fr": "Gardien de l'Arbre de Vie  <1 joueur>", "node_id": 778, "node_type": 5}
+{"in_scope": true, "map_code": "S779", "map_kind": "dungeon", "min_level": 0, "name_fr": "Garde du Cimetière <Event de groupe>", "node_id": 779, "node_type": 5}
+{"in_scope": true, "map_code": "S783", "map_kind": "dungeon", "min_level": 0, "name_fr": "Conte de légende : les voleurs de trésor et le lutin légendaire.", "node_id": 783, "node_type": 5}
+{"in_scope": true, "map_code": "S784", "map_kind": "dungeon", "min_level": 0, "name_fr": "Les 5 Animaux : La légende de Bonka <Event 1 joueur>", "node_id": 784, "node_type": 5}
+{"in_scope": true, "map_code": "S785", "map_kind": "dungeon", "min_level": 0, "name_fr": "Les 5 Animaux : La légende de Yula <Event 1 joueur>", "node_id": 785, "node_type": 5}
+{"in_scope": true, "map_code": "S786", "map_kind": "dungeon", "min_level": 0, "name_fr": "Les 5 Animaux : La légende de Barlilu <Event 1 joueur>", "node_id": 786, "node_type": 5}
+{"in_scope": true, "map_code": "S787", "map_kind": "dungeon", "min_level": 0, "name_fr": "Les 5 Animaux : La légende de Ron <Event 1 joueur>", "node_id": 787, "node_type": 5}
+{"in_scope": true, "map_code": "S788", "map_kind": "dungeon", "min_level": 0, "name_fr": "Les 5 Animaux : La légende de Maschatta <Event 1 joueur>", "node_id": 788, "node_type": 5}
+{"in_scope": true, "map_code": "S789", "map_kind": "dungeon", "min_level": 0, "name_fr": "Défi des Boss <Groupe>", "node_id": 789, "node_type": 5}
+{"in_scope": true, "map_code": "S790", "map_kind": "dungeon", "min_level": 0, "name_fr": "Le Pouvoir du Cristal d'Eternal <Groupe>", "node_id": 790, "node_type": 5}
+{"in_scope": true, "map_code": "S791", "map_kind": "dungeon", "min_level": 0, "name_fr": "Génération Future <Groupe>", "node_id": 791, "node_type": 5}
+{"in_scope": true, "map_code": "S792", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Profondeurs du Canal Tassos", "node_id": 792, "node_type": 11}
+{"in_scope": true, "map_code": "S793", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Abîme de Baram", "node_id": 793, "node_type": 11}
+{"in_scope": true, "map_code": "S794", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Mine du Village Andrew", "node_id": 794, "node_type": 11}
+{"in_scope": true, "map_code": "S795", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Temple de Delphes", "node_id": 795, "node_type": 11}
+{"in_scope": true, "map_code": "S796", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Les Profondeurs de l'Abysse Glacée de Skleros", "node_id": 796, "node_type": 11}
+{"in_scope": true, "map_code": "S797", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Ancien Autel", "node_id": 797, "node_type": 11}
+{"in_scope": true, "map_code": "S798", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Refuge des Sang Noir", "node_id": 798, "node_type": 11}
+{"in_scope": true, "map_code": "S799", "map_kind": "shared_instance", "min_level": 0, "name_fr": "Salle Ulta", "node_id": 799, "node_type": 11}
+{"in_scope": true, "map_code": "S801", "map_kind": "dungeon", "min_level": 0, "name_fr": "Base des Vilrequins", "node_id": 801, "node_type": 5}
+{"in_scope": true, "map_code": "S802", "map_kind": "dungeon", "min_level": 0, "name_fr": "Salle Ulta", "node_id": 802, "node_type": 5}
+{"in_scope": true, "map_code": "S803", "map_kind": "dungeon", "min_level": 0, "name_fr": "Crocvenin", "node_id": 803, "node_type": 5}
+{"in_scope": true, "map_code": "S804", "map_kind": "dungeon", "min_level": 0, "name_fr": "Écarlate", "node_id": 804, "node_type": 5}
+{"in_scope": true, "map_code": "S805", "map_kind": "dungeon", "min_level": 0, "name_fr": "Siècle", "node_id": 805, "node_type": 5}
+{"in_scope": true, "map_code": "S806", "map_kind": "dungeon", "min_level": 0, "name_fr": "Manoir", "node_id": 806, "node_type": 5}
+{"in_scope": true, "map_code": "S807", "map_kind": "dungeon", "min_level": 0, "name_fr": "Frontière de Basel", "node_id": 807, "node_type": 5}
+{"in_scope": true, "map_code": "S808", "map_kind": "dungeon", "min_level": 0, "name_fr": "Sturmfrau", "node_id": 808, "node_type": 5}
+{"in_scope": true, "map_code": "S809", "map_kind": "dungeon", "min_level": 0, "name_fr": "Abysse Glacée de Skleros", "node_id": 809, "node_type": 5}
+{"in_scope": true, "map_code": "S810", "map_kind": "dungeon", "min_level": 0, "name_fr": "Cratère des Géants", "node_id": 810, "node_type": 5}
+{"in_scope": true, "map_code": "S811", "map_kind": "dungeon", "min_level": 0, "name_fr": "Antre des Échos", "node_id": 811, "node_type": 5}
+{"in_scope": true, "map_code": "S812", "map_kind": "dungeon", "min_level": 0, "name_fr": "Prison Ossuaire", "node_id": 812, "node_type": 5}
+{"in_scope": true, "map_code": "S813", "map_kind": "dungeon", "min_level": 0, "name_fr": "Guillotine", "node_id": 813, "node_type": 5}
+{"in_scope": true, "map_code": "S814", "map_kind": "dungeon", "min_level": 0, "name_fr": "Cap Hurlant", "node_id": 814, "node_type": 5}
+{"in_scope": true, "map_code": "S815", "map_kind": "dungeon", "min_level": 0, "name_fr": "Abysse de Siècle", "node_id": 815, "node_type": 5}
+{"in_scope": true, "map_code": "S816", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple Spirenfer", "node_id": 816, "node_type": 5}
+{"in_scope": true, "map_code": "S817", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple de la Rose", "node_id": 817, "node_type": 5}
+{"in_scope": true, "map_code": "S818", "map_kind": "dungeon", "min_level": 0, "name_fr": "Grotte Non Répertoriée", "node_id": 818, "node_type": 5}
+{"in_scope": true, "map_code": "S819", "map_kind": "dungeon", "min_level": 0, "name_fr": "Cratère Météoritique <Solo>", "node_id": 819, "node_type": 5}
+{"in_scope": true, "map_code": "S820", "map_kind": "dungeon", "min_level": 0, "name_fr": "Grotte de la Marée des Ombres <Solo>", "node_id": 820, "node_type": 5}
+{"in_scope": true, "map_code": "S821", "map_kind": "dungeon", "min_level": 0, "name_fr": "Tour Kahlo <Solo>", "node_id": 821, "node_type": 5}
+{"in_scope": true, "map_code": "S822", "map_kind": "dungeon", "min_level": 0, "name_fr": "Iyernafalo <Solo>", "node_id": 822, "node_type": 5}
+{"in_scope": true, "map_code": "S823", "map_kind": "dungeon", "min_level": 0, "name_fr": "Terre sacrée de Kamodo <Solo>", "node_id": 823, "node_type": 5}
+{"in_scope": true, "map_code": "S824", "map_kind": "dungeon", "min_level": 0, "name_fr": "Temple aquatique <Solo>", "node_id": 824, "node_type": 5}
+{"in_scope": true, "map_code": "S825", "map_kind": "dungeon", "min_level": 0, "name_fr": "Labo Antigravité <Solo>", "node_id": 825, "node_type": 5}
+{"in_scope": true, "map_code": "S826", "map_kind": "dungeon", "min_level": 0, "name_fr": "Grey Lynn <Solo>", "node_id": 826, "node_type": 5}
+{"in_scope": true, "map_code": "S827", "map_kind": "dungeon", "min_level": 0, "name_fr": "Vallée Batelo (Solo)", "node_id": 827, "node_type": 5}
+{"in_scope": true, "map_code": "S828", "map_kind": "dungeon", "min_level": 0, "name_fr": "Allolans (Solo)", "node_id": 828, "node_type": 5}
+{"in_scope": true, "map_code": "S829", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Carrière Angor (Solo)", "node_id": 829, "node_type": 5}
+{"in_scope": true, "map_code": "S830", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Fort Verdure (Solo)", "node_id": 830, "node_type": 5}
+{"in_scope": true, "map_code": "S831", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Canal Tassos (Solo)", "node_id": 831, "node_type": 5}
+{"in_scope": true, "map_code": "S832", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Caverne de Schiste (Solo)", "node_id": 832, "node_type": 5}
+{"in_scope": true, "map_code": "S833", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Éroda (Solo)", "node_id": 833, "node_type": 5}
+{"in_scope": true, "map_code": "S834", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Morticora (Solo)", "node_id": 834, "node_type": 5}
+{"in_scope": true, "map_code": "S835", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Base des Vilrequins (Solo)", "node_id": 835, "node_type": 5}
+{"in_scope": true, "map_code": "S836", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Racine Branda (Solo)", "node_id": 836, "node_type": 5}
+{"in_scope": true, "map_code": "S837", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Palais des Malices (Solo)", "node_id": 837, "node_type": 5}
+{"in_scope": true, "map_code": "S838", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Salle Ulta (Solo)", "node_id": 838, "node_type": 5}
+{"in_scope": true, "map_code": "S839", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Cœur Baltaroï (Solo)", "node_id": 839, "node_type": 5}
+{"in_scope": true, "map_code": "S840", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Rêve du Maire (Solo)", "node_id": 840, "node_type": 5}
+{"in_scope": true, "map_code": "S841", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Crocvenin (Solo)", "node_id": 841, "node_type": 5}
+{"in_scope": true, "map_code": "S842", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Fléau (Solo)", "node_id": 842, "node_type": 5}
+{"in_scope": false, "map_code": "S843", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Écarlate (Solo)", "node_id": 843, "node_type": 5}
+{"in_scope": false, "map_code": "S844", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Siècle (Solo)", "node_id": 844, "node_type": 5}
+{"in_scope": false, "map_code": "S845", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Frontière de Basel (Solo)", "node_id": 845, "node_type": 5}
+{"in_scope": false, "map_code": "S846", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Arsenal Fédéral (Solo)", "node_id": 846, "node_type": 5}
+{"in_scope": false, "map_code": "S847", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Manoir (Solo)", "node_id": 847, "node_type": 5}
+{"in_scope": false, "map_code": "S848", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Cratère des Géants (Solo)", "node_id": 848, "node_type": 5}
+{"in_scope": false, "map_code": "S849", "map_kind": "trial", "min_level": 0, "name_fr": "Illusion Destructrice : Sturmfrau (Solo)", "node_id": 849, "node_type": 5}
+{"in_scope": false, "map_code": "S901", "map_kind": "dungeon", "min_level": 0, "name_fr": "王怪大挑戰【隊伍活動】", "node_id": 901, "node_type": 5}
+{"in_scope": false, "map_code": "S902", "map_kind": "dungeon", "min_level": 0, "name_fr": "守護永恆水晶【隊伍活動】", "node_id": 902, "node_type": 5}
+{"in_scope": false, "map_code": "S903", "map_kind": "dungeon", "min_level": 0, "name_fr": "拯救國家幼苗【隊伍活動】", "node_id": 903, "node_type": 5}
+{"in_scope": false, "map_code": "S910", "map_kind": "dungeon", "min_level": 0, "name_fr": "夏季慶典活動場地", "node_id": 910, "node_type": 5}
+{"in_scope": false, "map_code": "S994", "map_kind": "field", "min_level": 0, "name_fr": "Zone déclenchant automatiquement les quêtes", "node_id": 994, "node_type": 1}
+{"in_scope": false, "map_code": "S995", "map_kind": "dungeon", "min_level": 0, "name_fr": "大亂鬥測試場", "node_id": 995, "node_type": 5}
+{"in_scope": false, "map_code": "S996", "map_kind": "field", "min_level": 0, "name_fr": "監牢", "node_id": 996, "node_type": 1}
+{"in_scope": true, "map_code": "S308", "map_kind": "field", "min_level": 0, "name_fr": "Emplacement de l'Event", "node_id": 997, "node_type": 1}
+{"in_scope": true, "map_code": "S402", "map_kind": "field", "min_level": 0, "name_fr": "Emplacement d'Événement", "node_id": 998, "node_type": 1}
+{"in_scope": true, "map_code": "S999", "map_kind": "field", "min_level": 0, "name_fr": "Plan de Grille", "node_id": 999, "node_type": 1}

@@ -171,4 +171,33 @@ public class FamilyCityRulesTests
             Assert.True(scene.PositionGroups.ContainsKey(area),
                 $"{code} : aire [position] {area:X} absente");
     }
+
+    [Fact]
+    public void Market_HostsAuctioneerBankerAndMerchant_UpToMallCap()
+    {
+        Assert.Equal(0, FamilyCityRules.NpcCap(FamilyCityRules.TypeMarket, 3));
+        Assert.Equal(1, FamilyCityRules.NpcCap(FamilyCityRules.TypeMarket, 4));
+        Assert.Equal(3, FamilyCityRules.NpcCap(FamilyCityRules.TypeMarket, 12));
+        Assert.Equal(new[] { 53003, 53004, 53625 },
+            FamilyCityRules.StationNpcsFor(FamilyCityRules.TypeMarket, 12));
+        Assert.Equal(new[] { 53003 }, FamilyCityRules.StationNpcsFor(FamilyCityRules.TypeMarket, 4));
+    }
+
+    [Fact]
+    public void Hotel_HasNoNpc_BecauseFrenchDataHasNoHotelContract() =>
+        Assert.Empty(FamilyCityRules.StationNpcsFor(FamilyCityRules.TypeHotel, 12));
+
+    /// <summary>Preuve données FR : chaque PNJ du marché a un contrat kind 42 (c_item col35).</summary>
+    [Fact]
+    public void RealCorpus_MarketNpcsHaveFrenchContracts()
+    {
+        var f = Path.Combine(TestPaths.RepoRoot, "..", "corpus", "fr-full", "data", "db", "c_item.ini");
+        if (!File.Exists(f)) return;
+        var raw = System.Text.Encoding.GetEncoding("Big5").GetString(File.ReadAllBytes(f));
+        var contractNpcs = raw.Split('\n').Select(l => l.Split('|'))
+            .Where(p => p.Length > 35 && p[8] == "42" && int.TryParse(p[35], out _))
+            .Select(p => int.Parse(p[35])).ToHashSet();
+        foreach (var npc in FamilyCityRules.StationNpcsFor(FamilyCityRules.TypeMarket, 12))
+            Assert.Contains(npc, contractNpcs);
+    }
 }

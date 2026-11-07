@@ -1,0 +1,19 @@
+# code	fr	en
+# Textes des erreurs de gameplay. Le FR est la source de vérité ; l'EN est une version dérivée.
+# Arguments : {0}, {1}… remplacés par GameError.Args.
+GATHER_OUT_OF_AREA	Vous devez vous trouver dans une zone de récolte adaptée à cet outil.	You must be inside a gathering area suited to this tool.
+GATHER_BAG_FULL	Votre sac est plein : la récolte s'arrête.	Your bag is full: gathering stops.
+GATHER_TOOL_BROKEN	Votre outil est cassé.	Your tool is broken.
+GATHER_MOVED	Vous avez bougé : la récolte est annulée.	You moved: gathering is cancelled.
+GATHER_LEVEL_TOO_LOW	Votre niveau est trop bas pour utiliser cet outil.	Your level is too low to use this tool.
+CRAFT_BUILDING_LEVEL_TOO_LOW	Le bâtiment n'a pas le niveau requis pour ce plan.	The building level is too low for this plan.
+CRAFT_PLAN_MISSING	Déposez un plan valide dans l'emplacement prévu.	Place a valid plan in the slot.
+CRAFT_BAG_FULL	Pas assez de place dans le sac à dos.	Not enough room in your backpack.
+DUNGEON_NO_ENTRIES_LEFT	Vous n'avez plus d'entrées pour ce donjon aujourd'hui.	You have no entries left for this dungeon today.
+CONFIG_INVALID_VALUE	Valeur de configuration invalide : {0}.	Invalid configuration value: {0}.
+ADMIN_FORBIDDEN	Vous n'avez pas le niveau d'administration requis.	You do not have the required admin level.
+GATHER_ALREADY	Vous êtes déjà en train de récolter.	You are already gathering.
+GATHER_STARTED_MINING	En cours de minage…	Mining…
+GATHER_STARTED_FARMING	En cours de cueillette…	Gathering…
+GATHER_STARTED_CRYSTAL	En cours de divination…	Divining…
+GATHER_YIELD	Récolte : {0} x{1}	Gathered: {0} x{1}

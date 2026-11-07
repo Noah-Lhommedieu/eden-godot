@@ -75,6 +75,13 @@ La qualité de code doit être **irréprochable** : le code doit rester maintena
 | D7 | **EDENFR = le jeu officiel français complet (≤ Lv90).** Les autres clients étaient des serveurs privés au contenu custom. Donc : tout contenu du jeu est dans `corpus/fr-full` ; une « lacune » est d'abord une lecture incomplète des tables FR, pas un trou à documenter. L'anglais ne sert qu'aux joueurs non francophones. | Interdit d'écrire « absent des données FR » sans avoir remonté la chaîne FR complète. Les tables US (`S_*`) ne sont jamais une preuve d'absence. |
 | D8 | **Source d'information = la base de données** (idéal) ; à défaut, uniquement des fichiers externes **modifiables avec sauvegarde à chaque édition**. Le client n'est qu'un afficheur. | §3.7. |
 | D9 | **Configuration serveur massive** (temps de craft, respawn par instance, entrées de donjon, événements, **VIP**), éditable à chaud. | Lot F. |
+| D11 | **2 bases maximum** : `eden_content` (statique) + `eden_live` (dynamique), 3ᵉ seulement si justifiée ; toutes les tables utiles, aucune morte, **chaque table et colonne commentée**, données lisibles. | §3.7, lot DB. |
+| D12 | **Historique d'édition** hautement recommandé : visible, annulable, supprimable (purge consignée). | §3.7. |
+| D13 | **Bac à sable** de contenu (si l'espace disque le permet), **tableau de santé** discret et hiérarchisé, **journal d'activité** VIP/admin, **calendrier d'événements « éphéméride »** (style Almanax de Dofus). | §3.7, F5, D8. |
+| D14 | **VIP = un simple statut** (VIP ou non) donnant de petits buffs ; entrées de donjon par défaut **10 solo + 10 multi** (modifiables par VIP, `server.config.txt`, événements). | Lot F. |
+| D15 | **Types de map hiérarchisés** (normale / donjon / instance / mode spécial / trial) avec **édition complète par map** (mobs, stats, drops, exp, récompenses) ; un donjon classique est **privé** (personnage ou groupe). | §4.3. |
+| D16 | **Serveur → client sans lag** : 50 joueurs actifs, dimensionné pour 300, un seul serveur. | §3.8, lot N. |
+| D17 | Libération d'espace disque : liste des dossiers de `portage/` supprimables (aucune suppression sans accord). | §9. |
 | D10 | Durabilité des outils de récolte : 180 points ≈ 30 min (1 point / 10 s). Animations de récolte : elles existent, il faut les retrouver (§A3). `ui_text_en.tsv` = banque accessoire, jamais dépendance. | A3, E. |
 
 ---------------------------------------------------------------------------
@@ -237,36 +244,52 @@ Le panneau natif (`familytownlistwnd.layout`, `ref-shots/` : voir `eden_godot/do
 4. **Hook de fusion unique** : `IniTable.ParseFile` (base + `*.overlay` + tombstones) côté lib partagée (un seul code, plus deux). `WorldParsers.ParseNpcs` lit des octets directement (`WorldParsers.cs:71`) : à faire passer par la même porte (risque R9 du concept).
 5. **Fin des constantes de gameplay en dur** : `FamilyCityRules.StationNpcs`, taux de récolte, tick de 30 s, table de rareté, services→fenêtres passent en `content/rules/*` (éditables, hot-reloadables, testables).
 
-### 3.7 Source de vérité = la BASE DE DONNÉES (décision D8, idée du propriétaire « à la Dofus »)
-**Idée retenue** : le serveur est l'unique propriétaire des *informations* (noms, stats, prix, recettes, drops, textes, règles) ; le client est un afficheur (comme les fichiers `lang`/`d2o` poussés par le serveur de Dofus). Le client ne contient plus de copie éditable.
-**État actuel [VÉRIFIÉ]** : la base PostgreSQL ne contient que l'**état des joueurs** (persos, inventaires, guildes, enchères…, voir `eden_server/Database/*.sql`) ; **toutes** les données de jeu sont des fichiers INI (53 `Load(…)` dans `GameDataService.cs`, lus une fois au boot). Il n'existe aucun schéma de contenu.
-**Faisabilité technique [MESURÉ]** : le contenu de gameplay complet fait 46 Mo bruts / **10,9 Mo compressés** (gzip, `corpus/fr-full/data/db`, 141 fichiers) ; `c_item`+`t_item` = 1,5 Mo compressés. Un client qui met le tout en cache disque par hash ne le télécharge **qu'une fois** ; ensuite seuls des **deltas par ligne** circulent (quelques Ko). Les panneaux (archive, wiki, admin) lisent l'**index mémoire local** : zéro aller-retour réseau, donc zéro lag.
-**Architecture proposée**
-```
- PostgreSQL schéma `content`  ← SOURCE DE VÉRITÉ (le serveur de jeu et l'admin lisent/écrivent ici)
-   content.row(table, id, cells jsonb, rev, updated_at)          1 ligne = 1 ligne de table de jeu
-   content.text(table, id, field, lang, value, status, rev)      textes FR (vérité) + EN (overlay)
-   content.rule(key, value jsonb, rev)                            règles de gameplay (§8)
-   content.changelog(rev, actor_account, table, id, before, after, ts, reason)   APPEND-ONLY = sauvegarde de CHAQUE édition
-   content.release(n, rev_from, rev_to, sha256, signed_by)        points de restauration nommés
-        │  LISTEN/NOTIFY (PostgreSQL) → ContentSnapshot reconstruit/patché (swap atomique, §3.3)
-        ▼
- Serveurs Zone/Mission/World : `Content.Current` (mémoire) — plus de lecture de fichiers INI au runtime
-        │  ContentDelta{rev, table, id, cells}  (diffusé aux clients connectés) ; ContentManifest{rev, hash par table} au login
-        ▼
- Client : cache disque par hash + index mémoire ; panneaux = lecture locale ; hot-reload des panneaux visibles (ILiveBound)
- Visuels : EPK (modèles/anims/layouts) — référencés par clé depuis `content.row`
-```
-**Pourquoi la base** : transactions (une édition admin est atomique), historique et annulation par ligne (`changelog`), droits par rôle PG, `LISTEN/NOTIFY` gratuit pour le hot-reload, requêtes pour le wiki/admin (jointures « quel PNJ vend l'item X »), une seule vérité même avec plusieurs processus (Zone et Mission chargent chacun leur copie aujourd'hui).
-**Garde-fous (obligatoires)**
-1. **Import initial reproductible** : `tools/content/seed` lit `corpus/fr-full/data/db` (lecture seule) et remplit `content.*` ; idempotent ; rejouable sur base vierge ; rapport de comptage ligne par ligne (test : `n` lignes du fichier = `n` lignes en base, hash par table).
-2. **Export de secours** : `tools/content/export` écrit `content/export/*.jsonl` (déterministe, trié) à chaque release et chaque nuit, **commité dans git** : on peut diff, restaurer et **démarrer sans base** (mode dégradé en lecture seule depuis l'export).
-3. **Sauvegarde par édition** : toute écriture passe par une fonction unique `Content.Edit(...)` qui insère le `changelog` dans la **même transaction** ; annulation = changeset inverse ; `pg_dump -n content` quotidien + avant toute action de masse.
-4. **Repli « fichiers seulement » (option minimale du propriétaire)** : si la base de contenu n'est pas retenue, la même API `Content.Edit` écrit dans `content/overlay/*.jsonl` avec copie `.bak` horodatée avant chaque écriture et entrée de journal ; le reste de l'architecture (snapshot, deltas, hot-reload) est identique. **Le choix base/fichiers n'est donc qu'un détail du magasin (`IContentStore`)**, jamais du reste du code.
-5. **Formats** : cellules typées par descripteur de table (jamais d'indice de colonne dans le code métier) ; textes UTF-8 en base (fin du problème Big5/CP1252).
-6. **Perf** : snapshot indexé par id (tableaux/dictionnaires), index inverses construits au swap (item→recettes, mob→drops, PNJ→boutiques) ; objectif mesuré : swap < 200 ms, delta appliqué < 5 ms côté client, panneau de recherche < 50 ms sur 60 000 entités.
-**Ce que le client garde** : layouts CEGUI, thèmes, modèles, animations, textures, FX, sons, polices, **préférences utilisateur**. **Ce qu'il perd** : toute table de gameplay éditable (items, mobs, PNJ, quêtes, sorts, recettes, drops, textes de jeu). Il garde un bundle FR de base empaqueté pour l'écran de connexion (avant d'être connecté).
-**Risques** : (R-DB1) migration lourde des 53 parsers : se fait table par table derrière `IContentStore` (lot B2) ; (R-DB2) le serveur dépend de la base au démarrage : couvert par l'export de secours (point 2) ; (R-DB3) volume des deltas lors d'une release massive : envoi par lots + compression ; (R-DB4) cohérence client/serveur : `rev` dans le handshake, ADR.
+### 3.7 Source de vérité = BASES DE DONNÉES claires et documentées (décisions D8, D11, D12)
+**Idée du propriétaire** : le serveur est l'unique propriétaire des *informations* ; le client est un afficheur (comme Dofus avec ses fichiers de langue). **Réponse du lead dév (7.2.1 n°1) : toutes les tables utiles, aucune table morte, chaque table et chaque colonne commentée, données lisibles par un humain, 2 à 3 bases au maximum.**
+
+**État actuel mesuré [VÉRIFIÉ, conteneur `edengodot-postgres` :5433, 2026-11-07]**
+| Constat | Valeur |
+|---|---|
+| Base utilisée par le serveur | `edenfr` (33 Mo) : schémas `account` 23 tables, `account_archive` 1, `game` 145, `game_archive` 16, `member` 14, `public` 2 = **187 tables** |
+| Anciennes bases encore présentes | `edenfr_db` (21 Mo), `edenfr_account` (17 Mo), `edenfr_member` (8 Mo), `edenfr_load` (41 Mo, test de charge) ; sur l'autre conteneur `eden-postgres` :5432 : `fnaccount`, `fndb1`, `fnmember` (utilisées par le Limitless d'origine). Rollback `EDEN_LEGACY_DB=1` dans `start-native.sh` |
+| Documentation | **43 tables sur 187** ont un commentaire ; **26 colonnes sur 2 407** |
+| Tables mortes | **71 tables sur 187 ne sont référencées par aucun code serveur** et ont 0 ligne (ex. `account.crashlog`, `account.itemmall_old`, `game.*_old`, `game.farm_*`, `game.statistics_*`, `member.oauth2_*`, `member.two_pass`, tout `game_archive.*`). Liste complète : `/tmp/tables.txt` régénérable par `tools/db/inventory` (lot DB-A) |
+| Données de jeu en base | **aucune** : les 53 tables de gameplay sont des fichiers INI lus au boot (`GameDataService.cs`) |
+
+**Disposition cible : DEUX bases (+ une troisième seulement si justifiée)**
+| Base | Contenu | Nature | Schémas |
+|---|---|---|---|
+| **`eden_content`** (statique) | Tout ce que les joueurs ne modifient pas : objets, monstres, PNJ, quêtes, sorts, classes, recettes, drops, boutiques, cartes et leurs apparitions (mobs/PNJ), bâtiments, textes FR/EN, règles de gameplay (configuration), éphéméride, profils de map, **journal des éditions** | Écrite par l'admin/éditeur, lue par tout le monde, publiée par révisions | `item`, `creature`, `npc`, `quest`, `skill`, `craft`, `map`, `guild_city`, `text`, `rule`, `calendar`, `history` |
+| **`eden_live`** (dynamique) | État vivant : comptes, personnages, inventaires, guildes, villes en cours, enchères, courrier, entrées de donjon, VIP, audit d'administration, classements, sessions web | Écrite en continu par le jeu | `account`, `character`, `inventory`, `guild`, `market`, `social`, `progress`, `admin`, `web` |
+| *(3ᵉ, optionnelle)* | **Aucune n'est nécessaire aujourd'hui** : le site Limitless se contente de `eden_live` (schéma `web` : actualités, sessions) et lit `eden_content` en lecture seule. Le **bac à sable** (D13) n'est pas une base permanente : copie temporaire `CREATE DATABASE eden_content_sandbox TEMPLATE eden_content` supprimée après usage | | |
+Les anciennes bases (`edenfr`, `edenfr_*`, `fn*`) sont **migrées puis supprimées** (sauvegarde `pg_dump` conservée). Pas de clé étrangère entre les deux bases (impossible) : `eden_live` référence `eden_content` par **identifiant métier stable** (ex. `item_id` natif du jeu) et un test de cohérence vérifie les références à chaque release.
+
+**Données claires, pas de relations cryptiques (réponse n°1)**
+- **Tables typées par entité**, une colonne par champ **nommée en clair** : `item(item_id, name_fr, item_kind, required_level, quality, buy_price_silver, sell_price_silver, stack_max, icon_key, model_key, …)`. **Fini le `jsonb` opaque** que proposait ma première version : les colonnes viennent des descripteurs de table (`columns/*.json`, concept §4.6) qui remplacent les indices de colonne de `ItemParser`.
+- **Chaque ligne se lit seule** : à côté de chaque identifiant de relation, une colonne de **libellé redondante en clair** maintenue par la base (colonne générée/trigger) — ex. `craft_recipe(recipe_id, product_item_id, product_name_fr, plan_item_id, plan_name_fr, work_level, success_percent, …)` ; `monster_drop(monster_id, monster_name_fr, item_id, item_name_fr, drop_percent)`. Les noms de tables et de colonnes sont français-lisibles en anglais technique cohérent (convention unique documentée : `snake_case`, singulier, suffixes `_id`, `_percent`, `_seconds`, `_silver`).
+- **Vues de lecture pour l'humain** : `v_item_obtention`, `v_dungeon_overview`, `v_guild_city_status`… (jointures déjà résolues). Un administrateur qui ouvre `psql` ou un outil SQL **comprend ce qu'il lit** sans suivre trois jointures.
+- **Documentation obligatoire et vérifiée** : `COMMENT ON TABLE` et `COMMENT ON COLUMN` pour **toutes** les tables et colonnes (rôle, unité, source native, valeurs possibles) ; `tools/db/doc-lint` échoue si un commentaire manque, si une table n'est référencée par aucun code **ni** par une vue/une fonction déclarée, ou si un nom n'est pas conforme. Document généré `docs/reference/DB-SCHEMA.md` à chaque release (dictionnaire de données : table, colonne, type, commentaire, source native).
+- **Pas de table morte** : les 71 tables inutilisées sont soit **supprimées** (migration `DROP`, après `pg_dump`), soit **branchées** si la fonctionnalité est voulue (ex. `gm_tool_log` → remplacée par l'audit `admin.audit`). Règle permanente : une table sans lecteur ni écrivain dans le code est refusée par le lint.
+
+**Import et reproductibilité** : `tools/content/seed` lit `corpus/fr-full/data/db` (lecture seule) → `eden_content` ; idempotent ; test « n lignes fichier = n lignes base, hash par table » ; textes en UTF-8 (fin du Big5/CP1252).
+**Historique des éditions (réponse n°7) — hautement recommandé, supprimable, annulable** : `history.change(change_id, entity_type, entity_id, entity_name, field, old_value, new_value, edited_by_account, edited_at, reason, release_id, reverted_by)` écrit dans la **même transaction** que l'édition. L'administrateur peut : **voir** l'historique d'une entité ; **annuler** une modification (écrit une modification inverse, tracée) ; **annuler en lot** (une release, une session, un compte) ; **supprimer** des entrées (purge par ancienneté ou sélection, niveau 5 ; la purge est elle-même consignée dans `admin.audit` et n'empêche pas de restaurer depuis un point de release conservé). Rétention configurable (`History.RetentionDays`).
+**Export de secours** : `tools/content/export` écrit `content/export/*.jsonl` (déterministe, trié, **commité**) à chaque release et chaque nuit : démarrage possible sans base (mode lecture seule), diff lisible, restauration. Repli « fichiers » (option minimale) : même API `IContentStore`, écriture dans des fichiers avec `.bak` horodaté ; le reste de l'architecture est identique.
+**Ce que le client garde** : layouts, thèmes, modèles, animations, textures, FX, sons, polices, préférences. **Ce qu'il perd** : toute table de gameplay éditable. Il garde un bundle FR de base empaqueté pour l'écran de connexion.
+**Risques** : migration des 53 parseurs table par table derrière `IContentStore` (lot B2) ; dépendance au démarrage (couverte par l'export) ; migration de 116 tables vivantes vers `eden_live` (scripts réversibles, test de comptage) ; le Limitless d'origine pointe sur `fn*` (lot D1).
+
+### 3.8 Distribution du contenu et du dynamique « no-lag » (50 joueurs actifs, dimensionné pour 300) — réponse n°9
+**Contraintes** : un seul serveur (pas de scaling horizontal), 50 joueurs réels actifs simultanément, marge 300 CCU sans lag. **Base de départ mesurée** : test de charge du 2026-11-01 (`eden_server/docs/DB-4-LOAD-TEST.md`) = 300 sessions bots 60 s, 300/300 entrées réussies, entrée zone 171 ms en moyenne, 2-4 coupures « Broken pipe » **non expliquées** (à investiguer avant tout), saturation PG résolue par `EDEN_DB_POOL_MAX` ; l'envoi est déjà groupé par session (`NetSession.FlushBatchAsync`), la vue est un carré ±48 sur grille spatiale (`Eden.Zone/Spatial/SpatialGrid.cs`), la boucle de zone tourne à 100 ms (`Program.cs:808`).
+**Méthode retenue (règles, par ordre d'impact)**
+1. **Le contenu statique ne passe jamais par le socket de jeu.** Un point d'entrée HTTP/2 dédié (Kestrel, port séparé, loopback ou LAN) sert des **blocs adressés par hash** (`/content/<table>/<hash>.br`), **pré-compressés en Brotli à la publication**, `Cache-Control: immutable`, servis depuis la mémoire/`sendfile` (zéro CPU par requête). 300 clients × 11 Mo ne se produit **qu'une fois par release** (puis cache disque client) ; le débit est plafonné (jeton par client, ex. 1 Mo/s, priorité basse) pour ne jamais concurrencer le gameplay.
+2. **Chargement en deux temps** : *tables critiques* d'abord (objets, textes, sorts, quêtes actives ≈ 4 Mo compressés), le reste en tâche de fond après l'entrée en jeu ; un panneau ouvert sur une table pas encore arrivée affiche un squelette, jamais un blocage.
+3. **Deltas** : une modification de contenu = un message `ContentDelta{rev, table, id, cells}` **sérialisé une seule fois** puis envoyé en copie partagée aux N sessions abonnées (pas de sérialisation par client), regroupé par tick de 100 ms, compressé au-delà d'un seuil.
+4. **Requêtes dynamiques identiques coalescées** (« single-flight ») : 30 joueurs ouvrant la liste des villes de guilde dans la même seconde = **1** calcul, résultat mis en cache avec `rev` et durée de vie courte (1-5 s), réponse « inchangé » (`304`-like) si le client a déjà la `rev`. Même principe pour classements, enchères (listes), boutiques, événements du jour.
+5. **Jamais de base dans le chemin chaud** : contenu = snapshot mémoire (swap atomique) ; état joueur chaud = Redis (déjà en place : or/position/vitals) ; écritures en write-behind groupées (déjà : flush 15 s, 300 persos < 1 s). Les lectures de panneaux (archive, wiki, admin) se font sur l'**index local du client** : zéro réseau.
+6. **Pas d'allocation dans les boucles chaudes** : `ArrayPool<byte>`, `Span<T>`, tampons réutilisés pour les paquets, pas de LINQ ni de `string` dans le chemin de déplacement/vue ; GC en mode concurrent, pas de pause > 20 ms (mesure `dotnet-counters`).
+7. **Budget par joueur** : ≤ 30 ko/s moyen en jeu, rafale ≤ 200 ko ; AOI inchangé (±48), émission des déplacements dédupliquée et limitée en fréquence par distance ; priorité des paquets (combat > déplacement > cosmétique).
+8. **Back-pressure** : file d'envoi bornée par session ; un client lent est dégradé (paquets cosmétiques abandonnés) sans bloquer les autres ; jamais d'`await` d'envoi dans la boucle de zone.
+9. **Pool de connexions PG** dimensionné (`EDEN_DB_POOL_MAX`), `max_connections` ≥ 300, `pgbouncer` si le total dépasse ; index sur toute clé de recherche ; `pg_stat_statements` actif (déjà `020`).
+**Preuves exigées (lot N)** : (a) enquêter sur « Broken pipe » ; (b) étendre `Eden.Bots` avec un scénario **« contenu »** (300 clients qui ouvrent wiki/archive/liste de villes/boutiques en même temps + une release de contenu poussée en pleine charge) ; (c) mesurer **p50/p95/p99 de latence de boucle de zone**, débit sortant, pauses GC, CPU, pour 50 / 150 / 300 bots ; (d) seuils d'acceptation : boucle de zone p99 < 50 ms, aucun paquet de gameplay retardé > 100 ms pendant une release, 0 déconnexion ; (e) rapport dans `docs/knowledge/performance-baselines.md`. Comme pour le reste : « fait » = chiffres publiés.
 
 ### 3.4 Hot-reload (innovations concrètes, par palier)
 | Palier | Quoi | Dépendance | Apport |
@@ -291,7 +314,11 @@ Le code C# du client (scripts Godot) n'est **pas** rechargeable à chaud en jeu 
 ### 3.6 Lots B
 | Lot | Contenu | Acceptation |
 |---|---|---|
-| B0 | ADR « source de vérité = base `content` (repli fichiers + sauvegarde) » ; schéma SQL `content.*` ; `IContentStore` (2 implémentations : PostgreSQL, fichiers JSONL) ; `tools/content/seed` + `export` | Seed rejoué 2× = mêmes hashs ; export commité ; table `changelog` remplie par une édition de test ; arrêt de la base → boot depuis l'export |
+| B0 | ADR « deux bases `eden_content` / `eden_live` (repli fichiers + sauvegarde) » ; DDL des tables **typées** générées depuis les descripteurs ; `IContentStore` (PostgreSQL, fichiers JSONL) ; `tools/content/seed` + `export` | Seed rejoué 2× = mêmes hashs ; chaque table/colonne commentée (`doc-lint` vert) ; édition de test inscrite dans `history.change` ; arrêt de la base → boot depuis l'export |
+| DB-A | Inventaire (`tools/db/inventory`) des 187 tables : 71 non référencées, 0 ligne → décision par table (supprimer / brancher), sauvegarde `pg_dump` avant | Liste signée par le propriétaire ; 0 table sans lecteur ni écrivain |
+| DB-B | Séparation `edenfr` → `eden_live` (116 tables vivantes, renommage clair, commentaires) et suppression des bases `edenfr_db/account/member/load` et `fn*` après sauvegarde | `dotnet test` vert, login + entrée de zone + inventaire sur la nouvelle base ; 2 bases seulement dans `\l` |
+| DB-C | `doc-lint` (commentaires, nommage, tables mortes) en CI + génération de `docs/reference/DB-SCHEMA.md` | Lint vert ; dictionnaire de données généré |
+| N | Réseau « no-lag » §3.8 : enquête « Broken pipe », scénario de charge « contenu », 50/150/300 bots, seuils | Rapport chiffré dans `performance-baselines.md` |
 | B1 | Lib `Eden.Content` + `ContentSnapshot` + `content/` + `manifest.json` ; ADR-0003 appliqué ; ADR « couche contenu » | Serveur et client compilent contre la même assembly ; `tools/test.sh` vert ; 0 `S_*` encore lue pour les tables migrées en B2 |
 | B2 | Migration P-B table par table + rapport de divergence + tests « même ligne » | Rapport : divergence → 0 sur chaque table migrée ; gameplay rejoué sur un scénario par table (drop, PNJ, quête, recette) |
 | B3 | Hot-reload H0-H1 (+ `ILiveBound`) | Modifier `content/rules/gather_rules` pendant une session : le prochain tick de récolte applique la nouvelle valeur sans redémarrage |
@@ -340,6 +367,24 @@ Un contenu est **présent en jeu** s'il est atteignable par le gameplay normal (
 - **Monstre** : placé dans une scène (`[reborn_monsters]`) de niveau ≤ 90 ; **PNJ** : posé dans une scène accessible (hors dev) ; **quête** : niveau ≤ 90 et donneur placé ; **sort/classe** : classes jouables, rang ≤ 90 ; **carte** : node accessible.
 - Écarts connus à exclure : ids `Testing ID`/placeholders (`測試用編號`, R15 du concept), items « (sans nom) », 55 icônes d'événement `e0###` absentes (G23), 12 classes éveillées sans nom FR (G24/G25).
 Ce périmètre est la **seule** définition utilisée par le wiki, par l'admin (filtre « valide ») et par l'anglais.
+
+### 4.4 Hiérarchie des types de map et édition par map (réponse n°4 et n°8)
+**Règle de conception** : un seul modèle, trois niveaux d'héritage. Une valeur de gameplay se résout **du plus précis au plus général** : *réglage du mob dans la map* → *réglage de la map* → *réglage du type de map* → *défaut global*. Le type de map porte les **règles de mode** ; la map porte les **ajustements**.
+
+| Type de map (`map_kind`) | Définition (voir §4.1) | Instanciation | Règles propres |
+|---|---|---|---|
+| **Monde ouvert** (`field`) | `c_node` type 1 hors instances partagées | partagée | pénalité d'EXP à la mort, PvP/zones selon node |
+| **Instance partagée** (`shared_instance`) : BTS 224, DD 216, Labo Vingot 212… | type 1/11 + respawn rapide + boss durs | **partagée** (on croise des joueurs sans groupe, pas de sens imposé) | **pas de perte d'EXP à la mort** (comme un donjon), mobs 15-90 s, boss durs |
+| **Donjon classique** (`dungeon`) D1-D3 | type 5/7, Épreuve | **privée au personnage ou au groupe** (décision 8) | pas de perte d'EXP, quota d'entrées/jour, boss à longue réapparition |
+| **Mode spécial** (`special_mode`) | Illusion Destructrice (D4), Tour des Cieux, arènes, expéditions, champs de bataille | selon le mode | récompenses/score propres (système *Evaluate* pour ID) |
+| **Trial / épreuve scorée** (`trial`) | nodes 655-668 (type 18) + 829-858 solo | privée à l'équipe | score, grade, loterie de fin |
+| **Ville de guilde** (`guild_city`) | type 4 (501/502) | privée à la **famille** visitée | bâtiments, PNJ de service |
+**Vérifications faites [VÉRIFIÉ]**
+- *Donjons privés* : `ZoneEntryFlow.Instancing.cs` (`ResolveInstanceGroup`) donne à chaque personnage la clé `team.Id` (en équipe) ou `-charId` (solo) pour les types de la liste `InstanceNodeTypes = {4,5,6,7,8,9,10,12,14,15,16,17,18,19}` ; deux joueurs sans groupe commun **ne se voient pas** (entités, mobs et PNJ filtrés par groupe). Le type 4 (ville de guilde) est lié à la famille, pas à l'équipe.
+- *Défaut trouvé* : « donjon » est défini **à deux endroits incohérents** : `ZoneEntryFlow.Dungeon.cs:29` (`catalogue OU type 5`) et `ZoneLiveWorld.cs:620` (types 5, 7, 11, 18). La **pénalité d'EXP** (`Combat.Death.cs:402`, `!IsDungeonNode`) n'est donc **pas** supprimée dans BTS/DD/Labo Vingot (type 1) alors que le propriétaire veut qu'elle le soit. Le lot C remplace ces deux définitions par `map_kind` (une seule source, §4.1).
+**Édition complète par map** (modèle de données dans `eden_content.map`) : `map_profile(map_id, map_name_fr, map_kind, recommended_level, …)` ; `map_monster_spawn(map_id, spawn_id, monster_id, monster_name_fr, respawn_seconds, x, y, …)` ; `map_npc_spawn(…)` ; `map_monster_override(map_id, monster_id, hp_percent, attack_percent, exp_percent, gold_percent, drop_rate_percent, drop_table_id, reward_item_id…)` ; `map_reward(map_id, …)` ; `map_entry_rule(map_id, daily_entries_solo, daily_entries_multi, min_level, …)`. Les spawns, aujourd'hui dans `scene/sNNN.ini` (lus par client **et** serveur), passent dans la base : **la géométrie (fsm/nif) reste un asset ; la population devient une information**. Opérations : **ajouter / modifier / supprimer** un spawn, un mob, un drop, une récompense, un PNJ ; édition en lot (« tous les boss de la famille Angor ×1,2 EXP ») ; aperçu avant/après ; annulation par l'historique.
+**UX de l'éditeur (ergonomique ET optimisé)** : arbre `Type de map ▸ Famille ▸ Map ▸ (Mobs · Spawns · Drops · Récompenses · Entrées · PNJ)` ; panneau de détail avec **valeur héritée affichée en grisé** et surcharge locale en couleur ; recherche instantanée sur l'index mémoire ; validation immédiate (références, bornes) ; tableau virtualisé (milliers de lignes sans lag) ; mêmes écrans en jeu (panneau admin) et sur le site (Limitless).
+**Acceptation** : BTS/DD/Vingot → plus de perte d'EXP à la mort (test + capture) ; deux comptes sans groupe dans Carrière Angor ne se voient pas, deux comptes sans groupe dans BTS se voient (test live) ; modifier l'EXP d'un mob de DD par l'éditeur change le gain au kill suivant sans redémarrage ; annulation depuis l'historique restaure l'ancienne valeur.
 
 ---------------------------------------------------------------------------
 ## 5. LOT D — Wiki, site Limitless amélioré, panneau d'administration par COMPTE
@@ -402,6 +447,19 @@ Emplacement : `reverseden/eden_server/limitless/` (**dossier frère**, ~1,6 Go a
 | Textes serveur (chat, refus, annonces) | `SendTextIndexAsync`, textes en dur côté serveur | à recenser (`grep` des chaînes françaises/CJK dans `SRV`) |
 Les volumes réels sont obtenus **après** application de `scope.json` (≤ Lv90, présent en jeu).
 
+### 6.2b Organisation du travail FR → EN (réponse n°6 : items d'abord, mais pas seulement)
+**Unité de traduction** = `(type d'entité, id, champ)`, stockée dans `eden_content.text.translation(entity_type, entity_id, field, lang, value, status, translated_at, reviewed_by)` avec `status` ∈ `missing / auto / reviewed / validated / outdated`. **`outdated`** : le texte FR source a changé après la traduction (hash du FR mémorisé) → retraduction signalée automatiquement. Le FR n'est **jamais** modifié par le pipeline EN.
+**Ordre de livraison par vagues** (chaque vague est livrable seule, avec rollback §6.4) :
+| Vague | Contenu | Pourquoi |
+|---|---|---|
+| 1 | **Objets ≤ 90 présents en jeu** (nom, description, effet d'usage) + glossaire | priorité du propriétaire ; sert wiki, inventaire, enchères, craft |
+| 2 | Interface : menus, fenêtres, statuts, messages système, textes serveur | visible partout, volume faible |
+| 3 | Classes, sorts, talents, enchants/statuts | cohérence combat |
+| 4 | PNJ (nom + titre), monstres, cartes, bâtiments, recettes | dépend des objets (noms propres) |
+| 5 | Quêtes (titres, dialogues, objectifs) | volume le plus lourd, dépend de tout |
+| 6 | Succès, titres, collections, événements, éphéméride | contenu secondaire |
+**Tableau de bord de traduction** (panneau « santé du contenu ») : par type d'entité, % `validated`, nombre de `outdated`, chaînes les plus vues en jeu non traduites. Les noms propres (PNJ, lieux) passent par le **glossaire** pour rester cohérents entre quêtes, cartes et objets.
+
 ### 6.3 Pipeline
 1. **Extraction** : `lang-inventory` produit `to_translate.tsv` {table, id, champ, fr, contexte (type d'objet, niveau, nom lié), statut}. Les codes de mise en forme (`$N$`, `#c…#`, retours ligne) sont protégés par jetons.
 2. **Traduction** assistée par IA par lots cohérents (même fiche d'objet/de quête traduite ensemble pour garder les noms identiques), avec glossaire imposé et mémoire de traduction (une chaîne FR identique = une seule traduction).
@@ -442,7 +500,7 @@ Phase 3 (wiki + site)        D1 → D2 → D3 → D4
 Phase 4 (admin)              D5 → D6 → D7 → D8             (B3/B6 en parallèle)
 Phase 5 (anglais)            E0 → E1 → E2 → E3/E4 → E5 → E6   (après B1 ; E2 peut démarrer dès A2)
 ```
-Phase 6 (config + VIP)       F1 → F2 → F3 → F4      (F1 peut démarrer dès la phase 1 ; A3 en dépend pour ses constantes)
+Phase 6 (config + VIP)       F1 → F2 → F3 → F4 → F5     ‖  DB-A → DB-B → DB-C (avant B0)  ‖  N (réseau, en continu)      (F1 peut démarrer dès la phase 1 ; A3 en dépend pour ses constantes)
 **Preuves à fournir par lot** : contrat de tâche rempli ; `tools/build.sh` + `tools/test.sh` verts ; logs/commandes collés ; captures **regardées** (`tools/capture.sh`, `ref-shots/` pour l'UI native) ; régénération du graphe (`tools/graph/graph.sh`) ; entrée dans `docs/knowledge/known-bugs.md` pour tout bug trouvé.
 
 ### 7.1 « Où regarder » — carte rapide
@@ -462,19 +520,39 @@ Phase 6 (config + VIP)       F1 → F2 → F3 → F4      (F1 peut démarrer dè
 | Écarts de données connus | `docs/workflows/EDENFR-GAPS.md` (G1-G40) |
 | Se repérer dans le code | `tools/graph/graph.sh query "…"` ; `tools/graph/graph.sh portage query "…"` |
 
-### 7.2 Décisions closes (2026-11-07) et points à préciser
-**Closes** : durabilité 1 pt / 10 s ; animations à retrouver (collect01/02 trouvées, association à prouver) ; contrats PNJ = à lire dans les tables FR (D7) ; Limitless copié et versionné ; `ui_text_en.tsv` accessoire.
-**À préciser avant le lot concerné (propositions, une réponse courte suffit)**
-1. **B0 – base ou fichiers ?** Je recommande la base `content` + export git (§3.7). Confirmer. Si oui : la base de contenu partage-t-elle l'instance PostgreSQL `edenfr` (schéma `content`) ?
-2. **F – VIP** : paliers (VIP 1-3 ?) ou un seul statut ? Source d'attribution (achat boutique, commande admin, date d'expiration) ? Un VIP expire-t-il (`vip_until`) ? Les bonus VIP s'appliquent-ils aussi aux autres personnages du compte (par compte, cohérent avec l'admin par compte) ?
-3. **F – entrées de donjon** : le code fixe aujourd'hui 10 entrées/jour/intensité (`DungeonEntryRules.MaxDailyEntries`, décision antérieure : le wiki FR dit 2 solo / 10 multi). Quelle valeur par défaut visée : 10, ou 2/10 natif ? Les entrées bonus d'événement s'ajoutent-elles au plafond du jour ou donnent-elles des « tickets » reportables ?
-4. **F – respawn** : un réglage **par classe** d'instance (I1 : BTS/DD/Vingot) suffit-il, ou veux-tu aussi un réglage **par node** (ex. un boss précis) ?
-5. **A3 – association outil→animation** : si le décompilé ne tranche pas, acceptes-tu que je valide visuellement (jouer 812 et 813 sur chaque outil et te montrer les captures) ?
-6. **E – priorité de langue** : EN complet des objets d'abord, ou UI/menus d'abord (déjà prévu : UI d'abord) ?
-7. **Aide à la restauration** : veux-tu un écran admin « historique d'une entité » (voir/annuler les éditions précédentes, §3.7 point 3) en v1 ? (je le recommande : c'est la contrepartie de l'édition en direct.)
-**Ajouts pertinents que je propose (à valider)** : (a) *mode « bac à sable »* : une base `content` clonée pour tester une release avant publication ; (b) *tableau de bord de santé du contenu* (références cassées, items sans nom FR, textes CJK résiduels) généré à chaque release ; (c) *journal d'activité joueur VIP/admin* dans l'audit ; (d) *calendrier d'événements* (début/fin automatiques des événements et entrées bonus) lu dans la configuration plutôt que commutateurs manuels.
+### 7.2 Décisions (voir §1 D7-D17) et points restant à préciser
+**Closes** : durabilité 1 pt / 10 s ; animations à retrouver (`collect01/02`) ; contrats PNJ lus dans les tables FR ; Limitless copié et versionné ; `ui_text_en.tsv` accessoire ; base de données + export + historique annulable ; VIP = simple statut ; entrées 10 solo + 10 multi ; hiérarchie des types de map ; éphéméride ; réseau no-lag ; nettoyage disque listé (§9).
+**Points restant à préciser (uniquement ceux qui changent le code)** : voir §7.2.2, après les réponses du lead dév ci-dessous.
+
+### 7.2.1 Réponse du lead dév : 
+1. Coté sgbd pour le contenu tu fais ce que tu veux, l'essentiel c'est : Table TOUTES SANS EXCEPTION utile (pas de table mortes) avec commentaires pour TOUTES les tables existantes, des descriptif pour CHAQUE colonne de chaque table etc, tout doit être documenté, sur la gestion des databases je veux une database selon les données statique (comme item, npc...) et une database selon les données actives (joueurs, guilde actuels...) avec donc un tri des tables attribués pour les database, je veux pas 50 database différentes, 2 a 3 MAXIMUM selon si le site web nécessaire une database ou autre, une database statique et une dynamique et SI BESOIN en évitant un pattern dégueulasse une dernière database pour autre chose. Je veux également que les noms et les data ne soit pas que des id ou des choses incompréhensibles pour un humain, il faut des nommages même si pas utile techniquement parlant, des datas claire (si je vais voir les data je dois comprendre ce que je lis et pas voir des relations entre tables ultra complexe, on veut de la performances mais surtout des datas clair).
+2. Le vip n'est qu'un "simple" status, VIP ou pas VIP, le but c'est des "petits buff" pour les joueurs (mais qui techniquement sont complexe a envisagé dans un code propre comme l'exemple du temps de chargement quand on craft), ça pourrait aussi potentiellement donner des status comme un bonus d'exp % ou de drop % (comme les charmes) ou autre style de buff.
+3. Il est vrai que dans l'eden officiel c'était 2 entrée solo et 10 entrée multiplayer, en revanche on va faire une modification ici pour une base de 10 entrée solo et 10 multiplayer (changeable via typiquement un status VIP ou alors le config.txt du serveur via par exemple un correctif ou un event bonus.)
+4.  La question est assez complexe, il faut faire par hiérarchisation. On sait que les instances (BTS etc) sont pas comme les donjons classique (par exemple dans une instance si on meurt c'est comme un dj on perd pas d'exp) mais techniquement c'est aussi comme une vrai map (on peut croiser des gens sans être dans un groupe et y'a pas de "sens" a suivre obligatoire). Donc premièrement un tri par type de map (normal, donjons, instances...), ensuite il faut des moyens d'éditions PAR MAP dans chacun des cas, édition de stats des mobs et de leur drop et exp donné etc. (Oublie pas que les illusions destructrices incarne également un "mode de jeu" donc un type de map différents des donjons classique, des instances et des map normal, c'est des "donjons" spéciaux, et les trials aussi sont "différents" des autres types de map). Donc pour chaque hiérarchie il faut des moyens d'édition complet pour ajouter, modifier, supprimer du contenu, et surtout l'axe compliqué c'est que TOUT doit être a la fois ergonomique mais fonctionnel avec une UX/UI pratique et surtout optimisé.
+5. Je veux le meilleur donc fait selon ce que tu estimes le plus propre a faire.
+6. je dirais Item, mais warning y'a pas que les items, y'a les quetes les npc les textes etc, réalise une vraie organisation pour tout le contenu FR->EN a créer, dans tous les cas le FR est source de vérité absolue.
+7. Oui un historique est HAUTEMENT conseillé, l'historique doit également être supprimable, permettre de revenir en arrière d'une modification etc
+Pour tes idées supplémentaire, (a) Oui un bac a sable est une bonne idée si bien réalisé et si j'ai assez d'espace disque,(b) je pense que tu as pas tord sur le coté tableau de bord, tant que l'UI n'est pas envahissante et que tu fais une hiérarchisation propre des panels et sous-panels pour voir les soucis potentiel, voir des suggestions... (c) Oui ça me va tant que bien réalisé et conceptualisé. (d) Oui, une sorte d'almanax comme sur dofus mais pour eden eternal avec des buffs journalier pour farm un donjon spécifique ou un type de batiment de ville de guilde spécifique ou un taux d'exp augmenté etc, ça pourrait être une voie super intéressante tu as eu une super idée, essaie de creuser ça pour une personnalisation plus complexe et plus simple a éditer ou créer (peut être une logique comme skript ? ou des variable config.txt ? je sais pas mais essaie de trouver des idées sympa).
+
+
+
+8. Je rajoute une informations supplémentaire, pour les donjons classique on est d'accord que t'a bien fait en sorte que si 2 joueurs rentre dans un même donjons sans être dans le même groupe, ils ne se voient pas ? un donjon c'est privé a un personnage ou au groupe d'une personne.
+9. Je rajoute une informations supplémentaire, sur tout l'axe de l'idée "serveur qui envoie les informations de tout le contenu du jeu au client en no-lag only", il est obligatoire de bien réfléchir a la méthodologie technique pour faire ça "no-lag", je rappel que le jeu doit pouvoir tank 50 joueur actif qui vont pas attendre simplement, ils feront tous quelque chose en même temps et parfois certains auront besoin des mêmes infos statique ou dynamique a un temps d'intervalle court etc, il est nécessaire donc de réfléchir au moyen d'optimiser tout ce bordel réseau, conceptualisant (pour être certain que 50 joueurs pourront jouer sans lag) l'idée que 300 joueurs actif serait présent en même temps et que même là ça ne doit pas lag (le serveur n'aura pas de scaling vertical comme ferait kubernetes, il n'y a qu'un serveur qui tournera donc tout doit être millimétré et optimisé sans perdre en qualité donc cherche les bonnes méthodes a employer).
+10. Vérifie si c'est possible de libérer de l'espace via le dossier "/home/ster2lune/Bureau/reverseden/portage/", peut être y-a t-il des dossier lourd et statique déjà dupliqué dans le projet actuel ? fait moi la liste des dossier ainsi que des raisons de pourquoi ces dossier serait supprimable sans danger ou perte de data importante pour le projet actuel (projet actuel étant "/home/ster2lune/Bureau/reverseden/eden-godot").
+
+### 7.2.2 Analyse des réponses du lead dév et points à préciser (2026-11-07, 3ᵉ passe)
+Chaque réponse a été traduite en décision (§1 D11-D17) et en lot. Contradictions et risques repérés :
+1. **Cohérence de ma première version** : j'avais proposé des tables génériques `row(table,id,cells jsonb)`. Ce n'est **pas lisible** : remplacé par des tables typées et des colonnes de libellé (§3.7).
+2. **Séparation en deux bases et clés étrangères** : impossibles entre deux bases PostgreSQL ; remplacées par identifiants métier + test de cohérence à la release. *À confirmer* : acceptes-tu l'absence de contrainte SQL entre `eden_live` et `eden_content` ? (alternative : une seule base à deux schémas, contraintes possibles, mais tu as demandé deux bases ; je recommande deux bases.)
+3. **VIP simple vs « petits buffs complexes »** : une partie passe par des enchants natifs (EXP %, drop %), le reste par le moteur de modificateurs (F5). *À préciser* : liste des **premiers buffs VIP** souhaités (EXP/drop %, temps de craft, tick de récolte, entrées de donjon ?) avec leurs valeurs initiales.
+4. **Éphéméride** : *à préciser* : durée d'un effet (1 jour comme Dofus, ou aussi hebdomadaire) ; l'effet est-il **annoncé la veille** (planifier sa journée) ou découvert le jour même ? ; un joueur peut-il le **consulter hors jeu** sur le site (je suppose oui) ?
+5. **Spawns dans la base** : sortir les populations des fichiers `sNNN.ini` est un gros chantier (574 scènes, lus par le client **et** le serveur). Proposition : v1 = édition par **surcharges** par map (`map_monster_override`, pas de déplacement de spawn) ; v2 = édition complète des spawns. *À valider.*
+6. **Pénalité d'EXP en instance partagée** : le propriétaire veut aucune perte (comme un donjon). C'est un changement de comportement par rapport au code (§4.4) : *à confirmer* que cela vaut aussi pour les champs de bataille et arènes (je suppose non).
+7. **Suppression de l'historique** : *à préciser* la rétention par défaut (je propose 180 jours) et qui peut purger (niveau 5 uniquement).
+8. **Disque** : 29 Go libres sur 561 (95 %). Les bases sont minuscules (≈ 120 Mo au total) : le bac à sable ne pose pas de problème ; c'est le nettoyage §9 qui compte.
 
 ### 7.3 Journal de ce plan
+- 2026-11-07 (3) : réponses du lead dév 7.2.1 intégrées. Mesures : 187 tables en base (71 mortes, 43 commentées, 26/2407 colonnes) ; contenu 10,9 Mo compressé ; `IsDungeonNode` défini à 2 endroits ; donjons privés confirmés ; `portage/` : ~63 Go uniques (hardlinks vérifiés). Ajouts : §3.7 refait, §3.8, §4.4, F2/F4/F5 refaits, §6.2b, §9, lots DB-A/B/C et N.
 - 2026-11-07 (2) : retour du propriétaire. Fait : copie Limitless versionnée (commit `10dc582`, sans push) ; animations `collect01/02` retrouvées dans `motion.ini` ; BTS = node 224 ; contrats PNJ FR à relire (D7) ; ajout §0.4, §3.7, lot F.
 - 2026-11-07 : rédaction. Recherches faites : code client/serveur (layers, dialogue, récolte, 502), logs du jour, données `c_node`/`scene`/`c_familycombine`/`c_item`/`c_familycollect`, portail Limitless. **Non vérifié** : la cause exacte de A2 (hypothèses H1-H5 à départager par capture), l'existence d'une animation de minage native, le contenu réel de la base (`psql` introuvable), l'état de la base de test du propriétaire.
 
@@ -499,24 +577,43 @@ Phase 6 (config + VIP)       F1 → F2 → F3 → F4      (F1 peut démarrer dè
   - *Événements* : voir F3.
 - **Acceptation** : 60+ clés au registre ; test « clé inconnue / hors bornes → refus + ancienne valeur » ; test de résolution en cascade ; modifier `Craft.alchemy.CastSeconds` pendant une session change le prochain cast sans redémarrage (log + capture de la barre de cast).
 
-### F2 — Entrées de donjon configurables
-- Remplacer `MaxDailyEntries` (constante) par `Config.Resolve("Dungeon.MaxDailyEntries.*", {node, classe, compte})`. Compteurs existants : table `game.player_dungeon_entries` (`eden_server/Database/025-dungeon-entries.sql`, `EvaluateRepository.cs:138-156`).
-- **Entrées bonus** : modèle « solde d'entrées bonus » par compte et par classe (`dungeon_bonus_entries`), alimenté par (a) un événement (F3), (b) une commande admin, (c) le profil VIP (F4). Consommées **après** le quota du jour ; expiration configurable.
-- Le client affiche le quota restant (paquet de statut de donjon existant, `ZoneEntryFlow.Dungeon.cs`) : vérifier que bonus + quota s'additionnent à l'écran.
-- **Acceptation** : réglage 3 entrées/jour → 4ᵉ refusée avec message FR ; événement « +2 entrées » → 5 autorisées ; reset à `Dungeon.ResetHour` ; tests unitaires de la règle.
+### F2 — Entrées de donjon configurables (décision D14)
+- **Défaut du jeu : 10 entrées solo + 10 entrées multijoueur par jour** (le natif officiel donnait 2 solo / 10 multi ; l'écart est voulu). Remplacer la constante `DungeonEntryRules.MaxDailyEntries` (`DungeonCatalog.cs:64`) par `Config.Resolve("Dungeon.MaxDailyEntries.Solo|Multi", contexte)` ; valeurs par défaut 10/10 dans `eden_content.rule`.
+- Modifiable par : statut **VIP** (F4), **`server.config.txt`** (correctif global), **événement ou éphéméride** (F3/F5), commande admin, réglage **par map** (`map_entry_rule`, §4.4). Cumul documenté : `défaut de la map` → `règle de mode` → `événement/éphéméride` → `VIP`, plafonné par `Dungeon.AbsoluteMaxEntries`.
+- **Entrées bonus** : solde `dungeon_bonus_entry(account_id, map_kind, remaining, expires_at, source)` dans `eden_live`, consommé après le quota du jour.
+- Compteurs : `game.player_dungeon_entries` (`025-dungeon-entries.sql`, `EvaluateRepository.cs:138-156`). Le client affiche quota + bonus.
+- **Acceptation** : réglage 3 → 4ᵉ entrée refusée (message FR) ; VIP +2 → 5ᵉ autorisée ; événement +2 s'ajoute ; reset à `Dungeon.ResetHour` ; tests unitaires de la cascade.
 
 ### F3 — Événements configurables (extension du `Event.*` actuel)
 - Événement = bloc de configuration **daté** : `Event.<nom>.Start/End` (calendrier automatique), `ExpPct/DropPct/GoldPct` (existants) + `DropItem` (déjà prévu en commentaire) + **`DungeonBonusEntries`**, `CraftDurationPct`, `RespawnPct`, `GatherRatePct`, `ShopDiscountPct`. Plusieurs événements actifs se cumulent selon une règle documentée (additif par défaut, plafonds configurables).
 - **Acceptation** : un événement planifié s'active et s'éteint tout seul (horloge simulée en test) ; annonce en jeu (broadcast existant).
 
-### F4 — Base VIP (squelette extensible, pas le système complet)
-- **Modèle** : `account.vip` {`account_id`, `tier` (0 = non VIP), `vip_until` (nullable = permanent), `granted_by`, `granted_at`} ; **par compte** (cohérent avec l'admin par compte). Dérivé à chaque entrée en zone dans `EntryState.VipTier` (comme le privilège admin, lot D0) ; rafraîchi à l'expiration.
-- **Profils VIP = couche de configuration** : `Vip.<tier>.<clé de F1> = valeur` (ex. `Vip.1.Craft.alchemy.DurationMultiplier = 0.8`, `Vip.2.Level.Max = 95`, `Vip.1.Dungeon.BonusEntries = 2`, `Vip.1.ExpRate = 120`, `Vip.1.Gather.TickSeconds = 25`). Aucun code spécifique « VIP » dans les systèmes de jeu : ils appellent `Config.Resolve(clé, contexte)` et le contexte contient le palier — **c'est ce qui permet de modifier des pans entiers du gameplay sans coder**.
-- **Administration** : commande admin `//vip <compte> <palier> [jours]` + écran du panneau (lot D6) + page du site ; historique dans l'audit.
-- **Client** : badge/état VIP dans le profil (affichage simple), aucune logique côté client.
-- **À ne PAS faire en v1** : boutique VIP, paiement, avantages cosmétiques, calendrier d'expiration automatisé complexe. Seulement la base.
-- **Acceptation** : un compte VIP 1 voit un craft durer 20 % de moins qu'un compte normal (deux comptes, même plan, logs `[Config] resolve … vip=1`) ; retrait du VIP → retour au comportement normal au prochain calcul ; test unitaire de la cascade avec VIP.
-- **Garde-fous** : `Level.Max` VIP ne dépasse jamais le plafond de données (90) sans clé explicite `Level.AbsoluteMax` ; chaque clé déclare si elle est « VIP-surchargeable » (liste blanche dans le registre).
+### F4 — VIP : un simple statut, des « petits buffs » (réponse n°2, décision D14)
+- **Modèle minimal** : `eden_live.account.vip_status(account_id, is_vip, vip_since, vip_until NULL=permanent, granted_by, note)`. **Pas de paliers.** Par compte (cohérent avec l'admin par compte).
+- **Deux mécanismes complémentaires, un seul concept pour le joueur** (« je suis VIP ») :
+  1. **Statut visible** (icône, infobulle) posé à l'entrée en zone via le système de statuts existant (`2026-11-03-status-system.md`) pour tout ce que le **moteur d'enchants natif sait déjà faire** : bonus d'EXP % (`ItemExpRateUp`, 2911), de drop % (`ItemDropRateUp`, 2902 — comme les charmes), etc. Zéro code nouveau.
+  2. **Modificateurs de gameplay** pour ce que le natif ne sait **pas** exprimer en enchant (aucun enchant de « temps de craft », de « tick de récolte », d'« entrées de donjon » : vérifié dans `Eden.Core/Data/EnchantCommands.cs`, seuls `ElfCollectTime/Rate/CombineRate` existent pour les elfes) : fournis par le **moteur de modificateurs** (F5) — `Config.Resolve(clé, contexte)` où le contexte contient `is_vip`. **Aucun `if (vip)` dans les systèmes de jeu.**
+- **Table de bonus VIP = données** (`eden_content.rule` ou fichier `vip.rules`), ex. : `craft.cast_seconds ×0.8`, `craft.duration ×0.9`, `gather.tick_seconds ×0.85`, `dungeon.entries.solo +2`, `dungeon.entries.multi +2`, `exp ×1.10`, `drop ×1.10`. Chaque clé du registre déclare si elle est « surchargeable par VIP » (liste blanche).
+- Administration : `//vip <compte> [jours]`, écran du panneau, page du site ; historique dans l'audit.
+- **À ne pas faire en v1** : boutique/paiement, paliers, cosmétiques.
+- **Acceptation** : deux comptes (normal/VIP), même plan : le cast VIP est 20 % plus court (log `[Config] resolve craft.cast_seconds … vip=1`) ; l'icône VIP apparaît ; retrait du VIP → comportement normal au prochain calcul ; test de cascade.
+
+### F5 — « Éphéméride d'Eden » et moteur de modificateurs (idée Almanax, décision D13)
+**Concept** : chaque jour (ou semaine/événement), un **effet du jour** s'applique à tout le serveur : « aujourd'hui +25 % d'EXP dans Carrière Angor », « +50 % de réussite des fonderies », « le Labo Vingot donne +1 entrée bonus », « récolte de pioche ×1,5 », « −20 % de temps de craft d'alchimie ». Affiché dans un panneau en jeu (aujourd'hui / demain / semaine), annoncé à la connexion, consultable sur le site.
+**Un seul moteur pour VIP, événements, éphéméride, charmes et réglages de map** : le **moteur de modificateurs**.
+- **Modificateur** = `{ cible, opération, valeur }` : `cible` = clé du registre (F1), `opération` ∈ {`multiplier`, `ajouter`, `fixer`, `plafonner`}, `valeur` numérique.
+- **Règle** = `{ quand, alors[], jusqu'à, source, priorité }` en **JSON/TSV déclaratif** (pas de langage de script) :
+  ```
+  quand : { map_kind: "dungeon", map_family: "carriere_angor" }   # ou { building_type: "alchimie" } / { account.is_vip: true } / { class: 12 }
+  alors : [ { cible: "exp.rate", op: "multiplier", valeur: 1.25 }, { cible: "dungeon.entries.solo", op: "ajouter", valeur: 1 } ]
+  ```
+- **Pourquoi pas un langage de script** : sécurité (aucun code arbitraire côté serveur), testabilité (une règle = une donnée validable), hot-reload trivial, éditable par formulaire dans le panneau, diff lisible dans l'historique. Si un besoin dépasse ce format, ajouter un **nouveau champ `quand` ou une nouvelle opération** au moteur (un fichier, testé), jamais un interpréteur.
+- **Résolution** (une seule fonction, testée) : `défaut global → type de map → map → éphéméride/événement → VIP → buff personnel (charme/enchant)` ; les `multiplier` se composent, les `ajouter` se somment, `plafonner` s'applique en dernier ; un **journal de résolution** (`explain`) dit pourquoi une valeur vaut X (indispensable à l'admin et aux tests).
+- **Rotation déterministe** : `effet_du_jour = pool[hash(date, graine_serveur) mod n]` avec pondération et règles d'exclusion (pas deux fois le même thème de suite, alternance donjon / ville de guilde / EXP) ; l'admin peut **forcer** un jour, **verrouiller** un calendrier ou **réutiliser un modèle** ; pas de tâche planifiée fragile : l'effet se déduit de la date.
+- **Modèles d'effets** (bibliothèque dans `eden_content.calendar`) : *Journée du donjon* (cible = une famille de donjons), *Journée du bâtiment* (type de bâtiment de ville : durée/réussite), *Journée d'EXP*, *Journée de butin*, *Journée de récolte*, *Journée d'entrées bonus*. Création d'un nouveau modèle = formulaire (nom FR/EN, icône, description avec variables `{valeur}`, règles).
+- **Sources de données existantes à réutiliser** : tables natives `c_festival.ini` (647 lignes, bonus de fête), `c_activity.ini` (2 679 lignes, activités datées), `c_recommendactivity.ini` (1 212 lignes), `c_destinyevent.ini` : à **lire d'abord** pour ne pas dupliquer les événements officiels ; l'éphéméride est un ajout du serveur, pas un remplaçant.
+- **Client** : panneau « Éphéméride » (icône dans le HUD) alimenté par le delta de contenu `calendar` ; aucune logique.
+- **Acceptation** : 7 jours simulés (horloge injectée) → séquence conforme aux règles d'exclusion ; effet actif visible en jeu ; un effet « +25 % EXP en Angor » change réellement le gain (log `explain`) ; édition d'un modèle sans redémarrage ; tests de la fonction de résolution (≥ 30 cas).
 
 | Lot | Dépend | Preuves |
 |---|---|---|
@@ -524,3 +621,24 @@ Phase 6 (config + VIP)       F1 → F2 → F3 → F4      (F1 peut démarrer dè
 | F2 | F1, A5 | Test live quota/bonus sur 2 comptes |
 | F3 | F1, F2 | Test calendrier + annonce |
 | F4 | F1, D0 | Test live 2 comptes (normal/VIP) |
+| F5 | F1, B3 | Tests de résolution + simulation 7 jours + capture du panneau |
+
+---------------------------------------------------------------------------
+## 9. Libération d'espace disque (réponse n°10) — AUCUNE suppression sans accord explicite
+---------------------------------------------------------------------------
+**Disque** : 561 Go, 504 Go utilisés, **29 Go libres (95 %)**. `portage/` fait 74 Go ; `eden-godot/` 43 Go.
+**Méthode** : deux arbres peuvent partager des fichiers par **liens physiques** (ADR-0004) ; supprimer un des deux ne libère alors **rien**. Mesure faite avec `du -sm eden-godot <dossier>` (compte les inodes déjà vus une seule fois) et comparaison d'inodes.
+| Dossier de `portage/` | Taille propre (hors liens) | Pourquoi supprimable / risques | Verdict |
+|---|---|---|---|
+| `eden_godot/godot_project/assets` (dérivés GLB/PNG du client 4.7) | **27,5 Go** | `eden-godot` n'a **pas** de dossier `assets/` : il lit les formats natifs via `raw_assets -> ../corpus/fr-full` (loaders NIF/KF/DDS). Les dérivés sont **régénérables** par `tools/nif2gltf` depuis `corpus/fr-full`. Perte : on ne peut plus lancer le **client 4.7 de référence** avec ses assets (comparaison côte à côte) | Supprimable si tu n'as plus besoin de lancer le client 4.7 |
+| `eden_godot/dist` (exports/builds) | **17,7 Go** | Sorties de build régénérables ; aucune source | Supprimable sans danger |
+| `eden_godot/godot-shots` (captures anciennes) | **8,3 Go** | Captures de session ; `ref-shots/` (95 Mo, comparaison) est un autre dossier. **Attention** : `eden_godot/godot_project/scripts/player/PlayerController.cs:1566` écrit encore dans ce chemin en dur — à corriger avant | Supprimable après correction du chemin |
+| `corpus/official` (corpus officiel/EN-US) | **9,4 Go** | Interdit d'usage par `AGENTS.md` (EDENFR pur). **Possiblement irremplaçable** (autre source) | **Sauvegarder sur un disque externe avant** ; puis supprimable |
+| `corpus/original-fr` | 352 Mo | Archive FR d'origine ; petit ; peut servir de preuve de provenance | À garder |
+| `eden_server` (copie ancienne du serveur) | 431 Mo | `eden-godot/eden_server` est l'arbre actif ; **seul usage restant** : l'oracle « Reforged » éventuel de `ReforgedDataLocator` (`PortageRelative`, désactivé par `EDEN_REFORGED_DB`) et `server_us` (tables US de référence, 200 Mo) | Supprimable après vérification que `EDEN_REFORGED_DB` pointe bien sur `corpus/fr-full/data/db` (c'est le cas dans `start-native.sh`) ; garder `server_us` si on veut le rapport de divergence |
+| `knowledge` (150 Mo), `ref-shots` (95 Mo), `futur-feature` (8 Mo), `docs`, `tools` | ≈ 0,25 Go | Anciennes copies ; `knowledge/tools/*.py` écrit encore vers `portage/knowledge` en dur | À garder ou déplacer |
+| `corpus/fr-full` (9 Go) et `re` (1,4 Go) | **0 Go** | **Liens physiques** vers `eden-godot/corpus/fr-full-pak-2026-10` et `eden-godot/re` (mêmes inodes, vérifié sur 2 000 fichiers) : les supprimer ne libère rien | Ne rien faire |
+**Total réellement libérable dans `portage/`** : jusqu'à **≈ 63 Go** (27,5 + 17,7 + 8,3 + 9,4) ; sans le client 4.7 et sans `corpus/official` : ≈ **26 Go** (dist + godot-shots). 
+**Dépendances à traiter AVANT toute suppression** : (1) `tools/graph/graph.sh portage …` indexe `../portage` (garder au moins `portage/eden_godot/godot_project/scripts` et `docs`, ≈ 6 Mo, pour le graphe de référence « équivalent de Y dans l'ancien client ») ; (2) `PlayerController.cs:1566` (captures) ; (3) `tools/legacy-flax/audit/gen_fr_supplements.py:10` et `knowledge/tools/*.py` (chemins en dur, outils d'archive).
+**Autres gisements dans `eden-godot/` (hors demande, à titre d'information)** : `artifacts/corpus-sheets` 7,2 Go, `artifacts/packs` 6,6 Go, `artifacts/corpus-png` 4,1 Go (tous régénérables, ignorés par git) ; `corpus/fr-full-pak-2026-10` 9 Go est le **même contenu** que `portage/corpus/fr-full` (liens physiques) : à ne supprimer qu'avec lui si plus aucun outil ne le cite.
+**Procédure proposée** : (1) sauvegarde externe de `corpus/official` ; (2) corriger les 3 chemins en dur ; (3) lancer un build + `tools/test.sh` ; (4) supprimer dossier par dossier en commençant par `dist`, mesurer `df` après chaque étape ; (5) consigner dans `docs/workflows/`.

@@ -21,3 +21,5 @@ knowledge/graphify-out/graph.json
 *.pem
 .env
 __pycache__/
+
+/archive/

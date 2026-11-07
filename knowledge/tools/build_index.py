@@ -7,7 +7,7 @@ import json
 import re
 from pathlib import Path
 
-ROOT = Path("/home/ster2lune/Bureau/reverseden/portage/knowledge")
+ROOT = Path("/home/ster2lune/Bureau/reverseden/eden-godot/knowledge")
 DATA = json.loads((ROOT / "tools/index_data.json").read_text(encoding="utf-8"))
 
 # ---------------------------------------------------------------- thèmes

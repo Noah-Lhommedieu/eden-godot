@@ -17,7 +17,7 @@ from urllib.parse import unquote, quote
 import html2text
 from bs4 import BeautifulSoup, Tag
 
-ROOT = Path("/home/ster2lune/Bureau/reverseden/portage/knowledge")
+ROOT = Path("/home/ster2lune/Bureau/reverseden/eden-godot/knowledge")
 WIKI3_SRC = ROOT / "raw/wiki-fr"
 WIKI2_SRC = ROOT / "raw/guides-fr"
 

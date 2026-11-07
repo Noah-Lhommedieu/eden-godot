@@ -85,18 +85,19 @@ La qualité de code doit être **irréprochable** : le code doit rester maintena
 | D10 | Durabilité des outils de récolte : 180 points ≈ 30 min (1 point / 10 s). Animations de récolte : elles existent, il faut les retrouver (§A3). `ui_text_en.tsv` = banque accessoire, jamais dépendance. | A3, E. |
 
 ---------------------------------------------------------------------------
-## 1bis. LOT Z — Libération d'espace disque (À FAIRE EN PREMIER, décision du propriétaire 7.2.3 n°8)
----------------------------------------------------------------------------
-Autorisation : exécuter ce qui est **sans danger** ou qui ne demande qu'une **petite mise à jour** pour le devenir. Détail des tailles et des raisons : §9. **Ordre d'exécution** (mesurer `df -h /` après chaque étape, consigner dans `docs/workflows/disk-cleanup-2026-11.md`) :
-| # | Action | Gain | Prérequis (petite mise à jour) | Statut |
-|---|---|---|---|---|
-| Z1 | Supprimer `portage/eden_godot/dist` (builds régénérables) | 17,7 Go | aucun | sans danger |
-| Z2 | Corriger `PlayerController.cs:1566` (captures écrites dans `portage/godot-shots`) → dossier `artifacts/shots/`, puis supprimer `portage/eden_godot/godot-shots` | 8,3 Go | 1 ligne + build | sans danger après correctif |
-| Z3 | Supprimer `portage/eden_server` hors `server_us` (copie ancienne du serveur) après avoir confirmé que `EDEN_REFORGED_DB` pointe sur `corpus/fr-full/data/db` (déjà le cas dans `start-native.sh`) | ≈ 0,23 Go | vérification | sans danger |
-| Z4 | Supprimer `portage/eden_godot/godot_project/assets` (dérivés du client 4.7, régénérables par `tools/nif2gltf`) en **gardant** `scripts/`, `docs/` pour le graphe de référence (`tools/graph/graph.sh portage`) | 27,5 Go | vérifier que `graph.sh` n'indexe pas `assets/` ; vérifier qu'aucun test ne lit `portage/…/assets` | sans danger si accord « on n'a plus besoin de lancer le client 4.7 » |
-| Z5 | `corpus/official` (9,4 Go) : **NON supprimé** tant qu'une sauvegarde externe n'existe pas | 9,4 Go | copie sur disque externe fournie par le propriétaire | **en attente** |
-| Z6 | `artifacts/` régénérable de `eden-godot` (`corpus-sheets` 7,2, `corpus-png` 4,1, `packs` 6,6 Go) | jusqu'à 17,9 Go | regénération testée (`tools/…`) avant de supprimer | optionnel, après Z1-Z4 |
-**Règles de sécurité** : (1) `rm` uniquement sur des chemins **vérifiés par `ls`** juste avant ; (2) jamais `corpus/fr-full` ni `re` de `portage` (liens physiques : 0 Go à gagner, risque de confusion) ; (3) après chaque suppression : `tools/build.sh` + un lancement du client ; (4) arrêt immédiat et rapport si un outil échoue à cause d'un chemin manquant. Gain visé sans Z5/Z6 : **≈ 53 Go** (29 Go libres → ≈ 82 Go).
+## 1bis. LOT Z — Libération d'espace disque — **FAIT le 2026-11-07** (autorisé par le propriétaire : `portage/` n'est plus nécessaire)
+**Résultat** : espace libre **29 Go → 82 Go** (disque 95 % → 85 %). **`/home/ster2lune/Bureau/reverseden/portage/` n'existe plus.** Build `tools/build.sh` : 0 erreur, 0 avertissement ; `tools/test.sh` : **NetTests 939 ✔, Eden.Core.Tests 967 ✔, Eden.Tests 1 799 ✔, 0 échec** (après les suppressions).
+**Déroulé** (mesures `df` à chaque étape) : `portage/eden_godot/dist` (+17 Go) → `eden_godot/godot-shots` (+8 Go) → `portage/godot-shots` → `eden_godot/godot_project/assets` (+27 Go) → build + tests → suppression du reste de `portage/` (le reste n'avait plus rien d'unique, ou était en **liens physiques** vers `eden-godot` : `corpus/fr-full` et `re` — supprimer ces noms ne touche pas les fichiers d'`eden-godot`, vérifié : `re/index.sqlite` et `corpus/fr-full-pak-2026-10` toujours présents).
+**Conservé avant suppression (déplacement instantané, même disque) dans `eden-godot/archive/portage/` — dossier ignoré par git (`/archive/` ajouté à `.gitignore`), 9,6 Go** :
+| Élément | Pourquoi gardé |
+|---|---|
+| `corpus/official` (9,4 Go) | source non-EDENFR potentiellement irremplaçable (jamais utilisée par le jeu : règle `AGENTS.md`) ; remplace la « sauvegarde externe » demandée |
+| `corpus/original-fr` (352 Mo, avec `MANIFEST.txt` et `restore.sh`) | fichiers FR d'origine pour un retour arrière du corpus |
+| `docs/` (plans de migration, `RAPPORT-CORPUS-OFFICIEL`, `ROLLBACK-CORPUS`, `ANALYSE-DONNEES-PROVENANCE`…), `tools/audit`, `eden_godot/{docs,ini2cs}` | seuls exemplaires |
+| `eden_godot/scripts` (ancien code du client 4.7, 5,5 Mo) | référence de lecture ; sa version indexée reste dans `tools/graph/portage/` |
+| `ui_textures_themes` (3 Mo), `eden_server_uniques/` (captures réseau `mitm_native_entry.log`, `ItemMallService.cs`, migration `011-drop-fnmember1.sql`) | uniques |
+**Correctifs de chemins en dur faits** : `PlayerController.cs` (`ShotsDir` → `eden-godot/artifacts/shots`), `knowledge/tools/{build_index,extract_fr}.py` (→ `eden-godot/knowledge`), `tools/graph/graph.sh` (`portage` : requêtes OK sur le graphe **figé** de `tools/graph/portage/`, la mise à jour affiche un message clair). **Reste** : `tools/legacy-flax/audit/gen_fr_supplements.py:10` (script d'archive, chemin mort, non utilisé), `ReforgedDataLocator.PortageRelative` (chemin de repli devenu inutile, désactivé par `EDEN_REFORGED_DB`) — à nettoyer au lot B (dette).
+**Non touché** : `eden-godot/artifacts/` (Z6 : 17,9 Go régénérables, optionnel, pas nécessaire maintenant) et `corpus/fr-full-pak-2026-10` (9 Go, ancienne extraction, même contenu que l'ex-copie de portage ; à garder tant que `tools/` la cite).
 
 ---------------------------------------------------------------------------
 ## 2. LOT A — Bugs bloquants constatés par le propriétaire (priorité absolue)
@@ -509,7 +510,7 @@ Les volumes réels sont obtenus **après** application de `scope.json` (≤ Lv90
 ## 7. Ordre d'exécution, dépendances, preuves
 ---------------------------------------------------------------------------
 ```
-Phase -1 (disque)           Z1 → Z2 → Z3 → Z4 (Z5 attend la sauvegarde ; Z6 optionnel)
+Phase -1 (disque)           FAIT (lot Z)
 Phase 0 (bloquants joueur)   A1 → A2 → A5 → A4 → A3      (indépendant du reste, démarrer ici)
 Phase 1 (fondations)         C (définitions) ‖ B1 (Eden.Content, ADR-0003) ‖ D0 (ADR)
 Phase 2 (contenu unique)     B2 (migration S_* → c_*) → B3 (hot-reload) → B5 (couverture services)
@@ -580,6 +581,7 @@ Chaque réponse a été traduite en décision (§1 D11-D17) et en lot. Contradic
 8. Réalise la libération de stockage pour tout ce qui est sans danger ou qui nécessite une simple petite mise a jour pour être sans danger (met en premier dans ton plan d'action)
 
 ### 7.3 Journal de ce plan
+- 2026-11-07 (5) : lot Z EXÉCUTÉ (`portage/` supprimé, 29 → 82 Go libres, build + 1 799 tests verts, archive 9,6 Go dans `archive/portage/`). Moteur de modificateurs F6 : le VIP ne passe plus par un enchant natif.
 - 2026-11-07 (4) : réponses 7.2.3 intégrées : lot Z (disque) placé en premier, VIP −25 %/+10 % EXP, calendrier 21 jours, reset 06:00 + deux systèmes de jours, règle d'EXP PvE/champ uniquement, 4 comportements de mobs à porter (non éditables).
 - 2026-11-07 (3) : réponses du lead dév 7.2.1 intégrées. Mesures : 187 tables en base (71 mortes, 43 commentées, 26/2407 colonnes) ; contenu 10,9 Mo compressé ; `IsDungeonNode` défini à 2 endroits ; donjons privés confirmés ; `portage/` : ~63 Go uniques (hardlinks vérifiés). Ajouts : §3.7 refait, §3.8, §4.4, F2/F4/F5 refaits, §6.2b, §9, lots DB-A/B/C et N.
 - 2026-11-07 (2) : retour du propriétaire. Fait : copie Limitless versionnée (commit `10dc582`, sans push) ; animations `collect01/02` retrouvées dans `motion.ini` ; BTS = node 224 ; contrats PNJ FR à relire (D7) ; ajout §0.4, §3.7, lot F.
@@ -620,9 +622,9 @@ Chaque réponse a été traduite en décision (§1 D11-D17) et en lot. Contradic
 ### F4 — VIP : un simple statut, des « petits buffs » (réponse n°2, décision D14)
 - **Modèle minimal** : `eden_live.account.vip_status(account_id, is_vip, vip_since, vip_until NULL=permanent, granted_by, note)`. **Pas de paliers.** Par compte (cohérent avec l'admin par compte).
 - **Deux mécanismes complémentaires, un seul concept pour le joueur** (« je suis VIP ») :
-  1. **Statut visible** (icône, infobulle) posé à l'entrée en zone via le système de statuts existant (`2026-11-03-status-system.md`) pour tout ce que le **moteur d'enchants natif sait déjà faire** : bonus d'EXP % (`ItemExpRateUp`, 2911), de drop % (`ItemDropRateUp`, 2902 — comme les charmes), etc. Zéro code nouveau.
-  2. **Modificateurs de gameplay** pour ce que le natif ne sait **pas** exprimer en enchant (aucun enchant de « temps de craft », de « tick de récolte », d'« entrées de donjon » : vérifié dans `Eden.Core/Data/EnchantCommands.cs`, seuls `ElfCollectTime/Rate/CombineRate` existent pour les elfes) : fournis par le **moteur de modificateurs** (F5) — `Config.Resolve(clé, contexte)` où le contexte contient `is_vip`. **Aucun `if (vip)` dans les systèmes de jeu.**
-- **Valeurs initiales décidées (7.2.3 n°3)** : **−25 % du temps actuel** pour **chaque temps de craft** (cast et durée des ordres), **chaque temps de plan de récolte**, et pour **la durabilité consommée par temps** dans l'usage des outils de ferme, mine et boule de cristal (donc ×0,75 sur la consommation : un outil dure ≈ 40 min au lieu de 30) ; plus un **statut permanent « VIP » : +10 % d'EXP personnage, +10 % d'EXP de classe, +10 % d'EXP de classe éveillée** — posé tant que le compte est VIP, **retiré automatiquement** quand le VIP s'arrête (statut recréé à chaque entrée en zone depuis `vip_status`, jamais persisté seul). Les −25 % passent par le moteur de modificateurs (`op: multiplier`, valeur 0,75) ; les +10 % d'EXP par l'enchant natif `ItemExpRateUp`/équivalent par type d'EXP (à vérifier s'il distingue personnage/classe/éveil, sinon via le moteur).
+  1. **Statut visible** (icône, infobulle) posé à l'entrée en zone via le système de statuts existant (`2026-11-03-status-system.md`) : **purement informatif** (enchant sans commande, id réservé `65100+`, texte FR/EN en contenu). **Ne porte aucune valeur de gameplay** (révision 7.2.3 : le couplage à l'enchant natif est abandonné, voir F6).
+  2. **Modificateurs de gameplay** (toutes les valeurs VIP, y compris l'EXP) fournis par le moteur F6 ; contrairement à ce que je pensais d'abord, les enchants natifs ne peuvent pas exprimer le temps de craft (aucun enchant de « temps de craft », de « tick de récolte », d'« entrées de donjon » : vérifié dans `Eden.Core/Data/EnchantCommands.cs`, seuls `ElfCollectTime/Rate/CombineRate` existent pour les elfes) : fournis par le **moteur de modificateurs** (F5) — `Config.Resolve(clé, contexte)` où le contexte contient `is_vip`. **Aucun `if (vip)` dans les systèmes de jeu.**
+- **Valeurs initiales décidées (7.2.3 n°3)** : **−25 % du temps actuel** pour **chaque temps de craft** (cast et durée des ordres), **chaque temps de plan de récolte**, et pour **la durabilité consommée par temps** dans l'usage des outils de ferme, mine et boule de cristal (donc ×0,75 sur la consommation : un outil dure ≈ 40 min au lieu de 30) ; plus un **statut permanent « VIP » : +10 % d'EXP personnage, +10 % d'EXP de classe, +10 % d'EXP de classe éveillée** — posé tant que le compte est VIP, **retiré automatiquement** quand le VIP s'arrête (statut recréé à chaque entrée en zone depuis `vip_status`, jamais persisté seul). Les −25 % **et** les +10 % d'EXP passent par le **moteur de modificateurs unifié (F6)** : le VIP n'est **pas** un enchant natif (voir F6 pour la raison et le remplacement). Le statut visible « VIP » (icône) est un enchant **cosmétique sans commande**, recréé à chaque entrée en zone et jamais la source de la valeur.
 - **Table de bonus VIP = données** (`eden_content.rule` ou fichier `vip.rules`), ex. : `craft.cast_seconds ×0.8`, `craft.duration ×0.9`, `gather.tick_seconds ×0.85`, `dungeon.entries.solo +2`, `dungeon.entries.multi +2`, `exp ×1.10`, `drop ×1.10`. Chaque clé du registre déclare si elle est « surchargeable par VIP » (liste blanche).
 - Administration : `//vip <compte> [jours]`, écran du panneau, page du site ; historique dans l'audit.
 - **À ne pas faire en v1** : boutique/paiement, paliers, cosmétiques.
@@ -647,16 +649,40 @@ Chaque réponse a été traduite en décision (§1 D11-D17) et en lot. Contradic
 - **Client** : panneau « Éphéméride » (icône dans le HUD) alimenté par le delta de contenu `calendar` ; aucune logique.
 - **Acceptation** : 7 jours simulés (horloge injectée) → séquence conforme aux règles d'exclusion ; effet actif visible en jeu ; un effet « +25 % EXP en Angor » change réellement le gain (log `explain`) ; édition d'un modèle sans redémarrage ; tests de la fonction de résolution (≥ 30 cas).
 
+
+### F6 — Moteur de modificateurs unifié (refonte demandée en 7.2.3 : modularité, propreté, maintenabilité)
+**Question posée** : l'EXP VIP via un « enchant natif » pose-t-elle problème ? **Réponse : oui, on l'évite, et on en profite pour nettoyer.**
+**Ce que fait le code aujourd'hui [VÉRIFIÉ]** : le calcul d'EXP est **éparpillé en 5 endroits** sans modèle commun :
+| Où | Quoi |
+|---|---|
+| `Combat.Rewards.cs:477-490` | `exp = ExpReward × ServerConfig.EffectiveExpRate(rate env) × DungeonRewardMult` ; idem classe avec `EffectiveClassExpRate(…, classe éveillée 21-60)` |
+| `ServerConfig.cs:76-95` | rates globaux × (1 + `EventPct`) — événements en dur (Christmas/Halloween) |
+| `Combat.Rewards.cs:818-826` (`GrantCharExpAsync`) | puis `exp += exp × Σ(charmes ExpRateBonus)/100` |
+| `Combat.Rewards.cs:282-290` | EXP de classe : `Σ(CpRateBonus + WakenCpBonus)` **additionnés ensemble**, sans distinguer classe normale / éveillée |
+| `Status.cs:475-491` + `Items.cs:496` | l'enchant natif `ItemExpRateUp` (2911) / `ItemWakenNpRateUp` (2912/2914) remplit `ExpRateBonus` / `CpRateBonus` / `WakenCpBonus` du statut |
+**Pourquoi l'enchant natif est un mauvais support pour le VIP** : (1) un enchant est **persisté** (`player_enchants`) → risque de VIP « fantôme » après expiration ou changement de compte ; (2) la valeur vivrait dans une **ligne de contenu** `c_enchant` (+ texte) plutôt que dans la règle VIP ; (3) il faut inventer des ids d'enchant dans un espace partagé avec le natif ; (4) il ne sait exprimer ni temps de craft, ni durabilité, ni entrées de donjon → deux mécanismes pour un seul concept « VIP » ; (5) l'additionnement `CpRate+WakenCp` empêche un réglage séparé classe/éveil.
+**Conception cible : `Eden.Core/Game/Modifiers/` (bibliothèque pure, testable hors serveur)**
+- `ModifierKey` : registre des clés (déclaratif, F1) — ex. `exp.character`, `exp.class`, `exp.awakened_class`, `drop.rate`, `gold.rate`, `craft.cast_seconds`, `craft.duration`, `gather.tick_seconds`, `gather.durability_cost`, `dungeon.entries.solo|multi`, `death.exp_loss`. Chaque clé déclare : unité, **mode de composition**, bornes, « surchargeable par VIP ? ».
+- `IModifierSource` (une classe par source, un fichier chacune) : `ConfigSource` (`server.config.txt`/`rule`), `MapKindSource` (§4.4), `EventSource`, `AlmanaxSource` (F5), `VipSource`, `StatusSource` (**adaptateur** qui expose les bonus des charmes/enchants natifs en lecture seule), plus tard `GuildSource`. Ajouter une source = ajouter une classe ; **aucun système de jeu ne change**.
+- `ModifierContext` (struct immuable) : `{ accountId, charId, mapId, mapKind, classId/classKind, buildingType, craftType, isVip, now }`.
+- `ModifierResolver.Resolve(key, ctx) → Resolved { Value, Explain[] }`. **Règles de composition (documentées et testées)** : (a) `Base × Π(multiplicateurs des sources « multiplicateur »)` — config, événement, éphéméride, mode de map, bonus de récompense du donjon multi ×1,5 ; (b) **`× (1 + Σ pourcentages additifs / 100)`** pour les sources « bonus additif » — charmes **et VIP** (cohérent avec le natif : « comme les charmes », les % de charmes se somment) ; (c) `fixer` puis `plafonner` en dernier ; (d) `Explain` liste chaque source et sa contribution (outil admin « pourquoi cette valeur ? » + tests).
+- **Performance** : le résultat est mis en cache **par session et par clé**, invalidé uniquement sur événements (connexion, changement de statut, de map, de `rev` de configuration, minuit/6 h) ; le chemin chaud (kill → EXP) fait une lecture de tableau, **zéro allocation** (contexte struct, pas de LINQ).
+- **VIP dans ce moteur** : `VipSource` renvoie, si `is_vip` : `exp.character +10 %`, `exp.class +10 %`, `exp.awakened_class +10 %` (additifs), `craft.cast_seconds ×0,75`, `craft.duration ×0,75`, `gather.tick_seconds ×0,75`, `gather.durability_cost ×0,75`. Les valeurs viennent de la table `vip.rules` (donnée). Quand le VIP s'arrête, **la source cesse de répondre** : rien à retirer, rien à nettoyer.
+- **Migration des 5 sites** (refonte) : remplacer les formules de `Combat.Rewards.cs`/`ServerConfig.cs` par `Modifiers.Resolve(...)` ; séparer `CpRateBonus` et `WakenCpBonus` (un bonus d'éveil ne s'applique qu'aux classes éveillées, un bonus de classe qu'aux classes normales — **à vérifier dans le natif** `CEC_ItemWakenNpRateUp` avant de changer le comportement) ; supprimer les `case "exppct"` en dur de `ServerConfig` au profit des événements-données.
+- **Tests (≥ 40)** : composition (multiplicateur seul, additif seul, mixte, plafond), invalidation du cache, VIP actif/inactif/expiré, séparation classe/éveil, charme + VIP additifs, événement + VIP, non-régression : **mêmes résultats qu'avant** pour un joueur sans VIP, sans événement et sans charme (golden sur 10 kills).
+- **Acceptation** : un même kill rapporte l'EXP attendue avec (rien / charme / VIP / charme + VIP / événement + VIP) ; `Explain` imprimé dans le log `[Modifiers]` ; le fichier `Combat.Rewards.cs` n'a plus aucune formule de taux en dur ; retrait du VIP → EXP normale immédiatement au prochain kill.
+
 | Lot | Dépend | Preuves |
 |---|---|---|
 | F1 | — | Tests registre + capture du cast modifié à chaud |
 | F2 | F1, A5 | Test live quota/bonus sur 2 comptes |
 | F3 | F1, F2 | Test calendrier + annonce |
 | F4 | F1, D0 | Test live 2 comptes (normal/VIP) |
-| F5 | F1, B3 | Tests de résolution + simulation 7 jours + capture du panneau |
+| F5 | F1, F6, B3 | Tests de résolution + simulation 7 jours + capture du panneau |
+| F6 | F1 | ≥ 40 tests + golden « mêmes résultats qu'avant » + log `[Modifiers]` |
 
 ---------------------------------------------------------------------------
-## 9. Libération d'espace disque (réponse n°10) — AUCUNE suppression sans accord explicite
+## 9. Libération d'espace disque (analyse initiale — EXÉCUTÉE, voir lot Z au §1bis)
 ---------------------------------------------------------------------------
 **Disque** : 561 Go, 504 Go utilisés, **29 Go libres (95 %)**. `portage/` fait 74 Go ; `eden-godot/` 43 Go.
 **Méthode** : deux arbres peuvent partager des fichiers par **liens physiques** (ADR-0004) ; supprimer un des deux ne libère alors **rien**. Mesure faite avec `du -sm eden-godot <dossier>` (compte les inodes déjà vus une seule fois) et comparaison d'inodes.

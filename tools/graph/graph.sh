@@ -16,9 +16,13 @@ G="$ROOT/tools/graph/.venv/bin/graphify"
 
 if [ "${1:-}" = "portage" ]; then
     shift
-    P="$(cd "$ROOT/../portage" && pwd)"
     M="$ROOT/tools/graph/portage/src"
     if [ $# -eq 0 ]; then
+        # Le dossier ../portage a été supprimé (2026-11-07) : le graphe de référence
+        # est figé dans tools/graph/portage ; seules les requêtes restent possibles.
+        P="$ROOT/../portage"
+        [ -d "$P" ] || { echo "portage supprimé : graphe figé, mise à jour impossible (requêtes OK)" >&2; exit 1; }
+        P="$(cd "$P" && pwd)"
         # Miroir : code et docs du client + serveur, sans données ni sorties.
         mkdir -p "$M"
         rsync -a --delete --link-dest="$P/" \

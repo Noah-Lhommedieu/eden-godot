@@ -5,6 +5,8 @@ et les décisions §1.1 / §12 de `CONCEPT-WIKI-ADMIN.md`** (ce document reste u
 restent valables, sauf là où ce plan le contredit explicitement).
 Statut : conception. **Aucun code n'a été modifié pour rédiger ce plan.**
 
+> **EXÉCUTION : lire d'abord `docs/architecture/PLAN-ACTION-3-EXECUTION.md`** (ordre des lots, protocole, fondations Q, parallélisation, baseline `pre-plan3-baseline`). Ce fichier-ci décrit le contenu détaillé de chaque lot.
+
 Ce plan est écrit pour une IA qui **ne connaît rien** du projet. Chaque lot dit : le constat, les preuves
 (chemins + lignes), où regarder, ce qu'il faut faire, comment prouver. Les constats sont marqués
 **[VÉRIFIÉ]** (lu dans le code/les logs/les données ce jour) ou **[HYPOTHÈSE]** (à prouver avant de coder).
